@@ -1,0 +1,46 @@
+--- 
+title: "Time-Series Analysis for Fisheries and Environmental Data"
+author: "E. E. Holmes, M. D. Scheuerell, and E. J. Ward"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+fontsize: 12pt
+documentclass: book
+bibliography: [tex/Fish507.bib, tex/book.bib, tex/packages.bib]
+biblio-style: apalike
+link-citations: yes
+description: "These are the computer labs for Applied Fisheries and Environmental Science Time-Series Analysis"
+cover-image: images/cover.png
+---
+
+# Preface {-}
+
+```{r RUNFIRST, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment=NA)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+```{r test-main, child = 'tex/defs.tex'}
+```
+
+These are computer labs developed as part of a course we teach at the University of Washington on applied time-series analysis for fisheries and environmental data.  You can find our lectures on our course website \url{https://nwfsc-timeseries.github.io/atsa/}.  You can find our initial labs in the MARSS User Guide.
+ 
+The authors are research scientists at the Northwest Fisheries Science Center (NWFSC).  This work was conducted as part of our jobs at the NWFSC, a research center for NOAA Fisheries which is a United States federal government agency.   
+
+Links to more code and publications on MARSS applications can be found by following the links at our academic websites:
+
+* http://faculty.washington.edu/eeholmes
+* http://faculty.washington.edu/scheuerl
+* https://sites.google.com/site/ericward2
+
+
+----------------
+
+Holmes, E. E., M. D. Scheuerell, and E. J. Ward. Time-series analysis for fisheries and environmental data. NOAA Fisheries, Northwest Fisheries Science Center, 2725 Montlake Blvd E., Seattle, WA 98112.  Contacts eli.holmes@noaa.gov, eric.ward@noaa.gov, and mark.scheuerell@noaa.gov
+
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'tex/packages.bib')
+```
