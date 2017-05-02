@@ -1,0 +1,413 @@
+%\renewcommand{\rightmark}{Homework solutions}
+
+
+\chapter*{Solutions Chapter \ref{chap:covariates}}
+\addcontentsline{toc}{chapter}{Solutions Chapter \ref{chap:covariates}}
+
+\subsection*{Data Set Up}
+\begin{Schunk}
+\begin{Sinput}
+ require(MARSS)
+ require(forecast)
+ phytos = c("Cryptomonas", "Diatoms", "Greens", 
+             "Unicells", "Other.algae")
+ yrs = lakeWAplanktonTrans[,"Year"]%in%1985:1994
+ dat = t(lakeWAplanktonTrans[yrs,phytos])
+ avg = apply(dat, 1, mean, na.rm=TRUE)
+ dat = (dat-avg)/sqrt(apply(dat, 1, var, na.rm=TRUE))
+ covars = rbind(Temp=lakeWAplanktonTrans[yrs,"Temp"],
+                TP=lakeWAplanktonTrans[yrs,"TP"])
+ avg = apply(covars, 1, mean)
+ covars =  (covars-avg)/sqrt(apply(covars, 1, var))
+\end{Sinput}
+\end{Schunk}
+Set up constants.
+\begin{Schunk}
+\begin{Sinput}
+ TT = dim(dat)[2] # length of time series
+ m = n = dim(dat)[1] # number of states & obs
+ period = 12 # data were collected monthly
+\end{Sinput}
+\end{Schunk}
+Set up the model structures that will be used across all the questions.
+\begin{Schunk}
+\begin{Sinput}
+   B = "diagonal and unequal"
+   U = "zero"
+   Q = "diagonal and unequal"
+   Z = "identity"
+   A = "zero"
+   R = "diagonal and equal"
+\end{Sinput}
+\end{Schunk}
+
+Note the models do not converge in the default of \verb@maxit=500@.  You could either set \verb@maxit@ higher by passing in \verb@control=list(maxit=2000)@ or try \verb@method="BFGS"@.  
+
+
+\subsection*{Problem 1}
+How does month affect the mean phytoplankton population growth rates? Show a plot of mean growth rate versus month. Estimate seasonal effects without any covariate (Temp, TP) effects.
+
+\bigskip
+Since the covariate affects growth rate, it appears in the $\xx$ equation not the $\yy$ equation.  Thus we want to set up $\CC$ and $\cc$.
+
+\smallskip
+{\bf Option 1}:  Treat month as a factor and you will estimate a month effect for each month. You need a row for each month (Jan, Feb, ...) and a column for each time point. You put a 1 in the Jan row for each Jan time point, repeat for the other months. The following code will create such a $\cc$ matrix.
+\begin{Schunk}
+\begin{Sinput}
+ c.fac <- diag(period)
+ for(i in 2:(ceiling(TT / period))) { c.fac <- cbind(c.fac, diag(period)) }
+ the.months = month.abb 
+ rownames(c.fac) = the.months
+\end{Sinput}
+\end{Schunk}
+We want each month to have separate effect on each taxon (60 effects), so our $\CC$ matrix can just be specified as \verb@"unconstrained"@. Our covariates are only in $\xx$ so $\DD$ and $\dd$ are zero.
+
+We set up the model list and fit: 
+\begin{Schunk}
+\begin{Sinput}
+ C = "unconstrained"; c=c.fac
+ D="zero"; d="zero"
+ model.list = list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c,D=D,d=d)
+ q1a <- MARSS(dat, model=model.list)
+\end{Sinput}
+\end{Schunk}
+Get the appropriate seasonal effects:
+\begin{Schunk}
+\begin{Sinput}
+ seas.a <- coef(q1a,type="matrix")$C
+ rownames(seas.a) <- phytos
+ colnames(seas.a) <- the.months
+\end{Sinput}
+\end{Schunk}
+
+We could plot the seasonal effect by species with this code:
+\begin{Schunk}
+\begin{Sinput}
+ matplot(t(seas.a),type="l",bty="n",xaxt="n", ylab="Fixed monthly", col=1:5)
+ axis(1,labels=the.months, at=1:12,las=2,cex.axis=0.75)
+ legend("topright", lty=1:5, legend=phytos, cex=0.6, col=1:5)
+\end{Sinput}
+\end{Schunk}
+
+If we had set \verb@U="unequal"@, we would need to set one of the columns of $\CC$
+to zero because the we would have created an under-determined problem (infinite solutions).  Basically, we have a problem like $10=y+z$.  You can't solve for both $y$ and $z$ in that case.
+
+\smallskip
+{\bf Option 2:} The factor approach required estimating 60 effects.  Another approach is to model
+the temperature effect as a 3rd order (or higher) polynomial $b m + c m^2 + d m^3$. This approach has less flexibility but requires only 20 $\CC$ parameters.
+
+First we make month cov matrix with our $m$, $m^2$, and $m^3$ in different rows:
+\begin{Schunk}
+\begin{Sinput}
+ poly.order = 3
+ month.cov = matrix(1,1,period)
+ for(i in 1:poly.order) { month.cov <- rbind(month.cov,(1:12)^i)  }
+ # for c, month.cov is replicated 10 times (once for each year)
+ c.m.poly <- matrix(month.cov, poly.order+1, TT, byrow=FALSE)
+\end{Sinput}
+\end{Schunk}
+Everything except $\cc$ remains the same.
+\begin{Schunk}
+\begin{Sinput}
+ C = "unconstrained"; c=c.m.poly
+ D="zero"; d="zero"
+ model.list = list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c,D=D,d=d)
+ q1b <- MARSS(dat, model=model.list)
+\end{Sinput}
+\end{Schunk}
+The effect of month $m$ $C_1  m + C_2  m^2 + C_3  m^3$. We can make our seasonal effect matrix (like seas above):
+\begin{Schunk}
+\begin{Sinput}
+ C.b = coef(q1b,type="matrix")$C
+ seas.b <- C.b %*% month.cov
+ rownames(seas.b) <- phytos
+ colnames(seas.b) <- the.months
+\end{Sinput}
+\end{Schunk}
+
+\smallskip
+{\bf Option 3:}  The factor approach required estimating 60 effects, and the 3rd order polynomial model was an improvement at only 20 parameters. Another option is using a combination of sine and cosine waves, which would require only 10 parameters.
+
+Begin by defining the seasonal covariates as
+\begin{Schunk}
+\begin{Sinput}
+ cos.t <- cos(2 * pi * seq(TT) / period)
+ sin.t <- sin(2 * pi * seq(TT) / period)
+ c.Four <- rbind(cos.t,sin.t)
+\end{Sinput}
+\end{Schunk}
+Everything except $\cc$ remains the same.
+\begin{Schunk}
+\begin{Sinput}
+ C = "unconstrained"; c=c.Four
+ D="zero"; d="zero"
+ model.list = list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c,D=D,d=d)
+ q1c = MARSS(dat, model=model.list)
+\end{Sinput}
+\end{Schunk}
+Now make our seasonal effect matrix (like seas above). The net seasonal effect is then $C_a \cos(2 \pi t/12) + C_b \sin(2 \pi t/12)$.
+\begin{Schunk}
+\begin{Sinput}
+ C.c = coef(q1c,type="matrix")$C
+ seas.c = C.c %*% c.Four[,1:period]
+ rownames(seas.c) = phytos
+ colnames(seas.c) = the.months
+\end{Sinput}
+\end{Schunk}
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{../figures/KeyCovar--q1-fig-plot}
+\end{center}
+\caption{This pattern of successive peaks of different algae taxon is known as algal succession.}
+\end{figure}
+
+\clearpage
+
+\subsection*{Problem 2}
+It is likely that both temperature and total phosphorus (TP) affect phytoplankton population growth rates. Evaluate which is the more important driver or if both are important. Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates.
+
+\bigskip
+The idea here is to fit different MARSS models: one where temperature affects growth rates, one where TP affects growth rates, and one where both affect growth rate.  The question did not specify what (if any) lags to use for your covariates.  We are going to use lag-0 for both temperature and TP.  However we will see at the end this is not a a very good model.  
+
+Create a $\CC$ matrix where temperature (only) has a linear effect on population growth.  That means the effect of TP is 0.  Then fit:
+\begin{Schunk}
+\begin{Sinput}
+ C = matrix(list(0),5,2); C[,1]=paste("Temp",1:5,sep="")
+ c = covars                        
+ model.list <- list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c,D=D,d=d)
+ q2.Temp = MARSS(dat, model=model.list)
+\end{Sinput}
+\end{Schunk}
+Create a model where TP (only) has a linear effect on population growth and fit:
+\begin{Schunk}
+\begin{Sinput}
+ C = matrix(list(0),5,2); C[,2]=paste("TP",1:5,sep="")
+ c = covars                        
+ model.list <- list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c,D=D,d=d)
+ q2.TP = MARSS(dat, model=model.list)
+\end{Sinput}
+\end{Schunk}
+Create a model where both temperature and TP have linear effects:
+\begin{Schunk}
+\begin{Sinput}
+ C = "unconstrained"
+ c = covars                        
+ model.list <- list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c,D=D,d=d)
+ q2.both = MARSS(dat, model=model.list)
+\end{Sinput}
+\end{Schunk}
+Use AIC to compare the 3 models:
+\begin{Schunk}
+\begin{Sinput}
+ data.frame(Model=c("Temp", "TP", "Both"),
+   	   AICc=round(c(q2.Temp$AICc, q2.TP$AICc, q2.both$AICc), 1))
+\end{Sinput}
+\begin{Soutput}
+  Model   AICc
+1  Temp 1480.9
+2    TP 1512.7
+3  Both 1480.0
+\end{Soutput}
+\end{Schunk}
+The AICc for the Temp model is 31.83 units lower than that for TP, offering
+support for lag-0 temperature being more important than lag-0 TP in explaining
+phytoplankton community abundance. The model including both Temp and TP
+is greater in AICc units than the Temp-only model, which suggests
+that adding an extra covariate (and parameter) to the model does not really
+improve model fit. 
+
+None of the Temp or TP models are particularly good compared to any of the
+purely seasonal (month) effect models. It's easy to compare all of them using AICc.
+\begin{Schunk}
+\begin{Sinput}
+ mod.names <- c("Temp", "TP", "Both", "Fixed", "Cubic", "Fourier")
+ AICc.all <- c(q2.Temp$AICc,q2.TP$AICc,q2.both$AICc,q1a$AICc,q1b$AICc,q1c$AIC)
+ delta.AICc <- round(AICc.all - min(AICc.all), 1)
+ # model selection results sorted from best (top) to worst (bottom)
+ data.frame(Model=mod.names, delta.AICc=delta.AICc)[order(delta.AICc),]
+\end{Sinput}
+\begin{Soutput}
+    Model delta.AICc
+6 Fourier        0.0
+5   Cubic        9.7
+4   Fixed       28.4
+3    Both       30.4
+1    Temp       31.3
+2      TP       63.1
+\end{Soutput}
+\end{Schunk}
+
+
+{\bf Diagnostics} Temperature and TP model residuals for all taxa except Greens appear to show significant negative
+autocorrelation at lag=1 (Figure \ref{fig.q3a} and Figure \ref{fig.q3b}), suggesting that both models are inadequate to
+capture all of the systematic variation in phytoplankton abundance.
+
+\begin{figure}[htp]
+\label{fig.q3a}
+\begin{center}
+\begin{Schunk}
+\begin{Sinput}
+ par(mfrow=c(5,2), mai=c(0.6,0.6,0.2,0.2), omi=c(0,0,0,0))
+ for(i in 1:5) {
+   plot.ts(residuals(q2.Temp)$model.residuals[i,], ylab="Residual", main=phytos[i])
+ 	abline(h=0, lty="dashed")
+ 	acf(residuals(q2.Temp)$model.residuals[i,])
+ 	}
+\end{Sinput}
+\end{Schunk}
+\includegraphics{../figures/KeyCovar--hw4_q2_fig1}
+\end{center}
+\caption{Plot the temperature model residuals and ACF's for all 5 taxa.}
+\end{figure}
+
+\begin{figure}[htp]
+\label{fig.q3b}
+\begin{center}
+\begin{Schunk}
+\begin{Sinput}
+ par(mfrow=c(5,2), mai=c(0.6,0.6,0.2,0.2), omi=c(0,0,0,0))
+ for(i in 1:5) {
+ 	plot.ts(residuals(q2.TP)$model.residuals[i,], ylab="Residual", main=phytos[i])
+ 	abline(h=0, lty="dashed")
+ 	acf(residuals(q2.TP)$model.residuals[i,])
+ 	}
+\end{Sinput}
+\end{Schunk}
+\includegraphics{../figures/KeyCovar--hw4_q2_fig2}
+\end{center}
+\caption{Plot of TP model residuals and ACF's for all 5 taxa.}
+\end{figure}
+
+\clearpage
+
+\subsection*{Problem 3}
+Evaluate whether the effect of temperature on phytoplankton manifests itself via their underlying physiology (by affecting algal growth rates and thus abundance) or because physical changes in the water stratification makes them easier/harder to sample in some months. Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates.
+
+\bigskip
+
+The idea here is to fit two different MARSS models: one with the Temp effect
+in the process eqn and the other with it in the observation equation. To do so, begin by setting the following matrices/vectors as above.
+\begin{Schunk}
+\begin{Sinput}
+ # For process
+ B = Q = "diagonal and unequal"; U = "zero"
+ # For observation
+ Z = "identity"; A = "zero"; R = "diagonal and equal"
+\end{Sinput}
+\end{Schunk}
+We already fit the temperature-effect model for the process in the 1st part of question 2, so now fit one with temperature in the observation equation instead. Now we want $\DD$ and $\dd$ instead of $\CC$ and $\cc$ that we used for the process equation.
+\begin{Schunk}
+\begin{Sinput}
+ D = "unconstrained"
+ d = covars["Temp",,drop=FALSE]
+ C = "zero"
+ c = "zero"
+\end{Sinput}
+\end{Schunk}
+Create appropriate model list and fit the model.
+\begin{Schunk}
+\begin{Sinput}
+ model.list.Tobs <- list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c,D=D,d=d)
+ q3.Tobs <- MARSS(dat, model=model.list.Tobs)
+\end{Sinput}
+\end{Schunk}
+Now use AIC to compare the 2 models.
+\begin{Schunk}
+\begin{Sinput}
+ data.frame(Model=c("proc", "obs"),
+   	   AICc=round(c(q2.Temp$AICc, q3.Tobs$AICc), 1))
+\end{Sinput}
+\begin{Soutput}
+  Model   AICc
+1  proc 1480.9
+2   obs 1500.7
+\end{Soutput}
+\end{Schunk}
+
+The AICc for the model with a temperature effect in the process equation is
+much lower than the model with the effect in the observation equation.
+Thus, we should conclude that the data support the hypothesis of a temperature
+effect on the physiology more than an observation/sampling phenomenon.
+
+{\bf Diagnostics} Similar to the temperature-effect in the process model, residuals for these models also show significant negative autocorrelation at lag=1 (Figure not shown but code is similar to that used in the previous question).
+
+% \begin{figure}[htp]
+% \label{fig.q3}
+% \begin{center}
+% <<hw4_q3_fig1, fig=TRUE, width=6, height=6>>=
+% par(mfrow=c(5,2), mai=c(0.6,0.6,0.2,0.2), omi=c(0,0,0,0))
+% for(i in 1:5) {
+% 	plot.ts(residuals(q3.Tobs)$model.residuals[i,], ylab="Residual", main=phytos[i])
+% 	abline(h=0, lty="dashed")
+% 	acf(residuals(q3.Tobs)$model.residuals[i,])
+% 	}
+% @
+% \end{center}
+% \caption{Plot of residuals for temperature effect in observation equation and ACF's for all 5 taxa}
+% \end{figure}
+
+\clearpage
+
+\subsection*{Problem 4}
+Is there support for temperature or TP  affecting all functional groups' growth rates the same, or are the effects on one taxon different from another?
+
+\bigskip
+
+
+The idea here is to fit four different MARSS models (2 each for temperature and TP). 
+Each one will assume covariates affect the process. Two models will have
+effects that vary by taxon as in Q2 (ie, C = "unconstrained") whereas
+the other 2 will assume the covariates affect all taxa equally.
+
+\begin{Schunk}
+\begin{Sinput}
+ # 1st: the Temp model
+ C = "equal" 
+ c = covars["Temp",,drop=FALSE]
+ model.list.Temp <- list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c)
+ q4.Temp <- MARSS(dat, model=model.list.Temp)
+\end{Sinput}
+\end{Schunk}
+Use AIC to compare the 2 Temp models
+\begin{Schunk}
+\begin{Sinput}
+ data.frame(Effect=c("taxon-specific", "equal"),
+   	   AICc=round(c(q2.Temp$AICc, q4.Temp$AICc), 1))
+\end{Sinput}
+\begin{Soutput}
+          Effect   AICc
+1 taxon-specific 1480.9
+2          equal 1551.9
+\end{Soutput}
+\end{Schunk}
+The AICc for the model with taxon-specific temperature effects is greater than 2
+lower than for the model that assumes a equal temperature effect, which
+supports the hypothesis of varying temperature effects by taxon. 
+
+\begin{Schunk}
+\begin{Sinput}
+ # 2nd: the TP model
+ C = "equal"
+ c = covars["TP",,drop=FALSE]
+ model.list.TP <- list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=c)
+ q4.TP <- MARSS(dat, model=model.list.TP)
+\end{Sinput}
+\end{Schunk}
+Now use AIC to compare the 2 TP models
+\begin{Schunk}
+\begin{Sinput}
+ data.frame(Effect=c("diff", "same"),
+ 		   AICc=round(c(q2.TP$AICc, q4.TP$AICc), 1))
+\end{Sinput}
+\begin{Soutput}
+  Effect   AICc
+1   diff 1512.7
+2   same 1548.2
+\end{Soutput}
+\end{Schunk}
+
+The AICc for the TP model with taxon-specific effects is greater than 2
+lower, which 
+strongly supports the hypothesis of non-equal TP effects. Repeating the same diagnostic plot used in question 2 reveals that these models also have autocorrelation in the residuals suggesting that these models are also still inadequate.
+

@@ -19,25 +19,25 @@ library(forecast)
 The **MARSS** package fits multivariate auto-regressive models of this form:
 \begin{equation}
 \begin{gathered}
-\xx_t = \BB \xx_{t-1}+\uu+\ww_t \text{ where } \ww_t \sim \N(0,\QQ) \\
-\yy_t = \ZZ\xx_t+\aa+\vv_t \text{ where } \vv_t \sim \N(0,\RR) \\
-\xx_0 = \mumu
+\mathbf{x}_t = \mathbf{B} \mathbf{x}_{t-1}+\mathbf{u}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \,\text{N}(0,\mathbf{Q}) \\
+\mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t \text{ where } \mathbf{v}_t \sim \,\text{N}(0,\mathbf{R}) \\
+\mathbf{x}_0 = \boldsymbol{\mu}
 \end{gathered}   
 (\#eq:uss-marss)
 \end{equation}
-To fit your time-series model with the **MARSS** package, you need to put your model into the form above.  The $\BB$, $\ZZ$, $\uu$, $\aa$, $\QQ$, $\RR$ and $\mumu$ are parameters that are (potentially) estimated. The $\yy$ are your data.  The $\xx$ are the hidden state(s).  Everything in bold is a matrix; if it is a small bolded letter, it is a matrix with 1 column.
+To fit your time-series model with the **MARSS** package, you need to put your model into the form above.  The $\mathbf{B}$, $\mathbf{Z}$, $\mathbf{u}$, $\mathbf{a}$, $\mathbf{Q}$, $\mathbf{R}$ and $\boldsymbol{\mu}$ are parameters that are (potentially) estimated. The $\mathbf{y}$ are your data.  The $\mathbf{x}$ are the hidden state(s).  Everything in bold is a matrix; if it is a small bolded letter, it is a matrix with 1 column.
 
-*Important: this state-space model, $\yy$ is always the data and $\xx$ is a hidden random walk estimated from the data.*
+*Important: this state-space model, $\mathbf{y}$ is always the data and $\mathbf{x}$ is a hidden random walk estimated from the data.*
 
 A basic ```MARSS()``` call looks like
 ```fit=MARSS(y, model=list(...))```.
-The argument ```model``` tells the function what form the parameters take.  The list has the elements with the names: ```B```, ```U```, ```Q```, etc.  The names correspond to the parameters with the same names in Equation \@ref(eq:uss-marss) except that $\mumu$ is called ```x0```. ```tinitx``` indicates whether the initial $\xx$ is specified at $t=0$ so $\xx_0$ or $t=1$ so $\xx_1$.
+The argument ```model``` tells the function what form the parameters take.  The list has the elements with the names: ```B```, ```U```, ```Q```, etc.  The names correspond to the parameters with the same names in Equation \@ref(eq:uss-marss) except that $\boldsymbol{\mu}$ is called ```x0```. ```tinitx``` indicates whether the initial $\mathbf{x}$ is specified at $t=0$ so $\mathbf{x}_0$ or $t=1$ so $\mathbf{x}_1$.
 
 Here's an example.  Let's say we want to fit a univariate AR-1 model observed with error. Here is that model:
 \begin{equation}
 \begin{gathered}
-x_t = b x_{t-1} + w_t \text{ where } \ww_t \sim \N(0,q) \\
-y_t = x_t+v_t \text{ where } v_t \sim \N(0,r) \\
+x_t = b x_{t-1} + w_t \text{ where } \mathbf{w}_t \sim \,\text{N}(0,q) \\
+y_t = x_t+v_t \text{ where } v_t \sim \,\text{N}(0,r) \\
 x_0 = \mu
 \end{gathered}   
 (\#eq:uss-ar1witherror)
@@ -67,7 +67,7 @@ And then fit with ```MARSS()``` using ```mod.list``` above:
 fit=MARSS(y,model=mod.list)
 ```
 
-If we wanted to fix $q=0.1$, then $\QQ=[0.1]$ (a $1 \times 1$ matrix with 0.1). We just change ```mod.list$Q``` and re-fit:
+If we wanted to fix $q=0.1$, then $\mathbf{Q}=[0.1]$ (a $1 \times 1$ matrix with 0.1). We just change ```mod.list$Q``` and re-fit:
 ```{r uss-mod.list.1, results='hide'}
 mod.list$Q=matrix(0.1)
 fit=MARSS(y,model=mod.list)
@@ -97,7 +97,7 @@ plot(Nile,ylab="Flow volume",xlab="Year")
 ### Flat level model {#sec-uss-flat-level-model}
 We will start by modeling these data as a simple average river flow with variability around some level $\mu$.  
 \begin{equation}
-y_t = \mu + v_t \text{ where } v_t \sim \N(0,r)    
+y_t = \mu + v_t \text{ where } v_t \sim \,\text{N}(0,r)    
 (\#eq:uss-simple-model)
 \end{equation}
 where $y_t$ is the river flow volume at year $t$.
@@ -105,8 +105,8 @@ where $y_t$ is the river flow volume at year $t$.
 We can write this model as a univariate state-space model as follows. We use $x_t$ to model the average flow level.  $y_t$ is just an observation of this flat $x_t$.  Work through $x_1$, $x_2$, $\dots$ starting from $x_0$ to convince yourself that $x_t$ will always equal $\mu$.
 \begin{equation}
 \begin{gathered}
-x_t = 1 \times x_{t-1}+ 0 + w_t    \text{ where } w_t \sim \N(0,0) \\
-y_t = 1 \times x_t + 0 + v_t \text{ where } v_t \sim \N(0,r)  \\
+x_t = 1 \times x_{t-1}+ 0 + w_t    \text{ where } w_t \sim \,\text{N}(0,0) \\
+y_t = 1 \times x_t + 0 + v_t \text{ where } v_t \sim \,\text{N}(0,r)  \\
 x_0 = \mu 
 \end{gathered}   
 (\#eq:uss-marss-model-0)
@@ -132,8 +132,8 @@ c(coef(kem.0, type="vector"), LL=kem.0$logLik, AICc=kem.0$AICc)
 Figure \@ref(fig:uss-plotfit) shows the fit for the flat average river flow model.  Looking at the data, we might expect that a declining average river flow would be better.  In MARSS form, that model would be:
 \begin{equation}
 \begin{gathered}
-x_t = 1 \times x_{t-1}+ u + w_t    \text{ where } w_t \sim \N(0,0) \\
-y_t = 1 \times x_t + 0 + v_t \text{ where } v_t \sim \N(0,r)  \\
+x_t = 1 \times x_{t-1}+ u + w_t    \text{ where } w_t \sim \,\text{N}(0,0) \\
+y_t = 1 \times x_t + 0 + v_t \text{ where } v_t \sim \,\text{N}(0,r)  \\
 x_0 = \mu
 \end{gathered}   
 (\#eq:uss-marss-model-1)
@@ -162,8 +162,8 @@ Looking at the flow levels, we might suspect that a model that allows the averag
 We will now model the average river flow at year $t$ as a random walk, specifically an autoregressive process which means that average river flow is year $t$ is a function of average river flow in year $t-1$.  
 \begin{equation}
 \begin{gathered}
-x_t = x_{t-1}+w_t \text{ where } w_t \sim \N(0,q) \\
-y_t = x_t+v_t \text{ where } v_t \sim \N(0,r)  \\
+x_t = x_{t-1}+w_t \text{ where } w_t \sim \,\text{N}(0,q) \\
+y_t = x_t+v_t \text{ where } v_t \sim \,\text{N}(0,r)  \\
 x_0 = \mu
 \end{gathered}   
 (\#eq:uss-random-walk-w-noise)
@@ -176,11 +176,11 @@ B=matrix(1), U=matrix(0), Q=matrix("q"),
 Z=matrix(1), A=matrix(0), R=matrix("r"),
 x0=matrix("mu"), tinitx=0 )
 ```
-We could also use the text shortcuts to specify the model.  Because $\RR$ and $\QQ$ are $1 \times 1$ matrices, "unconstrained", "diagonal and unequal", "diagonal and equal" and "equalvarcov" will all lead to a $1 \times 1$ matrix with one estimated element.  For $\aa$ and $\uu$, the following shortcut could be used:
+We could also use the text shortcuts to specify the model.  Because $\mathbf{R}$ and $\mathbf{Q}$ are $1 \times 1$ matrices, "unconstrained", "diagonal and unequal", "diagonal and equal" and "equalvarcov" will all lead to a $1 \times 1$ matrix with one estimated element.  For $\mathbf{a}$ and $\mathbf{u}$, the following shortcut could be used:
 ```{r uss-mod.nile.not.used, eval=FALSE}
 A=U="zero"
 ```
-Because $\xx_0$ is $1 \times 1$, it could be specified as "unequal", "equal" or "unconstrained".
+Because $\mathbf{x}_0$ is $1 \times 1$, it could be specified as "unequal", "equal" or "unconstrained".
 
 ```{r uss-fit.data.2, eval=TRUE, results='hide'}
 kem.2 = MARSS(dat, model=mod.nile.2)
@@ -196,8 +196,8 @@ We can add a drift to term to our random walk; the $u$ in the process model ($x$
 
 \begin{equation}
 \begin{gathered}
-x_t = x_{t-1}+u+w_t \text{ where } w_t \sim \N(0,q) \\
-y_t = x_t+v_t \text{ where } v_t \sim \N(0,r)  \\
+x_t = x_{t-1}+u+w_t \text{ where } w_t \sim \,\text{N}(0,q) \\
+y_t = x_t+v_t \text{ where } v_t \sim \,\text{N}(0,r)  \\
 x_0 = \mu
 \end{gathered}   
 (\#eq:uss-random-walk-w-noise-w-drift)
@@ -496,41 +496,41 @@ title("State estimate and data from\nJAGS (black) versus MARSS (red)")
 ## A simple random walk model of animal movement {#sec-uss-a-simple-random-walk-model-of-animal-movement}
 A simple random walk model of movement with drift (directional movement) but no correlation is 
 \begin{gather}
-x_{1,t} = x_{1,t-1} + u_1 + w_{1,t}, \;\; w_{1,t} \sim \N(0,\sigma^2_1)\\
-x_{2,t} = x_{2,t-1} + u_2 + w_{2,t}, \;\; w_{2,t} \sim \N(0,\sigma^2_2)
+x_{1,t} = x_{1,t-1} + u_1 + w_{1,t}, \;\; w_{1,t} \sim \,\text{N}(0,\sigma^2_1)\\
+x_{2,t} = x_{2,t-1} + u_2 + w_{2,t}, \;\; w_{2,t} \sim \,\text{N}(0,\sigma^2_2)
 (\#eq:uss-movement)
 \end{gather}
 where $x_{1,t}$ is the location at time $t$ along one axis (here, longitude) and $x_{2,t}$ is for another, generally orthogonal, axis (in here, latitude).   The parameter $u_1$ is the rate of longitudinal movement and $u_2$ is the rate of latitudinal movement. We add errors to our observations of location:
 \begin{gather}
-y_{1,t} = x_{1,t} + v_{1,t}, \;\; v_{1,t} \sim \N(0,\eta^2_1)\\
-y_{2,t} = x_{2,t} + v_{2,t}, \;\; v_{2,t} \sim \N(0,\eta^2_2),
+y_{1,t} = x_{1,t} + v_{1,t}, \;\; v_{1,t} \sim \,\text{N}(0,\eta^2_1)\\
+y_{2,t} = x_{2,t} + v_{2,t}, \;\; v_{2,t} \sim \,\text{N}(0,\eta^2_2),
 (\#eq:uss-observe)
 \end{gather}
 
-This model is  comprised of two separate univariate state-space models.  Note that $y_1$ depends only on $x_1$ and $y_2$ depends only on $x_2$.  There are no actual interactions between these two univariate models.  However, we can write the model down in the form of a multivariate model using diagonal variance-covariance matrices and a diagonal design ($\ZZ$) matrix.  Because the variance-covariance matrices and $\ZZ$ are diagonal, the $x_1$:$y_1$ and $x_2$:$y_2$ processes will be independent as intended.  Here are Equations \@ref(eq:uss-movement) and \@ref(eq:uss-observe) written as a MARSS model (in matrix form):
+This model is  comprised of two separate univariate state-space models.  Note that $y_1$ depends only on $x_1$ and $y_2$ depends only on $x_2$.  There are no actual interactions between these two univariate models.  However, we can write the model down in the form of a multivariate model using diagonal variance-covariance matrices and a diagonal design ($\mathbf{Z}$) matrix.  Because the variance-covariance matrices and $\mathbf{Z}$ are diagonal, the $x_1$:$y_1$ and $x_2$:$y_2$ processes will be independent as intended.  Here are Equations \@ref(eq:uss-movement) and \@ref(eq:uss-observe) written as a MARSS model (in matrix form):
 \begin{gather}
 \begin{bmatrix}x_{1,t}\\x_{2,t}\end{bmatrix}
 = \begin{bmatrix}x_{1,t-1}\\x_{2,t-1}\end{bmatrix}
 + \begin{bmatrix}u_1\\u_2\end{bmatrix}
 + \begin{bmatrix}w_{1,t}\\w_{2,t}\end{bmatrix},
- \textrm{ } \ww_t \sim \MVN\begin{pmatrix}0,\begin{bmatrix}\sigma^2_1&0\\0&\sigma^2_2\end{bmatrix} \end{pmatrix}  (\#eq:uss-mssmlong-a) \\
+ \textrm{ } \mathbf{w}_t \sim \,\text{MVN}\begin{pmatrix}0,\begin{bmatrix}\sigma^2_1&0\\0&\sigma^2_2\end{bmatrix} \end{pmatrix}  (\#eq:uss-mssmlong-a) \\
 \nonumber \\
 \begin{bmatrix}y_{1,t}\\y_{2,t}\end{bmatrix}
 = \begin{bmatrix}1&0\\0&1\end{bmatrix}
 \begin{bmatrix}x_{1,t}\\x_{2,t}\end{bmatrix}
 + \begin{bmatrix}v_{1,t}\\ v_{2,t}\end{bmatrix},
- \textrm{ } \vv_t \sim \MVN\begin{pmatrix}0,\begin{bmatrix}\eta^2_1&0\\0&\eta^2_2\end{bmatrix} \end{pmatrix}  (\#eq:uss-mssmlong-b)
+ \textrm{ } \mathbf{v}_t \sim \,\text{MVN}\begin{pmatrix}0,\begin{bmatrix}\eta^2_1&0\\0&\eta^2_2\end{bmatrix} \end{pmatrix}  (\#eq:uss-mssmlong-b)
 \end{gather}
-The variance-covariance matrix for $\ww_t$ is a diagonal matrix with unequal variances, $\sigma^2_1$ and $\sigma^2_2$. The variance-covariance matrix for $\vv_t$ is a diagonal matrix with unequal variances,  $\eta^2_1$ and $\eta^2_2$. We can write this succinctly as
+The variance-covariance matrix for $\mathbf{w}_t$ is a diagonal matrix with unequal variances, $\sigma^2_1$ and $\sigma^2_2$. The variance-covariance matrix for $\mathbf{v}_t$ is a diagonal matrix with unequal variances,  $\eta^2_1$ and $\eta^2_2$. We can write this succinctly as
 \begin{gather}
-\xx_t = \xx_{t-1} + \uu + \ww_t, \;\; \ww_t \sim \MVN(0,\QQ) \\
-\yy_t = \xx_{t} + \vv_t, \;\; \vv_t \sim \MVN(0,\RR). 
+\mathbf{x}_t = \mathbf{x}_{t-1} + \mathbf{u} + \mathbf{w}_t, \;\; \mathbf{w}_t \sim \,\text{MVN}(0,\mathbf{Q}) \\
+\mathbf{y}_t = \mathbf{x}_{t} + \mathbf{v}_t, \;\; \mathbf{v}_t \sim \,\text{MVN}(0,\mathbf{R}). 
 (\#eq:uss-mssm)
 \end{gather}
 
 \clearpage
 
-## Problems 
+## Problems {#sec-uss-problems}
 
 1. Write the equations for each of these models: ARIMA(0,0,0), ARIMA(0,1,0), ARIMA(1,0,0), ARIMA(0,0,1), ARIMA(1,0,1).  Read the help file for the ```Arima()``` function (in the **forecast** package) if you are fuzzy on the arima notation.
 
@@ -551,7 +551,7 @@ Consider these two models for the data:
 Written as a univariate state-space model, model 1 is
 \begin{equation}
 \begin{gathered}
-x_t = x_{t-1}+w_t \text{ where } w_t \sim \N(0,q)\\
+x_t = x_{t-1}+w_t \text{ where } w_t \sim \,\text{N}(0,q)\\
 x_0 = a \\
 y_t = x_t 
 \end{gathered}   
@@ -560,7 +560,7 @@ y_t = x_t
 Model 2 is almost identical except with $u$ added
 \begin{equation}
 \begin{gathered}
-x_t = x_{t-1}+u+w_t \text{ where } w_t \sim \N(0,q)\\
+x_t = x_{t-1}+u+w_t \text{ where } w_t \sim \,\text{N}(0,q)\\
 x_0 = a \\
 y_t = x_t 
 \end{gathered}   
@@ -602,7 +602,7 @@ Use ```?diff``` to check what the ```diff()``` function does.
 
 
 1.  If $x_t$ denotes a time series.  What is the first difference of $x$?  What is the second difference?
-2.  What is the $\xx$ model for ```diff.dat```?  Look at your answer to part (a) and the answer to part (e).
+2.  What is the $\mathbf{x}$ model for ```diff.dat```?  Look at your answer to part (a) and the answer to part (e).
 3.  Fit ```diff.dat``` using ```Arima()```. You'll need to change the arguments ```order``` and ```include.mean```.
 4.  Fit that model with ```MARSS()```.
 
@@ -612,7 +612,7 @@ This question should clue you into the fact that ```Arima()``` is not exactly fi
 
 4.  ```Arima()``` will also fit what it calls an "AR-1 with drift".  An AR-1 with drift is NOT this model: 
 \begin{equation}
-x_t = b x_{t-1}+u+w_t \text{ where } w_t \sim \N(0,q)  
+x_t = b x_{t-1}+u+w_t \text{ where } w_t \sim \,\text{N}(0,q)  
 (\#eq:uss-gompertz)
 \end{equation}
 The population dynamics literature, this equation is called the Gompertz model and is a type of density-dependent population model.
@@ -637,8 +637,8 @@ dat=log(graywhales[,2])
 Fit a random walk with drift model observed with error to the data:
 \begin{equation}
 \begin{gathered}
-x_t = x_{t-1}+u+w_t \text{ where } w_t \sim \N(0,q) \\
-y_t = x_t+v_t \text{ where } v_t \sim \N(0,r) \\
+x_t = x_{t-1}+u+w_t \text{ where } w_t \sim \,\text{N}(0,q) \\
+y_t = x_t+v_t \text{ where } v_t \sim \,\text{N}(0,r) \\
 x_0 = a 
 \end{gathered}   
 (\#eq:uss-marss-rw-w-drift)

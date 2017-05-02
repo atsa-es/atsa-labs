@@ -1223,17 +1223,17 @@ x_t = w_t + \theta_1 w_{t-1} + \theta_2 w_{t-2} + \dots + \theta_q w_{t-q},
 
 \noindent where $\{w_t\}$ is a white noise sequence with zero mean and some variance $\sigma^2$; for our purposes we usually assume that $w_t \sim \text{N}(0,q)$.  Of particular note is that because MA processes are finite sums of stationary errors, they themselves are stationary.
 
-Of interest to us are so-called "invertible" MA processes that can be expressed as an infinite AR process with no error term.  The term invertible comes from the inversion of the backshift operator (**B**) that we discussed in class (*i.e.*, $\BB x_t= x_{t-1}$).  So, for example, an MA(1) process with $\theta < \lvert 1 \rvert$ is invertible because it can be written using the backshift operator as
+Of interest to us are so-called "invertible" MA processes that can be expressed as an infinite AR process with no error term.  The term invertible comes from the inversion of the backshift operator (**B**) that we discussed in class (*i.e.*, $\mathbf{B} x_t= x_{t-1}$).  So, for example, an MA(1) process with $\theta < \lvert 1 \rvert$ is invertible because it can be written using the backshift operator as
 
 \begin{equation}
 (\#eq:LW1-RWasB)
 \begin{aligned}
 x_t &= w_t - \theta w_{t-1} \\
-x_t &= w_t - \theta \BB w_t \\
-x_t &= (1 - \theta \BB) w_t, \\
+x_t &= w_t - \theta \mathbf{B} w_t \\
+x_t &= (1 - \theta \mathbf{B}) w_t, \\
     &\Downarrow \\
-w_t &= \frac{1}{(1 - \theta \BB)} x_t \\
-w_t &= (1 + \theta \BB + \theta^2 \BB^2 + \theta^3 \BB^3 + \dots) x_t \\
+w_t &= \frac{1}{(1 - \theta \mathbf{B})} x_t \\
+w_t &= (1 + \theta \mathbf{B} + \theta^2 \mathbf{B}^2 + \theta^3 \mathbf{B}^3 + \dots) x_t \\
 w_t &= x_t + \theta x_{t-1} + \theta^2 x_{t-2} + \theta^3 x_{t-3} + \dots
 \end{aligned}
 \end{equation}
@@ -1439,7 +1439,7 @@ auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
 
 \clearpage
 
-## Problems 
+## Problems {#sec-ts-problems}
 
 We have seen how to do a variety of introductory time series analyses with R.  Now it is your turn to apply the information you learned here and in lecture to complete some analyses.  You have been asked by a colleauge to help analyze some time series data she collected as part of an experiment on the effects of light and nutrients on the population dynamics of phytoplankton.  Specifically, after controlling for differences in light and temperature, she wants to know if the natural log of population density can be modeled with some form of ARMA($p,q$) model.  The data are expressed as the number of cells per milliliter recorded every hour for one week beginning at 8:00 AM on December 1, 2014; you can find them here:
 

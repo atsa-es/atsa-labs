@@ -26,10 +26,9 @@ rnw.to.rmd=function(basefilename, sectag){
 
   #This Problems section is unique to Fish507 Rnw files
   #fix so that it is numbered
-  hwsec=which(str_detect(content, "section[*][{]Problems"))
-  content[hwsec]=str_replace(content[hwsec],"\\\\section[*][{]Problems","\n## Problems")
-  content[hwsec]=str_replace(content[hwsec],"[}]"," ")
-  
+  hwsec=which(str_detect(content, "\\\\section[*][{]Problems"))
+  content[hwsec]=str_replace(content[hwsec],"\\\\section[*][{]Problems","\\\\section{Problems")
+
   #chapter, section and subsection lines
   vals=c("chapter","section","subsection", "chapter[*]","section[*]","subsection[*]")
   for(j in 1:length(vals)){
@@ -419,7 +418,7 @@ rnw.to.rmd=function(basefilename, sectag){
   writeLines(content, paste(basefilename,".Rmd",sep=""))
 }
 
-replace.defs = function(defsfile, inputfile){
+replace.defs = function(defsfile, inputfile, outputfile){
   require(stringr)
   defs=readLines(defsfile)
   content=readLines(inputfile)
@@ -434,5 +433,5 @@ replace.defs = function(defsfile, inputfile){
     repval=str_replace_all(repval, "\\\\","\\\\\\\\")
     content=str_replace_all(content, tag, repval)
   }
-  writeLines(content, inputfile)
+  writeLines(content, outputfile)
 }

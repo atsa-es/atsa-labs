@@ -1,0 +1,660 @@
+```{r mss-RUNFIRST, echo=FALSE, include=FALSE, message=FALSE}
+```
+
+
+# Multivariate state-space models without covariates  {#chap-multivariate-state-space}
+
+
+This lab show you how to fit multivariate state-space models using the **MARSS** package. This chapter is an example which uses model selection to test different population structures in west coast harbor seals.  See \citet{Holmesetal2014} for a fuller version of this examples. Chapter \@ref(chap-mss-covariates) shows an example of a multivariate state-space model with covariates.
+
+As discussed in Chapter \@ref(chap-univariate-state-space), the **MARSS** package fits multivariate state-space models in this form:
+\begin{equation}
+\begin{gathered}
+\mathbf{x}_t = \mathbf{B} \mathbf{x}_{t-1}+\mathbf{u}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \,\text{N}(0,\mathbf{Q}) \\
+\mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t \text{ where } \mathbf{v}_t \sim \,\text{N}(0,\mathbf{R}) \\
+\mathbf{x}_0 = \boldsymbol{\mu}
+\end{gathered}   
+(\#eq:mss-marss)
+\end{equation}
+where each of the bolded terms are matrices.  Those that are bolded and small (not capitalized) have one column only, so are column matrices. 
+
+To fit your time-series model with the **MARSS** package, you need to determine the size and structure of each of the parameter matrices: $\mathbf{B}$, $\mathbf{u}$, $\mathbf{Q}$, $\mathbf{Z}$, $\mathbf{a}$, $\mathbf{R}$ and $\boldsymbol{\mu}$.  
+
+
+
+### The required packages  {-}
+
+The required packages are **MARSS** for fitting models via maximum-likelihood and **R2jags** and **coda** for fitting models via Bayesian integration.  To run the JAGS code, you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed.
+```{r mss-load-packages, results='hide', message=FALSE, warnings=FALSE}
+require(MARSS)
+require(R2jags)
+require(coda)
+```
+
+
+## West coast harbor seals counts {#sec-mss-west-coast-harbor-seals-counts}
+
+In this example, we will use multivariate state-space models to combine surveys from four survey regions to estimate the average long-term population growth rate and the year-to-year variability in that population growth rate.  
+
+We have five regions (or sites) where harbor seals were censused from 1978-1999 while hauled out of land\footnote{Jeffries et al. 2003.  Trends and status of harbor seals in Washington State: 1978-1999. Journal of Wildlife Management 67(1):208--219 }.  During the period of this dataset, harbor seals were recovering steadily after having been reduced to low levels by hunting prior to protection.  We will assume that the underlying population process is a stochastic exponential growth process with mean rates of increase that were not changing through 1978-1999.  
+
+The survey methodologies were consistent throughout the 20 years of the data but we do not know what fraction of the population that each region represents nor do we know the observation-error variance for each region.  Given differences between the numbers of haul-outs in each region, the observation errors may be quite different.  The regions have had different levels of sampling; the best sampled region has only 4 years missing while the worst has over half the years missing (Figure \@ref(fig:mss-fig1)).  
+
+```{r mss-noshowlegend, echo=FALSE, results='hide'}
+d=harborSealWA
+legendnames = (unlist(dimnames(d)[2]))[2:ncol(d)]
+for(i in 1:length(legendnames)) cat(paste(i,legendnames[i],"\n",sep=" "))
+```
+
+(ref:mss-fig1) Plot of the of the count data from the five harbor seal regions (Jeffries et al. 2003). The numbers on each line denote the different regions: 1) Strait of Juan de Fuca (SJF), 2) San Juan Islands (SJI), 2) Eastern Bays (EBays), 4) Puget Sound (PSnd), and 5) Hood Canal (HC).  Each region is an index of the total harbor seal population in each region. 
+
+```{r mss-fig1, fig=TRUE, echo=FALSE, fig.width=5, fig.height=5, fig.cap='(ref:mss-fig1)'}
+d=harborSealWA
+dat = d[,2:ncol(d)] #first col is years
+x = d[,1] #first col is years
+n = ncol(dat) #num time series
+
+#set up the graphical parameters to give each data a unique line, color and width
+options(warn=-99)
+ltys=matrix(1,nrow=n)
+cols=matrix(1:4,nrow=n)
+lwds=matrix(1:2,nrow=n)
+pchs=matrix(as.character(c(1:n)),nrow=n)
+options(warn=0)
+
+matplot(x,dat,xlab="",ylab="log(counts)",type="b",pch=pchs,lty=ltys,col=cols,lwd=lwds,bty="L")
+title("Puget Sound Harbor Seal Surveys")
+```
+ 
+
+
+### Load the harbor seal data {#sec-mss-load-the-harbor-seal-data}
+
+The harbor seal data are included in the **MARSS** package as matrix with years in column 1 and the logged counts in the other columns. Let's look at the first few years of data:
+```{r mss-Cs2-showdata}
+print(harborSealWA[1:8,], digits=3)
+```
+We are going to leave out Hood Canal (HC) since that region is somewhat isolated from the others and experiencing very different conditions due to hypoxic events and periodic intense killer whale predation.  We will set up the data as follows:
+
+```{r mss-Cs2-readindata}
+years = harborSealWA[,"Year"]
+dat= harborSealWA[,!(colnames(harborSealWA) %in% c("Year", "HC"))]
+dat=t(dat) #transpose to have years across columns
+colnames(dat) = years
+n = nrow(dat)-1
+```
+
+
+
+## A single well-mixed population {#sec-mss-a-single-well-mixed-population}
+
+When we are looking at data over a large geographic region, we might make the assumption that the different census regions are measuring a single population if we think animals are moving sufficiently such that the whole area (multiple regions together) is "well-mixed".  We write a model of the total  population abundance for this case as:
+\begin{equation}
+n_t = \,\text{exp}(u + w_t) n_{t-1},
+(\#eq:mss-expstoc)
+\end{equation}
+where $n_t$ is the total count in year $t$, $u$ is the mean population growth rate, and $w_t$ is the deviation from that average in year $t$. 
+We then take the log of both sides and write the model in log space:
+\begin{equation}
+x_t = x_{t-1} + u + w_t, \textrm{ where } w_t \sim \,\text{N}(0,q)
+(\#eq:mss-seg)
+\end{equation}
+$x_t=\log{n_t}$. When there is one effective population, there is one $x$, therefore $\mathbf{x}_t$ is a $1 \times 1$ matrix.  This is our **state** model and $x$ is called the "state".  This is just the jargon used in this type of model (state-space model) for the hidden state that you are estimating from the data.  "Hidden" means that you observe this state with error.
+
+
+
+### The observation process {#sec-mss-the-observation-process}
+
+We assume that all four regional time series are observations of this one population trajectory but they are scaled up or down relative to that trajectory.   In effect, we think of each regional survey as an index of the total population.  With this model, we do not think the regions represent independent subpopulations but rather independent observations of one population.
+Our model for the data, $\mathbf{y}_t = \mathbf{Z} \mathbf{x}_t + \mathbf{a} + \mathbf{v}_t$, is written as:
+\begin{equation}
+ \left[ \begin{array}{c}
+    y_{1} \\
+    y_{2} \\
+    y_{3} \\
+    y_{4}  \end{array} \right]_t = 
+    \left[ \begin{array}{c}
+    1\\
+    1\\
+    1\\
+    1\end{array} \right] x_t +  
+    \left[ \begin{array}{c}
+    0 \\
+    a_2 \\
+    a_3 \\
+    a_4  \end{array} \right] + 
+    \left[ \begin{array}{c}
+    v_{1} \\
+    v_{2} \\
+    v_{3} \\
+    v_{4}  \end{array} \right]_t 
+(\#eq:mss-meas)
+\end{equation}
+Each $y_{i}$ is the observed time series of counts for a different region.  The $a$'s are the bias between the regional sample and the total population.  $\mathbf{Z}$ specifies which observation time series, $y_i$, is associated with which population trajectory, $x_j$.  In this case, $\mathbf{Z}$ is a matrix with 1 column since each region is an observation of the one population trajectory.
+
+We allow that each region could have a unique observation variance and that the observation errors are independent between regions.  We assume that the observations errors on log(counts) are normal and thus the errors on (counts) are log-normal. The assumption of normality is not unreasonable since these regional counts are the sum of counts across multiple haul-outs.  We specify independent observation errors with different variances by specifying  that $\mathbf{v} \sim \,\text{MVN}(0,\mathbf{R})$, where
+\begin{equation}
+\mathbf{R} = \begin{bmatrix}
+    r_1 & 0 & 0 & 0 \\
+    0 & r_2 & 0 & 0\\
+    0 & 0 & r_3 & 0 \\
+    0 & 0 & 0 & r_4 \end{bmatrix}
+(\#eq:mss-Rdiag)
+\end{equation}
+This is a diagonal matrix with unequal variances.  The shortcut for this structure in ```MARSS()``` is ```"diagonal and unequal"```.
+
+
+### Fitting the model {#sec-mss-fitting-the-model}
+
+We need to write the model in the form of Equation \@ref(eq:mss-marss) with each parameter written as a matrix.  The observation model (Equation \@ref(eq:mss-meas)) is already in matrix form.  Let's write the state model in matrix form too:
+\begin{equation}
+[x]_t = [1][x]_{t-1} + [u] + [w]_t, \textrm{ where } [w]_t \sim \,\text{N}(0,[q])
+(\#eq:mss-seg-mat)
+\end{equation}
+It is very simple since all terms are $1 \times 1$ matrices.
+
+To fit our model with ```MARSS()```, we set up a list which precisely describes the size and structure of each parameter matrix.  Fixed values in a matrix are designated with their numeric value and estimated values are given a character name and put in quotes.  Our model list for a single well-mixed population is:
+```{r mss-fit.0.model}
+mod.list.0 = list(
+B=matrix(1),
+U=matrix("u"),
+Q=matrix("q"),
+Z=matrix(1,4,1),
+A="scaling",
+R="diagonal and unequal",
+x0=matrix("mu"),
+tinitx=0 )
+```
+and fit:
+```{r mss-fit.0.fit}
+fit.0 = MARSS(dat, model=mod.list.0)
+```
+We already discussed that the short-cut ```"diagonal and unequal"``` means a diagonal matrix with each diagonal element having a different value.  The short-cut ```"scaling"``` means the form of $\mathbf{a}$ in Equation \@ref(eq:mss-meas) with one value set to 0 and the rest estimated.  You should run the code in the list to make sure you see that each parameter in the list has the same form as in our mathematical equation for the model.
+
+
+### Model residuals {#sec-mss-model-residuals}
+
+The model fits fine but look at the model residuals (Figure \@ref(fig:mss-model-resids-plot)).  They have problems.
+```{r mss-model-resids, fig.show='hide'}
+par(mfrow=c(2,2))
+resids=residuals(fit.0)
+for(i in 1:4){
+plot(resids$model.residuals[i,],ylab="model residuals", xlab="")
+abline(h=0)
+title(rownames(dat)[i])
+}
+```
+
+
+(ref:mss-model-resids-plot) The model residuals for the first model.  SJI and EBays do not look good.
+
+```{r mss-model-resids-plot, echo=FALSE, fig=TRUE, fig.cap='(ref:mss-model-resids-plot)'}
+par(mfrow=c(2,2))
+resids=residuals(fit.0)
+for(i in 1:4){
+plot(resids$model.residuals[i,],ylab="model residuals", xlab="")
+abline(h=0)
+title(rownames(dat)[i])
+}
+```
+ 
+
+\clearpage
+
+
+## Four subpopulations with temporally uncorrelated errors {#sec-mss-segind}
+
+The model for one well-mixed population was not very good.  Another reasonable assumption is that the different census regions are measuring four different temporally independent subpopulations.  We write a model of the log subpopulation abundances for this case as:
+\begin{equation}
+\begin{gathered}
+\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}_t = 
+\begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 
+\end{bmatrix}
+\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}_{t-1} +
+\begin{bmatrix}u\\u\\u\\u\end{bmatrix} + 
+\begin{bmatrix}w\\w\\w\\w\end{bmatrix}_t \\
+\textrm{ where } \mathbf{w}_t \sim \,\text{MVN}\begin{pmatrix}0,
+\begin{bmatrix}
+    q & 0 & 0 & 0 \\
+    0 & q & 0 & 0\\
+    0 & 0 & q & 0 \\
+    0 & 0 & 0 & q \end{bmatrix}\end{pmatrix}\\
+\begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}_0 = \begin{bmatrix}\mu_1\\\mu_2\\\mu_3\\\mu_4\end{bmatrix}_t 
+\end{gathered}
+(\#eq:mss-seg-mod1)
+\end{equation}
+The $\mathbf{Q}$ matrix is diagonal with one variance value.  This means that the process variance (variance in year-to-year population growth rates) is independent (good and bad years are not correlated) but the level of variability is the same across regions.  We made the $\mathbf{u}$ matrix with one $u$ value.  This means that we assume the population growth rates are the same across regions.
+
+Notice that we set the $\mathbf{B}$ matrix equal to a diagonal matrix with 1 on the diagonal.  This is the "identity" matrix and it is like a 1 but for matrices.  We do not need $\mathbf{B}$ for our model, but ```MARSS()``` requires a value.
+
+
+### The observation process {#sec-mss-the-observation-process}
+
+In this model, each survey is an observation of a different $x$:
+\begin{equation}
+ \left[ \begin{array}{c}
+    y_{1} \\
+    y_{2} \\
+    y_{3} \\
+    y_{4}  \end{array} \right]_t = 
+\begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0\\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \end{bmatrix} \begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}_t +  
+    \left[ \begin{array}{c}
+    0 \\
+    0 \\
+    0 \\
+    0  \end{array} \right] + 
+    \left[ \begin{array}{c}
+    v_{1} \\
+    v_{2} \\
+    v_{3} \\
+    v_{4}  \end{array} \right]_t 
+(\#eq:mss-meas-mod1)
+\end{equation}
+No $a$'s can be estimated since we do not have multiple observations of a given $x$ time series. Our $\mathbf{R}$ matrix doesn't change; the observation errors are still assumed to the independent with different variances.
+
+Notice that our $\mathbf{Z}$ matrix changed.  $\mathbf{Z}$ is specifying which $y_i$ goes to which $x_j$.  The one we have specified means that $y_1$ is observing $x_1$, $y_2$ observes $x_2$, etc. We could have set up $\mathbf{Z}$ like so
+\begin{equation}
+\begin{bmatrix}
+    0 & 1 & 0 & 0 \\
+    1 & 0 & 0 & 0 \\
+    0 & 0 & 0 & 1 \\
+    0 & 0 & 1 & 0 
+\end{bmatrix}
+\end{equation}
+
+This would mean that $y_1$ observes $x_2$, $y_2$ observes $x_1$, $y_3$ observes $x_4$, and $y_4$ observes $x_3$.  Which $x$ goes to which $y$ is arbitrary; we need to make sure it is one-to-one.  We will stay with $\mathbf{Z}$ as an identity matrix since $y_i$ observing $x_i$ makes it easier to remember which $x$ goes with which $y$.  
+
+
+### Fitting the model {#sec-mss-fitting-mod1}
+
+We set up the model list for ```MARSS()``` as:
+```{r mss-fit-1-model}
+mod.list.1 = list(
+B="identity",
+U="equal",
+Q="diagonal and equal",
+Z="identity",
+A="scaling",
+R="diagonal and unequal",
+x0="unequal",
+tinitx=0 )
+```
+We introduced a few more short-cuts.  ```"equal"``` means all the values in the matrix are the same.   ```"diagonal and equal"``` means that the matrix is diagonal with one value on the diagonal.  ```"unequal"``` means that all values in the matrix are different.
+
+We can then fit our model for 4 subpopulations as:
+```{r mss-fit.1.fit, results='hide'}
+fit.1 = MARSS(dat, model=mod.list.1)
+```
+
+
+## Four subpopulations with temporally correlated errors {#sec-mss-four-subpopulations-with-temporally-correlated-errors}
+
+Another reasonable assumption is that the different census regions are measuring different subpopulations but that the year-to-year population growth rates are correlated (good and bad year coincide).  The only parameter that changes is the $\mathbf{Q}$ matrix:
+\begin{equation}
+\mathbf{Q}=\begin{bmatrix}
+    q & c & c & c \\
+    c & q & c & c\\
+    c & c & q & c \\
+    c & c & c & q \end{bmatrix}
+(\#eq:mss-qseg-mod2)
+\end{equation}
+This $\mathbf{Q}$ matrix structure means that the process variance (variance in year-to-year population growth rates) is the same across regions and the covariance in year-to-year population growth rates is also the same across regions.
+
+
+### Fitting the model {#sec-mss-fitting-mod2}
+
+Set up the model list for ```MARSS()``` as:
+```{r mss-fit-2-model}
+mod.list.2 = mod.list.1
+mod.list.2$Q = "equalvarcov"
+```
+```"equalvarcov"``` is a shortcut for the matrix form in Equation \@ref(eq:mss-qseg-mod2).
+
+Fit the model with:
+```{r mss-fit-1-fit, results='hide'}
+fit.2 = MARSS(dat, model=mod.list.2)
+```
+Results are not shown, but here are the AICc.  This last model is much better:
+```{r mss-fits-aicc}
+c(fit.0$AICc, fit.1$AICc, fit.2$AICc)
+```
+
+
+### Model residuals {#sec-mss-residuals-mod2}
+
+Look at the model residuals (Figure \@ref(fig:mss-model-resids-2)).  They are also much better.
+
+(ref:mss-model-resids-2) The model residuals for the model with four temporally correlated subpopulations.
+
+```{r mss-model-resids-2, echo=FALSE, fig=TRUE, fig.cap='(ref:mss-model-resids-2)'}
+par(mfrow=c(2,2))
+resids=residuals(fit.2)
+for(i in 1:4){
+plot(resids$model.residuals[i,],ylab="model residuals", xlab="")
+abline(h=0)
+title(rownames(dat)[i])
+}
+```
+ 
+
+Figure \@ref(fig:mss-fig2-plot) shows the estimated states for each region using this code:
+```{r mss-fig2, fig.show='hide'}
+par(mfrow=c(2,2))
+for(i in 1:4){
+plot(years,fit.2$states[i,],ylab="log subpopulation estimate", xlab="", type="l")
+lines(years,fit.2$states[i,]-1.96*fit.2$states.se[i,],type="l",lwd=1,lty=2,col="red")
+lines(years,fit.2$states[i,]+1.96*fit.2$states.se[i,],type="l",lwd=1,lty=2,col="red")
+title(rownames(dat)[i])
+}
+```
+
+
+(ref:mss-fig2-plot) Plot of the estimate of log harbor seals in each region. The 95\% confidence intervals on the population estimates are the dashed lines.  These are not the confidence intervals on the observations, and the observations (the numbers) will not fall between the confidence interval lines.
+
+```{r mss-fig2-plot, fig=TRUE, echo=FALSE, fig.width=6, fig.height=6, fig.cap='(ref:mss-fig2-plot)'}
+par(mfrow=c(2,2))
+for(i in 1:4){
+plot(years,fit.2$states[i,],ylab="log subpopulation estimate", xlab="", type="l")
+lines(years,fit.2$states[i,]-1.96*fit.2$states.se[i,],type="l",lwd=1,lty=2,col="red")
+lines(years,fit.2$states[i,]+1.96*fit.2$states.se[i,],type="l",lwd=1,lty=2,col="red")
+title(rownames(dat)[i])
+}
+```
+ 
+
+
+## Using MARSS models to study spatial structure {#sec-mss-using-marss-models-to-study-spatial-structure}
+
+For our next example, we will use MARSS models to test hypotheses about the population structure of harbor seals on the west coast.   For this example, we will evaluate the support for different population structures (numbers of subpopulations) using different $\mathbf{Z}$s to specify how survey regions map onto subpopulations.  We will assume correlated process errors with the same magnitude of process variance and covariance.  We will assume independent observations errors with equal variances at each site. We could do unequal variances but it takes a long time to fit so for this example, the observation variances are set equal.
+
+The dataset we will use is ```harborSeal```, a 29-year dataset of abundance indices for 12 regions along the U.S. west coast between 1975-2004 (Figure \@ref(fig:mss-Cs02-fig1)). 
+
+We start by setting up our data matrix.  We will leave off Hood Canal.
+```{r mss-Cs01-setup-data}
+years = harborSeal[,"Year"]
+good = !(colnames(harborSeal)%in%c("Year","HoodCanal"))
+sealData = t(harborSeal[,good])
+```
+
+
+(ref:mss-Cs02-fig1) Plot of log counts at each survey region in the harborSeal dataset. Each region is an index of the harbor seal abundance in that region. 
+
+```{r mss-Cs02-fig1, fig=TRUE, echo=FALSE, fig.width=6, fig.height=6, fig.cap='(ref:mss-Cs02-fig1)'}
+par(mfrow=c(4,3),mar=c(2,2,2,2))
+for(i in 2:dim(harborSeal)[2]) {
+    plot(years, harborSeal[,i], xlab="", ylab="", main=colnames(harborSeal)[i])
+}
+```
+ 
+
+
+
+## Hypotheses regarding spatial structure {#sec-mss-hypotheses-regarding-spatial-structure}
+
+We will evaluate the data support for the following hypotheses about the population structure: 
+
+
+*   H1: ```stock```  3 subpopulations defined by management units
+*   H2: ```coast+PS```  2 subpopulations defined by coastal versus WA inland
+*   H3: ```N+S```  2 subpopulations defined by north and south split in the middle of Oregon
+*   H4:```NC+strait+PS+SC```  4 subpopulations defined by N coastal, S coastal, SJF+Georgia Strait, and Puget Sound
+*   H5: ```panmictic```  All regions are part of the same panmictic population
+*   H6: ```site```  Each of the 11 regions is a subpopulation
+
+
+These hypotheses translate to these $\mathbf{Z}$ matrices (H6 not shown; it is an identity matrix):
+\begin{equation*}
+\begin{array}{rcccc}
+&H1&H2&H4&H5\\
+&\text{pnw ps ca}&\text{coast pc}&\text{nc is ps sc}&\text{pan}\\
+\hline
+\begin{array}{r}\text{Coastal Estuaries}\\ \text{Olympic Peninsula} \\ \text{Str. Juan de Fuca} \\ \text{San Juan Islands} \\ 
+\text{Eastern Bays} \\ \text{Puget Sound} \\ \text{CA Mainland} \\ \text{CA Channel Islands} \\ \text{OR North Coast} \\ 
+\text{OR South Coast} \\ \text{Georgia Strait} \end{array}&
+\begin{bmatrix}
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1 \\
+0 & 0 & 1 \\
+1 & 0 & 0 \\
+1 & 0 & 0 \\
+0 & 1 & 0 
+\end{bmatrix}&
+\begin{bmatrix}
+1 & 0  \\
+1 & 0  \\
+0 & 1  \\
+0 & 1  \\
+0 & 1  \\
+0 & 1  \\
+1 & 0  \\
+1 & 0  \\
+1 & 0  \\
+1 & 0  \\
+0 & 1  
+\end{bmatrix}&
+\begin{bmatrix}
+1 & 0 & 0 & 0\\
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1\\
+0 & 0 & 0 & 1\\
+1 & 0 & 0 & 0\\
+0 & 0 & 0 & 1\\
+0 & 1 & 0 & 0
+\end{bmatrix}&
+\begin{bmatrix}
+1 \\
+1 \\
+1 \\
+1 \\
+1 \\
+1 \\
+1 \\
+1 \\
+1 \\
+1 \\
+1 
+\end{bmatrix}
+\end{array}
+\end{equation*}
+
+To tell ```MARSS()``` the form of $\mathbf{Z}$, we construct the same matrix in R.  For example, for hypotheses 1, we can write:
+```{r mss-Zmodel, tidy=FALSE}
+Z.model=matrix(0,11,3)
+Z.model[c(1,2,9,10),1]=1  #which elements in col 1 are 1
+Z.model[c(3:6,11),2]=1  #which elements in col 2 are 1
+Z.model[7:8,3]=1  #which elements in col 3 are 1
+```
+
+Or we can use a short-cut by specifying $\mathbf{Z}$ as a factor that has the name of the subpopulation associated with each row in $\mathbf{y}$.  For hypothesis 1, this is
+```{r mss-Zmodel1}
+Z1=factor(c("pnw","pnw",rep("ps",4),"ca","ca","pnw","pnw","ps")) 
+```
+Notice it is 11 elements in length; one element for each row of data. 
+
+
+## Set up the hypotheses as different models {#sec-mss-set-up-the-hypotheses-as-different-models}
+
+Only the $\mathbf{Z}$ matrices change for our model.  We will set up a base model list used for all models.
+```{r mss-model-list, tidy=FALSE}
+mod.list = list(
+B = "identity",
+U = "unequal",
+Q = "equalvarcov",
+Z = "placeholder",
+A = "scaling",
+R = "diagonal and equal",
+x0 = "unequal",
+tinitx = 0 )
+```
+
+Then we set up the $\mathbf{Z}$ matrices using the factor short-cut.
+```{r mss-set-up-Zs, tidy=FALSE}
+Z.models = list(
+H1=factor(c("pnw","pnw",rep("ps",4),"ca","ca","pnw","pnw","ps")), 
+H2=factor(c(rep("coast",2),rep("ps",4),rep("coast",4),"ps")), 
+H3=factor(c(rep("N",6),"S","S","N","S","N")),
+H4=factor(c("nc","nc","is","is","ps","ps","sc","sc","nc","sc","is")),
+H5=factor(rep("pan",11)),
+H6=factor(1:11) #site
+)
+names(Z.models)=
+     c("stock","coast+PS","N+S","NC+strait+PS+SC","panmictic","site")
+```
+
+
+### Fit the models  {#sec-fit-models-hyp}
+
+We loop through the models, fit and store the results:
+```{r mss-Cs05-run-models}
+out.tab=NULL
+fits=list()
+for(i in 1:length(Z.models)){
+     mod.list$Z = Z.models[[i]] 
+     fit = MARSS(sealData, model=mod.list,
+            silent=TRUE, control=list(maxit=1000))
+     out=data.frame(H=names(Z.models)[i], 
+            logLik=fit$logLik, AICc=fit$AICc, num.param=fit$num.params,
+            m=length(unique(Z.models[[i]])),
+            num.iter=fit$numIter, converged=!fit$convergence)
+     out.tab=rbind(out.tab,out)
+     fits=c(fits,list(fit))
+}
+```
+
+
+We will use AICc and AIC weights to summarize the data support for the different hypotheses.  First we will sort the fits based on AICc:
+```{r mss-Cs06-sort-results}
+min.AICc=order(out.tab$AICc)
+out.tab.1=out.tab[min.AICc,]
+```
+Next we add the $\Delta$AICc values by subtracting the lowest AICc:
+```{r mss-Cs07-add-delta-aicc}
+out.tab.1=cbind(out.tab.1,
+           delta.AICc=out.tab.1$AICc-out.tab.1$AICc[1])
+```
+Relative likelihood is defined as $\,\text{exp}(-\Delta \mathrm{AICc}/2)$.
+```{r mss-Cs08-add-delta-aicc}
+out.tab.1=cbind(out.tab.1, 
+           rel.like=exp(-1*out.tab.1$delta.AICc/2))
+```
+The AIC weight for a model is its relative likelihood divided by the sum of all the relative likelihoods.  
+```{r mss-Cs09-aic-weight}
+out.tab.1=cbind(out.tab.1,
+          AIC.weight = out.tab.1$rel.like/sum(out.tab.1$rel.like))
+```
+
+Let's look at the model weights (```out.tab.1```):
+```{r mss-Cs10-print-table, echo=FALSE}
+out.tab.1$delta.AICc = round(out.tab.1$delta.AICc, digits=2)
+out.tab.1$AIC.weight = round(out.tab.1$AIC.weight, digits=3)
+print(out.tab.1[,c("H","delta.AICc","AIC.weight", "converged")], row.names=FALSE)
+```
+
+
+## Multivariate state-space models with JAGS {#sec-mss-multivariate-state-space-models-with-jags}
+
+Here we show you how to fit a MARSS model for the harbor seal data using JAGS. We will focus on four time series from inland Washington and set up the data as follows:
+
+```{r mss-set-up-seal-data}
+sites = c("SJF","SJI","EBays","PSnd")
+Y = harborSealWA[,sites]
+```
+
+We will fit the model with four temporally independent subpopulations with the same population growth rate ($u$) and year-to-year variance ($q$).  This is the model in Section \@ref(sec-mss-segind).
+
+
+## Writing the model in JAGS {#sec-mss-writing-the-model-in-jags}
+
+The first step is to write this model in JAGS.  See Chapter \@ref(chap-jags) for more information on and examples of JAGS models.
+
+```{r mss-jagsscript}
+jagsscript = cat("
+model {  
+   U ~ dnorm(0, 0.01);
+   tauQ~dgamma(0.001,0.001);
+   Q <- 1/tauQ;
+
+   # Estimate the initial state vector of population abundances
+   for(i in 1:nSites) {
+      X[1,i] ~ dnorm(3,0.01); # vague normal prior 
+   }
+
+   # Autoregressive process for remaining years
+   for(i in 2:nYears) {
+      for(j in 1:nSites) {
+         predX[i,j] <- X[i-1,j] + U;
+         X[i,j] ~ dnorm(predX[i,j], tauQ);
+      }
+   }
+
+   # Observation model
+   # The Rs are different in each site
+   for(i in 1:nSites) {
+     tauR[i]~dgamma(0.001,0.001);
+     R[i] <- 1/tauR[i];
+   }
+   for(i in 1:nYears) {
+     for(j in 1:nSites) {
+       Y[i,j] ~ dnorm(X[i,j],tauR[j]);
+     }
+   }
+}  
+
+",file="marss-jags.txt")
+```
+
+Then we write the data list, parameter list, and pass the model to the ```jags()``` function:
+
+```{r mss-marss-jags, results='hide', message=FALSE}
+jags.data = list("Y"=Y,nSites=dim(Y)[2],nYears = dim(Y)[1]) # named list
+jags.params=c("X","U","Q") 
+model.loc="marss-jags.txt" # name of the txt file
+mod_1 = jags(jags.data, parameters.to.save=jags.params, 
+             model.file=model.loc, n.chains = 3, 
+             n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
+```
+
+
+## Plot the posteriors for the estimated states {#sec-mss-plot-the-posteriors-for-the-estimated-states}
+
+We can plot any of the variables we chose to return to R in the ```jags.params``` list. Let's focus on the ```X```. When we look at the dimension of the ```X```, we can use the ```apply()``` function to calculate the means and 95 percent CIs of the estimated states.
+
+
+(ref:NA) Plot of the posterior means and credible intervals for the estimated states.
+
+```{r mss-plot-jags-states, fig.cap='(ref:NA)'}
+#attach.jags attaches the jags.params to our workspace
+attach.jags(mod_1)
+means = apply(X,c(2,3),mean)
+upperCI = apply(X,c(2,3),quantile,0.975)
+lowerCI = apply(X,c(2,3),quantile,0.025)
+par(mfrow =c(2,2))
+nYears = dim(Y)[1]
+for(i in 1:dim(means)[2]) {
+  plot(means[,i],lwd=3,ylim=range(c(lowerCI[,i],upperCI[,i])),
+       type="n",main=colnames(Y)[i],ylab="log abundance", xlab="time step")
+  polygon(c(1:nYears,nYears:1,1),
+          c(upperCI[,i],rev(lowerCI[,i]),upperCI[1,i]),col="skyblue",lty=0)
+  lines(means[,i],lwd=3)
+}
+```
+ 
+```{r mss-Reset, echo=FALSE}
+```
