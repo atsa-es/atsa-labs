@@ -1,0 +1,664 @@
+
+# Dynamic Factor Analysis {#sec-dfa}
+
+Here we will use the **MARSS** package to do Dynamic Factor Analysis (DFA), which allows us to look for a set of common underlying processes among a relatively large set of time series [@Zuuretal2003a]. There have been a number of recent applications of DFA to ecological questions surrounding Pacific salmon [@Stachuraetal2014; @Jorgensenetal2016; @Ohlbergeretal2016] and stream temperatures [@Lisietal2015]. For a more in-depth treatment of potential applications of MARSS models for DFA, I direct readers to Chap 9 in the [User's Guide](https://cran.r-project.org/web/packages/MARSS/vignettes/UserGuide.pdf) for the **MARSS** package.
+
+### Required packages {-}
+```{r dfa-load-packages, results='hide', message=FALSE, warnings=FALSE}
+require(MARSS)
+```
+
+## Introduction {#sec-dfa-intro}
+
+DFA is conceptually different than what we have been doing in the previous applications.  Here we are trying to explain temporal variation in a set of $n$ observed time series using linear combinations of a set of $m$ hidden random walks, where $m << n$.  A DFA model is a type of MARSS model with the following structure:
+
+\begin{equation}
+\begin{gathered}
+\mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \text{MVN}(0,\mathbf{Q}) \\
+\mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t \text{ where } \mathbf{v}_t \sim \text{MVN}(0,\mathbf{R}) 
+\end{gathered}
+(\#eq:dfa)
+\end{equation}
+
+
+This equation should look rather familiar as it is exactly the same form we used for estimating varying number of processes from a set of observations in Lesson II. The difference with DFA is that rather than fixing the elements within $\mathbf{Z}$ at 1 or 0 to indicate whether an observation does or does not correspond to a trend, we will instead estimate them as "loadings" on each of the states/processes.
+
+## Example of a DFA model {#sec-dfa-example1}
+
+The general idea is that the observations $\mathbf{y}$ are modeled as a linear combination of hidden processes $\mathbf{x}$ and factor loadings $\mathbf{Z}$ plus some offsets $\mathbf{a}$. Imagine a case where we had a data set with five observed time series ($n=5$) and we want to fit a model with three hidden processes ($m=3$).  If we write out our DFA model in MARSS matrix form, the process model would look like this:
+
+\begin{equation}
+\begin{bmatrix}
+    x_{1} \\
+    x_{2} \\
+    x_{3} \end{bmatrix}_t = 
+ \begin{bmatrix}
+    1&0&0 \\
+    0&1&0 \\
+    0&0&1 \end{bmatrix} 
+ \begin{bmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}\end{bmatrix}_{t-1} +
+ \begin{bmatrix}
+    w_{1} \\
+    w_{2} \\
+    w_{3} \end{bmatrix}_t 
+(\#eq:dfa-mat-x)
+\end{equation}
+
+
+And the observation equation would look like
+
+\begin{equation}
+\begin{bmatrix}
+    y_{1} \\
+    y_{2} \\
+    y_{3} \\
+    y_{4} \\
+    y_{5} \end{bmatrix}_t = 
+ \begin{bmatrix}
+    z_{11}&z_{12}&z_{13}\\
+    z_{21}&z_{22}&z_{23}\\
+    z_{31}&z_{32}&z_{33}\\
+    z_{41}&z_{42}&z_{43}\\
+    z_{51}&z_{52}&z_{53}\end{bmatrix}   
+ \begin{bmatrix}
+    x_{1} \\
+    x_{2} \\
+    x_{3} \end{bmatrix}_t + 
+ \begin{bmatrix}
+    a_1 \\
+    a_2 \\
+    a_3 \\
+    a_4 \\
+    a_5 \end{bmatrix} + 
+ \begin{bmatrix}
+    v_{1} \\
+    v_{2} \\
+    v_{3} \\
+    v_{4} \\
+    v_{5} \end{bmatrix}_t.
+(\#eq:dfa-mat-y)
+\end{equation}
+
+The process errors would be
+
+\begin{equation}
+\begin{bmatrix}
+    w_{1} \\
+    w_{2} \\
+    w_{3} \end{bmatrix}_t
+\sim \text{MVN} \begin{pmatrix}
+ \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \end{bmatrix},
+ \begin{bmatrix}
+    q_{11}&q_{12}&q_{13}\\
+    q_{12}&q_{22}&q_{23}\\
+    q_{13}&q_{23}&q_{33}\end{bmatrix}
+\end{pmatrix}.
+(\#eq:dfa-mat-pe)
+\end{equation}
+
+And the observation errors would be
+
+\begin{equation}
+\begin{bmatrix}
+    v_{1} \\
+    v_{2} \\
+    v_{3} \\
+    v_{4} \\
+    v_{5} \end{bmatrix}_t 
+ \sim \text{MVN} \begin{pmatrix}
+    \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+    0 \end{bmatrix},
+ \begin{bmatrix}
+    r_{11}&r_{12}&r_{13}&r_{14}&r_{15}\\
+    r_{12}&r_{22}&r_{23}&r_{24}&r_{25}\\
+    r_{13}&r_{23}&r_{33}&r_{34}&r_{35}\\
+    r_{14}&r_{24}&r_{34}&r_{44}&r_{45}\\
+    r_{15}&r_{25}&r_{35}&r_{45}&r_{55}\end{bmatrix}
+\end{pmatrix}
+(\#eq:dfa-mat-oe)
+\end{equation}
+
+## Constraining a DFA model {#sec-dfa-constraining-a-dfa-model}
+
+If $\mathbf{Z}$, $\mathbf{a}$, and $\mathbf{Q}$ are not constrained, however, then the DFA model above is unidentifiable. Nevertheless, we can use the following parameter constraints to make the model identifiable: 
+
+- in the first $m-1$ rows of $\mathbf{Z}$, the $z$-value in the $j$-th column and $i$-th row is set to zero if $j > i$;  
+- $\mathbf{a}$ is constrained so that the first $m$ values are set to zero; and  
+- $\mathbf{Q}$ is set equal to the identity matrix $\mathbf{I}_m$.  
+
+Using these constraints, the process equation for the DFA model above becomes
+
+\begin{equation}
+\begin{bmatrix}
+    x_{1} \\
+    x_{2} \\
+    x_{3} \end{bmatrix}_t = 
+ \begin{bmatrix}
+    1&0&0 \\
+    0&1&0 \\
+    0&0&1 \end{bmatrix} 
+ \begin{bmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}\end{bmatrix}_{t-1} +
+ \begin{bmatrix}
+    w_{1} \\
+    w_{2} \\
+    w_{3}
+  \end{bmatrix}_t
+(\#eq:dfa-mat-peqn2)
+\end{equation}
+
+and the observation equation becomes
+
+\begin{equation}
+\begin{bmatrix}
+    y_{1} \\
+    y_{2} \\
+    y_{3} \\
+    y_{4} \\
+    y_{5} \end{bmatrix}_t = 
+ \begin{bmatrix}
+    z_{11}&0&0\\
+    z_{21}&z_{22}&0\\
+    z_{31}&z_{32}&z_{33}\\
+    z_{41}&z_{42}&z_{43}\\
+    z_{51}&z_{52}&z_{53}\end{bmatrix}   
+ \begin{bmatrix}
+    x_{1} \\
+    x_{2} \\
+    x_{3} \end{bmatrix}_t + 
+ \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+    0 \end{bmatrix} + 
+ \begin{bmatrix}
+    v_{1} \\
+    v_{2} \\
+    v_{3} \\
+    v_{4} \\
+    v_{5} \end{bmatrix}_t.
+(\#eq:dfa-mat-oeqn2)
+\end{equation}
+
+The process errors would then become
+
+\begin{equation}
+\begin{bmatrix}
+    w_{1} \\
+    w_{2} \\
+    w_{3} \end{bmatrix}_t 
+  \sim \text{MVN} 
+\begin{pmatrix}
+    \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \end{bmatrix},
+    \begin{bmatrix}
+    1&0&0 \\
+    0&1&0 \\
+    0&0&1 \end{bmatrix}
+\end{pmatrix},
+(\#eq:dfa-mat-pe2)
+\end{equation}
+
+but the observation errors would stay the same, such that
+
+\begin{equation}
+\begin{bmatrix}
+    v_{1} \\
+    v_{2} \\
+    v_{3} \\
+    v_{4} \\
+    v_{5} \end{bmatrix}_t 
+ \sim \text{MVN} \begin{pmatrix}
+    \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+    0 \end{bmatrix},
+ \begin{bmatrix}
+    r_{11}&r_{12}&r_{13}&r_{14}&r_{15}\\
+    r_{12}&r_{22}&r_{23}&r_{24}&r_{25}\\
+    r_{13}&r_{23}&r_{33}&r_{34}&r_{35}\\
+    r_{14}&r_{24}&r_{34}&r_{44}&r_{45}\\
+    r_{15}&r_{25}&r_{35}&r_{45}&r_{55}
+  \end{bmatrix}
+\end{pmatrix}.
+(\#eq:dfa-mat-oe2)
+\end{equation}
+
+## Different error structures {#sec-dfa-different-error-structures}
+
+The example observation equation we used above had what we refer to as an "unconstrained" variance-covariance matrix $\mathbf{R}$ wherein all of the parameters are unique. In certain applications, however, we may want to change our assumptions about the forms for $\mathbf{R}$. For example, we might have good reason to believe that all of the observations have different error variances and they were independent of one another (e.g., different methods were used for sampling), in which case
+
+$$
+\mathbf{R} = 
+  \begin{bmatrix}
+  r_1&0&0&0&0 \\
+  0&r_2&0&0&0 \\
+  0&0&r_3&0&0 \\
+  0&0&0&r_4&0 \\
+  0&0&0&0&r_5
+  \end{bmatrix}.
+$$
+
+Alternatively, we might have a situation where all of the observation errors had the same variance $r$, but they were not independent from one another. In that case we would have to include a covariance parameter $k$, such that
+
+$$
+\mathbf{R} = 
+  \begin{bmatrix}
+  r&k&k&k&k \\
+  k&r&k&k&k \\
+  k&k&r&k&k \\
+  k&k&k&r&k \\
+  k&k&k&k&r
+  \end{bmatrix}.
+$$
+
+Any of these options for $\mathbf{R}$ (and other custom options as well) are available to us in a DFA model, just as they were in the MARSS models used in previous chapters.
+
+## Lake Washington phytoplankton data {#sec-dfa-lake-wa-data}
+
+For this exercise, we will use the Lake Washington phytoplankton data contained in the **MARSS** package. Let's begin by reading in the monthly values for all of the data, including metabolism, chemistry, and climate.
+
+```{r dfa-read_data}
+## load the data (there are 3 datasets contained here)
+data(lakeWAplankton)
+## we want lakeWAplanktonTrans, which has been transformed
+## so the 0s are replaced with NAs and the data z-scored
+all_dat <- lakeWAplanktonTrans
+## use only the 10 years from 1980-1989
+yr_frst <- 1980
+yr_last <- 1989
+plank_dat <- all_dat[all_dat[,"Year"]>=yr_frst & all_dat[,"Year"]<=yr_last,]
+## create vector of phytoplankton group names
+phytoplankton <- c("Cryptomonas", "Diatoms", "Greens",
+                   "Unicells", "Other.algae")
+## get only the phytoplankton
+dat_1980 <- plank_dat[,phytoplankton]
+```
+
+Next, we transpose the data matrix and calculate the number of time series and their length.
+
+```{r dfa-trans_data}
+## transpose data so time goes across columns
+dat_1980 <- t(dat_1980)
+## get number of time series
+N_ts <- dim(dat_1980)[1]
+## get length of time series
+TT <- dim(dat_1980)[2] 
+```
+
+It will be easier to estimate the real parameters of interest if we de-mean the data, so let's do that.
+
+```{r dfa-demean_data}
+y_bar <- apply(dat_1980, 1, mean, na.rm=TRUE)
+dat <- dat_1980 - y_bar
+rownames(dat) <- rownames(dat_1980)
+```
+
+### Plots of the data {#sec-dfa-plot-lake-wa-data}
+
+Here are time series plots of all five phytoplankton functional groups.
+
+```{r dfa-plot-phytos, fig.height=9, fig.width=8, fig.cap='Demeaned time series of Lake Washington phytoplankton.'}
+spp <- rownames(dat_1980)
+clr <- c("brown","blue","darkgreen","darkred","purple")
+cnt <- 1
+par(mfrow=c(N_ts,1), mai=c(0.5,0.7,0.1,0.1), omi=c(0,0,0,0))
+for(i in spp){
+  plot(dat[i,],xlab="",ylab="Abundance index", bty="L", xaxt="n", pch=16, col=clr[cnt], type="b")
+  axis(1,12*(0:dim(dat_1980)[2])+1,yr_frst+0:dim(dat_1980)[2])
+  title(i)
+  cnt <- cnt + 1
+  }
+```
+
+## Fitting DFA models with the MARSS package {#sec-dfa-fitting-dfa-models-with-marss}
+
+The **MARSS** package is designed to work with the fully specified matrix form of the multivariate state-space model we wrote out in Sec 3. Thus, we will need to create a model list with forms for each of the vectors and matrices. Note that even though some of the model elements are scalars and vectors, we will need to specify everything as a matrix (or array for time series of matrices).
+
+Notice that the code below uses some of the **MARSS** shortcuts for specifying forms of vectors and matrices. We will also use the `matrix(list(),nrow,ncol)` trick we learned previously.
+
+### The process model {#sec-dfa-process-model}
+
+We need to specify the explicit form for all of the vectors and matrices in the full form of the MARSS model we defined in Sec 3.1. Note that we do not have to specify anything for the states $(\mathbf{x})$ -- those are elements that `MARSS` will identify and estimate itself based on our definitions of the other vectors and matrices.
+
+```{r dfa-dfa_proc_eqn}
+## number of processes
+mm <- 3
+## 'BB' is identity: 1's along the diagonal & 0's elsewhere
+BB <- "identity"  # diag(mm)
+## 'uu' is a column vector of 0's
+uu <- "zero"  # matrix(0,mm,1)
+## 'CC' and 'cc' are for covariates
+CC <- "zero"  # matrix(0,mm,1)
+cc <- "zero"  # matrix(0,1,wk_last)
+## 'QQ' is identity
+QQ <- "identity"  # diag(mm)
+```
+
+### The observation model {#sec-dfa-observation-model}
+
+Here we will fit the DFA model above where we have `R N_ts` observed time series and we want 3 hidden states. Now we need to set up the observation model for `MARSS`. Here are the vectors and matrices for our first model where each nutrient follows its own process. Recall that we will need to set the elements in the upper R corner of $\mathbf{Z}$ to 0. We will assume that the observation errors have different variances and they are independent of one another.
+
+```{r dfa-dfa_obs_eqn}
+## 'ZZ' is loadings matrix
+Z_vals <- list("z11",  0  ,  0  ,
+               "z21","z22",  0  ,
+               "z31","z32","z33",
+               "z41","z42","z43",
+               "z51","z52","z53")
+ZZ <- matrix(Z_vals, nrow=N_ts, ncol=3, byrow=TRUE)
+ZZ
+## 'aa' is the offset/scaling
+aa <- "zero"
+## 'DD' and 'd' are for covariates
+DD <- "zero"  # matrix(0,mm,1)
+dd <- "zero"  # matrix(0,1,wk_last)
+## 'RR' is var-cov matrix for obs errors
+RR <- "diagonal and unequal"
+```
+
+### Fit the model in MARSS {#sec-dfa-fit-model-in-marss}
+
+Now it's time to fit our first DLM. To do so, we need to create a three lists that we will need to pass to the `MARSS()` function:
+
+1. A list of specifications for the model's vectors and matrices;
+2. A list of any initial values -- `MARSS` will pick its own otherwise;
+3. A list of control parameters for the `MARSS()` function.
+
+```{r dfa-create_model_lists}
+## list with specifications for model vectors/matrices
+mod_list <- list(B=BB, U=uu, C=CC, c=cc, Q=QQ, Z=ZZ, A=aa, D=DD, d=dd, R=RR)
+## list with model inits
+init_list <- list(x0=matrix(rep(0,mm),mm,1))
+## list with model control parameters
+con_list <- list(maxit=3000, allow.degen=TRUE)
+```
+
+Now we can fit the model.
+
+```{r dfa-fit_dfa_1, cache=TRUE}
+## fit MARSS
+dfa_1 <- MARSS(y=dat, model=mod_list, inits=init_list, control=con_list)
+```
+
+## Interpreting the MARSS output {#sec-dfa-interpreting-the-marss-output}
+
+By now the `MARSS()` output should look familiar. The first 12 parameter estimates `Z.z##` are the loadings of each observed time series on the 3 hidden states. The next 5 estimates `R.(,)` are the variances of the observation errors $(v_{i,t})$. The last 3 values, `x0.X#`, are the estimates of the initial states at $t = 0$.
+
+Recall that the estimates of the processes themselves (i.e., $\mathbf{x})$ are contained in one of the list elements in our fitted `MARSS` object. Specifically, they are in `mod_fit$states`, and their respective standard errors are in `mod_fit$states.se`. For the names of all of the other objects, type `names(dfa_1)`.
+
+## Rotating trends and loadings {#sec-dfa-rotating-loadings}
+
+Before proceeding further, we need to address the constraints we placed on the DFA model in Sec 2.2. In particular, we arbitrarily constrained $\mathbf{Z}$ in such a way to choose only one of these solutions, but fortunately the different solutions are equivalent, and they can be related to each other by a rotation matrix $\mathbf{H}$.  Let $\mathbf{H}$ be any $m \times m$ non-singular matrix.  The following are then equivalent DFA models:
+
+\begin{equation}
+\begin{gathered}
+ \mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \\
+ \mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t
+\end{gathered}   
+(\#eq:dfa-rot1)
+\end{equation}
+
+and
+
+\begin{equation}
+\begin{gathered}
+ \mathbf{H}\mathbf{x}_t = \mathbf{H}\mathbf{x}_{t-1}+\mathbf{H}\mathbf{w}_t \\
+ \mathbf{y}_t = \mathbf{Z}\mathbf{H}^{-1}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t
+\end{gathered}.
+(\#eq:dfa-rot2)
+\end{equation}
+
+There are many ways of doing factor rotations, but a common method is the "varimax"" rotation, which seeks a rotation matrix $\mathbf{H}$ that creates the largest difference between the loadings in $\mathbf{Z}$.  For example, imagine that row 3 in our estimated $\mathbf{Z}$ matrix was (0.2, 0.2, 0.2). That would mean that green algae were a mixture of equal parts of processes 1, 2, and 3.  If instead row 3 was (0.8, 0.1, 0.05), this would make our interpretation of the model fits easier because we could say that green algae followed the first process most closely.  The varimax rotation would find the $\mathbf{H}$ matrix that makes the rows in $\mathbf{Z}$ more like (0.8, 0.1, 0.05) and less like (0.2, 0.2, 0.2).
+ 
+The varimax rotation is easy to compute because R has a built in function for this: `varimax()`. Interestingly, the function returns the inverse of $\mathbf{H}$, which we need anyway.  
+
+```{r dfa-get_H_inv}
+## get the estimated ZZ
+Z_est <- coef(dfa_1, type="matrix")$Z
+## get the inverse of the rotation matrix
+H_inv <- varimax(Z_est)$rotmat
+```
+
+We can now rotate both $\mathbf{Z}$ and $\mathbf{x}$.
+
+```{r dfa-rotate_Z_x}
+## rotate factor loadings
+Z_rot = Z_est %*% H_inv   
+## rotate processes
+proc_rot = solve(H_inv) %*% dfa_1$states
+```
+
+## Estimated states and loadings {#sec-dfa-estimated-states}
+
+Here are plots of the three hidden processes (left column) and the loadings for each of phytoplankton groups (right column).
+
+```{r dfa-plot-dfa1, fig.height=9, fig.width=8, eval=TRUE, fig.cap='Estimated states from the DFA model.'}
+ylbl <- phytoplankton
+w_ts <- seq(dim(dat)[2])
+layout(matrix(c(1,2,3,4,5,6),mm,2),widths=c(2,1))
+## par(mfcol=c(mm,2), mai=c(0.5,0.5,0.5,0.1), omi=c(0,0,0,0))
+par(mai=c(0.5,0.5,0.5,0.1), omi=c(0,0,0,0))
+## plot the processes
+for(i in 1:mm) {
+  ylm <- c(-1,1)*max(abs(proc_rot[i,]))
+  ## set up plot area
+	plot(w_ts,proc_rot[i,], type="n", bty="L",
+	     ylim=ylm, xlab="", ylab="", xaxt="n")
+	## draw zero-line
+	abline(h=0, col="gray")
+	## plot trend line
+	lines(w_ts,proc_rot[i,], lwd=2)
+	lines(w_ts,proc_rot[i,], lwd=2)
+	## add panel labels
+	mtext(paste("State",i), side=3, line=0.5)
+	axis(1,12*(0:dim(dat_1980)[2])+1,yr_frst+0:dim(dat_1980)[2])
+}
+## plot the loadings
+minZ <- 0
+ylm <- c(-1,1)*max(abs(Z_rot))
+for(i in 1:mm) {
+  plot(c(1:N_ts)[abs(Z_rot[,i])>minZ], as.vector(Z_rot[abs(Z_rot[,i])>minZ,i]), type="h",
+       lwd=2, xlab="", ylab="", xaxt="n", ylim=ylm, xlim=c(0.5,N_ts+0.5), col=clr)
+	for(j in 1:N_ts) {
+	  if(Z_rot[j,i] > minZ) {text(j, -0.03, ylbl[j], srt=90, adj=1, cex=1.2, col=clr[j])}
+	  if(Z_rot[j,i] < -minZ) {text(j, 0.03, ylbl[j], srt=90, adj=0, cex=1.2, col=clr[j])}
+	  abline(h=0, lwd=1.5, col="gray")
+	  } 
+  mtext(paste("Factor loadings on state",i),side=3,line=0.5)
+}
+```
+
+It looks like there are strong seasonal cycles in the data, but there is some indication of a phase difference between some of the groups. We can use `ccf()` to investigate further.
+
+```{r dfa-xy-states12, height=4, width=5, fig.cap='Cross-correlation plot of the two rotations.'}
+par(mai=c(0.9,0.9,0.1,0.1))
+ccf(proc_rot[1,],proc_rot[2,], lag.max = 12, main="")
+```
+
+## Plotting the data and model fits {#sec-dfa-plot-data}
+
+We can plot the fits for our DFA model along with the data. The following function will return the fitted values ± (1-$\alpha$)% confidence intervals.
+
+```{r dfa-defn_get_DFA_fits}
+get_DFA_fits <- function(MLEobj,dd=NULL,alpha=0.05) {
+  ## empty list for results
+  fits <- list()
+  ## extra stuff for var() calcs
+  Ey <- MARSS:::MARSShatyt(MLEobj)
+  ## model params
+	ZZ <- coef(MLEobj, type="matrix")$Z
+	## number of obs ts
+	nn <- dim(Ey$ytT)[1]
+	## number of time steps
+	TT <- dim(Ey$ytT)[2]
+	## get the inverse of the rotation matrix
+	H_inv <- varimax(ZZ)$rotmat
+	## check for covars
+	if(!is.null(dd)) {
+	  DD <- coef(MLEobj, type="matrix")$D
+	  ## model expectation
+	  fits$ex <- ZZ %*% H_inv %*% MLEobj$states + DD %*% dd
+	} else {
+	  ## model expectation
+	  fits$ex <- ZZ %*% H_inv %*% MLEobj$states
+	}
+	## Var in model fits
+	VtT <- MARSSkfss(MLEobj)$VtT
+	VV <- NULL
+	for(tt in 1:TT) {
+	  RZVZ <- coef(MLEobj, type="matrix")$R - ZZ%*%VtT[,,tt]%*%t(ZZ)
+	  SS <- Ey$yxtT[,,tt] - Ey$ytT[,tt,drop=FALSE] %*% t(MLEobj$states[,tt,drop=FALSE])
+	  VV <- cbind(VV,diag(RZVZ + SS%*%t(ZZ) + ZZ%*%t(SS)))
+	  }
+ 	SE <- sqrt(VV)
+ 	## upper & lower (1-alpha)% CI
+ 	fits$up <- qnorm(1-alpha/2)*SE + fits$ex
+ 	fits$lo <- qnorm(alpha/2)*SE + fits$ex
+ 	return(fits)
+}
+```
+
+Here are time series of the five phytoplankton groups (points) with the mean of the DFA fits (black line) and the 95% confidence intervals (gray lines). 
+
+```{r dfa-plot-dfa-fits, fig.height=9, fig.width=8, fig.cap='Data and fits from the DFA model.'}
+## get model fits & CI's
+mod_fit <- get_DFA_fits(dfa_1)
+## plot the fits
+ylbl <- phytoplankton
+par(mfrow=c(N_ts,1), mai=c(0.5,0.7,0.1,0.1), omi=c(0,0,0,0))
+for(i in 1:N_ts) {
+  up <- mod_fit$up[i,]
+  mn <- mod_fit$ex[i,]
+  lo <- mod_fit$lo[i,]
+  plot(w_ts,mn,xlab="",ylab=ylbl[i],xaxt="n",type="n", cex.lab=1.2,
+       ylim=c(min(lo),max(up)))
+  axis(1,12*(0:dim(dat_1980)[2])+1,yr_frst+0:dim(dat_1980)[2])
+  points(w_ts,dat[i,], pch=16, col=clr[i])
+  lines(w_ts, up, col="darkgray")
+  lines(w_ts, mn, col="black", lwd=2)
+  lines(w_ts, lo, col="darkgray")
+}
+```
+
+## Covariates in DFA models {#sec-dfa-covariates}
+
+It is standard to add covariates to the analysis so that one removes known important drivers. The DFA with covariates is written:
+
+
+\begin{equation}
+\begin{gathered}
+\mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \text{MVN}(0,\mathbf{Q}) \\
+\mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{D}\mathbf{d}_t+\mathbf{v}_t \text{ where } \mathbf{v}_t \sim \text{MVN}(0,\mathbf{R})
+\end{gathered}   
+(\#eq:dfa-cov)
+\end{equation}
+
+
+where the $q \times 1$ vector $\mathbf{d}_t$ contains the covariate(s) at time $t$, and the $n \times q$ matrix $\mathbf{D}$ contains the effect(s) of the covariate(s) on the observations.  Using `form="dfa"` and `covariates=<covariate name(s)>`, we can easily add covariates to our DFA, but this means that the covariates are input, not data, and there can be no missing values (see Chapter 6 in the **MARSS** User Guide for how to include covariates with missing values).
+
+## Example from Lake Washington {#sec-dfa-lakeWA}
+
+The Lake Washington dataset has two environmental covariates that we might expect to have effects on phytoplankton growth, and hence, abundance: temperature (`Temp`) and total phosphorous (`TP`). We need the covariate inputs to have the same number of time steps as the variate data, and thus we limit the covariate data to the years 1980-1994 also.
+
+```{r dfa-get_covars}
+temp <- t(plank_dat[,"Temp",drop=FALSE])
+TP <- t(plank_dat[,"TP",drop=FALSE])
+```
+
+We will now fit three different models that each add covariate effects (i.e., `Temp`, `TP`, `Temp` and `TP`) to our existing model above where $m$ = 3 and $\mathbf{R}$ is `"diagonal and unequal"`.
+
+```{r dfa-fit_DFA_covars, cache=TRUE, results='hide'}
+mod_list=list(m=3, R="diagonal and unequal")
+dfa_temp <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
+                  control=con_list, covariates=temp)
+dfa_TP <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
+                control=con_list, covariates=TP)
+dfa_both <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
+                  control=con_list, covariates=rbind(temp,TP))
+```
+
+Next we can compare whether the addition of the covariates improves the model fit.
+
+```{r dfa_model_selection}
+print(cbind(model=c("no covars", "Temp", "TP", "Temp & TP"),
+      AICc=round(c(dfa_1$AICc, dfa_temp$AICc, dfa_TP$AICc, dfa_both$AICc))),
+      quote=FALSE)
+```
+
+This suggests that adding temperature or phosphorus to the model, either alone or in combination with one another, does seem to improve overall model fit. If we were truly interested in assessing the "best" model structure that includes covariates, however, we should examine all combinations of 1-4 trends and different structures for $\mathbf{R}$.
+
+Now let's try to fit a model with a dummy variable for season, and see how that does.
+
+```{r dfa-fit_dfa_dummy, cache=TRUE}
+cos_t <- cos(2 * pi * seq(TT) / 12)
+sin_t <- sin(2 * pi * seq(TT) / 12)
+dd <- rbind(cos_t,sin_t)
+dfa_seas <- MARSS(dat_1980, model=mod_list, form="dfa", z.score=TRUE,
+                  control=con_list, covariates=dd)
+dfa_seas$AICc
+```
+
+The model with a dummy seasonal factor does much better than the covariate models, but still not as well as the model with only 3 trends. The model fits for the seasonal effects model are shown below.
+
+```{r dfa-plot_dfa_temp_fits, fig.height=9, fig.width=8, fig.cap='Data and model fits for the DFA with covariates.'}
+## get model fits & CI's
+mod_fit <- get_DFA_fits(dfa_seas,dd=dd)
+## plot the fits
+ylbl <- phytoplankton
+par(mfrow=c(N_ts,1), mai=c(0.5,0.7,0.1,0.1), omi=c(0,0,0,0))
+for(i in 1:N_ts) {
+  up <- mod_fit$up[i,]
+  mn <- mod_fit$ex[i,]
+  lo <- mod_fit$lo[i,]
+  plot(w_ts,mn,xlab="",ylab=ylbl[i],xaxt="n",type="n", cex.lab=1.2,
+       ylim=c(min(lo),max(up)))
+  axis(1,12*(0:dim(dat_1980)[2])+1,yr_frst+0:dim(dat_1980)[2])
+  points(w_ts,dat[i,], pch=16, col=clr[i])
+  lines(w_ts, up, col="darkgray")
+  lines(w_ts, mn, col="black", lwd=2)
+  lines(w_ts, lo, col="darkgray")
+}
+```
+
+\clearpage
+
+## Problems  {#sec-dfa-problems}
+
+For your homework this week, we will continue to investigate common trends in the Lake Washington plankton data.
+
+1. Fit other DFA models to the phytoplankton data with varying numbers of trends from 1-4 (we fit a 3-trend model above). Do not include any covariates in these models. Using `R="diagonal and unequal"` for the observation errors, which of the DFA models has the most support from the data?
+
+Plot the model states and loadings as in Section \@ref(sec-dfa-estimated-states). Describe the general patterns in the states and the ways the different taxa load onto those trends.
+
+Also plot the the model fits as in Section \@ref(sec-dfa-plot-data). Do they reasonable? Are there any particular problems or outliers?
+
+2. How does the best model from Question 1 compare to a DFA model with the same number of trends, but with `R="unconstrained"`? 
+
+Plot the model states and loadings as in Section \@ref(sec-dfa-estimated-states). Describe the general patterns in the states and the ways the different taxa load onto those trends.
+
+Also plot the the model fits as in Section \@ref(sec-dfa-plot-data). Do they reasonable? Are there any particular problems or outliers?
+
+3. Fit a DFA model that includes temperature as a covariate and 3 trends (as in Section \@ref(sec-dfa-lakeWA)), but with`R="unconstrained"`? How does this model compare to the model with `R="diagonal and unequal"`? How does it compare to the model in Question 2? 
+
+Plot the model states and loadings as in Section \@ref(sec-dfa-estimated-states). Describe the general patterns in the states and the ways the different taxa load onto those trends.
+
+Also plot the the model fits as in Section \@ref(sec-dfa-plot-data).  Do they reasonable? Are there any particular problems or outliers?
+
