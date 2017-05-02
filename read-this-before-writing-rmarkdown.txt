@@ -1,0 +1,47 @@
+Label all your chunks uniquely and don't use "." or ":" in your chunk names. "-" is ok.
+So foo-foo and foo:foo are ok and foo.foo is not
+
+all chapter, section and subsection labels need to be on same line as \chapter or \section or next line
+This ->
+\chapter{Number 1} \label{chap:number1}
+Or ->
+\chapter{Number 1}
+\label{chap:number1}
+
+If you put the label after \chapter or \section, then label should be by itself on a line. So don't do this ->
+\label{chap:number1} And now I start my chapter. Yada, yada.
+
+Chapter labels should be of the form with the "chap:" prefix
+chap:foo
+Section and subsection labels should be of the form with the "sec:" prefix
+sec:foo
+
+Why? Because rmarkdown uses different ref formats for sections and I need to know what kind of \label this is.
+
+all equations that will be numbered need a label
+
+\verb@foo@ will put foo in r code so will be shaded
+\texttt{foo} will make foo as courier font
+
+If you make a plot, but don't want it plotted, use fig=FALSE even if you have eval=FALSE
+
+cross-refs for figures are automatically generated from the chunk label.  If chunk is foo, then ref is fig:foo.
+example:
+\begin{figure}[htp]
+\begin{center}
+<<foo, fig=TRUE>>=
+plot(1,1)
+@
+\end{center}
+\caption{Correlogram of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i obtained with the function \texttt{plot.acf}.}
+\end{figure}
+
+This is Figure \ref{fig:foo}.
+
+chunk labels should have either of the two formats
+<<foo, #no space between <<, label, and ","
+or
+<<label=foo, #no space between <<label=, label, and ","
+
+
+If you want to cross-reference figures or tables generated from a code chunk, please make sure the chunk label only contains alphanumeric characters (a-z, A-Z, 0-9), slashes (/), or dashes (-). 
