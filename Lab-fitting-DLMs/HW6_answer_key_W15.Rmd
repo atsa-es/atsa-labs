@@ -1,0 +1,290 @@
+---
+title: 'Homework #6 - Answer Key'
+author: "Mark Scheuerell"
+output: html_document
+---
+\renewcommand{\rmdefault}{phv}
+\fontfamily{phv}\selectfont
+
+
+Here are the answers for the homework problems from the sixth week of class on the Dynamic Linear Models (DLMs) material. Begin by getting the data
+
+```{r}
+# get S-R data; cols are:
+# 1: brood yr (brood.yr)
+# 2: number of spawners (Sp)
+# 3: number of recruits (Rec)
+# 4: PDO during first summer at sea (PDO.t2)
+# 5: PDO during first winter at sea (PDO.t3)
+load("KvichakSockeye.RData")
+```
+
+### Question 1
+> Begin by fitting a reduced form of Equation 15 that includes only a time-varying level ($\alpha_t$) and observation error ($v_t$).  Although you will be modeling productivity as completely independent of their parents, it will provde some insights as to the overall temporal pattern in recruitment.  Plot the ts of $\alpha_t$ and note the AICc for this model.
+
+The first thing we need is to compute the response variable: ln(R/S).
+
+```{r}
+# Time series of ln(R/S)
+lnRS = log(SRdata$Rec/SRdata$Sp)
+dat = matrix(lnRS, nrow=1)
+# number of years of data--we'll need this later
+TT = length(lnRS)
+```
+
+Now we can set up the DLM as a level-only model (i.e., a random walk with observation error) and fit it with MARSS.
+
+```{r}
+library(MARSS)
+# MARSS model defn
+# for process eqn
+BB = matrix(1)
+UU = matrix(0)
+QQ = matrix("q")
+# for observation eqn
+ZZ = matrix(1)
+AA = matrix(0)
+RR = matrix("r")
+# only need starting values for regr parameters
+inits.list = list(x0=matrix(1))
+# list of model matrices & vectors
+mod.list = list(B=BB, U=UU, Q=QQ, Z=ZZ, A=AA, R=RR, tinitx=0)
+# fit DLM
+Q1 = MARSS(dat, inits=inits.list, model=mod.list)
+# plot the time-varying level
+plot.ts(t(Q1$states), ylab=expression(alpha_t))
+# get AIC
+Q1$AIC
+```
+
+And finally examine some diagnostic plots:
+
+```{r}
+# get list of Kalman filter output
+kf.out = MARSSkfss(Q1)
+# forecast errors
+innov = kf.out$Innov
+# Q-Q plot of forecast errors
+qqnorm(t(innov), main="", pch=16, col="blue")
+# add y=x line for easier interpretation
+qqline(t(innov))
+# plot ACF of innovations
+acf(t(innov), lag.max=10, main="ACF for Q1 residuals")
+```
+
+### Question 2
+> Fit the full model specified by Equation 15.  For this model, obtain the time series of $\alpha_t$, which is an estimate of the stock productivity in the absence of density-dependent effects. How do these estimates of productivity compare to those from the previous question?  Plot the ts of $\alpha_t$ and note the AICc for this model.  (*Hint*: If you don't want a parameter to vary with time, what does that say about its process variance?.)
+
+Now we need to fit a DLM with a time-varying level (intercept), but time-invariant slope. Begin by obtaining the time series of spawners to use as the covariate.
+
+```{r}
+Sp = matrix(SRdata$Sp, nrow=1)
+```
+
+Now set up the MARSS model structure so $\alpha$ varies with time, but not $\beta$, which means $q=0$ for $\beta$ .  
+
+```{r}
+# number of regr coefs
+m = 2
+# MARSS model defn
+# for process eqn
+B = diag(m)                   # 2x2; Identity
+U = matrix(0,nrow=m,ncol=1)   # 2x1; both elements = 0
+Q = matrix(list(0),m,m)       # 2x2; all 0 for now
+Q[1,1] = "q"          	      # 2x2; diag = (q1,q2)
+# for observation eqn
+Z = array(NA, c(1,m,TT))   # NxMxT; empty for now
+Z[1,1,] = rep(1,TT)        # Nx1; 1's for intercept
+Z[1,2,] = Sp               # Nx1; regr variable
+A = matrix(0)              # 1x1; scalar = 0
+R = matrix("r")            # 1x1; scalar = r
+# only need starting values for regr parameters
+inits.list = list(x0=matrix(c(0, 0), nrow=m))
+# list of model matrices & vectors
+mod.list = list(B=B, U=U, Q=Q, Z=Z, A=A, R=R)
+# fit DLM
+Q2 = MARSS(dat, inits=inits.list, model=mod.list)
+# plot the time-varying level
+plot.ts(Q2$states[1,], ylab=expression(alpha_t))
+# get AIC
+Q2$AIC
+```
+
+It looks like the estimates of $\alpha_t$ are nearly identical for both models. Here are some diagnostic plots:
+
+```{r}
+# get list of Kalman filter output
+kf.out = MARSSkfss(Q2)
+# forecast errors
+innov = kf.out$Innov
+# Q-Q plot of forecast errors
+qqnorm(t(innov), main="", pch=16, col="blue")
+# add y=x line for easier interpretation
+qqline(t(innov))
+# plot ACF of innovations
+acf(t(innov), lag.max=10, main="ACF for Q2 residuals")
+```
+
+### Question 3
+> Fit the model specified by Equation 16 with the summer PDO index as the covariate (\texttt{PDO.t2}). What is the mean level of productivity?  Plot the ts of $\delta_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.
+
+Now we need to fit a DLM so $\alpha$ and $\beta$ are time-invariant, but $\delta$ varies by year.  
+
+```{r}
+# number of regr coefs
+m = 3
+# MARSS model defn
+# for process eqn
+B = diag(m) # 2x2; Identity
+U = matrix(0,nrow=m,ncol=1)
+Q = matrix(list(0),m,m)
+# place delta last--it's the only one to time-vary
+Q[3,3]=("q1")
+# for observation eqn
+Z = array(NA, c(1,m,TT)) # NxMxT; empty for now
+Z[1,1,] = rep(1,TT)  # 1's for intercept
+Z[1,2,] = SRdata[,2] # Sp regr variable
+Z[1,3,] = SRdata[,4] # summer PDO regr variable
+A = matrix(0) # 1x1; scalar = 0
+R = matrix("r") # 1x1; scalar = r
+# only need starting values for regr parameters
+inits.list = list(x0=matrix(c(0,0,0), nrow=m))
+# list of model matrices & vectors
+mod.list = list(B=B, U=U, Q=Q, Z=Z, A=A, R=R)
+# fit DLM
+Q3 = MARSS(dat, inits=inits.list, model=mod.list)
+# mean productivity
+mean(Q3$states[1,])
+# plot the time-varying effect of PDO
+plot.ts(Q3$states[3,], ylab=expression(delta_t))
+# get AIC
+Q3$AIC
+```
+
+It looks like the effect of PDO $(\delta_t)$ is increasing over time.
+
+Here are some diagnostic plots:
+
+```{r}
+# get list of Kalman filter output
+kf.out = MARSSkfss(Q3)
+# forecast errors
+innov = kf.out$Innov
+# Q-Q plot of forecast errors
+qqnorm(t(innov), main="", pch=16, col="blue")
+# add y=x line for easier interpretation
+qqline(t(innov))
+# plot ACF of innovations
+acf(t(innov), lag.max=10, main="ACF for Q3 residuals")
+```
+
+There is some indication that our model is not adequately accounting for autocorrelation in the residuals (i.e., signficant correlation at lag=1).
+
+### Question 4
+> Fit the model specified by Equation 16 with the winter PDO index as the covariate (\texttt{PDO.t3}). What is the mean level of productivity?  Plot the ts of $\delta_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.
+
+Again we need to fit a DLM so that $\alpha$ and $\beta$ are time-invariant, but $\delta$ varies by year.  
+
+```{r}
+# number of regr coefs
+m = 3
+# MARSS model defn
+# for process eqn
+B = diag(m) # 2x2; Identity
+U = matrix(0,nrow=m,ncol=1)
+Q = matrix(list(0),m,m)
+# place delta last--it's the only one to time-vary
+Q[3,3]=("q1")
+# for observation eqn
+Z = array(NA, c(1,m,TT)) # NxMxT; empty for now
+Z[1,1,] = rep(1,TT)  # 1's for intercept
+Z[1,2,] = SRdata[,2] # Sp regr variable
+Z[1,3,] = SRdata[,5] # winter PDO regr variable
+A = matrix(0) # 1x1; scalar = 0
+R = matrix("r") # 1x1; scalar = r
+# only need starting values for regr parameters
+inits.list = list(x0=matrix(c(0,0,0), nrow=m))
+# list of model matrices & vectors
+mod.list = list(B=B, U=U, Q=Q, Z=Z, A=A, R=R)
+# fit DLM
+Q4 = MARSS(dat, inits=inits.list, model=mod.list)
+# mean productivity
+mean(Q4$states[1,])
+# plot the time-varying effect of PDO
+plot.ts(Q4$states[3,], ylab=expression(delta_t))
+# get AIC
+Q4$AIC
+```
+
+It looks like the effect of PDO was initially flat over time, but then about half-way through the time series there is a decline in its effect.
+
+Here are some diagnostic plots:
+
+```{r}
+# get list of Kalman filter output
+kf.out = MARSSkfss(Q4)
+# forecast errors
+innov = kf.out$Innov
+# Q-Q plot of forecast errors
+qqnorm(t(innov), main="", pch=16, col="blue")
+# add y=x line for easier interpretation
+qqline(t(innov))
+# plot ACF of innovations
+acf(t(innov), lag.max=10, main="ACF for Q4 residuals")
+```
+
+As in Q4 there is some indication that our model is not adequately accounting for autocorrelation in the residuals (i.e., signficant correlation at lags 1 & 4-5).
+
+### Question 5
+> Based on AICc, which of the models above is the most parsimonius?  Is it well behaved ($i.e.$, are the model assumptions met)?  Plot the model forecasts for the best model.  Is this a good forecast model?
+
+We'll use AIC to evaluate the most parsimonius model.
+
+```{r}
+which.min(c(Q1$AIC,Q2$AIC,Q3$AIC,Q4$AIC))
+```
+
+The model we fit in Q1 appears to have the lowest AIC, which is peraps a bit surpising because it suggests no density dependence.
+
+Here's how to obtain the time series of forecasts (and their SE) for the best model.
+
+```{r}
+# get list of Kalman filter output
+kf.out = MARSSkfss(Q1)
+# forecasts of regr parameters; 2xT matrix
+eta = kf.out$xtt1
+# predictor variable (1's only for the intercept)
+Z = array(NA, c(1,1,TT))   # NxMxT; empty for now
+Z[1,1,] = rep(1,TT)        # Nx1; 1's for intercept
+# ts of E(forecasts)
+fore.mean = vector()
+for(t in 1:TT) {
+  fore.mean[t] = Z[,,t] %*% eta[,t,drop=F]
+}
+# variance of regr parameters; 1x2xT array
+Phi = kf.out$Vtt1
+# obs variance; 1x1 matrix
+R.est = coef(Q1, type="matrix")$R
+# ts of Var(forecasts)
+fore.var = vector()
+for(t in 1:TT) {
+  tZ = matrix(Z[,,t],1,1) # transpose of Z
+  fore.var[t] = Z[,,t] %*% Phi[,,t] %*% tZ + R.est
+}
+```
+
+And now we can plot them.
+
+```{r}
+fup = fore.mean+2*sqrt(fore.var)
+flo = fore.mean-2*sqrt(fore.var)
+par(mar=c(4,4,0.1,0), oma=c(0,0,2,0.5))
+ylims=c(min(flo),max(fup))
+plot(SRdata$brood.yr, t(dat), type="p", pch=16, ylim=ylims,
+     col="blue", xlab="Year", ylab="ln(R/S") #, xaxt="n")
+lines(SRdata$brood.yr, fore.mean, type="l", xaxt="n", ylab="", lwd=3)
+lines(SRdata$brood.yr, fup)
+lines(SRdata$brood.yr, flo)
+```
+
+Overall, the accuracy of the forecasts is a bit suspect as many observations are at 0.5+ log-units from the forecast. Although most of the observed ln(R/S) fell within the 95% forecast intervals, the intervals themselves are relatively large and span a large range of R/S.
