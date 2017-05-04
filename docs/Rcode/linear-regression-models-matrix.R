@@ -227,5 +227,3 @@ fit=lm(Ozone ~ Temp:region, data=homeworkdat)
 ## ----mlr-hw8-------------------------------------------------------------
 fit=lm(Ozone ~ -1 + Temp:region + Month, data=airquality)
 
-## ----mlr-reset, echo=FALSE, include.source=FALSE-------------------------
-

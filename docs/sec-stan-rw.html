@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2017-05-03">
+<meta name="date" content="2017-05-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -198,8 +198,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>4.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="4.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>4.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="4.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>4.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR-1 state-space model with JAGS*</a></li>
-<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A simple random walk model of animal movement</a></li>
+<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
+<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A random walk model of animal movement</a></li>
 <li class="chapter" data-level="4.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>4.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>5</b> Multivariate state-space models without covariates</a><ul>
@@ -291,6 +291,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.7.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>9.7.1</b> Using leave one out cross-validation to select models</a></li>
 </ul></li>
 <li class="chapter" data-level="9.8" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>9.8</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="9.9" data-path="stan-problems.html"><a href="stan-problems.html"><i class="fa fa-check"></i><b>9.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -318,7 +319,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>All of the previous three models can be interpreted as observation error models. Switching gears, we can alternatively model error in the state of nature, creating process error models. A simple process error model that many of you may have seen before is the random walk model. In this model, the assumption is that the true state of nature (or latent states) are measured perfectly. Thus, all uncertainty is originating from process variation (for ecological problems, this is often interpreted as environmental variation). For this simple model, we’ll assume that our process of interest (in this case, daily wind speed) exhibits no daily trend, but behaves as a random walk.</p>
 <p><span class="math display">\[y_t = y_{t-1} + e_{t}\]</span></p>
 <p>And the <span class="math inline">\({e}_{t} \sim N(0, \sigma)\)</span>. Remember back to the autocorrelated model (or MA(1) models) that we assumed that the errors <span class="math inline">\(e_t\)</span> followed a random walk. In contrast, this model assumes that the errors are independent, but that the state of nature follows a random walk. Note also that this model as written doesn’t include a drift term (this can be turned on / off using the <code>est_drift</code> argument).</p>
-<p><strong>Please fit the random walk model to the temperature data. Our function can do this by using model_name = ‘rw’. Once you’ve fitted the model, plot the predicted values and 95% CIs, as we did above in the regression model.</strong></p>
+<p>We can fit the random walk model using argument <code>model_name = 'rw'</code> passed to the <code>fit_stan()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rw =<span class="st"> </span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">est_drift =</span> <span class="ot">FALSE</span>, <span class="dt">model_name =</span> <span class="st">&quot;rw&quot;</span>)</code></pre></div>
 </div>
             </section>

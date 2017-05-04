@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2017-05-03">
+<meta name="date" content="2017-05-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -198,8 +198,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>4.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="4.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>4.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="4.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>4.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR-1 state-space model with JAGS*</a></li>
-<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A simple random walk model of animal movement</a></li>
+<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
+<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A random walk model of animal movement</a></li>
 <li class="chapter" data-level="4.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>4.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>5</b> Multivariate state-space models without covariates</a><ul>
@@ -291,6 +291,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.7.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>9.7.1</b> Using leave one out cross-validation to select models</a></li>
 </ul></li>
 <li class="chapter" data-level="9.8" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>9.8</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="9.9" data-path="stan-problems.html"><a href="stan-problems.html"><i class="fa fa-check"></i><b>9.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -321,9 +322,10 @@ E[y_t] = \phi * y_{t-1} + e_{t-1}
 \tag{8.6}
 \end{equation}\]</span>
 <p>The JAGS random walk model and R script to run the AR(1) model is below:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">################################################################ 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT We&#39;re
-################################################################ introducting a new AR coefficient &#39;phi&#39;, so the model is
-################################################################ y[t] ~ N(mu + phi*y[n-1], sigma^2)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT We&#39;re</span>
+<span class="co"># introducting a new AR coefficient &#39;phi&#39;, so the model is</span>
+<span class="co"># y[t] ~ N(mu + phi*y[n-1], sigma^2)</span>
+
 model.loc =<span class="st"> </span>(<span class="st">&quot;ar1_intercept.txt&quot;</span>)
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">model {  </span>

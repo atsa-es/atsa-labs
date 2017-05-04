@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2017-05-03">
+<meta name="date" content="2017-05-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -198,8 +198,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>4.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="4.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>4.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="4.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>4.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR-1 state-space model with JAGS*</a></li>
-<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A simple random walk model of animal movement</a></li>
+<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
+<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A random walk model of animal movement</a></li>
 <li class="chapter" data-level="4.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>4.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>5</b> Multivariate state-space models without covariates</a><ul>
@@ -291,6 +291,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.7.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>9.7.1</b> Using leave one out cross-validation to select models</a></li>
 </ul></li>
 <li class="chapter" data-level="9.8" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>9.8</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="9.9" data-path="stan-problems.html"><a href="stan-problems.html"><i class="fa fa-check"></i><b>9.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -316,28 +317,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-basicmat-problems" class="section level2">
 <h2><span class="header-section-number">1.7</span> Problems</h2>
 <ol style="list-style-type: decimal">
-<li>Build a <span class="math inline">\(4 \times 3\)</span> matrix with the numbers 1 through 4 in each row.</li>
-<li>Extract the elements in the 1st and 2nd rows and 1st and 2nd columns (you’ll have a <span class="math inline">\(2 \times 2\)</span> matrix). Show the R code that will do this.</li>
-<li>Build a <span class="math inline">\(4 \times 3\)</span> matrix with the numbers 1 through 12 by row (meaning the first row will have the numbers 1 through 4 in it).</li>
-<li>Extract the 3rd row of the above. Show R code to do this where you end up with a vector and how to do this where you end up with a <span class="math inline">\(1 \times 3\)</span> matrix.</li>
-<li>Build a <span class="math inline">\(4 \times 3\)</span> matrix that is all 1s except a 2 in the (2,3) element (2nd row, 3rd column).</li>
-<li>Take the transpose of the above.</li>
-<li>Build a <span class="math inline">\(4 \times 4\)</span> diagonal matrix with 1 through 4 on the diagonal.</li>
-<li>Build a <span class="math inline">\(5 \times 5\)</span> identity matrix.</li>
-<li>Replace the diagonal in the above matrix with 2 (the number 2).</li>
-<li>Build a matrix with 2 on the diagonal and 1s on the offdiagonals.</li>
-<li>Take the inverse of the above.</li>
-<li>Build a <span class="math inline">\(3 \times 3\)</span> matrix with the first 9 letters of the alphabet. First column should be “a”, “b”, “c”. <code>letters[1:9]</code> gives you these letters.</li>
-<li>Replace the diagonal of this matrix with the word “cat”.</li>
-<li>Build a <span class="math inline">\(4 \times 3\)</span> matrix with all 1s. Multiply by a <span class="math inline">\(3 \times 4\)</span> matrix with all 2s.</li>
-<li>If <span class="math inline">\(\mathbf{A}\)</span> is a <span class="math inline">\(4 \times 3\)</span> matrix, is <span class="math inline">\(\mathbf{A} \mathbf{A}\)</span> possible? Is <span class="math inline">\(\mathbf{A} \mathbf{A}^\top\)</span> possible? Show how to write <span class="math inline">\(\mathbf{A}\mathbf{A}^\top\)</span> in R.</li>
-<li>In the equation, <span class="math inline">\(\mathbf{A} \mathbf{B} = \mathbf{C}\)</span>, let <span class="math inline">\(\mathbf{A}=\left[ \begin{smallmatrix}1&amp;4&amp;7\\2&amp;5&amp;8\\3&amp;6&amp;9\end{smallmatrix}\right]\)</span>. Build a <span class="math inline">\(\mathbf{B}\)</span> matrix with only 1s and 0s such that the values on the diagonal of <span class="math inline">\(\mathbf{C}\)</span> are 1, 8, 6 (in that order). Show your R code for <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{B}\)</span> and <span class="math inline">\(\mathbf{A} \mathbf{B}\)</span>.</li>
-<li>Same <span class="math inline">\(\mathbf{A}\)</span> matrix as above and same equation <span class="math inline">\(\mathbf{A} \mathbf{B} = \mathbf{C}\)</span>. Build a <span class="math inline">\(3 \times 3\)</span> <span class="math inline">\(\mathbf{B}\)</span> matrix such that <span class="math inline">\(\mathbf{C}=2\mathbf{A}\)</span>. So <span class="math inline">\(\mathbf{C}=\left[ \begin{smallmatrix}2&amp;8&amp;14\\ 4&amp;10&amp;16\\ 6&amp;12&amp;18\end{smallmatrix}\right]\)</span>. Hint, <span class="math inline">\(\mathbf{B}\)</span> is diagonal.</li>
-<li>Same <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{A} \mathbf{B}=\mathbf{C}\)</span> equation. Build a <span class="math inline">\(\mathbf{B}\)</span> matrix to compute the row sums of <span class="math inline">\(\mathbf{A}\)</span>. So the first `row sum’ would be <span class="math inline">\(1+4+7\)</span>, the sum of all elements in row 1 of <span class="math inline">\(\mathbf{A}\)</span>. <span class="math inline">\(\mathbf{C}\)</span> will be <span class="math inline">\(\left[ \begin{smallmatrix}12\\ 15\\ 18\end{smallmatrix}\right]\)</span>, the row sums of <span class="math inline">\(\mathbf{A}\)</span>. Hint, <span class="math inline">\(\mathbf{B}\)</span> is a column matrix (1 column).</li>
-<li>Same <span class="math inline">\(\mathbf{A}\)</span> matrix as above but now equation <span class="math inline">\(\mathbf{B} \mathbf{A} = \mathbf{C}\)</span>. Build a <span class="math inline">\(\mathbf{B}\)</span> matrix to compute the column sums of <span class="math inline">\(\mathbf{A}\)</span>. So the first `column sum’ would be <span class="math inline">\(1+2+3\)</span>. <span class="math inline">\(\mathbf{C}\)</span> will be a <span class="math inline">\(1 \times 3\)</span> matrix.</li>
-<li>Let <span class="math inline">\(\mathbf{A} \mathbf{B}=\mathbf{C}\)</span> equation but <span class="math inline">\(\mathbf{A}=\left[ \begin{smallmatrix}2&amp;1&amp;1\\1&amp;2&amp;1\\1&amp;1&amp;2\end{smallmatrix}\right]\)</span> (so A=<code>diag(3)+1</code>). Build a <span class="math inline">\(\mathbf{B}\)</span> matrix such that <span class="math inline">\(\mathbf{C}=\left[ \begin{smallmatrix}3\\ 3\\ 3\end{smallmatrix}\right]\)</span>. Hint, you need to use the inverse of <span class="math inline">\(\mathbf{A}\)</span>.</li>
+<li><p>Build a <span class="math inline">\(4 \times 3\)</span> matrix with the numbers 1 through 4 in each row.</p></li>
+<li><p>Extract the elements in the 1st and 2nd rows and 1st and 2nd columns (you’ll have a <span class="math inline">\(2 \times 2\)</span> matrix). Show the R code that will do this.</p></li>
+<li><p>Build a <span class="math inline">\(4 \times 3\)</span> matrix with the numbers 1 through 12 by row (meaning the first row will have the numbers 1 through 4 in it).</p></li>
+<li><p>Extract the 3rd row of the above. Show R code to do this where you end up with a vector and how to do this where you end up with a <span class="math inline">\(1 \times 3\)</span> matrix.</p></li>
+<li><p>Build a <span class="math inline">\(4 \times 3\)</span> matrix that is all 1s except a 2 in the (2,3) element (2nd row, 3rd column).</p></li>
+<li><p>Take the transpose of the above.</p></li>
+<li><p>Build a <span class="math inline">\(4 \times 4\)</span> diagonal matrix with 1 through 4 on the diagonal.</p></li>
+<li><p>Build a <span class="math inline">\(5 \times 5\)</span> identity matrix.</p></li>
+<li><p>Replace the diagonal in the above matrix with 2 (the number 2).</p></li>
+<li><p>Build a matrix with 2 on the diagonal and 1s on the offdiagonals.</p></li>
+<li><p>Take the inverse of the above.</p></li>
+<li><p>Build a <span class="math inline">\(3 \times 3\)</span> matrix with the first 9 letters of the alphabet. First column should be “a”, “b”, “c”. <code>letters[1:9]</code> gives you these letters.</p></li>
+<li><p>Replace the diagonal of this matrix with the word “cat”.</p></li>
+<li><p>Build a <span class="math inline">\(4 \times 3\)</span> matrix with all 1s. Multiply by a <span class="math inline">\(3 \times 4\)</span> matrix with all 2s.</p></li>
+<li><p>If <span class="math inline">\(\mathbf{A}\)</span> is a <span class="math inline">\(4 \times 3\)</span> matrix, is <span class="math inline">\(\mathbf{A} \mathbf{A}\)</span> possible? Is <span class="math inline">\(\mathbf{A} \mathbf{A}^\top\)</span> possible? Show how to write <span class="math inline">\(\mathbf{A}\mathbf{A}^\top\)</span> in R.</p></li>
+<li><p>In the equation, <span class="math inline">\(\mathbf{A} \mathbf{B} = \mathbf{C}\)</span>, let <span class="math inline">\(\mathbf{A}=\left[ \begin{smallmatrix}1&amp;4&amp;7\\2&amp;5&amp;8\\3&amp;6&amp;9\end{smallmatrix}\right]\)</span>. Build a <span class="math inline">\(\mathbf{B}\)</span> matrix with only 1s and 0s such that the values on the diagonal of <span class="math inline">\(\mathbf{C}\)</span> are 1, 8, 6 (in that order). Show your R code for <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{B}\)</span> and <span class="math inline">\(\mathbf{A} \mathbf{B}\)</span>.</p></li>
+<li><p>Same <span class="math inline">\(\mathbf{A}\)</span> matrix as above and same equation <span class="math inline">\(\mathbf{A} \mathbf{B} = \mathbf{C}\)</span>. Build a <span class="math inline">\(3 \times 3\)</span> <span class="math inline">\(\mathbf{B}\)</span> matrix such that <span class="math inline">\(\mathbf{C}=2\mathbf{A}\)</span>. So <span class="math inline">\(\mathbf{C}=\left[ \begin{smallmatrix}2&amp;8&amp;14\\ 4&amp;10&amp;16\\ 6&amp;12&amp;18\end{smallmatrix}\right]\)</span>. Hint, <span class="math inline">\(\mathbf{B}\)</span> is diagonal.</p></li>
+<li><p>Same <span class="math inline">\(\mathbf{A}\)</span> and <span class="math inline">\(\mathbf{A} \mathbf{B}=\mathbf{C}\)</span> equation. Build a <span class="math inline">\(\mathbf{B}\)</span> matrix to compute the row sums of <span class="math inline">\(\mathbf{A}\)</span>. So the first `row sum’ would be <span class="math inline">\(1+4+7\)</span>, the sum of all elements in row 1 of <span class="math inline">\(\mathbf{A}\)</span>. <span class="math inline">\(\mathbf{C}\)</span> will be <span class="math inline">\(\left[ \begin{smallmatrix}12\\ 15\\ 18\end{smallmatrix}\right]\)</span>, the row sums of <span class="math inline">\(\mathbf{A}\)</span>. Hint, <span class="math inline">\(\mathbf{B}\)</span> is a column matrix (1 column).</p></li>
+<li><p>Same <span class="math inline">\(\mathbf{A}\)</span> matrix as above but now equation <span class="math inline">\(\mathbf{B} \mathbf{A} = \mathbf{C}\)</span>. Build a <span class="math inline">\(\mathbf{B}\)</span> matrix to compute the column sums of <span class="math inline">\(\mathbf{A}\)</span>. So the first `column sum’ would be <span class="math inline">\(1+2+3\)</span>. <span class="math inline">\(\mathbf{C}\)</span> will be a <span class="math inline">\(1 \times 3\)</span> matrix.</p></li>
+<li><p>Let <span class="math inline">\(\mathbf{A} \mathbf{B}=\mathbf{C}\)</span> equation but <span class="math inline">\(\mathbf{A}=\left[ \begin{smallmatrix}2&amp;1&amp;1\\1&amp;2&amp;1\\1&amp;1&amp;2\end{smallmatrix}\right]\)</span> (so A=<code>diag(3)+1</code>). Build a <span class="math inline">\(\mathbf{B}\)</span> matrix such that <span class="math inline">\(\mathbf{C}=\left[ \begin{smallmatrix}3\\ 3\\ 3\end{smallmatrix}\right]\)</span>. Hint, you need to use the inverse of <span class="math inline">\(\mathbf{A}\)</span>.</p></li>
 </ol>
-<p>Section <a href="sec-basicmat-subset.html#sec-basicmat-subset">1.3</a> is here.</p>
 
 </div>
 <!-- </div> -->

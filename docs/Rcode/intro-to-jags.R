@@ -8,12 +8,11 @@ Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 N = dim(airquality)[1] # number of data points
 
-## ----jags-lr1, echo=TRUE, results='hide'---------------------------------
-###############################################################
+## ----jags-lr1, results='hide'--------------------------------------------
 # 1. LINEAR REGRESSION with no covariates
 # no covariates, so intercept only. The parameters are 
 # mean 'mu' and precision/variance parameter 'tau.obs'
-###############################################################
+
 model.loc="lm_intercept.txt" # name of the txt file
 jagsscript = cat("
 model {  
@@ -28,7 +27,7 @@ model {
 }  
 ",file=model.loc)
 
-## ----jags-call-fun1, echo=TRUE, results='hide', eval=TRUE----------------
+## ----jags-call-fun1, results='hide'--------------------------------------
 jags.data = list("Y"=Wind,"N"=N) # named list of inputs
 jags.params=c("sd.obs","mu") # parameters to be monitored
 mod_lm_intercept = jags(jags.data, parameters.to.save=jags.params, 
@@ -77,11 +76,10 @@ plot(myList[[1]])
 ## gewekeDiags = geweke.diag(createMcmcList(mod_lm_intercept))
 ## heidelDiags = heidel.diag(createMcmcList(mod_lm_intercept))
 
-## ----jags-lm1ar, echo=TRUE, results='hide', eval=TRUE--------------------
-###############################################################
-# 2. MODIFY THE ERRORS TO BE AUTOCORRELATED 
+## ----jags-lm1ar, results='hide'------------------------------------------
+# 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS
 # no covariates, so intercept only. 
-###############################################################
+
 model.loc=("lmcor_intercept.txt")
 jagsscript = cat("
 model {  
@@ -102,14 +100,14 @@ model {
 }
 ",file=model.loc)
 
-## ----jags-lm1ar-mod, echo=TRUE, results='hide', eval=TRUE----------------
+## ----jags-lm1ar-mod, results='hide'--------------------------------------
 jags.data = list("Y"=Wind,"N"=N)
 jags.params=c("sd.obs","predY","mu","phi")
 mod_lmcor_intercept = jags(jags.data, parameters.to.save=jags.params, 
         model.file=model.loc, n.chains = 3, n.burnin=5000,
         n.thin=1, n.iter=10000, DIC=TRUE)   
 
-## ----jags-lm1ar-plot-func, echo=TRUE, results='hide', eval=TRUE----------
+## ----jags-lm1ar-plot-func, results='hide'--------------------------------
 plotModelOutput = function(jagsmodel, Y) {
 # attach the model
 attach.jags(jagsmodel)
@@ -125,19 +123,17 @@ lines(summaryPredictions[,2])
 points(Y)
 }
 
-## ----jags-lm1ar-plot, echo=TRUE, results='hide', eval=FALSE, fig.show='hide'----
+## ----jags-lm1ar-plot, results='hide', eval=FALSE, fig.show='hide'--------
 ## plotModelOutput(mod_lmcor_intercept, Wind)
 
 ## ----jags-lm1ar-plot1, fig=TRUE, echo=FALSE, fig.width=6, fig.height=6, fig.cap='(ref:jags-lm1ar-plot1)'----
 plotModelOutput(mod_lmcor_intercept, Wind)
 
-## ----jags-ar1, echo=TRUE, results='hide'---------------------------------
-################################################################
+## ----jags-ar1, results='hide'--------------------------------------------
 # 3. AR(1) MODEL WITH NO ESTIMATED AR COEFFICIENT = RANDOM WALK
 # no covariates. The model is y[t] ~ Normal(y[n-1], sigma) for 
 # we will call the precision tau.pro 
 # Note too that we have to define predY[1]
-################################################################
 model.loc=("rw_intercept.txt")
 jagsscript = cat("
 model {  
@@ -159,11 +155,10 @@ mod_rw_intercept = jags(jags.data, parameters.to.save=jags.params, model.file=mo
 n.chains = 3, n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
 
 ## ----jags-ar1est, echo=TRUE, results='hide'------------------------------
-################################################################
 # 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT
 # We're introducting a new AR coefficient 'phi', so the model is 
 # y[t] ~ N(mu + phi*y[n-1], sigma^2) 
-################################################################
+
 model.loc=("ar1_intercept.txt")
 jagsscript = cat("
 model {  
@@ -187,10 +182,9 @@ mod_ar1_intercept = jags(jags.data, parameters.to.save=jags.params,
         n.iter=10000, DIC=TRUE)  
 
 ## ----jags-ss1, echo=TRUE, results='hide'---------------------------------
-###############################################################
 # 5. MAKE THE SS MODEL a univariate random walk
 # no covariates. 
-###############################################################
+
 model.loc=("ss_model.txt")
 jagsscript = cat("
 model {  
@@ -220,11 +214,10 @@ jags.params=c("sd.q","sd.r","predY","mu")
 mod_ss = jags(jags.data, parameters.to.save=jags.params, model.file=model.loc, n.chains = 3, 
 n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
 
-## ----jags-cov, echo=TRUE, results='hide'---------------------------------
-###############################################################
+## ----jags-cov, results='hide'--------------------------------------------
 # 6. Include some covariates in a linear regression
 # Use temperature as a predictor of wind
-###############################################################
+
 model.loc=("lm.txt")
 jagsscript = cat("
 model {  
@@ -246,7 +239,7 @@ mod_lm = jags(jags.data, parameters.to.save=jags.params,
         model.file=model.loc, n.chains = 3, n.burnin=5000, 
         n.thin=1, n.iter=10000, DIC=TRUE)  
 
-## ----jags-cov-forecast, echo=TRUE,results='hide'-------------------------
+## ----jags-cov-forecast, results='hide'-----------------------------------
 jags.data = list("Y"=c(Wind,NA,NA,NA),"N"=(N+3))
 jags.params=c("sd.q","sd.r","predY","mu")
 model.loc=("ss_model.txt")
@@ -255,17 +248,7 @@ mod_ss_forecast = jags(jags.data, parameters.to.save=jags.params,
       n.iter=10000, DIC=TRUE)
 
 ## ----jags-hwdata, echo=TRUE----------------------------------------------
-Spawners = c(2662,1806,1707,1339,1686,2220,3121,5028,9263,4567,
-             1850,3353,2836,3961,4624,3262,3898,3039,5966,5931,
-             7346,4911,3116,3185,5590,2485,2987,3829,4921,2348,
-             1932,3151,2306,1686,4584,2635,2339,1454,3705,1510,
-             1331,942,884,666,1521,409,2388,1043,3262,2606,4866,
-             1161,3070,3320)
-Recruits = c(12741,15618,23675,37710,62260,32725,8659,28101,17054,
-             29885,33047,20059,35192,11006,48154,35829,46231,
-             32405,20782,21340,58392,21553,27528,28246,35163,
-             15419,16276,32946,11075,16909,22359,8022,16445,2912,
-             17642,2929,7554,3047,3488,577,4511,1478,3283,1633,
-             8536,7019,3947,2789,4606,3545,4421,1289,6416,3647)
+Spawners = c(2662,1806,1707,1339,1686,2220,3121,5028,9263,4567,1850,3353,2836,3961,4624,3262,3898,3039,5966,5931,7346,4911,3116,3185,5590,2485,2987,3829,4921,2348,1932,3151,2306,1686,4584,2635,2339,1454,3705,1510,1331,942,884,666,1521,409,2388,1043,3262,2606,4866,1161,3070,3320)
+Recruits = c(12741,15618,23675,37710,62260,32725,8659,28101,17054,29885,33047,20059,35192,11006,48154,35829,46231,32405,20782,21340,58392,21553,27528,28246,35163,15419,16276,32946,11075,16909,22359,8022,16445,2912,17642,2929,7554,3047,3488,577,4511,1478,3283,1633,8536,7019,3947,2789,4606,3545,4421,1289,6416,3647)
 logRS = log(Recruits/Spawners)
 

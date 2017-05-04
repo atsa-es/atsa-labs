@@ -238,12 +238,12 @@ jagsscript = cat("
 jags.data = list("Y"=dat, "N"=length(dat), Y1=dat[1])
 jags.params=c("sd.q","sd.r","X","mu", "u")
 
-## ----uss-jags-fit, results='hide'----------------------------------------
+## ----uss-jags-fit, results='hide', message=FALSE-------------------------
 mod_ss = jags(jags.data, parameters.to.save=jags.params, 
      model.file=model.loc, n.chains = 3, 
      n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)
 
-## ----uss-fig-posteriors, echo=TRUE, fig=TRUE, fig.cap='(ref:uss-fig-posteriors)'----
+## ----uss-fig-posteriors, fig=TRUE, fig.cap='(ref:uss-fig-posteriors)', message=FALSE----
 attach.jags(mod_ss)
 par(mfrow=c(2,2))
 hist(mu)
@@ -313,6 +313,4 @@ fit0 = MARSS(dat)
 
 ## ----uss-hw-movement-resids, eval=FALSE----------------------------------
 ## resids = residuals(fit0)$state.residuals
-
-## ----uss-Reset, echo=FALSE-----------------------------------------------
 

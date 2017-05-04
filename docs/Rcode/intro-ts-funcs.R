@@ -687,5 +687,3 @@ auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
 ## dBegin <- as.Date("2014-12-01")
 ## dayOfYear <- (dBegin - as.Date("2014-01-01") + 1)
 
-## ----ts-reset, echo=FALSE, include.source=FALSE--------------------------
-

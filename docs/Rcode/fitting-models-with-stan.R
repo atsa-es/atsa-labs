@@ -51,6 +51,10 @@ lm_intercept = fit_stan(y = Temp, x = rep(1, length(Temp)),
   model_name = "regression", 
   mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
 
+## ----stan-fig-burnin, fig.cap='A time series of our posterior draws using one chain and no burn-in.'----
+pars = extract(lm_intercept)
+plot(pars$beta)
+
 ## ----stan-lr-ar, cache=TRUE, results='hide'------------------------------
 lm_intercept_cor = fit_stan(y = Temp, x = rep(1, length(Temp)),
   model_name = "regression_cor", 

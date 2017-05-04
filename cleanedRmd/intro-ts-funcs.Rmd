@@ -1489,13 +1489,12 @@ pDat <- read.table(pp)
 \noindent Use the information above to do the following:
 
 
-1. Convert ```pDat```, which is a **data.frame** object, into a **ts** object.  This bit of code might be useful to get you started:
-
-```{r ts-HW1_1, eval=FALSE, echo=TRUE}
-## what day of 2014 is Dec 1st?
-dBegin <- as.Date("2014-12-01")
-dayOfYear <- (dBegin - as.Date("2014-01-01") + 1)
-```
+1. Convert ``pDat``, which is a **data.frame** object, into a **ts** object.  This bit of code might be useful to get you started:
+    ```{r ts-HW1_1, eval=FALSE, echo=TRUE}
+    ## what day of 2014 is Dec 1st?
+    dBegin <- as.Date("2014-12-01")
+    dayOfYear <- (dBegin - as.Date("2014-01-01") + 1)
+    ```
 
 2. Plot the time series of phytoplankton density and provide a brief description of any notable features.
 
@@ -1507,8 +1506,3 @@ dayOfYear <- (dBegin - as.Date("2014-01-01") + 1)
 
 6. Write out the best model in the form of Equation \@ref(eq:ARMAdefn) using the underscore notation to refer to subscripts ($e.g.$, write ```x_t``` for $x_t$). You can round any parameters/coefficients to the nearest hundreth. ($Hint$: if the mean of the time series is not zero, refer to Eqn 1.27 in the lab handout).
 
-
-
-
-```{r ts-reset, echo=FALSE, include.source=FALSE}
-```

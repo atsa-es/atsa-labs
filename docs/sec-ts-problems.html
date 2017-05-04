@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2017-05-03">
+<meta name="date" content="2017-05-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -198,8 +198,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>4.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="4.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>4.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="4.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>4.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR-1 state-space model with JAGS*</a></li>
-<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A simple random walk model of animal movement</a></li>
+<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
+<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A random walk model of animal movement</a></li>
 <li class="chapter" data-level="4.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>4.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>5</b> Multivariate state-space models without covariates</a><ul>
@@ -291,6 +291,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.7.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>9.7.1</b> Using leave one out cross-validation to select models</a></li>
 </ul></li>
 <li class="chapter" data-level="9.8" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>9.8</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="9.9" data-path="stan-problems.html"><a href="stan-problems.html"><i class="fa fa-check"></i><b>9.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -321,12 +322,10 @@ pp &lt;-<span class="st"> &quot;http://faculty.washington.edu/scheuerl/phytoDat.
 pDat &lt;-<span class="st"> </span><span class="kw">read.table</span>(pp)</code></pre></div>
 <p>Use the information above to do the following:</p>
 <ol style="list-style-type: decimal">
-<li>Convert <code>pDat</code>, which is a <strong>data.frame</strong> object, into a <strong>ts</strong> object. This bit of code might be useful to get you started:</li>
-</ol>
+<li><p>Convert <code>pDat</code>, which is a <strong>data.frame</strong> object, into a <strong>ts</strong> object. This bit of code might be useful to get you started:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## what day of 2014 is Dec 1st?
 dBegin &lt;-<span class="st"> </span><span class="kw">as.Date</span>(<span class="st">&quot;2014-12-01&quot;</span>)
-dayOfYear &lt;-<span class="st"> </span>(dBegin -<span class="st"> </span><span class="kw">as.Date</span>(<span class="st">&quot;2014-01-01&quot;</span>) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div>
-<ol start="2" style="list-style-type: decimal">
+dayOfYear &lt;-<span class="st"> </span>(dBegin -<span class="st"> </span><span class="kw">as.Date</span>(<span class="st">&quot;2014-01-01&quot;</span>) +<span class="st"> </span><span class="dv">1</span>)</code></pre></div></li>
 <li><p>Plot the time series of phytoplankton density and provide a brief description of any notable features.</p></li>
 <li><p>Although you do not have the actual measurements for the specific temperature and light regimes used in the experiment, you have been informed that they follow a regular light/dark period with accompanying warm/cool temperatures. Thus, estimating a fixed seasonal effect is justifiable. Also, the instrumentation is precise enough to preclude any systematic change in measurements over time (<span class="math inline">\(i.e.\)</span>, you can assume <span class="math inline">\(m_t = 0\)</span> for all <span class="math inline">\(t\)</span>). Obtain the time series of the estimated log-density of phytoplankton absent any hourly effects caused by variation in temperature or light. (<span class="math inline">\(Hint\)</span>: You will need to do some decomposition.)</p></li>
 <li><p>Use diagnostic tools to identify the possible order(s) of ARMA model(s) that most likely describes the log of population density for this particular experiment. Note that at this point you should be focusing your analysis on the results obtained in Question 3.</p></li>

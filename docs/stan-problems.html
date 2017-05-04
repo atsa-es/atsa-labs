@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="sec-mlr-season-w-var.html">
-<link rel="next" href="sec-mlr-problems.html">
+<link rel="prev" href="sec-stan-state-uncertainty.html">
+<link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -314,35 +314,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-mlr-confound" class="section level2">
-<h2><span class="header-section-number">2.8</span> Models with confounded parameters*</h2>
-<p>Try adding region as another factor in your model along with quarter and fit with <code>lm()</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss ~<span class="st"> </span>-<span class="dv">1</span> +<span class="st"> </span>Air.Flow +<span class="st"> </span>reg +<span class="st"> </span>qtr, <span class="dt">data =</span> fulldat))</code></pre></div>
-<pre><code>  Air.Flow       regn       regs    qtrqtr2    qtrqtr3    qtrqtr4 
-  1.066524 -49.024320 -44.831760  -3.066094   3.499428         NA </code></pre>
-<p>The estimate for quarter 1 is gone (actually it was set to 0) and the estimate for quarter 4 is NA. Look at the <span class="math inline">\(\mathbf{Z}\)</span> matrix for Form 1 and see if you can figure out the problem. Try also writing out the model for the 1st plant and you’ll see what part of the problem is and why the estimate for quarter 1 is fixed at 0.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(stack.loss ~<span class="st"> </span>-<span class="dv">1</span> +<span class="st"> </span>Air.Flow +<span class="st"> </span>reg +<span class="st"> </span>qtr, <span class="dt">data =</span> fulldat)
-Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit)</code></pre></div>
-<p>But why is the estimate for quarter 4 equal to NA? What if the ordering of north and south regions was different, say 1 through 4 north, 5 through 8 south, 9 through 12 north, etc?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fulldat2 =<span class="st"> </span>fulldat
-fulldat2$reg2 =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;s&quot;</span>), 
-    <span class="dv">3</span>)[<span class="dv">1</span>:<span class="dv">21</span>]
-fit =<span class="st"> </span><span class="kw">lm</span>(stack.loss ~<span class="st"> </span>Air.Flow +<span class="st"> </span>reg2 +<span class="st"> </span>qtr, <span class="dt">data =</span> fulldat2)
-<span class="kw">coef</span>(fit)</code></pre></div>
-<pre><code>(Intercept)    Air.Flow       reg2s     qtrqtr2     qtrqtr3     qtrqtr4 
--45.6158421   1.0407975  -3.5754722   0.7329027   3.0389763   3.6960928 </code></pre>
-<p>Now an estimate for quarter 4 appears.</p>
-<p>The problem is two-fold. First by having both region and quarter intercepts, we created models where 2 intercepts appear for one <span class="math inline">\(i\)</span> model and we cannot estimate both. <code>lm()</code> helps us out by setting one of the factor effects to 0. It will chose the first alphabetically. But as we saw with the model where odd numbered plants were north and even numbered were south, we can still have a situation where one of the intercepts is non-identifiable. <code>lm()</code> helps us out by alerting us to the problem by setting one to NA.</p>
-<p>Once you start writing your own Jags code or using MARSS, you will need to make sure that all your parameters are identifiable. If they are not, your code will simply `chase its tail’. The code will generally take forever to converge or if you did not try different starting conditions, it may look like it converged but actually the estimates for the confounded parameters are meaningless. So you will need to think carefully about the model you are fitting and consider if there are multiple parameters measuring the same thing (for example 2 intercept parameters).</p>
-<p></p>
+<div id="stan-problems" class="section level2">
+<h2><span class="header-section-number">9.9</span> Problems</h2>
+<ol style="list-style-type: decimal">
+<li><p>By adapting the code in Section <a href="sec-stan-lr.html#sec-stan-lr">9.2</a>, fit a regression model that includes the intercept and a slope, modeling the effect of Wind. What is the mean wind effect you estimate?</p></li>
+<li><p>Using the results from the linear regression model fit with no burn-in (Section <a href="sec-stan-lr.html#sec-stan-burn">9.2.1</a>), calculate the ACF of the <code>beta</code> time series using <code>acf()</code>. Would thinning more be appropriate? How much?</p></li>
+<li><p>Using the fit of the random walk model to the temperature data (Section <a href="sec-stan-rw.html#sec-stan-rw">9.4</a>), plot the predicted values (states) and 95% CIs.</p></li>
+<li><p>To see the effect of this increased flexibility in estimating the autocorrelation, make a plot of the predictions from the AR(1) model (Section <a href="sec-stan-ar1.html#sec-stan-ar1">9.5</a> and the RW model (<a href="sec-stan-rw.html#sec-stan-rw">9.4</a>).</p></li>
+<li><p>Fit the univariate state-space model (Section <a href="sec-stan-uss.html#sec-stan-uss">9.6</a>) with and without the autoregressive parameter <span class="math inline">\(\phi\)</span> and compare the estimated process and observation error variances. Recall that AR(1) without the <span class="math inline">\(\phi\)</span> parameter is a random walk.</p></li>
+</ol>
+
 </div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-mlr-season-w-var.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-mlr-problems.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-stan-state-uncertainty.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -371,7 +361,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/linear-regression-models-matrix.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/fitting-models-with-stan.Rmd",
 "text": "Edit"
 },
 "download": ["AFTS.pdf"],

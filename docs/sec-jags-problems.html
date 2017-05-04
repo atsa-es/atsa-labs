@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2017-05-03">
+<meta name="date" content="2017-05-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -198,8 +198,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>4.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="4.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>4.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="4.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>4.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR-1 state-space model with JAGS*</a></li>
-<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A simple random walk model of animal movement</a></li>
+<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
+<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A random walk model of animal movement</a></li>
 <li class="chapter" data-level="4.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>4.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>5</b> Multivariate state-space models without covariates</a><ul>
@@ -291,6 +291,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.7.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>9.7.1</b> Using leave one out cross-validation to select models</a></li>
 </ul></li>
 <li class="chapter" data-level="9.8" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>9.8</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="9.9" data-path="stan-problems.html"><a href="stan-problems.html"><i class="fa fa-check"></i><b>9.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -316,26 +317,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-jags-problems" class="section level2">
 <h2><span class="header-section-number">8.8</span> Problems</h2>
 <ol style="list-style-type: decimal">
-<li>Fit the intercept only model from section <a href="sec-jags-lr-no-covariates.html#sec-jags-lr-no-covariates">8.2</a>. Set the burn-in to 3, and when the model completes, plot the time series of the parameter <code>mu</code> for the first MCMC chain.</li>
-</ol>
-<ul>
-<li>Based on your visual inspection, has the MCMC chain convered?</li>
-<li>What is the ACF of the first MCMC chain?</li>
-</ul>
-<ol start="2" style="list-style-type: decimal">
+<li><p>Fit the intercept only model from section <a href="sec-jags-lr-no-covariates.html#sec-jags-lr-no-covariates">8.2</a>. Set the burn-in to 3, and when the model completes, plot the time series of the parameter <code>mu</code> for the first MCMC chain.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Based on your visual inspection, has the MCMC chain convered?</p></li>
+<li><p>What is the ACF of the first MCMC chain?</p></li>
+</ol></li>
 <li><p>Increase the MCMC burn-in for the model in question 1 to a value that you think is reasonable. After the model has converged, calculate the Gelman-Rubin diagnostic for the fitted model object.</p></li>
 <li><p>Compare the results of the <code>plotModelOutput()</code> function for the intercept only model from section <a href="sec-jags-lr-no-covariates.html#sec-jags-lr-no-covariates">8.2</a>. You will to add “predY” to your JAGS model and to the list of parameters to monitor, and re-run the model.</p></li>
 <li>Modify the random walk model without drift from section <a href="sec-jags-rw.html#sec-jags-rw">8.4</a> to a random walk model with drift. The equation for this model is
-<span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation*}
 E[y_t] = y_{t-1} + \mu + e_{t-1}
-\end{equation}\]</span>
+\end{equation*}\]</span>
 <p>where <span class="math inline">\(\mu\)</span> is interpreted as the average daily trend in wind speed. What might be a reasonable prior on <span class="math inline">\(\mu\)</span>?</p></li>
 <li><p>Plot the posterior distribution of <span class="math inline">\(\phi\)</span> for the AR(1) model in section <a href="sec-jags-ar1.html#sec-jags-ar1">8.5</a>. Can this parameter be well estimated for this dataset?</p></li>
 <li><p>Plot the posteriors for the process and observation variances (not standard deviation) for the univariate state-space model in section <a href="sec-jags-uss.html#sec-jags-uss">8.6</a>. Which is larger for this dataset?</p></li>
 <li><p>Add the effect of temperature to the AR(1) model in section <a href="sec-jags-ar1.html#sec-jags-ar1">8.5</a>. Plot the posterior for <code>beta</code> and compare to the posterior for <code>beta</code> from the model in section <a href="sec-jags-uss.html#sec-jags-covariates">8.6.1</a>.</p></li>
 <li><p>Plot the fitted values from the model in section <a href="sec-jags-forecast.html#sec-jags-forecast">8.7</a>, including the forecasts, with the 95% credible intervals for each data point.</p></li>
-<li><p>The following is a real life dataset from the Upper Skagit River (Puget Sound, 1952-2005) on salmon spawners and recruits:</p></li>
-</ol>
+<li><p>The following is a dataset from the Upper Skagit River (Puget Sound, 1952-2005) on salmon spawners and recruits:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Spawners =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2662</span>, <span class="dv">1806</span>, <span class="dv">1707</span>, <span class="dv">1339</span>, <span class="dv">1686</span>, <span class="dv">2220</span>, <span class="dv">3121</span>, <span class="dv">5028</span>, 
     <span class="dv">9263</span>, <span class="dv">4567</span>, <span class="dv">1850</span>, <span class="dv">3353</span>, <span class="dv">2836</span>, <span class="dv">3961</span>, <span class="dv">4624</span>, <span class="dv">3262</span>, <span class="dv">3898</span>, <span class="dv">3039</span>, 
     <span class="dv">5966</span>, <span class="dv">5931</span>, <span class="dv">7346</span>, <span class="dv">4911</span>, <span class="dv">3116</span>, <span class="dv">3185</span>, <span class="dv">5590</span>, <span class="dv">2485</span>, <span class="dv">2987</span>, <span class="dv">3829</span>, 
@@ -349,19 +347,22 @@ Recruits =<span class="st"> </span><span class="kw">c</span>(<span class="dv">12
     <span class="dv">17642</span>, <span class="dv">2929</span>, <span class="dv">7554</span>, <span class="dv">3047</span>, <span class="dv">3488</span>, <span class="dv">577</span>, <span class="dv">4511</span>, <span class="dv">1478</span>, <span class="dv">3283</span>, <span class="dv">1633</span>, 
     <span class="dv">8536</span>, <span class="dv">7019</span>, <span class="dv">3947</span>, <span class="dv">2789</span>, <span class="dv">4606</span>, <span class="dv">3545</span>, <span class="dv">4421</span>, <span class="dv">1289</span>, <span class="dv">6416</span>, <span class="dv">3647</span>)
 logRS =<span class="st"> </span><span class="kw">log</span>(Recruits/Spawners)</code></pre></div>
-Fit the following Ricker model to these data using the following linear form of this model with normally distributed errors:<br />
+<ol style="list-style-type: lower-alpha">
+<li>Fit the following Ricker model to these data using the following linear form of this model with normally distributed errors:<br />
 
-<span class="math display">\[\begin{equation}
+<span class="math display">\[\begin{equation*}
 log(R_t/S_t) = a + b \times S_t + e_t,\text{ where } e_t \sim \,\text{N}(0,\sigma^2)
-\end{equation}\]</span>
-<p>You will recognize that this form is exactly the same as linear regression, with independent errors (very similar to the intercept only model of Wind we fit in section <a href="sec-jags-lr-no-covariates.html#sec-jags-lr-no-covariates">8.2</a>).</p>
-<p>Within the constraints of the Ricker model, think about how you might want to treat the errors. The basic model described above has independent errors that are not correlated in time. Approaches to analyzing this dataset might involve</p>
+\end{equation*}\]</span>
+<p>You will recognize that this form is exactly the same as linear regression, with independent errors (very similar to the intercept only model of Wind we fit in section <a href="sec-jags-lr-no-covariates.html#sec-jags-lr-no-covariates">8.2</a>).</p></li>
+<li><p>Within the constraints of the Ricker model, think about other ways you might want to treat the errors. The basic model described above has independent errors that are not correlated in time. Approaches to analyzing this dataset might involve</p>
 <ul>
-<li>modeling the errors as independent (as described above)</li>
-<li>modeling the errors as autocorrelated</li>
-<li>fitting a state-space model, with independent or correlated process errors</li>
-</ul>
-<p>Fit each of these models, and compare their performance (either using their predictive ability, or forecasting ability).</p>
+<li><p>modeling the errors as independent (as described above)</p></li>
+<li><p>modeling the errors as autocorrelated</p></li>
+<li><p>fitting a state-space model, with independent or correlated process errors</p></li>
+</ul></li>
+</ol>
+<p>Fit each of these models, and compare their performance (either using their predictive ability, or forecasting ability).</p></li>
+</ol>
 
 </div>
 <!-- </div> -->

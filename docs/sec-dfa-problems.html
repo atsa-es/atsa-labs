@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2017-05-03">
+<meta name="date" content="2017-05-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -198,8 +198,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>4.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="4.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>4.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="4.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>4.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR-1 state-space model with JAGS*</a></li>
-<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A simple random walk model of animal movement</a></li>
+<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
+<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A random walk model of animal movement</a></li>
 <li class="chapter" data-level="4.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>4.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>5</b> Multivariate state-space models without covariates</a><ul>
@@ -291,6 +291,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.7.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>9.7.1</b> Using leave one out cross-validation to select models</a></li>
 </ul></li>
 <li class="chapter" data-level="9.8" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>9.8</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="9.9" data-path="stan-problems.html"><a href="stan-problems.html"><i class="fa fa-check"></i><b>9.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -317,19 +318,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">7.13</span> Problems</h2>
 <p>For your homework this week, we will continue to investigate common trends in the Lake Washington plankton data.</p>
 <ol style="list-style-type: decimal">
-<li>Fit other DFA models to the phytoplankton data with varying numbers of trends from 1-4 (we fit a 3-trend model above). Do not include any covariates in these models. Using <code>R=&quot;diagonal and unequal&quot;</code> for the observation errors, which of the DFA models has the most support from the data?</li>
-</ol>
+<li><p>Fit other DFA models to the phytoplankton data with varying numbers of trends from 1-4 (we fit a 3-trend model above). Do not include any covariates in these models. Using <code>R=&quot;diagonal and unequal&quot;</code> for the observation errors, which of the DFA models has the most support from the data?</p>
 <p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-<ol start="2" style="list-style-type: decimal">
-<li>How does the best model from Question 1 compare to a DFA model with the same number of trends, but with <code>R=&quot;unconstrained&quot;</code>?</li>
-</ol>
+<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p></li>
+<li><p>How does the best model from Question 1 compare to a DFA model with the same number of trends, but with <code>R=&quot;unconstrained&quot;</code>?</p>
 <p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Fit a DFA model that includes temperature as a covariate and 3 trends (as in Section <a href="sec-dfa-lakeWA.html#sec-dfa-lakeWA">7.12</a>), but with<code>R=&quot;unconstrained&quot;</code>? How does this model compare to the model with <code>R=&quot;diagonal and unequal&quot;</code>? How does it compare to the model in Question 2?</li>
+<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p></li>
+<li><p>Fit a DFA model that includes temperature as a covariate and 3 trends (as in Section <a href="sec-dfa-lakeWA.html#sec-dfa-lakeWA">7.12</a>), but with<code>R=&quot;unconstrained&quot;</code>? How does this model compare to the model with <code>R=&quot;diagonal and unequal&quot;</code>? How does it compare to the model in Question 2?</p>
+<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p></li>
 </ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
 <p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
 
 </div>
