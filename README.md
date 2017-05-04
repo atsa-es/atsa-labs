@@ -6,7 +6,7 @@
 * [Directories](#directories)
 * [Building the book](#build)
 
-## Writing the rmarkdown files {#writing}
+## Writing the rmarkdown files
 
 ### Code in text, package names and object names
 
