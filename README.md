@@ -5,8 +5,10 @@
 * [Key files](#key-files)
 * [Directories](#directories)
 * [Building the book](#build-the-book)
+* [.gitignore file](#gitignore-file)
 
 ## Writing the rmarkdown files
+[back to top](#afts-labbook-info)
 
 ### Code in text, package names and object names
 
@@ -88,6 +90,7 @@ You can pass these in `fig.cap='This is my caption.'` but if your caption is lon
 ```
 
 ## Special conventions
+[back to top](#afts-labbook-info)
 
 Look at the other Rmd files and follow the conventions for the first page.  These have
 
@@ -104,6 +107,7 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
 
 
 ## Build the book
+[back to top](#afts-labbook-info)
 
     ```{r tmp, eval=FALSE}
     source("cleanDefsinRmd.R")
@@ -114,6 +118,7 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
 You can use 'Build Book' under the build tab in RStudio but make sure to run `cleanDefsinRmd.R` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
 
 ## Key files
+[back to top](#afts-labbook-info)
 
 * index.Rmd: First page.  Yaml metadata for the book is at the top of file
 * _output.yml output yaml is here
@@ -123,6 +128,7 @@ You can use 'Build Book' under the build tab in RStudio but make sure to run `cl
 * cleanDefsinRmd.R This is the script to populate the cleanedRmd folder with the Rmd files used in _bookdown.yml.  It replaces the mathdefs (like \AA), tangles the R code from the Rmd and puts in docs/Rcode.
 
 ## Directories
+[back to top](#afts-labbook-info)
 
 Most of these you will see on GitHub.  A couple directories are only for your local machine.
 
@@ -150,7 +156,8 @@ bookdown populates this.  It has cache.
 
 To build the book on your local machine, you'll install the bookdown package and build as described in [build the book](#build).  bookdown will create the libs folder in your project with jquery and gitbook folders.
 
-### .gitignore
+## gitignore file
+[back to top](#afts-labbook-info)
 
 I have many files in my local repository that don't need to be on GitHub.  All the `AFTS` files are stuff generated if a book build fails, and the clean up fails.  Normally all this is in the docs folder.  The `#Misc` stuff is stuff I am working on and have not cleaned up yet.
 
