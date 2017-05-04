@@ -1,17 +1,27 @@
-```{r uss-RUNFIRST, echo=FALSE, include.source=FALSE}
+```{r uss-setup, include=FALSE, purl=FALSE}
+knitr::opts_knit$set(unnamed.chunk.label = "uss-")
 ```
 
 
 # Univariate state-space models  {#chap-univariate-state-space}
+\chaptermark{Univariate state-space models}
 
 
-This lab show you how to fit some basic univariate state-space models using MARSS(). This will also introduce you to the idea of writing AR models in state-space form.  Before running the code, load the required R packages:
-```{r uss-loadpackages, results='hide', message=FALSE, warnings=FALSE}
-library(MARSS)
+This lab show you how to fit some basic univariate state-space models using MARSS(). This will also introduce you to the idea of writing AR models in state-space form.  
+
+A script with all the R code in the chapter can be downloaded  [here]("./Rcode/fitting-univariate-state-space.R"). 
+
+### Data and packages  {-}
+
+All the data used in the chapter are in the **MARSS** package. The other  required packages are **stats** (normally loaded by default when starting R), **datasets** and **forecast**.  To run the JAGS code example, you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed and the **R2jags** and **coda** R packages.  Install the packages, if needed, and load:
+```{r uss-loadpackages, results='hide', message=FALSE, warning=FALSE}
 library(stats)
+library(MARSS)
 library(forecast)
+library(datasets)
+library(R2jags)
+library(coda)
 ```
-
 
 
 ## Fitting a state-space model with MARSS {#sec-uss-fitting-a-state-space-model-with-marss}
@@ -404,13 +414,9 @@ acf(resids$state.residuals[1,], main="stoc level w(t)")
 
 ## Fitting a univariate AR-1 state-space model with JAGS* {#sec-uss-fitting-a-univariate-ar--state-space-model-with-jags}
 
-Here we show how to fit model 3, Equation \@ref(eq:uss-random-walk-w-noise-w-drift), with JAGS.
-First load the required packages:
-```{r uss-jags-packages, warnings=FALSE, messages=FALSE, results='hide'}
-require(coda)
-require(R2jags)
-```
-Next write the model for JAGS to a file (filename in ```model.loc```):
+Here we show how to fit model 3, Equation \@ref(eq:uss-random-walk-w-noise-w-drift), with JAGS.  This section requires that you have JAGS installed and the **R2jags** and **coda** R packages loaded.
+
+The first step is to write the model for JAGS to a file (filename in ```model.loc```):
 ```{r uss-jags-model}
 model.loc="ss_model.txt"
 jagsscript = cat("
@@ -727,5 +733,4 @@ The lon residuals are in row 1 and lat residuals are in row 2 (same order as the
 
 
 ```{r uss-Reset, echo=FALSE}
-options(width=120)
 ```

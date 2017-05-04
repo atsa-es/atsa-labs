@@ -1,27 +1,36 @@
-
-```{r setup, include=FALSE}
+```{r stan-setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 ```
 
 # Stan for Bayesian time-series analysis {#chap-stan}
+\chaptermark{Stan}
 
+For this lab, we will use [Stan](http://mc-stan.org/documentation/) for fitting models. These examples are primarily drawn from the Stan manual and previous code from this class.  For running the code in this chapter, you will need to download and install **RStan** for your operating system: follow the instructions [here](http://mc-stan.org/interfaces/rstan.html). 
 
-For this lab, we'll use [Stan](http://mc-stan.org/documentation/) for estimation. You'll need to download Stan below. Additionally, you'll need to download a package we've created for deploying these models called ``statss``. This is hosted on the Github repository for the class [https://github.com/eric-ward/safs-timeseries](https://github.com/eric-ward/safs-timeseries), and you can install with ``devtools()``. These examples are primarily drawn from the *Stan* manual and previous code from this class.
+A script with all the R code in the chapter can be downloaded  [here]("./Rcode/fitting-models-with-stan.R").
 
-```{r stan-load, warning=FALSE, message=FALSE, results='hide'}
-library(rstan)
+## Stan packages and chapter data sets {#sec-stan-packages-data}
+
+You will need the **statss** package we have written for fitting state-space time-series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/eric-ward/safs-timeseries).  Install  using the **devtools** package.
+```{r stan-load, eval=FALSE}
 library(devtools)
-#if you have not installed statss
-#devtools::install_github("eric-ward/safs-timeseries/statss")
+devtools::install_github("eric-ward/safs-timeseries/statss")
+```
+
+In addition, you will need the **rstan** and **datasets** packages. After installing, if needed, load the packages:
+```{r stan-loadpackages, results='hide', warning=FALSE, message=FALSE}
 library(statss)
-# for optimizing stan on your machine,
+library(rstan)
+library(datasets)
+```
+
+Once you have Stan and **rstan** installed, optimize Stan on your machine:
+```{r stan-rstan-setup, warning=FALSE, message=FALSE, results='hide'}
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 ```
 
-## Data {#sec-stan-data}
-
-For data for this lab, we will use a dataset on airquality in New York. We'll load the data and create a couple new variables for future use. For the majority of our models, we're going to treat 'Wind' as the response variable for our time series models. 
+For this lab, we will use a data set on airquality in New York from the **datasets** package. Load the data and create a couple new variables for future use. 
 
 ```{r stan-data}
 data(airquality)
@@ -40,7 +49,7 @@ Remember that in linear regression models, the residual error is interpreted as 
 
 To run this model using our package, we'll need to specify the response and predictor variables. The covariate matrix with an intercept only is a matrix of 1s. To double check, you could always look at 
 
-```{r stab-lm}
+```{r stan-lm}
 x = model.matrix(lm(Temp~1))
 ```
 
@@ -94,7 +103,7 @@ To illustrate the effects of the burn-in / warmup period, and thinning, we'll ha
 
 **Please make a plot of the time series of beta. Based on visual inspection, when does the chain converge? Second, calculate the ACF using acf() - would thinning more be appropriate?**
 
-```{r stan-lm2, cache=TRUE, resulst='hide'}
+```{r stan-lm2, cache=TRUE, results='hide'}
 lm_intercept = fit_stan(y = Temp, x = rep(1, length(Temp)),
   model_name = "regression", 
   mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))

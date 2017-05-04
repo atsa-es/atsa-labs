@@ -1,12 +1,22 @@
-```{r dlm-RUNFIRST, echo=FALSE, include=FALSE, message=FALSE}
-require(MARSS)
+```{r dlm-setup, include=FALSE, purl=FALSE}
+knitr::opts_knit$set(unnamed.chunk.label = "dlm-")
 ```
 
 
 # Dynamic linear models {#chap-dlm-dynamic-linear-models}
+\chaptermark{Dynamic linear models}
 
-Here we will use MARSS to analyze dynamic linear models (DLMs), wherein the parameters in a regression model are treated as time-varying. DLMs are used commonly in econometrics, but have received less attention in the ecological literature (c.f., Lamon et al. 1998, Scheuerell and Williams 2005). Our treatment of DLMs is rather cursory---we direct the reader to excellent textbooks by Pole et al. (1994) and Petris et al. (2009) for more in-depth treatments of DLMs. The former focuses on Bayesian estimation whereas the latter addresses both likelihood-based and Bayesian estimation methods.
+Here we will use MARSS to analyze dynamic linear models (DLMs), wherein the parameters in a regression model are treated as time-varying. DLMs are used commonly in econometrics, but have received less attention in the ecological literature [c.f. @Lamonetal1998; @ScheuerellWilliams2005]. Our treatment of DLMs is rather cursory---we direct the reader to excellent textbooks by @Poleetal1994 and @Petrisetal2009 for more in-depth treatments of DLMs. The former focuses on Bayesian estimation whereas the latter addresses both likelihood-based and Bayesian estimation methods.
 
+A script with all the R code in the chapter can be downloaded  [here]("./Rcode/DLM.R"). 
+
+### Data {-}
+
+Most of the data used in the chapter are from the **MARSS** package.  Install the package, if needed, and load:
+```{r dlm-loadpackages, warning=FALSE, message=FALSE}
+library(MARSS)
+```
+The problem set uses an additional data set on spawners and recruits: [KvichakSockeye.RData]("./data/KvichakSockeye.RData").  
 
 ## Overview {#sec-dlm-overview}
 
@@ -45,7 +55,8 @@ The idea is that the evolution matrix $\GG_t$ deterministically maps the paramet
 
 
 ## Example of a univariate DLM {#sec-dlm-example-of-a-univariate-dlm}
-Let's consider an example from the literature. Scheuerell \& Williams (2005) used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell \& Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon ("smolts") entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year $t$,
+
+Let's consider an example from the literature. @ScheuerellWilliams2005 used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell \& Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon ("smolts") entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year $t$,
 \begin{equation}
 (\#eq:dlm-dlmSW1)
 survival_t = \alpha_t + \beta_t F_t + v_t \text{ with } v_{t}\sim\N(0,r),
@@ -81,7 +92,7 @@ where $\xx_t = \ttheta_t$, $\BB_t = \GG_t$, $\uu_t = \CC_t = \cc_t = \zer$, $\yy
 
 
 ## Fitting a univariate DLM with MARSS {#sec-dlm-fitting-a-univariate-dlm-with-marss}
-Now let's go ahead and analyze the DLM specified in Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). We begin by getting the data set, which has 3 columns for 1) the year the salmon smolts migrated to the ocean ($year$), 2) logit-transformed survival\footnote{Survival in the original context was defined as the proportion of juveniles that survive to adulthood. Thus, we use the logit function, defined as $logit(p)=log_e(p/[1-p])$, to map survival from the open interval (0,1) onto the interval $(-\infty,\infty)$, which allows us to meet our assumption of normally distributed observation errors.} ($logit.s$), and 3) the coastal upwelling index for April ($CUI.apr$). There are 42 years of data (1964--2005).
+Now let's go ahead and analyze the DLM specified in Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). We begin by loading the data set (which is in the *MARSS* package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean ($year$), 2) logit-transformed survival\footnote{Survival in the original context was defined as the proportion of juveniles that survive to adulthood. Thus, we use the logit function, defined as $logit(p)=log_e(p/[1-p])$, to map survival from the open interval (0,1) onto the interval $(-\infty,\infty)$, which allows us to meet our assumption of normally distributed observation errors.} ($logit.s$), and 3) the coastal upwelling index for April ($CUI.apr$). There are 42 years of data (1964--2005).
 ```{r read.in.data, eval=TRUE}
 ## load the data
 data(SalmonSurvCUI)
@@ -175,7 +186,8 @@ mtext("Year of ocean entry", 1, line=3)
  
 
 ## Forecasting with a univariate DLM {#sec-dlm-forecasting-with-a-univariate-dlm}
-Scheuerell \& Williams (2005) were interested in how well upwelling could be used to actually \textit{forecast} expected survival of salmon, so let's look at how well our model does in that context. To do so, we need the predictive distributions for the regression parameters and observation.
+
+@ScheuerellWilliams2005 were interested in how well upwelling could be used to actually \textit{forecast} expected survival of salmon, so let's look at how well our model does in that context. To do so, we need the predictive distributions for the regression parameters and observation.
 
 Beginning with our definition for the distribution of the parameters at time $t=0$, $\ttheta_0 \sim \MVN(\pipi_0,\LAM_0)$ in Equation \@ref(eq:dlm-dlmSW3), we write
 \begin{equation}
@@ -393,18 +405,25 @@ The data come from a large public database begun by Ransom Myers many years ago.
 
 For this exercise, we will use spawner-recruit data for sockeye salmon ($Oncorhynchus$ $nerka$) from the Kvichak River in SW Alaska that span the years 1952-1989.  In addition, we'll examine the potential effects of the Pacific Decadal Oscillation (PDO) during the salmon's first year in the ocean, which is widely believed to be a "bottleneck" to survival.
 
-Here are the data:
+```{r dlm-copy-data-file-to-doc, include=FALSE, purl=FALSE}
+#If bookdown is being run, then we are at the top level
+#make sure the Rdata is in the docs folder
+#file.copy("Lab-fitting-DLMs/KvichakSockeye.RData", "docs/data/KvichakSockeye.RData", overwrite=TRUE)
+if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
+  #load the data
+  load("docs/data/KvichakSockeye.RData")
+}else{
+  load("KvichakSockeye.RData")
+}
+```
 
-```{r SRdata, echo=TRUE, eval=TRUE}
-## get S-R data; object is 'SRdata"
-## file cols are:
-## 1: brood yr (brood.yr)
-## 2: number of spawners (Sp)
-## 3: number of recruits (Rec)
-## 4: PDO during first summer at sea (PDO.t2)
-## 5: PDO during first winter at sea (PDO.t3)
-load("Lab-fitting-DLMs/KvichakSockeye.RData")
+Download the Rdata file for Kvichak River from here: [KvichakSockeye.RData]("./data/KvichakSockeye.RData"). Then load the Rdata file:
+```{r dlm-SRdata, echo=TRUE, eval=FALSE}
+load("KvichakSockeye.RData")
+```
 
+The data are a dataframe with columns for brood year (`brood.yr`), number of spawners (`Sp`), number of recruits (`Rec`) and PDO at year $t-2$ (`PDO.t2`) and $t-3$ (`PDO.t3`).
+```{r dlm-data-head}
 ## head of data file
 head(SRdata)
 ```
@@ -434,7 +453,3 @@ This model assumes no density-dependent survival in that the number of recruits 
 
 5. Based on AICc, which of the models above is the most parsimonius?  Is it well behaved ($i.e.$, are the model assumptions met)?  Plot the model forecasts for the best model.  Is this a good forecast model?  
 
-
-
-```{r Reset, echo=FALSE}
-```

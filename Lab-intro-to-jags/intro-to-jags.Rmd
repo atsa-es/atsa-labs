@@ -1,27 +1,24 @@
-```{r jags-RUNFIRST, echo=FALSE}
+```{r jags-setup, include=FALSE, purl=FALSE}
 removefiles=c()
+knitr::opts_knit$set(unnamed.chunk.label = "ts-")
 ```
 
 
 # JAGS for Bayesian time-series analysis  {#chap-jags}
+\chaptermark{JAGS}
 
-In this lab, we will work through using Bayesian methods to estimate parameters in time series models using JAGS. There are a variety of software tools to do this. R has a number of packages available on the TimeSeries task view, 
-\newline \newline
- http://cran.r-project.org/web/views/TimeSeries.html 
-\newline \newline
-Software to implement more complicated models is also available, and many of you are probably familiar with these options (AD Model Builder and Template Model Builder, WinBUGS, OpenBUGS, JAGS, to name a few). We will be using JAGS because (1) it is platform independent, (2) most of the glitches have been worked out, and (3) it is easy to use via R. After updating to the latest version of R, install JAGS for your operating platform here:
-\newline \newline
- http://sourceforge.net/projects/mcmc-jags/files/ 
-\newline \newline
-Click on JAGS, then the most recent folder, then the platform of your machine. With JAGS installed, open up R (or RStudio) and install the **coda** and **R2jags** packages.
+In this lab, we will work through using Bayesian methods to estimate parameters in time series models. There are a variety of software tools to do time-series analysis using Bayesian methods. R lists a number of packages available on the R Cran [TimeSeries](http://cran.r-project.org/web/views/TimeSeries.html) task view.  
+
+Software to implement more complicated models is also available, and many of you are probably familiar with these options (AD Model Builder and Template Model Builder, WinBUGS, OpenBUGS, JAGS, Stan, to name a few). In this chapter, we will show you how to write state-space models in JAGS and fit these models.  
+
+After updating to the latest version of R, install JAGS for your operating platform using the instructions [here](http://sourceforge.net/projects/mcmc-jags/files/).  Click on JAGS, then the most recent folder, then the platform of your machine.  You will also need the **coda** and **R2jags** packages.
 ```{r jags-loadpackages, results='hide', message=FALSE, warnings=FALSE}
-require(coda)
-require(R2jags)
+library(coda)
+library(R2jags)
 ```
 
+## The airquality dataset {#sec-jags-dataset}
 
-
-## The dataset {#sec-jags-dataset}
 For data for this lab, we will include a dataset on air quality in New York. We will load the data and create a couple new variables for future use. For the majority of our models, we are going to treat wind speed as the response variable for our time-series models. 
 
 ```{r jags-loaddata, echo=TRUE, results='hide', eval=TRUE}
@@ -67,7 +64,7 @@ model {
 }  
 ",file=model.loc)
 ```
-```{r clean1, echo=FALSE}
+```{r clean1, echo=FALSE, purl=FALSE}
 removefiles=c(removefiles, model.loc)
 ```
 
@@ -202,7 +199,7 @@ model {
 }
 ",file=model.loc)
 ```
-```{r clean2, echo=FALSE}
+```{r clean2, echo=FALSE, purl=FALSE}
 removefiles=c(removefiles, model.loc)
 ```
 Notice several subtle changes from the simpler first model: (1) we are estimating the autocorrelation parameter $\phi$, which is assigned a Uniform(-1, 1) prior, (2) we model the residual variance as a function of the autocorrelation, and (3) we allow the autocorrelation to affect the predicted values ```predY```. One other change we can make is to add ```predY``` to the list of parameters we want returned to R. 
@@ -287,7 +284,7 @@ jags.params=c("sd.pro","predY","mu")
 mod_rw_intercept = jags(jags.data, parameters.to.save=jags.params, model.file=model.loc, 
 n.chains = 3, n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
 ```
-```{r clean3, echo=FALSE}
+```{r clean3, echo=FALSE, purl=FALSE}
 removefiles=c(removefiles, model.loc)
 ```
 
@@ -331,7 +328,7 @@ mod_ar1_intercept = jags(jags.data, parameters.to.save=jags.params,
         model.file=model.loc, n.chains = 3, n.burnin=5000, n.thin=1, 
         n.iter=10000, DIC=TRUE)  
 ```
-```{r clean4, echo=FALSE}
+```{r clean4, echo=FALSE, purl=FALSE}
 removefiles=c(removefiles, model.loc)
 ```
 
@@ -386,7 +383,7 @@ jags.params=c("sd.q","sd.r","predY","mu")
 mod_ss = jags(jags.data, parameters.to.save=jags.params, model.file=model.loc, n.chains = 3, 
 n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
 ```
-```{r clean5, echo=FALSE}
+```{r clean5, echo=FALSE, purl=FALSE}
 removefiles=c(removefiles, model.loc)
 ```
 
@@ -421,7 +418,7 @@ mod_lm = jags(jags.data, parameters.to.save=jags.params,
         model.file=model.loc, n.chains = 3, n.burnin=5000, 
         n.thin=1, n.iter=10000, DIC=TRUE)  
 ```
-```{r clean6, echo=FALSE}
+```{r clean6, echo=FALSE, purl=FALSE}
 removefiles=c(removefiles, model.loc)
 ```
 
@@ -506,6 +503,6 @@ Within the constraints of the Ricker model, think about how you might want to tr
 Fit each of these models, and compare their performance (either using their predictive ability, or forecasting ability).
 
 
-```{r jags-reset, echo=FALSE, include.source=FALSE}
+```{r jags-reset, include=FALSE, purl=FALSE}
 file.remove(removefiles)
 ```

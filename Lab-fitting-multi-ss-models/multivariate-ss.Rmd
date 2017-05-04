@@ -1,11 +1,25 @@
-```{r mss-RUNFIRST, echo=FALSE, include=FALSE, message=FALSE}
+```{r mss-setup, include=FALSE, purl=FALSE}
+knitr::opts_knit$set(unnamed.chunk.label = "mss-")
 ```
 
 
-# Multivariate state-space models without covariates  {#chap-multivariate-state-space}
-
+# Multivariate state-space models without covariates  {#chap-mss}
+\chaptermark{Multivariate state-space models}
 
 This lab show you how to fit multivariate state-space models using the **MARSS** package. This chapter is an example which uses model selection to test different population structures in west coast harbor seals.  See \citet{Holmesetal2014} for a fuller version of this examples. Chapter \@ref(chap-mss-covariates) shows an example of a multivariate state-space model with covariates.
+
+A script with all the R code in the chapter can be downloaded  [here]("./Rcode/multivariate-ss.R"). 
+
+### Data and packages  {-}
+
+All the data used in the chapter are in the **MARSS** package. For most examples, we will use the ``MARSS()`` function to fit models via maximum-likelihood.  We also show how to fit a Bayesian model using JAGS.  For this section you will need the **R2jags** and **coda** packages.  To run the JAGS code, you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed.  See Chapter \@ref(chap-jags) for more details on JAGS.  
+```{r mss-loadpackages, results='hide', message=FALSE, warning=FALSE}
+library(MARSS)
+library(R2jags)
+library(coda)
+```
+
+## Overview {#sec-mss-overview}
 
 As discussed in Chapter \@ref(chap-univariate-state-space), the **MARSS** package fits multivariate state-space models in this form:
 \begin{equation}
@@ -18,19 +32,7 @@ As discussed in Chapter \@ref(chap-univariate-state-space), the **MARSS** packag
 \end{equation}
 where each of the bolded terms are matrices.  Those that are bolded and small (not capitalized) have one column only, so are column matrices. 
 
-To fit your time-series model with the **MARSS** package, you need to determine the size and structure of each of the parameter matrices: $\BB$, $\uu$, $\QQ$, $\ZZ$, $\aa$, $\RR$ and $\mumu$.  
-
-
-
-### The required packages  {-}
-
-The required packages are **MARSS** for fitting models via maximum-likelihood and **R2jags** and **coda** for fitting models via Bayesian integration.  To run the JAGS code, you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed.
-```{r mss-load-packages, results='hide', message=FALSE, warnings=FALSE}
-require(MARSS)
-require(R2jags)
-require(coda)
-```
-
+To fit a multivariate time-series model with the **MARSS** package, you need to first determine the size and structure of each of the parameter matrices: $\BB$, $\uu$, $\QQ$, $\ZZ$, $\aa$, $\RR$ and $\mumu$.  This requires first writing down your model in matrix form.  We will illustarte this with a series of models for the temporal population dynamics of West coast harbor seals.
 
 ## West coast harbor seals counts {#sec-mss-west-coast-harbor-seals-counts}
 

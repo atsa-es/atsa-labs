@@ -1,22 +1,36 @@
-```{r mlr-RUNFIRST, echo=FALSE}
-require(MARSS)
+```{r mlr-setup, include=FALSE, purl=FALSE}
+knitr::opts_knit$set(unnamed.chunk.label = "mlr-")
 ```
 
-
 # Linear regression in matrix form  {#chap-mlr}
+\chaptermark{Linear regression}
 
 This chapter shows how to write linear regression models in matrix form. The purpose is to get you comfortable writing multivariate linear models in different matrix forms before we start working with time-series versions of these models.  Each matrix form is an equivalent model for the data, but written in different forms.  You do not need to worry which form is better or worse at this point.  Simply get comfortable writing multivariate linear models in different matrix forms.
 
-We will work with the ```stackloss``` dataset available in R.  The ```stackloss``` dataset consists of 21 observations on the efficiency of a plant that produces nitric acid as a function of three explanatory variables: air flow, water temperature and acid concentration.  We are going to use just the first 4 datapoints so that it is easier to write the matrices, but the concepts extend to as many datapoints as you have
-```{r mlr-stackloss.data, tidy=FALSE}
+A script with all the R code in the chapter can be downloaded  [here]("./Rcode/linear-regression-models-matrix.R").  
+
+### Data and packages {-}
+
+This chapter uses the **stats**, **MARSS** and **datasets** packages. Install those packages, if needed, and load:
+```{r mlr-loadpackages, results='hide', warning=FALSE, message=FALSE}
+library(stats)
+library(MARSS)
+library(datasets)
+```
+
+We will work with the ```stackloss``` dataset available in R.  The dataset consists of 21 observations on the efficiency of a plant that produces nitric acid as a function of three explanatory variables: air flow, water temperature and acid concentration.  We are going to use just the first 4 datapoints so that it is easier to write the matrices, but the concepts extend to as many datapoints as you have.
+```{r mlr-stackloss.data}
 data(stackloss)
 dat = stackloss[1:4,] #subsetted first 4 rows
 dat
 ```
 
+
+## A simple regression: one explanatory variable {#sec-mlr-lr1}
+
 We will start by regressing stack loss against air flow.  In R using the ```lm()``` function this is
-```{r mlr-stackloss1, eval=FALSE}
-require(stats)
+```{r mlr-stackloss1, results='hide'}
+#the dat data.frame is defined on the first page of the chapter
 lm(stack.loss ~ Air.Flow, data=dat)
 ```
 
@@ -28,7 +42,7 @@ stack.loss_i = \alpha + \beta air_i + e_i, \text{ where } e_i \sim \N(0,\sigma^2
 We will write the model for all the measurements together in two different ways, Form 1 and Form 2.
 
 
-## Form 1  {#sec-mlr-form1}
+## Matrix Form 1  {#sec-mlr-form1}
 In this form, we have the explanatory variables in a matrix on the left of our parameter matrix:
 \begin{equation}
 (\#eq:stackloss-form1)
@@ -147,7 +161,7 @@ Take a look at the $\ZZ$ we made in R.  It looks exactly like what is in our mod
 This form of writing a regression model will come up when you work with dynamic linear models (DLMs).  With DLMs, you will be fitting models of the form $\yy_t=\ZZ_t\xx_t+\ee_t$.  In these models you have multiple $\yy$ at regular time points and you allow your regression parameters, the $\xx$, to evolve through time as a random walk.
 
 
-### Form 1b: The transpose of Form 1  {#sec-mlr-form1b}
+### Matrix Form 1b: The transpose of Form 1  {#sec-mlr-form1b}
 We could also write Form 1 as follows:
 \begin{equation}
 (\#eq:stackloss-form1b) 
@@ -173,7 +187,7 @@ coef(fit1.mult)
 ```
 
 
-## Form 2  {#sec-mlr-form2}
+## Matrix Form 2  {#sec-mlr-form2}
 
 In this form, we have the explanatory variables in a matrix on the right of our parameter matrix as in Form 1b but we arrange everything a little differently:
 \begin{equation}
@@ -350,7 +364,6 @@ In the homework, you will use the R code in this section to solve for the parame
 y=matrix(dat$stack.loss, ncol=1)
 x=matrix(c(1,dat$Air.Flow),ncol=1)
 #make the Z matrix
-require(MARSS)
 n=nrow(dat) #number of rows in our data file
 k=1
 #Z has n rows and 1 col for intercept, and n cols for the n air data points
