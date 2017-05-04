@@ -78,8 +78,6 @@ names(pars)
 $$y_t = \beta \times 1 + e_t, e_t \sim N(0,\sigma)$$
 so our estimated parameters are $\beta$ and $\sigma$.  Our stan code computed the derived variables: predicted $y_t$ which is $\hat{y}_t = \beta \times 1$ and the log-likelihood.  lp__ is the log posterior which is automatically returned.
 
-**On your own, try to re-fit a regression model that includes the intercept and a slope, modeling the effect of Wind. What's the mean wind effect you estimate?**
-
 We can then make basic plots or summaries of each of these parameters, 
 
 ```{r stan-hist}
@@ -99,15 +97,21 @@ points(Wind, col="red")
 
 ### Burn-in and thinning {#sec-stan-burn}
 
-To illustrate the effects of the burn-in / warmup period, and thinning, we'll have you re-run the above model, but for just 1 MCMC chain (the default is 3).  
-
-**Please make a plot of the time series of beta. Based on visual inspection, when does the chain converge? Second, calculate the ACF using acf() - would thinning more be appropriate?**
+To illustrate the effects of the burn-in/warmup period and thinning, we can re-run the above model, but for just 1 MCMC chain (the default is 3).  
 
 ```{r stan-lm2, cache=TRUE, results='hide'}
 lm_intercept = fit_stan(y = Temp, x = rep(1, length(Temp)),
   model_name = "regression", 
   mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
 ```
+
+Here is a plot of the time series of `beta` with one chain and no burn-in. Based on visual inspection, when does the chain converge? 
+
+```{r stan-fig-burnin, fig.cap='A time series of our posterior draws using one chain and no burn-in.'}
+pars = extract(lm_intercept)
+plot(pars$beta)
+```
+
 
 ## Linear regression with correlated errors {#sec-stan-lr-ar}
 
@@ -134,25 +138,23 @@ $$y_t = y_{t-1} + e_{t}$$
 
 And the ${e}_{t} \sim N(0, \sigma)$. Remember back to the autocorrelated model (or MA(1) models) that we assumed that the errors $e_t$ followed a random walk. In contrast, this model assumes that the errors are independent, but that the state of nature follows a random walk. Note also that this model as written doesn't include a drift term (this can be turned on / off using the ``est_drift`` argument).
 
-**Please fit the random walk model to the temperature data. Our function can do this by using model_name = 'rw'. Once you've fitted the model, plot the predicted values and 95% CIs, as we did above in the regression model.** 
-
+We can fit the random walk model using argument `model_name = 'rw'` passed to the ``fit_stan()`` function.
 ```{r stan-rw, cache=TRUE, results='hide'}
 rw = fit_stan(y = Temp, est_drift = FALSE, model_name = "rw")
 ```
 
+
 ## Autoregressive models {#sec-stan-ar1}
 
-A variation of the random walk model described previously is the autoregressive time series model of order 1, AR(1). This model is essentially the same as the random walk model but it introduces an estimated coefficient, which we'll call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean -- when $\phi$ = 1, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we'll discuss more in future lectures. The math to describe the AR(1) model is: 
+A variation of the random walk model described previously is the autoregressive time-series model of order 1, AR(1). This model is essentially the same as the random walk model but it introduces an estimated coefficient, which we'll call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean -- when $\phi$ = 1, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we'll discuss more in future lectures. The math to describe the AR(1) model is: 
 $$y_t = \phi y_{t-1} + e_{t}$$. 
 
-**Our function can fit higher order AR models, but for now we just want you to fit an AR model and make a histogram of phi. **
+The ``fit_stan()`` function can fit higher order AR models, but for now we just want to fit an AR(1) model and make a histogram of phi.
 
 ```{r stan-ar1-fit, results='hide', cache=TRUE}
 ar1 = fit_stan(y = Temp, x = matrix(1, nrow = length(Temp), ncol = 1), 
   model_name = "ar", est_drift=FALSE, P = 1)
 ```
-
-**To see the effect of this increased flexibility in estimating the autocorrelation, make a plot of the predictions from the AR(1) model and the RW model**
 
 ## Univariate state-space models {#sec-stan-uss}
 
@@ -164,8 +166,7 @@ For the process model, there are a number of ways to parameterize the first 'sta
 $$Y_t \sim N(x_t, r)$$
 In the two above models, we'll refer to $q$ as the standard deviation of the process variance and $r$ as the standard deviation of the observation error variance
 
-**For this model, fit the above model with and without the autoregressive parameter $\phi$ and compare the estimated process and observation error variances. Code examples are given below**
-
+We can fit the state-space AR(1) and random walk models using the ``fit_stan()`` function:
 ```{r stan-arrw, results='hide', cache=TRUE}
 ss_ar = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_ar")
 ss_rw = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
@@ -282,3 +283,15 @@ plot(pred_mean, type="l", lwd = 3, ylim = range(c(pred_mean, pred_lo, pred_hi)),
 lines(pred_lo)
 lines(pred_hi)
 ```
+
+## Problems {#stan-problems}
+
+1. By adapting the code in Section \@ref(sec-stan-lr), fit a regression model that includes the intercept and a slope, modeling the effect of Wind. What is the mean wind effect you estimate?
+
+2. Using the results from the linear regression model fit with no burn-in (Section \@ref(sec-stan-burn)),  calculate the ACF of the `beta` time series using ``acf()``. Would thinning more be appropriate?  How much?
+
+3. Using the fit of the random walk model to the temperature data (Section \@ref(sec-stan-rw)), plot the predicted values (states) and 95% CIs.
+
+4. To see the effect of this increased flexibility in estimating the autocorrelation, make a plot of the predictions from the AR(1) model (Section \@ref(sec-stan-ar1) and the RW model (\@ref(sec-stan-rw)).
+
+5. Fit the univariate state-space model (Section \@ref(sec-stan-uss)) with and without the autoregressive parameter $\phi$ and compare the estimated process and observation error variances.  Recall that AR(1) without the $\phi$ parameter is a random walk.

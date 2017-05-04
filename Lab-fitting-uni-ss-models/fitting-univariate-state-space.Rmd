@@ -39,11 +39,11 @@ To fit your time-series model with the **MARSS** package, you need to put your m
 
 *Important: this state-space model, $\yy$ is always the data and $\xx$ is a hidden random walk estimated from the data.*
 
-A basic ```MARSS()``` call looks like
-```fit=MARSS(y, model=list(...))```.
-The argument ```model``` tells the function what form the parameters take.  The list has the elements with the names: ```B```, ```U```, ```Q```, etc.  The names correspond to the parameters with the same names in Equation \@ref(eq:uss-marss) except that $\mumu$ is called ```x0```. ```tinitx``` indicates whether the initial $\xx$ is specified at $t=0$ so $\xx_0$ or $t=1$ so $\xx_1$.
+A basic ``MARSS()`` call looks like
+``fit=MARSS(y, model=list(...))``.
+The argument ```model``` tells the function what form the parameters take.  The list has the elements with the names: ```B```, ```U```, ```Q```, etc.  The names correspond to the parameters with the same names in Equation \@ref(eq:uss-marss) except that $\mumu$ is called ``x0``. ``tinitx`` indicates whether the initial $\xx$ is specified at $t=0$ so $\xx_0$ or $t=1$ so $\xx_1$.
 
-Here's an example.  Let's say we want to fit a univariate AR-1 model observed with error. Here is that model:
+Here's an example.  Let's say we want to fit a univariate AR(1) model observed with error. Here is that model:
 \begin{equation}
 \begin{gathered}
 x_t = b x_{t-1} + w_t \text{ where } \ww_t \sim \N(0,q) \\
@@ -53,11 +53,11 @@ x_0 = \mu
 (\#eq:uss-ar1witherror)
 \end{equation}
 
-To fit this with ```MARSS()```, we need to write Equation \@ref(eq:uss-ar1witherror) as Equation \@ref(eq:uss-marss).  Equation \@ref(eq:uss-marss) is in MATRIX form.  In the model list, the parameters must be written EXACTLY like they would be written for Equation \@ref(eq:uss-marss).  For example, ```1``` is the number 1 in R.  It is not a matrix:
+To fit this with ``MARSS()``, we need to write Equation \@ref(eq:uss-ar1witherror) as Equation \@ref(eq:uss-marss).  Equation \@ref(eq:uss-marss) is in MATRIX form.  In the model list, the parameters must be written EXACTLY like they would be written for Equation \@ref(eq:uss-marss).  For example, ``1`` is the number 1 in R.  It is not a matrix:
 ```{r uss-bad.1}
 class(1)
 ```
-If you need a 1 (or 0) in your model, you need to pass in the parameter as a $1 \times 1$ matrix: ```matrix(1)```.
+If you need a 1 (or 0) in your model, you need to pass in the parameter as a $1 \times 1$ matrix: ``matrix(1)``.
 
 With that mind, our model list for Equation \@ref(eq:uss-ar1witherror) is:
 ```{r uss-mod.list}
@@ -67,17 +67,17 @@ Z=matrix(1), A=matrix(0), R=matrix("r"),
 x0=matrix("mu"), tinitx=0 )
 ```
 
-We can simulate some AR-1 plus error data like so
+We can simulate some AR(1) plus error data like so
 ```{r uss-ar1-w-error}
 q=0.1; r=0.1; n=100
 y=cumsum(rnorm(n,0,sqrt(q)))+rnorm(n,0,sqrt(r))
 ```
-And then fit with ```MARSS()``` using ```mod.list``` above:
+And then fit with ``MARSS()`` using ``mod.list`` above:
 ```{r uss-ar1-fit}
 fit=MARSS(y,model=mod.list)
 ```
 
-If we wanted to fix $q=0.1$, then $\QQ=[0.1]$ (a $1 \times 1$ matrix with 0.1). We just change ```mod.list$Q``` and re-fit:
+If we wanted to fix $q=0.1$, then $\QQ=[0.1]$ (a $1 \times 1$ matrix with 0.1). We just change ``mod.list$Q`` and re-fit:
 ```{r uss-mod.list.1, results='hide'}
 mod.list$Q=matrix(0.1)
 fit=MARSS(y,model=mod.list)
@@ -212,7 +212,7 @@ x_0 = \mu
 \end{gathered}   
 (\#eq:uss-random-walk-w-noise-w-drift)
 \end{equation}
-The model is then specified by changing ```U``` to indicate that a $u$ is estimated:
+The model is then specified by changing ``U`` to indicate that a $u$ is estimated:
 ```{r uss-mod.nile.3, eval=TRUE}
 mod.nile.3 = list(
 B=matrix(1), U=matrix("u"), Q=matrix("q"),
@@ -231,23 +231,23 @@ Figure \@ref(fig:uss-plotfit) shows all the models along with their AICc values.
 
 
 ## The StructTS function {#sec-uss-the-structts-function}
-The ```StructTS``` function in R will also fit the stochastic level model:
+The ``StructTS`` function in R will also fit the stochastic level model:
 ```{r uss-fit.data.2.structTS, eval=TRUE}
 fit.sts = StructTS(dat, type="level")
 fit.sts
 ```
-The estimates from ```StructTS()``` will be different (though similar) from ```MARSS()``` because ```StructTS()``` uses $x_1 = y_1$, that is the hidden state at $t=1$ is fixed to be the data at $t=1$.  That is fine if you have a long data set, but would be disastrous for the short data sets typical in fisheries and ecology.  
+The estimates from ``StructTS()`` will be different (though similar) from ``MARSS()`` because ``StructTS()`` uses $x_1 = y_1$, that is the hidden state at $t=1$ is fixed to be the data at $t=1$.  That is fine if you have a long data set, but would be disastrous for the short data sets typical in fisheries and ecology.  
 
-```StructTS()``` is much, much faster for long time series.  The example in ```?StructTS``` is pretty much instantaneous with ```StructTS()``` but takes minutes with the EM algorithm that is the default in ```MARSS()```.  With the BFGS algorithm, it is much closer to ```StructTS()```:
+``StructTS()`` is much, much faster for long time series.  The example in ``?StructTS`` is pretty much instantaneous with ``StructTS()`` but takes minutes with the EM algorithm that is the default in ``MARSS()``.  With the BFGS algorithm, it is much closer to ``StructTS()``:
 ```{r uss-fit.data.2.comp, eval=FALSE}
 trees <- window(treering, start = 0)
 fitts = StructTS(trees, type = "level")
 fitem = MARSS(as.vector(trees),mod.nile.2)
 fitbf = MARSS(as.vector(trees),mod.nile.2, method="BFGS")
 ```
-Note that ```mod.nile.2``` specifies a univariate stochastic level model so we can use it just fine with other univariate data sets.
+Note that ``mod.nile.2`` specifies a univariate stochastic level model so we can use it just fine with other univariate data sets.
 
-In addition, ```fitted(fit.sts)``` where ```fit.sts``` is a fit from ```StructTS()``` is very different than ```fit.marss$states``` from ```MARSS()```. 
+In addition, ``fitted(fit.sts)`` where ``fit.sts`` is a fit from ``StructTS()`` is very different than ``fit.marss$states`` from ``MARSS()``. 
 ```{r uss-fit.data.2.fitted.structTS, eval=TRUE}
 t=10
 fitted(fit.sts)[t]
@@ -255,14 +255,14 @@ fitted(fit.sts)[t]
 is the expected value of $y_{t+1}$ (in this case $y_{11}$ since we set $t=10$) given the data up to $y_t$ (in this case, up to $y_{10}$).  It is called the one-step ahead prediction.  
 We are not going to use the one-step ahead predictions unless we are forecasting or doing cross-validation.  
 
-Typically, when we analyze fisheries and ecological data, we want to know the estimate of the state, the $x_t$, given ALL the data.  For example, we might need an estimate of the population size in year 1990 given a time series of counts from 1930 to 2015.  We don't want to use only the data up to 1989; we want to use all the information.  ```fit.marss$states``` from ```MARSS()``` is the expected value of $x_t$ given all the data.  For the stochastic level model, that is equal to the expected value of $y_t$ given all the data except $y_t$.
+Typically, when we analyze fisheries and ecological data, we want to know the estimate of the state, the $x_t$, given ALL the data.  For example, we might need an estimate of the population size in year 1990 given a time series of counts from 1930 to 2015.  We don't want to use only the data up to 1989; we want to use all the information.  ``fit.marss$states`` from ``MARSS()`` is the expected value of $x_t$ given all the data.  For the stochastic level model, that is equal to the expected value of $y_t$ given all the data except $y_t$.
 
-If you needed the one-step predictions from ```MARSS()```, you can get them from the Kalman filter output:
+If you needed the one-step predictions from ``MARSS()``, you can get them from the Kalman filter output:
 ```{r uss-fit-data-2-onestepahead, eval=TRUE, results='hide'}
 kf=print(kem.2, what="kfs")
 kf$xtt1[1,t]
 ```
-Passing in ```what="kfs"``` returns the Kalman filter/smoother output.  The expected value of $x_t$ conditioned on $y_1$ to $y_{t-1}$ is in ```kf$xtt1```.  The expected value of $x_t$ conditioned on all the data is in ```kf$xtT```.
+Passing in ``what="kfs"`` returns the Kalman filter/smoother output.  The expected value of $x_t$ conditioned on $y_1$ to $y_{t-1}$ is in ``kf$xtt1``.  The expected value of $x_t$ conditioned on all the data is in ``kf$xtT``.
 
 
 (ref:uss-plotfit) The Nile River flow volume with the model estimated flow rates (solid lines).  The bottom model is a stochastic level model, meaning there isn't one level line.  Rather the level line is a distribution that has a mean and standard deviation.  The solid state line in the bottom plots is the mean of the stochastic level and the 2 standard deviations are shown.  The other two models are deterministic level models so the state is not stochastic and does not have a standard deviation.
@@ -309,7 +309,7 @@ legend("topright", paste("model 3, AICc=",format(kem$AICc,digits=1)),bty="n")
 
 ## Comparing models with AIC and model weights {#sec-uss-comparing-models-with-aic-and-model-weights}
 
-To get the AIC or AICc values for a model fit from a MARSS fit, use ```fit$AIC``` or ```fit$AICc```.  The log-likelihood is in ```fit$logLik``` and the number of estimated parameters in ```fit$num.params```.  For fits from other functions, try ```AIC(fit)``` or look at the function documentation.
+To get the AIC or AICc values for a model fit from a MARSS fit, use ``fit$AIC`` or ``fit$AICc``.  The log-likelihood is in ``fit$logLik`` and the number of estimated parameters in ``fit$num.params``.  For fits from other functions, try ``AIC(fit)`` or look at the function documentation.
 
 Let's put the AICc values 3 Nile models together:
 ```{r uss-nile-aics}
@@ -331,7 +331,7 @@ relLik=relLik,
 weight=aicweight)
 rownames(aic.table)=c("flat level","linear trend", "stoc level", "stoc level w drift")
 ```
-Here the table is printed using ```round()``` to limit the number of digits shown.
+Here the table is printed using ``round()`` to limit the number of digits shown.
 ```{r uss-aic-table-round}
 round(aic.table, digits=3)
 ```
@@ -342,7 +342,7 @@ One thing to keep in mind when comparing models within a set of models is that t
 ## Basic diagnostics {#sec-uss-basic-diagnostics}
 
 The first diagnostic that you do with any statistical analysis is check that your residuals correspond to your assumed error structure.  We have two types of errors in a univariate state-space model: process errors, the $w_t$, and observation errors, the $v_t$.  
-They should not have a temporal trend.  To get the residuals from most types of fits in R, you can use ```residuals(fit)```.  ```MARSS()``` calls the $v_t$, "model residuals", and the $w_t$ "state residuals".  We can plot these using the following code (Figure \@ref(fig:uss-resids)).
+They should not have a temporal trend.  To get the residuals from most types of fits in R, you can use ``residuals(fit)``.  ``MARSS()`` calls the $v_t$, "model residuals", and the $w_t$ "state residuals".  We can plot these using the following code (Figure \@ref(fig:uss-resids)).
 ```{r uss-resids0, fig.show='hide'}
 par(mfrow=c(1,2))
 resids=residuals(kem.0)
@@ -381,7 +381,7 @@ abline(h=0)
 ```
  
 
-The residuals should also not be autocorrelated in time.  We can check the autocorrelation with the function ```acf()```.  We won't do this for the state residuals for the flat level or linear trends since for those models $w_t=0$.  The autocorrelation plots are shown in Figure \@ref(fig:uss-acfs).  The stochastic level model looks the best in that its model residuals (the $v_t$) are fine but the state model still has problems.  Clearly the state is not a simple random walk.  This is not surprising.  The Aswan Low Dam was completed in 1902 and changed the mean flow.  The Aswan High Dam was completed in 1970 and also affected the flow.  You can see these perturbations in Figure \@ref(fig:uss-plotdata).
+The residuals should also not be autocorrelated in time.  We can check the autocorrelation with the function ``acf()``.  We won't do this for the state residuals for the flat level or linear trends since for those models $w_t=0$.  The autocorrelation plots are shown in Figure \@ref(fig:uss-acfs).  The stochastic level model looks the best in that its model residuals (the $v_t$) are fine but the state model still has problems.  Clearly the state is not a simple random walk.  This is not surprising.  The Aswan Low Dam was completed in 1902 and changed the mean flow.  The Aswan High Dam was completed in 1970 and also affected the flow.  You can see these perturbations in Figure \@ref(fig:uss-plotdata).
 
 ```{r uss-acf0, fig.show='hide'}
 par(mfrow=c(2,2))
@@ -412,11 +412,11 @@ acf(resids$state.residuals[1,], main="stoc level w(t)")
 \clearpage
 
 
-## Fitting a univariate AR-1 state-space model with JAGS* {#sec-uss-fitting-a-univariate-ar--state-space-model-with-jags}
+## Fitting a univariate AR(1) state-space model with JAGS {#sec-uss-fitting-a-univariate-ar--state-space-model-with-jags}
 
 Here we show how to fit model 3, Equation \@ref(eq:uss-random-walk-w-noise-w-drift), with JAGS.  This section requires that you have JAGS installed and the **R2jags** and **coda** R packages loaded.
 
-The first step is to write the model for JAGS to a file (filename in ```model.loc```):
+The first step is to write the model for JAGS to a file (filename in ``model.loc``):
 ```{r uss-jags-model}
 model.loc="ss_model.txt"
 jagsscript = cat("
@@ -442,23 +442,23 @@ jagsscript = cat("
    }                  
    ",file=model.loc)
 ```
-Next we specify the data (and any other input) that the JAGS code needs.  In this case, we need to pass in ```dat``` and the number of time steps since that is used in the for loop.  We also specify the parameters that we want to monitor.  We need to specify at least one, but we will monitor all of them so we can plot them after fitting.  Note, that the hidden state is a parameter in the Bayesian context (but not in the maximum likelihood context).  
+Next we specify the data (and any other input) that the JAGS code needs.  In this case, we need to pass in ``dat`` and the number of time steps since that is used in the for loop.  We also specify the parameters that we want to monitor.  We need to specify at least one, but we will monitor all of them so we can plot them after fitting.  Note, that the hidden state is a parameter in the Bayesian context (but not in the maximum likelihood context).  
 ```{r uss-jags-set}
 jags.data = list("Y"=dat, "N"=length(dat), Y1=dat[1])
 jags.params=c("sd.q","sd.r","X","mu", "u")
 ```
 Now we can fit the model:
-```{r uss-jags-fit, results='hide'}
+```{r uss-jags-fit, results='hide', message=FALSE}
 mod_ss = jags(jags.data, parameters.to.save=jags.params, 
      model.file=model.loc, n.chains = 3, 
      n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)
 ```
 
-We can then show the posteriors with the MLEs from MARSS on top:
+We can then show the posteriors along with the MLEs from MARSS on top (Figure \@ref(fig:uss-fig-posteriors) ) using the code below.
 
-(ref:uss-fig-posteriors) The posteriors for model 3 with MLE estimates from MARSS shown in red.
+(ref:uss-fig-posteriors) The posteriors for model 3 with MLE estimates from ``MARSS()`` shown in red.
 
-```{r uss-fig-posteriors, echo=TRUE, fig=TRUE, fig.cap='(ref:uss-fig-posteriors)'}
+```{r uss-fig-posteriors, fig=TRUE, fig.cap='(ref:uss-fig-posteriors)', message=FALSE}
 attach.jags(mod_ss)
 par(mfrow=c(2,2))
 hist(mu)
@@ -473,7 +473,7 @@ detach.jags()
 ```
  
 
-To plot the estimated states, we write a helper function:
+To plot the estimated states ( Figure \@ref(fig:uss-fig-bayesian-states) ), we write a helper function:
 ```{r uss-jags-plot-states-fun}
 plotModelOutput = function(jagsmodel, Y) {
   attach.jags(jagsmodel)
@@ -499,7 +499,7 @@ title("State estimate and data from\nJAGS (black) versus MARSS (red)")
  
 
 
-## A simple random walk model of animal movement {#sec-uss-a-simple-random-walk-model-of-animal-movement}
+## A random walk model of animal movement {#sec-uss-a-simple-random-walk-model-of-animal-movement}
 A simple random walk model of movement with drift (directional movement) but no correlation is 
 \begin{gather}
 x_{1,t} = x_{1,t-1} + u_1 + w_{1,t}, \;\; w_{1,t} \sim \N(0,\sigma^2_1)\\
@@ -538,23 +538,20 @@ The variance-covariance matrix for $\ww_t$ is a diagonal matrix with unequal var
 
 ## Problems {#sec-uss-problems}
 
-1. Write the equations for each of these models: ARIMA(0,0,0), ARIMA(0,1,0), ARIMA(1,0,0), ARIMA(0,0,1), ARIMA(1,0,1).  Read the help file for the ```Arima()``` function (in the **forecast** package) if you are fuzzy on the arima notation.
+1. Write the equations for each of these models: ARIMA(0,0,0), ARIMA(0,1,0), ARIMA(1,0,0), ARIMA(0,0,1), ARIMA(1,0,1).  Read the help file for the ``Arima()`` function (in the **forecast** package) if you are fuzzy on the arima notation.
 
 2. The **MARSS** package includes a data set of sharp-tailed grouse in Washington.  Load the data to use as follows:
+    ```{r uss-hw1, results='hide'}
+    library(MARSS)
+    dat=log(grouse[,2])
+    ```
+    Consider these two models for the data:
 
-```{r uss-hw1, results='hide'}
-library(MARSS)
-dat=log(grouse[,2])
-```
+    *  Model 1  random walk with no drift observed with no error
+    
+    *  Model 2  random walk with drift observed with no error
 
-Consider these two models for the data:
-
-
-*  Model 1  random walk with no drift observed with no error
-*  Model 2  random walk with drift observed with no error
-
-
-Written as a univariate state-space model, model 1 is
+    Written as a univariate state-space model, model 1 is
 \begin{equation}
 \begin{gathered}
 x_t = x_{t-1}+w_t \text{ where } w_t \sim \N(0,q)\\
@@ -563,7 +560,7 @@ y_t = x_t
 \end{gathered}   
 (\#eq:uss-hw2-1)
 \end{equation}
-Model 2 is almost identical except with $u$ added
+    Model 2 is almost identical except with $u$ added
 \begin{equation}
 \begin{gathered}
 x_t = x_{t-1}+u+w_t \text{ where } w_t \sim \N(0,q)\\
@@ -572,75 +569,78 @@ y_t = x_t
 \end{gathered}   
 (\#eq:uss-hw2-2)
 \end{equation}
-$y$ is the log grouse count in year $t$. 
+    $y$ is the log grouse count in year $t$. 
+
+    a.  Plot the data. The year is in column 1 of ``grouse``.
+    
+    a.  Fit each model using ``MARSS()``.
+    
+    a.  Which one appears better supported given AICc?
+    
+    a.  Load the **forecast** package. Use ``?auto.arima`` to learn what it does.  Then use ``auto.arima(dat)``  to fit the data.  Next run ``auto.arima(dat, trace=TRUE)`` to see all the ARIMA models that the function compared. Note, ARIMA(0,1,0) is a random walk with b=1.  ARIMA(0,1,0) with drift would be a random walk (b=1) with drift (with $u$).   
+    a.  Is the difference in the AICc values between a random walk with and without drift comparable between MARSS() and auto.arima()?
+
+    Note when using ``auto.arima()``, an AR(1) model of the following form will be fit (notice the $b$): $x_t = b x_{t-1}+w_t$.  ``auto.arima()`` refers to this model $x_t = x_{t-1}+w_t$, which is also AR(1) but with $b=1$, as ARIMA(0,1,0).  This says that the first difference of the data (that's the 1 in the middle) is a ARMA(0,0) process (the 0s in the 1st and 3rd spots).  So ARIMA(0,1,0) means this: $x_t - x_{t-1} = w_t$.  
+
+3. Create a random walk with drift time series using ``cumsum()`` and ``rnorm()``.  Look at the ``rnorm()`` help file (``?rnorm``) to make sure you know what the arguments to the ``rnorm()`` are.
+    ```{r uss-hw3data}
+    dat=cumsum(rnorm(100,0.1,1))
+    ```
+
+    a.  What is the order of this random walk written as ARIMA(p, d, q)? "what is the order" means "what is $p$, $d$, and $q$. Model "order" is how ``arima()`` and ``Arima()`` specify arima models.
+    
+    a.  Fit that model using ``Arima()`` in the **forecast** package.  You'll need to specify the arguments ``order`` and ``include.drift``.  Use ``?Arima`` to review what that function does if needed.
+    
+    a.  Write out the equation for this random walk as a univariate state-space model.  Notice that there is no observation error, but still write this as a state-space model.
+    
+    a.  Fit that model with ``MARSS()``.
+    
+    a.  How are the two estimates from ``Arima()`` and ``MARSS()`` different?
 
 
-a.  Plot the data. The year is in column 1 of ```grouse```.
-a.  Fit each model using ```MARSS()```.
-a.  Which one appears better supported given AICc?
-a.  Load the **forecast** package. Use ```?auto.arima``` to learn what it does.  Then use ```auto.arima(dat)```  to fit the data.  Next run ```auto.arima(dat, trace=TRUE)``` to see all the ARIMA models that the function compared. Note, ARIMA(0,1,0) is a random walk with b=1.  ARIMA(0,1,0) with drift would be a random walk (b=1) with drift (with $u$).   
-a.  Is the difference in the AICc values between a random walk with and without drift comparable between MARSS() and auto.arima()?
+4. The first-difference of ``dat`` used in the previous problem is:
+    ```{r uss-hw3data.diff}
+    diff.dat=diff(dat)
+    ```
+    Use ``?diff`` to check what the ``diff()`` function does.
 
+    a.  If $x_t$ denotes a time series.  What is the first difference of $x$?  What is the second difference?
 
-Note when using ```auto.arima()```, an AR-1 model of the following form will be fit (notice the $b$): $x_t = b x_{t-1}+w_t$.  ```auto.arima()``` refers to this model $x_t = x_{t-1}+w_t$, which is also AR-1 but with $b=1$, as ARIMA(0,1,0).  This says that the first difference of the data (that's the 1 in the middle) is a ARMA(0,0) process (the 0s in the 1st and 3rd spots).  So ARIMA(0,1,0) means this: $x_t - x_{t-1} = w_t$.  
+    b.  What is the $\xx$ model for ``diff.dat``?  Look at your answer to part (a) and the answer to part (e).
 
-3. Create a random walk with drift time series using the following command:
-```{r uss-hw3data}
-dat=cumsum(rnorm(100,0.1,1))
-```
-Use ```?rnorm``` to make sure you know what the arguments to the ```rnorm()``` function are.
+    c.  Fit ``diff.dat`` using ``Arima()``. You'll need to change the arguments ``order`` and ``include.mean``.
 
+    d.  Fit with ``MARSS()``. You will need to write the model for ``diff.dat`` as a state-space model.  If you've done this right, the estimated parameters using ``Arima()`` and ``MARSS()`` will now be the same.
 
-a.  Write out the equation for that random walk as a univariate state-space model. 
-a.  What is the order of this random walk written as ARIMA(p, d, q)? "what is the order" means "what is $p$, $d$, and $q$. Model "order" is how ```arima()``` and ```Arima()``` specify arima models.
-a.  Fit that model using ```Arima()``` in the **forecast** package.  You'll need to specify the arguments ```order``` and ```include.drift```.  Use ```?Arima``` to review what that function does if needed.
-a.  Fit that model with ```MARSS()```.
-a.  How are the two estimates different?
+    This question should clue you into the fact that ``Arima()`` is not exactly fitting Equation \@ref(eq:uss-marss).  It's very similar, but not quite written that way.  By the way, Equation \@ref(eq:uss-marss) is how structural time series observed with error are written (state-space models). To recover the estimates that a function like ``arima()`` or ``Arima()`` returns,  you need to write your state-space model in a specific way (as seen above).
 
-
-Now fit the first-differenced data:
-
-```{r uss-hw3data.diff}
-diff.dat=diff(dat)
-```
-
-Use ```?diff``` to check what the ```diff()``` function does.
-
-
-1.  If $x_t$ denotes a time series.  What is the first difference of $x$?  What is the second difference?
-2.  What is the $\xx$ model for ```diff.dat```?  Look at your answer to part (a) and the answer to part (e).
-3.  Fit ```diff.dat``` using ```Arima()```. You'll need to change the arguments ```order``` and ```include.mean```.
-4.  Fit that model with ```MARSS()```.
-
-If you've done this right, the estimated parameters using ```Arima()``` and ```MARSS()``` will now be the same.
-
-This question should clue you into the fact that ```Arima()``` is not exactly fitting Equation \@ref(eq:uss-marss).  It's very similar, but not quite written that way.  By the way, Equation \@ref(eq:uss-marss) is how structural time series observed with error are written (state-space models). To recover the estimates that a function like ```arima()``` or ```Arima()``` returns,  you need to write your state-space model in a specific way (as seen above).
-
-4.  ```Arima()``` will also fit what it calls an "AR-1 with drift".  An AR-1 with drift is NOT this model: 
+5.  ``Arima()`` will also fit what it calls an "AR(1) with drift".  An AR(1) with drift is NOT this model: 
 \begin{equation}
 x_t = b x_{t-1}+u+w_t \text{ where } w_t \sim \N(0,q)  
 (\#eq:uss-gompertz)
 \end{equation}
-The population dynamics literature, this equation is called the Gompertz model and is a type of density-dependent population model.
+    In the population dynamics literature, this equation is called the Gompertz model and is a type of density-dependent population model.
 
+    a.  Write R code to simulate Equation \@ref(eq:uss-gompertz).  Make $b$ less than 1 and greater than 0.  Set $u$ and $x_0$ to whatever you want.  You can use a for loop. 
 
-a.  Write R code to simulate Equation \@ref(eq:uss-gompertz).  Make $b$ less than 1 and greater than 0.  Set $u$ and $x_0$ to whatever you want.  You can use a for loop.  
-a.  Plot the trajectories and show that this model does not "drift" upward or downward.  It fluctuates about a mean value.
-a.  Hold $b$ constant and change $u$.  How do the trajectories change?
-a.  Hold $u$ constant and change $b$.  Make sure to use a $b$ close to 1 and another close to 0. How do the trajectories change?
-a.  Do 2 simulations each with the same $w_t$.  In one simulation, set $u=1$ and in the other $u=2$.  For both simulations, set $x_1 = u/(1-b)$.  You can set $b$ to whatever you want as long as $0<b<1$.  Plot the 2 trajectories on the same plot.  What is different?
+    a.  Plot the trajectories and show that this model does not "drift" upward or downward.  It fluctuates about a mean value.
 
+    a.  Hold $b$ constant and change $u$.  How do the trajectories change?
 
-We will fit what ```Arima()``` calls "AR-1 with drift" models in the chapter on MARSS models with covariates.  
+    a.  Hold $u$ constant and change $b$.  Make sure to use a $b$ close to 1 and another close to 0. How do the trajectories change?
 
-5. The **MARSS** package includes a data set of gray whales.  Load the data to use as follows:
+    a.  Do 2 simulations each with the same $w_t$.  In one simulation, set $u=1$ and in the other $u=2$.  For both simulations, set $x_1 = u/(1-b)$.  You can set $b$ to whatever you want as long as $0<b<1$.  Plot the 2 trajectories on the same plot.  What is different?
 
-```{r uss-hw4, results='hide'}
-library(MARSS)
-dat=log(graywhales[,2])
-```
+    We will fit what ``Arima()`` calls "AR(1) with drift" models in the chapter on MARSS models with covariates.  
 
-Fit a random walk with drift model observed with error to the data:
+6. The **MARSS** package includes a data set of gray whales.  Load the data to use as follows:
+
+    ```{r uss-hw4, results='hide'}
+    library(MARSS)
+    dat=log(graywhales[,2])
+    ```
+
+    Fit a random walk with drift model observed with error to the data:
 \begin{equation}
 \begin{gathered}
 x_t = x_{t-1}+u+w_t \text{ where } w_t \sim \N(0,q) \\
@@ -649,88 +649,101 @@ x_0 = a
 \end{gathered}   
 (\#eq:uss-marss-rw-w-drift)
 \end{equation}
-$y$ is the whale count in year $t$. $x$ is interpreted as the 'true' unknown population size that we are trying to estimate.
+    $y$ is the whale count in year $t$. $x$ is interpreted as the 'true' unknown population size that we are trying to estimate.
+
+    a.  Fit this model with ``MARSS()``
+
+    a.  Plot the estimated $x$ as a line with the actual counts added as points.  $x$ is in ``fit$states``.  It is a matrix. To plot using ``plot()``, you will need to change it to a vector using ``as.vector()`` or ``fit$states[1,]``
+
+    a.  Simulate 1000 sample gray whale populstion trajectories (the $x$ in your model) using the estimated $u$ and $q$ starting at the estimated $x$ in 1997.  You can do this with a couple for loops or write something terse with ``cumsum()`` and ``apply()``.
+
+    a.  Using these simulated trajectories, what is your estimate of the probability that the grey whale population will be above 50,000 graywhales in 2007?
+
+    a.  What kind(s) of uncertainty does your estimate above NOT include?
 
 
-a.  Fit this model with ```MARSS()```
-a.  Plot the estimated $x$ as a line with the actual counts added as points.  $x$ is in ```fit$states```.  It is a matrix. To plot using ```plot()```, you will need to change it to a vector using ```as.vector()``` or ```fit$states[1,]```
-a.  Simulate 1000 sample gray whale populstion trajectories (the $x$ in your model) using the estimated $u$ and $q$ starting at the estimated $x$ in 1997.  You can do this with a couple for loops or write something terse with ```cumsum()``` and ```apply()```.
-a.  Using these simulated trajectories, what is your estimate of the probability that the grey whale population will be above 50,000 graywhales in 2007?
-a.  What kind(s) of uncertainty does your estimate above NOT include?
+7. Fit the following models to the graywhales data using MARSS().  Assume $b=1$. 
+
+    *  Model 1  Process error only model with drift
+    
+    *  Model 2  Process error only model without drift
+    
+    *  Model 3  Process error with drift and observation error with observation error variance fixed = 0.05.
+    
+    *  Model 4  Process error with drift and observation error with observation error variance estimated.
+
+    a.  Compute the AICc's for each model and likelihood or deviance (-2 * log likelihood).  Where to find these? Try ``names(fit)``.  ``logLik()`` is the standard R function to return log-likelihood from fits.
+
+    a.  Calculate a table of $\Delta\text{AICc}$ values and AICc weights. 
+
+    a.  Show the acf of the model and state residuals for the best model. You will need a vector of the residuals to do this. If ``fit`` is the fit from a fit call like ``fit = MARSS(dat)``, you get the residuals using this code:
+        ```{r uss-hw-greywhales, eval=FALSE}
+        residuals(fit)$state.residuals[1,]
+        residuals(fit)$model.residuals[1,]
+        ```
+        Do the acf's suggest any problems?
 
 
-6. Fit the following models to the graywhales data using MARSS().  Assume $b=1$. 
-
-
-*  Model 1  Process error only model with drift
-*  Model 2  Process error only model without drift
-*  Model 3  Process error with drift and observation error with observation error variance fixed = 0.05.
-*  Model 4  Process error with drift and observation error with observation error variance estimated.
-
-
-
-a.  Compute the AICc's for each model and likelihood or deviance (-2 * log likelihood).  Where to find these? Try ```names(fit)```.  ```logLik()``` is the standard R function to return log-likelihood from fits.
-a.  Calculate a table of $\Delta\text{AICc}$ values and AICc weights. 
-a.  Show the acf of the model and state residuals for the best model. You will need a vector of the residuals to do this. If ```fit``` is the fit from a fit call like ```fit = MARSS(dat)```, you get the residuals using this code:
-```{r uss-hw-greywhales, eval=FALSE}
-residuals(fit)$state.residuals[1,]
-residuals(fit)$model.residuals[1,]
-```
-Do the acf's suggest any problems?
-
-
-7. Evaluate the predictive accuracy of forecasts using the **forecast** package using the ```airmiles``` dataset.
+8. Evaluate the predictive accuracy of forecasts using the **forecast** package using the ``airmiles`` dataset.
 Load the data to use as follows:
 
-```{r uss-hw6, results='hide'}
-library(forecast)
-dat=log(airmiles)
-n=length(dat)
-training.dat = dat[1:(n-3)]
-test.dat = dat[(n-2):n]
-```
-
-This will prepare the training data and set aside the last 3 data points for validation. 
-
-
-a.  Fit the following four models using ```Arima()```: ARIMA(0,0,0), ARIMA(1,0,0), ARIMA(0,0,1), ARIMA(1,0,1).
-a.  Use ```forecast()``` to make 3 step ahead forecasts from each.
-a.  Calculate the MASE statistic for each using the ```accuracy()``` function in the **forecast** package. Type ```?accuracy``` to learn how to use this function.
-a.  Present the results in a table.
-a.  Which model is best supported based on the MASE statistic?
+    ```{r uss-hw6, results='hide'}
+    library(forecast)
+    dat=log(airmiles)
+    n=length(dat)
+    training.dat = dat[1:(n-3)]
+    test.dat = dat[(n-2):n]
+    ```
+    This will prepare the training data and set aside the last 3 data points for validation. 
 
 
+    a.  Fit the following four models using ``Arima()``: ARIMA(0,0,0), ARIMA(1,0,0), ARIMA(0,0,1), ARIMA(1,0,1).
 
-8. The WhaleNet Archive of STOP Data has movement data on loggerhead turtles on the east coast of the US from ARGOS tags.  The **MARSS** package ```loggerheadNoisy``` dataset is lat/lot data on eight individuals, however we have corrupted this data severely by adding random errors in order to create a "bad tag" problem (very noisy).  Use ```head(loggerheadNoisy)``` to get an idea of the data.  Then load the data on one turtle, MaryLee.  MARSS needs time across the columns to you need to use transpose the data (as shown).
-```{r uss-hw-marylee}
-turtlename="MaryLee"
-dat = loggerheadNoisy[which(loggerheadNoisy$turtle==turtlename),5:6]
-dat = t(dat) 
-```
+    a.  Use ``forecast()`` to make 3 step ahead forecasts from each.
 
+    a.  Calculate the MASE statistic for each using the ``accuracy()`` function in the **forecast** package. Type ``?accuracy`` to learn how to use this function.
 
-a.  Plot MaryLee's locations (as a line not dots).  Put the latitude locations on the y-axis and the longitude on the y-axis. You can use ```rownames(dat)``` to see which is in which row. You can just use ```plot()``` for the homework. But if you want, you can look at the MARSS Manual chapter on animal movement to see how to plot the turtle locations on a map using the **maps** package.
-a.  Analyze the data with a state-space model (movement observed with error) using
-```{r uss-hw-movement-fit1, results='hide'}
-fit0 = MARSS(dat)
-```
-Look at the output from the above MARSS call.  What is the meaning of the parameters output from MARSS in terms of turtle movement? What exactly is the $u$ estimate for example?  Look at the data and think about the model you fit.
-a.  What assumption did the default MARSS model make about observation error and process error? What does that assumption mean in terms of how steps in the N-S and E-W directions are related?  What does that assumption mean in terms of our assumption about the latitudal and longitudinal observation errors?
-a.  Does MaryLee move faster in the latitude direction versus longitude direction?
-a.  Add MaryLee's estimated "true" positions to your plot of her locations. You can use ```lines(x, y, col="red")``` (with x and y replaced with your x and y data). The true position is the "state".  This is in the states element of an output from MARSS ```fit0$states```.
-a.  Compare the following models for these data.  Movement in the lat/lon direction is  (1) independent but the variance is the same, (2) is correlated and lat/lon variances are different, and (3) is correlated and the lat/lon variances are the same.  You only need to change Q specification.  Your MARSS call will now look like the following with ```...``` replaced with your Q specification.
-```{r uss-hw-movement-model-compare, eval=FALSE}
-fit1 = MARSS(dat, list(Q=...))
-```
-a.  Plot your state residuals (true location residuals).  What are the problems? Discuss in reference to your plot of the location data.  Here is how to get state residuals from ```MARSS()$ output:
-```{r uss-hw-movement-resids, eval=FALSE}
-resids = residuals(fit0)$state.residuals
-```
-The lon residuals are in row 1 and lat residuals are in row 2 (same order as the data).
+    a.  Present the results in a table.
+
+    a.  Which model is best supported based on the MASE statistic?
 
 
+9. The WhaleNet Archive of STOP Data has movement data on loggerhead turtles on the east coast of the US from ARGOS tags.  The **MARSS** package ``loggerheadNoisy`` dataset is lat/lot data on eight individuals, however we have corrupted this data severely by adding random errors in order to create a "bad tag" problem (very noisy).  Use ``head(loggerheadNoisy)`` to get an idea of the data.  Then load the data on one turtle, MaryLee.  MARSS needs time across the columns to you need to use transpose the data (as shown).
+    ```{r uss-hw-marylee}
+    turtlename="MaryLee"
+    dat = loggerheadNoisy[which(loggerheadNoisy$turtle==turtlename),5:6]
+    dat = t(dat) 
+    ```
 
+    a.  Plot MaryLee's locations (as a line not dots).  Put the latitude locations on the y-axis and the longitude on the y-axis. You can use ``rownames(dat)`` to see which is in which row. You can just use ``plot()`` for the homework. But if you want, you can look at the MARSS Manual chapter on animal movement to see how to plot the turtle locations on a map using the **maps** package.
 
+    a.  Analyze the data with a state-space model (movement observed with error) using
+        ```{r uss-hw-movement-fit1, results='hide'}
+        fit0 = MARSS(dat)
+        ```
+        Look at the output from the above MARSS call.  What is the meaning of the parameters output from MARSS in terms of turtle movement? What exactly is the $u$ estimate for example?  Look at the data and think about the model you fit.
+    
+    a.  What assumption did the default MARSS model make about observation error and process error? What does that assumption mean in terms of how steps in the N-S and E-W directions are related?  What does that assumption mean in terms of our assumption about the latitudal and longitudinal observation errors?
 
-```{r uss-Reset, echo=FALSE}
-```
+    a.  Does MaryLee move faster in the latitude direction versus longitude direction?
+
+    a.  Add MaryLee's estimated "true" positions to your plot of her locations. You can use ``lines(x, y, col="red")`` (with x and y replaced with your x and y data). The true position is the "state".  This is in the states element of an output from MARSS ``fit0$states``.
+
+    a.  Fit the following models with different assumptions regarding the movement in the lat/lon direction:  
+
+        *  Lat/lon movements are independent but the variance is the same
+        
+        *  Lat/lon movements are correlated and lat/lon variances are different
+        
+        *  Lat/lon movements are correlated and the lat/lon variances are the same.
+
+        You only need to change ``Q`` specification.  Your MARSS call will now look like the following with ``...`` replaced with your ``Q`` specification.
+        ```{r uss-hw-movement-model-compare, eval=FALSE}
+        fit1 = MARSS(dat, list(Q=...))
+        ```
+    a.  Plot your state residuals (true location residuals).  What are the problems? Discuss in reference to your plot of the location data.  Here is how to get state residuals from ``MARSS()`` output:
+        ```{r uss-hw-movement-resids, eval=FALSE}
+        resids = residuals(fit0)$state.residuals
+        ```
+       The lon residuals are in row 1 and lat residuals are in row 2 (same order as the data).
+

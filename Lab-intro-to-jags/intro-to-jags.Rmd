@@ -44,12 +44,11 @@ Remember that in linear regression models, the residual error is interpreted as 
 
 To run the JAGS model, we will need to start by writing the model in JAGS notation. For our linear regression model, one way to construct the model is 
 
-```{r jags-lr1, echo=TRUE, results='hide'}
-###############################################################
+```{r jags-lr1, results='hide'}
 # 1. LINEAR REGRESSION with no covariates
 # no covariates, so intercept only. The parameters are 
 # mean 'mu' and precision/variance parameter 'tau.obs'
-###############################################################
+
 model.loc="lm_intercept.txt" # name of the txt file
 jagsscript = cat("
 model {  
@@ -76,7 +75,7 @@ The function from the **R2jags** package that we actually use to run the model i
 
 To actually run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS, (2) a vector of parameters that we want to monitor in JAGS and have returned back to R, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the ```jags()``` function. 
 
-```{r jags-call-fun1, echo=TRUE, results='hide', eval=TRUE}
+```{r jags-call-fun1, results='hide'}
 jags.data = list("Y"=Wind,"N"=N) # named list of inputs
 jags.params=c("sd.obs","mu") # parameters to be monitored
 mod_lm_intercept = jags(jags.data, parameters.to.save=jags.params, 
@@ -174,11 +173,10 @@ In addition to affecting the expectation, the correlation parameter $\phi$ also 
 
 Like in our first model, we assume that the data follow a normal likelihood (or equivalently that the residuals are normally distributed), ${y_t} = E[{y_t}] + {e}_{t}$, or ${y_t} \sim \N(E[y_t], \sigma^2)$. Thus, it is possible to express the subsequent deviations as $e_t = y_t - E[y_t]$, or equivalently as $e_t = y_t - \mu -\phi \times e_{t-1}$. The JAGS script for this model is:
 
-```{r jags-lm1ar, echo=TRUE, results='hide', eval=TRUE}
-###############################################################
-# 2. MODIFY THE ERRORS TO BE AUTOCORRELATED 
+```{r jags-lm1ar, results='hide'}
+# 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS
 # no covariates, so intercept only. 
-###############################################################
+
 model.loc=("lmcor_intercept.txt")
 jagsscript = cat("
 model {  
@@ -199,12 +197,12 @@ model {
 }
 ",file=model.loc)
 ```
-```{r clean2, echo=FALSE, purl=FALSE}
+```{r clean2, include=FALSE, purl=FALSE}
 removefiles=c(removefiles, model.loc)
 ```
 Notice several subtle changes from the simpler first model: (1) we are estimating the autocorrelation parameter $\phi$, which is assigned a Uniform(-1, 1) prior, (2) we model the residual variance as a function of the autocorrelation, and (3) we allow the autocorrelation to affect the predicted values ```predY```. One other change we can make is to add ```predY``` to the list of parameters we want returned to R. 
 
-```{r jags-lm1ar-mod, echo=TRUE, results='hide', eval=TRUE}
+```{r jags-lm1ar-mod, results='hide'}
 jags.data = list("Y"=Wind,"N"=N)
 jags.params=c("sd.obs","predY","mu","phi")
 mod_lmcor_intercept = jags(jags.data, parameters.to.save=jags.params, 
@@ -214,7 +212,7 @@ mod_lmcor_intercept = jags(jags.data, parameters.to.save=jags.params,
 
 For some models, we may be interested in examining the posterior fits to data. You can make this plot yourself, but we have also put together a simple function whose arguments are one of our fitted models and the raw data. The function is: 
 
-```{r jags-lm1ar-plot-func, echo=TRUE, results='hide', eval=TRUE}
+```{r jags-lm1ar-plot-func, results='hide'}
 plotModelOutput = function(jagsmodel, Y) {
 # attach the model
 attach.jags(jagsmodel)
@@ -232,7 +230,7 @@ points(Y)
 ```
 
 We can use the function to plot the predicted posterior mean with 95\% CIs, as well as the raw data. For example, try
-```{r jags-lm1ar-plot, echo=TRUE, results='hide', eval=FALSE, fig.show='hide'}
+```{r jags-lm1ar-plot, results='hide', eval=FALSE, fig.show='hide'}
 plotModelOutput(mod_lmcor_intercept, Wind)
 ```
 
@@ -243,9 +241,6 @@ plotModelOutput(mod_lmcor_intercept, Wind)
 plotModelOutput(mod_lmcor_intercept, Wind)
 ```
  
-
-
-
 ## Random walk time series model {#sec-jags-rw}
 
 All of the previous three models can be interpreted as observation error models. Switching gears, we can alternatively model error in the state of nature, creating process error models. A simple process error model that many of you may have seen before is the random walk model. In this model, the assumption is that the true state of nature (or latent states) are measured perfectly. Thus, all uncertainty is originating from process variation (for ecological problems, this is often interpreted as environmental variation). For this simple model, we will assume that our process of interest (in this case, daily wind speed) exhibits no daily trend, but behaves as a random walk. 
@@ -257,13 +252,11 @@ E[y_t] = y_{t-1} + e_{t-1}
 
 And the $e_t \sim \N(0, \sigma^2)$. Remember back to the autocorrelated model (or MA(1) models) that we assumed that the errors $e_t$ followed a random walk. In contrast, the AR(1) model assumes that the errors are independent, but that the state of nature follows a random walk. The JAGS random walk model and R script to run it is below:
 
-```{r jags-ar1, echo=TRUE, results='hide'}
-################################################################
+```{r jags-ar1, results='hide'}
 # 3. AR(1) MODEL WITH NO ESTIMATED AR COEFFICIENT = RANDOM WALK
 # no covariates. The model is y[t] ~ Normal(y[n-1], sigma) for 
 # we will call the precision tau.pro 
 # Note too that we have to define predY[1]
-################################################################
 model.loc=("rw_intercept.txt")
 jagsscript = cat("
 model {  
@@ -301,11 +294,10 @@ E[y_t] = \phi * y_{t-1} + e_{t-1}
 The JAGS random walk model and R script to run the AR(1) model is below:
 
 ```{r jags-ar1est, echo=TRUE, results='hide'}
-################################################################
 # 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT
 # We're introducting a new AR coefficient 'phi', so the model is 
 # y[t] ~ N(mu + phi*y[n-1], sigma^2) 
-################################################################
+
 model.loc=("ar1_intercept.txt")
 jagsscript = cat("
 model {  
@@ -350,10 +342,9 @@ y_t \sim \N(x_t, r)
 In the two above models, $q$ is the  process variance and $r$ is the observation error variance. The JAGS code will use the standard deviation (square root) of these.  The code to produce and fit this model is below:
 
 ```{r jags-ss1, echo=TRUE, results='hide'}
-###############################################################
 # 5. MAKE THE SS MODEL a univariate random walk
 # no covariates. 
-###############################################################
+
 model.loc=("ss_model.txt")
 jagsscript = cat("
 model {  
@@ -392,11 +383,10 @@ removefiles=c(removefiles, model.loc)
 
 Returning to the first example of regression with the intercept only, we will introduce ```Temp``` as the covariate explaining our response variable ```Wind```. Note that to include the covariate, we (1) modify the JAGS script to include a new coefficient---in this case ```beta```, (2) update the predictive equation to include the effects of the new covariate, and (3) we include the new covariate in our named data list. 
 
-```{r jags-cov, echo=TRUE, results='hide'}
-###############################################################
+```{r jags-cov, results='hide'}
 # 6. Include some covariates in a linear regression
 # Use temperature as a predictor of wind
-###############################################################
+
 model.loc=("lm.txt")
 jagsscript = cat("
 model {  
@@ -427,7 +417,7 @@ removefiles=c(removefiles, model.loc)
 
 There are a number of different approaches to using Bayesian time-series models to perform forecasting. One approach might be to fit a model, and use those posterior distributions to forecast as a secondary step (say within R). A more streamlined approach is to do this within the JAGS code itself. We can take advantage of the fact that JAGS allows you to include NAs in the response variable (but never in the predictors). Let's use the same Wind dataset, and the univariate state-space model described above to forecast three time steps into the future. We can do this by including 3 more NAs in the dataset, and incrementing the variable ```N``` by 3.
 
-```{r jags-cov-forecast, echo=TRUE,results='hide'}
+```{r jags-cov-forecast, results='hide'}
 jags.data = list("Y"=c(Wind,NA,NA,NA),"N"=(N+3))
 jags.params=c("sd.q","sd.r","predY","mu")
 model.loc=("ss_model.txt")
@@ -446,19 +436,19 @@ We can inspect the fitted model object, and see that ```predY``` contains the 3 
 
 1. Fit the intercept only model from section \@ref(sec-jags-lr-no-covariates). Set the burn-in to 3, and when the  model completes, plot the time series of the parameter ```mu``` for the first MCMC chain.
 
-*  Based on your visual inspection, has the MCMC chain convered?
-*  What is the ACF of the first MCMC chain?
-
+    a. Based on your visual inspection, has the MCMC chain convered?
+    
+    b. What is the ACF of the first MCMC chain?
 
 2. Increase the MCMC burn-in for the model in question 1 to a value that you think is reasonable. After the model has converged, calculate the Gelman-Rubin diagnostic for the fitted model object.
 
 3. Compare the results of the ```plotModelOutput()``` function for the intercept only model from section \@ref(sec-jags-lr-no-covariates). You will to add "predY" to your JAGS model and to the list of parameters to monitor, and re-run the model.
 
 4. Modify the random walk model without drift from section \@ref(sec-jags-rw) to a random walk model with drift. The equation for this model is
-\begin{equation}
+\begin{equation*}
 E[y_t] = y_{t-1} + \mu + e_{t-1}
-\end{equation}
-where $\mu$ is interpreted as the average daily trend in wind speed. What might be a reasonable prior on $\mu$? 
+\end{equation*}
+    where $\mu$ is interpreted as the average daily trend in wind speed. What might be a reasonable prior on $\mu$? 
 
 5. Plot the posterior distribution of $\phi$ for the AR(1) model in section \@ref(sec-jags-ar1).  Can this parameter be well estimated for this dataset?
 
@@ -468,39 +458,28 @@ where $\mu$ is interpreted as the average daily trend in wind speed. What might 
 
 8. Plot the fitted values from the model in section \@ref(sec-jags-forecast), including the forecasts, with the 95\% credible intervals for each data point.
 
-9. The following is a real life dataset from the Upper Skagit River (Puget Sound, 1952-2005) on salmon spawners and recruits:
+9. The following is a dataset from the Upper Skagit River (Puget Sound, 1952-2005) on salmon spawners and recruits:
+    ```{r jags-hwdata, echo=TRUE}
+    Spawners = c(2662,1806,1707,1339,1686,2220,3121,5028,9263,4567,1850,3353,2836,3961,4624,3262,3898,3039,5966,5931,7346,4911,3116,3185,5590,2485,2987,3829,4921,2348,1932,3151,2306,1686,4584,2635,2339,1454,3705,1510,1331,942,884,666,1521,409,2388,1043,3262,2606,4866,1161,3070,3320)
+    Recruits = c(12741,15618,23675,37710,62260,32725,8659,28101,17054,29885,33047,20059,35192,11006,48154,35829,46231,32405,20782,21340,58392,21553,27528,28246,35163,15419,16276,32946,11075,16909,22359,8022,16445,2912,17642,2929,7554,3047,3488,577,4511,1478,3283,1633,8536,7019,3947,2789,4606,3545,4421,1289,6416,3647)
+    logRS = log(Recruits/Spawners)
+    ```
 
-```{r jags-hwdata, echo=TRUE}
-Spawners = c(2662,1806,1707,1339,1686,2220,3121,5028,9263,4567,
-             1850,3353,2836,3961,4624,3262,3898,3039,5966,5931,
-             7346,4911,3116,3185,5590,2485,2987,3829,4921,2348,
-             1932,3151,2306,1686,4584,2635,2339,1454,3705,1510,
-             1331,942,884,666,1521,409,2388,1043,3262,2606,4866,
-             1161,3070,3320)
-Recruits = c(12741,15618,23675,37710,62260,32725,8659,28101,17054,
-             29885,33047,20059,35192,11006,48154,35829,46231,
-             32405,20782,21340,58392,21553,27528,28246,35163,
-             15419,16276,32946,11075,16909,22359,8022,16445,2912,
-             17642,2929,7554,3047,3488,577,4511,1478,3283,1633,
-             8536,7019,3947,2789,4606,3545,4421,1289,6416,3647)
-logRS = log(Recruits/Spawners)
-```
-
-Fit the following Ricker model to these data using the following linear form of this model with normally distributed errors:   
-\begin{equation}
+    a. Fit the following Ricker model to these data using the following linear form of this model with normally distributed errors:   
+\begin{equation*}
 log(R_t/S_t) = a + b \times S_t + e_t,\text{ where } e_t \sim \N(0,\sigma^2)
-\end{equation}
-You will recognize that this form is exactly the same as linear regression, with independent errors (very similar to the intercept only model of Wind we fit in section \@ref(sec-jags-lr-no-covariates)).
+\end{equation*}
+    You will recognize that this form is exactly the same as linear regression, with independent errors (very similar to the intercept only model of Wind we fit in section \@ref(sec-jags-lr-no-covariates)).
 
-Within the constraints of the Ricker model, think about how you might want to treat the errors. The basic model described above has independent errors that are not correlated in time. Approaches to analyzing this dataset might involve
+    b. Within the constraints of the Ricker model, think about other ways you might want to treat the errors. The basic model described above has independent errors that are not correlated in time. Approaches to analyzing this dataset might involve
 
+        *  modeling the errors as independent (as described above)
+        
+        *  modeling the errors as autocorrelated
+        
+        *  fitting a state-space model, with independent or correlated process errors
 
-*  modeling the errors as independent (as described above)
-*  modeling the errors as autocorrelated
-*  fitting a state-space model, with independent or correlated process errors
-
-
-Fit each of these models, and compare their performance (either using their predictive ability, or forecasting ability).
+    Fit each of these models, and compare their performance (either using their predictive ability, or forecasting ability).
 
 
 ```{r jags-reset, include=FALSE, purl=FALSE}

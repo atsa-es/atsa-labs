@@ -748,39 +748,35 @@ homeworkdat = airquality[1:5,]
 
 
 1. Using Form 1 $\yy=\ZZ\xx+\ee$, write the model being fit by this command
-```{r mlr-hw1}
-fit=lm(Ozone ~ Wind + Temp, data=homeworkdat)
-```
+    ```{r mlr-hw1}
+    fit=lm(Ozone ~ Wind + Temp, data=homeworkdat)
+    ```
 
 2. Build the $\yy$ and $\ZZ$ matrices for the above model in R and solve for $\xx$ (the parameters).  Show that they match what you get from the first ```lm()``` call.
 
-3. If you added -1 to your ```lm()``` call in question 1, what changes in your model?
-```{r mlr-hw1b}
-fit=lm(Ozone ~ -1 + Wind + Temp, data=homeworkdat)
-```
+3. If you added -1 to your ```lm()``` call in question 1, what changes in  your model?
+    ```{r mlr-hw1b}
+    fit=lm(Ozone ~ -1 + Wind + Temp, data=homeworkdat)
+    ```
 
-4. Write the model for question 1 in Form 2. Adapt the code from subsection \@ref(sec-mlr-solveform2code) to solve for the parameters. You will need to contruct new Z, y and x in the code.
+4. Write the model for question 1 in Form 2. Adapt the code from subsection \@ref(sec-mlr-solveform2code) to solve for the parameters. You will need to construct new Z, y and x in the code.
 
 5.  Model the ozone data with only a region (north/south) effect:
+    ```{r mlr-hw4}
+    fit=lm(Ozone ~ -1 + region, data=homeworkdat)
+    ```
 
-```{r mlr-hw4}
-fit=lm(Ozone ~ -1 + region, data=homeworkdat)
-```
-
-Write this model in Form 1b (not Form 1) show that you can solve for the parameter values you get from the ```lm()``` call.
+    Write this model in Form 1b (not Form 1) show that you can solve for the parameter values you get from the ```lm()``` call.
 
 6. Write the model in question 5 in Form 2. Show that you can solve for the parameter values you get from the ```lm()``` call.  Again to do this, you adapt the code from subsection \@ref(sec-mlr-solveform2code).
 
 7. Write the model below in Form 2.
+    ```{r mlr-hw5}
+    fit=lm(Ozone ~ Temp:region, data=homeworkdat)
+    ```
 
-```{r mlr-hw5}
-fit=lm(Ozone ~ Temp:region, data=homeworkdat)
-```
 8. Using the airquality dataset with 111 data points, write the model below in Form 2 and solve for the parametes by adapting code from subsection \@ref(sec-mlr-solveform2code).
+    ```{r mlr-hw8}
+    fit=lm(Ozone ~ -1 + Temp:region + Month, data=airquality)
+    ```
 
-```{r mlr-hw8}
-fit=lm(Ozone ~ -1 + Temp:region + Month, data=airquality)
-```
-
-```{r mlr-reset, echo=FALSE, include.source=FALSE}
-```
