@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="sec-dfa-lakeWA.html">
-<link rel="next" href="chap-jags.html">
+<link rel="prev" href="sec-uss-problems.html">
+<link rel="next" href="sec-mss-overview.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -313,34 +313,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-dfa-problems" class="section level2">
-<h2><span class="header-section-number">7.13</span> Problems</h2>
-<p>For your homework this week, we will continue to investigate common trends in the Lake Washington plankton data.</p>
-<ol style="list-style-type: decimal">
-<li>Fit other DFA models to the phytoplankton data with varying numbers of trends from 1-4 (we fit a 3-trend model above). Do not include any covariates in these models. Using <code>R=&quot;diagonal and unequal&quot;</code> for the observation errors, which of the DFA models has the most support from the data?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-<ol start="2" style="list-style-type: decimal">
-<li>How does the best model from Question 1 compare to a DFA model with the same number of trends, but with <code>R=&quot;unconstrained&quot;</code>?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Fit a DFA model that includes temperature as a covariate and 3 trends (as in Section <a href="sec-dfa-lakeWA.html#sec-dfa-lakeWA">7.12</a>), but with<code>R=&quot;unconstrained&quot;</code>? How does this model compare to the model with <code>R=&quot;diagonal and unequal&quot;</code>? How does it compare to the model in Question 2?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-
+<div id="chap-mss" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> Multivariate state-space models without covariates</h1>
+<p></p>
+<p>This lab show you how to fit multivariate state-space models using the <strong>MARSS</strong> package. This chapter is an example which uses model selection to test different population structures in west coast harbor seals. See  for a fuller version of this examples. Chapter <a href="#chap-mss-covariates"><strong>??</strong></a> shows an example of a multivariate state-space model with covariates.</p>
+<p>A script with all the R code in the chapter can be downloaded <a href="%22./Rcode/multivariate-ss.R%22">here</a>.</p>
+<div id="data-and-packages-3" class="section level3 unnumbered">
+<h3>Data and packages</h3>
+<p>All the data used in the chapter are in the <strong>MARSS</strong> package. For most examples, we will use the <code>MARSS()</code> function to fit models via maximum-likelihood. We also show how to fit a Bayesian model using JAGS. For this section you will need the <strong>R2jags</strong> and <strong>coda</strong> packages. To run the JAGS code, you will also need <a href="http://mcmc-jags.sourceforge.net/">JAGS</a> installed. See Chapter <a href="chap-jags.html#chap-jags">8</a> for more details on JAGS.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MARSS)
+<span class="kw">library</span>(R2jags)
+<span class="kw">library</span>(coda)</code></pre></div>
+</div> 
 </div>
-<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-dfa-lakeWA.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="chap-jags.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-uss-problems.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-mss-overview.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -369,7 +361,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/intro-to-dfa.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/multivariate-ss.Rmd",
 "text": "Edit"
 },
 "download": ["AFTS.pdf"],

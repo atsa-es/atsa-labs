@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="sec-dfa-lakeWA.html">
-<link rel="next" href="chap-jags.html">
+<link rel="prev" href="chap-ts.html">
+<link rel="next" href="sec-ts-time-series-plots.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -313,34 +313,33 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-dfa-problems" class="section level2">
-<h2><span class="header-section-number">7.13</span> Problems</h2>
-<p>For your homework this week, we will continue to investigate common trends in the Lake Washington plankton data.</p>
-<ol style="list-style-type: decimal">
-<li>Fit other DFA models to the phytoplankton data with varying numbers of trends from 1-4 (we fit a 3-trend model above). Do not include any covariates in these models. Using <code>R=&quot;diagonal and unequal&quot;</code> for the observation errors, which of the DFA models has the most support from the data?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-<ol start="2" style="list-style-type: decimal">
-<li>How does the best model from Question 1 compare to a DFA model with the same number of trends, but with <code>R=&quot;unconstrained&quot;</code>?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Fit a DFA model that includes temperature as a covariate and 3 trends (as in Section <a href="sec-dfa-lakeWA.html#sec-dfa-lakeWA">7.12</a>), but with<code>R=&quot;unconstrained&quot;</code>? How does this model compare to the model with <code>R=&quot;diagonal and unequal&quot;</code>? How does it compare to the model in Question 2?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-
+<div id="sec-ts-data" class="section level2">
+<h2><span class="header-section-number">3.1</span> CO<span class="math inline">\(_2\)</span> and global temperature data set</h2>
+<p>For this chapter we will use the time series of the atmospheric concentration of CO<span class="math inline">\(_2\)</span> collected at the Mauna Loa Observatory in Hawai’i. We downloaded this data and created the <code>CO2</code> dataframe with the following code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RCurl)
+## get CO2 data from Mauna Loa observatory
+ww1 &lt;-<span class="st"> &quot;ftp://aftp.cmdl.noaa.gov/products/&quot;</span>
+ww2 &lt;-<span class="st"> &quot;trends/co2/co2_mm_mlo.txt&quot;</span>
+CO2fulltext &lt;-<span class="st"> </span><span class="kw">getURL</span>(<span class="kw">paste0</span>(ww1, ww2))
+CO2 &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">text =</span> CO2fulltext)[, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>)]
+## assign better column names
+<span class="kw">colnames</span>(CO2) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;month&quot;</span>, <span class="st">&quot;ppm&quot;</span>)
+<span class="kw">save</span>(CO2, CO2fulltext, <span class="dt">file =</span> <span class="st">&quot;CO2_data.RData&quot;</span>)</code></pre></div>
+<p>The data file contains some extra information that we don’t need, so we only read in a subset of the columns ( 1, 2 &amp; 5). <code>CO2fulltext</code> contains information on the data. Use <code>cat(CO2fulltext)</code> to read.</p>
+<p>The second data set we will use is Northern Hemisphere land and ocean temperature anomalies from NOAA. We downloaded this data set with the following code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RCurl)
+ww1 &lt;-<span class="st"> &quot;https://www.ncdc.noaa.gov/cag/time-series/&quot;</span>
+ww2 &lt;-<span class="st"> &quot;global/nhem/land_ocean/p12/12/1880-2014.csv&quot;</span>
+Temp &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">text =</span> <span class="kw">getURL</span>(<span class="kw">paste0</span>(ww1, ww2)), <span class="dt">skip =</span> <span class="dv">4</span>)
+<span class="kw">save</span>(Temp, <span class="dt">file =</span> <span class="st">&quot;NHemiTemp_data.RData&quot;</span>)</code></pre></div>
 </div>
-<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-dfa-lakeWA.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="chap-jags.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="chap-ts.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-ts-time-series-plots.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -369,7 +368,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/intro-to-dfa.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/intro-ts-funcs.Rmd",
 "text": "Edit"
 },
 "download": ["AFTS.pdf"],

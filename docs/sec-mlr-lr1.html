@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="sec-dfa-lakeWA.html">
-<link rel="next" href="chap-jags.html">
+<link rel="prev" href="chap-mlr.html">
+<link rel="next" href="sec-mlr-form1.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -313,34 +313,26 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-dfa-problems" class="section level2">
-<h2><span class="header-section-number">7.13</span> Problems</h2>
-<p>For your homework this week, we will continue to investigate common trends in the Lake Washington plankton data.</p>
-<ol style="list-style-type: decimal">
-<li>Fit other DFA models to the phytoplankton data with varying numbers of trends from 1-4 (we fit a 3-trend model above). Do not include any covariates in these models. Using <code>R=&quot;diagonal and unequal&quot;</code> for the observation errors, which of the DFA models has the most support from the data?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-<ol start="2" style="list-style-type: decimal">
-<li>How does the best model from Question 1 compare to a DFA model with the same number of trends, but with <code>R=&quot;unconstrained&quot;</code>?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Fit a DFA model that includes temperature as a covariate and 3 trends (as in Section <a href="sec-dfa-lakeWA.html#sec-dfa-lakeWA">7.12</a>), but with<code>R=&quot;unconstrained&quot;</code>? How does this model compare to the model with <code>R=&quot;diagonal and unequal&quot;</code>? How does it compare to the model in Question 2?</li>
-</ol>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">7.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">7.10</a>. Do they reasonable? Are there any particular problems or outliers?</p>
-
+<div id="sec-mlr-lr1" class="section level2">
+<h2><span class="header-section-number">2.1</span> A simple regression: one explanatory variable</h2>
+<p>We will start by regressing stack loss against air flow. In R using the <code>lm()</code> function this is</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># the dat data.frame is defined on the first page of the</span>
+<span class="co"># chapter</span>
+<span class="kw">lm</span>(stack.loss ~<span class="st"> </span>Air.Flow, <span class="dt">data =</span> dat)</code></pre></div>
+This fits the following model for the <span class="math inline">\(i\)</span>-th measurment:
+<span class="math display" id="eq:stacklossi">\[\begin{equation}
+\tag{2.1}
+stack.loss_i = \alpha + \beta air_i + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
+\end{equation}\]</span>
+<p>We will write the model for all the measurements together in two different ways, Form 1 and Form 2.</p>
 </div>
-<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-dfa-lakeWA.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="chap-jags.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="chap-mlr.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-mlr-form1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -369,7 +361,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/intro-to-dfa.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/linear-regression-models-matrix.Rmd",
 "text": "Edit"
 },
 "download": ["AFTS.pdf"],
