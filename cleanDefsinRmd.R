@@ -1,6 +1,23 @@
 #replace math commands with their definitions
 #Why do a replacement like this? See comments below
-source("rnw_to_rmd.R")
+require(stringr)
+replace.defs = function(defsfile, inputfile, outputfile){
+  defs=readLines(defsfile)
+  content=readLines(inputfile)
+  for(i in defs){
+    start=str_locate(i,"newcommand[{]")[2]+1
+    end=str_locate(i,"[}]")[1]-1
+    tag=str_sub(i, start, end)
+    tag=str_replace(tag, "\\\\","\\\\\\\\")
+    start=str_locate_all(i,"[{]")[[1]][2,1]+1
+    end=str_length(i)-1
+    repval=str_sub(i, start, end)
+    repval=str_replace_all(repval, "\\\\","\\\\\\\\")
+    content=str_replace_all(content, tag, repval)
+  }
+  writeLines(content, outputfile)
+}
+
 basefiles=c(
   "Lab-basic-matrix/basic-matrix-math",
   "Lab-linear-regression/linear-regression-models-matrix",
@@ -13,7 +30,17 @@ basefiles=c(
   "Lab-intro-to-stan/fitting-models-with-stan"
 )
 for(basefile in basefiles){
-  replace.defs("tex/defs.tex", paste(basefile,".Rmd",sep=""), paste(basefile,"-clean.Rmd",sep=""))
+  filename=str_split(basefile,"/")[[1]][2]
+  outputfile = paste("cleanedRmd/",filename,".Rmd",sep="")
+  replace.defs("tex/defs.tex", paste(basefile,".Rmd",sep=""), outputfile)
+}
+
+#Create the R files
+require(stringr)
+for(basefile in basefiles){
+  filename=str_split(basefile,"/")[[1]][2]
+  outputfile = paste("docs/Rcode/",filename,".R",sep="")
+  knitr::purl(paste(basefile,".Rmd",sep=""), output= outputfile)
 }
 
 ####################################################
