@@ -1,6 +1,6 @@
 # AFTS Labbook Info
 
-* [Writing the rmarkdown files](#writing)
+* [Writing the rmarkdown files](#writing-the-rmarkdown-files)
 * [Special Rmd conventions for AFTS](#special)
 * [Key files](#key-files)
 * [Directories](#directories)
