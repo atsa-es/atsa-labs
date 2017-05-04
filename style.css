@@ -14,15 +14,28 @@ pre {
   word-break: normal;
   word-wrap: normal;
 }
-pre.sourceCode {
+.sourceCode pre {
   word-break: normal;
   word-wrap: normal;
   background-color: white !important;
 }
-pre code {
+.sourceCode pre code {
   white-space: inherit;
+  background-color: white !important;
 }
-.section code {
+.section .sourceCode code {
+  white-space: inherit;
+  background-color: white !important;
+}
+.section .sourceCode pre {
+  white-space: inherit;
+  background-color: white !important;
+}
+.section li code {
+  white-space: inherit;
+  background-color: white !important;
+}
+.section li pre {
   white-space: inherit;
   background-color: white !important;
 }
@@ -43,17 +56,18 @@ h1, h2, h3, h4 {
 }
 
 /* the following is to try to fix problems with lists embedded in lists */
-ul {
+/* the :not(.chapter) is to not have this apply to the toc on left */
+.book-body ul {
     padding: 0;
     margin: 20px !important;
 }
 
-ul li {
+.book-body ul li {
     margin-top: 0em;
     margin-bottom: 0em;
 }
 
-ul li p {
+.book-body ul li p {
     margin-bottom: 0px !important;
     margin-top: 0px !important;
 }
