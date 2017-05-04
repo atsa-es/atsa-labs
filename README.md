@@ -192,6 +192,7 @@ Lab-intro-to-ts/*.txt
 Lab-linear-regression/*.pdf
 Lab-linear-regression/*.Rnw
 read-this-before-writing-rmarkdown.txt
+marss-jags.txt
 
 # Windows image file caches
 Thumbs.db
