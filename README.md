@@ -1,11 +1,23 @@
 # AFTS Labbook Info
 
+* [style sheet](#style-sheet)
 * [Writing the rmarkdown files](#writing-the-rmarkdown-files)
 * [Special Rmd conventions for AFTS](#special-conventions)
 * [Key files](#key-files)
 * [Directories](#directories)
 * [Building the book](#build-the-book)
 * [.gitignore file](#gitignore-file)
+
+## Style sheet
+[back to top](#afts-labbook-info)
+
+Use the style sheet to change the look of the book.  Change it in the top level.  Note, when bookdown builds the docs folder, it wipes out the folder, and copies stuff from the top-level into docs.  But if you are testing the style sheet, then make the change in docs.  Just make sure to copy over to the top-level or you'll lose the changes next time the book is built.
+
+If you are having trouble with vertical spacing, then
+
+* Make sure you have a blank line between your list elements.  Otherwise, the text won't be wrapped in <p> and it mucks with the spacing.
+
+* Take a look at the style sheet and the spacing elements.  
 
 ## Writing the rmarkdown files
 [back to top](#afts-labbook-info)
@@ -75,9 +87,9 @@ To have an equation number that you can reference you need to label the equation
 
 ### Figure captions
 
-You can pass these in `fig.cap='This is my caption.'` but if your caption is long or contains rmarkdown, then use a text reference. Here is an example
+You can pass these in `fig.cap='This is my caption.'` but if your caption is long or contains rmarkdown (or latex), then use a text reference. Here is an example
 
-    (ref:foo) A scatterplot of the data `cars` using **base** R graphics. 
+    (ref:foo) This is a caption with **markdown**, ``code`` and some $\beta$ greek in latex. 
 
     ```{r foo, fig.cap='(ref:foo)'}
     plot(cars)  # a scatterplot
@@ -87,6 +99,29 @@ You can pass these in `fig.cap='This is my caption.'` but if your caption is lon
 
 `cleanDefsinRmd.R` will make R code files automatically from the Rmd files.  If you have chunks that you don't want in those files put `purl=FALSE` in the header.  So
 ```{r foo, purl=FALSE}
+```
+
+### Lists notes
+
+Use indenting to make sure the paragraphs in your lists (esp. in the Problems sections) all line up.
+```
+1. Level 1
+   
+    Paragraph in Level 1
+        
+    a. another list within level 1
+    b. another list within level 1
+````
+Use a blank space between your lists.  The html is different and your list spacing will vary if you are not consistent.  The html for this
+```
+* foo1
+* foo2
+```
+Is different than
+```
+* foo1
+
+* foo2
 ```
 
 ## Special conventions
