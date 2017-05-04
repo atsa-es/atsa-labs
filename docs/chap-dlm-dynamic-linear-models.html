@@ -234,12 +234,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="6.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
 <li class="chapter" data-level="6.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="6.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with MARSS</a></li>
+<li class="chapter" data-level="6.3" data-path="fitting-a-univariate-dlm-with-marss.html"><a href="fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code id="sec-dlm-fitting-a-univariate-dlm-with-marss">MARSS()</code></a></li>
 <li class="chapter" data-level="6.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.4</b> Forecasting with a univariate DLM</a><ul>
 <li class="chapter" data-level="6.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>6.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
 <li class="chapter" data-level="6.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>6.4.2</b> DLM forecast diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework</a><ul>
+<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework discussion and data</a><ul>
 <li class="chapter" data-level="6.5.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>6.5.1</b> Spawner-recruit data</a></li>
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>6.6</b> Problems</a></li>
@@ -317,7 +317,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="chap-dlm-dynamic-linear-models" class="section level1">
 <h1><span class="header-section-number">Chapter 6</span> Dynamic linear models</h1>
 <p></p>
-<p>Here we will use MARSS to analyze dynamic linear models (DLMs), wherein the parameters in a regression model are treated as time-varying. DLMs are used commonly in econometrics, but have received less attention in the ecological literature <span class="citation">(c.f. Lamon, Carpenter, and Stow <a href="#ref-Lamonetal1998">1998</a>; Scheuerell and Williams <a href="#ref-ScheuerellWilliams2005">2005</a>)</span>. Our treatment of DLMs is rather cursory—we direct the reader to excellent textbooks by <span class="citation">Pole, West, and Harrison (<a href="#ref-Poleetal1994">1994</a>)</span> and <span class="citation">Petris, Petrone, and Campagnoli (<a href="#ref-Petrisetal2009">2009</a>)</span> for more in-depth treatments of DLMs. The former focuses on Bayesian estimation whereas the latter addresses both likelihood-based and Bayesian estimation methods.</p>
+<p>Here we will use MARSS to analyze dynamic linear models (DLMs), wherein the parameters in a regression model are treated as time-varying. DLMs are used commonly in econometrics, but have received less attention in the ecological literature <span class="citation">(c.f. Lamon, Carpenter, and Stow <a href="references.html#ref-Lamonetal1998">1998</a>; Scheuerell and Williams <a href="references.html#ref-ScheuerellWilliams2005">2005</a>)</span>. Our treatment of DLMs is rather cursory—we direct the reader to excellent textbooks by <span class="citation">Pole, West, and Harrison (<a href="references.html#ref-Poleetal1994">1994</a>)</span> and <span class="citation">Petris, Petrone, and Campagnoli (<a href="references.html#ref-Petrisetal2009">2009</a>)</span> for more in-depth treatments of DLMs. The former focuses on Bayesian estimation whereas the latter addresses both likelihood-based and Bayesian estimation methods.</p>
 <p>A script with all the R code in the chapter can be downloaded <a href="%22./Rcode/DLM.R%22">here</a>.</p>
 <div id="data" class="section level3 unnumbered">
 <h3>Data</h3>
@@ -325,21 +325,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MARSS)</code></pre></div>
 <p>The problem set uses an additional data set on spawners and recruits: <a href="%22./data/KvichakSockeye.RData%22">KvichakSockeye.RData</a>.</p>
 </div> 
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-Lamonetal1998">
-<p>Lamon, E.C. III, S.R. Carpenter, and C.A. Stow. 1998. “Forecasting Pcb Concentrations in Lake Michigan Salmonids: A Dynamic Linear Model Approach.” <em>Ecological Applications</em> 8: 659–68.</p>
-</div>
-<div id="ref-ScheuerellWilliams2005">
-<p>Scheuerell, Mark D., and John G. Williams. 2005. “Forecasting Climate Induced Changes in the Survival of Snake River Spring/Summer Chinook Salmon (Oncorhynchus Tshawytscha).” <em>Fisheries Oceanography</em> 14 (6): 448–57.</p>
-</div>
-<div id="ref-Poleetal1994">
-<p>Pole, A., M. West, and J. Harrison. 1994. <em>Applied Bayesian Forecasting and Time Series Analysis</em>. New York: Chapman; Hall.</p>
-</div>
-<div id="ref-Petrisetal2009">
-<p>Petris, Giovanni, Sonia Petrone, and Patrizia Campagnoli. 2009. <em>Dynamic Linear Models with R</em>. Use R! Springer.</p>
-</div>
 </div>
             </section>
 

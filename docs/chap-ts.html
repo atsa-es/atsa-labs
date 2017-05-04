@@ -234,12 +234,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="6.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
 <li class="chapter" data-level="6.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="6.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with MARSS</a></li>
+<li class="chapter" data-level="6.3" data-path="fitting-a-univariate-dlm-with-marss.html"><a href="fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code id="sec-dlm-fitting-a-univariate-dlm-with-marss">MARSS()</code></a></li>
 <li class="chapter" data-level="6.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.4</b> Forecasting with a univariate DLM</a><ul>
 <li class="chapter" data-level="6.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>6.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
 <li class="chapter" data-level="6.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>6.4.2</b> DLM forecast diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework</a><ul>
+<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework discussion and data</a><ul>
 <li class="chapter" data-level="6.5.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>6.5.1</b> Spawner-recruit data</a></li>
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>6.6</b> Problems</a></li>
@@ -321,9 +321,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>A script with all the R code in the chapter can be downloaded <a href="%22./Rcode/intro-ts-funcs.R%22">here</a>.</p>
 <div id="data-and-packages-1" class="section level3 unnumbered">
 <h3>Data and packages</h3>
-<p>The chapter uses two data sets described in Section <a href="sec-ts-data.html#sec-ts-data">3.1</a>. The main one is a CO<span class="math inline">\(_2\)</span> data set: <a href="%22./data/CO2_data.RData%22">CO2_data.RData</a>. The second is a Northern Hemisphere temperature data set: <a href="%22./data/NHemiTemp_data.RData%22">NHemiTemp_data.RData</a>. After downloading via the links, load the data</p>
+<p>The chapter uses two data sets described in Section <a href="sec-ts-data.html#sec-ts-data">3.1</a>. The main one is a CO<span class="math inline">\(_2\)</span> data set: <a href="%22./data/CO2_data.RData%22">CO2_data.RData</a>. The second is a Northern Hemisphere temperature data set: <a href="%22./data/NHemiTemp_data.RData%22">NHemiTemp_data.RData</a>. The problems use a data set on hourly phytoplankton counts: <a href="%22./data/hourly_phyto.RData%22">hourly_phyto.RData</a>. After downloading via the links, load the data</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;CO2_data.RData&quot;</span>)
-<span class="kw">load</span>(<span class="st">&quot;NHemiTemp_data.RData&quot;</span>)</code></pre></div>
+<span class="kw">load</span>(<span class="st">&quot;NHemiTemp_data.RData&quot;</span>)
+<span class="kw">load</span>(<span class="st">&quot;hourly_phyto.RData&quot;</span>)</code></pre></div>
 <p>This chapter uses the <strong>stats</strong> package, which is often loaded by default when you start R, the <strong>MARSS</strong> package and the <strong>forecast</strong> package. The problems use a dataset in the <strong>datasets</strong> package. After installing the packages, if needed, load:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stats)
 <span class="kw">library</span>(MARSS)

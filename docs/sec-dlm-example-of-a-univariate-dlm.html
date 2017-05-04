@@ -33,7 +33,7 @@
   
   
 <link rel="prev" href="sec-dlm-overview.html">
-<link rel="next" href="sec-dlm-fitting-a-univariate-dlm-with-marss.html">
+<link rel="next" href="fitting-a-univariate-dlm-with-marss.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -234,12 +234,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="6.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
 <li class="chapter" data-level="6.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="6.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with MARSS</a></li>
+<li class="chapter" data-level="6.3" data-path="fitting-a-univariate-dlm-with-marss.html"><a href="fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code id="sec-dlm-fitting-a-univariate-dlm-with-marss">MARSS()</code></a></li>
 <li class="chapter" data-level="6.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.4</b> Forecasting with a univariate DLM</a><ul>
 <li class="chapter" data-level="6.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>6.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
 <li class="chapter" data-level="6.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>6.4.2</b> DLM forecast diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework</a><ul>
+<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework discussion and data</a><ul>
 <li class="chapter" data-level="6.5.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>6.5.1</b> Spawner-recruit data</a></li>
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>6.6</b> Problems</a></li>
@@ -316,7 +316,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="sec-dlm-example-of-a-univariate-dlm" class="section level2">
 <h2><span class="header-section-number">6.2</span> Example of a univariate DLM</h2>
-Let’s consider an example from the literature. <span class="citation">Scheuerell and Williams (<a href="#ref-ScheuerellWilliams2005">2005</a>)</span> used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell &amp; Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon (“smolts”) entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year <span class="math inline">\(t\)</span>,
+Let’s consider an example from the literature. <span class="citation">Scheuerell and Williams (<a href="references.html#ref-ScheuerellWilliams2005">2005</a>)</span> used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell &amp; Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon (“smolts”) entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year <span class="math inline">\(t\)</span>,
 <span class="math display" id="eq:dlm-dlmSW1">\[\begin{equation}
 \tag{6.5}
 survival_t = \alpha_t + \beta_t F_t + v_t \text{ with } v_{t}\sim\,\text{N}(0,r),
@@ -348,19 +348,13 @@ Equation <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(6.7)<
 \end{equation}\]</span>
 <p>where <span class="math inline">\(\mathbf{x}_t = \boldsymbol{\theta}_t\)</span>, <span class="math inline">\(\mathbf{B}_t = \mathbf{G}_t\)</span>, <span class="math inline">\(\mathbf{u}_t = \mathbf{C}_t = \mathbf{c}_t = \mathbf{0}\)</span>, <span class="math inline">\(\mathbf{y}_t = y_t\)</span> (i.e., <span class="math inline">\(\mathbf{y}_t\)</span> is 1 <span class="math inline">\(\mathsf{x}\)</span> 1), <span class="math inline">\(\mathbf{Z}_t = \mathbf{F}_t^{\top}\)</span>, <span class="math inline">\(\mathbf{a}_t = \mathbf{D}_t = \mathbf{d}_t = \mathbf{0}\)</span>, and <span class="math inline">\(\mathbf{R}_t = r\)</span> (i.e., <span class="math inline">\(\mathbf{R}_t\)</span> is 1 <span class="math inline">\(\mathsf{x}\)</span> 1).</p>
 </div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-ScheuerellWilliams2005">
-<p>Scheuerell, Mark D., and John G. Williams. 2005. “Forecasting Climate Induced Changes in the Survival of Snake River Spring/Summer Chinook Salmon (Oncorhynchus Tshawytscha).” <em>Fisheries Oceanography</em> 14 (6): 448–57.</p>
-</div>
-</div>
             </section>
 
           </div>
         </div>
       </div>
 <a href="sec-dlm-overview.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="fitting-a-univariate-dlm-with-marss.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

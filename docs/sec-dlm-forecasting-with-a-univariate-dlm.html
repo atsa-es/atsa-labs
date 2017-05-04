@@ -32,7 +32,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="sec-dlm-fitting-a-univariate-dlm-with-marss.html">
+<link rel="prev" href="fitting-a-univariate-dlm-with-marss.html">
 <link rel="next" href="sec-dlm-homework.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -234,12 +234,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="6.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
 <li class="chapter" data-level="6.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="6.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with MARSS</a></li>
+<li class="chapter" data-level="6.3" data-path="fitting-a-univariate-dlm-with-marss.html"><a href="fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code id="sec-dlm-fitting-a-univariate-dlm-with-marss">MARSS()</code></a></li>
 <li class="chapter" data-level="6.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.4</b> Forecasting with a univariate DLM</a><ul>
 <li class="chapter" data-level="6.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>6.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
 <li class="chapter" data-level="6.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>6.4.2</b> DLM forecast diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework</a><ul>
+<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework discussion and data</a><ul>
 <li class="chapter" data-level="6.5.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>6.5.1</b> Spawner-recruit data</a></li>
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>6.6</b> Problems</a></li>
@@ -316,7 +316,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="sec-dlm-forecasting-with-a-univariate-dlm" class="section level2">
 <h2><span class="header-section-number">6.4</span> Forecasting with a univariate DLM</h2>
-<p><span class="citation">Scheuerell and Williams (<a href="#ref-ScheuerellWilliams2005">2005</a>)</span> were interested in how well upwelling could be used to actually  expected survival of salmon, so let’s look at how well our model does in that context. To do so, we need the predictive distributions for the regression parameters and observation.</p>
+<p><span class="citation">Scheuerell and Williams (<a href="references.html#ref-ScheuerellWilliams2005">2005</a>)</span> were interested in how well upwelling could be used to actually  expected survival of salmon, so let’s look at how well our model does in that context. To do so, we need the predictive distributions for the regression parameters and observation.</p>
 Beginning with our definition for the distribution of the parameters at time <span class="math inline">\(t=0\)</span>, <span class="math inline">\(\boldsymbol{\theta}_0 \sim \,\text{MVN}(\boldsymbol{\pi}_0,\boldsymbol{\Lambda}_0)\)</span> in Equation <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(6.7)</a>, we write
 <span class="math display" id="eq:dlm-dlmFore1">\[\begin{equation}
 \tag{6.9}
@@ -338,7 +338,7 @@ y_{t}|y_{1:t-1} &amp;\sim \,\text{N}(\zeta_{t},\Psi_{t}), \text{ where} \nonumbe
 \end{align}\]</span>
 <div id="sec-dlm-forecasting-a-univariate-dlm-with-marss" class="section level3">
 <h3><span class="header-section-number">6.4.1</span> Forecasting a univariate DLM with MARSS</h3>
-<p>Working from Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-dlmFore3">(6.11)</a>, we can now use MARSS to compute the expected value of the forecast at time <span class="math inline">\(t\)</span> <span class="math inline">\((\,\text{E} [y_t|y_{1:t-1}] = \zeta_t)\)</span>, and its variance <span class="math inline">\((\,\text{var} [y_t|y_{1:t-1}] = \Psi_t)\)</span>. For the expectation, we need <span class="math inline">\(\mathbf{F}_t\boldsymbol{\eta}_t\)</span>. Recall that <span class="math inline">\(\mathbf{F}_t\)</span> is our <span class="math inline">\(1 \times m\)</span> matrix of explanatory variables at time <span class="math inline">\(t\)</span> (<span class="math inline">\(\mathbf{F}_t\)</span> is called <span class="math inline">\(\mathbf{Z}_t\)</span> in MARSS notation). The one-step ahead forecasts of the parameters at time <span class="math inline">\(t\)</span> <span class="math inline">\((\boldsymbol{\eta}_t)\)</span> are calculated as part of the Kalman filter algorithm—they are termed <span class="math inline">\(\tilde{x}_t^{t-1}\)</span> in MARSS notation and stored as <code>xtt1</code> in the list produced by the <code>MARSSkfss()</code> function.</p>
+<p>Working from Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-dlmFore3">(6.11)</a>, we can now use <code>MARSS()</code> to compute the expected value of the forecast at time <span class="math inline">\(t\)</span> <span class="math inline">\((\,\text{E} [y_t|y_{1:t-1}] = \zeta_t)\)</span>, and its variance <span class="math inline">\((\,\text{var} [y_t|y_{1:t-1}] = \Psi_t)\)</span>. For the expectation, we need <span class="math inline">\(\mathbf{F}_t\boldsymbol{\eta}_t\)</span>. Recall that <span class="math inline">\(\mathbf{F}_t\)</span> is our <span class="math inline">\(1 \times m\)</span> matrix of explanatory variables at time <span class="math inline">\(t\)</span> (<span class="math inline">\(\mathbf{F}_t\)</span> is called <span class="math inline">\(\mathbf{Z}_t\)</span> in MARSS notation). The one-step ahead forecasts of the parameters at time <span class="math inline">\(t\)</span> <span class="math inline">\((\boldsymbol{\eta}_t)\)</span> are calculated as part of the Kalman filter algorithm—they are termed <span class="math inline">\(\tilde{x}_t^{t-1}\)</span> in <code>MARSS()</code> notation and stored as <code>xtt1</code> in the list produced by the <code>MARSSkfss()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## get list of Kalman filter output
 kf.out =<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)
 ## forecasts of regr parameters; 2xT matrix
@@ -415,18 +415,12 @@ Figure 6.6: Autocorrelation plot of the forecast errors (innovations) for the DL
 
 </div>
 </div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-ScheuerellWilliams2005">
-<p>Scheuerell, Mark D., and John G. Williams. 2005. “Forecasting Climate Induced Changes in the Survival of Snake River Spring/Summer Chinook Salmon (Oncorhynchus Tshawytscha).” <em>Fisheries Oceanography</em> 14 (6): 448–57.</p>
-</div>
-</div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="fitting-a-univariate-dlm-with-marss.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="sec-dlm-homework.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

@@ -11,10 +11,11 @@ A script with all the R code in the chapter can be downloaded  [here]("./Rcode/i
 
 ### Data and packages {-}
 
-The chapter uses two data sets described in Section \@ref(sec-ts-data).  The main one is a CO$_2$ data set: [CO2_data.RData]("./data/CO2_data.RData"). The second is   a Northern Hemisphere temperature data set:  [NHemiTemp_data.RData]("./data/NHemiTemp_data.RData").  After downloading via the links, load the data
+The chapter uses two data sets described in Section \@ref(sec-ts-data).  The main one is a CO$_2$ data set: [CO2_data.RData]("./data/CO2_data.RData"). The second is   a Northern Hemisphere temperature data set:  [NHemiTemp_data.RData]("./data/NHemiTemp_data.RData").  The problems use a data set on hourly phytoplankton counts: [hourly_phyto.RData]("./data/hourly_phyto.RData"). After downloading via the links, load the data
 ```{r ts-load-datasets, eval=FALSE}
 load("CO2_data.RData")
 load("NHemiTemp_data.RData")
+load("hourly_phyto.RData")
 ```
 
 This chapter uses the **stats** package, which is often loaded by default when you start R, the **MARSS** package and the **forecast** package. The problems use a dataset in the **datasets** package.  After installing the packages, if needed, load:
@@ -1478,16 +1479,11 @@ auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
 
 ## Problems {#sec-ts-problems}
 
-We have seen how to do a variety of introductory time series analyses with R.  Now it is your turn to apply the information you learned here and in lecture to complete some analyses.  You have been asked by a colleauge to help analyze some time series data she collected as part of an experiment on the effects of light and nutrients on the population dynamics of phytoplankton.  Specifically, after controlling for differences in light and temperature, she wants to know if the natural log of population density can be modeled with some form of ARMA($p,q$) model.  The data are expressed as the number of cells per milliliter recorded every hour for one week beginning at 8:00 AM on December 1, 2014; you can find them here:
+We have seen how to do a variety of introductory time series analyses with R.  Now it is your turn to apply the information you learned here and in lecture to complete some analyses.  You have been asked by a colleague to help analyze some time series data she collected as part of an experiment on the effects of light and nutrients on the population dynamics of phytoplankton.  Specifically, after controlling for differences in light and temperature, she wants to know if the natural log of population density can be modeled with some form of ARMA($p,q$) model.  
 
-```{r ts-HW1_pre, eval=FALSE, echo=TRUE}
-## get phytoplankton data
-pp <- "http://faculty.washington.edu/scheuerl/phytoDat.txt"
-pDat <- read.table(pp)
-```
+The data are expressed as the number of cells per milliliter recorded every hour for one week beginning at 8:00 AM on December 1, 2014; you can download the data here: [hourly_phyto.RData]("./data/hourly_phyto.RData").
 
-\noindent Use the information above to do the following:
-
+Use the information above to do the following:
 
 1. Convert ``pDat``, which is a **data.frame** object, into a **ts** object.  This bit of code might be useful to get you started:
     ```{r ts-HW1_1, eval=FALSE, echo=TRUE}
@@ -1498,11 +1494,11 @@ pDat <- read.table(pp)
 
 2. Plot the time series of phytoplankton density and provide a brief description of any notable features.
 
-3. Although you do not have the actual measurements for the specific temperature and light regimes used in the experiment, you have been informed that they follow a regular light/dark period with accompanying warm/cool temperatures.  Thus, estimating a fixed seasonal effect is justifiable.  Also, the instrumentation is precise enough to preclude any systematic change in measurements over time ($i.e.$, you can assume $m_t = 0$ for all $t$).  Obtain the time series of the estimated log-density of phytoplankton absent any hourly effects caused by variation in temperature or light. ($Hint$: You will need to do some decomposition.)
+3. Although you do not have the actual measurements for the specific temperature and light regimes used in the experiment, you have been informed that they follow a regular light/dark period with accompanying warm/cool temperatures.  Thus, estimating a fixed seasonal effect is justifiable.  Also, the instrumentation is precise enough to preclude any systematic change in measurements over time (*i.e.*, you can assume $m_t = 0$ for all $t$).  Obtain the time series of the estimated log-density of phytoplankton absent any hourly effects caused by variation in temperature or light. (*Hint*: You will need to do some decomposition.)
 
 4. Use diagnostic tools to identify the possible order(s) of ARMA model(s) that most likely describes the log of population density for this particular experiment.  Note that at this point you should be focusing your analysis on the results obtained in Question 3.
 
-5. Use some form of search to identify what form of ARMA($p,q$) model best describes the log of population density for this particular experiment. Use what you learned in Question 4 to inform possible orders of $p$ and $q$. ($Hint$: if you use ```auto.arima()```, include the additional argument ```seasonal=FALSE```)
+5. Use some form of search to identify what form of ARMA($p,q$) model best describes the log of population density for this particular experiment. Use what you learned in Question 4 to inform possible orders of $p$ and $q$. (*Hint*: if you use ```auto.arima()```, include the additional argument ```seasonal=FALSE```)
 
-6. Write out the best model in the form of Equation \@ref(eq:ARMAdefn) using the underscore notation to refer to subscripts ($e.g.$, write ```x_t``` for $x_t$). You can round any parameters/coefficients to the nearest hundreth. ($Hint$: if the mean of the time series is not zero, refer to Eqn 1.27 in the lab handout).
+6. Write out the best model in the form of Equation \@ref(eq:ARMAdefn) using the underscore notation to refer to subscripts (*e.g.*, write ```x_t``` for $x_t$). You can round any parameters/coefficients to the nearest hundreth. ($Hint$: if the mean of the time series is not zero, refer to Eqn 1.27 in the lab handout).
 

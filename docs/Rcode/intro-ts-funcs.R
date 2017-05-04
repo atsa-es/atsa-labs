@@ -1,6 +1,7 @@
 ## ----ts-load-datasets, eval=FALSE----------------------------------------
 ## load("CO2_data.RData")
 ## load("NHemiTemp_data.RData")
+## load("hourly_phyto.RData")
 
 ## ----ts-loadpackages, warning=FALSE, message=FALSE, results='hide'-------
 library(stats)
@@ -676,11 +677,6 @@ ARMA.res[[which(ARMA.AIC==min(ARMA.AIC))]]
 ## ----ts-autoARIMA, eval=TRUE, echo=TRUE----------------------------------
 ## find best ARMA(p,q) model
 auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
-
-## ----ts-HW1_pre, eval=FALSE, echo=TRUE-----------------------------------
-## ## get phytoplankton data
-## pp <- "http://faculty.washington.edu/scheuerl/phytoDat.txt"
-## pDat <- read.table(pp)
 
 ## ----ts-HW1_1, eval=FALSE, echo=TRUE-------------------------------------
 ## ## what day of 2014 is Dec 1st?

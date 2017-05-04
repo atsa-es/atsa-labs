@@ -234,12 +234,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="6.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
 <li class="chapter" data-level="6.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="6.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with MARSS</a></li>
+<li class="chapter" data-level="6.3" data-path="fitting-a-univariate-dlm-with-marss.html"><a href="fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code id="sec-dlm-fitting-a-univariate-dlm-with-marss">MARSS()</code></a></li>
 <li class="chapter" data-level="6.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.4</b> Forecasting with a univariate DLM</a><ul>
 <li class="chapter" data-level="6.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>6.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
 <li class="chapter" data-level="6.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>6.4.2</b> DLM forecast diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework</a><ul>
+<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework discussion and data</a><ul>
 <li class="chapter" data-level="6.5.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>6.5.1</b> Spawner-recruit data</a></li>
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>6.6</b> Problems</a></li>
@@ -317,31 +317,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-dfa" class="section level1">
 <h1><span class="header-section-number">Chapter 7</span> Dynamic Factor Analysis</h1>
 <p></p>
-<p>Here we will use the <strong>MARSS</strong> package to do Dynamic Factor Analysis (DFA), which allows us to look for a set of common underlying processes among a relatively large set of time series <span class="citation">(Zuur et al. <a href="#ref-Zuuretal2003a">2003</a>)</span>. There have been a number of recent applications of DFA to ecological questions surrounding Pacific salmon <span class="citation">(Stachura, Mantua, and Scheuerell <a href="#ref-Stachuraetal2014">2014</a>; Jorgensen et al. <a href="#ref-Jorgensenetal2016">2016</a>; Ohlberger, Scheuerell, and Schindler <a href="#ref-Ohlbergeretal2016">2016</a>)</span> and stream temperatures <span class="citation">(Lisi et al. <a href="#ref-Lisietal2015">2015</a>)</span>. For a more in-depth treatment of potential applications of MARSS models for DFA, see Chapter 9 in the <a href="https://cran.r-project.org/web/packages/MARSS/vignettes/UserGuide.pdf">MARSS User’s Guide</a>.</p>
+<p>Here we will use the <strong>MARSS</strong> package to do Dynamic Factor Analysis (DFA), which allows us to look for a set of common underlying processes among a relatively large set of time series <span class="citation">(Zuur et al. <a href="references.html#ref-Zuuretal2003a">2003</a>)</span>. There have been a number of recent applications of DFA to ecological questions surrounding Pacific salmon <span class="citation">(Stachura, Mantua, and Scheuerell <a href="references.html#ref-Stachuraetal2014">2014</a>; Jorgensen et al. <a href="references.html#ref-Jorgensenetal2016">2016</a>; Ohlberger, Scheuerell, and Schindler <a href="references.html#ref-Ohlbergeretal2016">2016</a>)</span> and stream temperatures <span class="citation">(Lisi et al. <a href="references.html#ref-Lisietal2015">2015</a>)</span>. For a more in-depth treatment of potential applications of MARSS models for DFA, see Chapter 9 in the <a href="https://cran.r-project.org/web/packages/MARSS/vignettes/UserGuide.pdf">MARSS User’s Guide</a>.</p>
 <p>A script with all the R code in the chapter can be downloaded <a href="%22./Rcode/intro-to-dfa.R%22">here</a>.</p>
 <div id="data-and-packages-4" class="section level3 unnumbered">
 <h3>Data and packages</h3>
 <p>All the data used in the chapter are in the <strong>MARSS</strong> package. Install the package, if needed, and load to run the code in the chapter.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MARSS)</code></pre></div>
 </div> 
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-Zuuretal2003a">
-<p>Zuur, A. F., R. J. Fryer, I. T. Jolliffe, R. Dekker, and J. J. Beukema. 2003. “Estimating Common Trends in Multivariate Time Series Using Dynamic Factor Analysis.” <em>Environmetrics</em> 14 (7): 665–85.</p>
-</div>
-<div id="ref-Stachuraetal2014">
-<p>Stachura, Megan M., Nathan J. Mantua, and Mark D. Scheuerell. 2014. “Oceanographic influences on patterns in North Pacific salmon abundance.” Journal Article. <em>Canadian Journal of Fisheries and Aquatic Sciences</em> 71 (2): 226–35. doi:<a href="https://doi.org/10.1139/cjfas-2013-0367">10.1139/cjfas-2013-0367</a>.</p>
-</div>
-<div id="ref-Jorgensenetal2016">
-<p>Jorgensen, Jeff C., Eric J. Ward, Mark D. Scheuerell, and Richard W. Zabel. 2016. “Assessing Spatial Covariance Among Time Series of Abundance.” Journal Article. <em>Ecology and Evolution</em> 6: 2472–85. doi:<a href="https://doi.org/10.1002/ece3.2031">10.1002/ece3.2031</a>.</p>
-</div>
-<div id="ref-Ohlbergeretal2016">
-<p>Ohlberger, J., Mark D. Scheuerell, and Daniel E. Schindler. 2016. “Population coherence and environmental impacts across spatial scales: a case study of Chinook salmon.” Journal Article. <em>Ecosphere</em> 7: e01333. doi:<a href="https://doi.org/10.1002/ecs2.1333">10.1002/ecs2.1333</a>.</p>
-</div>
-<div id="ref-Lisietal2015">
-<p>Lisi, Peter J., Daniel E. Schindler, Timothy J. Cline, Mark D. Scheuerell, and Patrick B. Walsh. 2015. “Watershed Geomorphology and Snowmelt Control Stream Thermal Sensitivity to Air Temperature.” Journal Article. <em>Geophysical Research Letters</em> 42 (9): 3380–8. doi:<a href="https://doi.org/10.1002/2015gl064083">10.1002/2015gl064083</a>.</p>
-</div>
 </div>
             </section>
 

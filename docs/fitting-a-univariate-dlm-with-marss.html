@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html">
-<link rel="next" href="sec-uss-problems.html">
+<link rel="prev" href="sec-dlm-example-of-a-univariate-dlm.html">
+<link rel="next" href="sec-dlm-forecasting-with-a-univariate-dlm.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -314,49 +314,90 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-uss-a-simple-random-walk-model-of-animal-movement" class="section level2">
-<h2><span class="header-section-number">4.7</span> A random walk model of animal movement</h2>
-A simple random walk model of movement with drift (directional movement) but no correlation is
-<span class="math display" id="eq:uss-movement">\[\begin{gather}
-x_{1,t} = x_{1,t-1} + u_1 + w_{1,t}, \;\; w_{1,t} \sim \,\text{N}(0,\sigma^2_1)\\
-x_{2,t} = x_{2,t-1} + u_2 + w_{2,t}, \;\; w_{2,t} \sim \,\text{N}(0,\sigma^2_2)
-\tag{4.8}
-\end{gather}\]</span>
-where <span class="math inline">\(x_{1,t}\)</span> is the location at time <span class="math inline">\(t\)</span> along one axis (here, longitude) and <span class="math inline">\(x_{2,t}\)</span> is for another, generally orthogonal, axis (in here, latitude). The parameter <span class="math inline">\(u_1\)</span> is the rate of longitudinal movement and <span class="math inline">\(u_2\)</span> is the rate of latitudinal movement. We add errors to our observations of location:
-<span class="math display" id="eq:uss-observe">\[\begin{gather}
-y_{1,t} = x_{1,t} + v_{1,t}, \;\; v_{1,t} \sim \,\text{N}(0,\eta^2_1)\\
-y_{2,t} = x_{2,t} + v_{2,t}, \;\; v_{2,t} \sim \,\text{N}(0,\eta^2_2),
-\tag{4.9}
-\end{gather}\]</span>
-This model is comprised of two separate univariate state-space models. Note that <span class="math inline">\(y_1\)</span> depends only on <span class="math inline">\(x_1\)</span> and <span class="math inline">\(y_2\)</span> depends only on <span class="math inline">\(x_2\)</span>. There are no actual interactions between these two univariate models. However, we can write the model down in the form of a multivariate model using diagonal variance-covariance matrices and a diagonal design (<span class="math inline">\(\mathbf{Z}\)</span>) matrix. Because the variance-covariance matrices and <span class="math inline">\(\mathbf{Z}\)</span> are diagonal, the <span class="math inline">\(x_1\)</span>:<span class="math inline">\(y_1\)</span> and <span class="math inline">\(x_2\)</span>:<span class="math inline">\(y_2\)</span> processes will be independent as intended. Here are Equations <a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html#eq:uss-movement">(4.8)</a> and <a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html#eq:uss-observe">(4.9)</a> written as a MARSS model (in matrix form):
-<span class="math display" id="eq:uss-mssmlong-b" id="eq:uss-mssmlong-a">\[\begin{gather}
-\begin{bmatrix}x_{1,t}\\x_{2,t}\end{bmatrix}
-= \begin{bmatrix}x_{1,t-1}\\x_{2,t-1}\end{bmatrix}
-+ \begin{bmatrix}u_1\\u_2\end{bmatrix}
-+ \begin{bmatrix}w_{1,t}\\w_{2,t}\end{bmatrix},
- \textrm{ } \mathbf{w}_t \sim \,\text{MVN}\begin{pmatrix}0,\begin{bmatrix}\sigma^2_1&amp;0\\0&amp;\sigma^2_2\end{bmatrix} \end{pmatrix}  \tag{4.10} \\
-\nonumber \\
-\begin{bmatrix}y_{1,t}\\y_{2,t}\end{bmatrix}
-= \begin{bmatrix}1&amp;0\\0&amp;1\end{bmatrix}
-\begin{bmatrix}x_{1,t}\\x_{2,t}\end{bmatrix}
-+ \begin{bmatrix}v_{1,t}\\ v_{2,t}\end{bmatrix},
- \textrm{ } \mathbf{v}_t \sim \,\text{MVN}\begin{pmatrix}0,\begin{bmatrix}\eta^2_1&amp;0\\0&amp;\eta^2_2\end{bmatrix} \end{pmatrix}  \tag{4.11}
-\end{gather}\]</span>
-The variance-covariance matrix for <span class="math inline">\(\mathbf{w}_t\)</span> is a diagonal matrix with unequal variances, <span class="math inline">\(\sigma^2_1\)</span> and <span class="math inline">\(\sigma^2_2\)</span>. The variance-covariance matrix for <span class="math inline">\(\mathbf{v}_t\)</span> is a diagonal matrix with unequal variances, <span class="math inline">\(\eta^2_1\)</span> and <span class="math inline">\(\eta^2_2\)</span>. We can write this succinctly as
-<span class="math display" id="eq:uss-mssm">\[\begin{gather}
-\mathbf{x}_t = \mathbf{x}_{t-1} + \mathbf{u} + \mathbf{w}_t, \;\; \mathbf{w}_t \sim \,\text{MVN}(0,\mathbf{Q}) \\
-\mathbf{y}_t = \mathbf{x}_{t} + \mathbf{v}_t, \;\; \mathbf{v}_t \sim \,\text{MVN}(0,\mathbf{R}). 
-\tag{4.12}
-\end{gather}\]</span>
-<p></p>
+<div id="fitting-a-univariate-dlm-with-marss" class="section level2">
+<h2><span class="header-section-number">6.3</span> Fitting a univariate DLM with <code id="sec-dlm-fitting-a-univariate-dlm-with-marss">MARSS()</code></h2>
+<p>Now let’s go ahead and analyze the DLM specified in Equations <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW1">(6.5)</a>–<a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(6.7)</a>. We begin by loading the data set (which is in the <strong>MARSS</strong> package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean (<code>year</code>), 2) logit-transformed survival  (<code>logit.s</code>), and 3) the coastal upwelling index for April (<code>CUI.apr</code>). There are 42 years of data (1964–2005).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## load the data
+<span class="kw">data</span>(SalmonSurvCUI)
+## get time indices
+years =<span class="st"> </span>SalmonSurvCUI[, <span class="dv">1</span>]
+## number of years of data
+TT =<span class="st"> </span><span class="kw">length</span>(years)
+## get response data: logit(survival)
+dat =<span class="st"> </span><span class="kw">matrix</span>(SalmonSurvCUI[, <span class="dv">2</span>], <span class="dt">nrow =</span> <span class="dv">1</span>)</code></pre></div>
+<p>As we have seen in other case studies, standardizing our covariate(s) to have zero-mean and unit-variance can be helpful in model fitting and interpretation. In this case, it’s a good idea because the variance of <code>CUI.apr</code> is orders of magnitude greater than <code>logit.s</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## get regressor variable
+CUI =<span class="st"> </span>SalmonSurvCUI[, <span class="dv">3</span>]
+## z-score the CUI
+CUI.z =<span class="st"> </span><span class="kw">matrix</span>((CUI -<span class="st"> </span><span class="kw">mean</span>(CUI))/<span class="kw">sqrt</span>(<span class="kw">var</span>(CUI)), <span class="dt">nrow =</span> <span class="dv">1</span>)
+## number of regr params (slope + intercept)
+m =<span class="st"> </span><span class="kw">dim</span>(CUI.z)[<span class="dv">1</span>] +<span class="st"> </span><span class="dv">1</span></code></pre></div>
+<p>Plots of logit-transformed survival and the <span class="math inline">\(z\)</span>-scored April upwelling index are shown in Figure <a href="fitting-a-univariate-dlm-with-marss.html#fig:plotdata">6.1</a>.</p>
+
+<div class="figure"><span id="fig:plotdata"></span>
+<img src="AFTS_files/figure-html/plotdata-1.png" alt="Time series of logit-transformed marine survival estimates for Snake River spring/summer Chinook salmon (top) and z-scores of the coastal upwelling index at 45N 125W (bottom). The x-axis indicates the year that the salmon smolts entered the ocean." width="576" />
+<p class="caption">
+Figure 6.1: Time series of logit-transformed marine survival estimates for Snake River spring/summer Chinook salmon (top) and <em>z</em>-scores of the coastal upwelling index at 45N 125W (bottom). The <em>x</em>-axis indicates the year that the salmon smolts entered the ocean.
+</p>
+</div>
+<p>Next, we need to set up the appropriate matrices and vectors for MARSS. Let’s begin with those for the process equation because they are straightforward.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## for process eqn
+B =<span class="st"> </span><span class="kw">diag</span>(m)  ## 2x2; Identity
+U =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow =</span> m, <span class="dt">ncol =</span> <span class="dv">1</span>)  ## 2x1; both elements = 0
+Q =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), m, m)  ## 2x2; all 0 for now
+<span class="kw">diag</span>(Q) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q.alpha&quot;</span>, <span class="st">&quot;q.beta&quot;</span>)  ## 2x2; diag = (q1,q2)</code></pre></div>
+<p>Defining the correct form for the observation model is a little more tricky, however, because of how we model the effect(s) of explanatory variables. In a DLM, we need to use <span class="math inline">\(\mathbf{Z}_t\)</span> (instead of <span class="math inline">\(\mathbf{d}_t\)</span>) as the matrix of known regressors/drivers that affect <span class="math inline">\(\mathbf{y}_t\)</span>, and <span class="math inline">\(\mathbf{x}_t\)</span> (instead of <span class="math inline">\(\mathbf{D}_t\)</span>) as the regression parameters. Therefore, we need to set <span class="math inline">\(\mathbf{Z}_t\)</span> equal to an <span class="math inline">\(n\)</span> <span class="math inline">\(\mathsf{x}\)</span> <span class="math inline">\(m\)</span> <span class="math inline">\(\mathsf{x}\)</span> <span class="math inline">\(T\)</span> array, where <span class="math inline">\(n\)</span> is the number of response variables (= 1; <span class="math inline">\(y_t\)</span> is univariate), <span class="math inline">\(m\)</span> is the number of regression parameters (= intercept + slope = 2), and <span class="math inline">\(T\)</span> is the length of the time series (= 42).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## for observation eqn
+Z =<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="kw">c</span>(<span class="dv">1</span>, m, TT))  ## NxMxT; empty for now
+Z[<span class="dv">1</span>, <span class="dv">1</span>, ] =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, TT)  ## Nx1; 1&#39;s for intercept
+Z[<span class="dv">1</span>, <span class="dv">2</span>, ] =<span class="st"> </span>CUI.z  ## Nx1; regr variable
+A =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>)  ## 1x1; scalar = 0
+R =<span class="st"> </span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>)  ## 1x1; scalar = r</code></pre></div>
+<p>Lastly, we need to define our lists of initial starting values and model matrices/vectors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## only need starting values for regr parameters
+inits.list =<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow =</span> m))
+## list of model matrices &amp; vectors
+mod.list =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R)</code></pre></div>
+<p>And now we can fit our DLM with MARSS.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## fit univariate DLM
+dlm1 =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">inits =</span> inits.list, <span class="dt">model =</span> mod.list)</code></pre></div>
+<pre><code>Success! abstol and log-log tests passed at 115 iterations.
+Alert: conv.test.slope.tol is 0.5.
+Test with smaller values (&lt;0.1) to ensure convergence.
+
+MARSS fit is
+Estimation method: kem 
+Convergence test: conv.test.slope.tol = 0.5, abstol = 0.001
+Estimation converged in 115 iterations. 
+Log-likelihood: -40.03813 
+AIC: 90.07627   AICc: 91.74293   
+ 
+          Estimate
+R.r        0.15708
+Q.q.alpha  0.11264
+Q.q.beta   0.00564
+x0.X1     -3.34023
+x0.X2     -0.05388
+
+Standard errors have not been calculated. 
+Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
+<p>Notice that the MARSS output does not list any estimates of the regression parameters themselves. Why not? Remember that in a DLM the matrix of states <span class="math inline">\((\mathbf{x})\)</span> contains the estimates of the regression parameters <span class="math inline">\((\boldsymbol{\theta})\)</span>. Therefore, we need to look in <code>dlm1$states</code> for the MLEs of the regression parameters, and in <code>dlm1$states.se</code> for their standard errors.</p>
+<p>Time series of the estimated intercept and slope are shown in Figure <a href="fitting-a-univariate-dlm-with-marss.html#fig:plotdlm1">6.2</a>. It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (<code>Q.q1</code>). In fact, although the effect of April upwelling appears to be increasing over time, it doesn’t really become important as an explanatory variable until about 1990 when the approximate 95% confidence interval for the slope no longer overlaps zero. <!-- % plot regression parameters --></p>
+
+<div class="figure"><span id="fig:plotdlm1"></span>
+<img src="AFTS_files/figure-html/plotdlm1-1.png" alt="Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the univariate DLM specified by Equations (6.5)–(6.7). Thin lines denote the mean \(\pm\) 2 standard deviations." width="576" />
+<p class="caption">
+Figure 6.2: Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the univariate DLM specified by Equations <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW1">(6.5)</a>–<a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(6.7)</a>. Thin lines denote the mean <span class="math inline">\(\pm\)</span> 2 standard deviations.
+</p>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-uss-problems.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-dlm-example-of-a-univariate-dlm.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-dlm-forecasting-with-a-univariate-dlm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -385,7 +426,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/fitting-univariate-state-space.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/DLM.Rmd",
 "text": "Edit"
 },
 "download": ["AFTS.pdf"],
