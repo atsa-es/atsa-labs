@@ -1,10 +1,10 @@
 # AFTS Labbook Info
 
 * [Writing the rmarkdown files](#writing-the-rmarkdown-files)
-* [Special Rmd conventions for AFTS](#special)
+* [Special Rmd conventions for AFTS](#special-conventions)
 * [Key files](#key-files)
 * [Directories](#directories)
-* [Building the book](#build)
+* [Building the book](#build-the-book)
 
 ## Writing the rmarkdown files
 
@@ -35,11 +35,11 @@ So ``foo-foo`` is ok and ``foo.foo`` is not
 
 Label chapters like with 'chap-' and a tag specific to that chapter
 
- # This is chapter foo {#chap-foo}
+    # This is chapter foo {#chap-foo}
 
 Label sections like with 'sec-' and a tag specific to that chapter
 
- # This is section foo {#sec-foo-this-section}
+    # This is section foo {#sec-foo-this-section}
 
 ### Cross-references
 
@@ -87,7 +87,7 @@ You can pass these in `fig.cap='This is my caption.'` but if your caption is lon
 ```{r foo, purl=FALSE}
 ```
 
-## Special conventions {#special}
+## Special conventions
 
 Look at the other Rmd files and follow the conventions for the first page.  These have
 
@@ -103,7 +103,7 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
     ```
 
 
-## To build the book {#build}
+## Build the book
 
     ```{r tmp, eval=FALSE}
     source("cleanDefsinRmd.R")
@@ -113,7 +113,7 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
     
 You can use 'Build Book' under the build tab in RStudio but make sure to run `cleanDefsinRmd.R` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
 
-## Key files {#key-files}
+## Key files
 
 * index.Rmd: First page.  Yaml metadata for the book is at the top of file
 * _output.yml output yaml is here
@@ -122,7 +122,7 @@ You can use 'Build Book' under the build tab in RStudio but make sure to run `cl
 * DESCRIPTION RStudio uses this to detect that this is a bookdown book.  
 * cleanDefsinRmd.R This is the script to populate the cleanedRmd folder with the Rmd files used in _bookdown.yml.  It replaces the mathdefs (like \AA), tangles the R code from the Rmd and puts in docs/Rcode.
 
-## Directories {#directories}
+## Directories
 
 Most of these you will see on GitHub.  A couple directories are only for your local machine.
 
