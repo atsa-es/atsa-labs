@@ -91,8 +91,9 @@ Equation \@ref(eq:dlm-dlmSW3) is, not surprisingly, equivalent to our standard M
 where $\xx_t = \ttheta_t$, $\BB_t = \GG_t$, $\uu_t = \CC_t = \cc_t = \zer$, $\yy_t = y_t$ (i.e., $\yy_t$ is 1 $\mathsf{x}$ 1), $\ZZ_t = \FF_t^{\top}$, $\aa_t = \DD_t = \dd_t = \zer$, and $\RR_t = r$ (i.e., $\RR_t$ is 1 $\mathsf{x}$ 1).
 
 
-## Fitting a univariate DLM with MARSS {#sec-dlm-fitting-a-univariate-dlm-with-marss}
-Now let's go ahead and analyze the DLM specified in Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). We begin by loading the data set (which is in the *MARSS* package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean ($year$), 2) logit-transformed survival\footnote{Survival in the original context was defined as the proportion of juveniles that survive to adulthood. Thus, we use the logit function, defined as $logit(p)=log_e(p/[1-p])$, to map survival from the open interval (0,1) onto the interval $(-\infty,\infty)$, which allows us to meet our assumption of normally distributed observation errors.} ($logit.s$), and 3) the coastal upwelling index for April ($CUI.apr$). There are 42 years of data (1964--2005).
+## Fitting a univariate DLM with ``MARSS()`` {#sec-dlm-fitting-a-univariate-dlm-with-marss}
+
+Now let's go ahead and analyze the DLM specified in Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). We begin by loading the data set (which is in the **MARSS** package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean (``year``), 2) logit-transformed survival \footnote{Survival in the original context was defined as the proportion of juveniles that survive to adulthood. Thus, we use the logit function, defined as $logit(p)=log_e(p/[1-p])$, to map survival from the open interval (0,1) onto the interval $(-\infty,\infty)$, which allows us to meet our assumption of normally distributed observation errors.} (``logit.s``), and 3) the coastal upwelling index for April (``CUI.apr``). There are 42 years of data (1964--2005).
 ```{r read.in.data, eval=TRUE}
 ## load the data
 data(SalmonSurvCUI)
@@ -104,7 +105,7 @@ TT = length(years)
 dat = matrix(SalmonSurvCUI[,2],nrow=1)
 ```
 
-As we have seen in other case studies, standardizing our covariate(s) to have zero-mean and unit-variance can be helpful in model fitting and interpretation. In this case, it's a good idea because the variance of $CUI.apr$ is orders of magnitude greater than $survival$.
+As we have seen in other case studies, standardizing our covariate(s) to have zero-mean and unit-variance can be helpful in model fitting and interpretation. In this case, it's a good idea because the variance of ``CUI.apr`` is orders of magnitude greater than ``logit.s``.
 ```{r z.score, eval=TRUE}
 ## get regressor variable
 CUI = SalmonSurvCUI[,3]
@@ -116,7 +117,7 @@ m = dim(CUI.z)[1] + 1
 Plots of logit-transformed survival and the $z$-scored April upwelling index are shown in Figure \@ref(fig:plotdata).
 
 
-(ref:plotdata) Time series of logit-transformed marine survival estimates for Snake River spring/summer Chinook salmon (top) and \textit{z}-scores of the coastal upwelling index at 45N 125W (bottom). The \textit{x}-axis indicates the year that the salmon smolts entered the ocean.
+(ref:plotdata) Time series of logit-transformed marine survival estimates for Snake River spring/summer Chinook salmon (top) and *z*-scores of the coastal upwelling index at 45N 125W (bottom). The *x*-axis indicates the year that the salmon smolts entered the ocean.
 
 ```{r plotdata, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=4, fig.width=6, fig.cap='(ref:plotdata)'}
 par(mfrow=c(m,1), mar=c(4,4,0.1,0), oma=c(0,0,2,0.5))
@@ -211,7 +212,7 @@ y_{t}|y_{1:t-1} &\sim \N(\zeta_{t},\Psi_{t}), \text{ where} \nonumber\\
 
 
 ### Forecasting a univariate DLM with MARSS {#sec-dlm-forecasting-a-univariate-dlm-with-marss}
-Working from Equation \@ref(eq:dlm-dlmFore3), we can now use MARSS to compute the expected value of the forecast at time $t$ $(\E [y_t|y_{1:t-1}] = \zeta_t)$, and its variance $(\var [y_t|y_{1:t-1}] = \Psi_t)$. For the expectation, we need $\FF_t\etaeta_t$. Recall that $\FF_t$ is our $1 \times m$ matrix of explanatory variables at time $t$ ($\FF_t$ is called $\ZZ_t$ in MARSS notation). The one-step ahead forecasts of the parameters at time $t$ $(\etaeta_t)$ are calculated as part of the Kalman filter algorithm---they are termed $\tilde{x}_t^{t-1}$ in MARSS notation and stored as ```xtt1``` in the list produced by the ```MARSSkfss()``` function.
+Working from Equation \@ref(eq:dlm-dlmFore3), we can now use ``MARSS()`` to compute the expected value of the forecast at time $t$ $(\E [y_t|y_{1:t-1}] = \zeta_t)$, and its variance $(\var [y_t|y_{1:t-1}] = \Psi_t)$. For the expectation, we need $\FF_t\etaeta_t$. Recall that $\FF_t$ is our $1 \times m$ matrix of explanatory variables at time $t$ ($\FF_t$ is called $\ZZ_t$ in MARSS notation). The one-step ahead forecasts of the parameters at time $t$ $(\etaeta_t)$ are calculated as part of the Kalman filter algorithm---they are termed $\tilde{x}_t^{t-1}$ in ``MARSS()`` notation and stored as ``xtt1`` in the list produced by the ``MARSSkfss()`` function.
 ```{r univ.DLM.fore.mean, eval=TRUE}
 ## get list of Kalman filter output
 kf.out = MARSSkfss(dlm1)
@@ -350,7 +351,7 @@ The ACF plot (Figure \@ref(fig:plotdlmACF)) shows no significant autocorrelation
 \newpage
 
 
-## Homework {#sec-dlm-homework}
+## Homework discussion and data {#sec-dlm-homework}
 
 For the homework this week we will use a DLM to examine some of the time-varying properties of the spawner-recruit relationship for Pacific salmon.  Much work has been done on this topic, particularly by Randall Peterman and his students and post-docs at Simon Fraser University.  To do so, researchers commonly use a Ricker model because of its relatively simple form, such that the number of recruits (offspring) born in year $t$ ($R_t$) from the number of spawners (parents) ($S_t$) is
 
