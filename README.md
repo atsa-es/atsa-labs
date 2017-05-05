@@ -1,12 +1,41 @@
 # AFTS Labbook Info
 
+* [Getting started with editing your chapter](#getting-started)
 * [style sheet](#style-sheet)
-* [Writing the rmarkdown files](#writing-the-rmarkdown-files)
+* [Notes on writing the rmarkdown files](#writing-the-rmarkdown-files)
 * [Special Rmd conventions for AFTS](#special-conventions)
 * [Key files](#key-files)
 * [Directories](#directories)
 * [Building the book](#build-the-book)
 * [.gitignore file](#gitignore-file)
+
+## Getting started
+[back to top](#afts-labbook-info)
+
+There are many pieces to a bookdown book and this README covers all the pieces.  It also covers some markdown special to bookdown cross-references and some conventions to keep our chapters in the same format in [Notes on writing the rmarkdown files](#writing-the-rmarkdown-files).
+
+Here is the quick start version.
+
+* **Where are the Rmd files for my chapter?**  They are in the folders with prefix "Lab-"
+* **There are few Rmd files there.  Which are used?** The file ``_bookdown.yml`` specifies which Rmd are used in the book.
+* **How do I just work on my chapter?** Edit a Rmd file as usual but use one of those in the "Lab-" folders as a template.
+* **But I cloned the whole repo.  Can I use 'Build Book' in RStudio?**  Well, yes but it takes a long time to build the whole book.  Here's how to do just your chapter.  
+    * Set your working directory to be your folder like 'Lab-fitting-DLMs'
+    * Edit your Rmd, like DLM.Rmd
+    * Click **knit**.  Ignore 'Build Book' in the Build tab.  
+    * knit will put the html files in your folder and you'll need to clean up later.  The mathdefs won't be replaced and you won't have a bibliography.  If that bugs you, put this yaml at the top of your Rmd
+    ```
+    ---
+    output: 
+      html_document:
+        includes:
+          before_body: [../tex/bracket-start.txt, ../tex/defs.tex, ../tex/bracket-end.txt]
+    bibliography: ../tex/Fish507.bib
+    ---
+    ```
+    You want to leave it there then you'll need to make a tex folder in your Lab- directory and copy mathdef.tex and Fish507.bib there.  Then get rid of the '../' in the file paths above.  The reason is that bookdown will detect this yaml and it is working from a directory above.  It won't find '../tex/'.
+* **How do I cite?**  The Fish507.bib file is in the folder "tex". Add bib citations there but search to make sure it is not already there.  "Lab-fitting-DLMs/DLM.Rmd" has examples of citations.
+* **Don't make changes to the docs folder.** That's were bookdown puts the website files and your changes will get wiped out.
 
 ## Style sheet
 [back to top](#afts-labbook-info)
@@ -123,6 +152,15 @@ Is different than
 
 * foo2
 ```
+
+### Citations
+
+The bib file is Fish507.bib in the tex folder.
+
+``[@Lamonetal1998; @ScheuerellWilliams2005]`` gets you (Lamon et al. 1998; Scheuerell and Williams 2006).
+
+``@Lamonetal1998`` gets Lamon et al. (1998)
+
 
 ## Special conventions
 [back to top](#afts-labbook-info)
