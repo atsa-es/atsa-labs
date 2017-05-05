@@ -33,7 +33,11 @@ Here is the quick start version.
     bibliography: ../tex/Fish507.bib
     ---
     ```
-    You want to leave it there then you'll need to make a tex folder in your Lab- directory and copy mathdef.tex and Fish507.bib there.  Then get rid of the '../' in the file paths above.  The reason is that bookdown will detect this yaml and it is working from a directory above.  It won't find '../tex/'.
+    If you want to leave it there then you'll need to make a tex folder in your Lab- directory and copy mathdef.tex and Fish507.bib there.  Then get rid of the '../' in the file paths above.  The reason is that bookdown will detect this yaml and it is working from a directory above.  It won't find '../tex/'.
+    
+    bookdown documentation suggests that this should work
+    ```bookdown::render_book( c("index.Rmd","cleanedRmd/basic-matrix-math.Rmd"), preview=TRUE)```
+    but I have not been able to get that to work and it puts garbage in the docs folder.
 * **How do I cite?**  The Fish507.bib file is in the folder "tex". Add bib citations there but search to make sure it is not already there.  "Lab-fitting-DLMs/DLM.Rmd" has examples of citations.
 * **Don't make changes to the docs folder.** That's were bookdown puts the website files and your changes will get wiped out.
 
