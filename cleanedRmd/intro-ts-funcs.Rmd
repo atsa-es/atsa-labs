@@ -402,10 +402,9 @@ An alternative to decomposition for removing trends is differencing.  We saw in 
 
 \begin{equation}
 (\#eq:diffDefnB)
-\nabla^d x_t = (1-**B**)^d x_t,
+\nabla^d x_t = (1-\mathbf{B})^d x_t,
 \end{equation}
-
-\noindent where **B** is the backshift operator (*i.e.*, $**B**^k x_t = x_{t-k}$ for $k \geq 1$).
+where **B** is the backshift operator (*i.e.*, $\mathbf{B}^k x_t = x_{t-k}$ for $k \geq 1$).
 
 So, for example, a random walk is one of the most simple and widely used time series models, but it is not stationary.  We can write a random walk model as
 
@@ -534,7 +533,7 @@ acf(co2, lag.max=36)
 ```
  
 
-\noindent There are 4 things about Figure \@ref(fig:ts-plotACFb) that are noteworthy:
+There are 4 things about Figure \@ref(fig:ts-plotACFb) that are noteworthy:
 
 
 1.  the ACF at lag 0, $r_0$, equals 1 by default (*i.e.*, the correlation of a time series with itself)--it's plotted as a reference point;
@@ -542,7 +541,7 @@ acf(co2, lag.max=36)
 3.  the horizontal blue lines are the approximate 95\% CI's; and
 4.  there is very high autocorrelation even out to lags of 36 months.
 
-                                                                               As an alternative to the default plots for **acf** objects, let's define a new plot function for **acf** objects with some better features:
+As an alternative to the default plots for **acf** objects, let's define a new plot function for **acf** objects with some better features:
 
 ```{r ts-BetterPlotACF, eval=TRUE, echo=TRUE}
 ## better ACF plot
@@ -555,7 +554,7 @@ plot.acf <- function(ACFobj) {
        xlab="Lag",ylab="Correlation",las=1)
   abline(h=-1/nn+c(-2,2)/sqrt(nn),lty="dashed",col="blue")
   abline(h=0)
-}                                                                                                            
+}
 ```
 
 Now we can assign the result of ```acf()``` to a variable and then use the information contained therein to plot the correlogram with our new plot function.
@@ -581,9 +580,7 @@ par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## correlogram of the CO2 data
 plot.acf(co2.acf)
 ```
-          
-
-\noindent Notice that all of the relevant information is still there (Figure \@ref(fig:ts-plotbetterACF)), but now $r_0=1$ is not plotted at lag-0 and the lags on the $x$-axis are displayed correctly as integers.
+Notice that all of the relevant information is still there (Figure \@ref(fig:ts-plotbetterACF)), but now $r_0=1$ is not plotted at lag-0 and the lags on the $x$-axis are displayed correctly as integers.
 
 Before we move on to the PACF, let's look at the ACF for some deterministic time series, which will help you identify interesting properties (*e.g.*, trends, seasonal effects) in a stochastic time series, and account for them in time series models--an important topic in this course.  First, let's look at a straight line.
 
@@ -622,9 +619,7 @@ plot.ts(tt, ylab=expression(italic(x[t])))
 ## plot ACF
 plot.acf(line.acf)
 ```
- 
-
-\noindent The correlogram for a straight line is itself a linearly decreasing function over time (Figure \@ref(fig:ts-plotLinearACF)).
+The correlogram for a straight line is itself a linearly decreasing function over time (Figure \@ref(fig:ts-plotLinearACF)).
 
 Now let's examine the ACF for a sine wave and see what sort of pattern arises.
 
@@ -659,9 +654,7 @@ plot.ts(tt, ylab=expression(italic(x[t])))
 ## plot ACF
 plot.acf(sine.acf)
 ```
- 
-
-\noindent Perhaps not surprisingly, the correlogram for a sine wave is itself a sine wave whose amplitude decreases linearly over time (Figure \@ref(fig:ts-plotSineACF)).
+Perhaps not surprisingly, the correlogram for a sine wave is itself a sine wave whose amplitude decreases linearly over time (Figure \@ref(fig:ts-plotSineACF)).
 
 Now let's examine the ACF for a sine wave with a linear downward trend and see what sort of patterns arise.
 
@@ -696,9 +689,7 @@ plot.ts(tt, ylab=expression(italic(x[t])))
 ## plot ACF
 plot.acf(sili.acf)
 ```
- 
-
-\noindent The correlogram for a sine wave with a trend is itself a nonsymmetrical sine wave whose amplitude and center decrease over time (Figure \@ref(fig:ts-plotSiLiACF)).
+The correlogram for a sine wave with a trend is itself a nonsymmetrical sine wave whose amplitude and center decrease over time (Figure \@ref(fig:ts-plotSiLiACF)).
 
 As we have seen, the ACF is a powerful tool in time series analysis for identifying important features in the data.  As we will see later, the ACF is also an important diagnostic tool for helping to select the proper order of $p$ and $q$ in ARMA($p$,$q$) models.
 
@@ -756,9 +747,7 @@ par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## correlogram of the CO2 data
 pacf(co2, lag.max=36)
 ```
- 
-
-\noindent Notice in Figure \@ref(fig:ts-plotPACFb) that the partial autocorrelation at lag-1 is very high (it equals the ACF at lag-1), but the other values at lags > 1 are relatively small, unlike what we saw for the ACF.  We will discuss this in more detail later on in this lab.
+Notice in Figure \@ref(fig:ts-plotPACFb) that the partial autocorrelation at lag-1 is very high (it equals the ACF at lag-1), but the other values at lags > 1 are relatively small, unlike what we saw for the ACF.  We will discuss this in more detail later on in this lab.
 
 Notice also that the PACF plot again has real-valued indices for the time lag, but it does not include any value for lag-0 because it is impossible to remove any intermediate autocorrelation between $t$ and $t-k$ when $k=0$, and therefore the PACF does not exist at lag-0.  If you would like, you can use the ```plot.acf()``` function we defined above to plot the PACF estimates because ```acf()``` and ```pacf()``` produce identical list structures (results not shown here).
 
@@ -850,7 +839,6 @@ ccf(suns, lynx, ylab="Cross-correlation")
  
 
 From Figures \@ref(fig:ts-plotSunsLynx) and \@ref(fig:ts-plotCCFb) it looks like lynx numbers are relatively low 3-5 years after high sunspot activity (*i.e.*, significant correlation at lags of -3 to -5).
-
 
 
 ## White noise (WN) {#sec-ts-white-noise-wn}

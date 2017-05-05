@@ -351,9 +351,9 @@ Figure 3.10: Correlogram of the observed atmospheric CO<span class="math inline"
 <li>the ACF at lag 0, <span class="math inline">\(r_0\)</span>, equals 1 by default (<em>i.e.</em>, the correlation of a time series with itself)–it’s plotted as a reference point;</li>
 <li>the <span class="math inline">\(x\)</span>-axis has decimal values for lags, which is caused by R using the year index as the lag rather than the month;</li>
 <li>the horizontal blue lines are the approximate 95% CI’s; and</li>
-<li><p>there is very high autocorrelation even out to lags of 36 months.</p>
-<pre><code>                                                                       As an alternative to the default plots for **acf** objects, let&#39;s define a new plot function for **acf** objects with some better features:</code></pre></li>
+<li>there is very high autocorrelation even out to lags of 36 months.</li>
 </ol>
+<p>As an alternative to the default plots for <strong>acf</strong> objects, let’s define a new plot function for <strong>acf</strong> objects with some better features:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## better ACF plot
 plot.acf &lt;-<span class="st"> </span>function(ACFobj) {
     rr &lt;-<span class="st"> </span>ACFobj$acf[-<span class="dv">1</span>]

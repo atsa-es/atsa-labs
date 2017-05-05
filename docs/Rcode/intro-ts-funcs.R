@@ -212,7 +212,7 @@ plot.acf <- function(ACFobj) {
        xlab="Lag",ylab="Correlation",las=1)
   abline(h=-1/nn+c(-2,2)/sqrt(nn),lty="dashed",col="blue")
   abline(h=0)
-}                                                                                                            
+}
 
 ## ----ts-betterACF, eval=FALSE, echo=TRUE---------------------------------
 ## ## acf of the CO2 data
