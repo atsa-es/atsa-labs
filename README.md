@@ -71,7 +71,9 @@ If you want the output of code, then decide if you want that output in code font
 
 ### Math shortcuts
 
-You can use the shortcuts in tex/defs.tex.  These are things like \AA for ``\mathbf{A}``.
+You can use the shortcuts in tex/defs.tex.  These are things like \AA for ``\mathbf{A}``.  Note that for html, this is processed with mathJax.  For inline, mathJax looks a bit meh.  
+
+We might think of only using \AA in equations and using ``**A**`` in text.  The downside is that it is easy for our text font to not match our font in our equations, which is determined by mathJax.
 
 ### Label chunks uniquely with a unique tag for your chapter
 
