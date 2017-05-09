@@ -380,10 +380,18 @@ mod_5 =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt"
 <p>We will compute the Leave One Out Information Criterion (LOOIC) using the loo package. Like AIC, lower is better.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(loo)
 <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_1))$looic</code></pre></div>
-<pre><code>[1] 1598.7</code></pre>
+<pre><code>Warning: Some Pareto k diagnostic values are slightly high. See
+help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
+<pre><code>[1] 1600.224</code></pre>
 <p>Table of the LOOIC values:</p>
-<p><code>r   looics = c(loo(extract_log_lik(mod_1))$looic, loo(extract_log_lik(mod_2))$looic,        loo(extract_log_lik(mod_3))$looic, loo(extract_log_lik(mod_4))$looic,        loo(extract_log_lik(mod_5))$looic)   looic.table = data.frame(trends = 1:5, LOOIC = looics)   looic.table</code></p>
-<p><code>trends    LOOIC   1      1 1598.700   2      2 1530.603   3      3 1471.334   4      4 1454.646   5      5 1447.238</code></p>
+<p><code>r   looics = c(loo(extract_log_lik(mod_1))$looic, loo(extract_log_lik(mod_2))$looic,        loo(extract_log_lik(mod_3))$looic, loo(extract_log_lik(mod_4))$looic,        loo(extract_log_lik(mod_5))$looic)</code></p>
+<p><code>Warning: Some Pareto k diagnostic values are slightly high. See   help('pareto-k-diagnostic') for details.</code></p>
+<p>``` Warning: Some Pareto k diagnostic values are too high. See help(‘pareto-k- diagnostic’) for details.</p>
+<p>Warning: Some Pareto k diagnostic values are too high. See help(‘pareto-k- diagnostic’) for details.</p>
+<p>Warning: Some Pareto k diagnostic values are too high. See help(‘pareto-k- diagnostic’) for details.</p>
+<p>Warning: Some Pareto k diagnostic values are too high. See help(‘pareto-k- diagnostic’) for details. ```</p>
+<p><code>r   looic.table = data.frame(trends = 1:5, LOOIC = looics)   looic.table</code></p>
+<p><code>trends    LOOIC   1      1 1600.224   2      2 1531.636   3      3 1470.748   4      4 1451.330   5      5 1445.553</code></p>
 </div>
 </div>
             </section>
