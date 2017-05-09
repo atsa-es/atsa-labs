@@ -5,7 +5,7 @@ knitr::opts_knit$set(unnamed.chunk.label = "mlr-")
 # Linear regression in matrix form  {#chap-mlr}
 \chaptermark{Linear regression}
 
-This chapter shows how to write linear regression models in matrix form. The purpose is to get you comfortable writing multivariate linear models in different matrix forms before we start working with time-series versions of these models.  Each matrix form is an equivalent model for the data, but written in different forms.  You do not need to worry which form is better or worse at this point.  Simply get comfortable writing multivariate linear models in different matrix forms.
+This chapter shows how to write linear regression models in matrix form. The purpose is to get you comfortable writing multivariate linear models in different matrix forms before we start working with time series versions of these models.  Each matrix form is an equivalent model for the data, but written in different forms.  You do not need to worry which form is better or worse at this point.  Simply get comfortable writing multivariate linear models in different matrix forms.
 
 A script with all the R code in the chapter can be downloaded  [here]("./Rcode/linear-regression-models-matrix.R").  
 
@@ -233,7 +233,7 @@ The number of rows of $\mathbf{Z}$ is always $n$, the number of rows of $\mathbf
 
 
 ### When does Form 2 arise?  {#sec-mlr-form2when}
-Form 2 is similar to how multivariate time-series models are typically written for reading by humans (on a whiteboard or paper).  In these models, we see equations like this:
+Form 2 is similar to how multivariate time series models are typically written for reading by humans (on a whiteboard or paper).  In these models, we see equations like this:
 \begin{equation}
 (\#eq:ss1)
 \begin{bmatrix}y_1\\y_2\\y_3\\y_4\end{bmatrix}_t
@@ -357,7 +357,7 @@ as before.
 
 
 ### Code to solve for parameters in Form 2  {#sec-mlr-solveform2code}
-In the homework, you will use the R code in this section to solve for the parameters in Form 2.  Later when you are fitting multivariate time-series models, you will not solve for parameters this way but you will need to both construct $\mathbf{Z}$ matrices in R and read $\mathbf{Z}$ matrices. The homework will give you practice creating $\mathbf{Z}$ matrices in R.
+In the homework, you will use the R code in this section to solve for the parameters in Form 2.  Later when you are fitting multivariate time series models, you will not solve for parameters this way but you will need to both construct $\mathbf{Z}$ matrices in R and read $\mathbf{Z}$ matrices. The homework will give you practice creating $\mathbf{Z}$ matrices in R.
 
 ```{r mlr-stackloss.form2.solve, tidy=FALSE}
 #make your y and x matrices

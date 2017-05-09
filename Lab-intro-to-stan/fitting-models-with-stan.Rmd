@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 ```
 
-# Stan for Bayesian time-series analysis {#chap-stan}
+# Stan for Bayesian time series analysis {#chap-stan}
 \chaptermark{Stan}
 
 For this lab, we will use [Stan](http://mc-stan.org/documentation/) for fitting models. These examples are primarily drawn from the Stan manual and previous code from this class.  For running the code in this chapter, you will need to download and install **RStan** for your operating system: follow the instructions [here](http://mc-stan.org/interfaces/rstan.html). 
@@ -11,7 +11,7 @@ A script with all the R code in the chapter can be downloaded  [here]("./Rcode/f
 
 ## Stan packages and chapter data sets {#sec-stan-packages-data}
 
-You will need the **statss** package we have written for fitting state-space time-series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/eric-ward/safs-timeseries).  Install  using the **devtools** package.
+You will need the **statss** package we have written for fitting state-space time series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/eric-ward/safs-timeseries).  Install  using the **devtools** package.
 ```{r stan-load, eval=FALSE}
 library(devtools)
 devtools::install_github("eric-ward/safs-timeseries/statss")
@@ -146,7 +146,7 @@ rw = fit_stan(y = Temp, est_drift = FALSE, model_name = "rw")
 
 ## Autoregressive models {#sec-stan-ar1}
 
-A variation of the random walk model described previously is the autoregressive time-series model of order 1, AR(1). This model is essentially the same as the random walk model but it introduces an estimated coefficient, which we'll call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean -- when $\phi$ = 1, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we'll discuss more in future lectures. The math to describe the AR(1) model is: 
+A variation of the random walk model described previously is the autoregressive time series model of order 1, AR(1). This model is essentially the same as the random walk model but it introduces an estimated coefficient, which we will call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean -- when $\phi$ = 1, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we'll discuss more in future lectures. The math to describe the AR(1) model is: 
 $$y_t = \phi y_{t-1} + e_{t}$$. 
 
 The ``fit_stan()`` function can fit higher order AR models, but for now we just want to fit an AR(1) model and make a histogram of phi.

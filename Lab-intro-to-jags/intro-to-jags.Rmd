@@ -4,10 +4,10 @@ knitr::opts_knit$set(unnamed.chunk.label = "ts-")
 ```
 
 
-# JAGS for Bayesian time-series analysis  {#chap-jags}
+# JAGS for Bayesian time series analysis  {#chap-jags}
 \chaptermark{JAGS}
 
-In this lab, we will work through using Bayesian methods to estimate parameters in time series models. There are a variety of software tools to do time-series analysis using Bayesian methods. R lists a number of packages available on the R Cran [TimeSeries](http://cran.r-project.org/web/views/TimeSeries.html) task view.  
+In this lab, we will work through using Bayesian methods to estimate parameters in time series models. There are a variety of software tools to do time series analysis using Bayesian methods. R lists a number of packages available on the R Cran [TimeSeries](http://cran.r-project.org/web/views/TimeSeries.html) task view.  
 
 Software to implement more complicated models is also available, and many of you are probably familiar with these options (AD Model Builder and Template Model Builder, WinBUGS, OpenBUGS, JAGS, Stan, to name a few). In this chapter, we will show you how to write state-space models in JAGS and fit these models.  
 
@@ -19,7 +19,7 @@ library(R2jags)
 
 ## The airquality dataset {#sec-jags-dataset}
 
-For data for this lab, we will include a dataset on air quality in New York. We will load the data and create a couple new variables for future use. For the majority of our models, we are going to treat wind speed as the response variable for our time-series models. 
+For data for this lab, we will include a dataset on air quality in New York. We will load the data and create a couple new variables for future use. For the majority of our models, we are going to treat wind speed as the response variable for our time series models. 
 
 ```{r jags-loaddata, echo=TRUE, results='hide', eval=TRUE}
 data(airquality)
@@ -284,7 +284,7 @@ removefiles=c(removefiles, model.loc)
 
 ## Autoregressive AR(1) time series models {#sec-jags-ar1}
 
-A variation of the random walk model described previously is the autoregressive time-series model of order 1, AR(1). This model introduces a coefficient, which we will call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean---when $\phi = 1$, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we will discuss more in future lectures. The math to describe the AR(1) time series model is:
+A variation of the random walk model described previously is the autoregressive time series model of order 1, AR(1). This model introduces a coefficient, which we will call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean---when $\phi = 1$, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we will discuss more in future lectures. The math to describe the AR(1) time series model is:
 
 \begin{equation}
 E[y_t] = \phi * y_{t-1} + e_{t-1}
@@ -415,7 +415,7 @@ removefiles=c(removefiles, model.loc)
 
 ## Forecasting with JAGS models {#sec-jags-forecast}
 
-There are a number of different approaches to using Bayesian time-series models to perform forecasting. One approach might be to fit a model, and use those posterior distributions to forecast as a secondary step (say within R). A more streamlined approach is to do this within the JAGS code itself. We can take advantage of the fact that JAGS allows you to include NAs in the response variable (but never in the predictors). Let's use the same Wind dataset, and the univariate state-space model described above to forecast three time steps into the future. We can do this by including 3 more NAs in the dataset, and incrementing the variable ```N``` by 3.
+There are a number of different approaches to using Bayesian time series models to perform forecasting. One approach might be to fit a model, and use those posterior distributions to forecast as a secondary step (say within R). A more streamlined approach is to do this within the JAGS code itself. We can take advantage of the fact that JAGS allows you to include NAs in the response variable (but never in the predictors). Let's use the same Wind dataset, and the univariate state-space model described above to forecast three time steps into the future. We can do this by including 3 more NAs in the dataset, and incrementing the variable ```N``` by 3.
 
 ```{r jags-cov-forecast, results='hide'}
 jags.data = list("Y"=c(Wind,NA,NA,NA),"N"=(N+3))
