@@ -1,5 +1,6 @@
 # AFTS Labbook Info
 
+* [Installing bookdown](#installing-bookdown)
 * [Getting started with editing your chapter](#getting-started)
 * [style sheet](#style-sheet)
 * [Notes on writing the rmarkdown files](#writing-the-rmarkdown-files)
@@ -7,9 +8,26 @@
 * [Key files](#key-files)
 * [Directories](#directories)
 * [Building the book](#build-the-book)
+* [Building a chapter](#build-a-chapter)
 * [.gitignore file](#gitignore-file)
 
-## Getting started
+## Installing bookdown
+[back to top](#installing-bookdown)
+
+    ```
+    library(devtools)
+    install_github("rstudio/bookdown")
+    ```
+
+To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
+
+[Building a book](#build-the-book) Note, if you build the whole book, everything needs to be able to run.  That means you need STAN, JAGS, and all the requisite packages installed.  If you just want to update one chapter, then see the section on that.
+
+[Build a chapter](#build-a-chapter) If you just want to work on one chapter or you making a fix to a chapter, go to this section.
+
+Make sure to look at the section on the .gitignore file since bookdown produces a lot of extra files that you will not want on the AFTSLabbook GitHub site.
+
+## Getting started editing a chapter
 [back to top](#afts-labbook-info)
 
 There are many pieces to a bookdown book and this README covers all the pieces.  It also covers some markdown special to bookdown cross-references and some conventions to keep our chapters in the same format in [Notes on writing the rmarkdown files](#writing-the-rmarkdown-files).
@@ -17,7 +35,7 @@ There are many pieces to a bookdown book and this README covers all the pieces. 
 Here is the quick start version.
 
 * **Where are the Rmd files for my chapter?**  They are in the folders with prefix "Lab-"
-* **There are few Rmd files there.  Which are used?** The file ``_bookdown.yml`` specifies which Rmd are used in the book.
+* **There are few Rmd files there.  Which are used?** The file ``_bookdown.yml`` specifies which Rmd are used in the book.  The file specifies ``cleanedRmd/`` is made from your Rmd file by the code ``cleanDefsinRmd.R``.  You'll need to run that on your file after your finish your Rmd work.
 * **How do I just work on my chapter?** Edit a Rmd file as usual but use one of those in the "Lab-" folders as a template.
 * **But I cloned the whole repo.  Can I use 'Build Book' in RStudio?**  Well, yes but it takes a long time to build the whole book.  Here's how to do just your chapter.  
     * Set your working directory to be your folder like 'Lab-fitting-DLMs'
@@ -213,7 +231,7 @@ Most of these you will see on GitHub.  A couple directories are only for your lo
 
 ### docs
 
-This is where bookdown put the html files.  It also has an Rcode and data folders.  `cleanDefsinRmd()` tangles the Rmds and put the R scripts in the Rcode folder.  You need to put your data files in the data folder so that the user can download them.  See the Rmd file for intro-ts-funcs.Rmd for an example.
+This is where bookdown puts the html files.  It also has an Rcode and data folders.  `cleanDefsinRmd()` tangles the Rmds and put the R scripts in the Rcode folder.  You need to put your data files in the data folder so that the user can download them.  See the Rmd file for intro-ts-funcs.Rmd for an example.
 
 ### individual chapter folders
 
@@ -227,9 +245,9 @@ This has cover image though not used anywhere (yet).
 
 This has tex files used for the PDF production.
 
-### _bookdown_files
+### _bookdown_files (local machine only)
 
-bookdown populates this.  It has cache.
+bookdown populates this.  It has cache.  You don't want this on GitHub.
 
 ### libs (local machine only)
 
@@ -245,7 +263,7 @@ Here is what my .gitignore looks like:
 ```
 #RProj files
 .Rproj.user/
-AFTS-Labbook.Rproj
+*.Rproj
 AFTS_cache/
 AFTS_files/
 AFTS.Rmd
