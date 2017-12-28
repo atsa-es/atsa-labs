@@ -227,6 +227,13 @@ If you are adding a chapter, then you will need to re-build the whole book to ge
 
 If you are working on an existing chapter and just making some updates, then you don't need to re-build the whole book.  You just need to update the docs/yourchap.html and figure pngs in docs/Applied_Time_Series_Analysis/figure_html/
 
+Making bigger changes to your chapter? Then edit your Rmd in your ``Lab-`` folder.  Once that is ready, run ``cleanDefsinRmd.R`` to clean up the Rmd for bookdown.
+
+Making minor changes? Then edit your Rmd in your ``Lab-`` folder AND make the same edits to the Rmd in the cleanedRmd folder.  Then knit the Rmd in the cleanedRmd folder, then you'll need to move the files to the right places.
+
+Making really minor changes? Then edit your Rmd in your ``Lab-`` folder AND make the same edits to the html in the docs folder.  No need to knit anything.  You are changing the Rmd so that your changes are not wiped out when the whole book is rebuilt later.
+
+
 ## Key files
 [back to top](#key-files)
 
