@@ -214,8 +214,21 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
     
 You can use 'Build Book' under the build tab in RStudio but make sure to run `cleanDefsinRmd.R` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
 
+## Build a chapter
+[back to top](#build-a-chapter)
+
+    ```{r tmp, eval=FALSE}
+    source("cleanDefsinRmd.R")
+    bookdown::render_book("index.Rmd", "bookdown::gitbook")
+    bookdown::render_book("index.Rmd", "bookdown::pdf_book")
+    ```
+    
+If you are adding a chapter, then you will need to re-build the whole book to get the index.html file updated.  But work on your chapter on its own until it is done.  Just knit the Rmd as described in [Getting started with editing your chapter](#getting-started) and when you are ready, build the whole book.
+
+If you are working on an existing chapter and just making some updates, then you don't need to re-build the whole book.  You just need to update the docs/yourchap.html and figure pngs in docs/Applied_Time_Series_Analysis/figure_html/
+
 ## Key files
-[back to top](#afts-labbook-info)
+[back to top](#key-files)
 
 * index.Rmd: First page.  Yaml metadata for the book is at the top of file
 * _output.yml output yaml is here
@@ -256,7 +269,7 @@ To build the book on your local machine, you'll install the bookdown package and
 ## gitignore file
 [back to top](#afts-labbook-info)
 
-I have many files in my local repository that don't need to be on GitHub.  All the `AFTS` files are stuff generated if a book build fails, and the clean up fails.  Normally all this is in the docs folder.  The `#Misc` stuff is stuff I am working on and have not cleaned up yet.
+I have many files in my local repository that don't need to be on GitHub.  If a book build fails, the clean up fails so you will have a lot of extra directories and files in your base directory.  Normally, if build does not fail, bookdown moves this to the docs folder.  The `#Misc` stuff is stuff I am working on and have not cleaned up yet.
 
 Here is what my .gitignore looks like:
 
@@ -264,13 +277,13 @@ Here is what my .gitignore looks like:
 #RProj files
 .Rproj.user/
 *.Rproj
-AFTS_cache/
-AFTS_files/
-AFTS.Rmd
-AFTS.tex
-AFTS.pdf
-AFTS.log
-AFTS.toc
+Applied_Time_Series_Analysis_cache/
+Applied_Time_Series_Analysis_files/
+Applied_Time_Series_Analysis.Rmd
+Applied_Time_Series_Analysis.tex
+Applied_Time_Series_Analysis.pdf
+Applied_Time_Series_Analysis.log
+Applied_Time_Series_Analysis.toc
 libs
 
 #Misc
