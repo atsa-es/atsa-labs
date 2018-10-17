@@ -140,7 +140,7 @@ model {
    tau.obs ~ dgamma(0.001,0.001); # This is inverse gamma
    sd.obs <- 1/sqrt(tau.obs); # sd is treated as derived parameter
    phi ~ dunif(-1,1);
-   tau.cor <- tau.obs * (1-phi*phi); # Var = sigma2 * (1-rho^2)
+   tau.cor <- tau.obs / (1-phi*phi); # Var = sigma2 * (1-rho^2)
    
    # Jags is not vectorized, so we have to loop over observations
    epsilon[1] <- Y[1] - mu;
