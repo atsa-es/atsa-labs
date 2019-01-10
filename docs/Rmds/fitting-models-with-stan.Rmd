@@ -1,0 +1,297 @@
+```{r stan-setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+```
+
+# Stan for Bayesian time series analysis {#chap-stan}
+\chaptermark{Stan}
+
+For this lab, we will use [Stan](http://mc-stan.org/documentation/) for fitting models. These examples are primarily drawn from the Stan manual and previous code from this class.  
+
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-models-with-stan.R).
+
+## Stan packages and chapter data sets {#sec-stan-packages-data}
+
+You will need the **atsar** package we have written for fitting state-space time series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/nwfsc-timeseries/atsar).  Install  using the **devtools** package.
+```{r stan-load, eval=FALSE}
+library(devtools)
+devtools::install_github("nwfsc-timeseries/atsar")
+```
+
+In addition, you will need the **rstan** and **datasets** packages. After installing, if needed, load the packages:
+```{r stan-loadpackages, results='hide', warning=FALSE, message=FALSE}
+library(atsar)
+library(rstan)
+library(datasets)
+```
+
+Once you have Stan and **rstan** installed, optimize Stan on your machine:
+```{r stan-rstan-setup, warning=FALSE, message=FALSE, results='hide'}
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+```
+
+For this lab, we will use a data set on airquality in New York from the **datasets** package. Load the data and create a couple new variables for future use. 
+
+```{r stan-data}
+data(airquality)
+Wind = airquality$Wind # wind speed
+Temp = airquality$Temp # air temperature
+```
+
+## Linear regression {#sec-stan-lr}
+
+We'll start with the simplest time series model possible: linear regression with only an intercept, so that the predicted values of all observations are the same. There are several ways we can write this equation. First, the predicted values can be written as $E[Y_{t}] = \beta x$, where $x=1$. Assuming that the residuals are normally distributed, the model linking our predictions to observed data is written as 
+$$y_t = \beta x + e_{t}, e_{t} \sim N(0,\sigma), x=1$$
+
+An equivalent way to think about this model is that instead of the residuals as normally distributed with mean zero, we can think of the data $y_t$ as being drawn from a normal distribution with a mean of the intercept, and the same residual standard deviation:
+$$Y_t \sim N(E[Y_{t}],\sigma)$$
+Remember that in linear regression models, the residual error is interpreted as independent and identically distributed observation error.
+
+To run this model using our package, we'll need to specify the response and predictor variables. The covariate matrix with an intercept only is a matrix of 1s. To double check, you could always look at 
+
+```{r stan-lm}
+x = model.matrix(lm(Temp~1))
+```
+
+Fitting the model using our function is done with this code, 
+
+```{r stan-lr1, warning=FALSE, message=FALSE, results='hide', cache=TRUE}
+lm_intercept = fit_stan(y = as.numeric(Temp), x = rep(1, length(Temp)),
+  model_name = "regression")
+```
+
+Coarse summaries of ``stanfit`` objects can be examined by typing one of the following
+
+```{r stan-lm-sum, results='hide'}
+lm_intercept
+#this is huge
+summary(lm_intercept)
+```
+
+But to get more detailed output for each parameter, you have to use the ``extract()`` function, 
+```{r stan-extract-lm}
+pars = extract(lm_intercept)
+names(pars)
+```
+
+``extract()`` will return the draws from the posterior for your parameters and any derived variables specified in your stan code.  In this case, our model is 
+$$y_t = \beta \times 1 + e_t, e_t \sim N(0,\sigma)$$
+so our estimated parameters are $\beta$ and $\sigma$.  Our stan code computed the derived variables: predicted $y_t$ which is $\hat{y}_t = \beta \times 1$ and the log-likelihood.  lp__ is the log posterior which is automatically returned.
+
+We can then make basic plots or summaries of each of these parameters, 
+
+```{r stan-hist}
+hist(pars$beta, 40, col="grey", xlab="Intercept", main="")
+quantile(pars$beta, c(0.025,0.5,0.975))
+```
+
+One of the other useful things we can do is look at the predicted values of our model ($\hat{y}_t=\beta \times 1$) and overlay the data. The predicted values are *pars$pred*.
+
+```{r stan-fig-lm, fig.cap='Data and predicted values for the linear regression model.'}
+plot(apply(pars$pred, 2, mean), main="Predicted values", lwd=2, 
+  ylab="Wind", ylim= c(min(pars$pred), max(pars$pred)), type="l")
+lines(apply(pars$pred, 2, quantile,0.025))
+lines(apply(pars$pred, 2, quantile,0.975))
+points(Wind, col="red")
+```
+
+### Burn-in and thinning {#sec-stan-burn}
+
+To illustrate the effects of the burn-in/warmup period and thinning, we can re-run the above model, but for just 1 MCMC chain (the default is 3).  
+
+```{r stan-lm2, cache=TRUE, results='hide'}
+lm_intercept = fit_stan(y = Temp, x = rep(1, length(Temp)),
+  model_name = "regression", 
+  mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
+```
+
+Here is a plot of the time series of `beta` with one chain and no burn-in. Based on visual inspection, when does the chain converge? 
+
+```{r stan-fig-burnin, fig.cap='A time series of our posterior draws using one chain and no burn-in.'}
+pars = extract(lm_intercept)
+plot(pars$beta)
+```
+
+
+## Linear regression with correlated errors {#sec-stan-lr-ar}
+
+In our first model, the errors were independent in time. We're going to modify this to model autocorrelated errors. Autocorrelated errors are widely used in ecology and other fields -- for a greater discussion, see Morris and Doak (2002) Quantitative Conservation Biology. To make the errors autocorrelated, we start by defining the error in the first time step, ${e}_{1} = y_{1} - \beta$. The expectation of ${Y_t}$ in each time step is then written as 
+$$E[{Y_t}] = \beta + \phi  e_{t-1}$$
+
+In addition to affecting the expectation, the correlation parameter $\phi$ also affects the variance of the errors, so that 
+$${ \sigma  }^{ 2 }={ \psi  }^{ 2 }\left( 1-{ \phi  }^{ 2 } \right)$$
+Like in our first model, we assume that the data follows a normal likelihood (or equivalently that the residuals are normally distributed), $y_t = E[Y_t] + e_t$, or $Y_t \sim N(E[{Y_t}], \sigma)$. Thus, it is possible to express the subsequent deviations as ${e}_{t} = {y}_{t} - E[{Y_t}]$, or equivalently as ${e}_{t} = {y}_{t} - \beta -\phi  {e}_{t-1}$. 
+
+We can fit this regression with autocorrelated errors by changing the model name to  'regression_cor' 
+
+```{r stan-lr-ar, cache=TRUE, results='hide'}
+lm_intercept_cor = fit_stan(y = Temp, x = rep(1, length(Temp)),
+  model_name = "regression_cor", 
+  mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
+```
+
+## Random walk model {#sec-stan-rw}
+
+All of the previous three models can be interpreted as observation error models. Switching gears, we can alternatively model error in the state of nature, creating process error models. A simple process error model that many of you may have seen before is the random walk model. In this model, the assumption is that the true state of nature (or latent states) are measured perfectly. Thus, all uncertainty is originating from process variation (for ecological problems, this is often interpreted as environmental variation). For this simple model, we'll assume that our process of interest (in this case, daily wind speed) exhibits no daily trend, but behaves as a random walk. 
+
+$$y_t = y_{t-1} + e_{t}$$
+
+And the ${e}_{t} \sim N(0, \sigma)$. Remember back to the autocorrelated model (or MA(1) models) that we assumed that the errors $e_t$ followed a random walk. In contrast, this model assumes that the errors are independent, but that the state of nature follows a random walk. Note also that this model as written doesn't include a drift term (this can be turned on / off using the ``est_drift`` argument).
+
+We can fit the random walk model using argument `model_name = 'rw'` passed to the ``fit_stan()`` function.
+```{r stan-rw, cache=TRUE, results='hide'}
+rw = fit_stan(y = Temp, est_drift = FALSE, model_name = "rw")
+```
+
+
+## Autoregressive models {#sec-stan-ar1}
+
+A variation of the random walk model described previously is the autoregressive time series model of order 1, AR(1). This model is essentially the same as the random walk model but it introduces an estimated coefficient, which we will call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean -- when $\phi$ = 1, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we'll discuss more in future lectures. The math to describe the AR(1) model is: 
+$$y_t = \phi y_{t-1} + e_{t}$$. 
+
+The ``fit_stan()`` function can fit higher order AR models, but for now we just want to fit an AR(1) model and make a histogram of phi.
+
+```{r stan-ar1-fit, results='hide', cache=TRUE}
+ar1 = fit_stan(y = Temp, x = matrix(1, nrow = length(Temp), ncol = 1), 
+  model_name = "ar", est_drift=FALSE, P = 1)
+```
+
+## Univariate state-space models {#sec-stan-uss}
+
+At this point, we've fit models with observation or process error, but we haven't tried to estimate both simultaneously. We will do so here, and introduce some new notation to describe the process model and observation model. We use the notation ${x_t}$ to denote the latent state or state of nature (which is unobserved) at time $t$ and ${y_t}$ to denote the observed data. For introductory purposes, we'll make the process model autoregressive (similar to our AR(1) model),
+
+$$x_{t} = \phi  x_{t-1} + e_{t}, e_{t} \sim N(0,q)$$
+
+For the process model, there are a number of ways to parameterize the first 'state', and we'll talk about this more in the class, but for the sake of this model, we'll place a vague weakly informative prior on $x_1$, $x_1 \sim N(0, 0.01)$.Second, we need to construct an observation model linking the estimate unseen states of nature $x_t$ to the data $y_t$. For simplicitly, we'll assume that the observation errors are indepdendent and identically distributed, with no observation component. Mathematically, this model is 
+$$Y_t \sim N(x_t, r)$$
+In the two above models, we'll refer to $q$ as the standard deviation of the process variance and $r$ as the standard deviation of the observation error variance
+
+We can fit the state-space AR(1) and random walk models using the ``fit_stan()`` function:
+```{r stan-arrw, results='hide', cache=TRUE}
+ss_ar = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_ar")
+ss_rw = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
+```
+
+## Dynamic factor analysis {#sec-stan-dfa}
+
+First load the plankton dataset from the MARSS package.
+```{r stan-dfa-data}
+ library(MARSS)
+ data(lakeWAplankton)
+ # we want lakeWAplanktonTrans, which has been transformed
+ # so the 0s are replaced with NAs and the data z-scored
+ dat = lakeWAplanktonTrans
+ # use only the 10 years from 1980-1989
+ plankdat = dat[dat[,"Year"]>=1980 & dat[,"Year"]<1990,]
+ # create vector of phytoplankton group names
+ phytoplankton = c("Cryptomonas", "Diatoms", "Greens",
+                   "Unicells", "Other.algae")
+ # get only the phytoplankton
+ dat.spp.1980 = t(plankdat[,phytoplankton])
+ # z-score the data since we subsetted time
+ dat.spp.1980 = dat.spp.1980-apply(dat.spp.1980,1,mean,na.rm=TRUE)
+ dat.spp.1980 = dat.spp.1980/sqrt(apply(dat.spp.1980,1,var,na.rm=TRUE))
+ #check our z-score
+ apply(dat.spp.1980,1,mean,na.rm=TRUE)
+ apply(dat.spp.1980,1,var,na.rm=TRUE)
+```
+
+Plot the data.
+```{r stan-plot-dfa, fig=TRUE, fig.cap='Phytoplankton data.'}
+#make into ts since easier to plot
+dat.ts=ts(t(dat.spp.1980),frequency=12, start=c(1980,1))
+par(mfrow=c(3,2),mar=c(2,2,2,2))
+for(i in 1:5) 
+  plot(dat.ts[,i], type="b",
+       main=colnames(dat.ts)[i],col="blue",pch=16)
+```
+
+Run a 3 trend model on these data.
+```{r stan-dfa.3.trend, results='hide', cache=TRUE}
+mod_3 = fit_dfa(y = dat.spp.1980, num_trends=3)
+```
+
+Rotate the estimated trends and look at what it produces.
+```{r stan-dfa-rot}
+rot = rotate_trends(mod_3)
+names(rot)
+```
+
+Plot the estimate of the trends.
+```{r stan-dfa-plot-trends, fig=TRUE, fig.cap='Trends.'}
+matplot(t(rot$trends_mean),type="l",lwd=2,ylab="mean trend")
+```
+
+### Using leave one out cross-validation to select models {#sec-stan-loo}
+
+We will fit multiple DFA with different numbers of trends and use leave one out (LOO) cross-validation to choose the best model.
+
+```{r stan-dfa.5.models, results='hide', cache=TRUE}
+mod_1 = fit_dfa(y = dat.spp.1980, num_trends=1)
+mod_2 = fit_dfa(y = dat.spp.1980, num_trends=2)
+mod_3 = fit_dfa(y = dat.spp.1980, num_trends=3)
+mod_4 = fit_dfa(y = dat.spp.1980, num_trends=4)
+mod_5 = fit_dfa(y = dat.spp.1980, num_trends=5)
+```
+
+We will compute the Leave One Out Information Criterion (LOOIC) using the loo package.  Like AIC, lower is better.
+
+```{r stan-looic}
+library(loo)
+loo(extract_log_lik(mod_1))$looic
+```
+
+Table of the LOOIC values:
+  ```{r stan-looic-table}
+looics = c(
+  loo(extract_log_lik(mod_1))$looic,
+  loo(extract_log_lik(mod_2))$looic,
+  loo(extract_log_lik(mod_3))$looic,
+  loo(extract_log_lik(mod_4))$looic,
+  loo(extract_log_lik(mod_5))$looic
+  )
+looic.table = data.frame(trends=1:5, LOOIC=looics)
+looic.table
+```
+
+## Uncertainty intervals on states {#sec-stan-state-uncertainty}
+
+We will look at the effect of missing data on the uncertainty intervals on estimates states using a DFA on the harbor seal dataset.
+
+```{r stan-harborseal-data}
+data("harborSealWA")
+#the first column is year
+matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
+        ylab="Log abundance", xlab="")
+```
+
+Assume they are all observing a single trend.
+```{r stan-seal-fit, results='hide', cache=TRUE}
+seal.mod= fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
+```
+
+```{r stan-seal-trend}
+pars = extract(seal.mod)
+```
+
+```{r stan-plot-seal, fig = TRUE, fig.cap='Estimated states and 95% credible intervals.'}
+pred_mean = c(apply(pars$x, c(2,3), mean))
+pred_lo = c(apply(pars$x, c(2,3), quantile, 0.025))
+pred_hi = c(apply(pars$x, c(2,3), quantile, 0.975))
+
+plot(pred_mean, type="l", lwd = 3, ylim = range(c(pred_mean, pred_lo, pred_hi)), main = "Trend")
+lines(pred_lo)
+lines(pred_hi)
+```
+
+## Problems {#stan-problems}
+
+1. By adapting the code in Section \@ref(sec-stan-lr), fit a regression model that includes the intercept and a slope, modeling the effect of Wind. What is the mean wind effect you estimate?
+
+2. Using the results from the linear regression model fit with no burn-in (Section \@ref(sec-stan-burn)),  calculate the ACF of the `beta` time series using `acf()`. Would thinning more be appropriate?  How much?
+
+3. Using the fit of the random walk model to the temperature data (Section \@ref(sec-stan-rw)), plot the predicted values (states) and 95% CIs.
+
+4. To see the effect of this increased flexibility in estimating the autocorrelation, make a plot of the predictions from the AR(1) model (Section \@ref(sec-stan-ar1) and the RW model (\@ref(sec-stan-rw)).
+
+5. Fit the univariate state-space model (Section \@ref(sec-stan-uss)) with and without the autoregressive parameter $\phi$ and compare the estimated process and observation error variances.  Recall that AR(1) without the $\phi$ parameter is a random walk.

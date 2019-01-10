@@ -1,0 +1,270 @@
+```{r basicmat-setup, include=FALSE, purl=FALSE}
+knitr::opts_knit$set(unnamed.chunk.label = "basicmat-")
+```
+
+
+# Basic matrix math in R  {#chap-basicmat}
+\chaptermark{Matrix math}
+
+This chapter reviews the basic matrix math operations that you will need to understand the course material and shows how to do these operations in R.
+
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/basic-matrix-math.R).
+
+
+## Creating matrices in R  {#sec-basicmat-create}
+Create a $3 \times 4$ matrix, meaning 3 row and 4 columns, that is all 1s:
+```{r basicmat-matrix}
+matrix(1, 3, 4)
+```
+Create a $3 \times 4$ matrix filled in with the numbers 1 to 12 by column (default) and by row:
+```{r basicmat-matrix0}
+matrix(1:12, 3, 4)
+matrix(1:12, 3, 4, byrow=TRUE)
+```
+Create a matrix with one column:
+```{r basicmat-matrix1}
+matrix(1:4, ncol=1)
+```
+Create a matrix with one row:
+```{r basicmat-matrix2}
+matrix(1:4, nrow=1)
+```
+Check the dimensions of a matrix
+```{r basicmat-matrix3}
+A=matrix(1:6, 2,3)
+A
+dim(A)
+```
+Get the number of rows in a matrix:
+```{r basicmat-matrix4}
+dim(A)[1]
+nrow(A)
+```
+Create a 3D matrix (called array):
+```{r basicmat-matrix5}
+A=array(1:6, dim=c(2,3,2))
+A
+dim(A)
+```
+Check if an object is a matrix.  A data frame is not a matrix.  A vector is not a matrix.
+```{r basicmat-matrix6}
+A=matrix(1:4, 1, 4)
+A
+class(A)
+B=data.frame(A)
+B
+class(B)
+C=1:4
+C
+class(C)
+```
+
+
+## Matrix multiplication, addition and transpose  {#sec-basicmat-multiply}
+You will need to be very solid in matrix multiplication for the course.  If you haven't done it in awhile, google `matrix multiplication youtube' and you find lots of 5min videos to remind you.
+
+In R, you use the ```%*%``` operation to do matrix multiplication.  When you do matrix multiplication, the columns of the matrix on the left must equal the rows of the matrix on the right.  The result is a matrix that has the number of rows of the matrix on the left and number of columns of the matrix on the right.
+$$(n \times m)(m \times p) = (n \times p)$$
+```{r basicmat-mult, tidy=FALSE}
+A=matrix(1:6, 2, 3) #2 rows, 3 columns
+B=matrix(1:6, 3, 2) #3 rows, 2 columns
+A%*%B #this works
+B%*%A #this works
+try(B%*%B) #this doesn't
+```
+To add two matrices use ```+```. The matrices have to have the same dimensions.
+```{r basicmat-add, tidy=FALSE}
+A+A #works
+A+t(B) #works
+try(A+B) #does not work since A has 2 rows and B has 3
+```
+The transpose of a matrix is denoted $\mathbf{A}^\top$ or $\mathbf{A}^\prime$.  To transpose a matrix in R, you use ```t()```.
+```{r basicmat-transpose, tidy=FALSE}
+A=matrix(1:6, 2, 3) #2 rows, 3 columns
+t(A) #is the transpose of A
+try(A%*%A) #this won't work
+A%*%t(A) #this will
+```
+
+
+## Subsetting a matrix  {#sec-basicmat-subset}
+To subset a matrix, we use ```[ ]```:
+```{r basicmat-subset1, tidy=FALSE}
+A=matrix(1:9, 3, 3) #3 rows, 3 columns
+#get the first and second rows of A
+#it's a 2x3 matrix
+A[1:2,]
+#get the top 2 rows and left 2 columns
+A[1:2,1:2]
+#What does this do?
+A[c(1,3),c(1,3)]
+#This?
+A[c(1,2,1),c(2,3)]
+```
+If you have used matlab, you know you can say something like ```A[1,end]``` to denote the element of a matrix in row 1 and the last column.  R does not have `end'.  To do, the same in R you do something like:
+```{r basicmat-subset2, tidy=FALSE}
+A=matrix(1:9, 3, 3)
+A[1,ncol(A)]
+#or
+A[1,dim(A)[2]]
+```
+
+**Warning R will create vectors from subsetting matrices!**
+
+One of the really bad things that R does with matrices is create a vector if you happen to subset a matrix to create a matrix with 1 row or 1 column.  Look at this:
+```{r basicmat-subset3, tidy=FALSE}
+A=matrix(1:9, 3, 3)
+#take the first 2 rows
+B=A[1:2,]
+#everything is ok
+dim(B)
+class(B)
+#take the first row
+B=A[1,]
+#oh no! It should be a 1x3 matrix but it is not.
+dim(B)
+#It is not even a matrix any more
+class(B)
+#and what happens if we take the transpose?
+#Oh no, it's a 1x3 matrix not a 3x1 (transpose of 1x3)
+t(B)
+#A%*%B should fail because A is (3x3) and B is (1x3)
+A%*%B
+#It works? That is horrible!
+```
+This will create hard to find bugs in your code because you will look at ```B=A[1,]``` and everything looks fine.  Why is R saying it is not a matrix!  To stop R from doing this use ```drop=FALSE```.
+```{r basicmat-dropfalse, tidy=FALSE}
+B=A[1,,drop=FALSE]
+#Now it is a matrix as it should be
+dim(B)
+class(B)
+#this fails as it should (alerting you to a problem!)
+try(A%*%B)
+```
+
+
+## Replacing elements in a matrix  {#sec-basicmat-replace}
+Replace 1 element.
+```{r basicmat-replace, tidy=FALSE}
+A=matrix(1, 3, 3)
+A[1,1]=2
+A
+```
+Replace a row with all 1s or a string of values
+```{r basicmat-replace2, tidy=FALSE}
+A=matrix(1, 3, 3)
+A[1,]=2
+A
+A[1,]=1:3
+A
+```
+Replace group of elements.  This often does not work as one expects so be sure look at your matrix after trying something like this.  Here I want to replace elements (1,3) and (3,1) with 2, but it didn't work as I wanted.
+```{r basicmat-replace3, tidy=FALSE}
+A=matrix(1, 3, 3)
+A[c(1,3),c(3,1)]=2
+A
+```
+How do I replace elements (1,1) and (3,3) with 2 then?  It's tedious.  If you have a lot of elements to replace, you might want to use a for loop.
+```{r basicmat-replace4, tidy=FALSE}
+A=matrix(1, 3, 3)
+A[1,3]=2
+A[3,1]=2
+A
+```
+
+
+## Diagonal matrices and identity matrices  {#sec-basicmat-diagonal}
+A diagonal matrix is one that is square, meaning number of rows equals number of columns, and it has 0s on the off-diagonal and non-zeros on the diagonal.  In R, you form a diagonal matrix with the ```diag()``` function:
+```{r basicmat-diag, tidy=FALSE}
+diag(1,3) #put 1 on diagonal of 3x3 matrix
+diag(2, 3) #put 2 on diagonal of 3x3 matrix
+diag(1:4) #put 1 to 4 on diagonal of 4x4 matrix
+```
+The ```diag()``` function can also be used to replace elements on the diagonal of a matrix:
+```{r basicmat-diag2}
+A=matrix(3, 3, 3)
+diag(A)=1
+A
+A=matrix(3, 3, 3)
+diag(A)=1:3
+A
+A=matrix(3, 3, 4)
+diag(A[1:3,2:4])=1
+A
+```
+The ```diag()``` function is also used to get the diagonal of a matrix.
+```{r basicmat-diag4}
+A=matrix(1:9, 3, 3)
+diag(A)
+```
+The identity matrix is a special kind of diagonal matrix with 1s on the diagonal.  It is denoted $\mathbf{I}$.  $\mathbf{I}_3$ would mean a $3 \times 3$ diagonal matrix.  A identity matrix has the property that $\mathbf{A}\mathbf{I}=\mathbf{A}$ and $\mathbf{I}\mathbf{A}=\mathbf{A}$ so it is like a 1.
+```{r basicmat-diag3}
+A=matrix(1:9, 3, 3)
+I=diag(3) #shortcut for 3x3 identity matrix
+A%*%I
+```
+
+
+## Taking the inverse of a square matrix  {#sec-basicmat-inverse}
+The inverse of a matrix is denoted $\mathbf{A}^{-1}$.  You can think of the inverse of a matrix like $1/a$.  $1/a \times a = 1$. $\mathbf{A}^{-1}\mathbf{A} = \mathbf{A}\mathbf{A}^{-1} = \mathbf{I}$.  The inverse of a matrix does not always exist; for one it has to be square.  We'll be using inverses for variance-covariance matrices and by definition (of a variance-covariance matrix), the inverse of those exist.  In R, there are a couple way common ways to take the inverse of a variance-covariance matrix (or something with the same properties).  ```solve()``` is the most common probably:
+```{r basicmat-solve}
+A=diag(3,3)+matrix(1,3,3)
+invA=solve(A)
+invA%*%A
+A%*%invA
+```
+Another option is to use ```chol2inv()``` which uses a Cholesky decomposition\footnote{The Cholesky decomposition is a handy way to keep your variance-covariance matrices valid when doing a parameter search.  Don't search over the raw variance-covariance matrix.  Search over a matrix where the lower triangle is 0, that is what a Cholesky decomposition looks like.  Let's call it $\texttt{B}$. Your variance-covariance matrix is $\texttt{t(B)\%*\%B}$.}:
+```{r basicmat-chol2inv}
+A=diag(3,3)+matrix(1,3,3)
+invA=chol2inv(chol(A))
+invA%*%A
+A%*%invA
+```
+For the purpose of this course, ```solve()``` is fine.
+
+\clearpage
+
+## Problems  {#sec-basicmat-problems}
+
+1. Build a $4 \times 3$ matrix with the numbers 1 through 4 in each row.
+
+2. Extract the elements in the 1st and 2nd rows and 1st and 2nd columns (you'll have a $2 \times 2$ matrix). Show the R code that will do this.
+
+3. Build a $4 \times 3$ matrix with the numbers 1 through 12 by row (meaning the first row will have the numbers 1 through 4 in it).
+
+4. Extract the 3rd row of the above.  Show R code to do this where you end up with a vector and how to do this where you end up with a $1 \times 3$ matrix.
+
+5. Build a $4 \times 3$ matrix that is all 1s except a 2 in the (2,3) element (2nd row, 3rd column).
+
+6. Take the transpose of the above.
+
+7. Build a $4 \times 4$ diagonal matrix with 1 through 4 on the diagonal.
+
+8. Build a $5 \times 5$ identity matrix.
+
+9. Replace the diagonal in the above matrix with 2 (the number 2).
+
+10. Build a matrix with 2 on the diagonal and 1s on the offdiagonals.
+
+11. Take the inverse of the above.
+
+12. Build a $3 \times 3$ matrix with the first 9 letters of the alphabet.  First column should be "a", "b", "c".  ```letters[1:9]``` gives you these letters.
+
+13. Replace the diagonal of this matrix with the word "cat".
+
+14. Build a $4 \times 3$ matrix with all 1s. Multiply by a $3 \times 4$ matrix with all 2s.
+
+15. If $\mathbf{A}$ is a $4 \times 3$ matrix, is $\mathbf{A} \mathbf{A}$ possible? Is $\mathbf{A}  \mathbf{A}^\top$ possible?  Show how to write $\mathbf{A}\mathbf{A}^\top$ in R.
+
+16. In the equation, $\mathbf{A} \mathbf{B} = \mathbf{C}$, let $\mathbf{A}=\left[ \begin{smallmatrix}1&4&7\\2&5&8\\3&6&9\end{smallmatrix}\right]$.  Build a $\mathbf{B}$ matrix with only 1s and 0s such that the values on the diagonal of $\mathbf{C}$ are 1, 8, 6 (in that order).  Show your R code for $\mathbf{A}$, $\mathbf{B}$ and $\mathbf{A} \mathbf{B}$.
+
+17. Same $\mathbf{A}$ matrix as above and same equation $\mathbf{A} \mathbf{B} = \mathbf{C}$.  Build a $3 \times 3$ $\mathbf{B}$ matrix such that $\mathbf{C}=2\mathbf{A}$.  So $\mathbf{C}=\left[ \begin{smallmatrix}2&8&14\\ 4&10&16\\ 6&12&18\end{smallmatrix}\right]$. Hint, $\mathbf{B}$ is diagonal.
+
+18. Same $\mathbf{A}$ and $\mathbf{A} \mathbf{B}=\mathbf{C}$ equation.  Build a $\mathbf{B}$ matrix to compute the row sums of $\mathbf{A}$.  So the first `row sum' would be $1+4+7$, the sum of all elements in row 1 of $\mathbf{A}$.  $\mathbf{C}$ will be $\left[ \begin{smallmatrix}12\\ 15\\ 18\end{smallmatrix}\right]$, the row sums of $\mathbf{A}$. Hint, $\mathbf{B}$ is a column matrix (1 column).
+
+19. Same $\mathbf{A}$ matrix as above but now equation $\mathbf{B} \mathbf{A}  = \mathbf{C}$.  Build a $\mathbf{B}$ matrix to compute the column sums of $\mathbf{A}$.  So the first `column sum' would be $1+2+3$.  $\mathbf{C}$ will be a $1 \times 3$ matrix.
+
+20. Let $\mathbf{A} \mathbf{B}=\mathbf{C}$ equation but $\mathbf{A}=\left[ \begin{smallmatrix}2&1&1\\1&2&1\\1&1&2\end{smallmatrix}\right]$ (so A=```diag(3)+1```).  Build a $\mathbf{B}$ matrix such that $\mathbf{C}=\left[ \begin{smallmatrix}3\\ 3\\ 3\end{smallmatrix}\right]$. Hint, you need to use the inverse of $\mathbf{A}$.
+
+```{r basicmat-reset, echo=FALSE, include.source=FALSE}
+```

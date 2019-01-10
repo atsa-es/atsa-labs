@@ -43,6 +43,15 @@ for(basefile in basefiles){
   knitr::purl(paste(basefile,".Rmd",sep=""), output= outputfile)
 }
 
+#Create the Rmd files
+require(stringr)
+for(basefile in basefiles){
+  filename=str_split(basefile,"/")[[1]][2]
+  inputfile = paste("cleanedRmd/",filename,".Rmd",sep="")
+  outputfile = paste("docs/Rmds/",filename,".Rmd",sep="")
+  file.copy(inputfile, outputfile, overwrite=TRUE)
+}
+
 ####################################################
 # A search via google will show the following solutions
 # Add 'before_body' to your output.yml:
