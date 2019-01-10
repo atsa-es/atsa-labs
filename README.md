@@ -279,7 +279,7 @@ To build the book on your local machine, you'll install the bookdown package and
 ## gitignore file
 [back to top](#afts-labbook-info)
 
-I have many files in my local repository that don't need to be on GitHub.  If a book build fails, the clean up fails so you will have a lot of extra directories and files in your base directory.  Normally, if build does not fail, bookdown moves this to the docs folder.  The `#Misc` stuff is stuff I am working on and have not cleaned up yet.
+I have many files in my local repository that don't need to be on GitHub.  If a book build fails, the clean up fails so you will have a lot of extra directories and files in your base directory.  Normally, if build does not fail, bookdown moves this to the docs folder.  The `#Misc` stuff is stuff I am working on and have not been cleaned up yet.
 
 Here is what my .gitignore looks like:
 
@@ -295,6 +295,7 @@ Applied_Time_Series_Analysis.pdf
 Applied_Time_Series_Analysis.log
 Applied_Time_Series_Analysis.toc
 libs
+_bookdown_files
 
 #Misc
 *.Rnw

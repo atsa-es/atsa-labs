@@ -754,15 +754,18 @@ homeworkdat = airquality[1:5,]
     ```
 
 2. For the above model, write out the following R code.
-    a. Create the $\yy$ and $\ZZ$ matrices.
+    a. Create the $\yy$ and $\ZZ$ matrices in R.
     b. Solve for $\xx$ (the parameters).  Show that they match what you get from the first ```lm()``` call.
 
-3. If you added -1 to your ```lm()``` call in question 1, what changes in  your model? Write out the new $\ZZ$ and $\xx$ matrices.
+3. Add -1 to your ```lm()``` call in question 1: 
     ```{r mlr-hw1b}
     fit=lm(Ozone ~ -1 + Wind + Temp, data=homeworkdat)
     ```
+    a. What changes in  your model? 
+    b. Write out the new $\ZZ$ and $\xx$ matrices.
 
-4. Write the model for question 1 in Form 2. Adapt the code from subsection \@ref(sec-mlr-solveform2code) to solve for the parameters. You will need to construct new `Z`, `y` and `x` in the code.
+4.  a. Write the model for question 1 in Form 2. 
+    b. Adapt the code from subsection \@ref(sec-mlr-solveform2code) to solve for the parameters. You will need to construct new `Z`, `y` and `x` in the code.
 
 5. A model of the ozone data with only a region (north/south) effect can be written:
     ```{r mlr-hw4}

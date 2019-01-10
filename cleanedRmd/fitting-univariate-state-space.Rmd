@@ -68,6 +68,10 @@ x0=matrix("mu"), tinitx=0 )
 ```
 
 We can simulate some AR(1) plus error data like so
+```{r set-set-invisible, echo=FALSE}
+set.seed(123)
+```
+
 ```{r uss-ar1-w-error}
 q=0.1; r=0.1; n=100
 y=cumsum(rnorm(n,0,sqrt(q)))+rnorm(n,0,sqrt(r))

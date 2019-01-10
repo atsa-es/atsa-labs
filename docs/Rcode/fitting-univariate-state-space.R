@@ -15,6 +15,9 @@ B=matrix(1), U=matrix(0), Q=matrix("q"),
 Z=matrix(1), A=matrix(0), R=matrix("r"),
 x0=matrix("mu"), tinitx=0 )
 
+## ----set-set-invisible, echo=FALSE---------------------------------------
+set.seed(123)
+
 ## ----uss-ar1-w-error-----------------------------------------------------
 q=0.1; r=0.1; n=100
 y=cumsum(rnorm(n,0,sqrt(q)))+rnorm(n,0,sqrt(r))
