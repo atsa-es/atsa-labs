@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>3.4 Differencing to remove a trend or seasonal effects | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown 0.3.18 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta property="og:title" content="3.4 Differencing to remove a trend or seasonal effects | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta name="twitter:title" content="3.4 Differencing to remove a trend or seasonal effects | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2017-05-08">
+<meta name="date" content="2019-01-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,6 +36,7 @@
 <link rel="next" href="sec-ts-correlation-within-and-among-time-series.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -50,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -138,7 +165,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html"><i class="fa fa-check"></i><b>2.6</b> Seasonal effect as a factor</a><ul>
 <li class="chapter" data-level="2.6.1" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html#sec-mlr-season-form1"><i class="fa fa-check"></i><b>2.6.1</b> Seasonal intercepts written in Form 1</a></li>
-<li class="chapter" data-level="2.6.2" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html#seasonal-intercepts-written-in-form-2-sec-mlr-season-form2"><i class="fa fa-check"></i><b>2.6.2</b> Seasonal intercepts written in Form 2 {#sec-mlr-season-form2</a></li>
+<li class="chapter" data-level="2.6.2" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html#sec-mlr-season-form2"><i class="fa fa-check"></i><b>2.6.2</b> Seasonal intercepts written in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
@@ -148,7 +175,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-ts.html"><a href="chap-ts.html#data-and-packages-1"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="3.1" data-path="sec-ts-data.html"><a href="sec-ts-data.html"><i class="fa fa-check"></i><b>3.1</b> CO<span class="math inline">\(_2\)</span> and global temperature data set</a></li>
 <li class="chapter" data-level="3.2" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html"><i class="fa fa-check"></i><b>3.2</b> Time series plots</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#ts-objects-and-plot.ts"><i class="fa fa-check"></i><b>3.2.1</b> <strong>ts</strong> objects and <code id="sec-ts-textbfts-objects-and-verbplotts">plot.ts()</code></a></li>
+<li class="chapter" data-level="3.2.1" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#sec-ts-textbfts-objects-and-verbplotts"><i class="fa fa-check"></i><b>3.2.1</b> <strong>ts</strong> objects and <code>plot.ts()</code></a></li>
 <li class="chapter" data-level="3.2.2" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#sec-ts-combining-and-plotting-multiple-textbfts-objects"><i class="fa fa-check"></i><b>3.2.2</b> Combining and plotting multiple <strong>ts</strong> objects</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html"><i class="fa fa-check"></i><b>3.3</b> Decomposition of time series</a><ul>
@@ -181,7 +208,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.9.2" data-path="sec-ts-moving-average-ma-models.html"><a href="sec-ts-moving-average-ma-models.html#sec-ts-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>3.9.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="3.10" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>3.10</b> Autoregressive moving-average (ARMA) models</a><ul>
-<li class="chapter" data-level="3.10.1" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#fitting-armapq-models-with-arima"><i class="fa fa-check"></i><b>3.10.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code id="sec-ts-fitting-armapq-models-with-verbarima">arima()</code></a></li>
+<li class="chapter" data-level="3.10.1" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#sec-ts-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>3.10.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
 <li class="chapter" data-level="3.10.2" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#sec-ts-searching-over-model-orders"><i class="fa fa-check"></i><b>3.10.2</b> Searching over model orders</a></li>
 </ul></li>
 <li class="chapter" data-level="3.11" data-path="sec-ts-problems.html"><a href="sec-ts-problems.html"><i class="fa fa-check"></i><b>3.11</b> Problems</a></li>
@@ -214,7 +241,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.3.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-model-residuals"><i class="fa fa-check"></i><b>5.3.3</b> Model residuals</a></li>
 </ul></li>
 <li class="chapter" data-level="5.4" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html"><i class="fa fa-check"></i><b>5.4</b> Four subpopulations with temporally uncorrelated errors</a><ul>
-<li class="chapter" data-level="5.4.1" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-the-observation-process"><i class="fa fa-check"></i><b>5.4.1</b> The observation process</a></li>
+<li class="chapter" data-level="5.4.1" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-the-observation-process-2"><i class="fa fa-check"></i><b>5.4.1</b> The observation process</a></li>
 <li class="chapter" data-level="5.4.2" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-fitting-mod1"><i class="fa fa-check"></i><b>5.4.2</b> Fitting the model</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><i class="fa fa-check"></i><b>5.5</b> Four subpopulations with temporally correlated errors</a><ul>
@@ -234,7 +261,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="6.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
 <li class="chapter" data-level="6.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="6.3" data-path="fitting-a-univariate-dlm-with-marss.html"><a href="fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code id="sec-dlm-fitting-a-univariate-dlm-with-marss">MARSS()</code></a></li>
+<li class="chapter" data-level="6.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code>MARSS()</code></a></li>
 <li class="chapter" data-level="6.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.4</b> Forecasting with a univariate DLM</a><ul>
 <li class="chapter" data-level="6.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>6.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
 <li class="chapter" data-level="6.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>6.4.2</b> DLM forecast diagnostics</a></li>
@@ -317,38 +344,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects" class="section level2">
 <h2><span class="header-section-number">3.4</span> Differencing to remove a trend or seasonal effects</h2>
 <p>An alternative to decomposition for removing trends is differencing. We saw in lecture how the difference operator works and how it can be used to remove linear and nonlinear trends as well as various seasonal features that might be evident in the data. As a reminder, we define the difference operator as</p>
-<span class="math display" id="eq:diffDefnA">\[\begin{equation}
+<p><span class="math display" id="eq:diffDefnA">\[\begin{equation}
 \tag{3.6}
 \nabla x_t = x_t - x_{t-1},
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>and, more generally, for order <span class="math inline">\(d\)</span></p>
-<span class="math display" id="eq:diffDefnB">\[\begin{equation}
+<p><span class="math display" id="eq:diffDefnB">\[\begin{equation}
 \tag{3.7}
 \nabla^d x_t = (1-\mathbf{B})^d x_t,
 \end{equation}\]</span>
-<p>where <strong>B</strong> is the backshift operator (<em>i.e.</em>, <span class="math inline">\(\mathbf{B}^k x_t = x_{t-k}\)</span> for <span class="math inline">\(k \geq 1\)</span>).</p>
+where <strong>B</strong> is the backshift operator (<em>i.e.</em>, <span class="math inline">\(\mathbf{B}^k x_t = x_{t-k}\)</span> for <span class="math inline">\(k \geq 1\)</span>).</p>
 <p>So, for example, a random walk is one of the most simple and widely used time series models, but it is not stationary. We can write a random walk model as</p>
-<span class="math display" id="eq:defnRW">\[\begin{equation}
+<p><span class="math display" id="eq:defnRW">\[\begin{equation}
 \tag{3.8}
   x_t = x_{t-1} + w_t, \text{ with } w_t \sim \text{N}(0,q).
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>Applying the difference operator to Equation <a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html#eq:defnRW">(3.8)</a> will yield a time series of Gaussian white noise errors <span class="math inline">\(\{w_t\}\)</span>:</p>
-<span class="math display" id="eq:diffRW">\[\begin{equation}
+<p><span class="math display" id="eq:diffRW">\[\begin{equation}
 \tag{3.9}
   \begin{aligned}
     \nabla (x_t &amp;= x_{t-1} + w_t) \\
     x_t - x_{t-1} &amp;= x_{t-1} - x_{t-1} + w_t \\
     x_t - x_{t-1} &amp;= w_t
   \end{aligned}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <div id="sec-ts-using-the-verbdiff-function" class="section level3">
 <h3><span class="header-section-number">3.4.1</span> Using the <code>diff()</code> function</h3>
 <p>In R we can use the <code>diff()</code> function for differencing a time series, which requires 3 arguments: <code>x</code> (the data), <code>lag</code> (the lag at which to difference), and <code>differences</code> (the order of differencing; <span class="math inline">\(d\)</span> in Equation <a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html#eq:diffDefnB">(3.7)</a>). For example, first-differencing a time series will remove a linear trend (<em>i.e.</em>, <code>differences=1</code>); twice-differencing will remove a quadratic trend (<em>i.e.</em>, <code>differences=2</code>). In addition, first-differencing a time series at a lag equal to the period will remove a seasonal trend (<em>e.g.</em>, set <code>lag=12</code> for monthly data).</p>
 <p>Let’s use <code>diff()</code> to remove the trend and seasonal signal from the CO<span class="math inline">\(_2\)</span> time series, beginning with the trend. Close inspection of Figure <a href="sec-ts-time-series-plots.html#fig:ts-plotdata1">3.1</a> would suggest that there is a nonlinear increase in CO<span class="math inline">\(_2\)</span> concentration over time, so we’ll set <code>differences=2</code>):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## twice-difference the CO2 data
-co2.D2 &lt;-<span class="st"> </span><span class="kw">diff</span>(co2, <span class="dt">differences =</span> <span class="dv">2</span>)
-## plot the differenced data
-<span class="kw">plot</span>(co2.D2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(nabla^<span class="dv">2</span>, <span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>])))</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## twice-difference the CO2 data</span>
+co2.D2 &lt;-<span class="st"> </span><span class="kw">diff</span>(co2, <span class="dt">differences=</span><span class="dv">2</span>)
+<span class="co">## plot the differenced data</span>
+<span class="kw">plot</span>(co2.D2, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">paste</span>(nabla<span class="op">^</span><span class="dv">2</span>,<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>])))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotCO2diff2"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotCO2diff2-1.png" alt="Time series of the twice-differenced atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i." width="672" />
@@ -357,11 +384,11 @@ Figure 3.8: Time series of the twice-differenced atmospheric CO<span class="math
 </p>
 </div>
 <p>We were apparently successful in removing the trend, but the seasonal effect still appears obvious (Figure <a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html#fig:ts-plotCO2diff2">3.8</a>). Therefore, let’s go ahead and difference that series at lag-12 because our data were collected monthly.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## difference the differenced CO2 data
-co2.D2D12 &lt;-<span class="st"> </span><span class="kw">diff</span>(co2.D2, <span class="dt">lag =</span> <span class="dv">12</span>)
-## plot the newly differenced data
-<span class="kw">plot</span>(co2.D2D12, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(nabla, <span class="st">&quot;(&quot;</span>, nabla^<span class="dv">2</span>, 
-    <span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>], <span class="st">&quot;)&quot;</span>)))</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## difference the differenced CO2 data</span>
+co2.D2D12 &lt;-<span class="st"> </span><span class="kw">diff</span>(co2.D2, <span class="dt">lag=</span><span class="dv">12</span>)
+<span class="co">## plot the newly differenced data</span>
+<span class="kw">plot</span>(co2.D2D12,
+     <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">paste</span>(nabla,<span class="st">&quot;(&quot;</span>,nabla<span class="op">^</span><span class="dv">2</span>,<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>],<span class="st">&quot;)&quot;</span>)))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotCO2diff12"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotCO2diff12-1.png" alt="Time series of the lag-12 difference of the twice-differenced atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i." width="672" />
@@ -389,17 +416,18 @@ Figure 3.9: Time series of the lag-12 difference of the twice-differenced atmosp
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -409,6 +437,10 @@ gitbook.start({
 "edit": {
 "link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/intro-ts-funcs.Rmd",
 "text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
 },
 "download": ["Applied Time Series Analysis.pdf"],
 "toc": {
@@ -423,9 +455,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

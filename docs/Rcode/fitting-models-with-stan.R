@@ -3,10 +3,10 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 
 ## ----stan-load, eval=FALSE-----------------------------------------------
 ## library(devtools)
-## devtools::install_github("eric-ward/safs-timeseries/statss")
+## devtools::install_github("nwfsc-timeseries/atsar")
 
 ## ----stan-loadpackages, results='hide', warning=FALSE, message=FALSE-----
-library(statss)
+library(atsar)
 library(rstan)
 library(datasets)
 

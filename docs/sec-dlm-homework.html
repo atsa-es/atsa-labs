@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>6.5 Homework discussion and data | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown 0.3.18 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta property="og:title" content="6.5 Homework discussion and data | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta name="twitter:title" content="6.5 Homework discussion and data | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2017-05-08">
+<meta name="date" content="2019-01-09">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,6 +36,7 @@
 <link rel="next" href="sec-dlm-problems.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -50,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -138,7 +165,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="2.6" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html"><i class="fa fa-check"></i><b>2.6</b> Seasonal effect as a factor</a><ul>
 <li class="chapter" data-level="2.6.1" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html#sec-mlr-season-form1"><i class="fa fa-check"></i><b>2.6.1</b> Seasonal intercepts written in Form 1</a></li>
-<li class="chapter" data-level="2.6.2" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html#seasonal-intercepts-written-in-form-2-sec-mlr-season-form2"><i class="fa fa-check"></i><b>2.6.2</b> Seasonal intercepts written in Form 2 {#sec-mlr-season-form2</a></li>
+<li class="chapter" data-level="2.6.2" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html#sec-mlr-season-form2"><i class="fa fa-check"></i><b>2.6.2</b> Seasonal intercepts written in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
@@ -148,7 +175,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-ts.html"><a href="chap-ts.html#data-and-packages-1"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="3.1" data-path="sec-ts-data.html"><a href="sec-ts-data.html"><i class="fa fa-check"></i><b>3.1</b> CO<span class="math inline">\(_2\)</span> and global temperature data set</a></li>
 <li class="chapter" data-level="3.2" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html"><i class="fa fa-check"></i><b>3.2</b> Time series plots</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#ts-objects-and-plot.ts"><i class="fa fa-check"></i><b>3.2.1</b> <strong>ts</strong> objects and <code id="sec-ts-textbfts-objects-and-verbplotts">plot.ts()</code></a></li>
+<li class="chapter" data-level="3.2.1" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#sec-ts-textbfts-objects-and-verbplotts"><i class="fa fa-check"></i><b>3.2.1</b> <strong>ts</strong> objects and <code>plot.ts()</code></a></li>
 <li class="chapter" data-level="3.2.2" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#sec-ts-combining-and-plotting-multiple-textbfts-objects"><i class="fa fa-check"></i><b>3.2.2</b> Combining and plotting multiple <strong>ts</strong> objects</a></li>
 </ul></li>
 <li class="chapter" data-level="3.3" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html"><i class="fa fa-check"></i><b>3.3</b> Decomposition of time series</a><ul>
@@ -181,7 +208,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.9.2" data-path="sec-ts-moving-average-ma-models.html"><a href="sec-ts-moving-average-ma-models.html#sec-ts-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>3.9.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="3.10" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>3.10</b> Autoregressive moving-average (ARMA) models</a><ul>
-<li class="chapter" data-level="3.10.1" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#fitting-armapq-models-with-arima"><i class="fa fa-check"></i><b>3.10.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code id="sec-ts-fitting-armapq-models-with-verbarima">arima()</code></a></li>
+<li class="chapter" data-level="3.10.1" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#sec-ts-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>3.10.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
 <li class="chapter" data-level="3.10.2" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#sec-ts-searching-over-model-orders"><i class="fa fa-check"></i><b>3.10.2</b> Searching over model orders</a></li>
 </ul></li>
 <li class="chapter" data-level="3.11" data-path="sec-ts-problems.html"><a href="sec-ts-problems.html"><i class="fa fa-check"></i><b>3.11</b> Problems</a></li>
@@ -214,7 +241,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.3.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-model-residuals"><i class="fa fa-check"></i><b>5.3.3</b> Model residuals</a></li>
 </ul></li>
 <li class="chapter" data-level="5.4" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html"><i class="fa fa-check"></i><b>5.4</b> Four subpopulations with temporally uncorrelated errors</a><ul>
-<li class="chapter" data-level="5.4.1" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-the-observation-process"><i class="fa fa-check"></i><b>5.4.1</b> The observation process</a></li>
+<li class="chapter" data-level="5.4.1" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-the-observation-process-2"><i class="fa fa-check"></i><b>5.4.1</b> The observation process</a></li>
 <li class="chapter" data-level="5.4.2" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-fitting-mod1"><i class="fa fa-check"></i><b>5.4.2</b> Fitting the model</a></li>
 </ul></li>
 <li class="chapter" data-level="5.5" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><i class="fa fa-check"></i><b>5.5</b> Four subpopulations with temporally correlated errors</a><ul>
@@ -234,7 +261,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="6.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
 <li class="chapter" data-level="6.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="6.3" data-path="fitting-a-univariate-dlm-with-marss.html"><a href="fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code id="sec-dlm-fitting-a-univariate-dlm-with-marss">MARSS()</code></a></li>
+<li class="chapter" data-level="6.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code>MARSS()</code></a></li>
 <li class="chapter" data-level="6.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.4</b> Forecasting with a univariate DLM</a><ul>
 <li class="chapter" data-level="6.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>6.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
 <li class="chapter" data-level="6.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>6.4.2</b> DLM forecast diagnostics</a></li>
@@ -317,44 +344,46 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-dlm-homework" class="section level2">
 <h2><span class="header-section-number">6.5</span> Homework discussion and data</h2>
 <p>For the homework this week we will use a DLM to examine some of the time-varying properties of the spawner-recruit relationship for Pacific salmon. Much work has been done on this topic, particularly by Randall Peterman and his students and post-docs at Simon Fraser University. To do so, researchers commonly use a Ricker model because of its relatively simple form, such that the number of recruits (offspring) born in year <span class="math inline">\(t\)</span> (<span class="math inline">\(R_t\)</span>) from the number of spawners (parents) (<span class="math inline">\(S_t\)</span>) is</p>
-<span class="math display" id="eq:dlm-baseRicker">\[\begin{equation}
+<p><span class="math display" id="eq:dlm-baseRicker">\[\begin{equation}
 \tag{6.12}
 R_t = a S_t e^{-b S + v_t}.
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>The parameter <span class="math inline">\(a\)</span> determines the maximum reproductive rate in the absence of any density-dependent effects (the slope of the curve at the origin), <span class="math inline">\(b\)</span> is the strength of density dependence, and <span class="math inline">\(v_t \sim N(0,\sigma)\)</span>. In practice, the model is typically log-transformed so as to make it linear with respect to the predictor variable <span class="math inline">\(S_t\)</span>, such that</p>
-<span class="math display" id="eq:dlm-lnRicker">\[\begin{equation}
+<p><span class="math display" id="eq:dlm-lnRicker">\[\begin{equation}
 \tag{6.13}
 \begin{aligned}
 \text{log}(R_t) &amp;= \text{log}(a) + \text{log}(S_t) -b S_t + v_t \\
 \text{log}(R_t) - \text{log}(S_t) &amp;= \text{log}(a) -b S_t + v_t \\
 \text{log}(R_t/S_t) &amp;= \text{log}(a) - b S_t + v_t.
 \end{aligned}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>Substituting <span class="math inline">\(y_t = \text{log}(R_t/S_t)\)</span>, <span class="math inline">\(x_t = S_t\)</span>, and <span class="math inline">\(\alpha = \text{log}(a)\)</span> yields a simple linear regression model with intercept <span class="math inline">\(\alpha\)</span> and slope <span class="math inline">\(b\)</span>.</p>
 <p>Unfortunately, however, residuals from this simple model typically show high-autocorrelation due to common environmental conditions that affect overlaping generations. Therefore, to correct for this and allow for an index of stock productivity that controls for any density-dependent effects, the model may be re-witten as</p>
-<span class="math display" id="eq:dlm-lnTVRicker">\[\begin{equation}
+<p><span class="math display" id="eq:dlm-lnTVRicker">\[\begin{equation}
 \tag{6.14}
 \begin{aligned}
 \text{log}(R_t/S_t) &amp;= \alpha_t - b S_t + v_t, \\
 \alpha_t &amp;= \alpha_{t-1} + w_t,
 \end{aligned}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>and <span class="math inline">\(w_t \sim N(0,q)\)</span>. By treating the brood-year specific productivity as a random walk, we allow it to vary, but in an autocorrelated manner so that consecutive years are not independent from one another.</p>
 <p>More recently, interest has grown in using covariates (<span class="math inline">\(e.g.\)</span>, sea-surface temperature) to explain the interannual variability in productivity. In that case, we can can write the model as</p>
-<span class="math display" id="eq:dlm-lnCovRicker">\[\begin{equation}
+<p><span class="math display" id="eq:dlm-lnCovRicker">\[\begin{equation}
 \tag{6.15}
 \text{log}(R_t/S_t) = \alpha + \delta_t X_t - b S_t + v_t.
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>In this case we are estimating some base-level productivity (<span class="math inline">\(\alpha\)</span>) plus the time-varying effect of some covariate <span class="math inline">\(X_t\)</span> (<span class="math inline">\(\delta_t\)</span>).</p>
 <div id="sec-dlm-spawner-recruit-data" class="section level3">
 <h3><span class="header-section-number">6.5.1</span> Spawner-recruit data</h3>
-<p>The data come from a large public database begun by Ransom Myers many years ago. If you are interested, you can find lots of time series of spawning-stock, recruitment, and harvest for a variety of fishes around the globe. Here is the website:  <a href="http://ram.biology.dal.ca/~myers/about_site.html" class="uri">http://ram.biology.dal.ca/~myers/about_site.html</a></p>
+<p>The data come from a large public database begun by Ransom Myers many years ago. If you are interested, you can find lots of time series of spawning-stock, recruitment, and harvest for a variety of fishes around the globe. Here is the website:
+
+<a href="http://ram.biology.dal.ca/~myers/about_site.html" class="uri">http://ram.biology.dal.ca/~myers/about_site.html</a></p>
 <p>For this exercise, we will use spawner-recruit data for sockeye salmon (<span class="math inline">\(Oncorhynchus\)</span> <span class="math inline">\(nerka\)</span>) from the Kvichak River in SW Alaska that span the years 1952-1989. In addition, we’ll examine the potential effects of the Pacific Decadal Oscillation (PDO) during the salmon’s first year in the ocean, which is widely believed to be a “bottleneck” to survival.</p>
 <p>Download the Rdata file for Kvichak River from here: <a href="%22./data/KvichakSockeye.RData%22">KvichakSockeye.RData</a>. Then load the Rdata file:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;KvichakSockeye.RData&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;KvichakSockeye.RData&quot;</span>)</code></pre>
 <p>The data are a dataframe with columns for brood year (<code>brood.yr</code>), number of spawners (<code>Sp</code>), number of recruits (<code>Rec</code>) and PDO at year <span class="math inline">\(t-2\)</span> (<code>PDO.t2</code>) and <span class="math inline">\(t-3\)</span> (<code>PDO.t3</code>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## head of data file
-<span class="kw">head</span>(SRdata)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## head of data file</span>
+<span class="kw">head</span>(SRdata)</code></pre>
 <pre><code>  brood.yr   Sp   Rec PDO.t2 PDO.t3
 1     1952 5970 17310  -0.61  -0.61
 2     1953  320   520  -1.48  -2.66
@@ -362,7 +391,7 @@ R_t = a S_t e^{-b S + v_t}.
 4     1955  250  1280   0.01   0.11
 5     1956 9443 39036   0.86   0.37
 6     1957 2843  4091  -0.25   0.29</code></pre>
-<p></p>
+
 </div>
 </div>
             </section>
@@ -382,17 +411,18 @@ R_t = a S_t e^{-b S + v_t}.
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
 <script>
-require(["gitbook"], function(gitbook) {
+gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
 "github": false,
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -402,6 +432,10 @@ gitbook.start({
 "edit": {
 "link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/DLM.Rmd",
 "text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
 },
 "download": ["Applied Time Series Analysis.pdf"],
 "toc": {
@@ -416,9 +450,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

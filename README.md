@@ -7,6 +7,7 @@
 * [Special Rmd conventions for AFTS](#special-conventions)
 * [Key files](#key-files)
 * [Directories](#directories)
+* [Required packages](#required-packages)
 * [Building the book](#build-the-book)
 * [Building a chapter](#build-a-chapter)
 * [.gitignore file](#gitignore-file)
@@ -201,7 +202,14 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
     #in case you forget to add a chunk label
     knitr::opts_knit$set(unnamed.chunk.label = "dfa-")
     ```
+## Required packages
+[back to top](#afts-labbook-info)
 
+* knitr, bookdown, formatR
+* rjags, r2jags, and install JAGS
+* rstan
+* forecast
+* MARSS
 
 ## Build the book
 [back to top](#afts-labbook-info)
@@ -212,30 +220,24 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
     bookdown::render_book("index.Rmd", "bookdown::pdf_book")
     ```
     
-You can use 'Build Book' under the build tab in RStudio but make sure to run `cleanDefsinRmd.R` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
+You can use 'Build Book' under the build tab in RStudio but make sure to run `source("cleanDefsinRmd.R")` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
 
 ## Build a chapter
-[back to top](#build-a-chapter)
+[back to top](#afts-labbook-info)
 
-    ```{r tmp, eval=FALSE}
-    source("cleanDefsinRmd.R")
-    bookdown::render_book("index.Rmd", "bookdown::gitbook")
-    bookdown::render_book("index.Rmd", "bookdown::pdf_book")
-    ```
-    
-If you are adding a chapter, then you will need to re-build the whole book to get the index.html file updated.  But work on your chapter on its own until it is done.  Just knit the Rmd as described in [Getting started with editing your chapter](#getting-started) and when you are ready, build the whole book.
+If you are adding a chapter, then you will need to [re-build the whole book](#build-the-book) to get the index.html file updated.  But work on your chapter on its own until it is done.  Just knit the Rmd as described in [Getting started with editing your chapter](#getting-started) and when you are ready, build the whole book.
 
-If you are working on an existing chapter and just making some updates, then you don't need to re-build the whole book.  You just need to update the docs/yourchap.html and figure pngs in docs/Applied_Time_Series_Analysis/figure_html/
+If you are working on an existing chapter and just making some updates without adding any sections, then you don't need to re-build the whole book.  You just need to update the docs/yourchap.html and figure pngs in docs/Applied_Time_Series_Analysis/figure_html/
 
-Making bigger changes to your chapter? Then edit your Rmd in your ``Lab-`` folder.  Once that is ready, run ``cleanDefsinRmd.R`` to clean up the Rmd for bookdown.
+**Making big changes to your chapter?** Then edit your Rmd in your ``Lab-`` folder.  Knit that Rmd until you are ready. Once that is ready, [re-build the whole book](#build-the-book).
 
-Making minor changes? Then edit your Rmd in your ``Lab-`` folder AND make the same edits to the Rmd in the cleanedRmd folder.  Then knit the Rmd in the cleanedRmd folder, then you'll need to move the files to the right places.
+**Making minor changes with no added sections?** Then edit your Rmd in your ``Lab-`` folder AND make the same edits to the Rmd in the cleanedRmd folder.  Then knit the Rmd in the cleanedRmd folder. You'll need to move the files to the right places.
 
-Making really minor changes? Then edit your Rmd in your ``Lab-`` folder AND make the same edits to the html in the docs folder.  No need to knit anything.  You are changing the Rmd so that your changes are not wiped out when the whole book is rebuilt later.
+**Making really minor changes?** Then edit your Rmd in your ``Lab-`` folder AND make the same edits to the html in the docs folder.  No need to knit anything.  You are changing the Rmd so that your changes are not wiped out when the whole book is rebuilt later.
 
 
 ## Key files
-[back to top](#key-files)
+[back to top](#afts-labbook-info)
 
 * index.Rmd: First page.  Yaml metadata for the book is at the top of file
 * _output.yml output yaml is here

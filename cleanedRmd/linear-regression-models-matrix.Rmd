@@ -7,7 +7,7 @@ knitr::opts_knit$set(unnamed.chunk.label = "mlr-")
 
 This chapter shows how to write linear regression models in matrix form. The purpose is to get you comfortable writing multivariate linear models in different matrix forms before we start working with time series versions of these models.  Each matrix form is an equivalent model for the data, but written in different forms.  You do not need to worry which form is better or worse at this point.  Simply get comfortable writing multivariate linear models in different matrix forms.
 
-A script with all the R code in the chapter can be downloaded  [here]("./Rcode/linear-regression-models-matrix.R").  
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/linear-regression-models-matrix.R).  
 
 ### Data and packages {-}
 
@@ -628,7 +628,8 @@ Z[1:4,]
 ```
 
 
-### Seasonal intercepts written in Form 2  {#sec-mlr-season-form2
+### Seasonal intercepts written in Form 2  {#sec-mlr-season-form2}
+
 We do not need to add 1s and 0s to our $\mathbf{Z}$ matrix in Form 2; we just add subscripts to our intercepts like we did when we had north-south intercepts.  In this model, we do not have any explanatory variables (except intercept) so our $\mathbf{x}$ is just a $1 \times 1$ matrix:
 \begin{equation}
 (\#eq:stackloss-form2-season)
@@ -726,7 +727,7 @@ Now an estimate for quarter 4 appears.
 
 The problem is two-fold.  First by having both region and quarter intercepts, we created models where 2 intercepts appear for one $i$ model and we cannot estimate both.  ```lm()``` helps us out by setting one of the factor effects to 0.  It will chose the first alphabetically. But as we saw with the model where odd numbered plants were north and even numbered were south, we can still have a situation where one of the intercepts is non-identifiable.  ```lm()``` helps us out by alerting us to the problem by setting one to NA.  
 
-Once you start writing your own Jags code or using MARSS, you will need to make sure that all your parameters are identifiable.  If they are not, your code will simply `chase its tail'.  The code will generally take forever to converge or if you did not try different starting conditions, it may look like it converged but actually the estimates for the confounded parameters are meaningless.   So you will need to think carefully about the model you are fitting and consider if there are multiple parameters measuring the same thing (for example 2 intercept parameters).
+Once you start developing your own models, you will need to make sure that all your parameters are identifiable.  If they are not, your code will simply `chase its tail'.  The code will generally take forever to converge or if you did not try different starting conditions, it may look like it converged but actually the estimates for the confounded parameters are meaningless.   So you will need to think carefully about the model you are fitting and consider if there are multiple parameters measuring the same thing (for example 2 intercept parameters).
 
 \clearpage
 
@@ -747,35 +748,40 @@ homeworkdat = airquality[1:5,]
 ```
 
 
-1. Using Form 1 $\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e}$, write the model being fit by this command
+1. Using Form 1 $\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e}$, write out the model, showing the $\mathbf{Z}$ and $\mathbf{x}$ matrices, being fit by this command
     ```{r mlr-hw1}
     fit=lm(Ozone ~ Wind + Temp, data=homeworkdat)
     ```
 
-2. Build the $\mathbf{y}$ and $\mathbf{Z}$ matrices for the above model in R and solve for $\mathbf{x}$ (the parameters).  Show that they match what you get from the first ```lm()``` call.
+2. For the above model, write out the following R code.
+    a. Create the $\mathbf{y}$ and $\mathbf{Z}$ matrices.
+    b. Solve for $\mathbf{x}$ (the parameters).  Show that they match what you get from the first ```lm()``` call.
 
-3. If you added -1 to your ```lm()``` call in question 1, what changes in  your model?
+3. If you added -1 to your ```lm()``` call in question 1, what changes in  your model? Write out the new $\mathbf{Z}$ and $\mathbf{x}$ matrices.
     ```{r mlr-hw1b}
     fit=lm(Ozone ~ -1 + Wind + Temp, data=homeworkdat)
     ```
 
-4. Write the model for question 1 in Form 2. Adapt the code from subsection \@ref(sec-mlr-solveform2code) to solve for the parameters. You will need to construct new Z, y and x in the code.
+4. Write the model for question 1 in Form 2. Adapt the code from subsection \@ref(sec-mlr-solveform2code) to solve for the parameters. You will need to construct new `Z`, `y` and `x` in the code.
 
-5.  Model the ozone data with only a region (north/south) effect:
+5. A model of the ozone data with only a region (north/south) effect can be written:
     ```{r mlr-hw4}
     fit=lm(Ozone ~ -1 + region, data=homeworkdat)
     ```
 
-    Write this model in Form 1b (not Form 1) show that you can solve for the parameter values you get from the ```lm()``` call.
+    a. Write this model in Form 1.
+    b. Show that you can solve for the parameter values you get from the ```lm()``` call.
 
-6. Write the model in question 5 in Form 2. Show that you can solve for the parameter values you get from the ```lm()``` call.  Again to do this, you adapt the code from subsection \@ref(sec-mlr-solveform2code).
+6. a. Write the model in question 5 in Form 2. 
+   b. Show that you can solve for the parameter values you get from the ```lm()``` call.  Again to do this, you adapt the code from subsection \@ref(sec-mlr-solveform2code).
 
 7. Write the model below in Form 2.
     ```{r mlr-hw5}
     fit=lm(Ozone ~ Temp:region, data=homeworkdat)
     ```
 
-8. Using the airquality dataset with 111 data points, write the model below in Form 2 and solve for the parametes by adapting code from subsection \@ref(sec-mlr-solveform2code).
+8.  a. Using the airquality dataset with 111 data points, write the model below in Form 2.
+    b. Solve for the parameters by adapting code from subsection \@ref(sec-mlr-solveform2code).
     ```{r mlr-hw8}
     fit=lm(Ozone ~ -1 + Temp:region + Month, data=airquality)
     ```

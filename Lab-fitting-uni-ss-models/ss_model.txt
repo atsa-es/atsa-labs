@@ -1,0 +1,22 @@
+
+   model {  
+   # priors on parameters
+   mu ~ dnorm(Y1, 1/(Y1*100)); # normal mean = 0, sd = 1/sqrt(0.01)
+   tau.q ~ dgamma(0.001,0.001); # This is inverse gamma
+   sd.q <- 1/sqrt(tau.q); # sd is treated as derived parameter
+   tau.r ~ dgamma(0.001,0.001); # This is inverse gamma
+   sd.r <- 1/sqrt(tau.r); # sd is treated as derived parameter
+   u ~ dnorm(0, 0.01);
+    
+   # Because init X is specified at t=0
+   X0 <- mu
+   X[1] ~ dnorm(X0+u,tau.q);
+   Y[1] ~ dnorm(X[1], tau.r);
+ 
+   for(i in 2:N) {
+   predX[i] <- X[i-1]+u; 
+   X[i] ~ dnorm(predX[i],tau.q); # Process variation
+   Y[i] ~ dnorm(X[i], tau.r); # Observation variation
+   }
+   }                  
+   

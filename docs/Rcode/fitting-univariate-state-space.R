@@ -197,7 +197,7 @@ resids=residuals(kem.1)
 acf(resids$model.residuals[1,], main="linear trend v(t)")
 resids=residuals(kem.2)
 acf(resids$model.residuals[1,], main="stoc level v(t)")
-acf(resids$state.residuals[1,], main="stoc level w(t)")
+acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
 
 ## ----uss-acfs, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-acfs)'------------
 par(mfrow=c(2,2))
@@ -207,7 +207,7 @@ resids=residuals(kem.1)
 acf(resids$model.residuals[1,], main="linear trend v(t)")
 resids=residuals(kem.2)
 acf(resids$model.residuals[1,], main="stoc level v(t)")
-acf(resids$state.residuals[1,], main="stoc level w(t)")
+acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
 
 ## ----uss-jags-model------------------------------------------------------
 model.loc="ss_model.txt"
