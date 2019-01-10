@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -345,7 +345,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.2</span> Examples using the Nile river data</h2>
 <p>We will use the data from the Nile River (Figure <a href="sec-uss-examples-using-the-nile-river-data.html#fig:uss-plotdata">4.1</a>). We will fit different flow models to the data and compare the models with AIC.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(datasets)
-dat=<span class="kw">as.vector</span>(Nile)</code></pre>
+dat =<span class="st"> </span><span class="kw">as.vector</span>(Nile)</code></pre>
 
 <div class="figure"><span id="fig:uss-plotdata"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-plotdata-1.png" alt="The Nile River flow volume 1871 to 1970 (Nile dataset in R)." width="672" />
@@ -371,14 +371,13 @@ x_0 = \mu
 \tag{4.4}
 \end{equation}\]</span>
 The model is specified as a list as follows:</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod.nile<span class="fl">.0</span> =<span class="st"> </span><span class="kw">list</span>( 
-<span class="dt">B=</span><span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U=</span><span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">Q=</span><span class="kw">matrix</span>(<span class="dv">0</span>),
-<span class="dt">Z=</span><span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A=</span><span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R=</span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>),
-<span class="dt">x0=</span><span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), <span class="dt">tinitx=</span><span class="dv">0</span> )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod.nile<span class="fl">.0</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), 
+    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>), <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), 
+    <span class="dt">tinitx =</span> <span class="dv">0</span>)</code></pre>
 <p>We then fit the model:</p>
-<pre class="sourceCode r"><code class="sourceCode r">kem<span class="fl">.0</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>mod.nile<span class="fl">.0</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">kem<span class="fl">.0</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.nile<span class="fl">.0</span>)</code></pre>
 <p>Output not shown, but here are the estimates and AICc.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">coef</span>(kem<span class="fl">.0</span>, <span class="dt">type=</span><span class="st">&quot;vector&quot;</span>), <span class="dt">LL=</span>kem<span class="fl">.0</span><span class="op">$</span>logLik, <span class="dt">AICc=</span>kem<span class="fl">.0</span><span class="op">$</span>AICc)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">coef</span>(kem<span class="fl">.0</span>, <span class="dt">type =</span> <span class="st">&quot;vector&quot;</span>), <span class="dt">LL =</span> kem<span class="fl">.0</span><span class="op">$</span>logLik, <span class="dt">AICc =</span> kem<span class="fl">.0</span><span class="op">$</span>AICc)</code></pre>
 <pre><code>       R.r      x0.mu         LL       AICc 
 28351.5675   919.3500  -654.5157  1313.1552 </code></pre>
 </div>
@@ -394,14 +393,13 @@ x_0 = \mu
 \tag{4.5}
 \end{equation}\]</span>
 where <span class="math inline">\(u\)</span> is now the average per-year decline in river flow volume. The model is specified as follows:</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod.nile<span class="fl">.1</span> =<span class="st"> </span><span class="kw">list</span>(
-<span class="dt">B=</span><span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U=</span><span class="kw">matrix</span>(<span class="st">&quot;u&quot;</span>), <span class="dt">Q=</span><span class="kw">matrix</span>(<span class="dv">0</span>),
-<span class="dt">Z=</span><span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A=</span><span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R=</span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>),
-<span class="dt">x0=</span><span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), <span class="dt">tinitx=</span><span class="dv">0</span> )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod.nile<span class="fl">.1</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="st">&quot;u&quot;</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), 
+    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>), <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), 
+    <span class="dt">tinitx =</span> <span class="dv">0</span>)</code></pre>
 <p>We then fit the model:</p>
-<pre class="sourceCode r"><code class="sourceCode r">kem<span class="fl">.1</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>mod.nile<span class="fl">.1</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">kem<span class="fl">.1</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.nile<span class="fl">.1</span>)</code></pre>
 <p>Here are the estimates, log-likelihood and AICc:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">coef</span>(kem<span class="fl">.1</span>, <span class="dt">type=</span><span class="st">&quot;vector&quot;</span>), <span class="dt">LL=</span>kem<span class="fl">.1</span><span class="op">$</span>logLik, <span class="dt">AICc=</span>kem<span class="fl">.1</span><span class="op">$</span>AICc)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">coef</span>(kem<span class="fl">.1</span>, <span class="dt">type =</span> <span class="st">&quot;vector&quot;</span>), <span class="dt">LL =</span> kem<span class="fl">.1</span><span class="op">$</span>logLik, <span class="dt">AICc =</span> kem<span class="fl">.1</span><span class="op">$</span>AICc)</code></pre>
 <pre><code>         R.r          U.u        x0.mu           LL         AICc 
 22213.595453    -2.692106  1054.935067  -642.315910  1290.881821 </code></pre>
 <p>Figure <a href="sec-uss-the-structts-function.html#fig:uss-plotfit">4.2</a> shows the fits for the two models with deterministic models (flat and declining) for mean river flow along with their AICc values (smaller AICc is better). The AICc for the model with a declining river flow is lower by over 20 (which is a lot).</p>
@@ -420,16 +418,15 @@ x_0 = \mu
 \end{equation}\]</span>
 As before, <span class="math inline">\(y_t\)</span> is the river flow volume at year <span class="math inline">\(t\)</span>. <span class="math inline">\(x_t\)</span> is the mean level.
 The model is specified as:</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod.nile<span class="fl">.2</span> =<span class="st"> </span><span class="kw">list</span>(
-<span class="dt">B=</span><span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U=</span><span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">Q=</span><span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>),
-<span class="dt">Z=</span><span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A=</span><span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R=</span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>),
-<span class="dt">x0=</span><span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), <span class="dt">tinitx=</span><span class="dv">0</span> )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod.nile<span class="fl">.2</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), 
+    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>), <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), 
+    <span class="dt">tinitx =</span> <span class="dv">0</span>)</code></pre>
 <p>We could also use the text shortcuts to specify the model. Because <span class="math inline">\(\mathbf{R}\)</span> and <span class="math inline">\(\mathbf{Q}\)</span> are <span class="math inline">\(1 \times 1\)</span> matrices, “unconstrained”, “diagonal and unequal”, “diagonal and equal” and “equalvarcov” will all lead to a <span class="math inline">\(1 \times 1\)</span> matrix with one estimated element. For <span class="math inline">\(\mathbf{a}\)</span> and <span class="math inline">\(\mathbf{u}\)</span>, the following shortcut could be used:</p>
-<pre class="sourceCode r"><code class="sourceCode r">A=U=<span class="st">&quot;zero&quot;</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A =<span class="st"> </span>U =<span class="st"> &quot;zero&quot;</span></code></pre>
 <p>Because <span class="math inline">\(\mathbf{x}_0\)</span> is <span class="math inline">\(1 \times 1\)</span>, it could be specified as “unequal”, “equal” or “unconstrained”.</p>
-<pre class="sourceCode r"><code class="sourceCode r">kem<span class="fl">.2</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>mod.nile<span class="fl">.2</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">kem<span class="fl">.2</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.nile<span class="fl">.2</span>)</code></pre>
 <p>Here are the estimates, log-likelihood and AICc:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">coef</span>(kem<span class="fl">.2</span>, <span class="dt">type=</span><span class="st">&quot;vector&quot;</span>), <span class="dt">LL=</span>kem<span class="fl">.2</span><span class="op">$</span>logLik, <span class="dt">AICc=</span>kem<span class="fl">.2</span><span class="op">$</span>AICc)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">coef</span>(kem<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;vector&quot;</span>), <span class="dt">LL =</span> kem<span class="fl">.2</span><span class="op">$</span>logLik, <span class="dt">AICc =</span> kem<span class="fl">.2</span><span class="op">$</span>AICc)</code></pre>
 <pre><code>       R.r        Q.q      x0.mu         LL       AICc 
 15065.6121  1425.0030  1111.6338  -637.7631  1281.7762 </code></pre>
 </div>
@@ -445,13 +442,12 @@ x_0 = \mu
 \tag{4.7}
 \end{equation}\]</span>
 The model is then specified by changing <code>U</code> to indicate that a <span class="math inline">\(u\)</span> is estimated:</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod.nile<span class="fl">.3</span> =<span class="st"> </span><span class="kw">list</span>(
-<span class="dt">B=</span><span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U=</span><span class="kw">matrix</span>(<span class="st">&quot;u&quot;</span>), <span class="dt">Q=</span><span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>),
-<span class="dt">Z=</span><span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A=</span><span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R=</span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>),
-<span class="dt">x0=</span><span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), <span class="dt">tinitx=</span><span class="dv">0</span>)</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">kem<span class="fl">.3</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>mod.nile<span class="fl">.3</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod.nile<span class="fl">.3</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="st">&quot;u&quot;</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), 
+    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>), <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), 
+    <span class="dt">tinitx =</span> <span class="dv">0</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">kem<span class="fl">.3</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.nile<span class="fl">.3</span>)</code></pre>
 <p>Here are the estimates, log-likelihood and AICc:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>, <span class="dt">type=</span><span class="st">&quot;vector&quot;</span>), <span class="dt">LL=</span>kem<span class="fl">.3</span><span class="op">$</span>logLik, <span class="dt">AICc=</span>kem<span class="fl">.3</span><span class="op">$</span>AICc)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>, <span class="dt">type =</span> <span class="st">&quot;vector&quot;</span>), <span class="dt">LL =</span> kem<span class="fl">.3</span><span class="op">$</span>logLik, <span class="dt">AICc =</span> kem<span class="fl">.3</span><span class="op">$</span>AICc)</code></pre>
 <pre><code>         R.r          U.u          Q.q        x0.mu           LL 
 15585.278194    -3.248793  1088.987455  1124.044484  -637.302692 
         AICc 

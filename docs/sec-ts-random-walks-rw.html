@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -357,16 +357,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="co">## length of time series</span>
 TT &lt;-<span class="st"> </span><span class="dv">100</span>
 <span class="co">## initialize {x_t} and {w_t}</span>
-xx &lt;-<span class="st"> </span>ww &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span>TT, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)
+xx &lt;-<span class="st"> </span>ww &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> TT, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)
 <span class="co">## compute values 2 thru TT</span>
-<span class="cf">for</span>(t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>TT) { xx[t] &lt;-<span class="st"> </span>xx[t<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>ww[t] }</code></pre>
+<span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>TT) {
+    xx[t] &lt;-<span class="st"> </span>xx[t <span class="op">-</span><span class="st"> </span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>ww[t]
+}</code></pre>
 <p>Now let’s plot the simulated time series and its ACF.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## setup plot area</span>
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
 <span class="co">## plot line</span>
-<span class="kw">plot.ts</span>(xx, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
+<span class="kw">plot.ts</span>(xx, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
 <span class="co">## plot ACF</span>
-<span class="kw">plot.acf</span>(<span class="kw">acf</span>(xx, <span class="dt">plot=</span><span class="ot">FALSE</span>))</code></pre>
+<span class="kw">plot.acf</span>(<span class="kw">acf</span>(xx, <span class="dt">plot =</span> <span class="ot">FALSE</span>))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotRW"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotRW-1.png" alt="Simulated time series of a random walk model (left) and its associated ACF (right)." width="672" />
@@ -406,11 +408,11 @@ Figure 3.20: Simulated time series of a random walk model (left) and its associa
 x2 &lt;-<span class="st"> </span><span class="kw">cumsum</span>(ww)</code></pre>
 <p>Let’s plot both time series to see if it worked.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## setup plot area</span>
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
 <span class="co">## plot 1st RW</span>
-<span class="kw">plot.ts</span>(xx, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
+<span class="kw">plot.ts</span>(xx, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
 <span class="co">## plot 2nd RW</span>
-<span class="kw">plot.ts</span>(x2, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</code></pre>
+<span class="kw">plot.ts</span>(x2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotRWalt"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotRWalt-1.png" alt="Time series of the same random walk model formulated as Equation (3.18) and simulated via a for loop (left), and as Equation (3.21) and simulated via cumsum() (right)." width="672" />

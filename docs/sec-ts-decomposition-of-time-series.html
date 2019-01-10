@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -365,12 +365,12 @@ x_t = m_t + s_t + e_t,
 <p>It is important to note here that our time series of the estimated trend <span class="math inline">\(\{\hat{m}_t\}\)</span> is actually shorter than the observed time series by <span class="math inline">\(2a\)</span> units.</p>
 <p>Conveniently, R has the built-in function <code>filter()</code> for estimating moving-average (and other) linear filters. In addition to specifying the time series to be filtered, we need to pass in the filter weights (and 2 other arguments we won’t worry about here–type <code>?filter</code> to get more information). The easiest way to create the filter is with the <code>rep()</code> function:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## weights for moving avg</span>
-fltr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dt">times=</span><span class="dv">11</span>),<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">12</span></code></pre>
+fltr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dt">times =</span> <span class="dv">11</span>), <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">12</span></code></pre>
 <p>Now let’s get our estimate of the trend <span class="math inline">\(\{\hat{m}\}\)</span> with <code>filter()</code>} and plot it:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## estimate of trend</span>
-co2.trend &lt;-<span class="st"> </span><span class="kw">filter</span>(co2, <span class="dt">filter=</span>fltr, <span class="dt">method=</span><span class="st">&quot;convo&quot;</span>, <span class="dt">sides=</span><span class="dv">2</span>)
+co2.trend &lt;-<span class="st"> </span><span class="kw">filter</span>(co2, <span class="dt">filter =</span> fltr, <span class="dt">method =</span> <span class="st">&quot;convo&quot;</span>, <span class="dt">sides =</span> <span class="dv">2</span>)
 <span class="co">## plot the trend</span>
-<span class="kw">plot.ts</span>(co2.trend, <span class="dt">ylab=</span><span class="st">&quot;Trend&quot;</span>, <span class="dt">cex=</span><span class="dv">1</span>)</code></pre>
+<span class="kw">plot.ts</span>(co2.trend, <span class="dt">ylab =</span> <span class="st">&quot;Trend&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</code></pre>
 <p>The trend is a more-or-less smoothly increasing function over time, the average slope of which does indeed appear to be increasing over time as well (Figure <a href="sec-ts-decomposition-of-time-series.html#fig:ts-plotTrendTSb">3.3</a>).</p>
 
 <div class="figure"><span id="fig:ts-plotTrendTSb"></span>
@@ -392,7 +392,7 @@ Figure 3.3: Time series of the estimated trend <span class="math inline">\(\{\ha
 co2<span class="fl">.1</span>T &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2.trend</code></pre>
 <p>This estimate of the seasonal effect for each time <span class="math inline">\(t\)</span> also contains the random error <span class="math inline">\(e_t\)</span>, however, which can be seen by plotting the time series and careful comparison of Equations <a href="sec-ts-decomposition-of-time-series.html#eq:classDecomp">(3.1)</a> and <a href="sec-ts-decomposition-of-time-series.html#eq:seasEst">(3.4)</a>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the monthly seasonal effects</span>
-<span class="kw">plot.ts</span>(co2<span class="fl">.1</span>T, <span class="dt">ylab=</span><span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Month&quot;</span>, <span class="dt">cex=</span><span class="dv">1</span>)</code></pre>
+<span class="kw">plot.ts</span>(co2<span class="fl">.1</span>T, <span class="dt">ylab =</span> <span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotSeasTSb"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotSeasTSb-1.png" alt="Time series of seasonal effects plus random errors for the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i, measured monthly from March 1958 to present." width="672" />
@@ -406,19 +406,19 @@ ll &lt;-<span class="st"> </span><span class="kw">length</span>(co2<span class="
 <span class="co">## frequency (ie, 12)</span>
 ff &lt;-<span class="st"> </span><span class="kw">frequency</span>(co2<span class="fl">.1</span>T)
 <span class="co">## number of periods (years); %/% is integer division</span>
-periods &lt;-<span class="st"> </span>ll <span class="op">%/%</span><span class="st"> </span>ff
+periods &lt;-<span class="st"> </span>ll<span class="op">%/%</span>ff
 <span class="co">## index of cumulative month</span>
-index &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,ll,<span class="dt">by=</span>ff) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
+index &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, ll, <span class="dt">by =</span> ff) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
 <span class="co">## get mean by month</span>
 mm &lt;-<span class="st"> </span><span class="kw">numeric</span>(ff)
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ff) {
-  mm[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(co2<span class="fl">.1</span>T[index<span class="op">+</span>i], <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ff) {
+    mm[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(co2<span class="fl">.1</span>T[index <span class="op">+</span><span class="st"> </span>i], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
 }
 <span class="co">## subtract mean to make overall mean=0</span>
 mm &lt;-<span class="st"> </span>mm <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(mm)</code></pre>
 <p>Before we create the entire time series of seasonal effects, let’s plot them for each month to see what is happening within a year:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the monthly seasonal effects</span>
-<span class="kw">plot.ts</span>(mm, <span class="dt">ylab=</span><span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Month&quot;</span>, <span class="dt">cex=</span><span class="dv">1</span>)</code></pre>
+<span class="kw">plot.ts</span>(mm, <span class="dt">ylab =</span> <span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</code></pre>
 <p>It looks like, on average, that the CO<span class="math inline">\(_2\)</span> concentration is highest in spring (March) and lowest in summer (August) (Figure <a href="sec-ts-decomposition-of-time-series.html#fig:ts-plotSeasMean">3.5</a>). (<em>Aside</em>: Do you know why this is?)</p>
 
 <div class="figure"><span id="fig:ts-plotSeasMean"></span>
@@ -429,9 +429,8 @@ Figure 3.5: Estimated monthly seasonal effects for the atmospheric CO<span class
 </div>
 <p>Finally, let’s create the entire time series of seasonal effects <span class="math inline">\(\{\hat{s}_t\}\)</span>:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## create ts object for season</span>
-co2.seas &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">rep</span>(mm, periods<span class="op">+</span><span class="dv">1</span>)[<span class="kw">seq</span>(ll)],
-               <span class="dt">start=</span><span class="kw">start</span>(co2<span class="fl">.1</span>T), 
-               <span class="dt">frequency=</span>ff)</code></pre>
+co2.seas &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">rep</span>(mm, periods <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)[<span class="kw">seq</span>(ll)], <span class="dt">start =</span> <span class="kw">start</span>(co2<span class="fl">.1</span>T), 
+    <span class="dt">frequency =</span> ff)</code></pre>
 </div>
 <div id="sec-ts-completing-the-model" class="section level3">
 <h3><span class="header-section-number">3.3.3</span> Completing the model</h3>
@@ -445,7 +444,7 @@ co2.seas &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="k
 co2.err &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2.trend <span class="op">-</span><span class="st"> </span>co2.seas</code></pre>
 <p>Now that we have all 3 of our model components, let’s plot them together with the observed data <span class="math inline">\(\{x_t\}\)</span>. The results are shown in Figure <a href="sec-ts-decomposition-of-time-series.html#fig:ts-plotTrSeas">3.6</a>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the obs ts, trend &amp; seasonal effect</span>
-<span class="kw">plot</span>(<span class="kw">cbind</span>(co2,co2.trend,co2.seas,co2.err),<span class="dt">main=</span><span class="st">&quot;&quot;</span>,<span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</code></pre>
+<span class="kw">plot</span>(<span class="kw">cbind</span>(co2, co2.trend, co2.seas, co2.err), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotTrSeas"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotTrSeas-1.png" alt="Time series of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) along with the estimated trend, seasonal effects, and random errors." width="672" />
@@ -470,7 +469,7 @@ co2.decomp &lt;-<span class="st"> </span><span class="kw">decompose</span>(co2)<
 </ul>
 <p>We can easily make plots of the output and compare them to those in Figure <a href="sec-ts-decomposition-of-time-series.html#fig:ts-plotTrSeas">3.6</a>:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the obs ts, trend &amp; seasonal effect</span>
-<span class="kw">plot</span>(co2.decomp, <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</code></pre>
+<span class="kw">plot</span>(co2.decomp, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotDecompB"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotDecompB-1.png" alt="Time series of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) along with the estimated trend, seasonal effects, and random errors obtained with the function decompose()." width="672" />

@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -348,6 +348,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The <code>fit_stan()</code> function can fit higher order AR models, but for now we just want to fit an AR(1) model and make a histogram of phi.</p>
 <pre class="sourceCode r"><code class="sourceCode r">ar1 =<span class="st"> </span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dt">nrow =</span> <span class="kw">length</span>(Temp), <span class="dt">ncol =</span> <span class="dv">1</span>), 
     <span class="dt">model_name =</span> <span class="st">&quot;ar&quot;</span>, <span class="dt">est_drift =</span> <span class="ot">FALSE</span>, <span class="dt">P =</span> <span class="dv">1</span>)</code></pre>
+<pre><code>Warning: There were 5 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</code></pre>
+<pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
 </div>
             </section>
 

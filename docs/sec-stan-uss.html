@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -350,7 +350,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 In the two above models, we’ll refer to <span class="math inline">\(q\)</span> as the standard deviation of the process variance and <span class="math inline">\(r\)</span> as the standard deviation of the observation error variance</p>
 <p>We can fit the state-space AR(1) and random walk models using the <code>fit_stan()</code> function:</p>
 <pre class="sourceCode r"><code class="sourceCode r">ss_ar =<span class="st"> </span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">est_drift =</span> <span class="ot">FALSE</span>, <span class="dt">model_name =</span> <span class="st">&quot;ss_ar&quot;</span>)</code></pre>
-<pre><code>Warning: There were 516 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
+<pre><code>Warning: There were 68 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
 http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</code></pre>
 <pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">ss_rw =<span class="st"> </span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">est_drift =</span> <span class="ot">FALSE</span>, <span class="dt">model_name =</span> <span class="st">&quot;ss_rw&quot;</span>)</code></pre>

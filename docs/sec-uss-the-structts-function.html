@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -344,7 +344,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-uss-the-structts-function" class="section level2">
 <h2><span class="header-section-number">4.3</span> The StructTS function</h2>
 <p>The <code>StructTS</code> function in R will also fit the stochastic level model:</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit.sts =<span class="st"> </span><span class="kw">StructTS</span>(dat, <span class="dt">type=</span><span class="st">&quot;level&quot;</span>)
+<pre class="sourceCode r"><code class="sourceCode r">fit.sts =<span class="st"> </span><span class="kw">StructTS</span>(dat, <span class="dt">type =</span> <span class="st">&quot;level&quot;</span>)
 fit.sts</code></pre>
 <pre><code>
 Call:
@@ -357,30 +357,21 @@ Variances:
 <p><code>StructTS()</code> is much, much faster for long time series. The example in <code>?StructTS</code> is pretty much instantaneous with <code>StructTS()</code> but takes minutes with the EM algorithm that is the default in <code>MARSS()</code>. With the BFGS algorithm, it is much closer to <code>StructTS()</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r">trees &lt;-<span class="st"> </span><span class="kw">window</span>(treering, <span class="dt">start =</span> <span class="dv">0</span>)
 fitts =<span class="st"> </span><span class="kw">StructTS</span>(trees, <span class="dt">type =</span> <span class="st">&quot;level&quot;</span>)
-fitem =<span class="st"> </span><span class="kw">MARSS</span>(<span class="kw">as.vector</span>(trees),mod.nile<span class="fl">.2</span>)
-fitbf =<span class="st"> </span><span class="kw">MARSS</span>(<span class="kw">as.vector</span>(trees),mod.nile<span class="fl">.2</span>, <span class="dt">method=</span><span class="st">&quot;BFGS&quot;</span>)</code></pre>
+fitem =<span class="st"> </span><span class="kw">MARSS</span>(<span class="kw">as.vector</span>(trees), mod.nile<span class="fl">.2</span>)
+fitbf =<span class="st"> </span><span class="kw">MARSS</span>(<span class="kw">as.vector</span>(trees), mod.nile<span class="fl">.2</span>, <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</code></pre>
 <p>Note that <code>mod.nile.2</code> specifies a univariate stochastic level model so we can use it just fine with other univariate data sets.</p>
 <p>In addition, <code>fitted(fit.sts)</code> where <code>fit.sts</code> is a fit from <code>StructTS()</code> is very different than <code>fit.marss$states</code> from <code>MARSS()</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">t=<span class="dv">10</span>
+<pre class="sourceCode r"><code class="sourceCode r">t =<span class="st"> </span><span class="dv">10</span>
 <span class="kw">fitted</span>(fit.sts)[t]</code></pre>
 <pre><code>[1] 1162.904</code></pre>
 <p>is the expected value of <span class="math inline">\(y_{t+1}\)</span> (in this case <span class="math inline">\(y_{11}\)</span> since we set <span class="math inline">\(t=10\)</span>) given the data up to <span class="math inline">\(y_t\)</span> (in this case, up to <span class="math inline">\(y_{10}\)</span>). It is called the one-step ahead prediction.<br />
 We are not going to use the one-step ahead predictions unless we are forecasting or doing cross-validation.</p>
 <p>Typically, when we analyze fisheries and ecological data, we want to know the estimate of the state, the <span class="math inline">\(x_t\)</span>, given ALL the data. For example, we might need an estimate of the population size in year 1990 given a time series of counts from 1930 to 2015. We don’t want to use only the data up to 1989; we want to use all the information. <code>fit.marss$states</code> from <code>MARSS()</code> is the expected value of <span class="math inline">\(x_t\)</span> given all the data. For the stochastic level model, that is equal to the expected value of <span class="math inline">\(y_t\)</span> given all the data except <span class="math inline">\(y_t\)</span>.</p>
 <p>If you needed the one-step predictions from <code>MARSS()</code>, you can get them from the Kalman filter output:</p>
-<pre class="sourceCode r"><code class="sourceCode r">kf=<span class="kw">print</span>(kem<span class="fl">.2</span>, <span class="dt">what=</span><span class="st">&quot;kfs&quot;</span>)
-kf<span class="op">$</span>xtt1[<span class="dv">1</span>,t]</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">kf =<span class="st"> </span><span class="kw">print</span>(kem<span class="fl">.2</span>, <span class="dt">what =</span> <span class="st">&quot;kfs&quot;</span>)
+kf<span class="op">$</span>xtt1[<span class="dv">1</span>, t]</code></pre>
 <p>Passing in <code>what=&quot;kfs&quot;</code> returns the Kalman filter/smoother output. The expected value of <span class="math inline">\(x_t\)</span> conditioned on <span class="math inline">\(y_1\)</span> to <span class="math inline">\(y_{t-1}\)</span> is in <code>kf$xtt1</code>. The expected value of <span class="math inline">\(x_t\)</span> conditioned on all the data is in <code>kf$xtT</code>.</p>
 
-<pre><code>Loading required package: lattice</code></pre>
-<pre><code>Loading required package: survival</code></pre>
-<pre><code>Loading required package: Formula</code></pre>
-<pre><code>Loading required package: ggplot2</code></pre>
-<pre><code>
-Attaching package: &#39;Hmisc&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:base&#39;:
-
-    format.pval, units</code></pre>
 <div class="figure"><span id="fig:uss-plotfit"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-plotfit-1.png" alt="The Nile River flow volume with the model estimated flow rates (solid lines). The bottom model is a stochastic level model, meaning there isn’t one level line. Rather the level line is a distribution that has a mean and standard deviation. The solid state line in the bottom plots is the mean of the stochastic level and the 2 standard deviations are shown. The other two models are deterministic level models so the state is not stochastic and does not have a standard deviation." width="480" />
 <p class="caption">

@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -356,17 +356,17 @@ airquality<span class="op">$</span>region =<span class="st"> </span><span class=
 homeworkdat =<span class="st"> </span>airquality[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,]</code></pre>
 <ol style="list-style-type: decimal">
 <li><p>Using Form 1 <span class="math inline">\(\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e}\)</span>, write out the model, showing the <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> matrices, being fit by this command</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit=<span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data=</span>homeworkdat)</code></pre></li>
+<pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data =</span> homeworkdat)</code></pre></li>
 <li>For the above model, write out the following R code.
 <ol style="list-style-type: lower-alpha">
 <li>Create the <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> matrices.</li>
 <li>Solve for <span class="math inline">\(\mathbf{x}\)</span> (the parameters). Show that they match what you get from the first <code>lm()</code> call.</li>
 </ol></li>
 <li><p>If you added -1 to your <code>lm()</code> call in question 1, what changes in your model? Write out the new <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> matrices.</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit=<span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data=</span>homeworkdat)</code></pre></li>
+<pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data =</span> homeworkdat)</code></pre></li>
 <li><p>Write the model for question 1 in Form 2. Adapt the code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a> to solve for the parameters. You will need to construct new <code>Z</code>, <code>y</code> and <code>x</code> in the code.</p></li>
 <li><p>A model of the ozone data with only a region (north/south) effect can be written:</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit=<span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>region, <span class="dt">data=</span>homeworkdat)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>region, <span class="dt">data =</span> homeworkdat)</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li>Write this model in Form 1.</li>
 <li>Show that you can solve for the parameter values you get from the <code>lm()</code> call.</li>
@@ -376,12 +376,12 @@ homeworkdat =<span class="st"> </span>airquality[<span class="dv">1</span><span 
 <li>Show that you can solve for the parameter values you get from the <code>lm()</code> call. Again to do this, you adapt the code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a>.</li>
 </ol></li>
 <li><p>Write the model below in Form 2.</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit=<span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Temp<span class="op">:</span>region, <span class="dt">data=</span>homeworkdat)</code></pre></li>
+<pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Temp<span class="op">:</span>region, <span class="dt">data =</span> homeworkdat)</code></pre></li>
 <li><ol style="list-style-type: lower-alpha">
 <li>Using the airquality dataset with 111 data points, write the model below in Form 2.</li>
 <li>Solve for the parameters by adapting code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a>.</li>
 </ol>
-<pre class="sourceCode r"><code class="sourceCode r">fit=<span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Temp<span class="op">:</span>region <span class="op">+</span><span class="st"> </span>Month, <span class="dt">data=</span>airquality)</code></pre></li>
+<pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Temp<span class="op">:</span>region <span class="op">+</span><span class="st"> </span>Month, <span class="dt">data =</span> airquality)</code></pre></li>
 </ol>
 
 </div>

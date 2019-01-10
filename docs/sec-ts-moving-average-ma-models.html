@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -367,28 +367,25 @@ w_t &amp;= x_t + \theta x_{t-1} + \theta^2 x_{t-2} + \theta^3 x_{t-3} + \dots
 <p>We can simulate MA(<span class="math inline">\(q\)</span>) processes just as we did for AR(<span class="math inline">\(p\)</span>) processes using <code>arima.sim()</code>. Here are 3 different ones with contrasting <span class="math inline">\(\theta\)</span>’s:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
 <span class="co">## list description for MA(1) model with small coef</span>
-MA.sm &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">ma=</span><span class="fl">0.2</span>, <span class="dt">sd=</span><span class="fl">0.1</span>)
+MA.sm &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">0.2</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)
 <span class="co">## list description for MA(1) model with large coef</span>
-MA.lg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">ma=</span><span class="fl">0.8</span>, <span class="dt">sd=</span><span class="fl">0.1</span>)
+MA.lg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">0.8</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)
 <span class="co">## list description for MA(1) model with large coef</span>
-MA.neg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">ma=</span><span class="op">-</span><span class="fl">0.5</span>, <span class="dt">sd=</span><span class="fl">0.1</span>)
+MA.neg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">-0.5</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)
 <span class="co">## simulate MA(1)</span>
-MA1.sm &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">50</span>, <span class="dt">model=</span>MA.sm)
-MA1.lg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">50</span>, <span class="dt">model=</span>MA.lg)
-MA1.neg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">50</span>, <span class="dt">model=</span>MA.neg)</code></pre>
+MA1.sm &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.sm)
+MA1.lg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.lg)
+MA1.neg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.neg)</code></pre>
 <p>with their associated plots.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## setup plot region</span>
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))
 <span class="co">## plot the ts</span>
-<span class="kw">plot.ts</span>(MA1.sm,
-        <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]),
-        <span class="dt">main=</span><span class="kw">expression</span>(<span class="kw">paste</span>(theta,<span class="st">&quot; = 0.2&quot;</span>)))
-<span class="kw">plot.ts</span>(MA1.lg,
-        <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]),
-        <span class="dt">main=</span><span class="kw">expression</span>(<span class="kw">paste</span>(theta,<span class="st">&quot; = 0.8&quot;</span>)))
-<span class="kw">plot.ts</span>(MA1.neg,
-        <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]),
-        <span class="dt">main=</span><span class="kw">expression</span>(<span class="kw">paste</span>(theta,<span class="st">&quot; = -0.5&quot;</span>)))</code></pre>
+<span class="kw">plot.ts</span>(MA1.sm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, 
+    <span class="st">&quot; = 0.2&quot;</span>)))
+<span class="kw">plot.ts</span>(MA1.lg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, 
+    <span class="st">&quot; = 0.8&quot;</span>)))
+<span class="kw">plot.ts</span>(MA1.neg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, 
+    <span class="st">&quot; = -0.5&quot;</span>)))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotMA1opps"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotMA1opps-1.png" alt="Time series of simulated MA(1) processes with \(\theta=0.2\) (left), \(\theta=0.8\) (middle), and \(\theta=-0.5\) (right)." width="672" />
@@ -407,19 +404,18 @@ MAq &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.7
 <span class="co">## empty list for storing models</span>
 MA.mods &lt;-<span class="st"> </span><span class="kw">list</span>()
 <span class="co">## loop over orders of q</span>
-<span class="cf">for</span>(q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
-  <span class="co">## assume SD=1, so not specified</span>
-  MA.mods[[q]] &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">1000</span>, <span class="kw">list</span>(<span class="dt">ma=</span>MAq[<span class="dv">1</span><span class="op">:</span>q]))
+<span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
+    <span class="co">## assume SD=1, so not specified</span>
+    MA.mods[[q]] &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="kw">list</span>(<span class="dt">ma =</span> MAq[<span class="dv">1</span><span class="op">:</span>q]))
 }</code></pre>
 <p>Now that we have our four MA(<span class="math inline">\(q\)</span>) models, lets look at plots of the time series, ACF’s, and PACF’s.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## set up plot region</span>
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>))
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">3</span>))
 <span class="co">## loop over orders of q</span>
-<span class="cf">for</span>(q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
-  <span class="kw">plot.ts</span>(MA.mods[[q]][<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>],
-          <span class="dt">ylab=</span><span class="kw">paste</span>(<span class="st">&quot;MA(&quot;</span>,q,<span class="st">&quot;)&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>))
-  <span class="kw">acf</span>(MA.mods[[q]], <span class="dt">lag.max=</span><span class="dv">12</span>)
-  <span class="kw">pacf</span>(MA.mods[[q]], <span class="dt">lag.max=</span><span class="dv">12</span>, <span class="dt">ylab=</span><span class="st">&quot;PACF&quot;</span>)
+<span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
+    <span class="kw">plot.ts</span>(MA.mods[[q]][<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>], <span class="dt">ylab =</span> <span class="kw">paste</span>(<span class="st">&quot;MA(&quot;</span>, q, <span class="st">&quot;)&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))
+    <span class="kw">acf</span>(MA.mods[[q]], <span class="dt">lag.max =</span> <span class="dv">12</span>)
+    <span class="kw">pacf</span>(MA.mods[[q]], <span class="dt">lag.max =</span> <span class="dv">12</span>, <span class="dt">ylab =</span> <span class="st">&quot;PACF&quot;</span>)
 }</code></pre>
 
 <div class="figure"><span id="fig:ts-plotMApComps"></span>

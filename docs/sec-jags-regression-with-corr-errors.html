@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -354,10 +354,10 @@ E[y_t] = \mu + \phi * e_{t-1}
 \tag{8.4}
 \end{equation}\]</span></p>
 <p>Like in our first model, we assume that the data follow a normal likelihood (or equivalently that the residuals are normally distributed), <span class="math inline">\({y_t} = E[{y_t}] + {e}_{t}\)</span>, or <span class="math inline">\({y_t} \sim \,\text{N}(E[y_t], \sigma^2)\)</span>. Thus, it is possible to express the subsequent deviations as <span class="math inline">\(e_t = y_t - E[y_t]\)</span>, or equivalently as <span class="math inline">\(e_t = y_t - \mu -\phi \times e_{t-1}\)</span>. The JAGS script for this model is:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS</span>
-<span class="co"># no covariates, so intercept only. </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS no</span>
+<span class="co"># covariates, so intercept only.</span>
 
-model.loc=(<span class="st">&quot;lmcor_intercept.txt&quot;</span>)
+model.loc =<span class="st"> </span>(<span class="st">&quot;lmcor_intercept.txt&quot;</span>)
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">model {  </span>
 <span class="st">   # priors on parameters</span>
@@ -365,7 +365,7 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">   tau.obs ~ dgamma(0.001,0.001); </span>
 <span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span>
 <span class="st">   phi ~ dunif(-1,1);</span>
-<span class="st">   tau.cor &lt;- tau.obs * (1-phi*phi); # Var = sigma2 * (1-rho^2)</span>
+<span class="st">   tau.cor &lt;- tau.obs / (1-phi*phi); # Var = sigma2 * (1-rho^2)</span>
 <span class="st">   </span>
 <span class="st">   epsilon[1] &lt;- Y[1] - mu;</span>
 <span class="st">   predY[1] &lt;- mu; # initial value</span>
@@ -375,31 +375,35 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">      epsilon[i] &lt;- (Y[i] - mu) - phi*epsilon[i-1];</span>
 <span class="st">   }</span>
 <span class="st">}</span>
-<span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)</code></pre>
+<span class="st">&quot;</span>, 
+    <span class="dt">file =</span> model.loc)</code></pre>
 <p>Notice several subtle changes from the simpler first model: (1) we are estimating the autocorrelation parameter <span class="math inline">\(\phi\)</span>, which is assigned a Uniform(-1, 1) prior, (2) we model the residual variance as a function of the autocorrelation, and (3) we allow the autocorrelation to affect the predicted values <code>predY</code>. One other change we can make is to add <code>predY</code> to the list of parameters we want returned to R.</p>
-<pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N)
-jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>,<span class="st">&quot;predY&quot;</span>,<span class="st">&quot;mu&quot;</span>,<span class="st">&quot;phi&quot;</span>)
-mod_lmcor_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, 
-        <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin=</span><span class="dv">5000</span>,
-        <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)   </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)
+jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)
+mod_lmcor_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, 
+    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, 
+    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
 <p>For some models, we may be interested in examining the posterior fits to data. You can make this plot yourself, but we have also put together a simple function whose arguments are one of our fitted models and the raw data. The function is:</p>
 <pre class="sourceCode r"><code class="sourceCode r">plotModelOutput =<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {
-<span class="co"># attach the model</span>
-<span class="kw">attach.jags</span>(jagsmodel)
-x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="kw">length</span>(Y))
-summaryPredictions =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(predY,<span class="dv">2</span>,quantile,<span class="fl">0.025</span>), <span class="kw">apply</span>(predY,<span class="dv">2</span>,mean), 
-<span class="kw">apply</span>(predY,<span class="dv">2</span>,quantile,<span class="fl">0.975</span>))
-<span class="kw">plot</span>(Y, <span class="dt">col=</span><span class="st">&quot;white&quot;</span>,<span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y,summaryPredictions)),<span class="kw">max</span>(<span class="kw">c</span>(Y,summaryPredictions))), 
-<span class="dt">xlab=</span><span class="st">&quot;&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;95% CIs of predictions and data&quot;</span>,<span class="dt">main=</span><span class="kw">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, 
-jagsmodel<span class="op">$</span>model.file))
-<span class="kw">polygon</span>(<span class="kw">c</span>(x,<span class="kw">rev</span>(x)), <span class="kw">c</span>(summaryPredictions[,<span class="dv">1</span>], <span class="kw">rev</span>(summaryPredictions[,<span class="dv">3</span>])), 
-<span class="dt">col=</span><span class="st">&quot;grey70&quot;</span>,<span class="dt">border=</span><span class="ot">NA</span>)
-<span class="kw">lines</span>(summaryPredictions[,<span class="dv">2</span>])
-<span class="kw">points</span>(Y)
+    <span class="co"># attach the model</span>
+    <span class="kw">attach.jags</span>(jagsmodel)
+    x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))
+    summaryPredictions =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), 
+        <span class="kw">apply</span>(predY, <span class="dv">2</span>, mean), <span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))
+    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, summaryPredictions)), 
+        <span class="kw">max</span>(<span class="kw">c</span>(Y, summaryPredictions))), <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, 
+        <span class="dt">main =</span> <span class="kw">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="op">$</span>model.file))
+    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="kw">rev</span>(summaryPredictions[, 
+        <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="dt">border =</span> <span class="ot">NA</span>)
+    <span class="kw">lines</span>(summaryPredictions[, <span class="dv">2</span>])
+    <span class="kw">points</span>(Y)
 }</code></pre>
 <p>We can use the function to plot the predicted posterior mean with 95% CIs, as well as the raw data. For example, try</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotModelOutput</span>(mod_lmcor_intercept, Wind)</code></pre>
 
+<pre><code>The following object is masked _by_ .GlobalEnv:
+
+    mu</code></pre>
 <div class="figure"><span id="fig:jags-lm1ar-plot1"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-lm1ar-plot1-1.png" alt="Predicted posterior mean with 95% CIs" width="576" />
 <p class="caption">

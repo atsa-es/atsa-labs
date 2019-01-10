@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -367,13 +367,14 @@ x_t = \mu + \phi (x_{t-1} - \mu) + w_t.
 <p>Let’s see an example of how <code>arima()</code> works. First we’ll simulate an ARMA(2,2) model and then estimate the parameters to see how well we can recover them. In addition, we’ll add in a constant to create a non-zero mean, which <code>arima()</code> reports as <code>intercept</code> in its output.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
 <span class="co">## ARMA(2,2) description for arim.sim()</span>
-ARMA22 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">2</span>), <span class="dt">ar=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.7</span>,<span class="fl">0.2</span>), <span class="dt">ma=</span><span class="kw">c</span>(<span class="fl">0.7</span>,<span class="fl">0.2</span>))
+ARMA22 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="dt">ar =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.7</span>, <span class="fl">0.2</span>), <span class="dt">ma =</span> <span class="kw">c</span>(<span class="fl">0.7</span>, 
+    <span class="fl">0.2</span>))
 <span class="co">## mean of process</span>
 mu &lt;-<span class="st"> </span><span class="dv">5</span>
 <span class="co">## simulated process (+ mean)</span>
-ARMA.sim &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">10000</span>, <span class="dt">model=</span>ARMA22) <span class="op">+</span><span class="st"> </span>mu
+ARMA.sim &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">10000</span>, <span class="dt">model =</span> ARMA22) <span class="op">+</span><span class="st"> </span>mu
 <span class="co">## estimate parameters</span>
-<span class="kw">arima</span>(<span class="dt">x=</span>ARMA.sim, <span class="dt">order=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">2</span>))</code></pre>
+<span class="kw">arima</span>(<span class="dt">x =</span> ARMA.sim, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>))</code></pre>
 <pre><code>
 Call:
 arima(x = ARMA.sim, order = c(2, 0, 2))
@@ -394,19 +395,20 @@ ARMA.res &lt;-<span class="st"> </span><span class="kw">list</span>()
 <span class="co">## set counter</span>
 cc &lt;-<span class="st"> </span><span class="dv">1</span>
 <span class="co">## loop over AR</span>
-<span class="cf">for</span>(p <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>) {
-  <span class="co">## loop over MA</span>
-  <span class="cf">for</span>(q <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>) {
-    ARMA.res[[cc]] &lt;-<span class="st"> </span><span class="kw">arima</span>(<span class="dt">x=</span>ARMA.sim,<span class="dt">order=</span><span class="kw">c</span>(p,<span class="dv">0</span>,q))
-    cc &lt;-<span class="st"> </span>cc <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-  }
+<span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>) {
+    <span class="co">## loop over MA</span>
+    <span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>) {
+        ARMA.res[[cc]] &lt;-<span class="st"> </span><span class="kw">arima</span>(<span class="dt">x =</span> ARMA.sim, <span class="dt">order =</span> <span class="kw">c</span>(p, <span class="dv">0</span>, 
+            q))
+        cc &lt;-<span class="st"> </span>cc <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+    }
 }</code></pre>
 <pre><code>Warning in arima(x = ARMA.sim, order = c(p, 0, q)): possible convergence
 problem: optim gave code = 1</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## get AIC values for model evaluation</span>
-ARMA.AIC &lt;-<span class="st"> </span><span class="kw">sapply</span>(ARMA.res,<span class="cf">function</span>(x) x<span class="op">$</span>aic)
+ARMA.AIC &lt;-<span class="st"> </span><span class="kw">sapply</span>(ARMA.res, <span class="cf">function</span>(x) x<span class="op">$</span>aic)
 <span class="co">## model with lowest AIC is the best</span>
-ARMA.res[[<span class="kw">which</span>(ARMA.AIC<span class="op">==</span><span class="kw">min</span>(ARMA.AIC))]]</code></pre>
+ARMA.res[[<span class="kw">which</span>(ARMA.AIC <span class="op">==</span><span class="st"> </span><span class="kw">min</span>(ARMA.AIC))]]</code></pre>
 <pre><code>
 Call:
 arima(x = ARMA.sim, order = c(p, 0, q))
@@ -419,7 +421,7 @@ s.e.   0.0291  0.0284  0.0289  0.0236     0.0125
 sigma^2 estimated as 0.9972:  log likelihood = -14175.92,  aic = 28363.84</code></pre>
 <p>It looks like our search worked, so let’s look at the other method for fitting ARIMA models. The <code>auto.arima()</code> function in the <strong>forecast</strong> package will conduct an automatic search over all possible orders of ARIMA models that you specify. For details, type <code>?auto.arima</code> after loading the package. Let’s repeat our search using the same criteria.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## find best ARMA(p,q) model</span>
-<span class="kw">auto.arima</span>(ARMA.sim, <span class="dt">start.p=</span><span class="dv">0</span>, <span class="dt">max.p=</span><span class="dv">3</span>, <span class="dt">start.q=</span><span class="dv">0</span>, <span class="dt">max.q=</span><span class="dv">3</span>)</code></pre>
+<span class="kw">auto.arima</span>(ARMA.sim, <span class="dt">start.p =</span> <span class="dv">0</span>, <span class="dt">max.p =</span> <span class="dv">3</span>, <span class="dt">start.q =</span> <span class="dv">0</span>, <span class="dt">max.q =</span> <span class="dv">3</span>)</code></pre>
 <pre><code>Series: ARMA.sim 
 ARIMA(2,0,2) with non-zero mean 
 

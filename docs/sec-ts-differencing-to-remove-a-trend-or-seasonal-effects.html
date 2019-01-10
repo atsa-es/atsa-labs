@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -373,9 +373,9 @@ where <strong>B</strong> is the backshift operator (<em>i.e.</em>, <span class="
 <p>In R we can use the <code>diff()</code> function for differencing a time series, which requires 3 arguments: <code>x</code> (the data), <code>lag</code> (the lag at which to difference), and <code>differences</code> (the order of differencing; <span class="math inline">\(d\)</span> in Equation <a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html#eq:diffDefnB">(3.7)</a>). For example, first-differencing a time series will remove a linear trend (<em>i.e.</em>, <code>differences=1</code>); twice-differencing will remove a quadratic trend (<em>i.e.</em>, <code>differences=2</code>). In addition, first-differencing a time series at a lag equal to the period will remove a seasonal trend (<em>e.g.</em>, set <code>lag=12</code> for monthly data).</p>
 <p>Let’s use <code>diff()</code> to remove the trend and seasonal signal from the CO<span class="math inline">\(_2\)</span> time series, beginning with the trend. Close inspection of Figure <a href="sec-ts-time-series-plots.html#fig:ts-plotdata1">3.1</a> would suggest that there is a nonlinear increase in CO<span class="math inline">\(_2\)</span> concentration over time, so we’ll set <code>differences=2</code>):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## twice-difference the CO2 data</span>
-co2.D2 &lt;-<span class="st"> </span><span class="kw">diff</span>(co2, <span class="dt">differences=</span><span class="dv">2</span>)
+co2.D2 &lt;-<span class="st"> </span><span class="kw">diff</span>(co2, <span class="dt">differences =</span> <span class="dv">2</span>)
 <span class="co">## plot the differenced data</span>
-<span class="kw">plot</span>(co2.D2, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">paste</span>(nabla<span class="op">^</span><span class="dv">2</span>,<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>])))</code></pre>
+<span class="kw">plot</span>(co2.D2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(nabla<span class="op">^</span><span class="dv">2</span>, <span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>])))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotCO2diff2"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotCO2diff2-1.png" alt="Time series of the twice-differenced atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i." width="672" />
@@ -385,10 +385,10 @@ Figure 3.8: Time series of the twice-differenced atmospheric CO<span class="math
 </div>
 <p>We were apparently successful in removing the trend, but the seasonal effect still appears obvious (Figure <a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html#fig:ts-plotCO2diff2">3.8</a>). Therefore, let’s go ahead and difference that series at lag-12 because our data were collected monthly.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## difference the differenced CO2 data</span>
-co2.D2D12 &lt;-<span class="st"> </span><span class="kw">diff</span>(co2.D2, <span class="dt">lag=</span><span class="dv">12</span>)
+co2.D2D12 &lt;-<span class="st"> </span><span class="kw">diff</span>(co2.D2, <span class="dt">lag =</span> <span class="dv">12</span>)
 <span class="co">## plot the newly differenced data</span>
-<span class="kw">plot</span>(co2.D2D12,
-     <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">paste</span>(nabla,<span class="st">&quot;(&quot;</span>,nabla<span class="op">^</span><span class="dv">2</span>,<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>],<span class="st">&quot;)&quot;</span>)))</code></pre>
+<span class="kw">plot</span>(co2.D2D12, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(nabla, <span class="st">&quot;(&quot;</span>, nabla<span class="op">^</span><span class="dv">2</span>, 
+    <span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>], <span class="st">&quot;)&quot;</span>)))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotCO2diff12"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotCO2diff12-1.png" alt="Time series of the lag-12 difference of the twice-differenced atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i." width="672" />

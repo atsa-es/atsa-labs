@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -367,31 +367,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-fit-models-hyp" class="section level3">
 <h3><span class="header-section-number">5.8.1</span> Fit the models</h3>
 <p>We loop through the models, fit and store the results:</p>
-<pre class="sourceCode r"><code class="sourceCode r">out.tab=<span class="ot">NULL</span>
-fits=<span class="kw">list</span>()
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(Z.models)){
-     mod.list<span class="op">$</span>Z =<span class="st"> </span>Z.models[[i]] 
-     fit =<span class="st"> </span><span class="kw">MARSS</span>(sealData, <span class="dt">model=</span>mod.list,
-            <span class="dt">silent=</span><span class="ot">TRUE</span>, <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">maxit=</span><span class="dv">1000</span>))
-     out=<span class="kw">data.frame</span>(<span class="dt">H=</span><span class="kw">names</span>(Z.models)[i], 
-            <span class="dt">logLik=</span>fit<span class="op">$</span>logLik, <span class="dt">AICc=</span>fit<span class="op">$</span>AICc, <span class="dt">num.param=</span>fit<span class="op">$</span>num.params,
-            <span class="dt">m=</span><span class="kw">length</span>(<span class="kw">unique</span>(Z.models[[i]])),
-            <span class="dt">num.iter=</span>fit<span class="op">$</span>numIter, <span class="dt">converged=</span><span class="op">!</span>fit<span class="op">$</span>convergence)
-     out.tab=<span class="kw">rbind</span>(out.tab,out)
-     fits=<span class="kw">c</span>(fits,<span class="kw">list</span>(fit))
+<pre class="sourceCode r"><code class="sourceCode r">out.tab =<span class="st"> </span><span class="ot">NULL</span>
+fits =<span class="st"> </span><span class="kw">list</span>()
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(Z.models)) {
+    mod.list<span class="op">$</span>Z =<span class="st"> </span>Z.models[[i]]
+    fit =<span class="st"> </span><span class="kw">MARSS</span>(sealData, <span class="dt">model =</span> mod.list, <span class="dt">silent =</span> <span class="ot">TRUE</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1000</span>))
+    out =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">H =</span> <span class="kw">names</span>(Z.models)[i], <span class="dt">logLik =</span> fit<span class="op">$</span>logLik, 
+        <span class="dt">AICc =</span> fit<span class="op">$</span>AICc, <span class="dt">num.param =</span> fit<span class="op">$</span>num.params, <span class="dt">m =</span> <span class="kw">length</span>(<span class="kw">unique</span>(Z.models[[i]])), 
+        <span class="dt">num.iter =</span> fit<span class="op">$</span>numIter, <span class="dt">converged =</span> <span class="op">!</span>fit<span class="op">$</span>convergence)
+    out.tab =<span class="st"> </span><span class="kw">rbind</span>(out.tab, out)
+    fits =<span class="st"> </span><span class="kw">c</span>(fits, <span class="kw">list</span>(fit))
 }</code></pre>
 <p>We will use AICc and AIC weights to summarize the data support for the different hypotheses. First we will sort the fits based on AICc:</p>
-<pre class="sourceCode r"><code class="sourceCode r">min.AICc=<span class="kw">order</span>(out.tab<span class="op">$</span>AICc)
-out.tab<span class="fl">.1</span>=out.tab[min.AICc,]</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">min.AICc =<span class="st"> </span><span class="kw">order</span>(out.tab<span class="op">$</span>AICc)
+out.tab<span class="fl">.1</span> =<span class="st"> </span>out.tab[min.AICc, ]</code></pre>
 <p>Next we add the <span class="math inline">\(\Delta\)</span>AICc values by subtracting the lowest AICc:</p>
-<pre class="sourceCode r"><code class="sourceCode r">out.tab<span class="fl">.1</span>=<span class="kw">cbind</span>(out.tab<span class="fl">.1</span>,
-           <span class="dt">delta.AICc=</span>out.tab<span class="fl">.1</span><span class="op">$</span>AICc<span class="op">-</span>out.tab<span class="fl">.1</span><span class="op">$</span>AICc[<span class="dv">1</span>])</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">out.tab<span class="fl">.1</span> =<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>, <span class="dt">delta.AICc =</span> out.tab<span class="fl">.1</span><span class="op">$</span>AICc <span class="op">-</span><span class="st"> </span>out.tab<span class="fl">.1</span><span class="op">$</span>AICc[<span class="dv">1</span>])</code></pre>
 <p>Relative likelihood is defined as <span class="math inline">\(\,\text{exp}(-\Delta \mathrm{AICc}/2)\)</span>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">out.tab<span class="fl">.1</span>=<span class="kw">cbind</span>(out.tab<span class="fl">.1</span>, 
-           <span class="dt">rel.like=</span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span><span class="op">*</span>out.tab<span class="fl">.1</span><span class="op">$</span>delta.AICc<span class="op">/</span><span class="dv">2</span>))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">out.tab<span class="fl">.1</span> =<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>, <span class="dt">rel.like =</span> <span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>out.tab<span class="fl">.1</span><span class="op">$</span>delta.AICc<span class="op">/</span><span class="dv">2</span>))</code></pre>
 <p>The AIC weight for a model is its relative likelihood divided by the sum of all the relative likelihoods.</p>
-<pre class="sourceCode r"><code class="sourceCode r">out.tab<span class="fl">.1</span>=<span class="kw">cbind</span>(out.tab<span class="fl">.1</span>,
-          <span class="dt">AIC.weight =</span> out.tab<span class="fl">.1</span><span class="op">$</span>rel.like<span class="op">/</span><span class="kw">sum</span>(out.tab<span class="fl">.1</span><span class="op">$</span>rel.like))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">out.tab<span class="fl">.1</span> =<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>, <span class="dt">AIC.weight =</span> out.tab<span class="fl">.1</span><span class="op">$</span>rel.like<span class="op">/</span><span class="kw">sum</span>(out.tab<span class="fl">.1</span><span class="op">$</span>rel.like))</code></pre>
 <p>Let’s look at the model weights (<code>out.tab.1</code>):</p>
 <pre><code>               H delta.AICc AIC.weight converged
  NC+strait+PS+SC       0.00      0.979      TRUE

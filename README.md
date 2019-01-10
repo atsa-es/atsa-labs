@@ -219,7 +219,8 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
     bookdown::render_book("index.Rmd", "bookdown::gitbook")
     bookdown::render_book("index.Rmd", "bookdown::pdf_book")
     ```
-    
+Note this code may fail if _bookdown_files folder does not exist for the cache.  In that case, use 'Build Book' in RStudio.
+
 You can use 'Build Book' under the build tab in RStudio but make sure to run `source("cleanDefsinRmd.R")` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
 
 ## Build a chapter
@@ -269,7 +270,7 @@ This has tex files used for the PDF production.
 
 ### _bookdown_files (local machine only)
 
-bookdown populates this.  It has cache.  You don't want this on GitHub.
+bookdown populates this.  It has the cache.  You don't want this on GitHub.
 
 ### libs (local machine only)
 

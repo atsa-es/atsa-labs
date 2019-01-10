@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -364,12 +364,9 @@ QQ &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(m
 <h3><span class="header-section-number">7.6.2</span> The observation model</h3>
 <p>Here we will fit the DFA model above where we have <code>R N_ts</code> observed time series and we want 3 hidden states. Now we need to set up the observation model for <code>MARSS</code>. Here are the vectors and matrices for our first model where each nutrient follows its own process. Recall that we will need to set the elements in the upper R corner of <span class="math inline">\(\mathbf{Z}\)</span> to 0. We will assume that the observation errors have different variances and they are independent of one another.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## &#39;ZZ&#39; is loadings matrix</span>
-Z_vals &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;z11&quot;</span>,  <span class="dv">0</span>  ,  <span class="dv">0</span>  ,
-               <span class="st">&quot;z21&quot;</span>,<span class="st">&quot;z22&quot;</span>,  <span class="dv">0</span>  ,
-               <span class="st">&quot;z31&quot;</span>,<span class="st">&quot;z32&quot;</span>,<span class="st">&quot;z33&quot;</span>,
-               <span class="st">&quot;z41&quot;</span>,<span class="st">&quot;z42&quot;</span>,<span class="st">&quot;z43&quot;</span>,
-               <span class="st">&quot;z51&quot;</span>,<span class="st">&quot;z52&quot;</span>,<span class="st">&quot;z53&quot;</span>)
-ZZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z_vals, <span class="dt">nrow=</span>N_ts, <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">byrow=</span><span class="ot">TRUE</span>)
+Z_vals &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;z11&quot;</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="st">&quot;z21&quot;</span>, <span class="st">&quot;z22&quot;</span>, <span class="dv">0</span>, <span class="st">&quot;z31&quot;</span>, <span class="st">&quot;z32&quot;</span>, <span class="st">&quot;z33&quot;</span>, 
+    <span class="st">&quot;z41&quot;</span>, <span class="st">&quot;z42&quot;</span>, <span class="st">&quot;z43&quot;</span>, <span class="st">&quot;z51&quot;</span>, <span class="st">&quot;z52&quot;</span>, <span class="st">&quot;z53&quot;</span>)
+ZZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z_vals, <span class="dt">nrow =</span> N_ts, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)
 ZZ</code></pre>
 <pre><code>     [,1]  [,2]  [,3] 
 [1,] &quot;z11&quot; 0     0    
@@ -394,14 +391,16 @@ RR &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></code></pre>
 <li>A list of control parameters for the <code>MARSS()</code> function.</li>
 </ol>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## list with specifications for model vectors/matrices</span>
-mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>BB, <span class="dt">U=</span>uu, <span class="dt">C=</span>CC, <span class="dt">c=</span>cc, <span class="dt">Q=</span>QQ, <span class="dt">Z=</span>ZZ, <span class="dt">A=</span>aa, <span class="dt">D=</span>DD, <span class="dt">d=</span>dd, <span class="dt">R=</span>RR)
+mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> BB, <span class="dt">U =</span> uu, <span class="dt">C =</span> CC, <span class="dt">c =</span> cc, <span class="dt">Q =</span> QQ, <span class="dt">Z =</span> ZZ, 
+    <span class="dt">A =</span> aa, <span class="dt">D =</span> DD, <span class="dt">d =</span> dd, <span class="dt">R =</span> RR)
 <span class="co">## list with model inits</span>
-init_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0=</span><span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>,mm),mm,<span class="dv">1</span>))
+init_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>, mm), mm, <span class="dv">1</span>))
 <span class="co">## list with model control parameters</span>
-con_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">maxit=</span><span class="dv">3000</span>, <span class="dt">allow.degen=</span><span class="ot">TRUE</span>)</code></pre>
+con_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">3000</span>, <span class="dt">allow.degen =</span> <span class="ot">TRUE</span>)</code></pre>
 <p>Now we can fit the model.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## fit MARSS</span>
-dfa_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="dt">y=</span>dat, <span class="dt">model=</span>mod_list, <span class="dt">inits=</span>init_list, <span class="dt">control=</span>con_list)</code></pre>
+dfa_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="dt">y =</span> dat, <span class="dt">model =</span> mod_list, <span class="dt">inits =</span> init_list, 
+    <span class="dt">control =</span> con_list)</code></pre>
 <pre><code>Success! abstol and log-log tests passed at 246 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.

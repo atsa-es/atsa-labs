@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -344,16 +344,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-mlr-confound" class="section level2">
 <h2><span class="header-section-number">2.8</span> Models with confounded parameters*</h2>
 <p>Try adding region as another factor in your model along with quarter and fit with <code>lm()</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data=</span>fulldat))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data =</span> fulldat))</code></pre>
 <pre><code>  Air.Flow       regn       regs    qtrqtr2    qtrqtr3    qtrqtr4 
   1.066524 -49.024320 -44.831760  -3.066094   3.499428         NA </code></pre>
 <p>The estimate for quarter 1 is gone (actually it was set to 0) and the estimate for quarter 4 is NA. Look at the <span class="math inline">\(\mathbf{Z}\)</span> matrix for Form 1 and see if you can figure out the problem. Try also writing out the model for the 1st plant and you’ll see what part of the problem is and why the estimate for quarter 1 is fixed at 0.</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data=</span>fulldat)
-Z=<span class="kw">model.matrix</span>(fit)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data =</span> fulldat)
+Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit)</code></pre>
 <p>But why is the estimate for quarter 4 equal to NA? What if the ordering of north and south regions was different, say 1 through 4 north, 5 through 8 south, 9 through 12 north, etc?</p>
-<pre class="sourceCode r"><code class="sourceCode r">fulldat2=fulldat
-fulldat2<span class="op">$</span>reg2 =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;n&quot;</span>,<span class="st">&quot;n&quot;</span>,<span class="st">&quot;n&quot;</span>,<span class="st">&quot;s&quot;</span>,<span class="st">&quot;s&quot;</span>,<span class="st">&quot;s&quot;</span>,<span class="st">&quot;s&quot;</span>),<span class="dv">3</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">21</span>]
-fit=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg2 <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data=</span>fulldat2)
+<pre class="sourceCode r"><code class="sourceCode r">fulldat2 =<span class="st"> </span>fulldat
+fulldat2<span class="op">$</span>reg2 =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;s&quot;</span>, <span class="st">&quot;s&quot;</span>), 
+    <span class="dv">3</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">21</span>]
+fit =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg2 <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data =</span> fulldat2)
 <span class="kw">coef</span>(fit)</code></pre>
 <pre><code>(Intercept)    Air.Flow       reg2s     qtrqtr2     qtrqtr3     qtrqtr4 
 -45.6158421   1.0407975  -3.5754722   0.7329027   3.0389763   3.6960928 </code></pre>

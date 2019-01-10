@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -402,15 +402,11 @@ Figure 9.4: Trends.
 <pre class="sourceCode r"><code class="sourceCode r">mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">1</span>)
 mod_<span class="dv">2</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">2</span>)
 mod_<span class="dv">3</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">3</span>)
-mod_<span class="dv">4</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">4</span>)</code></pre>
-<pre><code>Warning: There were 4 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
+mod_<span class="dv">4</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">4</span>)
+mod_<span class="dv">5</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">5</span>)</code></pre>
+<pre><code>Warning: There were 301 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 <pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">mod_<span class="dv">5</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">5</span>)</code></pre>
-<pre><code>Warning: There were 132 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
-http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded
-
-Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
 <p>We will compute the Leave One Out Information Criterion (LOOIC) using the loo package. Like AIC, lower is better.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(loo)
 <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">1</span>))<span class="op">$</span>looic</code></pre>
@@ -422,13 +418,11 @@ MCSE estimates will be over-optimistic.</code></pre>
 
 Warning in log(z): NaNs produced
 
-Warning in log(z): NaNs produced
-
 Warning in log(z): NaNs produced</code></pre>
 <pre><code>Warning: Accessing looic using &#39;$&#39; is deprecated and will be removed in
 a future release. Please extract the looic estimate from the &#39;estimates&#39;
 component instead.</code></pre>
-<pre><code>[1] 1636.458</code></pre>
+<pre><code>[1] 1634.995</code></pre>
 <p>Table of the LOOIC values:</p>
 <pre class="sourceCode r"><code class="sourceCode r">looics =<span class="st"> </span><span class="kw">c</span>(<span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">1</span>))<span class="op">$</span>looic, <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">2</span>))<span class="op">$</span>looic, 
     <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">3</span>))<span class="op">$</span>looic, <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">4</span>))<span class="op">$</span>looic, 
@@ -438,6 +432,8 @@ For models fit with MCMC, the reported PSIS effective sample sizes and
 MCSE estimates will be over-optimistic.</code></pre>
 <pre><code>Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
 <pre><code>Warning in log(z): NaNs produced
+
+Warning in log(z): NaNs produced
 
 Warning in log(z): NaNs produced
 
@@ -512,11 +508,11 @@ component instead.</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">looic.table =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trends =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">LOOIC =</span> looics)
 looic.table</code></pre>
 <pre><code>  trends    LOOIC
-1      1 1636.458
-2      2 1608.670
-3      3 1486.296
-4      4 1456.736
-5      5 1438.147</code></pre>
+1      1 1634.995
+2      2 1583.003
+3      3 1477.893
+4      4 1431.200
+5      5 1439.394</code></pre>
 </div>
 </div>
             </section>

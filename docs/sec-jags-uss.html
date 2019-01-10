@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -354,10 +354,10 @@ y_t \sim \,\text{N}(x_t, r)
 \tag{8.8}
 \end{equation}\]</span>
 In the two above models, <span class="math inline">\(q\)</span> is the process variance and <span class="math inline">\(r\)</span> is the observation error variance. The JAGS code will use the standard deviation (square root) of these. The code to produce and fit this model is below:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 5. MAKE THE SS MODEL a univariate random walk</span>
-<span class="co"># no covariates. </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 5. MAKE THE SS MODEL a univariate random walk no</span>
+<span class="co"># covariates.</span>
 
-model.loc=(<span class="st">&quot;ss_model.txt&quot;</span>)
+model.loc =<span class="st"> </span>(<span class="st">&quot;ss_model.txt&quot;</span>)
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">model {  </span>
 <span class="st">   # priors on parameters</span>
@@ -379,19 +379,21 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">      Y[i] ~ dnorm(X[i], tau.obs); # Observation variation</span>
 <span class="st">   }</span>
 <span class="st">}  </span>
-<span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)
+<span class="st">&quot;</span>, 
+    <span class="dt">file =</span> model.loc)
 
-jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N)
-jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>,<span class="st">&quot;sd.r&quot;</span>,<span class="st">&quot;predY&quot;</span>,<span class="st">&quot;mu&quot;</span>)
-mod_ss =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, 
-<span class="dt">n.burnin=</span><span class="dv">5000</span>, <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </code></pre>
+jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)
+jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>)
+mod_ss =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, 
+    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, 
+    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
 <div id="sec-jags-covariates" class="section level3">
 <h3><span class="header-section-number">8.6.1</span> Including covariates</h3>
 <p>Returning to the first example of regression with the intercept only, we will introduce <code>Temp</code> as the covariate explaining our response variable <code>Wind</code>. Note that to include the covariate, we (1) modify the JAGS script to include a new coefficient—in this case <code>beta</code>, (2) update the predictive equation to include the effects of the new covariate, and (3) we include the new covariate in our named data list.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 6. Include some covariates in a linear regression</span>
-<span class="co"># Use temperature as a predictor of wind</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 6. Include some covariates in a linear regression Use</span>
+<span class="co"># temperature as a predictor of wind</span>
 
-model.loc=(<span class="st">&quot;lm.txt&quot;</span>)
+model.loc =<span class="st"> </span>(<span class="st">&quot;lm.txt&quot;</span>)
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">model {  </span>
 <span class="st">   mu ~ dnorm(0, 0.01); </span>
@@ -404,13 +406,14 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">      Y[i] ~ dnorm(predY[i], tau.obs);</span>
 <span class="st">   }</span>
 <span class="st">}  </span>
-<span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)
+<span class="st">&quot;</span>, 
+    <span class="dt">file =</span> model.loc)
 
-jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N,<span class="st">&quot;C&quot;</span>=Temp)
-jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>,<span class="st">&quot;predY&quot;</span>,<span class="st">&quot;mu&quot;</span>,<span class="st">&quot;beta&quot;</span>)
-mod_lm =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, 
-        <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin=</span><span class="dv">5000</span>, 
-        <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </code></pre>
+jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N, <span class="dt">C =</span> Temp)
+jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;beta&quot;</span>)
+mod_lm =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, 
+    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, 
+    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
 </div>
 </div>
             </section>

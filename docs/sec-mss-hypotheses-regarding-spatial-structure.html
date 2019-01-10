@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -421,7 +421,8 @@ Z.model[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</
 Z.model[<span class="kw">c</span>(<span class="dv">3</span><span class="op">:</span><span class="dv">6</span>,<span class="dv">11</span>),<span class="dv">2</span>]=<span class="dv">1</span>  <span class="co">#which elements in col 2 are 1</span>
 Z.model[<span class="dv">7</span><span class="op">:</span><span class="dv">8</span>,<span class="dv">3</span>]=<span class="dv">1</span>  <span class="co">#which elements in col 3 are 1</span></code></pre>
 <p>Or we can use a short-cut by specifying <span class="math inline">\(\mathbf{Z}\)</span> as a factor that has the name of the subpopulation associated with each row in <span class="math inline">\(\mathbf{y}\)</span>. For hypothesis 1, this is</p>
-<pre class="sourceCode r"><code class="sourceCode r">Z1=<span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="kw">rep</span>(<span class="st">&quot;ps&quot;</span>,<span class="dv">4</span>),<span class="st">&quot;ca&quot;</span>,<span class="st">&quot;ca&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;ps&quot;</span>)) </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">Z1 =<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;pnw&quot;</span>, <span class="st">&quot;pnw&quot;</span>, <span class="kw">rep</span>(<span class="st">&quot;ps&quot;</span>, <span class="dv">4</span>), <span class="st">&quot;ca&quot;</span>, <span class="st">&quot;ca&quot;</span>, <span class="st">&quot;pnw&quot;</span>, 
+    <span class="st">&quot;pnw&quot;</span>, <span class="st">&quot;ps&quot;</span>))</code></pre>
 <p>Notice it is 11 elements in length; one element for each row of data.</p>
 </div>
             </section>

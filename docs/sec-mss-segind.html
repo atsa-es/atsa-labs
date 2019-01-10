@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -409,18 +409,12 @@ No <span class="math inline">\(a\)</span>’s can be estimated since we do not h
 <div id="sec-mss-fitting-mod1" class="section level3">
 <h3><span class="header-section-number">5.4.2</span> Fitting the model</h3>
 <p>We set up the model list for <code>MARSS()</code> as:</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod.list<span class="fl">.1</span> =<span class="st"> </span><span class="kw">list</span>(
-<span class="dt">B=</span><span class="st">&quot;identity&quot;</span>,
-<span class="dt">U=</span><span class="st">&quot;equal&quot;</span>,
-<span class="dt">Q=</span><span class="st">&quot;diagonal and equal&quot;</span>,
-<span class="dt">Z=</span><span class="st">&quot;identity&quot;</span>,
-<span class="dt">A=</span><span class="st">&quot;scaling&quot;</span>,
-<span class="dt">R=</span><span class="st">&quot;diagonal and unequal&quot;</span>,
-<span class="dt">x0=</span><span class="st">&quot;unequal&quot;</span>,
-<span class="dt">tinitx=</span><span class="dv">0</span> )</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod.list<span class="fl">.1</span> =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">U =</span> <span class="st">&quot;equal&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and equal&quot;</span>, 
+    <span class="dt">Z =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>, <span class="dt">R =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, 
+    <span class="dt">x0 =</span> <span class="st">&quot;unequal&quot;</span>, <span class="dt">tinitx =</span> <span class="dv">0</span>)</code></pre>
 <p>We introduced a few more short-cuts. <code>&quot;equal&quot;</code> means all the values in the matrix are the same. <code>&quot;diagonal and equal&quot;</code> means that the matrix is diagonal with one value on the diagonal. <code>&quot;unequal&quot;</code> means that all values in the matrix are different.</p>
 <p>We can then fit our model for 4 subpopulations as:</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit<span class="fl">.1</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>mod.list<span class="fl">.1</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">fit<span class="fl">.1</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.list<span class="fl">.1</span>)</code></pre>
 </div>
 </div>
             </section>

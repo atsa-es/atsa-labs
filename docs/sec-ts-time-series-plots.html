@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -351,11 +351,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The second, <code>start</code>, specifies the first sample in terms of (<span class="math inline">\(day\)</span>, <span class="math inline">\(hour\)</span>), (<span class="math inline">\(year\)</span>, <span class="math inline">\(month\)</span>), etc. So, for example, if the data were collected monthly beginning in November of 1969, then <code>frequency=12</code> and <code>start=c(1969,11)</code>. If the data were collected annually, then you simply specify <code>start</code> as a scalar (<em>e.g.</em>, <code>start=1991</code>) and omit <code>frequency</code> (<em>i.e.</em>, R will set <code>frequency=1</code> by default).</p>
 <p>The Mauna Loa time series is collected monthly and begins in March of 1958, which we can get from the data themselves, and then pass to <code>ts()</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## create a time series (ts) object from the CO2 data</span>
-co2 &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data=</span>CO2<span class="op">$</span>ppm, <span class="dt">frequency=</span><span class="dv">12</span>,
-          <span class="dt">start=</span><span class="kw">c</span>(CO2[<span class="dv">1</span>,<span class="st">&quot;year&quot;</span>],CO2[<span class="dv">1</span>,<span class="st">&quot;month&quot;</span>]))</code></pre>
+co2 &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> CO2<span class="op">$</span>ppm, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(CO2[<span class="dv">1</span>, <span class="st">&quot;year&quot;</span>], 
+    CO2[<span class="dv">1</span>, <span class="st">&quot;month&quot;</span>]))</code></pre>
 <p>Now let’s plot the data using <code>plot.ts()</code>, which is designed specifically for <strong>ts</strong> objects like the one we just created above. It’s nice because we don’t need to specify any <span class="math inline">\(x\)</span>-values as they are taken directly from the <strong>ts</strong> object.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the ts</span>
-<span class="kw">plot.ts</span>(co2, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>],<span class="st">&quot; (ppm)&quot;</span>)))</code></pre>
+<span class="kw">plot.ts</span>(co2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>], <span class="st">&quot; (ppm)&quot;</span>)))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotdata1"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotdata1-1.png" alt="Time series of the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i measured monthly from March 1958 to present." width="672" />
@@ -368,22 +368,23 @@ Figure 3.1: Time series of the atmospheric CO<span class="math inline">\(_2\)</s
 <div id="sec-ts-combining-and-plotting-multiple-textbfts-objects" class="section level3">
 <h3><span class="header-section-number">3.2.2</span> Combining and plotting multiple <strong>ts</strong> objects</h3>
 <p>Before we examine the CO<span class="math inline">\(_2\)</span> data further, however, let’s see a quick example of how you can combine and plot multiple time series together. We’ll use the <a href="sec-ts-data.html#sec-ts-data">data</a> on monthly mean temperature anomolies for the Northern Hemisphere (<code>Temp</code>). First convert <code>Temp</code> to a <code>ts</code> object.</p>
-<pre class="sourceCode r"><code class="sourceCode r">temp.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data=</span>Temp<span class="op">$</span>Value, <span class="dt">frequency=</span><span class="dv">12</span>, <span class="dt">start=</span><span class="kw">c</span>(<span class="dv">1880</span>,<span class="dv">1</span>))</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">temp.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> Temp<span class="op">$</span>Value, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1880</span>, 
+    <span class="dv">1</span>))</code></pre>
 <p>Before we can plot the two time series together, however, we need to line up their time indices because the temperature data start in January of 1880, but the CO<span class="math inline">\(_2\)</span> data start in March of 1958. Fortunately, the <code>ts.intersect()</code> function makes this really easy once the data have been transformed to <strong>ts</strong> objects by trimming the data to a common time frame. Also, <code>ts.union()</code> works in a similar fashion, but it pads one or both series with the appropriate number of NA’s. Let’s try both.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## intersection (only overlapping times)</span>
-datI &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(co2,temp.ts)
+datI &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(co2, temp.ts)
 <span class="co">## dimensions of common-time data</span>
 <span class="kw">dim</span>(datI)</code></pre>
 <pre><code>[1] 682   2</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## union (all times)</span>
-datU &lt;-<span class="st"> </span><span class="kw">ts.union</span>(co2,temp.ts)
+datU &lt;-<span class="st"> </span><span class="kw">ts.union</span>(co2, temp.ts)
 <span class="co">## dimensions of all-time data</span>
 <span class="kw">dim</span>(datU)</code></pre>
 <pre><code>[1] 1647    2</code></pre>
 <p>As you can see, the intersection of the two data sets is much smaller than the union. If you compare them, you will see that the first 938 rows of <code>datU</code> contains <code>NA</code> in the <code>co2</code> column.</p>
 <p>It turns out that the regular <code>plot()</code> function in R is smart enough to recognize a <strong>ts</strong> object and use the information contained therein appropriately. Here’s how to plot the intersection of the two time series together with the y-axes on alternate sides (results are shown in Figure <a href="sec-ts-time-series-plots.html#fig:ts-plotdata2">3.2</a>):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the ts</span>
-<span class="kw">plot</span>(datI, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</code></pre>
+<span class="kw">plot</span>(datI, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotdata2"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotdata2-1.png" alt="Time series of the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) and the mean temperature index for the Northern Hemisphere (bottom) measured monthly from March 1958 to present." width="672" />

@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -360,7 +360,7 @@ This <span class="math inline">\(\mathbf{Q}\)</span> matrix structure means that
 mod.list<span class="fl">.2</span><span class="op">$</span>Q =<span class="st"> &quot;equalvarcov&quot;</span></code></pre>
 <p><code>&quot;equalvarcov&quot;</code> is a shortcut for the matrix form in Equation <a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html#eq:mss-qseg-mod2">(5.9)</a>.</p>
 <p>Fit the model with:</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit<span class="fl">.2</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>mod.list<span class="fl">.2</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">fit<span class="fl">.2</span> =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.list<span class="fl">.2</span>)</code></pre>
 <p>Results are not shown, but here are the AICc. This last model is much better:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(fit<span class="fl">.0</span><span class="op">$</span>AICc, fit<span class="fl">.1</span><span class="op">$</span>AICc, fit<span class="fl">.2</span><span class="op">$</span>AICc)</code></pre>
 <pre><code>[1] -19.02786 -22.20194 -41.00511</code></pre>
@@ -376,12 +376,15 @@ Figure 5.3: The model residuals for the model with four temporally correlated su
 </p>
 </div>
 <p>Figure <a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html#fig:mss-fig2-plot">5.4</a> shows the estimated states for each region using this code:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>){
-<span class="kw">plot</span>(years,fit<span class="fl">.2</span><span class="op">$</span>states[i,],<span class="dt">ylab=</span><span class="st">&quot;log subpopulation estimate&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)
-<span class="kw">lines</span>(years,fit<span class="fl">.2</span><span class="op">$</span>states[i,]<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span>fit<span class="fl">.2</span><span class="op">$</span>states.se[i,],<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">lwd=</span><span class="dv">1</span>,<span class="dt">lty=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">lines</span>(years,fit<span class="fl">.2</span><span class="op">$</span>states[i,]<span class="op">+</span><span class="fl">1.96</span><span class="op">*</span>fit<span class="fl">.2</span><span class="op">$</span>states.se[i,],<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">lwd=</span><span class="dv">1</span>,<span class="dt">lty=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">title</span>(<span class="kw">rownames</span>(dat)[i])
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {
+    <span class="kw">plot</span>(years, fit<span class="fl">.2</span><span class="op">$</span>states[i, ], <span class="dt">ylab =</span> <span class="st">&quot;log subpopulation estimate&quot;</span>, 
+        <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)
+    <span class="kw">lines</span>(years, fit<span class="fl">.2</span><span class="op">$</span>states[i, ] <span class="op">-</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>fit<span class="fl">.2</span><span class="op">$</span>states.se[i, 
+        ], <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">1</span>, <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+    <span class="kw">lines</span>(years, fit<span class="fl">.2</span><span class="op">$</span>states[i, ] <span class="op">+</span><span class="st"> </span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>fit<span class="fl">.2</span><span class="op">$</span>states.se[i, 
+        ], <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">1</span>, <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+    <span class="kw">title</span>(<span class="kw">rownames</span>(dat)[i])
 }</code></pre>
 
 <div class="figure"><span id="fig:mss-fig2-plot"></span>

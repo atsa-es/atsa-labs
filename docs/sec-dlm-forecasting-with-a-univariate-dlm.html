@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -372,19 +372,19 @@ kf.out =<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)
 eta =<span class="st"> </span>kf.out<span class="op">$</span>xtt1
 <span class="co">## ts of E(forecasts)</span>
 fore.mean =<span class="st"> </span><span class="kw">vector</span>()
-<span class="cf">for</span>(t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {
-  fore.mean[t] =<span class="st"> </span>Z[,,t] <span class="op">%*%</span><span class="st"> </span>eta[,t,drop=F]
+<span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {
+    fore.mean[t] =<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span>F]
 }</code></pre>
 <p>For the variance of the forecasts, we need <span class="math inline">\(\mathbf{F}_t\Phi_{t}\mathbf{F}_t^{\top} + \mathbf{R}\)</span>. As with the mean, <span class="math inline">\(\mathbf{F}_t \equiv \mathbf{Z}_t\)</span>. The variances of the one-step ahead forecasts of the parameters at time <span class="math inline">\(t\)</span> <span class="math inline">\((\Phi_t)\)</span> are also calculated as part of the Kalman filter algorithm—they are stored as <code>Vtt1</code> in the list produced by the <code>MARSSkfss()</code> function. Lastly, the observation variance <span class="math inline">\(\mathbf{R}\)</span> is part of the standard MARSS output.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## variance of regr parameters; 1x2xT array</span>
 Phi =<span class="st"> </span>kf.out<span class="op">$</span>Vtt1
 <span class="co">## obs variance; 1x1 matrix</span>
-R.est =<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R
+R.est =<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R
 <span class="co">## ts of Var(forecasts)</span>
 fore.var =<span class="st"> </span><span class="kw">vector</span>()
-<span class="cf">for</span>(t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {
-  tZ =<span class="st"> </span><span class="kw">matrix</span>(Z[,,t],m,<span class="dv">1</span>) <span class="co">## transpose of Z</span>
-  fore.var[t] =<span class="st"> </span>Z[,,t] <span class="op">%*%</span><span class="st"> </span>Phi[,,t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est
+<span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {
+    tZ =<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span>
+    fore.var[t] =<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est
 }</code></pre>
 <p>Plots of the model mean forecasts with their estimated uncertainty are shown in Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:plotdlmForeLogit">6.3</a>. Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time <span class="math inline">\(t\)</span> based on data available only through time <span class="math inline">\(t-1\)</span>. In this case, however, MARSS is actually estimating the states at <span class="math inline">\(t=0\)</span> (<span class="math inline">\(\boldsymbol{\theta}_0\)</span>), which allows us to compute a forecast for the first time point.
 <!-- % forecast plot - logit space --></p>
@@ -413,7 +413,7 @@ Figure 6.4: Time series of survival data (blue dots) and model mean forecasts (t
 innov =<span class="st"> </span>kf.out<span class="op">$</span>Innov</code></pre>
 <p>Let’s see if our innovations meet the model assumptions. Beginning with (1), we can use a Q-Q plot to see whether the innovations are normally distributed with a mean of zero. We’ll use the <code>qqnorm()</code> function to plot the quantiles of the innovations on the <span class="math inline">\(y\)</span>-axis versus the theoretical quantiles from a Normal distribution on the <span class="math inline">\(x\)</span>-axis. If the 2 distributions are similar, the points should fall on the line defined by <span class="math inline">\(y = x\)</span>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## Q-Q plot of innovations</span>
-<span class="kw">qqnorm</span>(<span class="kw">t</span>(innov), <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)
+<span class="kw">qqnorm</span>(<span class="kw">t</span>(innov), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)
 <span class="co">## add y=x line for easier interpretation</span>
 <span class="kw">qqline</span>(<span class="kw">t</span>(innov))</code></pre>
 <!-- % diagnostics plot: QQ -->
@@ -426,12 +426,12 @@ Figure 6.5: Q-Q plot of the forecast errors (innovations) for the DLM specified 
 </div>
 <p>The Q-Q plot (Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:plotdlmQQ">6.5</a>) indicates that the innovations appear to be more-or-less normally distributed (i.e., most points fall on the line). Furthermore, it looks like the mean of the innovations is about 0, but we should use a more reliable test than simple visual inspection. We can formally test whether the mean of the innovations is significantly different from 0 by using a one-sample <span class="math inline">\(t\)</span>-test. based on a null hypothesis of <span class="math inline">\(\,\text{E}(e_t)=0\)</span>. To do so, we will use the function <code>t.test()</code> and base our inference on a significance value of <span class="math inline">\(\alpha = 0.05\)</span>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## p-value for t-test of H0: E(innov) = 0</span>
-<span class="kw">t.test</span>(<span class="kw">t</span>(innov), <span class="dt">mu=</span><span class="dv">0</span>)<span class="op">$</span>p.value</code></pre>
+<span class="kw">t.test</span>(<span class="kw">t</span>(innov), <span class="dt">mu =</span> <span class="dv">0</span>)<span class="op">$</span>p.value</code></pre>
 <pre><code>[1] 0.4840901</code></pre>
 <p>The <span class="math inline">\(p\)</span>-value <span class="math inline">\(&gt;&gt;\)</span> 0.05 so we cannot reject the null hypothesis that <span class="math inline">\(\,\text{E}(e_t)=0\)</span>.</p>
 <p>Moving on to assumption (2), we can use the sample autocorrelation function (ACF) to examine whether the innovations covary with a time-lagged version of themselves. Using the <code>acf()</code> function, we can compute and plot the correlations of <span class="math inline">\(e_t\)</span> and <span class="math inline">\(e_{t-k}\)</span> for various values of <span class="math inline">\(k\)</span>. Assumption (2) will be met if none of the correlation coefficients exceed the 95% confidence intervals defined by <span class="math inline">\(\pm \, z_{0.975} / \sqrt{n}\)</span>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot ACF of innovations</span>
-<span class="kw">acf</span>(<span class="kw">t</span>(innov), <span class="dt">lag.max=</span><span class="dv">10</span>)</code></pre>
+<span class="kw">acf</span>(<span class="kw">t</span>(innov), <span class="dt">lag.max =</span> <span class="dv">10</span>)</code></pre>
 <!-- % diagnostics plot: ACF -->
 
 <div class="figure"><span id="fig:plotdlmACF"></span>

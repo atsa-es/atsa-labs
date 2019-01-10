@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -354,7 +354,7 @@ If the plant is in the south, our model is
 stack.loss_i = \alpha_s + \beta air_i + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
 \end{equation}\]</span>
 We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p>
-<pre class="sourceCode r"><code class="sourceCode r">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">reg=</span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;s&quot;</span>),n)[<span class="dv">1</span><span class="op">:</span>n])
+<pre class="sourceCode r"><code class="sourceCode r">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">reg =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;s&quot;</span>), n)[<span class="dv">1</span><span class="op">:</span>n])
 dat</code></pre>
 <pre><code>  Air.Flow Water.Temp Acid.Conc. stack.loss reg
 1       80         27         89         42   n
@@ -362,7 +362,7 @@ dat</code></pre>
 3       75         25         90         37   n
 4       62         24         87         28   s</code></pre>
 <p>And we can easily fit this model with <code>lm()</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">fit2 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data=</span>dat)
+<pre class="sourceCode r"><code class="sourceCode r">fit2 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data =</span> dat)
 <span class="kw">coef</span>(fit2)</code></pre>
 <pre><code>  Air.Flow       regn       regs 
  0.5358166 -2.0257880 -5.5429799 </code></pre>
@@ -380,27 +380,27 @@ dat</code></pre>
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
 \end{equation}\]</span>
 Notice that odd plants get <span class="math inline">\(\alpha_n\)</span> and even plants get <span class="math inline">\(\alpha_s\)</span>. Use <code>model.matrix()</code> to see that this is the <span class="math inline">\(\mathbf{Z}\)</span> matrix that <code>lm()</code> formed. Notice the matrix output by <code>model.matrix()</code> looks exactly like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Z=<span class="kw">model.matrix</span>(fit2)
-Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit2)
+Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</code></pre>
 <pre><code>  Air.Flow regn regs
 1       80    1    0
 2       80    0    1
 3       75    1    0
 4       62    0    1</code></pre>
 <p>We can solve for the parameters using <span class="math inline">\(\mathbf{x} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y}\)</span> as we did for Form 1 before by adding on the 1s and 0s columns we see in the <span class="math inline">\(\mathbf{Z}\)</span> matrix in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>. We could build this <span class="math inline">\(\mathbf{Z}\)</span> using the following R code:</p>
-<pre class="sourceCode r"><code class="sourceCode r">Z=<span class="kw">cbind</span>(dat<span class="op">$</span>Air.Flow,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))
-<span class="kw">colnames</span>(Z)=<span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;regn&quot;</span>,<span class="st">&quot;regs&quot;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">Z =<span class="st"> </span><span class="kw">cbind</span>(dat<span class="op">$</span>Air.Flow, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))
+<span class="kw">colnames</span>(Z) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;regn&quot;</span>, <span class="st">&quot;regs&quot;</span>)</code></pre>
 <p>Or just use <code>model.matrix()</code>. This will save time when models are more complex.</p>
-<pre class="sourceCode r"><code class="sourceCode r">Z=<span class="kw">model.matrix</span>(fit2)
-Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit2)
+Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</code></pre>
 <pre><code>  Air.Flow regn regs
 1       80    1    0
 2       80    0    1
 3       75    1    0
 4       62    0    1</code></pre>
 <p>Now we can solve for the parameters:</p>
-<pre class="sourceCode r"><code class="sourceCode r">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)
-<span class="kw">solve</span>(<span class="kw">t</span>(Z)<span class="op">%*%</span>Z)<span class="op">%*%</span><span class="kw">t</span>(Z)<span class="op">%*%</span>y</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)
+<span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y</code></pre>
 <pre><code>               [,1]
 Air.Flow  0.5358166
 regn     -2.0257880
@@ -427,18 +427,19 @@ regs     -5.5429799</code></pre>
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}\]</span></p>
 <p>To estimate the parameters, we need to be able to write a list matrix that looks like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.16)</a>. We can use the same code we used in Section <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a> with <span class="math inline">\(\mathbf{Z}\)</span> changed to look like that in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.16)</a>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)
-x=<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,dat<span class="op">$</span>Air.Flow),<span class="dt">ncol=</span><span class="dv">1</span>)
-n=<span class="kw">nrow</span>(dat)
-k=<span class="dv">1</span>
-<span class="co">#list matrix allows us to combine numbers and character strings</span>
-Z=<span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>),n,k<span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>)
-Z[<span class="kw">seq</span>(<span class="dv">1</span>,n,<span class="dv">2</span>),<span class="dv">1</span>]=<span class="st">&quot;alphanorth&quot;</span>
-Z[<span class="kw">seq</span>(<span class="dv">2</span>,n,<span class="dv">2</span>),<span class="dv">1</span>]=<span class="st">&quot;alphasouth&quot;</span>
-<span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n,<span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">:</span>n])=<span class="st">&quot;beta&quot;</span>
-P=MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[,,<span class="dv">1</span>]
-M=<span class="kw">kronecker</span>(<span class="kw">t</span>(x),<span class="kw">diag</span>(n))<span class="op">%*%</span>P
-<span class="kw">solve</span>(<span class="kw">t</span>(M)<span class="op">%*%</span>M)<span class="op">%*%</span><span class="kw">t</span>(M)<span class="op">%*%</span>y</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)
+x =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, dat<span class="op">$</span>Air.Flow), <span class="dt">ncol =</span> <span class="dv">1</span>)
+n =<span class="st"> </span><span class="kw">nrow</span>(dat)
+k =<span class="st"> </span><span class="dv">1</span>
+<span class="co"># list matrix allows us to combine numbers and character</span>
+<span class="co"># strings</span>
+Z =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n, k <span class="op">*</span><span class="st"> </span>n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
+Z[<span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphanorth&quot;</span>
+Z[<span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphasouth&quot;</span>
+<span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>n]) =<span class="st"> &quot;beta&quot;</span>
+P =<span class="st"> </span>MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[, , <span class="dv">1</span>]
+M =<span class="st"> </span><span class="kw">kronecker</span>(<span class="kw">t</span>(x), <span class="kw">diag</span>(n)) <span class="op">%*%</span><span class="st"> </span>P
+<span class="kw">solve</span>(<span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>M) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>y</code></pre>
 <pre><code>                 [,1]
 alphanorth -2.0257880
 alphasouth -5.5429799

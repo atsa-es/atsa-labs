@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -364,18 +364,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Here’s how to generate 100 samples from a normal distribution with mean of 5 and standard deviation of 0.2, and 50 samples from a Poisson distribution with a rate (<span class="math inline">\(\lambda\)</span>) of 20.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
 <span class="co">## random normal variates</span>
-GWN &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span><span class="dv">100</span>, <span class="dt">mean=</span><span class="dv">5</span>, <span class="dt">sd=</span><span class="fl">0.2</span>)
+GWN &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">mean =</span> <span class="dv">5</span>, <span class="dt">sd =</span> <span class="fl">0.2</span>)
 <span class="co">## random Poisson variates</span>
-PWN &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dt">n=</span><span class="dv">50</span>, <span class="dt">lambda=</span><span class="dv">20</span>)</code></pre>
+PWN &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">lambda =</span> <span class="dv">20</span>)</code></pre>
 <p>Here are plots of the time series. Notice that on one occasion the same number was drawn twice in a row from the Poisson distribution, which is discrete. That is virtually guaranteed to never happen with a continuous distribution.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## set up plot region</span>
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
 <span class="co">## plot normal variates with mean</span>
 <span class="kw">plot.ts</span>(GWN)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">5</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">5</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)
 <span class="co">## plot Poisson variates with mean</span>
 <span class="kw">plot.ts</span>(PWN)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">20</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>)</code></pre>
+<span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotDWNsims"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotDWNsims-1.png" alt="Time series plots of simulated Gaussian (left) and Poisson (right) white noise." width="672" />
@@ -385,11 +385,11 @@ Figure 3.18: Time series plots of simulated Gaussian (left) and Poisson (right) 
 </div>
 <p>Now let’s examine the ACF for the 2 white noise series and see if there is, in fact, zero autocorrelation for lags <span class="math inline">\(\geq\)</span> 1.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">## set up plot region</span>
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
 <span class="co">## plot normal variates with mean</span>
-<span class="kw">acf</span>(GWN, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">lag.max=</span><span class="dv">20</span>)
+<span class="kw">acf</span>(GWN, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">20</span>)
 <span class="co">## plot Poisson variates with mean</span>
-<span class="kw">acf</span>(PWN, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">lag.max=</span><span class="dv">20</span>)</code></pre>
+<span class="kw">acf</span>(PWN, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">20</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotACFdwn"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotACFdwn-1.png" alt="ACF’s for the simulated Gaussian (left) and Poisson (right) white noise shown in Figure 3.18." width="672" />

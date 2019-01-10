@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -351,8 +351,8 @@ Remember that in linear regression models, the residual error is interpreted as 
 <p>To run this model using our package, we’ll need to specify the response and predictor variables. The covariate matrix with an intercept only is a matrix of 1s. To double check, you could always look at</p>
 <pre class="sourceCode r"><code class="sourceCode r">x =<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(Temp <span class="op">~</span><span class="st"> </span><span class="dv">1</span>))</code></pre>
 <p>Fitting the model using our function is done with this code,</p>
-<pre class="sourceCode r"><code class="sourceCode r">lm_intercept =<span class="st"> </span><span class="kw">fit_stan</span>(<span class="dt">y =</span> <span class="kw">as.numeric</span>(Temp), <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)),
-  <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">lm_intercept =<span class="st"> </span><span class="kw">fit_stan</span>(<span class="dt">y =</span> <span class="kw">as.numeric</span>(Temp), <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), 
+    <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>)</code></pre>
 <p>Coarse summaries of <code>stanfit</code> objects can be examined by typing one of the following</p>
 <pre class="sourceCode r"><code class="sourceCode r">lm_intercept
 <span class="co"># this is huge</span>
@@ -369,7 +369,7 @@ so our estimated parameters are <span class="math inline">\(\beta\)</span> and <
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/stan-hist-1.png" width="672" /></p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">quantile</span>(pars<span class="op">$</span>beta, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))</code></pre>
 <pre><code>     2.5%       50%     97.5% 
- 4.889150  8.764638 12.970189 </code></pre>
+ 4.417566  8.774801 12.957942 </code></pre>
 <p>One of the other useful things we can do is look at the predicted values of our model (<span class="math inline">\(\hat{y}_t=\beta \times 1\)</span>) and overlay the data. The predicted values are <em>pars$pred</em>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, mean), <span class="dt">main =</span> <span class="st">&quot;Predicted values&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, 
     <span class="dt">ylab =</span> <span class="st">&quot;Wind&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(pars<span class="op">$</span>pred), <span class="kw">max</span>(pars<span class="op">$</span>pred)), 

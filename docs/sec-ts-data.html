@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -348,18 +348,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="co">## get CO2 data from Mauna Loa observatory</span>
 ww1 &lt;-<span class="st"> &quot;ftp://aftp.cmdl.noaa.gov/products/&quot;</span>
 ww2 &lt;-<span class="st"> &quot;trends/co2/co2_mm_mlo.txt&quot;</span>
-CO2fulltext &lt;-<span class="st"> </span><span class="kw">getURL</span>(<span class="kw">paste0</span>(ww1,ww2))
-CO2 &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">text=</span>CO2fulltext)[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>)]
+CO2fulltext &lt;-<span class="st"> </span><span class="kw">getURL</span>(<span class="kw">paste0</span>(ww1, ww2))
+CO2 &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">text =</span> CO2fulltext)[, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>)]
 <span class="co">## assign better column names</span>
-<span class="kw">colnames</span>(CO2) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;year&quot;</span>,<span class="st">&quot;month&quot;</span>,<span class="st">&quot;ppm&quot;</span>)
-<span class="kw">save</span>(CO2, CO2fulltext, <span class="dt">file=</span><span class="st">&quot;CO2_data.RData&quot;</span>)</code></pre>
+<span class="kw">colnames</span>(CO2) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;year&quot;</span>, <span class="st">&quot;month&quot;</span>, <span class="st">&quot;ppm&quot;</span>)
+<span class="kw">save</span>(CO2, CO2fulltext, <span class="dt">file =</span> <span class="st">&quot;CO2_data.RData&quot;</span>)</code></pre>
 <p>The data file contains some extra information that we don’t need, so we only read in a subset of the columns ( 1, 2 &amp; 5). <code>CO2fulltext</code> contains information on the data. Use <code>cat(CO2fulltext)</code> to read.</p>
 <p>The second data set we will use is Northern Hemisphere land and ocean temperature anomalies from NOAA. We downloaded this data set with the following code:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RCurl)
 ww1 &lt;-<span class="st"> &quot;https://www.ncdc.noaa.gov/cag/time-series/&quot;</span>
 ww2 &lt;-<span class="st"> &quot;global/nhem/land_ocean/p12/12/1880-2014.csv&quot;</span>
-Temp &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">text=</span><span class="kw">getURL</span>(<span class="kw">paste0</span>(ww1,ww2)), <span class="dt">skip=</span><span class="dv">4</span>)
-<span class="kw">save</span>(Temp, <span class="dt">file=</span><span class="st">&quot;NHemiTemp_data.RData&quot;</span>)</code></pre>
+Temp &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">text =</span> <span class="kw">getURL</span>(<span class="kw">paste0</span>(ww1, ww2)), <span class="dt">skip =</span> <span class="dv">4</span>)
+<span class="kw">save</span>(Temp, <span class="dt">file =</span> <span class="st">&quot;NHemiTemp_data.RData&quot;</span>)</code></pre>
 </div>
             </section>
 

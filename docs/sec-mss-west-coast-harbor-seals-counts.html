@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -356,7 +356,7 @@ Figure 5.1: Plot of the of the count data from the five harbor seal regions (Jef
 <div id="sec-mss-load-the-harbor-seal-data" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Load the harbor seal data</h3>
 <p>The harbor seal data are included in the <strong>MARSS</strong> package as matrix with years in column 1 and the logged counts in the other columns. Let’s look at the first few years of data:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(harborSealWA[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>,], <span class="dt">digits=</span><span class="dv">3</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(harborSealWA[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>, ], <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre>
 <pre><code>     Year  SJF  SJI EBays PSnd  HC
 [1,] 1978 6.03 6.75  6.63 5.82 6.6
 [2,] 1979   NA   NA    NA   NA  NA
@@ -367,11 +367,12 @@ Figure 5.1: Plot of the of the count data from the five harbor seal regions (Jef
 [7,] 1984 6.93 7.74  7.45   NA  NA
 [8,] 1985 7.16 7.53  7.26 6.60  NA</code></pre>
 <p>We are going to leave out Hood Canal (HC) since that region is somewhat isolated from the others and experiencing very different conditions due to hypoxic events and periodic intense killer whale predation. We will set up the data as follows:</p>
-<pre class="sourceCode r"><code class="sourceCode r">years =<span class="st"> </span>harborSealWA[,<span class="st">&quot;Year&quot;</span>]
-dat=<span class="st"> </span>harborSealWA[,<span class="op">!</span>(<span class="kw">colnames</span>(harborSealWA) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;HC&quot;</span>))]
-dat=<span class="kw">t</span>(dat) <span class="co">#transpose to have years across columns</span>
+<pre class="sourceCode r"><code class="sourceCode r">years =<span class="st"> </span>harborSealWA[, <span class="st">&quot;Year&quot;</span>]
+dat =<span class="st"> </span>harborSealWA[, <span class="op">!</span>(<span class="kw">colnames</span>(harborSealWA) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Year&quot;</span>, 
+    <span class="st">&quot;HC&quot;</span>))]
+dat =<span class="st"> </span><span class="kw">t</span>(dat)  <span class="co">#transpose to have years across columns</span>
 <span class="kw">colnames</span>(dat) =<span class="st"> </span>years
-n =<span class="st"> </span><span class="kw">nrow</span>(dat)<span class="op">-</span><span class="dv">1</span></code></pre>
+n =<span class="st"> </span><span class="kw">nrow</span>(dat) <span class="op">-</span><span class="st"> </span><span class="dv">1</span></code></pre>
 </div>
 </div>
             </section>

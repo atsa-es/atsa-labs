@@ -88,7 +88,7 @@ model {
    tau.obs ~ dgamma(0.001,0.001); 
    sd.obs <- 1/sqrt(tau.obs); 
    phi ~ dunif(-1,1);
-   tau.cor <- tau.obs * (1-phi*phi); # Var = sigma2 * (1-rho^2)
+   tau.cor <- tau.obs / (1-phi*phi); # Var = sigma2 * (1-rho^2)
    
    epsilon[1] <- Y[1] - mu;
    predY[1] <- mu; # initial value

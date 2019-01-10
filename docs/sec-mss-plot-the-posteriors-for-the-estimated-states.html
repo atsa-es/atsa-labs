@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -345,19 +345,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">5.11</span> Plot the posteriors for the estimated states</h2>
 <p>We can plot any of the variables we chose to return to R in the <code>jags.params</code> list. Let’s focus on the <code>X</code>. When we look at the dimension of the <code>X</code>, we can use the <code>apply()</code> function to calculate the means and 95 percent CIs of the estimated states.</p>
 
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#attach.jags attaches the jags.params to our workspace</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># attach.jags attaches the jags.params to our workspace</span>
 <span class="kw">attach.jags</span>(mod_<span class="dv">1</span>)
-means =<span class="st"> </span><span class="kw">apply</span>(X,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>),mean)
-upperCI =<span class="st"> </span><span class="kw">apply</span>(X,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>),quantile,<span class="fl">0.975</span>)
-lowerCI =<span class="st"> </span><span class="kw">apply</span>(X,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>),quantile,<span class="fl">0.025</span>)
-<span class="kw">par</span>(<span class="dt">mfrow =</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+means =<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), mean)
+upperCI =<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.975</span>)
+lowerCI =<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.025</span>)
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))
 nYears =<span class="st"> </span><span class="kw">dim</span>(Y)[<span class="dv">1</span>]
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(means)[<span class="dv">2</span>]) {
-  <span class="kw">plot</span>(means[,i],<span class="dt">lwd=</span><span class="dv">3</span>,<span class="dt">ylim=</span><span class="kw">range</span>(<span class="kw">c</span>(lowerCI[,i],upperCI[,i])),
-       <span class="dt">type=</span><span class="st">&quot;n&quot;</span>,<span class="dt">main=</span><span class="kw">colnames</span>(Y)[i],<span class="dt">ylab=</span><span class="st">&quot;log abundance&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;time step&quot;</span>)
-  <span class="kw">polygon</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nYears,nYears<span class="op">:</span><span class="dv">1</span>,<span class="dv">1</span>),
-          <span class="kw">c</span>(upperCI[,i],<span class="kw">rev</span>(lowerCI[,i]),upperCI[<span class="dv">1</span>,i]),<span class="dt">col=</span><span class="st">&quot;skyblue&quot;</span>,<span class="dt">lty=</span><span class="dv">0</span>)
-  <span class="kw">lines</span>(means[,i],<span class="dt">lwd=</span><span class="dv">3</span>)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(means)[<span class="dv">2</span>]) {
+    <span class="kw">plot</span>(means[, i], <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(lowerCI[, i], upperCI[, 
+        i])), <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">main =</span> <span class="kw">colnames</span>(Y)[i], <span class="dt">ylab =</span> <span class="st">&quot;log abundance&quot;</span>, 
+        <span class="dt">xlab =</span> <span class="st">&quot;time step&quot;</span>)
+    <span class="kw">polygon</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nYears, nYears<span class="op">:</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="kw">c</span>(upperCI[, i], <span class="kw">rev</span>(lowerCI[, 
+        i]), upperCI[<span class="dv">1</span>, i]), <span class="dt">col =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="dt">lty =</span> <span class="dv">0</span>)
+    <span class="kw">lines</span>(means[, i], <span class="dt">lwd =</span> <span class="dv">3</span>)
 }</code></pre>
 <div class="figure"><span id="fig:mss-plot-jags-states"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/mss-plot-jags-states-1.png" alt="Plot of the posterior means and credible intervals for the estimated states." width="672" />

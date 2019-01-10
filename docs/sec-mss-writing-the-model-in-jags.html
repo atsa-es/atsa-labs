@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -376,14 +376,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="st">   }</span>
 <span class="st">}  </span>
 
-<span class="st">&quot;</span>,<span class="dt">file=</span><span class="st">&quot;marss-jags.txt&quot;</span>)</code></pre>
+<span class="st">&quot;</span>, 
+    <span class="dt">file =</span> <span class="st">&quot;marss-jags.txt&quot;</span>)</code></pre>
 <p>Then we write the data list, parameter list, and pass the model to the <code>jags()</code> function:</p>
-<pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Y,<span class="dt">nSites=</span><span class="kw">dim</span>(Y)[<span class="dv">2</span>],<span class="dt">nYears =</span> <span class="kw">dim</span>(Y)[<span class="dv">1</span>]) <span class="co"># named list</span>
-jags.params=<span class="kw">c</span>(<span class="st">&quot;X&quot;</span>,<span class="st">&quot;U&quot;</span>,<span class="st">&quot;Q&quot;</span>) 
-model.loc=<span class="st">&quot;marss-jags.txt&quot;</span> <span class="co"># name of the txt file</span>
-mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, 
-             <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, 
-             <span class="dt">n.burnin=</span><span class="dv">5000</span>, <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Y, <span class="dt">nSites =</span> <span class="kw">dim</span>(Y)[<span class="dv">2</span>], <span class="dt">nYears =</span> <span class="kw">dim</span>(Y)[<span class="dv">1</span>])  <span class="co"># named list</span>
+jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;U&quot;</span>, <span class="st">&quot;Q&quot;</span>)
+model.loc =<span class="st"> &quot;marss-jags.txt&quot;</span>  <span class="co"># name of the txt file</span>
+mod_<span class="dv">1</span> =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, 
+    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, 
+    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
 </div>
             </section>
 

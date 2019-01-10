@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -349,11 +349,11 @@ E[y_t] = \phi * y_{t-1} + e_{t-1}
 \tag{8.6}
 \end{equation}\]</span></p>
 <p>The JAGS random walk model and R script to run the AR(1) model is below:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT</span>
-<span class="co"># We&#39;re introducting a new AR coefficient &#39;phi&#39;, so the model is </span>
-<span class="co"># y[t] ~ N(mu + phi*y[n-1], sigma^2) </span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT We&#39;re</span>
+<span class="co"># introducting a new AR coefficient &#39;phi&#39;, so the model is</span>
+<span class="co"># y[t] ~ N(mu + phi*y[n-1], sigma^2)</span>
 
-model.loc=(<span class="st">&quot;ar1_intercept.txt&quot;</span>)
+model.loc =<span class="st"> </span>(<span class="st">&quot;ar1_intercept.txt&quot;</span>)
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">model {  </span>
 <span class="st">   mu ~ dnorm(0, 0.01); </span>
@@ -367,13 +367,14 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">      Y[i] ~ dnorm(predY[i], tau.pro);</span>
 <span class="st">   }</span>
 <span class="st">}  </span>
-<span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)
+<span class="st">&quot;</span>, 
+    <span class="dt">file =</span> model.loc)
 
-jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N)
-jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.pro&quot;</span>,<span class="st">&quot;predY&quot;</span>,<span class="st">&quot;mu&quot;</span>,<span class="st">&quot;phi&quot;</span>)
-mod_ar1_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, 
-        <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin=</span><span class="dv">5000</span>, <span class="dt">n.thin=</span><span class="dv">1</span>, 
-        <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </code></pre>
+jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)
+jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.pro&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)
+mod_ar1_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, 
+    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, 
+    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
 </div>
             </section>
 

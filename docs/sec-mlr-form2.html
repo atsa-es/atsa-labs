@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -414,8 +414,8 @@ In this case, <span class="math inline">\(\mathbf{y}_t\)</span> is the set of 4 
 \end{bmatrix} 
 \end{equation*}\]</span>
 Notice how you just take each column one by one and stack them under each other. In R, the vec is</p>
-<pre class="sourceCode r"><code class="sourceCode r">A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>,<span class="dt">nrow=</span><span class="dv">2</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>)
-vecA =<span class="st"> </span><span class="kw">matrix</span>(A,<span class="dt">ncol=</span><span class="dv">1</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">A =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)
+vecA =<span class="st"> </span><span class="kw">matrix</span>(A, <span class="dt">ncol =</span> <span class="dv">1</span>)</code></pre>
 <p><span class="math inline">\(\mathbf{I}_n\)</span> is a <span class="math inline">\(n \times n\)</span> identity matrix, a diagonal matrix with all 0s on the off-diagonals and all 1s on the diagonal. In R, this is simply <code>diag(n)</code>.</p>
 <p>To show how we solve for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, let’s use an example with only 3 data points so Equation <a href="sec-mlr-form2.html#eq:stackloss-form2">(2.7)</a> becomes:
 <span class="math display" id="eq:stackloss-form2-small">\[\begin{equation}

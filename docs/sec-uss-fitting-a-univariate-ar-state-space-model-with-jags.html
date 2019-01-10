@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -345,7 +345,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.6</span> Fitting a univariate AR(1) state-space model with JAGS</h2>
 <p>Here we show how to fit model 3, Equation <a href="sec-uss-examples-using-the-nile-river-data.html#eq:uss-random-walk-w-noise-w-drift">(4.7)</a>, with JAGS. This section requires that you have JAGS installed and the <strong>R2jags</strong> and <strong>coda</strong> R packages loaded.</p>
 <p>The first step is to write the model for JAGS to a file (filename in <code>model.loc</code>):</p>
-<pre class="sourceCode r"><code class="sourceCode r">model.loc=<span class="st">&quot;ss_model.txt&quot;</span>
+<pre class="sourceCode r"><code class="sourceCode r">model.loc =<span class="st"> &quot;ss_model.txt&quot;</span>
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">   model {  </span>
 <span class="st">   # priors on parameters</span>
@@ -367,35 +367,27 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">   Y[i] ~ dnorm(X[i], tau.r); # Observation variation</span>
 <span class="st">   }</span>
 <span class="st">   }                  </span>
-<span class="st">   &quot;</span>,<span class="dt">file=</span>model.loc)</code></pre>
+<span class="st">   &quot;</span>, 
+    <span class="dt">file =</span> model.loc)</code></pre>
 <p>Next we specify the data (and any other input) that the JAGS code needs. In this case, we need to pass in <code>dat</code> and the number of time steps since that is used in the for loop. We also specify the parameters that we want to monitor. We need to specify at least one, but we will monitor all of them so we can plot them after fitting. Note, that the hidden state is a parameter in the Bayesian context (but not in the maximum likelihood context).</p>
-<pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=dat, <span class="st">&quot;N&quot;</span>=<span class="kw">length</span>(dat), <span class="dt">Y1=</span>dat[<span class="dv">1</span>])
-jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>,<span class="st">&quot;sd.r&quot;</span>,<span class="st">&quot;X&quot;</span>,<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;u&quot;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> dat, <span class="dt">N =</span> <span class="kw">length</span>(dat), <span class="dt">Y1 =</span> dat[<span class="dv">1</span>])
+jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;X&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;u&quot;</span>)</code></pre>
 <p>Now we can fit the model:</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod_ss =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, 
-     <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, 
-     <span class="dt">n.burnin=</span><span class="dv">5000</span>, <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">mod_ss =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, 
+    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, 
+    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
 <p>We can then show the posteriors along with the MLEs from MARSS on top (Figure <a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html#fig:uss-fig-posteriors">4.5</a> ) using the code below.</p>
 
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach.jags</span>(mod_ss)</code></pre>
-<pre><code>The following objects in .GlobalEnv will mask
-objects in the attached database:
-mu
-Remove these objects from .GlobalEnv? 
-
-1: YES
-2: NO
-
-Enter an item from the menu, or 0 to exit</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach.jags</span>(mod_ss)
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))
 <span class="kw">hist</span>(mu)
-<span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
 <span class="kw">hist</span>(u)
-<span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
 <span class="kw">hist</span>(<span class="kw">log</span>(sd.q<span class="op">^</span><span class="dv">2</span>))
-<span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
 <span class="kw">hist</span>(<span class="kw">log</span>(sd.r<span class="op">^</span><span class="dv">2</span>))
-<span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre>
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
 <div class="figure"><span id="fig:uss-fig-posteriors"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-fig-posteriors-1.png" alt="The posteriors for model 3 with MLE estimates from MARSS() shown in red." width="672" />
 <p class="caption">
@@ -405,20 +397,28 @@ Figure 4.5: The posteriors for model 3 with MLE estimates from <code>MARSS()</co
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">detach.jags</span>()</code></pre>
 <p>To plot the estimated states ( Figure <a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html#fig:uss-fig-bayesian-states">4.6</a> ), we write a helper function:</p>
 <pre class="sourceCode r"><code class="sourceCode r">plotModelOutput =<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {
-  <span class="kw">attach.jags</span>(jagsmodel)
-  x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="kw">length</span>(Y))
-  XPred =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(X,<span class="dv">2</span>,quantile,<span class="fl">0.025</span>), <span class="kw">apply</span>(X,<span class="dv">2</span>,mean), <span class="kw">apply</span>(X,<span class="dv">2</span>,quantile,<span class="fl">0.975</span>))
-  ylims =<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y,XPred), <span class="dt">na.rm=</span><span class="ot">TRUE</span>), <span class="kw">max</span>(<span class="kw">c</span>(Y,XPred), <span class="dt">na.rm=</span><span class="ot">TRUE</span>))
-  <span class="kw">plot</span>(Y, <span class="dt">col=</span><span class="st">&quot;white&quot;</span>,<span class="dt">ylim=</span>ylims, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;State predictions&quot;</span>)
-  <span class="kw">polygon</span>(<span class="kw">c</span>(x,<span class="kw">rev</span>(x)), <span class="kw">c</span>(XPred[,<span class="dv">1</span>], <span class="kw">rev</span>(XPred[,<span class="dv">3</span>])), <span class="dt">col=</span><span class="st">&quot;grey70&quot;</span>,<span class="dt">border=</span><span class="ot">NA</span>)
-  <span class="kw">lines</span>(XPred[,<span class="dv">2</span>])
-  <span class="kw">points</span>(Y)
+    <span class="kw">attach.jags</span>(jagsmodel)
+    x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))
+    XPred =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(X, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), <span class="kw">apply</span>(X, <span class="dv">2</span>, mean), 
+        <span class="kw">apply</span>(X, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))
+    ylims =<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, XPred), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="kw">max</span>(<span class="kw">c</span>(Y, XPred), 
+        <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
+    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> ylims, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;State predictions&quot;</span>)
+    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(XPred[, <span class="dv">1</span>], <span class="kw">rev</span>(XPred[, <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, 
+        <span class="dt">border =</span> <span class="ot">NA</span>)
+    <span class="kw">lines</span>(XPred[, <span class="dv">2</span>])
+    <span class="kw">points</span>(Y)
 }</code></pre>
 
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotModelOutput</span>(mod_ss, dat)
-<span class="kw">lines</span>(kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>,], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)
-<span class="kw">lines</span>(<span class="fl">1.96</span><span class="op">*</span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>,]<span class="op">+</span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>,], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lty=</span><span class="dv">2</span>)
-<span class="kw">lines</span>(<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>,]<span class="op">+</span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>,], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lty=</span><span class="dv">2</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plotModelOutput</span>(mod_ss, dat)</code></pre>
+<pre><code>The following object is masked _by_ .GlobalEnv:
+
+    mu</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">lines</span>(kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+<span class="kw">lines</span>(<span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>, ] <span class="op">+</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, 
+    <span class="dt">lty =</span> <span class="dv">2</span>)
+<span class="kw">lines</span>(<span class="op">-</span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>, ] <span class="op">+</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, 
+    <span class="dt">lty =</span> <span class="dv">2</span>)
 <span class="kw">title</span>(<span class="st">&quot;State estimate and data from</span><span class="ch">\n</span><span class="st">JAGS (black) versus MARSS (red)&quot;</span>)</code></pre>
 <div class="figure"><span id="fig:uss-fig-bayesian-states"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-fig-bayesian-states-1.png" alt="The estimated states from the Bayesian fit along with 95% credible intervals (black and grey) with the MLE states and 95% condidence intervals in red." width="672" />

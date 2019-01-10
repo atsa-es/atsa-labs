@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -349,11 +349,11 @@ E[y_t] = y_{t-1} + e_{t-1}
 \tag{8.5}
 \end{equation}\]</span></p>
 <p>And the <span class="math inline">\(e_t \sim \,\text{N}(0, \sigma^2)\)</span>. Remember back to the autocorrelated model (or MA(1) models) that we assumed that the errors <span class="math inline">\(e_t\)</span> followed a random walk. In contrast, the AR(1) model assumes that the errors are independent, but that the state of nature follows a random walk. The JAGS random walk model and R script to run it is below:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 3. AR(1) MODEL WITH NO ESTIMATED AR COEFFICIENT = RANDOM WALK</span>
-<span class="co"># no covariates. The model is y[t] ~ Normal(y[n-1], sigma) for </span>
-<span class="co"># we will call the precision tau.pro </span>
-<span class="co"># Note too that we have to define predY[1]</span>
-model.loc=(<span class="st">&quot;rw_intercept.txt&quot;</span>)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 3. AR(1) MODEL WITH NO ESTIMATED AR COEFFICIENT = RANDOM</span>
+<span class="co"># WALK no covariates. The model is y[t] ~ Normal(y[n-1],</span>
+<span class="co"># sigma) for we will call the precision tau.pro Note too that</span>
+<span class="co"># we have to define predY[1]</span>
+model.loc =<span class="st"> </span>(<span class="st">&quot;rw_intercept.txt&quot;</span>)
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">model {  </span>
 <span class="st">   mu ~ dnorm(0, 0.01); </span>
@@ -366,12 +366,14 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">      Y[i] ~ dnorm(predY[i], tau.pro);</span>
 <span class="st">   }</span>
 <span class="st">}  </span>
-<span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)
+<span class="st">&quot;</span>, 
+    <span class="dt">file =</span> model.loc)
 
-jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N)
-jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.pro&quot;</span>,<span class="st">&quot;predY&quot;</span>,<span class="st">&quot;mu&quot;</span>)
-mod_rw_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, <span class="dt">model.file=</span>model.loc, 
-<span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin=</span><span class="dv">5000</span>, <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </code></pre>
+jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)
+jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.pro&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>)
+mod_rw_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, 
+    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, 
+    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
 </div>
             </section>
 

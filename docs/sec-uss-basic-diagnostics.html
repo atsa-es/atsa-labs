@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-09">
+<meta name="date" content="2019-01-10">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -345,14 +345,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">4.5</span> Basic diagnostics</h2>
 <p>The first diagnostic that you do with any statistical analysis is check that your residuals correspond to your assumed error structure. We have two types of errors in a univariate state-space model: process errors, the <span class="math inline">\(w_t\)</span>, and observation errors, the <span class="math inline">\(v_t\)</span>.<br />
 They should not have a temporal trend. To get the residuals from most types of fits in R, you can use <code>residuals(fit)</code>. <code>MARSS()</code> calls the <span class="math inline">\(v_t\)</span>, “model residuals”, and the <span class="math inline">\(w_t\)</span> “state residuals”. We can plot these using the following code (Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-resids">4.3</a>).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-resids=<span class="kw">residuals</span>(kem<span class="fl">.0</span>)
-<span class="kw">plot</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>,], 
-   <span class="dt">ylab=</span><span class="st">&quot;model residual&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">main=</span><span class="st">&quot;flat level&quot;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)
-<span class="kw">plot</span>(resids<span class="op">$</span>state.residuals[<span class="dv">1</span>,], 
-   <span class="dt">ylab=</span><span class="st">&quot;state residual&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">main=</span><span class="st">&quot;flat level&quot;</span>)
-<span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
+resids =<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.0</span>)
+<span class="kw">plot</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">ylab =</span> <span class="st">&quot;model residual&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, 
+    <span class="dt">main =</span> <span class="st">&quot;flat level&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)
+<span class="kw">plot</span>(resids<span class="op">$</span>state.residuals[<span class="dv">1</span>, ], <span class="dt">ylab =</span> <span class="st">&quot;state residual&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, 
+    <span class="dt">main =</span> <span class="st">&quot;flat level&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</code></pre>
 
 <div class="figure"><span id="fig:uss-resids"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-resids-1.png" alt="The model and state residuals for the first 3 models." width="672" />
@@ -361,14 +361,14 @@ Figure 4.3: The model and state residuals for the first 3 models.
 </p>
 </div>
 <p>The residuals should also not be autocorrelated in time. We can check the autocorrelation with the function <code>acf()</code>. We won’t do this for the state residuals for the flat level or linear trends since for those models <span class="math inline">\(w_t=0\)</span>. The autocorrelation plots are shown in Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-acfs">4.4</a>. The stochastic level model looks the best in that its model residuals (the <span class="math inline">\(v_t\)</span>) are fine but the state model still has problems. Clearly the state is not a simple random walk. This is not surprising. The Aswan Low Dam was completed in 1902 and changed the mean flow. The Aswan High Dam was completed in 1970 and also affected the flow. You can see these perturbations in Figure <a href="sec-uss-examples-using-the-nile-river-data.html#fig:uss-plotdata">4.1</a>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
-resids=<span class="kw">residuals</span>(kem<span class="fl">.0</span>)
-<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>,], <span class="dt">main=</span><span class="st">&quot;flat level v(t)&quot;</span>)
-resids=<span class="kw">residuals</span>(kem<span class="fl">.1</span>)
-<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>,], <span class="dt">main=</span><span class="st">&quot;linear trend v(t)&quot;</span>)
-resids=<span class="kw">residuals</span>(kem<span class="fl">.2</span>)
-<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>,], <span class="dt">main=</span><span class="st">&quot;stoc level v(t)&quot;</span>)
-<span class="kw">acf</span>(resids<span class="op">$</span>state.residuals[<span class="dv">1</span>,], <span class="dt">main=</span><span class="st">&quot;stoc level w(t)&quot;</span>, <span class="dt">na.action=</span>na.pass)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))
+resids =<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.0</span>)
+<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;flat level v(t)&quot;</span>)
+resids =<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.1</span>)
+<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;linear trend v(t)&quot;</span>)
+resids =<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.2</span>)
+<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;stoc level v(t)&quot;</span>)
+<span class="kw">acf</span>(resids<span class="op">$</span>state.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;stoc level w(t)&quot;</span>, <span class="dt">na.action =</span> na.pass)</code></pre>
 
 <div class="figure"><span id="fig:uss-acfs"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-acfs-1.png" alt="The model and state residual acfs for the 3 models." width="672" />
