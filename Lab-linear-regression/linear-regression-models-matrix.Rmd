@@ -762,10 +762,12 @@ homeworkdat = airquality[1:5,]
     fit=lm(Ozone ~ -1 + Wind + Temp, data=homeworkdat)
     ```
     a. What changes in  your model? 
-    b. Write out the new $\ZZ$ and $\xx$ matrices.
+    b. Write out the new $\ZZ$ and $\xx$ matrices in Form 1.
+    c. Solve for the parameters ($\xx$) and show they match what is returned by ```lm()```.
 
-4.  a. Write the model for question 1 in Form 2. 
-    b. Adapt the code from subsection \@ref(sec-mlr-solveform2code) to solve for the parameters. You will need to construct new `Z`, `y` and `x` in the code.
+4.  a. Write the model for question 1 in Form 2.
+    b. Adapt the code from subsection \@ref(sec-mlr-solveform2code) and onstruct new `Z`, `y` and `x` in R code.
+    c. Solve for the parameters using the code from subsection \@ref(sec-mlr-solveform2code).
 
 5. A model of the ozone data with only a region (north/south) effect can be written:
     ```{r mlr-hw4}
@@ -773,19 +775,19 @@ homeworkdat = airquality[1:5,]
     ```
 
     a. Write this model in Form 1.
-    b. Show that you can solve for the parameter values you get from the ```lm()``` call.
+    b. Solve for the parameter values and show that they match what you get from the ```lm()``` call.
 
 6. a. Write the model in question 5 in Form 2. 
-   b. Show that you can solve for the parameter values you get from the ```lm()``` call.  Again to do this, you adapt the code from subsection \@ref(sec-mlr-solveform2code).
+   b. Solve for the parameter values and show that they match what you get from the ```lm()``` call.  To do this, you adapt the code from subsection \@ref(sec-mlr-solveform2code).
 
-7. Write the model below in Form 2.
+7. Write the model below in Form 2. Show the $\ZZ$, $\yy$ and $\xx$ matrices.
     ```{r mlr-hw5}
     fit=lm(Ozone ~ Temp:region, data=homeworkdat)
     ```
 
 8.  a. Using the airquality dataset with 111 data points, write the model below in Form 2.
-    b. Solve for the parameters by adapting code from subsection \@ref(sec-mlr-solveform2code).
     ```{r mlr-hw8}
     fit=lm(Ozone ~ -1 + Temp:region + Month, data=airquality)
     ```
+    b. Solve for the parameters by adapting code from subsection \@ref(sec-mlr-solveform2code).
 

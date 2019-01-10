@@ -366,29 +366,33 @@ homeworkdat =<span class="st"> </span>airquality[<span class="dv">1</span><span 
 <pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data =</span> homeworkdat)</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li>What changes in your model?</li>
-<li>Write out the new <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> matrices.</li>
+<li>Write out the new <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> matrices in Form 1.</li>
+<li>Solve for the parameters (<span class="math inline">\(\mathbf{x}\)</span>) and show they match what is returned by <code>lm()</code>.</li>
 </ol></li>
 <li><ol style="list-style-type: lower-alpha">
 <li>Write the model for question 1 in Form 2.</li>
-<li>Adapt the code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a> to solve for the parameters. You will need to construct new <code>Z</code>, <code>y</code> and <code>x</code> in the code.</li>
+<li>Adapt the code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a> and onstruct new <code>Z</code>, <code>y</code> and <code>x</code> in R code.</li>
+<li>Solve for the parameters using the code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a>.</li>
 </ol></li>
 <li><p>A model of the ozone data with only a region (north/south) effect can be written:</p>
 <pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>region, <span class="dt">data =</span> homeworkdat)</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li>Write this model in Form 1.</li>
-<li>Show that you can solve for the parameter values you get from the <code>lm()</code> call.</li>
+<li>Solve for the parameter values and show that they match what you get from the <code>lm()</code> call.</li>
 </ol></li>
 <li><ol style="list-style-type: lower-alpha">
 <li>Write the model in question 5 in Form 2.</li>
-<li>Show that you can solve for the parameter values you get from the <code>lm()</code> call. Again to do this, you adapt the code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a>.</li>
+<li>Solve for the parameter values and show that they match what you get from the <code>lm()</code> call. To do this, you adapt the code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a>.</li>
 </ol></li>
-<li><p>Write the model below in Form 2.</p>
+<li><p>Write the model below in Form 2. Show the <span class="math inline">\(\mathbf{Z}\)</span>, <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> matrices.</p>
 <pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Temp<span class="op">:</span>region, <span class="dt">data =</span> homeworkdat)</code></pre></li>
 <li><ol style="list-style-type: lower-alpha">
 <li>Using the airquality dataset with 111 data points, write the model below in Form 2.</li>
-<li>Solve for the parameters by adapting code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a>.</li>
 </ol>
-<pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Temp<span class="op">:</span>region <span class="op">+</span><span class="st"> </span>Month, <span class="dt">data =</span> airquality)</code></pre></li>
+<pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Temp<span class="op">:</span>region <span class="op">+</span><span class="st"> </span>Month, <span class="dt">data =</span> airquality)</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Solve for the parameters by adapting code from subsection <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a>.</li>
+</ol></li>
 </ol>
 
 </div>
