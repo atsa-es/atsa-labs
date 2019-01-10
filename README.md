@@ -281,7 +281,25 @@ To build the book on your local machine, you'll install the bookdown package and
 
 I have many files in my local repository that don't need to be on GitHub.  If a book build fails, the clean up fails so you will have a lot of extra directories and files in your base directory.  Normally, if build does not fail, bookdown moves this to the docs folder.  The `#Misc` stuff is stuff I am working on and have not been cleaned up yet.
 
-Here is what my .gitignore looks like:
+Here is what my .gitignore looks like on my mac:
+
+Here is what my .gitignore looks like on my PC. `Applied_Time_Series_Analysis_cache` is created by create pdf (then deleted) and `_bookdown_files` created by Build Book (and not deleted).
+
+```
+#RProj files
+.Rproj.user/
+*.Rproj
+Applied_Time_Series_Analysis_cache/
+Applied_Time_Series_Analysis_files/
+Applied_Time_Series_Analysis.Rmd
+Applied_Time_Series_Analysis.tex
+Applied_Time_Series_Analysis.pdf
+Applied_Time_Series_Analysis.log
+Applied_Time_Series_Analysis.toc
+libs
+_bookdown_files
+```
+Here is what my .gitignore looks like on my PC:
 
 ```
 #RProj files
