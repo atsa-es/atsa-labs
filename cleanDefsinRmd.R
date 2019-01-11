@@ -21,7 +21,8 @@ replace.defs = function(defsfile, inputfile, outputfile){
 basefiles=c(
   "Lab-basic-matrix/basic-matrix-math",
   "Lab-linear-regression/linear-regression-models-matrix",
-  "Lab-intro-to-ts/intro-ts-funcs",
+  "Lab-intro-to-ts/intro-to-ts",
+  "Lab-intro-to-ts/intro-ts-funcs-lab",
   "Lab-dynamic-factor-analysis/intro-to-dfa",
   "Lab-fitting-uni-ss-models/fitting-univariate-state-space",
   "Lab-fitting-multi-ss-models/multivariate-ss",
