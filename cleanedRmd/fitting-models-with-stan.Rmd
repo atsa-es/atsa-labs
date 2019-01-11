@@ -124,7 +124,7 @@ Like in our first model, we assume that the data follows a normal likelihood (or
 
 We can fit this regression with autocorrelated errors by changing the model name to  'regression_cor' 
 
-```{r stan-lr-ar, cache=TRUE, results='hide'}
+```{r stan-lr-ar, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
 lm_intercept_cor = fit_stan(y = Temp, x = rep(1, length(Temp)),
   model_name = "regression_cor", 
   mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
@@ -139,7 +139,7 @@ $$y_t = y_{t-1} + e_{t}$$
 And the ${e}_{t} \sim N(0, \sigma)$. Remember back to the autocorrelated model (or MA(1) models) that we assumed that the errors $e_t$ followed a random walk. In contrast, this model assumes that the errors are independent, but that the state of nature follows a random walk. Note also that this model as written doesn't include a drift term (this can be turned on / off using the ``est_drift`` argument).
 
 We can fit the random walk model using argument `model_name = 'rw'` passed to the ``fit_stan()`` function.
-```{r stan-rw, cache=TRUE, results='hide'}
+```{r stan-rw, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
 rw = fit_stan(y = Temp, est_drift = FALSE, model_name = "rw")
 ```
 
@@ -151,7 +151,7 @@ $$y_t = \phi y_{t-1} + e_{t}$$.
 
 The ``fit_stan()`` function can fit higher order AR models, but for now we just want to fit an AR(1) model and make a histogram of phi.
 
-```{r stan-ar1-fit, results='hide', cache=TRUE}
+```{r stan-ar1-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
 ar1 = fit_stan(y = Temp, x = matrix(1, nrow = length(Temp), ncol = 1), 
   model_name = "ar", est_drift=FALSE, P = 1)
 ```
@@ -167,7 +167,7 @@ $$Y_t \sim N(x_t, r)$$
 In the two above models, we'll refer to $q$ as the standard deviation of the process variance and $r$ as the standard deviation of the observation error variance
 
 We can fit the state-space AR(1) and random walk models using the ``fit_stan()`` function:
-```{r stan-arrw, results='hide', cache=TRUE}
+```{r stan-arrw, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
 ss_ar = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_ar")
 ss_rw = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
 ```
@@ -207,7 +207,7 @@ for(i in 1:5)
 ```
 
 Run a 3 trend model on these data.
-```{r stan-dfa.3.trend, results='hide', cache=TRUE}
+```{r stan-dfa.3.trend, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
 mod_3 = fit_dfa(y = dat.spp.1980, num_trends=3)
 ```
 
@@ -266,7 +266,7 @@ matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
 ```
 
 Assume they are all observing a single trend.
-```{r stan-seal-fit, results='hide', cache=TRUE}
+```{r stan-seal-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
 seal.mod= fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
 ```
 

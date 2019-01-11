@@ -7,13 +7,13 @@ knitr::opts_knit$set(unnamed.chunk.label = "uss-")
 \chaptermark{Univariate state-space models}
 
 
-This chapter will show you how to fit some basic univariate state-space models using the **MARSS** package. This will also introduce you to the idea of writing AR models in state-space form.  
+This chapter will show you how to fit some basic univariate state-space models using the **MARSS** package, the `StructTS()` function, and JAGS code. This chapter will also introduce you to the idea of writing AR(1) models in state-space form.  
 
 A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-univariate-state-space.R). The Rmd for this chapter can be downloaded [here](./Rmds/fitting-univariate-state-space.Rmd).
 
 ### Data and packages  {-}
 
-All the data used in the chapter are in the **MARSS** package. The other  required packages are **stats** (normally loaded by default when starting R), **datasets** and **forecast**.  To run the JAGS code example (optional), you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed and the **R2jags** and **coda** R packages.  Install the packages, if needed, and load:
+All the data used in the chapter are in the **MARSS** package. The other  required packages are **stats** (normally loaded by default when starting R), **datasets** and **forecast**.  To run the JAGS code example (optional), you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed and the **R2jags**, **rjags** and **coda** R packages.  Install the packages, if needed, and load:
 ```{r uss-loadpackages, results='hide', message=FALSE, warning=FALSE}
 library(stats)
 library(MARSS)
@@ -38,7 +38,7 @@ The **MARSS** package fits multivariate auto-regressive models of this form:
 \end{equation}
 To fit your time series model with the **MARSS** package, you need to put your model into the form above.  The $\mathbf{B}$, $\mathbf{Z}$, $\mathbf{u}$, $\mathbf{a}$, $\mathbf{Q}$, $\mathbf{R}$ and $\boldsymbol{\mu}$ are parameters that are (potentially) estimated. The $\mathbf{y}$ are your data.  The $\mathbf{x}$ are the hidden state(s).  Everything in bold is a matrix; if it is a small bolded letter, it is a matrix with 1 column.
 
-*Important: this state-space model, $\mathbf{y}$ is always the data and $\mathbf{x}$ is a hidden random walk estimated from the data.*
+*Important: In the state-space model equation, $\mathbf{y}$ is always the data and $\mathbf{x}$ is a hidden random walk estimated from the data.*
 
 A basic ``MARSS()`` call looks like
 ``fit=MARSS(y, model=list(...))``.
@@ -79,7 +79,7 @@ y=cumsum(rnorm(n,0,sqrt(q)))+rnorm(n,0,sqrt(r))
 ```
 And then fit with ``MARSS()`` using ``mod.list`` above:
 ```{r uss-ar1-fit}
-fit=MARSS(y,model=mod.list)
+fit=MARSS(y, model=mod.list)
 ```
 
 If we wanted to fix $q=0.1$, then $\mathbf{Q}=[0.1]$ (a $1 \times 1$ matrix with 0.1). We just change ``mod.list$Q`` and re-fit:
@@ -417,9 +417,10 @@ acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
 \clearpage
 
 
-## Fitting a univariate AR(1) state-space model with JAGS {#sec-uss-fitting-a-univariate-ar--state-space-model-with-jags}
+## Fitting with JAGS {#sec-uss-fitting-with-jags}
 
-Here we show how to fit model 3, Equation \@ref(eq:uss-random-walk-w-noise-w-drift), with JAGS.  This section requires that you have JAGS installed and the **R2jags** and **coda** R packages loaded.
+Here we show how to fit the stochastic level model, model 3 Equation \@ref(eq:uss-random-walk-w-noise-w-drift), with JAGS.  This is a model where the level is a random walk with drift and the Nile River flow is that level plus error. 
+This section requires that you have JAGS installed and the **R2jags**, **rjags** and **coda** R packages loaded.
 
 The first step is to write the model for JAGS to a file (filename in ``model.loc``):
 ```{r uss-jags-model}
@@ -479,7 +480,7 @@ detach.jags()
  
 
 To plot the estimated states ( Figure \@ref(fig:uss-fig-bayesian-states) ), we write a helper function:
-```{r uss-jags-plot-states-fun}
+```{r uss-jags-plot-states-fun, message=FALSE, warning=FALSE}
 plotModelOutput = function(jagsmodel, Y) {
   attach.jags(jagsmodel)
   x = seq(1,length(Y))
@@ -502,7 +503,102 @@ lines(-1.96*kem.3$states.se[1,]+kem.3$states[1,], col="red", lty=2)
 title("State estimate and data from\nJAGS (black) versus MARSS (red)")
 ```
  
+## Fitting with STAN {#sec-uss-fitting-with-stan}
 
+Let's fit the same model with STAN using the **rstan** package.
+
+```{r uss-stan-setup, message=FALSE}
+library(datasets)
+library(rstan)
+y = as.vector(Nile)
+```
+
+First we write the model.  We could write this to a file (recommended), but for this example, we write as a character object. Though the syntax is different from the JAGS code, it has many similarities.
+
+```{r uss-stan-ar-model}
+scode <- "
+data {
+  int<lower=0> N;
+  vector[N] y;
+}
+parameters {
+  real x0;
+  real u;
+  vector[N] pro_dev;
+  real<lower=0> sd_q;
+  real<lower=0> sd_r;
+}
+transformed parameters {
+  vector[N] x;
+  x[1] = x0 + u + pro_dev[1];
+  for(i in 2:N) {
+    x[i] = x[i-1] + u + pro_dev[i];
+  }
+}
+model {
+  x0 ~ normal(y[1],10);
+  u ~ normal(0,2);
+  sd_q ~ cauchy(0,5);
+  sd_r ~ cauchy(0,5);
+  pro_dev ~ normal(0, sd_q);
+  y ~ normal(x, sd_r);
+}
+generated quantities {
+  vector[N] log_lik;
+  for (n in 1:N) log_lik[n] = normal_lpdf(y[n] | x[n], sd_r);
+}
+"
+```
+
+Then we call `stan()` and pass in the data, names of parameter we wish to have returned, and information on number of chains, samples (iter), and thinning. The output is verbose (hidden here) and may have some warnings.
+
+```{r uss-stan-fit-model, message=FALSE, warning=FALSE, results='hide'}
+mod = rstan::stan(model_code = scode, 
+                  data = list("y"=y,"N"=length(y)), 
+                  pars = c("sd_q","x", "sd_r", "u", "x0"),
+                  chains = 3, 
+                  iter = 1000, 
+                  thin = 1)
+```
+
+We use `extract()` to extract the parameters from the fitted model and we can plot.  The estimated level is `x` and we will plot that with the 95% credible intervals.
+```{r uss-stan-ar-level, fig.cap="Estimated level and 95% credible intervals.  Blue line is the actual Nile River levels."}
+pars = rstan::extract(mod)
+pred_mean = apply(pars$x, 2, mean)
+pred_lo = apply(pars$x, 2, quantile, 0.025)
+pred_hi = apply(pars$x, 2, quantile, 0.975)
+plot(pred_mean, type = "l", lwd = 3, 
+     ylim = range(c(pred_mean, pred_lo, pred_hi)), ylab = "Nile River Level")
+lines(pred_lo)
+lines(pred_hi)
+lines(y, col="blue")
+```
+
+Here is a `ggplot()` version of the plot.
+
+```{r uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95% credible intervals"}
+library(ggplot2)
+nile <- data.frame(y=y, year=1871:1970)
+h <- ggplot(nile, aes(year))
+h + geom_ribbon(aes(ymin = pred_lo, ymax = pred_hi), fill = "grey70") +
+  geom_line(aes(y = pred_mean), size=1) +
+  geom_line(aes(y = y), color="blue") +
+  labs(y = "Nile River level")
+```
+
+We can plot the histogram of the samples against the values estimated via maximum likelihood.
+
+```{r uss-stan-hist-pars, fig.cap="Histogram of the parameter samples versus the estimate (red line) from maximum likelihood."}
+par(mfrow = c(2, 2))
+hist(pars$x0)
+abline(v = coef(kem.3)$x0, col = "red")
+hist(pars$u)
+abline(v = coef(kem.3)$U, col = "red")
+hist(log(pars$sd_q^2))
+abline(v = log(coef(kem.3)$Q), col = "red")
+hist(log(pars$sd_r^2))
+abline(v = log(coef(kem.3)$R), col = "red")
+```
 
 ## A random walk model of animal movement {#sec-uss-a-simple-random-walk-model-of-animal-movement}
 A simple random walk model of movement with drift (directional movement) but no correlation is 

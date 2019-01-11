@@ -24,7 +24,7 @@ q=0.1; r=0.1; n=100
 y=cumsum(rnorm(n,0,sqrt(q)))+rnorm(n,0,sqrt(r))
 
 ## ----uss-ar1-fit---------------------------------------------------------
-fit=MARSS(y,model=mod.list)
+fit=MARSS(y, model=mod.list)
 
 ## ----uss-mod.list.1, results='hide'--------------------------------------
 mod.list$Q=matrix(0.1)
@@ -260,7 +260,7 @@ hist(log(sd.r^2))
 abline(v=log(coef(kem.3)$R), col="red")
 detach.jags()
 
-## ----uss-jags-plot-states-fun--------------------------------------------
+## ----uss-jags-plot-states-fun, message=FALSE, warning=FALSE--------------
 plotModelOutput = function(jagsmodel, Y) {
   attach.jags(jagsmodel)
   x = seq(1,length(Y))
@@ -278,6 +278,84 @@ lines(kem.3$states[1,], col="red")
 lines(1.96*kem.3$states.se[1,]+kem.3$states[1,], col="red", lty=2)
 lines(-1.96*kem.3$states.se[1,]+kem.3$states[1,], col="red", lty=2)
 title("State estimate and data from\nJAGS (black) versus MARSS (red)")
+
+## ----uss-stan-setup, message=FALSE---------------------------------------
+library(datasets)
+library(rstan)
+y = as.vector(Nile)
+
+## ----uss-stan-ar-model---------------------------------------------------
+scode <- "
+data {
+  int<lower=0> N;
+  vector[N] y;
+}
+parameters {
+  real x0;
+  real u;
+  vector[N] pro_dev;
+  real<lower=0> sd_q;
+  real<lower=0> sd_r;
+}
+transformed parameters {
+  vector[N] x;
+  x[1] = x0 + u + pro_dev[1];
+  for(i in 2:N) {
+    x[i] = x[i-1] + u + pro_dev[i];
+  }
+}
+model {
+  x0 ~ normal(y[1],10);
+  u ~ normal(0,2);
+  sd_q ~ cauchy(0,5);
+  sd_r ~ cauchy(0,5);
+  pro_dev ~ normal(0, sd_q);
+  y ~ normal(x, sd_r);
+}
+generated quantities {
+  vector[N] log_lik;
+  for (n in 1:N) log_lik[n] = normal_lpdf(y[n] | x[n], sd_r);
+}
+"
+
+## ----uss-stan-fit-model, message=FALSE, warning=FALSE, results='hide'----
+mod = rstan::stan(model_code = scode, 
+                  data = list("y"=y,"N"=length(y)), 
+                  pars = c("sd_q","x", "sd_r", "u", "x0"),
+                  chains = 3, 
+                  iter = 1000, 
+                  thin = 1)
+
+## ----uss-stan-ar-level, fig.cap="Estimated level and 95% credible intervals.  Blue line is the actual Nile River levels."----
+pars = rstan::extract(mod)
+pred_mean = apply(pars$x, 2, mean)
+pred_lo = apply(pars$x, 2, quantile, 0.025)
+pred_hi = apply(pars$x, 2, quantile, 0.975)
+plot(pred_mean, type = "l", lwd = 3, 
+     ylim = range(c(pred_mean, pred_lo, pred_hi)), ylab = "Nile River Level")
+lines(pred_lo)
+lines(pred_hi)
+lines(y, col="blue")
+
+## ----uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95% credible intervals"----
+library(ggplot2)
+nile <- data.frame(y=y, year=1871:1970)
+h <- ggplot(nile, aes(year))
+h + geom_ribbon(aes(ymin = pred_lo, ymax = pred_hi), fill = "grey70") +
+  geom_line(aes(y = pred_mean), size=1) +
+  geom_line(aes(y = y), color="blue") +
+  labs(y = "Nile River level")
+
+## ----uss-stan-hist-pars, fig.cap="Histogram of the parameter samples versus the estimate (red line) from maximum likelihood."----
+par(mfrow = c(2, 2))
+hist(pars$x0)
+abline(v = coef(kem.3)$x0, col = "red")
+hist(pars$u)
+abline(v = coef(kem.3)$U, col = "red")
+hist(log(pars$sd_q^2))
+abline(v = log(coef(kem.3)$Q), col = "red")
+hist(log(pars$sd_r^2))
+abline(v = log(coef(kem.3)$R), col = "red")
 
 ## ----uss-hw1, results='hide'---------------------------------------------
 library(MARSS)

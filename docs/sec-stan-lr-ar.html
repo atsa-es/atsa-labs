@@ -249,9 +249,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>5.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="5.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>5.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="5.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>5.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="5.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>5.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
-<li class="chapter" data-level="5.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>5.7</b> A random walk model of animal movement</a></li>
-<li class="chapter" data-level="5.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>5.8</b> Problems</a></li>
+<li class="chapter" data-level="5.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>5.6</b> Fitting with JAGS</a></li>
+<li class="chapter" data-level="5.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>5.7</b> Fitting with STAN</a></li>
+<li class="chapter" data-level="5.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>5.8</b> A random walk model of animal movement</a></li>
+<li class="chapter" data-level="5.9" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>5.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>6</b> Multivariate state-space models without covariates</a><ul>
 <li class="chapter" data-level="" data-path="chap-mss.html"><a href="chap-mss.html#data-and-packages-3"><i class="fa fa-check"></i>Data and packages</a></li>
@@ -376,9 +377,6 @@ Like in our first model, we assume that the data follows a normal likelihood (or
 <pre class="sourceCode r"><code class="sourceCode r">lm_intercept_cor =<span class="st"> </span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), 
     <span class="dt">model_name =</span> <span class="st">&quot;regression_cor&quot;</span>, <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, 
         <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</code></pre>
-<pre><code>Warning: There were 4 divergent transitions after warmup. Increasing adapt_delta above 0.8 may help. See
-http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</code></pre>
-<pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
 </div>
             </section>
 

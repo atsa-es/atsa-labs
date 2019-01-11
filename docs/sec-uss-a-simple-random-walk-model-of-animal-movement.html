@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>5.7 A random walk model of animal movement | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>5.8 A random walk model of animal movement | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="5.7 A random walk model of animal movement | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="5.8 A random walk model of animal movement | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5.7 A random walk model of animal movement | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="5.8 A random walk model of animal movement | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -32,7 +32,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html">
+<link rel="prev" href="sec-uss-fitting-with-stan.html">
 <link rel="next" href="sec-uss-problems.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -249,9 +249,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>5.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="5.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>5.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="5.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>5.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="5.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>5.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
-<li class="chapter" data-level="5.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>5.7</b> A random walk model of animal movement</a></li>
-<li class="chapter" data-level="5.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>5.8</b> Problems</a></li>
+<li class="chapter" data-level="5.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>5.6</b> Fitting with JAGS</a></li>
+<li class="chapter" data-level="5.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>5.7</b> Fitting with STAN</a></li>
+<li class="chapter" data-level="5.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>5.8</b> A random walk model of animal movement</a></li>
+<li class="chapter" data-level="5.9" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>5.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>6</b> Multivariate state-space models without covariates</a><ul>
 <li class="chapter" data-level="" data-path="chap-mss.html"><a href="chap-mss.html#data-and-packages-3"><i class="fa fa-check"></i>Data and packages</a></li>
@@ -366,7 +367,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="sec-uss-a-simple-random-walk-model-of-animal-movement" class="section level2">
-<h2><span class="header-section-number">5.7</span> A random walk model of animal movement</h2>
+<h2><span class="header-section-number">5.8</span> A random walk model of animal movement</h2>
 <p>A simple random walk model of movement with drift (directional movement) but no correlation is
 <span class="math display" id="eq:uss-movement">\[\begin{gather}
 x_{1,t} = x_{1,t-1} + u_1 + w_{1,t}, \;\; w_{1,t} \sim \,\text{N}(0,\sigma^2_1)\\
@@ -406,7 +407,7 @@ The variance-covariance matrix for <span class="math inline">\(\mathbf{w}_t\)</s
           </div>
         </div>
       </div>
-<a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-uss-fitting-with-stan.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="sec-uss-problems.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>

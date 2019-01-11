@@ -33,7 +33,7 @@
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 <link rel="prev" href="sec-uss-basic-diagnostics.html">
-<link rel="next" href="sec-uss-a-simple-random-walk-model-of-animal-movement.html">
+<link rel="next" href="sec-uss-fitting-a-univariate-ar-state-space-model-with-stan.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -250,8 +250,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>5.4</b> Comparing models with AIC and model weights</a></li>
 <li class="chapter" data-level="5.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>5.5</b> Basic diagnostics</a></li>
 <li class="chapter" data-level="5.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>5.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
-<li class="chapter" data-level="5.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>5.7</b> A random walk model of animal movement</a></li>
-<li class="chapter" data-level="5.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>5.8</b> Problems</a></li>
+<li class="chapter" data-level="5.7" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-stan.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-stan.html"><i class="fa fa-check"></i><b>5.7</b> Fitting a univariate AR(1) state-space model with STAN</a></li>
+<li class="chapter" data-level="5.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>5.8</b> A random walk model of animal movement</a></li>
+<li class="chapter" data-level="5.9" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>5.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>6</b> Multivariate state-space models without covariates</a><ul>
 <li class="chapter" data-level="" data-path="chap-mss.html"><a href="chap-mss.html#data-and-packages-3"><i class="fa fa-check"></i>Data and packages</a></li>
@@ -367,7 +368,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="sec-uss-fitting-a-univariate-ar--state-space-model-with-jags" class="section level2">
 <h2><span class="header-section-number">5.6</span> Fitting a univariate AR(1) state-space model with JAGS</h2>
-<p>Here we show how to fit model 3, Equation <a href="sec-uss-examples-using-the-nile-river-data.html#eq:uss-random-walk-w-noise-w-drift">(5.7)</a>, with JAGS. This section requires that you have JAGS installed and the <strong>R2jags</strong> and <strong>coda</strong> R packages loaded.</p>
+<p>Here we show how to fit the stochastic level model, model 3 Equation <a href="sec-uss-examples-using-the-nile-river-data.html#eq:uss-random-walk-w-noise-w-drift">(5.7)</a>, with JAGS. This is a model where the level is a random walk with drift and the Nile River flow is that level plus error.
+This section requires that you have JAGS installed and the <strong>R2jags</strong>, <strong>rjags</strong> and <strong>coda</strong> R packages loaded.</p>
 <p>The first step is to write the model for JAGS to a file (filename in <code>model.loc</code>):</p>
 <pre class="sourceCode r"><code class="sourceCode r">model.loc =<span class="st"> &quot;ss_model.txt&quot;</span>
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
@@ -457,7 +459,7 @@ Figure 5.6: The estimated states from the Bayesian fit along with 95% credible i
         </div>
       </div>
 <a href="sec-uss-basic-diagnostics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-stan.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
