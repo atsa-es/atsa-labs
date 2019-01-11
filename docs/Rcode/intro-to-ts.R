@@ -1,14 +1,14 @@
-## ----ex-ts-plot-www, fig.cap = "Number of users connected to the internet"----
+## ----ts-plot-www, fig.cap = "Number of users connected to the internet"----
 data(WWWusage)
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(WWWusage, ylab = "", las = 1, col = "blue", lwd = 2)
 
-## ----ex-ts-plot-lynx, fig.cap = "Number of lynx trapped in Canada from 1821-1934"----
+## ----ts-plot-lynx, fig.cap = "Number of lynx trapped in Canada from 1821-1934"----
 data(lynx)
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(lynx, ylab = "", las = 1, col = "blue", lwd = 2)
 
-## ----load-quantmod, message=FALSE, warning=FALSE, echo=FALSE, results='hide'----
+## ----ts-load-quantmod, message=FALSE, warning=FALSE, echo=FALSE, results='hide'----
 if (!require("quantmod")) {
     install.packages("quantmod")
     library(quantmod)
@@ -18,7 +18,7 @@ end <- as.Date("2016-10-01")
 getSymbols("MSFT", src = "yahoo", from = start, to = end)
 plot(MSFT[, "MSFT.Close"], main = "MSFT")
 
-## ----ex-ts-plot-joint-dist, echo=FALSE, fig.cap="Distribution of realizations"----
+## ----ts-plot-joint-dist, echo=FALSE, fig.cap="Distribution of realizations"----
 set.seed(123)
 nn <- 50
 tt <- 40
@@ -28,31 +28,31 @@ matplot(ww, type="l", lty="solid",  las = 1,
         ylab = expression(italic(X[t])), xlab = "Time",
         col = gray(0.5, 0.4))
 
-## ----ex-ts-plot-joint-dist-2, echo=FALSE, fig.cap="Blue line is our one realization."----
+## ----ts-plot-joint-dist-2, echo=FALSE, fig.cap="Blue line is our one realization."----
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 matplot(ww, type="l", lty="solid",  las = 1,
         ylab = expression(italic(X[t])), xlab = "Time",
         col = gray(0.5, 0.4))
 lines(ww[,1], col = "blue", lwd = 2)
 
-## ----ex_WN---------------------------------------------------------------
+## ----ts-ex-WN------------------------------------------------------------
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 matplot(ww, type="l", lty="solid",  las = 1,
         ylab = expression(italic(x[t])), xlab = "Time",
         col = gray(0.5, 0.4))
 
-## ----ex_RW---------------------------------------------------------------
+## ----ts-ex-RW------------------------------------------------------------
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 matplot(apply(ww, 2, cumsum), type="l", lty="solid",  las = 1,
         ylab = expression(italic(x[t])), xlab = "Time",
         col = gray(0.5, 0.4))
 
-## ----plot-airpass, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960"----
+## ----ts-plot-airpass, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960"----
 xx <- AirPassengers
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(xx, las = 1, ylab = "")
 
-## ----plot-airpass-fltr1, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a low filter."----
+## ----ts-plot-airpass-fltr1, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a low filter."----
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(xx, las = 1, ylab = "")
 ## weights for moving avg
@@ -63,7 +63,7 @@ text(x = 1949, y = max(trend, na.rm = TRUE),
      labels = expression(paste(lambda, " = 1/3")),
      adj = c(0,0), col = "blue")
 
-## ----plot-airpass-fltr2, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a medium filter."----
+## ----ts-plot-airpass-fltr2, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a medium filter."----
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(xx, las = 1, ylab = "")
 ## weights for moving avg
@@ -78,7 +78,7 @@ text(x = 1949, y = max(trend, na.rm = TRUE)*0.9,
      labels = expression(paste(lambda, " = 1/9")),
      adj = c(0,0), col = "darkorange")
 
-## ----plot-airpass-fltr3, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a high filter."----
+## ----ts-plot-airpass-fltr3, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a high filter."----
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(xx, las = 1, ylab = "")
 ## weights for moving avg
@@ -116,12 +116,12 @@ ee <- decompose(xx)$random
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(ee, las = 1, ylab = "")
 
-## ----plot_ln_airpass, fig.cap = "Log monthly airline passengers from 1949-1960"----
+## ----ts-plot-ln-airpass, fig.cap = "Log monthly airline passengers from 1949-1960"----
 lx <- log(AirPassengers)
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(lx, las = 1, ylab = "")
 
-## ----plot_lin_trend, echo=FALSE------------------------------------------
+## ----ts-plot-lin-trend, echo=FALSE---------------------------------------
 tt <- as.vector(time(xx))
 cc <- coef(lm(lx ~ tt))
 pp <- cc[1] + cc[2] * tt

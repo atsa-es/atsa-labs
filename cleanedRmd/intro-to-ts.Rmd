@@ -12,13 +12,13 @@ At a very basic level, a time series is a set of observations taken sequentially
 
 ## Examples of time series
 
-```{r ex-ts-plot-www, fig.cap = "Number of users connected to the internet"}
+```{r ts-plot-www, fig.cap = "Number of users connected to the internet"}
 data(WWWusage)
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(WWWusage, ylab = "", las = 1, col = "blue", lwd = 2)
 ```
 
-```{r ex-ts-plot-lynx, fig.cap = "Number of lynx trapped in Canada from 1821-1934"}
+```{r ts-plot-lynx, fig.cap = "Number of lynx trapped in Canada from 1821-1934"}
 data(lynx)
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(lynx, ylab = "", las = 1, col = "blue", lwd = 2)
@@ -85,7 +85,7 @@ Most statistical analyses are concerned with estimating properties of a populati
 
 For example, one can’t observe today’s closing price of Microsoft stock more than once. Thus, conventional statistical procedures, based on large sample estimates, are inappropriate.
 
-```{r load-quantmod, message=FALSE, warning=FALSE, echo=FALSE, results='hide'}
+```{r ts-load-quantmod, message=FALSE, warning=FALSE, echo=FALSE, results='hide'}
 if (!require("quantmod")) {
     install.packages("quantmod")
     library(quantmod)
@@ -102,7 +102,7 @@ We use a time series model to analyze time series data.  A _time series model_ f
 
 Here is a plot of many realizations from a time series model.
 
-```{r ex-ts-plot-joint-dist, echo=FALSE, fig.cap="Distribution of realizations"}
+```{r ts-plot-joint-dist, echo=FALSE, fig.cap="Distribution of realizations"}
 set.seed(123)
 nn <- 50
 tt <- 40
@@ -115,7 +115,7 @@ matplot(ww, type="l", lty="solid",  las = 1,
 
 These lines represent the distribution of possible realizations.  However, we have only one realization. The time series model allows us to use the one realization we have to make inferences about the underlying joint distribution from whence our realization came.
 
-```{r ex-ts-plot-joint-dist-2, echo=FALSE, fig.cap="Blue line is our one realization."}
+```{r ts-plot-joint-dist-2, echo=FALSE, fig.cap="Blue line is our one realization."}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 matplot(ww, type="l", lty="solid",  las = 1,
         ylab = expression(italic(X[t])), xlab = "Time",
@@ -128,7 +128,7 @@ lines(ww[,1], col = "blue", lwd = 2)
 
 White noise: $x_t \sim N(0,1)$
 
-```{r ex_WN}
+```{r ts-ex-WN}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 matplot(ww, type="l", lty="solid",  las = 1,
         ylab = expression(italic(x[t])), xlab = "Time",
@@ -137,7 +137,7 @@ matplot(ww, type="l", lty="solid",  las = 1,
 
 Random walk: $x_t = x_{t-1} + w_t,~\text{with}~w_t \sim N(0,1)$
 
-```{r ex_RW}
+```{r ts-ex-RW}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 matplot(apply(ww, 2, cumsum), type="l", lty="solid",  las = 1,
         ylab = expression(italic(x[t])), xlab = "Time",
@@ -181,7 +181,7 @@ $$
 
 Here is a time series.
 
-```{r plot-airpass, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960"}
+```{r ts-plot-airpass, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960"}
 xx <- AirPassengers
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(xx, las = 1, ylab = "")
@@ -189,7 +189,7 @@ plot.ts(xx, las = 1, ylab = "")
 
 A linear filter with $a=3$ closely tracks the data.
 
-```{r plot-airpass-fltr1, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a low filter."}
+```{r ts-plot-airpass-fltr1, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a low filter."}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(xx, las = 1, ylab = "")
 ## weights for moving avg
@@ -203,7 +203,7 @@ text(x = 1949, y = max(trend, na.rm = TRUE),
 
 As we increase the length of data that is averaged from 1 on each side ($a=3$) to 4 on each side ($a=9$), the trend line is smoother.
 
-```{r plot-airpass-fltr2, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a medium filter."}
+```{r ts-plot-airpass-fltr2, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a medium filter."}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(xx, las = 1, ylab = "")
 ## weights for moving avg
@@ -221,7 +221,7 @@ text(x = 1949, y = max(trend, na.rm = TRUE)*0.9,
 
 When we increase up to 13 points on each side ($a=27$), the trend line is very smooth.
 
-```{r plot-airpass-fltr3, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a high filter."}
+```{r ts-plot-airpass-fltr3, echo=FALSE, fig.cap = "Monthly airline passengers from 1949-1960 with a high filter."}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(xx, las = 1, ylab = "")
 ## weights for moving avg
@@ -289,7 +289,7 @@ plot.ts(ee, las = 1, ylab = "")
 
 Let's repeat the decomposition with the log of the airline data.
 
-```{r plot_ln_airpass, fig.cap = "Log monthly airline passengers from 1949-1960"}
+```{r ts-plot-ln-airpass, fig.cap = "Log monthly airline passengers from 1949-1960"}
 lx <- log(AirPassengers)
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(lx, las = 1, ylab = "")
@@ -297,7 +297,7 @@ plot.ts(lx, las = 1, ylab = "")
 
 ### The trend ($m_t$)
 
-```{r plot_lin_trend, echo=FALSE}
+```{r ts-plot-lin-trend, echo=FALSE}
 tt <- as.vector(time(xx))
 cc <- coef(lm(lx ~ tt))
 pp <- cc[1] + cc[2] * tt
