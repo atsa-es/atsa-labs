@@ -206,7 +206,7 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
 [back to top](#afts-labbook-info)
 
 * knitr, bookdown, formatR
-* rjags, r2jags, and install JAGS
+* rjags, r2jags, coda, and install JAGS
 * rstan
 * forecast
 * MARSS

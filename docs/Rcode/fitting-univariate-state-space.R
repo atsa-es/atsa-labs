@@ -4,6 +4,7 @@ library(MARSS)
 library(forecast)
 library(datasets)
 library(R2jags)
+library(rjags)
 library(coda)
 
 ## ----uss-bad.1-----------------------------------------------------------

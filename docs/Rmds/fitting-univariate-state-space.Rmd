@@ -7,19 +7,20 @@ knitr::opts_knit$set(unnamed.chunk.label = "uss-")
 \chaptermark{Univariate state-space models}
 
 
-This lab show you how to fit some basic univariate state-space models using MARSS(). This will also introduce you to the idea of writing AR models in state-space form.  
+This lab will show you how to fit some basic univariate state-space models using MARSS(). This will also introduce you to the idea of writing AR models in state-space form.  
 
 A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-univariate-state-space.R). The Rmd for this chapter can be downloaded [here](./Rmds/fitting-univariate-state-space.Rmd).
 
 ### Data and packages  {-}
 
-All the data used in the chapter are in the **MARSS** package. The other  required packages are **stats** (normally loaded by default when starting R), **datasets** and **forecast**.  To run the JAGS code example, you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed and the **R2jags** and **coda** R packages.  Install the packages, if needed, and load:
+All the data used in the chapter are in the **MARSS** package. The other  required packages are **stats** (normally loaded by default when starting R), **datasets** and **forecast**.  To run the JAGS code example (optional), you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed and the **R2jags** and **coda** R packages.  Install the packages, if needed, and load:
 ```{r uss-loadpackages, results='hide', message=FALSE, warning=FALSE}
 library(stats)
 library(MARSS)
 library(forecast)
 library(datasets)
 library(R2jags)
+library(rjags)
 library(coda)
 ```
 
