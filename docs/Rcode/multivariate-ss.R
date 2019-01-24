@@ -260,5 +260,8 @@ for(i in 1:dim(means)[2]) {
   lines(means[,i],lwd=3)
 }
 
-## ----mss-Reset, echo=FALSE-----------------------------------------------
+## ------------------------------------------------------------------------
+require(MARSS)
+#Here is the dat to use for MARSS()
+dat <- t(harborSealWA[,2:6])
 

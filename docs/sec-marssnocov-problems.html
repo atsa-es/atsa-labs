@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>5.5 Basic diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>6.12 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="5.5 Basic diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="6.12 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5.5 Basic diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="6.12 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-uss-comparing-models-with-aic-and-model-weights.html">
-<link rel="next" href="sec-uss-fitting-with-jags.html">
+<link rel="prev" href="sec-mss-plot-the-posteriors-for-the-estimated-states.html">
+<link rel="next" href="chap-dlm-dynamic-linear-models.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -367,50 +367,95 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-uss-basic-diagnostics" class="section level2">
-<h2><span class="header-section-number">5.5</span> Basic diagnostics</h2>
-<p>The first diagnostic that you do with any statistical analysis is check that your residuals correspond to your assumed error structure. We have two types of errors in a univariate state-space model: process errors, the <span class="math inline">\(w_t\)</span>, and observation errors, the <span class="math inline">\(v_t\)</span>.<br />
-They should not have a temporal trend. To get the residuals from most types of fits in R, you can use <code>residuals(fit)</code>. <code>MARSS()</code> calls the <span class="math inline">\(v_t\)</span>, “model residuals”, and the <span class="math inline">\(w_t\)</span> “state residuals”. We can plot these using the following code (Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-resids">5.3</a>).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
-resids =<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.0</span>)
-<span class="kw">plot</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">ylab =</span> <span class="st">&quot;model residual&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, 
-    <span class="dt">main =</span> <span class="st">&quot;flat level&quot;</span>)
-<span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)
-<span class="kw">plot</span>(resids<span class="op">$</span>state.residuals[<span class="dv">1</span>, ], <span class="dt">ylab =</span> <span class="st">&quot;state residual&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, 
-    <span class="dt">main =</span> <span class="st">&quot;flat level&quot;</span>)
-<span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</code></pre>
-
-<div class="figure"><span id="fig:uss-resids"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/uss-resids-1.png" alt="The model and state residuals for the first 3 models." width="672" />
-<p class="caption">
-Figure 5.3: The model and state residuals for the first 3 models.
-</p>
+<div id="sec-marssnocov-problems" class="section level2">
+<h2><span class="header-section-number">6.12</span> Problems</h2>
+<p>For these questions, use the <code>harborSealWA</code> data set in <strong>MARSS</strong>. The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(MARSS)
+<span class="co"># Here is the dat to use for MARSS()</span>
+dat &lt;-<span class="st"> </span><span class="kw">t</span>(harborSealWA[, <span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</code></pre>
+<p>The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).</p>
+<div class="figure">
+<img src="images/harborSealWA_regions.png" alt="Regions in the harbor seal surveys" />
+<p class="caption">Regions in the harbor seal surveys</p>
 </div>
-<p>The residuals should also not be autocorrelated in time. We can check the autocorrelation with the function <code>acf()</code>. We won’t do this for the state residuals for the flat level or linear trends since for those models <span class="math inline">\(w_t=0\)</span>. The autocorrelation plots are shown in Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-acfs">5.4</a>. The stochastic level model looks the best in that its model residuals (the <span class="math inline">\(v_t\)</span>) are fine but the state model still has problems. Clearly the state is not a simple random walk. This is not surprising. The Aswan Low Dam was completed in 1902 and changed the mean flow. The Aswan High Dam was completed in 1970 and also affected the flow. You can see these perturbations in Figure <a href="sec-uss-examples-using-the-nile-river-data.html#fig:uss-plotdata">5.1</a>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))
-resids =<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.0</span>)
-<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;flat level v(t)&quot;</span>)
-resids =<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.1</span>)
-<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;linear trend v(t)&quot;</span>)
-resids =<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.2</span>)
-<span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;stoc level v(t)&quot;</span>)
-<span class="kw">acf</span>(resids<span class="op">$</span>state.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;stoc level w(t)&quot;</span>, <span class="dt">na.action =</span> na.pass)</code></pre>
+<ol style="list-style-type: decimal">
+<li><p>Plot the harbor seal data. Use whatever plotting functions you wish (e.g. <code>ggplot()</code>, <code>plot(); points(); lines()</code>, <code>matplot()</code>).</p></li>
+<li><p>Fit a panmictic population model that assumes that each of the 5 sites is observing one “Inland WA” harbor seal population with trend <span class="math inline">\(u\)</span>. Assume the observation errors are independent and identical. This means 1 variance on diagonal and 0s on off-diagonal. This is the default assumption for <code>MARSS()</code>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write the <span class="math inline">\(\mathbf{Z}\)</span> for this model.
+The code to use for making a matrix in Rmarkdown is</li>
+</ol>
+<pre><code>$$\begin{bmatrix}a &amp; b &amp; 0\\d &amp; e &amp; f\\0 &amp; h &amp; i\end{bmatrix}$$</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> matrix in R using <code>Z=matrix(...)</code> and using the factor short-cut for specifying <span class="math inline">\(\mathbf{Z}\)</span>. <code>Z=factor(c(...)</code>.</p></li>
+<li><p>Fit the model using <code>MARSS()</code>. What is the estimated trend (<span class="math inline">\(u\)</span>)? How fast was the population increasing (percent per year) based on this estimated <span class="math inline">\(u\)</span>?</p></li>
+<li>Compute the confidence intervals for the parameter estimates. Compare the intervals using the Hessian approximation and using a parametric bootstrap. What differences do you see between the two approaches? Use this code:</li>
+</ol>
+<pre><code>library(broom)
+tidy(fit)
+# set nboot low so it doesn&#39;t take forever
+tidy(fit, method=&quot;parametric&quot;,nboot=100)</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>What does an estimate of <span class="math inline">\(\mathbf{Q}=0\)</span> mean? What would the estimated state (<span class="math inline">\(x\)</span>) look like when <span class="math inline">\(\mathbf{Q}=0\)</span>?</li>
+</ol></li>
+<li>Using the same panmictic population model, compare 3 assumptions about the observation error structure.
+<ul>
+<li>The observation errors are independent with different variances.</li>
+<li>The observation errors are independent with the same variance.</li>
+<li>The observation errors are correlated with the same variance and same correlation.</li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write the <span class="math inline">\(\mathbf{R}\)</span> variance-covariance matrices for each assumption.</p></li>
+<li>Create each R matrix in R. To combine, numbers and characters in a matrix use a list matrix like so:</li>
+</ol>
+<pre><code>A &lt;- matrix(list(0),3,3)
+A[1,1] &lt;- &quot;sigma2&quot;</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>Fit each model using <code>MARSS()</code> and compare the estimated <span class="math inline">\(u\)</span> (the population long-term trend). Does the assumption about the errors change the <span class="math inline">\(u\)</span> estimate?</p></li>
+<li>Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit. Are there any issues that you see? Use this code to get your state residuals:</li>
+</ol>
+<pre><code>residuals(fit)$state.residuals[1,]</code></pre>
+<p>You need the <code>[1,]</code> since the residuals are returned as a matrix.</p></li>
+<li><p>Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC. The <span class="math inline">\(x\)</span> part f the model is the population structure. Assume that the observation errors are identical and independent (<code>R=&quot;diagonal and equal&quot;</code>). Assume that the process errors are unique and independent (<code>Q=&quot;diagonal and unequal&quot;</code>).</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write the <span class="math inline">\(\mathbf{x}\)</span> equation. Make sure each matrix in the equation has the right number of rows and columns.</p></li>
+<li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> matrix.</p></li>
+<li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> in R using <code>Z=matrix(...)</code> and using the factor shortcut <code>Z=factor(c(...))</code>.</p></li>
+<li><p>Fit the model with <code>MARSS()</code>.</p></li>
+<li><p>What do the estimated <span class="math inline">\(u\)</span> and <span class="math inline">\(\mathbf{Q}\)</span> imply about the population dynamics in the 3 subpopulations?</p></li>
+</ol></li>
+<li><p>Repeat the fit from Question 4 but assume that the 3 subpopulations covary. Use <code>Q=&quot;unconstrained&quot;</code>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>What does the estimated <span class="math inline">\(\mathbf{Q}\)</span> matrix tell you about how the 3 subpopulation covary?</p></li>
+<li><p>Compare the AICc from the model in Question 4 and the one with <code>Q=&quot;unconstrained&quot;</code>. Which is more supported?</p></li>
+<li><p>Fit the model with <code>Q=&quot;equalvarcov&quot;</code>. Is this more supported based on AICc?</p></li>
+</ol></li>
+<li><p>Develop the following alternative models for the structure of the inland harbor seal population. For each model assume that the observation errors are identical and independent (<code>R=&quot;diagonal and equal&quot;</code>). Assume that the process errors covary with equal variance and covariances (<code>Q=&quot;equalvarcov&quot;</code>).</p>
+<ul>
+<li>5 independent subpopulations with unique trends <span class="math inline">\(u\)</span>.</li>
+<li>5 independent subpopulations with the same trend <span class="math inline">\(u\)</span>.</li>
+<li>5 independent subpopulations with the same trend in 3 regions: SJF+SJI, PS+EBays, HC.</li>
+<li>1 panmictic population (the model from question 2).</li>
+<li>3 subpopulations. 1=SJF,SJI, 2=PS,EBays, 3=HC (the model from question 4).</li>
+<li>2 subpopulations. 1=SJF,SJI,PS,EBays, 2=HC.</li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li><p>Fit each model using <code>MARSS()</code>.</p></li>
+<li><p>Prepare a table of each model with a column for the AICc values. And a column for <span class="math inline">\(\Delta AICc\)</span> (AICc minus the lowest AICc in the group). What is the most supported model?</p></li>
+<li><p>Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for best model. If the model has multiple states (multiple subpopulations), there will be a separate row in
+<code>residuals(fit)$state.residuals</code> for each state residual.</p></li>
+</ol></li>
+</ol>
 
-<div class="figure"><span id="fig:uss-acfs"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/uss-acfs-1.png" alt="The model and state residual acfs for the 3 models." width="672" />
-<p class="caption">
-Figure 5.4: The model and state residual acfs for the 3 models.
-</p>
 </div>
-
-</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-uss-comparing-models-with-aic-and-model-weights.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-uss-fitting-with-jags.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-mss-plot-the-posteriors-for-the-estimated-states.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chap-dlm-dynamic-linear-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -440,7 +485,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/fitting-univariate-state-space.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/multivariate-ss.Rmd",
 "text": "Edit"
 },
 "history": {

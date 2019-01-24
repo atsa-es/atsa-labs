@@ -657,6 +657,99 @@ for(i in 1:dim(means)[2]) {
   lines(means[,i],lwd=3)
 }
 ```
- 
-```{r mss-Reset, echo=FALSE}
+
+\clearpage
+
+## Problems {#sec-marssnocov-problems}
+
+For these questions, use the `harborSealWA` data set in **MARSS**.  The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.
+```{r}
+require(MARSS)
+#Here is the dat to use for MARSS()
+dat <- t(harborSealWA[,2:6])
 ```
+The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).
+
+![Regions in the harbor seal surveys](images/harborSealWA_regions.png)
+
+1. Plot the harbor seal data.  Use whatever plotting functions you wish (e.g. `ggplot()`, `plot(); points(); lines()`, `matplot()`).
+
+2. Fit a panmictic population model that assumes that each of the 5 sites is observing one "Inland WA" harbor seal population with trend $u$. Assume the observation errors are independent and identical. This means 1 variance on diagonal and 0s on off-diagonal.  This is the default assumption for `MARSS()`.
+
+    a. Write the $\mathbf{Z}$ for this model.
+The code to use for making a matrix in Rmarkdown is 
+```
+$$\begin{bmatrix}a & b & 0\\d & e & f\\0 & h & i\end{bmatrix}$$
+```
+
+    b. Write the $\mathbf{Z}$ matrix in R using `Z=matrix(...)` and using the factor short-cut for specifying $\mathbf{Z}$.  `Z=factor(c(...)`.
+    
+    c. Fit the model using `MARSS()`.  What is the estimated trend ($u$)? How fast was the population increasing (percent per year) based on this estimated $u$?
+    
+    d. Compute the confidence intervals for the parameter estimates. Compare the intervals using the Hessian approximation and using a parametric bootstrap. What differences do you see between the two approaches? Use this code:
+```
+library(broom)
+tidy(fit)
+# set nboot low so it doesn't take forever
+tidy(fit, method="parametric",nboot=100)
+```
+
+    e. What does an estimate of $\mathbf{Q}=0$ mean? What would the estimated state ($x$) look like when $\mathbf{Q}=0$?
+
+3. Using the same panmictic population model, compare 3 assumptions about the observation error structure.  
+    * The observation errors are independent with different variances.
+    * The observation errors are independent with the same variance.
+    * The observation errors are correlated with the same variance and same correlation.
+    
+    a. Write the $\mathbf{R}$ variance-covariance matrices for each assumption.  
+    
+    b. Create each R matrix in R.  To combine, numbers and characters in a matrix use a list matrix like so:
+```
+A <- matrix(list(0),3,3)
+A[1,1] <- "sigma2"
+```
+
+    c. Fit each model using `MARSS()` and compare the estimated $u$ (the population long-term trend).  Does the assumption about the errors change the $u$ estimate?
+    
+    d. Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit.  Are there any issues that you see?  Use this code to get your state residuals:
+```
+residuals(fit)$state.residuals[1,]
+```
+You need the `[1,]` since the residuals are returned as a matrix.
+
+4. Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC.  The $x$ part f the model is the population structure.  Assume that the observation errors are identical and independent (`R="diagonal and equal"`).  Assume that the process errors are unique and independent (`Q="diagonal and unequal"`).
+
+    a. Write the $\mathbf{x}$ equation. Make sure each matrix in the equation has the right number of rows and columns.
+    
+    b. Write the $\mathbf{Z}$ matrix.
+    
+    c. Write the $\mathbf{Z}$ in R using `Z=matrix(...)` and using the factor shortcut `Z=factor(c(...))`.
+    
+    d. Fit the model with `MARSS()`.
+    
+    e. What do the estimated $u$ and $\mathbf{Q}$ imply about the population dynamics in the 3 subpopulations?
+    
+5. Repeat the fit from Question 4 but assume that the 3 subpopulations covary. Use `Q="unconstrained"`.  
+
+    a. What does the estimated  $\mathbf{Q}$ matrix tell you about how the 3 subpopulation covary?
+    
+    b. Compare the AICc from the model in Question 4 and the one with `Q="unconstrained"`.  Which is more supported?
+    
+    c. Fit the model with `Q="equalvarcov"`.  Is this more supported based on AICc?
+
+6. Develop the following alternative models for the structure of the inland harbor seal population.  For each model assume that the observation errors are identical and independent (`R="diagonal and equal"`).  Assume that the process errors covary with equal variance and covariances (`Q="equalvarcov"`).
+
+    * 5 independent subpopulations with unique trends $u$.
+    * 5 independent subpopulations with the same trend $u$.
+    * 5 independent subpopulations with the same trend in 3 regions: SJF+SJI, PS+EBays, HC.
+    * 1 panmictic population (the model from question 2).
+    * 3 subpopulations. 1=SJF,SJI, 2=PS,EBays, 3=HC (the model from question 4).
+    * 2 subpopulations. 1=SJF,SJI,PS,EBays, 2=HC.
+    
+    a. Fit each model using `MARSS()`.
+    
+    b. Prepare a table of each model with a column for the AICc values. And a column for $\Delta AICc$ (AICc minus the lowest AICc in the group).  What is the most supported model?
+    
+    d. Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for best model.  If the model has multiple states (multiple subpopulations), there will be a separate row in 
+`residuals(fit)$state.residuals` for each state residual.
+
