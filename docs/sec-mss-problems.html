@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>7.4 Forecasting with a univariate DLM | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>6.12 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="7.4 Forecasting with a univariate DLM | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="6.12 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="7.4 Forecasting with a univariate DLM | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="6.12 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-dlm-fitting-a-univariate-dlm-with-marss.html">
-<link rel="next" href="sec-dlm-homework.html">
+<link rel="prev" href="sec-mss-plot-the-posteriors-for-the-estimated-states.html">
+<link rel="next" href="chap-dlm-dynamic-linear-models.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -367,116 +367,115 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-dlm-forecasting-with-a-univariate-dlm" class="section level2">
-<h2><span class="header-section-number">7.4</span> Forecasting with a univariate DLM</h2>
-<p><span class="citation">Scheuerell and Williams (<a href="references.html#ref-ScheuerellWilliams2005">2005</a>)</span> were interested in how well upwelling could be used to actually  expected survival of salmon, so let’s look at how well our model does in that context. To do so, we need the predictive distributions for the regression parameters and observation.</p>
-<p>Beginning with our definition for the distribution of the parameters at time <span class="math inline">\(t=0\)</span>, <span class="math inline">\(\boldsymbol{\theta}_0 \sim \,\text{MVN}(\boldsymbol{\pi}_0,\boldsymbol{\Lambda}_0)\)</span> in Equation <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(7.7)</a>, we write
-<span class="math display" id="eq:dlm-dlmFore1">\[\begin{equation}
-\tag{7.9}
-\boldsymbol{\theta}_{t-1}|y_{1:t-1} \sim \,\text{MVN}(\boldsymbol{\pi}_{t-1},\boldsymbol{\Lambda}_{t-1})
-\end{equation}\]</span>
-to indicate the distribution of <span class="math inline">\(\boldsymbol{\theta}\)</span> at time <span class="math inline">\(t-1\)</span> conditioned on the observed data through time <span class="math inline">\(t-1\)</span> (i.e., <span class="math inline">\(y_{1:t-1}\)</span>). Then, we can write the one-step ahead predictive distribution for <span class="math inline">\(\boldsymbol{\theta}_t\)</span> given <span class="math inline">\(y_{1:t-1}\)</span> as
-<span class="math display" id="eq:dlm-dlmFore2">\[\begin{align}
-\tag{7.10}
-\boldsymbol{\theta}_{t}|y_{1:t-1} &amp;\sim \,\text{MVN}(\boldsymbol{\eta}_{t},\boldsymbol{\Phi}_{t}), \text{ where} \nonumber\\
-\boldsymbol{\eta}_{t} &amp;= \mathbf{G}_t\boldsymbol{\pi}_{t-1}, \text{ and}\\
-\boldsymbol{\Phi}_{t} &amp;= \mathbf{G}_t\boldsymbol{\Lambda}_{t-1}\mathbf{G}_t^{\top} + \mathbf{Q} \nonumber.
-\end{align}\]</span>
-Consequently, the one-step ahead predictive distribution for the observation at time <span class="math inline">\(t\)</span> given <span class="math inline">\(y_{1:t-1}\)</span> is
-<span class="math display" id="eq:dlm-dlmFore3">\[\begin{align}
-\tag{7.11}
-y_{t}|y_{1:t-1} &amp;\sim \,\text{N}(\zeta_{t},\Psi_{t}), \text{ where} \nonumber\\
-\zeta_{t} &amp;= \mathbf{F}_t\boldsymbol{\eta}_{t}, \text{ and}\\
-\Psi_{t} &amp;= \mathbf{F}_t\Phi_{t}\mathbf{F}_t^{\top} + \mathbf{R} \nonumber.
-\end{align}\]</span></p>
-<div id="sec-dlm-forecasting-a-univariate-dlm-with-marss" class="section level3">
-<h3><span class="header-section-number">7.4.1</span> Forecasting a univariate DLM with MARSS</h3>
-<p>Working from Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-dlmFore3">(7.11)</a>, we can now use <code>MARSS()</code> to compute the expected value of the forecast at time <span class="math inline">\(t\)</span> <span class="math inline">\((\,\text{E} [y_t|y_{1:t-1}] = \zeta_t)\)</span>, and its variance <span class="math inline">\((\,\text{var} [y_t|y_{1:t-1}] = \Psi_t)\)</span>. For the expectation, we need <span class="math inline">\(\mathbf{F}_t\boldsymbol{\eta}_t\)</span>. Recall that <span class="math inline">\(\mathbf{F}_t\)</span> is our <span class="math inline">\(1 \times m\)</span> matrix of explanatory variables at time <span class="math inline">\(t\)</span> (<span class="math inline">\(\mathbf{F}_t\)</span> is called <span class="math inline">\(\mathbf{Z}_t\)</span> in MARSS notation). The one-step ahead forecasts of the parameters at time <span class="math inline">\(t\)</span> <span class="math inline">\((\boldsymbol{\eta}_t)\)</span> are calculated as part of the Kalman filter algorithm—they are termed <span class="math inline">\(\tilde{x}_t^{t-1}\)</span> in <code>MARSS()</code> notation and stored as <code>xtt1</code> in the list produced by the <code>MARSSkfss()</code> function.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## get list of Kalman filter output</span>
-kf.out =<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)
-<span class="co">## forecasts of regr parameters; 2xT matrix</span>
-eta =<span class="st"> </span>kf.out<span class="op">$</span>xtt1
-<span class="co">## ts of E(forecasts)</span>
-fore.mean =<span class="st"> </span><span class="kw">vector</span>()
-<span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {
-    fore.mean[t] =<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span>F]
-}</code></pre>
-<p>For the variance of the forecasts, we need <span class="math inline">\(\mathbf{F}_t\Phi_{t}\mathbf{F}_t^{\top} + \mathbf{R}\)</span>. As with the mean, <span class="math inline">\(\mathbf{F}_t \equiv \mathbf{Z}_t\)</span>. The variances of the one-step ahead forecasts of the parameters at time <span class="math inline">\(t\)</span> <span class="math inline">\((\Phi_t)\)</span> are also calculated as part of the Kalman filter algorithm—they are stored as <code>Vtt1</code> in the list produced by the <code>MARSSkfss()</code> function. Lastly, the observation variance <span class="math inline">\(\mathbf{R}\)</span> is part of the standard MARSS output.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## variance of regr parameters; 1x2xT array</span>
-Phi =<span class="st"> </span>kf.out<span class="op">$</span>Vtt1
-<span class="co">## obs variance; 1x1 matrix</span>
-R.est =<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R
-<span class="co">## ts of Var(forecasts)</span>
-fore.var =<span class="st"> </span><span class="kw">vector</span>()
-<span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {
-    tZ =<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span>
-    fore.var[t] =<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est
-}</code></pre>
-<p>Plots of the model mean forecasts with their estimated uncertainty are shown in Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:plotdlmForeLogit">7.3</a>. Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time <span class="math inline">\(t\)</span> based on data available only through time <span class="math inline">\(t-1\)</span>. In this case, however, MARSS is actually estimating the states at <span class="math inline">\(t=0\)</span> (<span class="math inline">\(\boldsymbol{\theta}_0\)</span>), which allows us to compute a forecast for the first time point.
-<!-- % forecast plot - logit space --></p>
+<div id="sec-mss-problems" class="section level2">
+<h2><span class="header-section-number">6.12</span> Problems</h2>
+<p>For these questions, use the <code>harborSealWA</code> data set in <strong>MARSS</strong>. The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(MARSS)
+<span class="co"># Here is the dat to use for MARSS()</span>
+dat &lt;-<span class="st"> </span><span class="kw">t</span>(harborSealWA[, <span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</code></pre>
+<p>The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).</p>
+<div class="figure">
+<img src="images/harborSealWA_regions.png" alt="Regions in the harbor seal surveys" />
+<p class="caption">Regions in the harbor seal surveys</p>
+</div>
+<ol style="list-style-type: decimal">
+<li><p>Plot the harbor seal data. Use whatever plotting functions you wish (e.g. <code>ggplot()</code>, <code>plot(); points(); lines()</code>, <code>matplot()</code>).</p></li>
+<li><p>Fit a panmictic population model that assumes that each of the 5 sites is observing one “Inland WA” harbor seal population with trend <span class="math inline">\(u\)</span>. Assume the observation errors are independent and identical. This means 1 variance on diagonal and 0s on off-diagonal. This is the default assumption for <code>MARSS()</code>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write the <span class="math inline">\(\mathbf{Z}\)</span> for this model.
+The code to use for making a matrix in Rmarkdown is</li>
+</ol>
+<pre><code>$$\begin{bmatrix}a &amp; b &amp; 0\\d &amp; e &amp; f\\0 &amp; h &amp; i\end{bmatrix}$$</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> matrix in R using <code>Z=matrix(...)</code> and using the factor short-cut for specifying <span class="math inline">\(\mathbf{Z}\)</span>. <code>Z=factor(c(...)</code>.</p></li>
+<li><p>Fit the model using <code>MARSS()</code>. What is the estimated trend (<span class="math inline">\(u\)</span>)? How fast was the population increasing (percent per year) based on this estimated <span class="math inline">\(u\)</span>?</p></li>
+<li>Compute the confidence intervals for the parameter estimates. Compare the intervals using the Hessian approximation and using a parametric bootstrap. What differences do you see between the two approaches? Use this code:</li>
+</ol>
+<pre><code>library(broom)
+tidy(fit)
+# set nboot low so it doesn&#39;t take forever
+tidy(fit, method=&quot;parametric&quot;,nboot=100)</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>What does an estimate of <span class="math inline">\(\mathbf{Q}=0\)</span> mean? What would the estimated state (<span class="math inline">\(x\)</span>) look like when <span class="math inline">\(\mathbf{Q}=0\)</span>?</li>
+</ol></li>
+<li>Using the same panmictic population model, compare 3 assumptions about the observation error structure.
+<ul>
+<li>The observation errors are independent with different variances.</li>
+<li>The observation errors are independent with the same variance.</li>
+<li>The observation errors are correlated with the same variance and same correlation.</li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write the <span class="math inline">\(\mathbf{R}\)</span> variance-covariance matrices for each assumption.</p></li>
+<li>Create each R matrix in R. To combine, numbers and characters in a matrix use a list matrix like so:</li>
+</ol>
+<pre><code>A &lt;- matrix(list(0),3,3)
+A[1,1] &lt;- &quot;sigma2&quot;</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>Fit each model using <code>MARSS()</code> and compare the estimated <span class="math inline">\(u\)</span> (the population long-term trend). Does the assumption about the errors change the <span class="math inline">\(u\)</span> estimate?</p></li>
+<li>Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit. Are there any issues that you see? Use this code to get your state residuals:</li>
+</ol>
+<pre><code>residuals(fit)$state.residuals[1,]</code></pre>
+<p>You need the <code>[1,]</code> since the residuals are returned as a matrix.</p></li>
+<li><p>Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC. The <span class="math inline">\(x\)</span> part f the model is the population structure. Assume that the observation errors are identical and independent (<code>R=&quot;diagonal and equal&quot;</code>). Assume that the process errors are unique and independent (<code>Q=&quot;diagonal and unequal&quot;</code>).</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write the <span class="math inline">\(\mathbf{x}\)</span> equation. Make sure each matrix in the equation has the right number of rows and columns.</p></li>
+<li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> matrix.</p></li>
+<li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> in R using <code>Z=matrix(...)</code> and using the factor shortcut <code>Z=factor(c(...))</code>.</p></li>
+<li><p>Fit the model with <code>MARSS()</code>.</p></li>
+<li><p>What do the estimated <span class="math inline">\(u\)</span> and <span class="math inline">\(\mathbf{Q}\)</span> imply about the population dynamics in the 3 subpopulations?</p></li>
+</ol></li>
+<li><p>Repeat the fit from Question 4 but assume that the 3 subpopulations covary. Use <code>Q=&quot;unconstrained&quot;</code>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>What does the estimated <span class="math inline">\(\mathbf{Q}\)</span> matrix tell you about how the 3 subpopulation covary?</p></li>
+<li><p>Compare the AICc from the model in Question 4 and the one with <code>Q=&quot;unconstrained&quot;</code>. Which is more supported?</p></li>
+<li><p>Fit the model with <code>Q=&quot;equalvarcov&quot;</code>. Is this more supported based on AICc?</p></li>
+</ol></li>
+<li><p>Develop the following alternative models for the structure of the inland harbor seal population. For each model assume that the observation errors are identical and independent (<code>R=&quot;diagonal and equal&quot;</code>). Assume that the process errors covary with equal variance and covariances (<code>Q=&quot;equalvarcov&quot;</code>).</p>
+<ul>
+<li>5 independent subpopulations with unique trends <span class="math inline">\(u\)</span>.</li>
+<li>5 independent subpopulations with the same trend <span class="math inline">\(u\)</span>.</li>
+<li>5 independent subpopulations with the same trend in 3 regions: SJF+SJI, PS+EBays, HC.</li>
+<li>1 panmictic population (the model from question 2).</li>
+<li>3 subpopulations. 1=SJF,SJI, 2=PS,EBays, 3=HC (the model from question 4).</li>
+<li>2 subpopulations. 1=SJF,SJI,PS,EBays, 2=HC.</li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li><p>Fit each model using <code>MARSS()</code>.</p></li>
+<li><p>Prepare a table of each model with a column for the AICc values. And a column for <span class="math inline">\(\Delta AICc\)</span> (AICc minus the lowest AICc in the group). What is the most supported model?</p></li>
+</ol></li>
+<li><p>Do diagnostics on the model residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals. This will put NAs in the model residuals where there is missing data. Then do the tests on each row of <code>resids</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals
+resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span class="ot">NA</span></code></pre>
+<ol style="list-style-type: lower-alpha">
+<li><p>Plot the model residuals.</p></li>
+<li><p>Plot the ACF of the model residuals. Use <code>acf(..., na.action=na.pass)</code>.</p></li>
+<li><p>Plot the histogram of the model residuals.</p></li>
+<li><p>Fit an ARIMA() model to your model residuals using <code>forecast::auto.arima()</code>. Are the best fit models what you want? Note, we cannot use the Augmented Dickey-Fuller or KPSS tests when there are missing values in our residuals time series.</p></li>
+</ol></li>
+</ol>
+<!--
+8.  We cannot use the Augmented Dickey-Fuller test when there are missing values in our residuals time series.  Test the model residuals for autocorrelation using the Augmented Dickey-Fuller test using lag 1 and `urca::ur.df(..., type="trend", lags=1)`. Note this is the same as `tseries::adf.test(..., k=1)`.
+    
+    a. Compare the test using `type="none"` and `type="trend"`.  Which one do you think is appropriate for your residuals in this case?
+    
+         b. Plot the ACF of the model residuals. Use `acf(..., na.action=na.pass)`.
+   
+     c. Plot the histogram of the model residuals.  
+    
+     d. Fit an ARIMA() model to your model residuals using `forecast::auto.arima()`.  Are the best fit models what you want?  Note, we cannot use the Augmented Dickey-Fuller or KPSS tests when there are missing values in our residuals time series.
 
-<div class="figure"><span id="fig:plotdlmForeLogit"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/plotdlmForeLogit-1.png" alt="Time series of logit-transformed survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals." width="576" />
-<p class="caption">
-Figure 7.3: Time series of logit-transformed survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals.
-</p>
-</div>
-<p>Although our model forecasts look reasonable in logit-space, it is worthwhile to examine how well they look when the survival data and forecasts are back-transformed onto the interval [0,1] (Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:plotdlmForeRaw">7.4</a>). In that case, the accuracy does not seem to be affected, but the precision appears much worse, especially during the early and late portions of the time series when survival is changing rapidly.
-<!-- % forecast plot - normal space --></p>
 
-<div class="figure"><span id="fig:plotdlmForeRaw"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/plotdlmForeRaw-1.png" alt="Time series of survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals." width="576" />
-<p class="caption">
-Figure 7.4: Time series of survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals.
-</p>
-</div>
-</div>
-<div id="sec-dlm-dlm-forecast-diagnostics" class="section level3">
-<h3><span class="header-section-number">7.4.2</span> DLM forecast diagnostics</h3>
-
-<p>In the literature on state-space models, the set of <span class="math inline">\(e_t\)</span> are commonly referred to as “innovations”. <code>MARSS()</code> calculates the innovations as part of the Kalman filter algorithm—they are stored as <code>Innov</code> in the list produced by the <code>MARSSkfss()</code> function.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## forecast errors</span>
-innov =<span class="st"> </span>kf.out<span class="op">$</span>Innov</code></pre>
-<p>Let’s see if our innovations meet the model assumptions. Beginning with (1), we can use a Q-Q plot to see whether the innovations are normally distributed with a mean of zero. We’ll use the <code>qqnorm()</code> function to plot the quantiles of the innovations on the <span class="math inline">\(y\)</span>-axis versus the theoretical quantiles from a Normal distribution on the <span class="math inline">\(x\)</span>-axis. If the 2 distributions are similar, the points should fall on the line defined by <span class="math inline">\(y = x\)</span>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## Q-Q plot of innovations</span>
-<span class="kw">qqnorm</span>(<span class="kw">t</span>(innov), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)
-<span class="co">## add y=x line for easier interpretation</span>
-<span class="kw">qqline</span>(<span class="kw">t</span>(innov))</code></pre>
-<!-- % diagnostics plot: QQ -->
-
-<div class="figure"><span id="fig:plotdlmQQ"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/plotdlmQQ-1.png" alt="Q-Q plot of the forecast errors (innovations) for the DLM specified in Equations (7.5)–(7.7)." width="384" />
-<p class="caption">
-Figure 7.5: Q-Q plot of the forecast errors (innovations) for the DLM specified in Equations <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW1">(7.5)</a>–<a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(7.7)</a>.
-</p>
-</div>
-<p>The Q-Q plot (Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:plotdlmQQ">7.5</a>) indicates that the innovations appear to be more-or-less normally distributed (i.e., most points fall on the line). Furthermore, it looks like the mean of the innovations is about 0, but we should use a more reliable test than simple visual inspection. We can formally test whether the mean of the innovations is significantly different from 0 by using a one-sample <span class="math inline">\(t\)</span>-test. based on a null hypothesis of <span class="math inline">\(\,\text{E}(e_t)=0\)</span>. To do so, we will use the function <code>t.test()</code> and base our inference on a significance value of <span class="math inline">\(\alpha = 0.05\)</span>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## p-value for t-test of H0: E(innov) = 0</span>
-<span class="kw">t.test</span>(<span class="kw">t</span>(innov), <span class="dt">mu =</span> <span class="dv">0</span>)<span class="op">$</span>p.value</code></pre>
-<pre><code>[1] 0.4840901</code></pre>
-<p>The <span class="math inline">\(p\)</span>-value <span class="math inline">\(&gt;&gt;\)</span> 0.05 so we cannot reject the null hypothesis that <span class="math inline">\(\,\text{E}(e_t)=0\)</span>.</p>
-<p>Moving on to assumption (2), we can use the sample autocorrelation function (ACF) to examine whether the innovations covary with a time-lagged version of themselves. Using the <code>acf()</code> function, we can compute and plot the correlations of <span class="math inline">\(e_t\)</span> and <span class="math inline">\(e_{t-k}\)</span> for various values of <span class="math inline">\(k\)</span>. Assumption (2) will be met if none of the correlation coefficients exceed the 95% confidence intervals defined by <span class="math inline">\(\pm \, z_{0.975} / \sqrt{n}\)</span>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot ACF of innovations</span>
-<span class="kw">acf</span>(<span class="kw">t</span>(innov), <span class="dt">lag.max =</span> <span class="dv">10</span>)</code></pre>
-<!-- % diagnostics plot: ACF -->
-
-<div class="figure"><span id="fig:plotdlmACF"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/plotdlmACF-1.png" alt="Autocorrelation plot of the forecast errors (innovations) for the DLM specified in Equations (7.5)–(7.7). Horizontal blue lines define the upper and lower 95% confidence intervals." width="384" />
-<p class="caption">
-Figure 7.6: Autocorrelation plot of the forecast errors (innovations) for the DLM specified in Equations <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW1">(7.5)</a>–<a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(7.7)</a>. Horizontal blue lines define the upper and lower 95% confidence intervals.
-</p>
-</div>
-<p>The ACF plot (Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:plotdlmACF">7.6</a>) shows no significant autocorrelation in the innovations at lags 1–10, so it looks like both of our model assumptions have indeed been met.</p>
+-->
 
 </div>
-</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-dlm-homework.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-mss-plot-the-posteriors-for-the-estimated-states.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="chap-dlm-dynamic-linear-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -506,7 +505,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/DLM.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/multivariate-ss.Rmd",
 "text": "Edit"
 },
 "history": {

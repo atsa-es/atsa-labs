@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-24">
+<meta name="date" content="2019-01-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -442,10 +442,25 @@ A[1,1] &lt;- &quot;sigma2&quot;</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li><p>Fit each model using <code>MARSS()</code>.</p></li>
 <li><p>Prepare a table of each model with a column for the AICc values. And a column for <span class="math inline">\(\Delta AICc\)</span> (AICc minus the lowest AICc in the group). What is the most supported model?</p></li>
-<li><p>Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for best model. If the model has multiple states (multiple subpopulations), there will be a separate row in
-<code>residuals(fit)$state.residuals</code> for each state residual.</p></li>
 </ol></li>
+<li><p>Do diagnostics on the model residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals. This will put NAs in the model residuals where there is missing data. Then do the tests on each row of <code>resids</code>.</p></li>
 </ol>
+<pre class="sourceCode r"><code class="sourceCode r">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals
+resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span class="ot">NA</span></code></pre>
+<pre><code>a. What does the estimated  $\mathbf{Q}$ matrix tell you about how the 3 subpopulation covary?
+
+a. Plot the model residuals.
+
+b. Plot the ACF of the model residuals. Use `acf(..., na.action=na.pass)`.
+
+c. Plot the histogram of the model residuals.  
+
+d. Fit an ARIMA() model to your model residuals using `forecast::auto.arima()`.  Are the best fit models what you want?  Note, we cannot use the Augmented Dickey-Fuller or KPSS tests when there are missing values in our residuals time series.</code></pre>
+<!--
+8.  We cannot use the Augmented Dickey-Fuller test when there are missing values in our residuals time series.  Test the model residuals for autocorrelation using the Augmented Dickey-Fuller test using lag 1 and `urca::ur.df(..., type="trend", lags=1)`. Note this is the same as `tseries::adf.test(..., k=1)`.
+    
+    a. Compare the test using `type="none"` and `type="trend"`.  Which one do you think is appropriate for your residuals in this case?
+-->
 
 </div>
 <!-- </div> -->

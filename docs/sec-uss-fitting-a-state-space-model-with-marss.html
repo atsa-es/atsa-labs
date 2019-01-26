@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-24">
+<meta name="date" content="2019-01-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -281,7 +281,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html"><i class="fa fa-check"></i><b>6.9</b> Multivariate state-space models with JAGS</a></li>
 <li class="chapter" data-level="6.10" data-path="sec-mss-writing-the-model-in-jags.html"><a href="sec-mss-writing-the-model-in-jags.html"><i class="fa fa-check"></i><b>6.10</b> Writing the model in JAGS</a></li>
 <li class="chapter" data-level="6.11" data-path="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><a href="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><i class="fa fa-check"></i><b>6.11</b> Plot the posteriors for the estimated states</a></li>
-<li class="chapter" data-level="6.12" data-path="sec-marssnocov-problems.html"><a href="sec-marssnocov-problems.html"><i class="fa fa-check"></i><b>6.12</b> Problems</a></li>
+<li class="chapter" data-level="6.12" data-path="sec-mss-problems.html"><a href="sec-mss-problems.html"><i class="fa fa-check"></i><b>6.12</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html"><i class="fa fa-check"></i><b>7</b> Dynamic linear models</a><ul>
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
@@ -407,21 +407,21 @@ n =<span class="st"> </span><span class="dv">100</span>
 y =<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(q))) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(r))</code></pre>
 <p>And then fit with <code>MARSS()</code> using <code>mod.list</code> above:</p>
 <pre class="sourceCode r"><code class="sourceCode r">fit =<span class="st"> </span><span class="kw">MARSS</span>(y, <span class="dt">model =</span> mod.list)</code></pre>
-<pre><code>Success! abstol and log-log tests passed at 26 iterations.
+<pre><code>Success! abstol and log-log tests passed at 16 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
 
 MARSS fit is
 Estimation method: kem 
 Convergence test: conv.test.slope.tol = 0.5, abstol = 0.001
-Estimation converged in 26 iterations. 
-Log-likelihood: -57.26285 
-AIC: 120.5257   AICc: 120.7757   
+Estimation converged in 16 iterations. 
+Log-likelihood: -65.70444 
+AIC: 137.4089   AICc: 137.6589   
  
       Estimate
-R.r     0.0534
-Q.q     0.0933
-x0.mu   0.4067
+R.r     0.1066
+Q.q     0.0578
+x0.mu  -0.2024
 Initial states (x0) defined at t=0
 
 Standard errors have not been calculated. 

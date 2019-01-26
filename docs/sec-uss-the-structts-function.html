@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-24">
+<meta name="date" content="2019-01-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -281,7 +281,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html"><i class="fa fa-check"></i><b>6.9</b> Multivariate state-space models with JAGS</a></li>
 <li class="chapter" data-level="6.10" data-path="sec-mss-writing-the-model-in-jags.html"><a href="sec-mss-writing-the-model-in-jags.html"><i class="fa fa-check"></i><b>6.10</b> Writing the model in JAGS</a></li>
 <li class="chapter" data-level="6.11" data-path="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><a href="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><i class="fa fa-check"></i><b>6.11</b> Plot the posteriors for the estimated states</a></li>
-<li class="chapter" data-level="6.12" data-path="sec-marssnocov-problems.html"><a href="sec-marssnocov-problems.html"><i class="fa fa-check"></i><b>6.12</b> Problems</a></li>
+<li class="chapter" data-level="6.12" data-path="sec-mss-problems.html"><a href="sec-mss-problems.html"><i class="fa fa-check"></i><b>6.12</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html"><i class="fa fa-check"></i><b>7</b> Dynamic linear models</a><ul>
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
@@ -398,6 +398,18 @@ We are not going to use the one-step ahead predictions unless we are forecasting
 kf<span class="op">$</span>xtt1[<span class="dv">1</span>, t]</code></pre>
 <p>Passing in <code>what=&quot;kfs&quot;</code> returns the Kalman filter/smoother output. The expected value of <span class="math inline">\(x_t\)</span> conditioned on <span class="math inline">\(y_1\)</span> to <span class="math inline">\(y_{t-1}\)</span> is in <code>kf$xtt1</code>. The expected value of <span class="math inline">\(x_t\)</span> conditioned on all the data is in <code>kf$xtT</code>.</p>
 
+<pre><code>Loading required package: lattice</code></pre>
+<pre><code>Loading required package: survival</code></pre>
+<pre><code>Loading required package: Formula</code></pre>
+<pre><code>Loading required package: ggplot2</code></pre>
+<pre><code>
+Attaching package: &#39;Hmisc&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:quantmod&#39;:
+
+    Lag</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    format.pval, units</code></pre>
 <div class="figure"><span id="fig:uss-plotfit"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-plotfit-1.png" alt="The Nile River flow volume with the model estimated flow rates (solid lines). The bottom model is a stochastic level model, meaning there isn’t one level line. Rather the level line is a distribution that has a mean and standard deviation. The solid state line in the bottom plots is the mean of the stochastic level and the 2 standard deviations are shown. The other two models are deterministic level models so the state is not stochastic and does not have a standard deviation." width="480" />
 <p class="caption">

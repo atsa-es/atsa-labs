@@ -43,8 +43,8 @@ We have five regions (or sites) where harbor seals were censused from 1978-1999 
 The survey methodologies were consistent throughout the 20 years of the data but we do not know what fraction of the population that each region represents nor do we know the observation-error variance for each region.  Given differences between the numbers of haul-outs in each region, the observation errors may be quite different.  The regions have had different levels of sampling; the best sampled region has only 4 years missing while the worst has over half the years missing (Figure \@ref(fig:mss-fig1)).  
 
 ```{r mss-noshowlegend, echo=FALSE, results='hide'}
-d=harborSealWA
-legendnames = (unlist(dimnames(d)[2]))[2:ncol(d)]
+d <- harborSealWA
+legendnames <- (unlist(dimnames(d)[2]))[2:ncol(d)]
 for(i in 1:length(legendnames)) cat(paste(i,legendnames[i],"\n",sep=" "))
 ```
 
@@ -524,7 +524,7 @@ names(Z.models)=
 ### Fit the models  {#sec-fit-models-hyp}
 
 We loop through the models, fit and store the results:
-```{r mss-Cs05-run-models}
+```{r mss-Cs05-run-models, cache=TRUE}
 out.tab=NULL
 fits=list()
 for(i in 1:length(Z.models)){
@@ -624,7 +624,7 @@ model {
 
 Then we write the data list, parameter list, and pass the model to the ```jags()``` function:
 
-```{r mss-marss-jags, results='hide', message=FALSE}
+```{r mss-marss-jags, results='hide', message=FALSE, cache=TRUE}
 jags.data = list("Y"=Y,nSites=dim(Y)[2],nYears = dim(Y)[1]) # named list
 jags.params=c("X","U","Q") 
 model.loc="marss-jags.txt" # name of the txt file
@@ -656,11 +656,15 @@ for(i in 1:dim(means)[2]) {
           c(upperCI[,i],rev(lowerCI[,i]),upperCI[1,i]),col="skyblue",lty=0)
   lines(means[,i],lwd=3)
 }
+detach.jags()
 ```
 
+```{r marss-jags-reset, include=FALSE, purl=FALSE}
+file.remove("marss-jags.txt")
+```
 \clearpage
 
-## Problems {#sec-marssnocov-problems}
+## Problems {#sec-mss-problems}
 
 For these questions, use the `harborSealWA` data set in **MARSS**.  The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.
 ```{r}
@@ -749,7 +753,32 @@ You need the `[1,]` since the residuals are returned as a matrix.
     a. Fit each model using `MARSS()`.
     
     b. Prepare a table of each model with a column for the AICc values. And a column for $\Delta AICc$ (AICc minus the lowest AICc in the group).  What is the most supported model?
+
+7. Do diagnostics on the model residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals.  This will put NAs in the model residuals where there is missing data. Then do the tests on each row of `resids`.
+    ```{r mss-resids, eval=FALSE}
+    resids <- residuals(fit)$model.residuals
+    resids[is.na(dat)] <- NA
+    ```
+
+    a. Plot the model residuals.
+   
+    b. Plot the ACF of the model residuals. Use `acf(..., na.action=na.pass)`.
+   
+    c. Plot the histogram of the model residuals.  
     
-    d. Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for best model.  If the model has multiple states (multiple subpopulations), there will be a separate row in 
-`residuals(fit)$state.residuals` for each state residual.
+    d. Fit an ARIMA() model to your model residuals using `forecast::auto.arima()`.  Are the best fit models what you want?  Note, we cannot use the Augmented Dickey-Fuller or KPSS tests when there are missing values in our residuals time series.
+
+<!--
+8.  We cannot use the Augmented Dickey-Fuller test when there are missing values in our residuals time series.  Test the model residuals for autocorrelation using the Augmented Dickey-Fuller test using lag 1 and `urca::ur.df(..., type="trend", lags=1)`. Note this is the same as `tseries::adf.test(..., k=1)`.
+    
+    a. Compare the test using `type="none"` and `type="trend"`.  Which one do you think is appropriate for your residuals in this case?
+    
+         b. Plot the ACF of the model residuals. Use `acf(..., na.action=na.pass)`.
+   
+     c. Plot the histogram of the model residuals.  
+    
+     d. Fit an ARIMA() model to your model residuals using `forecast::auto.arima()`.  Are the best fit models what you want?  Note, we cannot use the Augmented Dickey-Fuller or KPSS tests when there are missing values in our residuals time series.
+
+
+-->
 

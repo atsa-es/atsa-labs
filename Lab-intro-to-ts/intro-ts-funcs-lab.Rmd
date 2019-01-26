@@ -1434,7 +1434,7 @@ It looks like we were pretty good at estimating the true parameters, but our sam
 
 In an ideal situation, you could examine the ACF and PACF of the time series of interest and immediately decipher what orders of $p$ and $q$ must have generated the data, but that doesn't always work in practice.  Instead, we are often left with the task of searching over several possible model forms and seeing which of them provides the most parsimonious fit to the data.  There are two easy ways to do this for ARIMA models in R.  The first is to write a little script that loops ove the possible dimensions of $p$ and $q$.  Let's try that for the process we simulated above and search over orders of $p$ and $q$ from 0-3 (it will take a few moments to run and will likely report an error about a "```possible convergence problem```", which you can ignore).
 
-```{r ts-ARMAsearch1, eval=TRUE, echo=TRUE}
+```{r ts-ARMAsearch1, eval=TRUE, echo=TRUE, cache=TRUE}
 ## empty list to store model fits
 ARMA.res <- list()
 ## set counter
@@ -1455,7 +1455,7 @@ ARMA.res[[which(ARMA.AIC==min(ARMA.AIC))]]
 
 It looks like our search worked, so let's look at the other method for fitting ARIMA models.  The ```auto.arima()``` function in the **forecast** package  will conduct an automatic search over all possible orders of ARIMA models that you specify.  For details, type ```?auto.arima``` after loading the package.  Let's repeat our search using the same criteria.
 
-```{r ts-autoARIMA, eval=TRUE, echo=TRUE}
+```{r ts-autoARIMA, eval=TRUE, echo=TRUE, cache=TRUE}
 ## find best ARMA(p,q) model
 auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
 ```

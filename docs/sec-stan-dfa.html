@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-24">
+<meta name="date" content="2019-01-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -281,7 +281,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.9" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html"><i class="fa fa-check"></i><b>6.9</b> Multivariate state-space models with JAGS</a></li>
 <li class="chapter" data-level="6.10" data-path="sec-mss-writing-the-model-in-jags.html"><a href="sec-mss-writing-the-model-in-jags.html"><i class="fa fa-check"></i><b>6.10</b> Writing the model in JAGS</a></li>
 <li class="chapter" data-level="6.11" data-path="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><a href="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><i class="fa fa-check"></i><b>6.11</b> Plot the posteriors for the estimated states</a></li>
-<li class="chapter" data-level="6.12" data-path="sec-marssnocov-problems.html"><a href="sec-marssnocov-problems.html"><i class="fa fa-check"></i><b>6.12</b> Problems</a></li>
+<li class="chapter" data-level="6.12" data-path="sec-mss-problems.html"><a href="sec-mss-problems.html"><i class="fa fa-check"></i><b>6.12</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html"><i class="fa fa-check"></i><b>7</b> Dynamic linear models</a><ul>
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
@@ -430,108 +430,15 @@ mod_<span class="dv">2</span> =<span class="st"> </span><span class="kw">fit_dfa
 mod_<span class="dv">3</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">3</span>)
 mod_<span class="dv">4</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">4</span>)
 mod_<span class="dv">5</span> =<span class="st"> </span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">5</span>)</code></pre>
-<pre><code>Warning: There were 301 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
-http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
-<pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
 <p>We will compute the Leave One Out Information Criterion (LOOIC) using the loo package. Like AIC, lower is better.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(loo)
 <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">1</span>))<span class="op">$</span>looic</code></pre>
-<pre><code>Warning: Relative effective sample sizes (&#39;r_eff&#39; argument) not specified.
-For models fit with MCMC, the reported PSIS effective sample sizes and 
-MCSE estimates will be over-optimistic.</code></pre>
-<pre><code>Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
-<pre><code>Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced</code></pre>
-<pre><code>Warning: Accessing looic using &#39;$&#39; is deprecated and will be removed in
-a future release. Please extract the looic estimate from the &#39;estimates&#39;
-component instead.</code></pre>
 <pre><code>[1] 1634.995</code></pre>
 <p>Table of the LOOIC values:</p>
 <pre class="sourceCode r"><code class="sourceCode r">looics =<span class="st"> </span><span class="kw">c</span>(<span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">1</span>))<span class="op">$</span>looic, <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">2</span>))<span class="op">$</span>looic, 
     <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">3</span>))<span class="op">$</span>looic, <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">4</span>))<span class="op">$</span>looic, 
-    <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">5</span>))<span class="op">$</span>looic)</code></pre>
-<pre><code>Warning: Relative effective sample sizes (&#39;r_eff&#39; argument) not specified.
-For models fit with MCMC, the reported PSIS effective sample sizes and 
-MCSE estimates will be over-optimistic.</code></pre>
-<pre><code>Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
-<pre><code>Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced</code></pre>
-<pre><code>Warning: Accessing looic using &#39;$&#39; is deprecated and will be removed in
-a future release. Please extract the looic estimate from the &#39;estimates&#39;
-component instead.</code></pre>
-<pre><code>Warning: Relative effective sample sizes (&#39;r_eff&#39; argument) not specified.
-For models fit with MCMC, the reported PSIS effective sample sizes and 
-MCSE estimates will be over-optimistic.</code></pre>
-<pre><code>Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
-<pre><code>Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced</code></pre>
-<pre><code>Warning: Accessing looic using &#39;$&#39; is deprecated and will be removed in
-a future release. Please extract the looic estimate from the &#39;estimates&#39;
-component instead.</code></pre>
-<pre><code>Warning: Relative effective sample sizes (&#39;r_eff&#39; argument) not specified.
-For models fit with MCMC, the reported PSIS effective sample sizes and 
-MCSE estimates will be over-optimistic.</code></pre>
-<pre><code>Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
-<pre><code>Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced</code></pre>
-<pre><code>Warning: Accessing looic using &#39;$&#39; is deprecated and will be removed in
-a future release. Please extract the looic estimate from the &#39;estimates&#39;
-component instead.</code></pre>
-<pre><code>Warning: Relative effective sample sizes (&#39;r_eff&#39; argument) not specified.
-For models fit with MCMC, the reported PSIS effective sample sizes and 
-MCSE estimates will be over-optimistic.</code></pre>
-<pre><code>Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
-<pre><code>Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced</code></pre>
-<pre><code>Warning: Accessing looic using &#39;$&#39; is deprecated and will be removed in
-a future release. Please extract the looic estimate from the &#39;estimates&#39;
-component instead.</code></pre>
-<pre><code>Warning: Relative effective sample sizes (&#39;r_eff&#39; argument) not specified.
-For models fit with MCMC, the reported PSIS effective sample sizes and 
-MCSE estimates will be over-optimistic.</code></pre>
-<pre><code>Warning: Some Pareto k diagnostic values are too high. See help(&#39;pareto-k-diagnostic&#39;) for details.</code></pre>
-<pre><code>Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced
-
-Warning in log(z): NaNs produced</code></pre>
-<pre><code>Warning: Accessing looic using &#39;$&#39; is deprecated and will be removed in
-a future release. Please extract the looic estimate from the &#39;estimates&#39;
-component instead.</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">looic.table =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trends =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">LOOIC =</span> looics)
+    <span class="kw">loo</span>(<span class="kw">extract_log_lik</span>(mod_<span class="dv">5</span>))<span class="op">$</span>looic)
+looic.table =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trends =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">LOOIC =</span> looics)
 looic.table</code></pre>
 <pre><code>  trends    LOOIC
 1      1 1634.995

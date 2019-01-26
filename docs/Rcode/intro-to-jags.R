@@ -8,7 +8,7 @@ Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 N = dim(airquality)[1] # number of data points
 
-## ----jags-lr1, results='hide'--------------------------------------------
+## ----jags-lr1, results='hide', cache=TRUE--------------------------------
 # 1. LINEAR REGRESSION with no covariates
 # no covariates, so intercept only. The parameters are 
 # mean 'mu' and precision/variance parameter 'tau.obs'
@@ -27,7 +27,7 @@ model {
 }  
 ",file=model.loc)
 
-## ----jags-call-fun1, results='hide'--------------------------------------
+## ----jags-call-fun1, results='hide', cache=TRUE--------------------------
 jags.data = list("Y"=Wind,"N"=N) # named list of inputs
 jags.params=c("sd.obs","mu") # parameters to be monitored
 mod_lm_intercept = jags(jags.data, parameters.to.save=jags.params, 
@@ -51,7 +51,7 @@ par(mfrow = c(2,1))
 hist(mu,40,col="grey",xlab="Mean",main="")
 hist(sd.obs,40,col="grey",xlab=expression(sigma[obs]),main="")
 
-## ----jags-lm1-mcmclist-func----------------------------------------------
+## ----jags-lm1-mcmclist-func, cache=TRUE----------------------------------
 createMcmcList = function(jagsmodel) {
 McmcArray = as.array(jagsmodel$BUGSoutput$sims.array)
 McmcList = vector("list",length=dim(McmcArray)[2])
@@ -76,7 +76,7 @@ plot(myList[[1]])
 ## gewekeDiags = geweke.diag(createMcmcList(mod_lm_intercept))
 ## heidelDiags = heidel.diag(createMcmcList(mod_lm_intercept))
 
-## ----jags-lm1ar, results='hide'------------------------------------------
+## ----jags-lm1ar, results='hide', cache=TRUE------------------------------
 # 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS
 # no covariates, so intercept only. 
 
@@ -100,7 +100,7 @@ model {
 }
 ",file=model.loc)
 
-## ----jags-lm1ar-mod, results='hide'--------------------------------------
+## ----jags-lm1ar-mod, results='hide', cache=TRUE--------------------------
 jags.data = list("Y"=Wind,"N"=N)
 jags.params=c("sd.obs","predY","mu","phi")
 mod_lmcor_intercept = jags(jags.data, parameters.to.save=jags.params, 
@@ -129,7 +129,7 @@ points(Y)
 ## ----jags-lm1ar-plot1, fig=TRUE, echo=FALSE, fig.width=6, fig.height=6, fig.cap='(ref:jags-lm1ar-plot1)'----
 plotModelOutput(mod_lmcor_intercept, Wind)
 
-## ----jags-ar1, results='hide'--------------------------------------------
+## ----jags-ar1, results='hide', cache=TRUE--------------------------------
 # 3. AR(1) MODEL WITH NO ESTIMATED AR COEFFICIENT = RANDOM WALK
 # no covariates. The model is y[t] ~ Normal(y[n-1], sigma) for 
 # we will call the precision tau.pro 
@@ -154,7 +154,7 @@ jags.params=c("sd.pro","predY","mu")
 mod_rw_intercept = jags(jags.data, parameters.to.save=jags.params, model.file=model.loc, 
 n.chains = 3, n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
 
-## ----jags-ar1est, echo=TRUE, results='hide'------------------------------
+## ----jags-ar1est, echo=TRUE, results='hide', cache=TRUE------------------
 # 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT
 # We're introducting a new AR coefficient 'phi', so the model is 
 # y[t] ~ N(mu + phi*y[n-1], sigma^2) 
@@ -181,7 +181,7 @@ mod_ar1_intercept = jags(jags.data, parameters.to.save=jags.params,
         model.file=model.loc, n.chains = 3, n.burnin=5000, n.thin=1, 
         n.iter=10000, DIC=TRUE)  
 
-## ----jags-ss1, echo=TRUE, results='hide'---------------------------------
+## ----jags-ss1, echo=TRUE, results='hide', cache=TRUE---------------------
 # 5. MAKE THE SS MODEL a univariate random walk
 # no covariates. 
 
@@ -214,7 +214,7 @@ jags.params=c("sd.q","sd.r","predY","mu")
 mod_ss = jags(jags.data, parameters.to.save=jags.params, model.file=model.loc, n.chains = 3, 
 n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
 
-## ----jags-cov, results='hide'--------------------------------------------
+## ----jags-cov, results='hide', cache=TRUE--------------------------------
 # 6. Include some covariates in a linear regression
 # Use temperature as a predictor of wind
 
@@ -239,7 +239,7 @@ mod_lm = jags(jags.data, parameters.to.save=jags.params,
         model.file=model.loc, n.chains = 3, n.burnin=5000, 
         n.thin=1, n.iter=10000, DIC=TRUE)  
 
-## ----jags-cov-forecast, results='hide'-----------------------------------
+## ----jags-cov-forecast, results='hide', cache=TRUE-----------------------
 jags.data = list("Y"=c(Wind,NA,NA,NA),"N"=(N+3))
 jags.params=c("sd.q","sd.r","predY","mu")
 model.loc=("ss_model.txt")

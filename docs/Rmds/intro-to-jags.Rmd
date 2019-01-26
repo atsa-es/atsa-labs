@@ -44,7 +44,7 @@ Remember that in linear regression models, the residual error is interpreted as 
 
 To run the JAGS model, we will need to start by writing the model in JAGS notation. For our linear regression model, one way to construct the model is 
 
-```{r jags-lr1, results='hide'}
+```{r jags-lr1, results='hide', cache=TRUE}
 # 1. LINEAR REGRESSION with no covariates
 # no covariates, so intercept only. The parameters are 
 # mean 'mu' and precision/variance parameter 'tau.obs'
@@ -75,7 +75,7 @@ The function from the **R2jags** package that we actually use to run the model i
 
 To actually run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS, (2) a vector of parameters that we want to monitor in JAGS and have returned back to R, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the ```jags()``` function. 
 
-```{r jags-call-fun1, results='hide'}
+```{r jags-call-fun1, results='hide', cache=TRUE}
 jags.data = list("Y"=Wind,"N"=N) # named list of inputs
 jags.params=c("sd.obs","mu") # parameters to be monitored
 mod_lm_intercept = jags(jags.data, parameters.to.save=jags.params, 
@@ -116,7 +116,7 @@ hist(sd.obs,40,col="grey",xlab=expression(sigma[obs]),main="")
 
 Finally, we can run some useful diagnostics from the **coda** package on this model output. We have written a small function to make the creation of mcmc lists (an argument required for many of the diagnostics). The function 
 
-```{r jags-lm1-mcmclist-func}
+```{r jags-lm1-mcmclist-func, cache=TRUE}
 createMcmcList = function(jagsmodel) {
 McmcArray = as.array(jagsmodel$BUGSoutput$sims.array)
 McmcList = vector("list",length=dim(McmcArray)[2])
@@ -173,7 +173,7 @@ In addition to affecting the expectation, the correlation parameter $\phi$ also 
 
 Like in our first model, we assume that the data follow a normal likelihood (or equivalently that the residuals are normally distributed), ${y_t} = E[{y_t}] + {e}_{t}$, or ${y_t} \sim \,\text{N}(E[y_t], \sigma^2)$. Thus, it is possible to express the subsequent deviations as $e_t = y_t - E[y_t]$, or equivalently as $e_t = y_t - \mu -\phi \times e_{t-1}$. The JAGS script for this model is:
 
-```{r jags-lm1ar, results='hide'}
+```{r jags-lm1ar, results='hide', cache=TRUE}
 # 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS
 # no covariates, so intercept only. 
 
@@ -202,7 +202,7 @@ removefiles=c(removefiles, model.loc)
 ```
 Notice several subtle changes from the simpler first model: (1) we are estimating the autocorrelation parameter $\phi$, which is assigned a Uniform(-1, 1) prior, (2) we model the residual variance as a function of the autocorrelation, and (3) we allow the autocorrelation to affect the predicted values ```predY```. One other change we can make is to add ```predY``` to the list of parameters we want returned to R. 
 
-```{r jags-lm1ar-mod, results='hide'}
+```{r jags-lm1ar-mod, results='hide', cache=TRUE}
 jags.data = list("Y"=Wind,"N"=N)
 jags.params=c("sd.obs","predY","mu","phi")
 mod_lmcor_intercept = jags(jags.data, parameters.to.save=jags.params, 
@@ -252,7 +252,7 @@ E[y_t] = y_{t-1} + e_{t-1}
 
 And the $e_t \sim \,\text{N}(0, \sigma^2)$. Remember back to the autocorrelated model (or MA(1) models) that we assumed that the errors $e_t$ followed a random walk. In contrast, the AR(1) model assumes that the errors are independent, but that the state of nature follows a random walk. The JAGS random walk model and R script to run it is below:
 
-```{r jags-ar1, results='hide'}
+```{r jags-ar1, results='hide', cache=TRUE}
 # 3. AR(1) MODEL WITH NO ESTIMATED AR COEFFICIENT = RANDOM WALK
 # no covariates. The model is y[t] ~ Normal(y[n-1], sigma) for 
 # we will call the precision tau.pro 
@@ -293,7 +293,7 @@ E[y_t] = \phi * y_{t-1} + e_{t-1}
 
 The JAGS random walk model and R script to run the AR(1) model is below:
 
-```{r jags-ar1est, echo=TRUE, results='hide'}
+```{r jags-ar1est, echo=TRUE, results='hide', cache=TRUE}
 # 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT
 # We're introducting a new AR coefficient 'phi', so the model is 
 # y[t] ~ N(mu + phi*y[n-1], sigma^2) 
@@ -341,7 +341,7 @@ y_t \sim \,\text{N}(x_t, r)
 \end{equation}
 In the two above models, $q$ is the  process variance and $r$ is the observation error variance. The JAGS code will use the standard deviation (square root) of these.  The code to produce and fit this model is below:
 
-```{r jags-ss1, echo=TRUE, results='hide'}
+```{r jags-ss1, echo=TRUE, results='hide', cache=TRUE}
 # 5. MAKE THE SS MODEL a univariate random walk
 # no covariates. 
 
@@ -383,7 +383,7 @@ removefiles=c(removefiles, model.loc)
 
 Returning to the first example of regression with the intercept only, we will introduce ```Temp``` as the covariate explaining our response variable ```Wind```. Note that to include the covariate, we (1) modify the JAGS script to include a new coefficient---in this case ```beta```, (2) update the predictive equation to include the effects of the new covariate, and (3) we include the new covariate in our named data list. 
 
-```{r jags-cov, results='hide'}
+```{r jags-cov, results='hide', cache=TRUE}
 # 6. Include some covariates in a linear regression
 # Use temperature as a predictor of wind
 
@@ -417,7 +417,7 @@ removefiles=c(removefiles, model.loc)
 
 There are a number of different approaches to using Bayesian time series models to perform forecasting. One approach might be to fit a model, and use those posterior distributions to forecast as a secondary step (say within R). A more streamlined approach is to do this within the JAGS code itself. We can take advantage of the fact that JAGS allows you to include NAs in the response variable (but never in the predictors). Let's use the same Wind dataset, and the univariate state-space model described above to forecast three time steps into the future. We can do this by including 3 more NAs in the dataset, and incrementing the variable ```N``` by 3.
 
-```{r jags-cov-forecast, results='hide'}
+```{r jags-cov-forecast, results='hide', cache=TRUE}
 jags.data = list("Y"=c(Wind,NA,NA,NA),"N"=(N+3))
 jags.params=c("sd.q","sd.r","predY","mu")
 model.loc=("ss_model.txt")

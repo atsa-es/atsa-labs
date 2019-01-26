@@ -656,7 +656,7 @@ ARMA.sim <- arima.sim(n=10000, model=ARMA22) + mu
 ## estimate parameters
 arima(x=ARMA.sim, order=c(2,0,2))
 
-## ----ts-ARMAsearch1, eval=TRUE, echo=TRUE--------------------------------
+## ----ts-ARMAsearch1, eval=TRUE, echo=TRUE, cache=TRUE--------------------
 ## empty list to store model fits
 ARMA.res <- list()
 ## set counter
@@ -674,7 +674,7 @@ ARMA.AIC <- sapply(ARMA.res,function(x) x$aic)
 ## model with lowest AIC is the best
 ARMA.res[[which(ARMA.AIC==min(ARMA.AIC))]]
 
-## ----ts-autoARIMA, eval=TRUE, echo=TRUE----------------------------------
+## ----ts-autoARIMA, eval=TRUE, echo=TRUE, cache=TRUE----------------------
 ## find best ARMA(p,q) model
 auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
 

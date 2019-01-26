@@ -242,12 +242,12 @@ jagsscript = cat("
 jags.data = list("Y"=dat, "N"=length(dat), Y1=dat[1])
 jags.params=c("sd.q","sd.r","X","mu", "u")
 
-## ----uss-jags-fit, results='hide', message=FALSE-------------------------
+## ----uss-jags-fit, results='hide', message=FALSE, cache=TRUE-------------
 mod_ss = jags(jags.data, parameters.to.save=jags.params, 
      model.file=model.loc, n.chains = 3, 
      n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)
 
-## ----uss-fig-posteriors, fig=TRUE, fig.cap='(ref:uss-fig-posteriors)', message=FALSE----
+## ----uss-fig-posteriors, fig=TRUE, fig.cap='(ref:uss-fig-posteriors)', message=FALSE, cache=TRUE----
 attach.jags(mod_ss)
 par(mfrow=c(2,2))
 hist(mu)
@@ -272,7 +272,7 @@ plotModelOutput = function(jagsmodel, Y) {
   points(Y)
 }
 
-## ----uss-fig-bayesian-states, echo=TRUE, fig=TRUE, fig.cap='(ref:uss-fig-bayesian-states)'----
+## ----uss-fig-bayesian-states, echo=TRUE, fig=TRUE, fig.cap='(ref:uss-fig-bayesian-states)', cache=TRUE----
 plotModelOutput(mod_ss, dat)
 lines(kem.3$states[1,], col="red")
 lines(1.96*kem.3$states.se[1,]+kem.3$states[1,], col="red", lty=2)
@@ -318,7 +318,7 @@ generated quantities {
 }
 "
 
-## ----uss-stan-fit-model, message=FALSE, warning=FALSE, results='hide'----
+## ----uss-stan-fit-model, message=FALSE, warning=FALSE, results='hide', cache=TRUE----
 mod = rstan::stan(model_code = scode, 
                   data = list("y"=y,"N"=length(y)), 
                   pars = c("sd_q","x", "sd_r", "u", "x0"),
