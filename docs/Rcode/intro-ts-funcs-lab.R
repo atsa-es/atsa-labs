@@ -27,6 +27,10 @@ library(datasets)
 ## Temp <- read.csv(text=getURL(paste0(ww1,ww2)), skip=4)
 ## save(Temp, file="NHemiTemp_data.RData")
 
+## ----eval=FALSE----------------------------------------------------------
+## load("CO2_data.RData")
+## load("NHemiTemp_data.RData")
+
 ## ----ts-CO2ts, echo=TRUE, eval=TRUE--------------------------------------
 ## create a time series (ts) object from the CO2 data
 co2 <- ts(data=CO2$ppm, frequency=12,

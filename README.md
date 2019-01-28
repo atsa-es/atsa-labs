@@ -219,7 +219,7 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
     bookdown::render_book("index.Rmd", "bookdown::gitbook")
     bookdown::render_book("index.Rmd", "bookdown::pdf_book")
     ```
-Note this code will fail if _bookdown_files folder or any cache files do not exist.  In that case, use 'Build Book' in RStudio. Particularly if any code to be cached is changed or created, 'Build Book' must be use to remake the cache.  Takes a long time since all the cache is rebuilt.  Always rerun 'cleanDefsinRmd.R' before using 'Build Book'.  Note that build book to pdf will fail if there are \newcommands in the Rmd files.  That's ok.  Cache will still be built and then run `render_book`.  You can select the arrow next to 'Build Book' and just use build to gitbook.
+Note this code will fail if _bookdown_files folder or any cache files do not exist.  In that case, use 'Build Book' in RStudio. Particularly if any code to be cached is changed or created, 'Build Book' must be used to remake the cache.  Takes a long time since all the cache is rebuilt.  Always rerun 'cleanDefsinRmd.R' before using 'Build Book'.  Note that build book to pdf will fail if there are \newcommands in the Rmd files.  That's ok.  Cache will still be built and then run `render_book`.  You can select the arrow next to 'Build Book' and just use build to gitbook.
 
 You can use 'Build Book' under the build tab in RStudio but make sure to run `source("cleanDefsinRmd.R")` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
 

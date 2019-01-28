@@ -40,7 +40,7 @@ CO2 <- read.table(text=CO2fulltext)[,c(1,2,5)]
 colnames(CO2) <- c("year","month","ppm")
 save(CO2, CO2fulltext, file="CO2_data.RData")
 ```
-The data file contains some extra information that we don't need, so we only read in a subset of the columns ( 1, 2 \& 5). `CO2fulltext` contains information on the data.  Use `cat(CO2fulltext)` to read.
+The data file contains some extra information that we don't need, so we only save a subset of the data, specifically columns ( 1, 2 \& 5), and save this to `CO2`. The object `CO2fulltext` contains information on the data.  Use `cat(CO2fulltext)` to read.  You can read in the RData file here: [CO2_data.RData](./data/CO2_data.RData). 
 
 ```{r ts-copy-data-file-to-doc, include=FALSE, purl=FALSE}
 #If bookdown is being run, then we are at the top level
@@ -56,7 +56,7 @@ if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){
 }
 ```
 
-The second data set we will use is Northern Hemisphere land and ocean temperature anomalies from NOAA. We downloaded this data set with the following code:
+The second data set we will use is Northern Hemisphere land and ocean temperature anomalies from NOAA. You can read in the RData file here:  [NHemiTemp_data.RData](./data/NHemiTemp_data.RData).  We downloaded these data and created the RData file with the following code:
 ```{r ts-temp-data, eval=FALSE}
 library(RCurl)
 ww1 <- "https://www.ncdc.noaa.gov/cag/time-series/"
@@ -78,6 +78,13 @@ if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){
   load("NHemiTemp_data.RData")
 }
 ```
+
+Once you have downloaded the RData files (or created your own with the code), load the data files with:
+```{r eval=FALSE}
+load("CO2_data.RData")
+load("NHemiTemp_data.RData")
+```
+
 ## Time series plots {#sec-ts-time-series-plots}
 
 Time series plots are an excellent way to begin the process of understanding what sort of process might have generated the data of interest.  Traditionally, time series have been plotted with the observed data on the $y$-axis and time on the $x$-axis.  Sequential time points are usually connected with some form of line, but sometimes other plot forms can be a useful way of conveying important information in the time series (*e.g.*, barplots of sea-surface temperature anomolies show nicely the contrasting El Niño and La Niña phenomena).
