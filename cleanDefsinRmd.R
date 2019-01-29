@@ -28,7 +28,8 @@ basefiles=c(
   "Lab-fitting-multi-ss-models/multivariate-ss",
   "Lab-fitting-DLMs/DLM",
   "Lab-intro-to-jags/intro-to-jags",
-  "Lab-intro-to-stan/fitting-models-with-stan"
+  "Lab-intro-to-stan/fitting-models-with-stan",
+  "Lab-box-jenkins-method/box-jenkins"
 )
 for(basefile in basefiles){
   filename=str_split(basefile,"/")[[1]][2]

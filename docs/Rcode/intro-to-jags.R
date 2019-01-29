@@ -1,5 +1,6 @@
 ## ----jags-loadpackages, results='hide', message=FALSE, warnings=FALSE----
 library(coda)
+library(rjags)
 library(R2jags)
 
 ## ----jags-loaddata, echo=TRUE, results='hide', eval=TRUE-----------------
