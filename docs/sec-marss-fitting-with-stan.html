@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>9.2 Example of a DFA model | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>7.10 Fitting a MARSS model with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="9.2 Example of a DFA model | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="7.10 Fitting a MARSS model with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="9.2 Example of a DFA model | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="7.10 Fitting a MARSS model with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-dfa-intro.html">
-<link rel="next" href="sec-dfa-constraining-a-dfa-model.html">
+<link rel="prev" href="sec-mss-multivariate-state-space-models-with-jags.html">
+<link rel="next" href="sec-mss-problems.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -389,110 +389,85 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-dfa-example1" class="section level2">
-<h2><span class="header-section-number">9.2</span> Example of a DFA model</h2>
-<p>The general idea is that the observations <span class="math inline">\(\mathbf{y}\)</span> are modeled as a linear combination of hidden processes <span class="math inline">\(\mathbf{x}\)</span> and factor loadings <span class="math inline">\(\mathbf{Z}\)</span> plus some offsets <span class="math inline">\(\mathbf{a}\)</span>. Imagine a case where we had a data set with five observed time series (<span class="math inline">\(n=5\)</span>) and we want to fit a model with three hidden processes (<span class="math inline">\(m=3\)</span>). If we write out our DFA model in MARSS matrix form, the observation equation would look like</p>
-<span class="math display" id="eq:dfa-mat-y">\[\begin{equation}
-\begin{bmatrix}
-    y_{1} \\
-    y_{2} \\
-    y_{3} \\
-    y_{4} \\
-    y_{5} \end{bmatrix}_t = 
- \begin{bmatrix}
-    z_{11}&amp;z_{12}&amp;z_{13}\\
-    z_{21}&amp;z_{22}&amp;z_{23}\\
-    z_{31}&amp;z_{32}&amp;z_{33}\\
-    z_{41}&amp;z_{42}&amp;z_{43}\\
-    z_{51}&amp;z_{52}&amp;z_{53}\end{bmatrix}   
- \begin{bmatrix}
-    x_{1} \\
-    x_{2} \\
-    x_{3} \end{bmatrix}_t + 
- \begin{bmatrix}
-    a_1 \\
-    a_2 \\
-    a_3 \\
-    a_4 \\
-    a_5 \end{bmatrix} + 
- \begin{bmatrix}
-    v_{1} \\
-    v_{2} \\
-    v_{3} \\
-    v_{4} \\
-    v_{5} \end{bmatrix}_t.
-\tag{9.2}
-\end{equation}\]</span>
-<p>and the process model would look like</p>
-<span class="math display" id="eq:dfa-mat-x">\[\begin{equation}
-\begin{bmatrix}
-    x_{1} \\
-    x_{2} \\
-    x_{3} \end{bmatrix}_t = 
- \begin{bmatrix}
-    1&amp;0&amp;0 \\
-    0&amp;1&amp;0 \\
-    0&amp;0&amp;1 \end{bmatrix} 
- \begin{bmatrix}
-    x_{1}\\
-    x_{2}\\
-    x_{3}\end{bmatrix}_{t-1} +
- \begin{bmatrix}
-    w_{1} \\
-    w_{2} \\
-    w_{3} \end{bmatrix}_t 
-\tag{9.3}
-\end{equation}\]</span>
-<p>The observation errors would be</p>
-<span class="math display" id="eq:dfa-mat-oe">\[\begin{equation}
-\begin{bmatrix}
-    v_{1} \\
-    v_{2} \\
-    v_{3} \\
-    v_{4} \\
-    v_{5} \end{bmatrix}_t 
- \sim \text{MVN} \begin{pmatrix}
-    \begin{bmatrix}
-    0 \\
-    0 \\
-    0 \\
-    0 \\
-    0 \end{bmatrix},
- \begin{bmatrix}
-    r_{11}&amp;r_{12}&amp;r_{13}&amp;r_{14}&amp;r_{15}\\
-    r_{12}&amp;r_{22}&amp;r_{23}&amp;r_{24}&amp;r_{25}\\
-    r_{13}&amp;r_{23}&amp;r_{33}&amp;r_{34}&amp;r_{35}\\
-    r_{14}&amp;r_{24}&amp;r_{34}&amp;r_{44}&amp;r_{45}\\
-    r_{15}&amp;r_{25}&amp;r_{35}&amp;r_{45}&amp;r_{55}\end{bmatrix}
-\end{pmatrix}
-\tag{9.4}
-\end{equation}\]</span>
-<p>And the process errors would be</p>
-<span class="math display" id="eq:dfa-mat-pe">\[\begin{equation}
-\begin{bmatrix}
-    w_{1} \\
-    w_{2} \\
-    w_{3} \end{bmatrix}_t
-\sim \text{MVN} \begin{pmatrix}
- \begin{bmatrix}
-    0 \\
-    0 \\
-    0 \end{bmatrix},
- \begin{bmatrix}
-    q_{11}&amp;q_{12}&amp;q_{13}\\
-    q_{12}&amp;q_{22}&amp;q_{23}\\
-    q_{13}&amp;q_{23}&amp;q_{33}\end{bmatrix}
-\end{pmatrix}.
-\tag{9.5}
-\end{equation}\]</span>
+<div id="sec-marss-fitting-with-stan" class="section level2">
+<h2><span class="header-section-number">7.10</span> Fitting a MARSS model with Stan</h2>
+<p>Let’s fit the same model with Stan using the <strong>rstan</strong> package. If you have not already, you will need to install the <strong>rstan</strong> package. This package depends on a number of other packages which should install automatically when you install <strong>rstan</strong>.</p>
+<p>First we write the model. We could write this to a file (recommended), but for this example, we write as a character object. Though the syntax is different from the JAGS code, it has many similarities. Note that Stan does not allow missing values in the data, thus we need to pass in only the non-missing values along with the row and column indices of those values. The latter is so we can match them to the appropriate state (<span class="math inline">\(x\)</span>) values.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scode &lt;-<span class="st"> &quot;</span>
+<span class="st">data {</span>
+<span class="st">  int&lt;lower=0&gt; TT; // length of ts</span>
+<span class="st">  int&lt;lower=0&gt; N; // num of ts; rows of y</span>
+<span class="st">  int&lt;lower=0&gt; n_pos; // number of non-NA values in y</span>
+<span class="st">  int&lt;lower=0&gt; col_indx_pos[n_pos]; // col index of non-NA vals</span>
+<span class="st">  int&lt;lower=0&gt; row_indx_pos[n_pos]; // row index of non-NA vals</span>
+<span class="st">  vector[n_pos] y;</span>
+<span class="st">}</span>
+<span class="st">parameters {</span>
+<span class="st">  vector[N] x0; // initial states</span>
+<span class="st">  real u;</span>
+<span class="st">  vector[N] pro_dev[TT]; // refed as pro_dev[TT,N]</span>
+<span class="st">  real&lt;lower=0&gt; sd_q;</span>
+<span class="st">  real&lt;lower=0&gt; sd_r[N]; // obs variances are different</span>
+<span class="st">}</span>
+<span class="st">transformed parameters {</span>
+<span class="st">  vector[N] x[TT]; // refed as x[TT,N]</span>
+<span class="st">  for(i in 1:N){</span>
+<span class="st">    x[1,i] = x0[i] + u + pro_dev[1,i];</span>
+<span class="st">    for(t in 2:TT) {</span>
+<span class="st">      x[t,i] = x[t-1,i] + u + pro_dev[t,i];</span>
+<span class="st">    }</span>
+<span class="st">  }</span>
+<span class="st">}</span>
+<span class="st">model {</span>
+<span class="st">  sd_q ~ cauchy(0,5);</span>
+<span class="st">  for(i in 1:N){</span>
+<span class="st">    x0[i] ~ normal(y[i],10); // assume no missing y[1]</span>
+<span class="st">    sd_r[i] ~ cauchy(0,5);</span>
+<span class="st">    for(t in 1:TT){</span>
+<span class="st">    pro_dev[t,i] ~ normal(0, sd_q);</span>
+<span class="st">    }</span>
+<span class="st">  }</span>
+<span class="st">  u ~ normal(0,2);</span>
+<span class="st">  for(i in 1:n_pos){</span>
+<span class="st">    y[i] ~ normal(x[col_indx_pos[i], row_indx_pos[i]], sd_r[row_indx_pos[i]]);</span>
+<span class="st">  }</span>
+<span class="st">}</span>
+<span class="st">generated quantities {</span>
+<span class="st">  vector[n_pos] log_lik;</span>
+<span class="st">  for (n in 1:n_pos) log_lik[n] = normal_lpdf(y[n] | x[col_indx_pos[n], row_indx_pos[n]], sd_r[row_indx_pos[n]]);</span>
+<span class="st">}</span>
+<span class="st">&quot;</span></code></pre></div>
+<p>Then we call <code>stan()</code> and pass in the data, names of parameter we wish to have returned, and information on number of chains, samples (iter), and thinning. The output is verbose (hidden here) and may have some warnings.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ypos &lt;-<span class="st"> </span>Y[<span class="op">!</span><span class="kw">is.na</span>(Y)]
+n_pos &lt;-<span class="st"> </span><span class="kw">length</span>(ypos) <span class="co">#number on non-NA ys</span>
+indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(Y), <span class="dt">arr.ind=</span><span class="ot">TRUE</span>) <span class="co">#index on the non-NAs</span>
+col_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[,<span class="st">&quot;col&quot;</span>])
+row_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[,<span class="st">&quot;row&quot;</span>])
+mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, 
+                  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y=</span>ypos, <span class="dt">TT=</span><span class="kw">ncol</span>(Y), <span class="dt">N=</span><span class="kw">nrow</span>(Y), <span class="dt">n_pos=</span>n_pos, <span class="dt">col_indx_pos=</span>col_indx_pos, <span class="dt">row_indx_pos=</span>row_indx_pos), 
+                  <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>,<span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>),
+                  <span class="dt">chains =</span> <span class="dv">3</span>, 
+                  <span class="dt">iter =</span> <span class="dv">1000</span>, 
+                  <span class="dt">thin =</span> <span class="dv">1</span>)</code></pre></div>
+<p>We use <code>extract()</code> to extract the parameters from the fitted model and we can plot. The estimated level is <code>x</code> and we will plot that with the 95% credible intervals.</p>
+<pre><code>No id variables; using all as measure variables
+No id variables; using all as measure variables
+No id variables; using all as measure variables</code></pre>
+<div class="figure"><span id="fig:marss-stan-plot"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/marss-stan-plot-1.png" alt="Estimated level and 95% credible intervals." width="672" />
+<p class="caption">
+Figure 7.7: Estimated level and 95% credible intervals.
+</p>
+</div>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-dfa-intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-dfa-constraining-a-dfa-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-mss-multivariate-state-space-models-with-jags.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-mss-problems.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -522,7 +497,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/intro-to-dfa.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/multivariate-ss.Rmd",
 "text": "Edit"
 },
 "history": {

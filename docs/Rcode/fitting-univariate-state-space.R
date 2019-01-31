@@ -210,6 +210,10 @@ resids <- residuals(kem.2)
 acf(resids$model.residuals[1,], main="stoc level v(t)")
 acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
 
+## ----uss-jags-data-------------------------------------------------------
+library(datasets)
+y <- as.vector(Nile)
+
 ## ----uss-loadpackages-jags, results='hide', message=FALSE, warning=FALSE----
 library(R2jags)
 library(rjags)
@@ -232,7 +236,7 @@ jagsscript <- cat("
    X[1] ~ dnorm(X0+u,tau.q);
    Y[1] ~ dnorm(X[1], tau.r);
  
-   for(i in 2:N) {
+   for(i in 2:TT) {
    predX[i] <- X[i-1]+u; 
    X[i] ~ dnorm(predX[i],tau.q); # Process variation
    Y[i] ~ dnorm(X[i], tau.r); # Observation variation
@@ -241,8 +245,8 @@ jagsscript <- cat("
    ",file=model.loc)
 
 ## ----uss-jags-set--------------------------------------------------------
-jags.data <- list("Y"=dat, "N"=length(dat), Y1=dat[1])
-jags.params <- c("sd.q","sd.r","X","mu", "u")
+jags.data <- list("Y"=y, "TT"=length(y), Y1=y[1])
+jags.params <- c("sd.q", "sd.r", "X", "mu", "u")
 
 ## ----uss-jags-fit, results='hide', message=FALSE, cache=TRUE-------------
 mod_ss <- jags(jags.data, parameters.to.save=jags.params, 
@@ -275,7 +279,7 @@ plotModelOutput <- function(jagsmodel, Y) {
 }
 
 ## ----uss-fig-bayesian-states, echo=TRUE, fig=TRUE, fig.cap='(ref:uss-fig-bayesian-states)', cache=TRUE----
-plotModelOutput(mod_ss, dat)
+plotModelOutput(mod_ss, y)
 lines(kem.3$states[1,], col="red")
 lines(1.96*kem.3$states.se[1,]+kem.3$states[1,], col="red", lty=2)
 lines(-1.96*kem.3$states.se[1,]+kem.3$states[1,], col="red", lty=2)
@@ -289,20 +293,22 @@ y <- as.vector(Nile)
 ## ----uss-stan-ar-model---------------------------------------------------
 scode <- "
 data {
-  int<lower=0> N;
-  vector[N] y;
+  int<lower=0> TT;
+  int<lower=0> n_pos; // number of non-NA values
+  int<lower=0> indx_pos[n_pos]; // index of the non-NA values
+  vector[n_pos] y;
 }
 parameters {
   real x0;
   real u;
-  vector[N] pro_dev;
+  vector[TT] pro_dev;
   real<lower=0> sd_q;
   real<lower=0> sd_r;
 }
 transformed parameters {
-  vector[N] x;
+  vector[TT] x;
   x[1] = x0 + u + pro_dev[1];
-  for(i in 2:N) {
+  for(i in 2:TT) {
     x[i] = x[i-1] + u + pro_dev[i];
   }
 }
@@ -312,23 +318,27 @@ model {
   sd_q ~ cauchy(0,5);
   sd_r ~ cauchy(0,5);
   pro_dev ~ normal(0, sd_q);
-  y ~ normal(x, sd_r);
+  for(i in 1:n_pos){
+    y[i] ~ normal(x[indx_pos[i]], sd_r);
+  }
 }
 generated quantities {
-  vector[N] log_lik;
-  for (n in 1:N) log_lik[n] = normal_lpdf(y[n] | x[n], sd_r);
+  vector[n_pos] log_lik;
+  for (i in 1:n_pos) log_lik[i] = normal_lpdf(y[i] | x[indx_pos[i]], sd_r);
 }
 "
 
 ## ----uss-stan-fit-model, message=FALSE, warning=FALSE, results='hide', cache=TRUE----
+# We pass in the non-NA ys as vector
+ypos <- y[!is.na(y)]
+n_pos <- sum(!is.na(y)) #number on non-NA ys
+indx_pos <- which(!is.na(y)) #index on the non-NAs
 mod <- rstan::stan(model_code = scode, 
-                  data = list("y"=y,"N"=length(y)), 
-                  pars = c("sd_q","x", "sd_r", "u", "x0"),
-                  chains = 3, 
-                  iter = 1000, 
-                  thin = 1)
+  data = list(y=ypos, TT=length(y), n_pos=n_pos, indx_pos=indx_pos), 
+  pars = c("sd_q","x", "sd_r", "u", "x0"),
+  chains = 3, iter = 1000, thin = 1)
 
-## ----uss-stan-ar-level, fig.cap="Estimated level and 95% credible intervals.  Blue line is the actual Nile River levels."----
+## ----uss-stan-ar-level, fig.cap="Estimated level and 95% credible intervals.  Blue dots are the actual Nile River levels."----
 pars <- rstan::extract(mod)
 pred_mean <- apply(pars$x, 2, mean)
 pred_lo <- apply(pars$x, 2, quantile, 0.025)
@@ -337,7 +347,7 @@ plot(pred_mean, type = "l", lwd = 3,
      ylim = range(c(pred_mean, pred_lo, pred_hi)), ylab = "Nile River Level")
 lines(pred_lo)
 lines(pred_hi)
-lines(y, col="blue")
+points(y, col="blue")
 
 ## ----uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95% credible intervals"----
 library(ggplot2)
@@ -345,7 +355,7 @@ nile <- data.frame(y=y, year=1871:1970)
 h <- ggplot(nile, aes(year))
 h + geom_ribbon(aes(ymin = pred_lo, ymax = pred_hi), fill = "grey70") +
   geom_line(aes(y = pred_mean), size=1) +
-  geom_line(aes(y = y), color="blue") +
+  geom_point(aes(y = y), color="blue") +
   labs(y = "Nile River level")
 
 ## ----uss-stan-hist-pars, fig.cap="Histogram of the parameter samples versus the estimate (red line) from maximum likelihood."----

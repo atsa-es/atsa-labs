@@ -13,7 +13,7 @@
    X[1] ~ dnorm(X0+u,tau.q);
    Y[1] ~ dnorm(X[1], tau.r);
  
-   for(i in 2:N) {
+   for(i in 2:TT) {
    predX[i] <- X[i-1]+u; 
    X[i] ~ dnorm(predX[i],tau.q); # Process variation
    Y[i] ~ dnorm(X[i], tau.r); # Observation variation

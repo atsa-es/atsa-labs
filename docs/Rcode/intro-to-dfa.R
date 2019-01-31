@@ -42,19 +42,6 @@ for(i in spp){
   cnt <- cnt + 1
   }
 
-## ----dfa-dfa_proc_eqn----------------------------------------------------
-## number of processes
-mm <- 3
-## 'BB' is identity: 1's along the diagonal & 0's elsewhere
-BB <- "identity"  # diag(mm)
-## 'uu' is a column vector of 0's
-uu <- "zero"  # matrix(0,mm,1)
-## 'CC' and 'cc' are for covariates
-CC <- "zero"  # matrix(0,mm,1)
-cc <- "zero"  # matrix(0,1,wk_last)
-## 'QQ' is identity
-QQ <- "identity"  # diag(mm)
-
 ## ----dfa-dfa_obs_eqn-----------------------------------------------------
 ## 'ZZ' is loadings matrix
 Z_vals <- list("z11",  0  ,  0  ,
@@ -72,17 +59,31 @@ dd <- "zero"  # matrix(0,1,wk_last)
 ## 'RR' is var-cov matrix for obs errors
 RR <- "diagonal and unequal"
 
+## ----dfa-dfa_proc_eqn----------------------------------------------------
+## number of processes
+mm <- 3
+## 'BB' is identity: 1's along the diagonal & 0's elsewhere
+BB <- "identity"  # diag(mm)
+## 'uu' is a column vector of 0's
+uu <- "zero"  # matrix(0,mm,1)
+## 'CC' and 'cc' are for covariates
+CC <- "zero"  # matrix(0,mm,1)
+cc <- "zero"  # matrix(0,1,wk_last)
+## 'QQ' is identity
+QQ <- "identity"  # diag(mm)
+
 ## ----dfa-create_model_lists----------------------------------------------
 ## list with specifications for model vectors/matrices
-mod_list <- list(B=BB, U=uu, C=CC, c=cc, Q=QQ, Z=ZZ, A=aa, D=DD, d=dd, R=RR)
+mod_list <- list(Z=ZZ, A=aa, D=DD, d=dd, R=RR,
+                 B=BB, U=uu, C=CC, c=cc, Q=QQ)
 ## list with model inits
-init_list <- list(x0=matrix(rep(0,mm),mm,1))
+init_list <- list(x0 = matrix(rep(0, mm), mm, 1))
 ## list with model control parameters
-con_list <- list(maxit=3000, allow.degen=TRUE)
+con_list <- list(maxit = 3000, allow.degen = TRUE)
 
 ## ----dfa-fit_dfa_1, cache=TRUE-------------------------------------------
 ## fit MARSS
-dfa_1 <- MARSS(y=dat, model=mod_list, inits=init_list, control=con_list)
+dfa_1 <- MARSS(y = dat, model = mod_list, inits = init_list, control = con_list)
 
 ## ----dfa-get_H_inv-------------------------------------------------------
 ## get the estimated ZZ
@@ -198,12 +199,12 @@ TP <- t(plank_dat[,"TP",drop=FALSE])
 
 ## ----dfa-fit_DFA_covars, cache=TRUE, results='hide'----------------------
 mod_list=list(m=3, R="diagonal and unequal")
-dfa_temp <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
-                  control=con_list, covariates=temp)
-dfa_TP <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
-                control=con_list, covariates=TP)
-dfa_both <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
-                  control=con_list, covariates=rbind(temp,TP))
+dfa_temp <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
+                  control = con_list, covariates=temp)
+dfa_TP <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
+                control = con_list, covariates=TP)
+dfa_both <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
+                  control = con_list, covariates=rbind(temp,TP))
 
 ## ----dfa_model_selection-------------------------------------------------
 print(cbind(model=c("no covars", "Temp", "TP", "Temp & TP"),
@@ -214,8 +215,8 @@ print(cbind(model=c("no covars", "Temp", "TP", "Temp & TP"),
 cos_t <- cos(2 * pi * seq(TT) / 12)
 sin_t <- sin(2 * pi * seq(TT) / 12)
 dd <- rbind(cos_t,sin_t)
-dfa_seas <- MARSS(dat_1980, model=mod_list, form="dfa", z.score=TRUE,
-                  control=con_list, covariates=dd)
+dfa_seas <- MARSS(dat_1980, model = mod_list, form = "dfa", z.score=TRUE,
+                  control = con_list, covariates=dd)
 dfa_seas$AICc
 
 ## ----dfa-plot_dfa_temp_fits, fig.height=9, fig.width=8, fig.cap='Data and model fits for the DFA with covariates.'----
