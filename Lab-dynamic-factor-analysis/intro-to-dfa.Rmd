@@ -23,8 +23,8 @@ DFA is conceptually different than what we have been doing in the previous appli
 
 \begin{equation}
 \begin{gathered}
-\mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \text{MVN}(0,\mathbf{Q}) \\
 \mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t \text{ where } \mathbf{v}_t \sim \text{MVN}(0,\mathbf{R}) 
+\mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \text{MVN}(0,\mathbf{Q}) \\
 \end{gathered}
 (\#eq:dfa)
 \end{equation}
@@ -34,30 +34,7 @@ This equation should look rather familiar as it is exactly the same form we used
 
 ## Example of a DFA model {#sec-dfa-example1}
 
-The general idea is that the observations $\yy$ are modeled as a linear combination of hidden processes $\xx$ and factor loadings $\ZZ$ plus some offsets $\aa$. Imagine a case where we had a data set with five observed time series ($n=5$) and we want to fit a model with three hidden processes ($m=3$).  If we write out our DFA model in MARSS matrix form, the process model would look like this:
-
-\begin{equation}
-\begin{bmatrix}
-    x_{1} \\
-    x_{2} \\
-    x_{3} \end{bmatrix}_t = 
- \begin{bmatrix}
-    1&0&0 \\
-    0&1&0 \\
-    0&0&1 \end{bmatrix} 
- \begin{bmatrix}
-    x_{1}\\
-    x_{2}\\
-    x_{3}\end{bmatrix}_{t-1} +
- \begin{bmatrix}
-    w_{1} \\
-    w_{2} \\
-    w_{3} \end{bmatrix}_t 
-(\#eq:dfa-mat-x)
-\end{equation}
-
-
-And the observation equation would look like
+The general idea is that the observations $\yy$ are modeled as a linear combination of hidden processes $\xx$ and factor loadings $\ZZ$ plus some offsets $\aa$. Imagine a case where we had a data set with five observed time series ($n=5$) and we want to fit a model with three hidden processes ($m=3$).  If we write out our DFA model in MARSS matrix form, the observation equation would look like
 
 \begin{equation}
 \begin{bmatrix}
@@ -91,27 +68,30 @@ And the observation equation would look like
 (\#eq:dfa-mat-y)
 \end{equation}
 
-The process errors would be
+and the process model would look like
 
 \begin{equation}
 \begin{bmatrix}
+    x_{1} \\
+    x_{2} \\
+    x_{3} \end{bmatrix}_t = 
+ \begin{bmatrix}
+    1&0&0 \\
+    0&1&0 \\
+    0&0&1 \end{bmatrix} 
+ \begin{bmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}\end{bmatrix}_{t-1} +
+ \begin{bmatrix}
     w_{1} \\
     w_{2} \\
-    w_{3} \end{bmatrix}_t
-\sim \text{MVN} \begin{pmatrix}
- \begin{bmatrix}
-    0 \\
-    0 \\
-    0 \end{bmatrix},
- \begin{bmatrix}
-    q_{11}&q_{12}&q_{13}\\
-    q_{12}&q_{22}&q_{23}\\
-    q_{13}&q_{23}&q_{33}\end{bmatrix}
-\end{pmatrix}.
-(\#eq:dfa-mat-pe)
+    w_{3} \end{bmatrix}_t 
+(\#eq:dfa-mat-x)
 \end{equation}
 
-And the observation errors would be
+
+The observation errors would be
 
 \begin{equation}
 \begin{bmatrix}
@@ -137,38 +117,35 @@ And the observation errors would be
 (\#eq:dfa-mat-oe)
 \end{equation}
 
-## Constraining a DFA model {#sec-dfa-constraining-a-dfa-model}
-
-If $\ZZ$, $\aa$, and $\QQ$ are not constrained, however, then the DFA model above is unidentifiable. Nevertheless, we can use the following parameter constraints to make the model identifiable: 
-
-- in the first $m-1$ rows of $\ZZ$, the $z$-value in the $j$-th column and $i$-th row is set to zero if $j > i$;  
-- $\aa$ is constrained so that the first $m$ values are set to zero; and  
-- $\QQ$ is set equal to the identity matrix $\II_m$.  
-
-Using these constraints, the process equation for the DFA model above becomes
+And the process errors would be
 
 \begin{equation}
 \begin{bmatrix}
-    x_{1} \\
-    x_{2} \\
-    x_{3} \end{bmatrix}_t = 
- \begin{bmatrix}
-    1&0&0 \\
-    0&1&0 \\
-    0&0&1 \end{bmatrix} 
- \begin{bmatrix}
-    x_{1}\\
-    x_{2}\\
-    x_{3}\end{bmatrix}_{t-1} +
- \begin{bmatrix}
     w_{1} \\
     w_{2} \\
-    w_{3}
-  \end{bmatrix}_t
-(\#eq:dfa-mat-peqn2)
+    w_{3} \end{bmatrix}_t
+\sim \text{MVN} \begin{pmatrix}
+ \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \end{bmatrix},
+ \begin{bmatrix}
+    q_{11}&q_{12}&q_{13}\\
+    q_{12}&q_{22}&q_{23}\\
+    q_{13}&q_{23}&q_{33}\end{bmatrix}
+\end{pmatrix}.
+(\#eq:dfa-mat-pe)
 \end{equation}
 
-and the observation equation becomes
+## Constraining a DFA model {#sec-dfa-constraining-a-dfa-model}
+
+If $\aa$, $\ZZ$, and $\QQ$ are not constrained, the DFA model above is unidentifiable. Nevertheless, we can use the following parameter constraints to make the model identifiable: 
+
+- $\aa$ is constrained so that the first $m$ values are set to zero;   
+- in the first $m-1$ rows of $\ZZ$, the $z$-value in the $j$-th column and $i$-th row is set to zero if $j > i$; and  
+- $\QQ$ is set equal to the identity matrix $\II_m$.  
+
+Using these constraints, the observation equation for the DFA model above becomes
 
 \begin{equation}
 \begin{bmatrix}
@@ -202,28 +179,30 @@ and the observation equation becomes
 (\#eq:dfa-mat-oeqn2)
 \end{equation}
 
-The process errors would then become
+and the process equation becomes
 
 \begin{equation}
 \begin{bmatrix}
-    w_{1} \\
-    w_{2} \\
-    w_{3} \end{bmatrix}_t 
-  \sim \text{MVN} 
-\begin{pmatrix}
-    \begin{bmatrix}
-    0 \\
-    0 \\
-    0 \end{bmatrix},
-    \begin{bmatrix}
+    x_{1} \\
+    x_{2} \\
+    x_{3} \end{bmatrix}_t = 
+ \begin{bmatrix}
     1&0&0 \\
     0&1&0 \\
-    0&0&1 \end{bmatrix}
-\end{pmatrix},
-(\#eq:dfa-mat-pe2)
+    0&0&1 \end{bmatrix} 
+ \begin{bmatrix}
+    x_{1}\\
+    x_{2}\\
+    x_{3}\end{bmatrix}_{t-1} +
+ \begin{bmatrix}
+    w_{1} \\
+    w_{2} \\
+    w_{3}
+  \end{bmatrix}_t
+(\#eq:dfa-mat-peqn2)
 \end{equation}
 
-but the observation errors would stay the same, such that
+The distribution of the observation errors would stay the same, such that
 
 \begin{equation}
 \begin{bmatrix}
@@ -248,6 +227,27 @@ but the observation errors would stay the same, such that
   \end{bmatrix}
 \end{pmatrix}.
 (\#eq:dfa-mat-oe2)
+\end{equation}
+
+but the distribution of the process errors would become
+
+\begin{equation}
+\begin{bmatrix}
+    w_{1} \\
+    w_{2} \\
+    w_{3} \end{bmatrix}_t 
+  \sim \text{MVN} 
+\begin{pmatrix}
+    \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \end{bmatrix},
+    \begin{bmatrix}
+    1&0&0 \\
+    0&1&0 \\
+    0&0&1 \end{bmatrix}
+\end{pmatrix},
+(\#eq:dfa-mat-pe2)
 \end{equation}
 
 ## Different error structures {#sec-dfa-different-error-structures}
@@ -343,24 +343,6 @@ The **MARSS** package is designed to work with the fully specified matrix form o
 
 Notice that the code below uses some of the **MARSS** shortcuts for specifying forms of vectors and matrices. We will also use the `matrix(list(),nrow,ncol)` trick we learned previously.
 
-### The process model {#sec-dfa-process-model}
-
-We need to specify the explicit form for all of the vectors and matrices in the full form of the MARSS model we defined in Sec 3.1. Note that we do not have to specify anything for the states $(\mathbf{x})$ -- those are elements that `MARSS` will identify and estimate itself based on our definitions of the other vectors and matrices.
-
-```{r dfa-dfa_proc_eqn}
-## number of processes
-mm <- 3
-## 'BB' is identity: 1's along the diagonal & 0's elsewhere
-BB <- "identity"  # diag(mm)
-## 'uu' is a column vector of 0's
-uu <- "zero"  # matrix(0,mm,1)
-## 'CC' and 'cc' are for covariates
-CC <- "zero"  # matrix(0,mm,1)
-cc <- "zero"  # matrix(0,1,wk_last)
-## 'QQ' is identity
-QQ <- "identity"  # diag(mm)
-```
-
 ### The observation model {#sec-dfa-observation-model}
 
 Here we will fit the DFA model above where we have `R N_ts` observed time series and we want 3 hidden states. Now we need to set up the observation model for `MARSS`. Here are the vectors and matrices for our first model where each nutrient follows its own process. Recall that we will need to set the elements in the upper R corner of $\ZZ$ to 0. We will assume that the observation errors have different variances and they are independent of one another.
@@ -383,9 +365,27 @@ dd <- "zero"  # matrix(0,1,wk_last)
 RR <- "diagonal and unequal"
 ```
 
+### The process model {#sec-dfa-process-model}
+
+We need to specify the explicit form for all of the vectors and matrices in the full form of the MARSS model we defined in Sec 3.1. Note that we do not have to specify anything for the states $(\mathbf{x})$ -- those are elements that `MARSS` will identify and estimate itself based on our definitions of the other vectors and matrices.
+
+```{r dfa-dfa_proc_eqn}
+## number of processes
+mm <- 3
+## 'BB' is identity: 1's along the diagonal & 0's elsewhere
+BB <- "identity"  # diag(mm)
+## 'uu' is a column vector of 0's
+uu <- "zero"  # matrix(0,mm,1)
+## 'CC' and 'cc' are for covariates
+CC <- "zero"  # matrix(0,mm,1)
+cc <- "zero"  # matrix(0,1,wk_last)
+## 'QQ' is identity
+QQ <- "identity"  # diag(mm)
+```
+
 ### Fit the model in MARSS {#sec-dfa-fit-model-in-marss}
 
-Now it's time to fit our first DLM. To do so, we need to create a three lists that we will need to pass to the `MARSS()` function:
+Now it's time to fit our first DFA model To do so, we need to create three lists that we will need to pass to the `MARSS()` function:
 
 1. A list of specifications for the model's vectors and matrices;
 2. A list of any initial values -- `MARSS` will pick its own otherwise;
@@ -393,18 +393,19 @@ Now it's time to fit our first DLM. To do so, we need to create a three lists th
 
 ```{r dfa-create_model_lists}
 ## list with specifications for model vectors/matrices
-mod_list <- list(B=BB, U=uu, C=CC, c=cc, Q=QQ, Z=ZZ, A=aa, D=DD, d=dd, R=RR)
+mod_list <- list(Z=ZZ, A=aa, D=DD, d=dd, R=RR,
+                 B=BB, U=uu, C=CC, c=cc, Q=QQ)
 ## list with model inits
-init_list <- list(x0=matrix(rep(0,mm),mm,1))
+init_list <- list(x0 = matrix(rep(0, mm), mm, 1))
 ## list with model control parameters
-con_list <- list(maxit=3000, allow.degen=TRUE)
+con_list <- list(maxit = 3000, allow.degen = TRUE)
 ```
 
 Now we can fit the model.
 
 ```{r dfa-fit_dfa_1, cache=TRUE}
 ## fit MARSS
-dfa_1 <- MARSS(y=dat, model=mod_list, inits=init_list, control=con_list)
+dfa_1 <- MARSS(y = dat, model = mod_list, inits = init_list, control = con_list)
 ```
 
 ## Interpreting the MARSS output {#sec-dfa-interpreting-the-marss-output}
@@ -419,8 +420,8 @@ Before proceeding further, we need to address the constraints we placed on the D
 
 \begin{equation}
 \begin{gathered}
- \mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \\
  \mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t
+ \mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \\
 \end{gathered}   
 (\#eq:dfa-rot1)
 \end{equation}
@@ -429,8 +430,8 @@ and
 
 \begin{equation}
 \begin{gathered}
- \mathbf{H}\mathbf{x}_t = \mathbf{H}\mathbf{x}_{t-1}+\mathbf{H}\mathbf{w}_t \\
  \mathbf{y}_t = \mathbf{Z}\mathbf{H}^{-1}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t
+ \mathbf{H}\mathbf{x}_t = \mathbf{H}\mathbf{x}_{t-1}+\mathbf{H}\mathbf{w}_t \\
 \end{gathered}.
 (\#eq:dfa-rot2)
 \end{equation}
@@ -574,14 +575,14 @@ It is standard to add covariates to the analysis so that one removes known impor
 
 \begin{equation}
 \begin{gathered}
-\mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \text{MVN}(0,\mathbf{Q}) \\
 \mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{D}\mathbf{d}_t+\mathbf{v}_t \text{ where } \mathbf{v}_t \sim \text{MVN}(0,\mathbf{R})
+\mathbf{x}_t = \mathbf{x}_{t-1}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \text{MVN}(0,\mathbf{Q}) \\
 \end{gathered}   
 (\#eq:dfa-cov)
 \end{equation}
 
 
-where the $q \times 1$ vector $\dd_t$ contains the covariate(s) at time $t$, and the $n \times q$ matrix $\DD$ contains the effect(s) of the covariate(s) on the observations.  Using `form="dfa"` and `covariates=<covariate name(s)>`, we can easily add covariates to our DFA, but this means that the covariates are input, not data, and there can be no missing values (see Chapter 6 in the **MARSS** User Guide for how to include covariates with missing values).
+where the $q \times 1$ vector $\dd_t$ contains the covariate(s) at time $t$, and the $n \times q$ matrix $\DD$ contains the effect(s) of the covariate(s) on the observations.  Using `form = "dfa"` and `covariates=<covariate name(s)>`, we can easily add covariates to our DFA, but this means that the covariates are input, not data, and there can be no missing values (see Chapter 6 in the **MARSS** User Guide for how to include covariates with missing values).
 
 ## Example from Lake Washington {#sec-dfa-lakeWA}
 
@@ -596,12 +597,12 @@ We will now fit three different models that each add covariate effects (i.e., `T
 
 ```{r dfa-fit_DFA_covars, cache=TRUE, results='hide'}
 mod_list=list(m=3, R="diagonal and unequal")
-dfa_temp <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
-                  control=con_list, covariates=temp)
-dfa_TP <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
-                control=con_list, covariates=TP)
-dfa_both <- MARSS(dat, model=mod_list, form="dfa", z.score=FALSE,
-                  control=con_list, covariates=rbind(temp,TP))
+dfa_temp <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
+                  control = con_list, covariates=temp)
+dfa_TP <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
+                control = con_list, covariates=TP)
+dfa_both <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
+                  control = con_list, covariates=rbind(temp,TP))
 ```
 
 Next we can compare whether the addition of the covariates improves the model fit.
@@ -620,8 +621,8 @@ Now let's try to fit a model with a dummy variable for season, and see how that 
 cos_t <- cos(2 * pi * seq(TT) / 12)
 sin_t <- sin(2 * pi * seq(TT) / 12)
 dd <- rbind(cos_t,sin_t)
-dfa_seas <- MARSS(dat_1980, model=mod_list, form="dfa", z.score=TRUE,
-                  control=con_list, covariates=dd)
+dfa_seas <- MARSS(dat_1980, model = mod_list, form = "dfa", z.score=TRUE,
+                  control = con_list, covariates=dd)
 dfa_seas$AICc
 ```
 
