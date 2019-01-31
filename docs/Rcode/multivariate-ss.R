@@ -4,8 +4,8 @@ library(R2jags)
 library(coda)
 
 ## ----mss-noshowlegend, echo=FALSE, results='hide'------------------------
-d=harborSealWA
-legendnames = (unlist(dimnames(d)[2]))[2:ncol(d)]
+d <- harborSealWA
+legendnames <- (unlist(dimnames(d)[2]))[2:ncol(d)]
 for(i in 1:length(legendnames)) cat(paste(i,legendnames[i],"\n",sep=" "))
 
 ## ----mss-fig1, fig=TRUE, echo=FALSE, fig.width=5, fig.height=5, fig.cap='(ref:mss-fig1)'----
@@ -161,7 +161,7 @@ H6=factor(1:11) #site
 names(Z.models)=
      c("stock","coast+PS","N+S","NC+strait+PS+SC","panmictic","site")
 
-## ----mss-Cs05-run-models-------------------------------------------------
+## ----mss-Cs05-run-models, cache=TRUE-------------------------------------
 out.tab=NULL
 fits=list()
 for(i in 1:length(Z.models)){
@@ -236,7 +236,7 @@ model {
 
 ",file="marss-jags.txt")
 
-## ----mss-marss-jags, results='hide', message=FALSE-----------------------
+## ----mss-marss-jags, results='hide', message=FALSE, cache=TRUE-----------
 jags.data = list("Y"=Y,nSites=dim(Y)[2],nYears = dim(Y)[1]) # named list
 jags.params=c("X","U","Q") 
 model.loc="marss-jags.txt" # name of the txt file
@@ -259,6 +259,14 @@ for(i in 1:dim(means)[2]) {
           c(upperCI[,i],rev(lowerCI[,i]),upperCI[1,i]),col="skyblue",lty=0)
   lines(means[,i],lwd=3)
 }
+detach.jags()
 
-## ----mss-Reset, echo=FALSE-----------------------------------------------
+## ------------------------------------------------------------------------
+require(MARSS)
+#Here is the dat to use for MARSS()
+dat <- t(harborSealWA[,2:6])
+
+## ----mss-resids, eval=FALSE----------------------------------------------
+## resids <- residuals(fit)$model.residuals
+## resids[is.na(dat)] <- NA
 

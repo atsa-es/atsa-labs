@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>8.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>10.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="8.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="10.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="10.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -25,13 +25,13 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-10">
+<meta name="date" content="2019-01-28">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
-  
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 <link rel="prev" href="sec-jags-dataset.html">
 <link rel="next" href="sec-jags-regression-with-corr-errors.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -51,67 +51,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -171,154 +145,225 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
 <li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Basic time series functions in R</a><ul>
-<li class="chapter" data-level="" data-path="chap-ts.html"><a href="chap-ts.html#data-and-packages-1"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="3.1" data-path="sec-ts-data.html"><a href="sec-ts-data.html"><i class="fa fa-check"></i><b>3.1</b> CO<span class="math inline">\(_2\)</span> and global temperature data set</a></li>
-<li class="chapter" data-level="3.2" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html"><i class="fa fa-check"></i><b>3.2</b> Time series plots</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#sec-ts-textbfts-objects-and-verbplotts"><i class="fa fa-check"></i><b>3.2.1</b> <strong>ts</strong> objects and <code>plot.ts()</code></a></li>
-<li class="chapter" data-level="3.2.2" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#sec-ts-combining-and-plotting-multiple-textbfts-objects"><i class="fa fa-check"></i><b>3.2.2</b> Combining and plotting multiple <strong>ts</strong> objects</a></li>
+<li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
+<li class="chapter" data-level="3.1" data-path="examples-of-time-series.html"><a href="examples-of-time-series.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
+<li class="chapter" data-level="3.2" data-path="classification-of-time-series.html"><a href="classification-of-time-series.html"><i class="fa fa-check"></i><b>3.2</b> Classification of time series</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="classification-of-time-series.html"><a href="classification-of-time-series.html#by-some-index-set"><i class="fa fa-check"></i><b>3.2.1</b> By some <em>index set</em></a></li>
+<li class="chapter" data-level="3.2.2" data-path="classification-of-time-series.html"><a href="classification-of-time-series.html#by-the-underlying-process"><i class="fa fa-check"></i><b>3.2.2</b> By the <em>underlying process</em></a></li>
+<li class="chapter" data-level="3.2.3" data-path="classification-of-time-series.html"><a href="classification-of-time-series.html#by-the-number-of-values-recorded"><i class="fa fa-check"></i><b>3.2.3</b> By the <em>number of values recorded</em></a></li>
+<li class="chapter" data-level="3.2.4" data-path="classification-of-time-series.html"><a href="classification-of-time-series.html#by-the-type-of-values-recorded"><i class="fa fa-check"></i><b>3.2.4</b> By the <em>type of values recorded</em></a></li>
 </ul></li>
-<li class="chapter" data-level="3.3" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html"><i class="fa fa-check"></i><b>3.3</b> Decomposition of time series</a><ul>
-<li class="chapter" data-level="3.3.1" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html#sec-ts-estimating-trends"><i class="fa fa-check"></i><b>3.3.1</b> Estimating trends</a></li>
-<li class="chapter" data-level="3.3.2" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html#sec-ts-estimating-seasonal-effects"><i class="fa fa-check"></i><b>3.3.2</b> Estimating seasonal effects</a></li>
-<li class="chapter" data-level="3.3.3" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html#sec-ts-completing-the-model"><i class="fa fa-check"></i><b>3.3.3</b> Completing the model</a></li>
-<li class="chapter" data-level="3.3.4" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html#sec-ts-using-verbdecompose-for-decomposition"><i class="fa fa-check"></i><b>3.3.4</b> Using <code>decompose()</code> for decomposition</a></li>
+<li class="chapter" data-level="3.3" data-path="statistical-analyses-of-time-series.html"><a href="statistical-analyses-of-time-series.html"><i class="fa fa-check"></i><b>3.3</b> Statistical analyses of time series</a></li>
+<li class="chapter" data-level="3.4" data-path="what-is-a-time-series-model.html"><a href="what-is-a-time-series-model.html"><i class="fa fa-check"></i><b>3.4</b> What is a time series model?</a></li>
+<li class="chapter" data-level="3.5" data-path="two-simple-and-classic-time-series-models.html"><a href="two-simple-and-classic-time-series-models.html"><i class="fa fa-check"></i><b>3.5</b> Two simple and classic time series models</a></li>
+<li class="chapter" data-level="3.6" data-path="classical-decomposition.html"><a href="classical-decomposition.html"><i class="fa fa-check"></i><b>3.6</b> Classical decomposition</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="classical-decomposition.html"><a href="classical-decomposition.html#the-trend-m_t"><i class="fa fa-check"></i><b>3.6.1</b> 1. The trend (<span class="math inline">\(m_t\)</span>)</a></li>
+<li class="chapter" data-level="3.6.2" data-path="classical-decomposition.html"><a href="classical-decomposition.html#example-of-linear-filtering"><i class="fa fa-check"></i><b>3.6.2</b> Example of linear filtering</a></li>
+<li class="chapter" data-level="3.6.3" data-path="classical-decomposition.html"><a href="classical-decomposition.html#seasonal-effect-s_t"><i class="fa fa-check"></i><b>3.6.3</b> 2. Seasonal effect (<span class="math inline">\(s_t\)</span>)</a></li>
+<li class="chapter" data-level="3.6.4" data-path="classical-decomposition.html"><a href="classical-decomposition.html#remainder-e_t"><i class="fa fa-check"></i><b>3.6.4</b> 3. Remainder (<span class="math inline">\(e_t\)</span>)</a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html"><a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html"><i class="fa fa-check"></i><b>3.4</b> Differencing to remove a trend or seasonal effects</a><ul>
-<li class="chapter" data-level="3.4.1" data-path="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html"><a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html#sec-ts-using-the-verbdiff-function"><i class="fa fa-check"></i><b>3.4.1</b> Using the <code>diff()</code> function</a></li>
+<li class="chapter" data-level="3.7" data-path="decomposition-on-log-transformed-data.html"><a href="decomposition-on-log-transformed-data.html"><i class="fa fa-check"></i><b>3.7</b> Decomposition on log-transformed data</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="decomposition-on-log-transformed-data.html"><a href="decomposition-on-log-transformed-data.html#the-trend-m_t-1"><i class="fa fa-check"></i><b>3.7.1</b> The trend (<span class="math inline">\(m_t\)</span>)</a></li>
+<li class="chapter" data-level="3.7.2" data-path="decomposition-on-log-transformed-data.html"><a href="decomposition-on-log-transformed-data.html#seasonal-effect-s_t-with-error-e_t"><i class="fa fa-check"></i><b>3.7.2</b> Seasonal effect (<span class="math inline">\(s_t\)</span>) with error (<span class="math inline">\(e_t\)</span>)</a></li>
+<li class="chapter" data-level="3.7.3" data-path="decomposition-on-log-transformed-data.html"><a href="decomposition-on-log-transformed-data.html#mean-seasonal-effect-s_t"><i class="fa fa-check"></i><b>3.7.3</b> Mean seasonal effect (<span class="math inline">\(s_t\)</span>)</a></li>
+<li class="chapter" data-level="3.7.4" data-path="decomposition-on-log-transformed-data.html"><a href="decomposition-on-log-transformed-data.html#remainder-e_t-1"><i class="fa fa-check"></i><b>3.7.4</b> Remainder (<span class="math inline">\(e_t\)</span>)</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="sec-ts-correlation-within-and-among-time-series.html"><a href="sec-ts-correlation-within-and-among-time-series.html"><i class="fa fa-check"></i><b>3.5</b> Correlation within and among time series</a><ul>
-<li class="chapter" data-level="3.5.1" data-path="sec-ts-correlation-within-and-among-time-series.html"><a href="sec-ts-correlation-within-and-among-time-series.html#sec-ts-autocorrelation-function-acf"><i class="fa fa-check"></i><b>3.5.1</b> Autocorrelation function (ACF)</a></li>
-<li class="chapter" data-level="3.5.2" data-path="sec-ts-correlation-within-and-among-time-series.html"><a href="sec-ts-correlation-within-and-among-time-series.html#sec-ts-partial-autocorrelation-function-pacf"><i class="fa fa-check"></i><b>3.5.2</b> Partial autocorrelation function (PACF)</a></li>
-<li class="chapter" data-level="3.5.3" data-path="sec-ts-correlation-within-and-among-time-series.html"><a href="sec-ts-correlation-within-and-among-time-series.html#sec-ts-cross-correlation-function-ccf"><i class="fa fa-check"></i><b>3.5.3</b> Cross-correlation function (CCF)</a></li>
 </ul></li>
-<li class="chapter" data-level="3.6" data-path="sec-ts-white-noise-wn.html"><a href="sec-ts-white-noise-wn.html"><i class="fa fa-check"></i><b>3.6</b> White noise (WN)</a><ul>
-<li class="chapter" data-level="3.6.1" data-path="sec-ts-white-noise-wn.html"><a href="sec-ts-white-noise-wn.html#sec-ts-simulating-white-noise"><i class="fa fa-check"></i><b>3.6.1</b> Simulating white noise</a></li>
+<li class="chapter" data-level="4" data-path="chap-ts-lab.html"><a href="chap-ts-lab.html"><i class="fa fa-check"></i><b>4</b> Basic time series functions in R</a><ul>
+<li class="chapter" data-level="" data-path="chap-ts-lab.html"><a href="chap-ts-lab.html#data-and-packages-1"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="4.1" data-path="sec-ts-data.html"><a href="sec-ts-data.html"><i class="fa fa-check"></i><b>4.1</b> CO<span class="math inline">\(_2\)</span> and global temperature data set</a></li>
+<li class="chapter" data-level="4.2" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html"><i class="fa fa-check"></i><b>4.2</b> Time series plots</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#sec-ts-textbfts-objects-and-verbplotts"><i class="fa fa-check"></i><b>4.2.1</b> <strong>ts</strong> objects and <code>plot.ts()</code></a></li>
+<li class="chapter" data-level="4.2.2" data-path="sec-ts-time-series-plots.html"><a href="sec-ts-time-series-plots.html#sec-ts-combining-and-plotting-multiple-textbfts-objects"><i class="fa fa-check"></i><b>4.2.2</b> Combining and plotting multiple <strong>ts</strong> objects</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="sec-ts-random-walks-rw.html"><a href="sec-ts-random-walks-rw.html"><i class="fa fa-check"></i><b>3.7</b> Random walks (RW)</a><ul>
-<li class="chapter" data-level="3.7.1" data-path="sec-ts-random-walks-rw.html"><a href="sec-ts-random-walks-rw.html#sec-ts-simulating-a-random-walk"><i class="fa fa-check"></i><b>3.7.1</b> Simulating a random walk</a></li>
-<li class="chapter" data-level="3.7.2" data-path="sec-ts-random-walks-rw.html"><a href="sec-ts-random-walks-rw.html#sec-ts-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>3.7.2</b> Alternative formulation of a random walk</a></li>
+<li class="chapter" data-level="4.3" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html"><i class="fa fa-check"></i><b>4.3</b> Decomposition of time series</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html#sec-ts-estimating-trends"><i class="fa fa-check"></i><b>4.3.1</b> Estimating trends</a></li>
+<li class="chapter" data-level="4.3.2" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html#sec-ts-estimating-seasonal-effects"><i class="fa fa-check"></i><b>4.3.2</b> Estimating seasonal effects</a></li>
+<li class="chapter" data-level="4.3.3" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html#sec-ts-completing-the-model"><i class="fa fa-check"></i><b>4.3.3</b> Completing the model</a></li>
+<li class="chapter" data-level="4.3.4" data-path="sec-ts-decomposition-of-time-series.html"><a href="sec-ts-decomposition-of-time-series.html#sec-ts-using-verbdecompose-for-decomposition"><i class="fa fa-check"></i><b>4.3.4</b> Using <code>decompose()</code> for decomposition</a></li>
 </ul></li>
-<li class="chapter" data-level="3.8" data-path="sec-ts-autoregressive-ar-models.html"><a href="sec-ts-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>3.8</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="3.8.1" data-path="sec-ts-autoregressive-ar-models.html"><a href="sec-ts-autoregressive-ar-models.html#sec-ts-simulating-an-arp-process"><i class="fa fa-check"></i><b>3.8.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="3.8.2" data-path="sec-ts-autoregressive-ar-models.html"><a href="sec-ts-autoregressive-ar-models.html#sec-ts-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>3.8.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.4" data-path="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html"><a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html"><i class="fa fa-check"></i><b>4.4</b> Differencing to remove a trend or seasonal effects</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html"><a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html#sec-ts-using-the-verbdiff-function"><i class="fa fa-check"></i><b>4.4.1</b> Using the <code>diff()</code> function</a></li>
 </ul></li>
-<li class="chapter" data-level="3.9" data-path="sec-ts-moving-average-ma-models.html"><a href="sec-ts-moving-average-ma-models.html"><i class="fa fa-check"></i><b>3.9</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="3.9.1" data-path="sec-ts-moving-average-ma-models.html"><a href="sec-ts-moving-average-ma-models.html#sec-ts-simulating-an-maq-process"><i class="fa fa-check"></i><b>3.9.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="3.9.2" data-path="sec-ts-moving-average-ma-models.html"><a href="sec-ts-moving-average-ma-models.html#sec-ts-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>3.9.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.5" data-path="sec-ts-correlation-within-and-among-time-series.html"><a href="sec-ts-correlation-within-and-among-time-series.html"><i class="fa fa-check"></i><b>4.5</b> Correlation within and among time series</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="sec-ts-correlation-within-and-among-time-series.html"><a href="sec-ts-correlation-within-and-among-time-series.html#sec-ts-autocorrelation-function-acf"><i class="fa fa-check"></i><b>4.5.1</b> Autocorrelation function (ACF)</a></li>
+<li class="chapter" data-level="4.5.2" data-path="sec-ts-correlation-within-and-among-time-series.html"><a href="sec-ts-correlation-within-and-among-time-series.html#sec-ts-partial-autocorrelation-function-pacf"><i class="fa fa-check"></i><b>4.5.2</b> Partial autocorrelation function (PACF)</a></li>
+<li class="chapter" data-level="4.5.3" data-path="sec-ts-correlation-within-and-among-time-series.html"><a href="sec-ts-correlation-within-and-among-time-series.html#sec-ts-cross-correlation-function-ccf"><i class="fa fa-check"></i><b>4.5.3</b> Cross-correlation function (CCF)</a></li>
 </ul></li>
-<li class="chapter" data-level="3.10" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>3.10</b> Autoregressive moving-average (ARMA) models</a><ul>
-<li class="chapter" data-level="3.10.1" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#sec-ts-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>3.10.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
-<li class="chapter" data-level="3.10.2" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#sec-ts-searching-over-model-orders"><i class="fa fa-check"></i><b>3.10.2</b> Searching over model orders</a></li>
+<li class="chapter" data-level="4.6" data-path="sec-ts-white-noise-wn.html"><a href="sec-ts-white-noise-wn.html"><i class="fa fa-check"></i><b>4.6</b> White noise (WN)</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="sec-ts-white-noise-wn.html"><a href="sec-ts-white-noise-wn.html#sec-ts-simulating-white-noise"><i class="fa fa-check"></i><b>4.6.1</b> Simulating white noise</a></li>
 </ul></li>
-<li class="chapter" data-level="3.11" data-path="sec-ts-problems.html"><a href="sec-ts-problems.html"><i class="fa fa-check"></i><b>3.11</b> Problems</a></li>
+<li class="chapter" data-level="4.7" data-path="sec-ts-random-walks-rw.html"><a href="sec-ts-random-walks-rw.html"><i class="fa fa-check"></i><b>4.7</b> Random walks (RW)</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="sec-ts-random-walks-rw.html"><a href="sec-ts-random-walks-rw.html#sec-ts-simulating-a-random-walk"><i class="fa fa-check"></i><b>4.7.1</b> Simulating a random walk</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-ts-random-walks-rw.html"><a href="sec-ts-random-walks-rw.html#sec-ts-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.7.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="chap-univariate-state-space.html"><a href="chap-univariate-state-space.html"><i class="fa fa-check"></i><b>4</b> Univariate state-space models</a><ul>
+<li class="chapter" data-level="4.8" data-path="sec-ts-autoregressive-ar-models.html"><a href="sec-ts-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.8</b> Autoregressive (AR) models</a><ul>
+<li class="chapter" data-level="4.8.1" data-path="sec-ts-autoregressive-ar-models.html"><a href="sec-ts-autoregressive-ar-models.html#sec-ts-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-ts-autoregressive-ar-models.html"><a href="sec-ts-autoregressive-ar-models.html#sec-ts-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+</ul></li>
+<li class="chapter" data-level="4.9" data-path="sec-ts-moving-average-ma-models.html"><a href="sec-ts-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.9</b> Moving-average (MA) models</a><ul>
+<li class="chapter" data-level="4.9.1" data-path="sec-ts-moving-average-ma-models.html"><a href="sec-ts-moving-average-ma-models.html#sec-ts-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.9.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.9.2" data-path="sec-ts-moving-average-ma-models.html"><a href="sec-ts-moving-average-ma-models.html#sec-ts-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.9.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.10</b> Autoregressive moving-average (ARMA) models</a><ul>
+<li class="chapter" data-level="4.10.1" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#sec-ts-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.10.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
+<li class="chapter" data-level="4.10.2" data-path="sec-ts-autoregressive-moving-average-arma-models.html"><a href="sec-ts-autoregressive-moving-average-arma-models.html#sec-ts-searching-over-model-orders"><i class="fa fa-check"></i><b>4.10.2</b> Searching over model orders</a></li>
+</ul></li>
+<li class="chapter" data-level="4.11" data-path="sec-ts-problems.html"><a href="sec-ts-problems.html"><i class="fa fa-check"></i><b>4.11</b> Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="chap-labboxjenkins-.html"><a href="chap-labboxjenkins-.html"><i class="fa fa-check"></i><b>5</b> Box-Jenkins method in R</a><ul>
+<li class="chapter" data-level="5.0.1" data-path="chap-labboxjenkins-.html"><a href="chap-labboxjenkins-.html#data"><i class="fa fa-check"></i><b>5.0.1</b> Data</a></li>
+<li class="chapter" data-level="5.1" data-path="box-jenkins-method.html"><a href="box-jenkins-method.html"><i class="fa fa-check"></i><b>5.1</b> Box-Jenkins method</a></li>
+<li class="chapter" data-level="5.2" data-path="stationarity.html"><a href="stationarity.html"><i class="fa fa-check"></i><b>5.2</b> Stationarity</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="stationarity.html"><a href="stationarity.html#look-at-stationarity-in-simulated-data"><i class="fa fa-check"></i><b>5.2.1</b> Look at stationarity in simulated data</a></li>
+<li class="chapter" data-level="5.2.2" data-path="stationarity.html"><a href="stationarity.html#stationary-around-a-linear-trend"><i class="fa fa-check"></i><b>5.2.2</b> Stationary around a linear trend</a></li>
+<li class="chapter" data-level="5.2.3" data-path="stationarity.html"><a href="stationarity.html#greek-landing-data"><i class="fa fa-check"></i><b>5.2.3</b> Greek landing data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="dickey-fuller-and-augmented-dickey-fuller-tests.html"><a href="dickey-fuller-and-augmented-dickey-fuller-tests.html"><i class="fa fa-check"></i><b>5.3</b> Dickey-Fuller and Augmented Dickey-Fuller tests</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="dickey-fuller-and-augmented-dickey-fuller-tests.html"><a href="dickey-fuller-and-augmented-dickey-fuller-tests.html#dickey-fuller-test"><i class="fa fa-check"></i><b>5.3.1</b> Dickey-Fuller test</a></li>
+<li class="chapter" data-level="5.3.2" data-path="dickey-fuller-and-augmented-dickey-fuller-tests.html"><a href="dickey-fuller-and-augmented-dickey-fuller-tests.html#augmented-dickey-fuller-test"><i class="fa fa-check"></i><b>5.3.2</b> Augmented Dickey-Fuller test</a></li>
+<li class="chapter" data-level="5.3.3" data-path="dickey-fuller-and-augmented-dickey-fuller-tests.html"><a href="dickey-fuller-and-augmented-dickey-fuller-tests.html#adf-test-using-adf.test"><i class="fa fa-check"></i><b>5.3.3</b> ADF test using <code>adf.test()</code></a></li>
+<li class="chapter" data-level="5.3.4" data-path="dickey-fuller-and-augmented-dickey-fuller-tests.html"><a href="dickey-fuller-and-augmented-dickey-fuller-tests.html#adf-test-using-ur.df"><i class="fa fa-check"></i><b>5.3.4</b> ADF test using <code>ur.df()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="kpss-test.html"><a href="kpss-test.html"><i class="fa fa-check"></i><b>5.4</b> KPSS test</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="kpss-test.html"><a href="kpss-test.html#test-on-simulated-data"><i class="fa fa-check"></i><b>5.4.1</b> Test on simulated data</a></li>
+<li class="chapter" data-level="5.4.2" data-path="kpss-test.html"><a href="kpss-test.html#test-the-anchovy-data-1"><i class="fa fa-check"></i><b>5.4.2</b> Test the anchovy data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="dealing-with-non-stationarity.html"><a href="dealing-with-non-stationarity.html"><i class="fa fa-check"></i><b>5.5</b> Dealing with non-stationarity</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="dealing-with-non-stationarity.html"><a href="dealing-with-non-stationarity.html#ndiffs"><i class="fa fa-check"></i><b>5.5.1</b> <code>ndiffs()</code></a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="summary-stationarity-testing.html"><a href="summary-stationarity-testing.html"><i class="fa fa-check"></i><b>5.6</b> Summary: stationarity testing</a></li>
+<li class="chapter" data-level="5.7" data-path="estimating-arma-parameters.html"><a href="estimating-arma-parameters.html"><i class="fa fa-check"></i><b>5.7</b> Estimating ARMA parameters</a><ul>
+<li class="chapter" data-level="5.7.1" data-path="estimating-arma-parameters.html"><a href="estimating-arma-parameters.html#ar2-data"><i class="fa fa-check"></i><b>5.7.1</b> AR(2) data</a></li>
+<li class="chapter" data-level="5.7.2" data-path="estimating-arma-parameters.html"><a href="estimating-arma-parameters.html#fit-with-arima"><i class="fa fa-check"></i><b>5.7.2</b> Fit with <code>Arima()</code></a></li>
+<li class="chapter" data-level="5.7.3" data-path="estimating-arma-parameters.html"><a href="estimating-arma-parameters.html#ar1-simulated-data"><i class="fa fa-check"></i><b>5.7.3</b> AR(1) simulated data</a></li>
+<li class="chapter" data-level="5.7.4" data-path="estimating-arma-parameters.html"><a href="estimating-arma-parameters.html#arma12-simulated-data"><i class="fa fa-check"></i><b>5.7.4</b> ARMA(1,2) simulated data</a></li>
+<li class="chapter" data-level="5.7.5" data-path="estimating-arma-parameters.html"><a href="estimating-arma-parameters.html#these-functions-work-for-data-with-missing-values"><i class="fa fa-check"></i><b>5.7.5</b> These functions work for data with missing values</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="estimating-the-arma-orders.html"><a href="estimating-the-arma-orders.html"><i class="fa fa-check"></i><b>5.8</b> Estimating the ARMA orders</a><ul>
+<li class="chapter" data-level="5.8.1" data-path="estimating-the-arma-orders.html"><a href="estimating-the-arma-orders.html#example-model-selection-for-ar2-data"><i class="fa fa-check"></i><b>5.8.1</b> Example: model selection for AR(2) data</a></li>
+<li class="chapter" data-level="5.8.2" data-path="estimating-the-arma-orders.html"><a href="estimating-the-arma-orders.html#fitting-to-100-simulated-data-sets"><i class="fa fa-check"></i><b>5.8.2</b> Fitting to 100 simulated data sets</a></li>
+<li class="chapter" data-level="5.8.3" data-path="estimating-the-arma-orders.html"><a href="estimating-the-arma-orders.html#tracetrue"><i class="fa fa-check"></i><b>5.8.3</b> Trace=TRUE</a></li>
+<li class="chapter" data-level="5.8.4" data-path="estimating-the-arma-orders.html"><a href="estimating-the-arma-orders.html#stepwisefalse"><i class="fa fa-check"></i><b>5.8.4</b> stepwise=FALSE</a></li>
+<li class="chapter" data-level="5.8.5" data-path="estimating-the-arma-orders.html"><a href="estimating-the-arma-orders.html#fit-to-the-anchovy-data"><i class="fa fa-check"></i><b>5.8.5</b> Fit to the anchovy data</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="check-residuals.html"><a href="check-residuals.html"><i class="fa fa-check"></i><b>5.9</b> Check residuals</a></li>
+<li class="chapter" data-level="5.10" data-path="forecast-from-a-fitted-arima-model.html"><a href="forecast-from-a-fitted-arima-model.html"><i class="fa fa-check"></i><b>5.10</b> Forecast from a fitted ARIMA model</a></li>
+<li class="chapter" data-level="5.11" data-path="seasonal-arima-model.html"><a href="seasonal-arima-model.html"><i class="fa fa-check"></i><b>5.11</b> Seasonal ARIMA model</a><ul>
+<li class="chapter" data-level="5.11.1" data-path="seasonal-arima-model.html"><a href="seasonal-arima-model.html#plot-seasonal-data"><i class="fa fa-check"></i><b>5.11.1</b> Plot seasonal data</a></li>
+<li class="chapter" data-level="5.11.2" data-path="seasonal-arima-model.html"><a href="seasonal-arima-model.html#auto.arima-for-seasonal-ts"><i class="fa fa-check"></i><b>5.11.2</b> <code>auto.arima()</code> for seasonal ts</a></li>
+</ul></li>
+<li class="chapter" data-level="5.12" data-path="forecast-using-a-seasonal-model.html"><a href="forecast-using-a-seasonal-model.html"><i class="fa fa-check"></i><b>5.12</b> Forecast using a seasonal model</a></li>
+<li class="chapter" data-level="5.13" data-path="problems.html"><a href="problems.html"><i class="fa fa-check"></i><b>5.13</b> Problems</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="chap-univariate-state-space.html"><a href="chap-univariate-state-space.html"><i class="fa fa-check"></i><b>6</b> Univariate state-space models</a><ul>
 <li class="chapter" data-level="" data-path="chap-univariate-state-space.html"><a href="chap-univariate-state-space.html#data-and-packages-2"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="4.1" data-path="sec-uss-fitting-a-state-space-model-with-marss.html"><a href="sec-uss-fitting-a-state-space-model-with-marss.html"><i class="fa fa-check"></i><b>4.1</b> Fitting a state-space model with MARSS</a></li>
-<li class="chapter" data-level="4.2" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html"><i class="fa fa-check"></i><b>4.2</b> Examples using the Nile river data</a><ul>
-<li class="chapter" data-level="4.2.1" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-flat-level-model"><i class="fa fa-check"></i><b>4.2.1</b> Flat level model</a></li>
-<li class="chapter" data-level="4.2.2" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-linear-trend-in-flow-model"><i class="fa fa-check"></i><b>4.2.2</b> Linear trend in flow model</a></li>
-<li class="chapter" data-level="4.2.3" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-stochastic-level-model"><i class="fa fa-check"></i><b>4.2.3</b> Stochastic level model</a></li>
-<li class="chapter" data-level="4.2.4" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-stochastic-level-model-with-drift"><i class="fa fa-check"></i><b>4.2.4</b> Stochastic level model with drift</a></li>
+<li class="chapter" data-level="6.1" data-path="sec-uss-fitting-a-state-space-model-with-marss.html"><a href="sec-uss-fitting-a-state-space-model-with-marss.html"><i class="fa fa-check"></i><b>6.1</b> Fitting a state-space model with MARSS</a></li>
+<li class="chapter" data-level="6.2" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html"><i class="fa fa-check"></i><b>6.2</b> Examples using the Nile river data</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-flat-level-model"><i class="fa fa-check"></i><b>6.2.1</b> Flat level model</a></li>
+<li class="chapter" data-level="6.2.2" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-linear-trend-in-flow-model"><i class="fa fa-check"></i><b>6.2.2</b> Linear trend in flow model</a></li>
+<li class="chapter" data-level="6.2.3" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-stochastic-level-model"><i class="fa fa-check"></i><b>6.2.3</b> Stochastic level model</a></li>
+<li class="chapter" data-level="6.2.4" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-stochastic-level-model-with-drift"><i class="fa fa-check"></i><b>6.2.4</b> Stochastic level model with drift</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>4.3</b> The StructTS function</a></li>
-<li class="chapter" data-level="4.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>4.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="4.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>4.5</b> Basic diagnostics</a></li>
-<li class="chapter" data-level="4.6" data-path="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><a href="sec-uss-fitting-a-univariate-ar-state-space-model-with-jags.html"><i class="fa fa-check"></i><b>4.6</b> Fitting a univariate AR(1) state-space model with JAGS</a></li>
-<li class="chapter" data-level="4.7" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>4.7</b> A random walk model of animal movement</a></li>
-<li class="chapter" data-level="4.8" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>4.8</b> Problems</a></li>
+<li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
+<li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
+<li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with STAN</a></li>
+<li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
+<li class="chapter" data-level="6.9" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>6.9</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>5</b> Multivariate state-space models without covariates</a><ul>
+<li class="chapter" data-level="7" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>7</b> Multivariate state-space models without covariates</a><ul>
 <li class="chapter" data-level="" data-path="chap-mss.html"><a href="chap-mss.html#data-and-packages-3"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="5.1" data-path="sec-mss-overview.html"><a href="sec-mss-overview.html"><i class="fa fa-check"></i><b>5.1</b> Overview</a></li>
-<li class="chapter" data-level="5.2" data-path="sec-mss-west-coast-harbor-seals-counts.html"><a href="sec-mss-west-coast-harbor-seals-counts.html"><i class="fa fa-check"></i><b>5.2</b> West coast harbor seals counts</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="sec-mss-west-coast-harbor-seals-counts.html"><a href="sec-mss-west-coast-harbor-seals-counts.html#sec-mss-load-the-harbor-seal-data"><i class="fa fa-check"></i><b>5.2.1</b> Load the harbor seal data</a></li>
+<li class="chapter" data-level="7.1" data-path="sec-mss-overview.html"><a href="sec-mss-overview.html"><i class="fa fa-check"></i><b>7.1</b> Overview</a></li>
+<li class="chapter" data-level="7.2" data-path="sec-mss-west-coast-harbor-seals-counts.html"><a href="sec-mss-west-coast-harbor-seals-counts.html"><i class="fa fa-check"></i><b>7.2</b> West coast harbor seals counts</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="sec-mss-west-coast-harbor-seals-counts.html"><a href="sec-mss-west-coast-harbor-seals-counts.html#sec-mss-load-the-harbor-seal-data"><i class="fa fa-check"></i><b>7.2.1</b> Load the harbor seal data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html"><i class="fa fa-check"></i><b>5.3</b> A single well-mixed population</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-the-observation-process"><i class="fa fa-check"></i><b>5.3.1</b> The observation process</a></li>
-<li class="chapter" data-level="5.3.2" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-fitting-the-model"><i class="fa fa-check"></i><b>5.3.2</b> Fitting the model</a></li>
-<li class="chapter" data-level="5.3.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-model-residuals"><i class="fa fa-check"></i><b>5.3.3</b> Model residuals</a></li>
+<li class="chapter" data-level="7.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html"><i class="fa fa-check"></i><b>7.3</b> A single well-mixed population</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-the-observation-process"><i class="fa fa-check"></i><b>7.3.1</b> The observation process</a></li>
+<li class="chapter" data-level="7.3.2" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-fitting-the-model"><i class="fa fa-check"></i><b>7.3.2</b> Fitting the model</a></li>
+<li class="chapter" data-level="7.3.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-model-residuals"><i class="fa fa-check"></i><b>7.3.3</b> Model residuals</a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html"><i class="fa fa-check"></i><b>5.4</b> Four subpopulations with temporally uncorrelated errors</a><ul>
-<li class="chapter" data-level="5.4.1" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-the-observation-process-2"><i class="fa fa-check"></i><b>5.4.1</b> The observation process</a></li>
-<li class="chapter" data-level="5.4.2" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-fitting-mod1"><i class="fa fa-check"></i><b>5.4.2</b> Fitting the model</a></li>
+<li class="chapter" data-level="7.4" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html"><i class="fa fa-check"></i><b>7.4</b> Four subpopulations with temporally uncorrelated errors</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-the-observation-process-2"><i class="fa fa-check"></i><b>7.4.1</b> The observation process</a></li>
+<li class="chapter" data-level="7.4.2" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-fitting-mod1"><i class="fa fa-check"></i><b>7.4.2</b> Fitting the model</a></li>
 </ul></li>
-<li class="chapter" data-level="5.5" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><i class="fa fa-check"></i><b>5.5</b> Four subpopulations with temporally correlated errors</a><ul>
-<li class="chapter" data-level="5.5.1" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html#sec-mss-fitting-mod2"><i class="fa fa-check"></i><b>5.5.1</b> Fitting the model</a></li>
-<li class="chapter" data-level="5.5.2" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html#sec-mss-residuals-mod2"><i class="fa fa-check"></i><b>5.5.2</b> Model residuals</a></li>
+<li class="chapter" data-level="7.5" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><i class="fa fa-check"></i><b>7.5</b> Four subpopulations with temporally correlated errors</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html#sec-mss-fitting-mod2"><i class="fa fa-check"></i><b>7.5.1</b> Fitting the model</a></li>
+<li class="chapter" data-level="7.5.2" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html#sec-mss-residuals-mod2"><i class="fa fa-check"></i><b>7.5.2</b> Model residuals</a></li>
 </ul></li>
-<li class="chapter" data-level="5.6" data-path="sec-mss-using-marss-models-to-study-spatial-structure.html"><a href="sec-mss-using-marss-models-to-study-spatial-structure.html"><i class="fa fa-check"></i><b>5.6</b> Using MARSS models to study spatial structure</a></li>
-<li class="chapter" data-level="5.7" data-path="sec-mss-hypotheses-regarding-spatial-structure.html"><a href="sec-mss-hypotheses-regarding-spatial-structure.html"><i class="fa fa-check"></i><b>5.7</b> Hypotheses regarding spatial structure</a></li>
-<li class="chapter" data-level="5.8" data-path="sec-mss-set-up-the-hypotheses-as-different-models.html"><a href="sec-mss-set-up-the-hypotheses-as-different-models.html"><i class="fa fa-check"></i><b>5.8</b> Set up the hypotheses as different models</a><ul>
-<li class="chapter" data-level="5.8.1" data-path="sec-mss-set-up-the-hypotheses-as-different-models.html"><a href="sec-mss-set-up-the-hypotheses-as-different-models.html#sec-fit-models-hyp"><i class="fa fa-check"></i><b>5.8.1</b> Fit the models</a></li>
+<li class="chapter" data-level="7.6" data-path="sec-mss-using-marss-models-to-study-spatial-structure.html"><a href="sec-mss-using-marss-models-to-study-spatial-structure.html"><i class="fa fa-check"></i><b>7.6</b> Using MARSS models to study spatial structure</a></li>
+<li class="chapter" data-level="7.7" data-path="sec-mss-hypotheses-regarding-spatial-structure.html"><a href="sec-mss-hypotheses-regarding-spatial-structure.html"><i class="fa fa-check"></i><b>7.7</b> Hypotheses regarding spatial structure</a></li>
+<li class="chapter" data-level="7.8" data-path="sec-mss-set-up-the-hypotheses-as-different-models.html"><a href="sec-mss-set-up-the-hypotheses-as-different-models.html"><i class="fa fa-check"></i><b>7.8</b> Set up the hypotheses as different models</a><ul>
+<li class="chapter" data-level="7.8.1" data-path="sec-mss-set-up-the-hypotheses-as-different-models.html"><a href="sec-mss-set-up-the-hypotheses-as-different-models.html#sec-fit-models-hyp"><i class="fa fa-check"></i><b>7.8.1</b> Fit the models</a></li>
 </ul></li>
-<li class="chapter" data-level="5.9" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html"><i class="fa fa-check"></i><b>5.9</b> Multivariate state-space models with JAGS</a></li>
-<li class="chapter" data-level="5.10" data-path="sec-mss-writing-the-model-in-jags.html"><a href="sec-mss-writing-the-model-in-jags.html"><i class="fa fa-check"></i><b>5.10</b> Writing the model in JAGS</a></li>
-<li class="chapter" data-level="5.11" data-path="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><a href="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><i class="fa fa-check"></i><b>5.11</b> Plot the posteriors for the estimated states</a></li>
+<li class="chapter" data-level="7.9" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html"><i class="fa fa-check"></i><b>7.9</b> Multivariate state-space models with JAGS</a></li>
+<li class="chapter" data-level="7.10" data-path="sec-mss-writing-the-model-in-jags.html"><a href="sec-mss-writing-the-model-in-jags.html"><i class="fa fa-check"></i><b>7.10</b> Writing the model in JAGS</a></li>
+<li class="chapter" data-level="7.11" data-path="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><a href="sec-mss-plot-the-posteriors-for-the-estimated-states.html"><i class="fa fa-check"></i><b>7.11</b> Plot the posteriors for the estimated states</a></li>
+<li class="chapter" data-level="7.12" data-path="sec-mss-problems.html"><a href="sec-mss-problems.html"><i class="fa fa-check"></i><b>7.12</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html"><i class="fa fa-check"></i><b>6</b> Dynamic linear models</a><ul>
-<li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
-<li class="chapter" data-level="6.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
-<li class="chapter" data-level="6.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="6.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>6.3</b> Fitting a univariate DLM with <code>MARSS()</code></a></li>
-<li class="chapter" data-level="6.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>6.4</b> Forecasting with a univariate DLM</a><ul>
-<li class="chapter" data-level="6.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>6.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
-<li class="chapter" data-level="6.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>6.4.2</b> DLM forecast diagnostics</a></li>
+<li class="chapter" data-level="8" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html"><i class="fa fa-check"></i><b>8</b> Dynamic linear models</a><ul>
+<li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data-1"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="8.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>8.1</b> Overview</a></li>
+<li class="chapter" data-level="8.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>8.2</b> Example of a univariate DLM</a></li>
+<li class="chapter" data-level="8.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>8.3</b> Fitting a univariate DLM with <code>MARSS()</code></a></li>
+<li class="chapter" data-level="8.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>8.4</b> Forecasting with a univariate DLM</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
+<li class="chapter" data-level="8.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>8.4.2</b> DLM forecast diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>6.5</b> Homework discussion and data</a><ul>
-<li class="chapter" data-level="6.5.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>6.5.1</b> Spawner-recruit data</a></li>
+<li class="chapter" data-level="8.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>8.5</b> Homework discussion and data</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>8.5.1</b> Spawner-recruit data</a></li>
 </ul></li>
-<li class="chapter" data-level="6.6" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>6.6</b> Problems</a></li>
+<li class="chapter" data-level="8.6" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>8.6</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="sec-dfa.html"><a href="sec-dfa.html"><i class="fa fa-check"></i><b>7</b> Dynamic Factor Analysis</a><ul>
+<li class="chapter" data-level="9" data-path="sec-dfa.html"><a href="sec-dfa.html"><i class="fa fa-check"></i><b>9</b> Dynamic Factor Analysis</a><ul>
 <li class="chapter" data-level="" data-path="sec-dfa.html"><a href="sec-dfa.html#data-and-packages-4"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="7.1" data-path="sec-dfa-intro.html"><a href="sec-dfa-intro.html"><i class="fa fa-check"></i><b>7.1</b> Introduction</a></li>
-<li class="chapter" data-level="7.2" data-path="sec-dfa-example1.html"><a href="sec-dfa-example1.html"><i class="fa fa-check"></i><b>7.2</b> Example of a DFA model</a></li>
-<li class="chapter" data-level="7.3" data-path="sec-dfa-constraining-a-dfa-model.html"><a href="sec-dfa-constraining-a-dfa-model.html"><i class="fa fa-check"></i><b>7.3</b> Constraining a DFA model</a></li>
-<li class="chapter" data-level="7.4" data-path="sec-dfa-different-error-structures.html"><a href="sec-dfa-different-error-structures.html"><i class="fa fa-check"></i><b>7.4</b> Different error structures</a></li>
-<li class="chapter" data-level="7.5" data-path="sec-dfa-lake-wa-data.html"><a href="sec-dfa-lake-wa-data.html"><i class="fa fa-check"></i><b>7.5</b> Lake Washington phytoplankton data</a><ul>
-<li class="chapter" data-level="7.5.1" data-path="sec-dfa-lake-wa-data.html"><a href="sec-dfa-lake-wa-data.html#sec-dfa-plot-lake-wa-data"><i class="fa fa-check"></i><b>7.5.1</b> Plots of the data</a></li>
+<li class="chapter" data-level="9.1" data-path="sec-dfa-intro.html"><a href="sec-dfa-intro.html"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
+<li class="chapter" data-level="9.2" data-path="sec-dfa-example1.html"><a href="sec-dfa-example1.html"><i class="fa fa-check"></i><b>9.2</b> Example of a DFA model</a></li>
+<li class="chapter" data-level="9.3" data-path="sec-dfa-constraining-a-dfa-model.html"><a href="sec-dfa-constraining-a-dfa-model.html"><i class="fa fa-check"></i><b>9.3</b> Constraining a DFA model</a></li>
+<li class="chapter" data-level="9.4" data-path="sec-dfa-different-error-structures.html"><a href="sec-dfa-different-error-structures.html"><i class="fa fa-check"></i><b>9.4</b> Different error structures</a></li>
+<li class="chapter" data-level="9.5" data-path="sec-dfa-lake-wa-data.html"><a href="sec-dfa-lake-wa-data.html"><i class="fa fa-check"></i><b>9.5</b> Lake Washington phytoplankton data</a><ul>
+<li class="chapter" data-level="9.5.1" data-path="sec-dfa-lake-wa-data.html"><a href="sec-dfa-lake-wa-data.html#sec-dfa-plot-lake-wa-data"><i class="fa fa-check"></i><b>9.5.1</b> Plots of the data</a></li>
 </ul></li>
-<li class="chapter" data-level="7.6" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html"><i class="fa fa-check"></i><b>7.6</b> Fitting DFA models with the MARSS package</a><ul>
-<li class="chapter" data-level="7.6.1" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-process-model"><i class="fa fa-check"></i><b>7.6.1</b> The process model</a></li>
-<li class="chapter" data-level="7.6.2" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-observation-model"><i class="fa fa-check"></i><b>7.6.2</b> The observation model</a></li>
-<li class="chapter" data-level="7.6.3" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-fit-model-in-marss"><i class="fa fa-check"></i><b>7.6.3</b> Fit the model in MARSS</a></li>
+<li class="chapter" data-level="9.6" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html"><i class="fa fa-check"></i><b>9.6</b> Fitting DFA models with the MARSS package</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-process-model"><i class="fa fa-check"></i><b>9.6.1</b> The process model</a></li>
+<li class="chapter" data-level="9.6.2" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-observation-model"><i class="fa fa-check"></i><b>9.6.2</b> The observation model</a></li>
+<li class="chapter" data-level="9.6.3" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-fit-model-in-marss"><i class="fa fa-check"></i><b>9.6.3</b> Fit the model in MARSS</a></li>
 </ul></li>
-<li class="chapter" data-level="7.7" data-path="sec-dfa-interpreting-the-marss-output.html"><a href="sec-dfa-interpreting-the-marss-output.html"><i class="fa fa-check"></i><b>7.7</b> Interpreting the MARSS output</a></li>
-<li class="chapter" data-level="7.8" data-path="sec-dfa-rotating-loadings.html"><a href="sec-dfa-rotating-loadings.html"><i class="fa fa-check"></i><b>7.8</b> Rotating trends and loadings</a></li>
-<li class="chapter" data-level="7.9" data-path="sec-dfa-estimated-states.html"><a href="sec-dfa-estimated-states.html"><i class="fa fa-check"></i><b>7.9</b> Estimated states and loadings</a></li>
-<li class="chapter" data-level="7.10" data-path="sec-dfa-plot-data.html"><a href="sec-dfa-plot-data.html"><i class="fa fa-check"></i><b>7.10</b> Plotting the data and model fits</a></li>
-<li class="chapter" data-level="7.11" data-path="sec-dfa-covariates.html"><a href="sec-dfa-covariates.html"><i class="fa fa-check"></i><b>7.11</b> Covariates in DFA models</a></li>
-<li class="chapter" data-level="7.12" data-path="sec-dfa-lakeWA.html"><a href="sec-dfa-lakeWA.html"><i class="fa fa-check"></i><b>7.12</b> Example from Lake Washington</a></li>
-<li class="chapter" data-level="7.13" data-path="sec-dfa-problems.html"><a href="sec-dfa-problems.html"><i class="fa fa-check"></i><b>7.13</b> Problems</a></li>
+<li class="chapter" data-level="9.7" data-path="sec-dfa-interpreting-the-marss-output.html"><a href="sec-dfa-interpreting-the-marss-output.html"><i class="fa fa-check"></i><b>9.7</b> Interpreting the MARSS output</a></li>
+<li class="chapter" data-level="9.8" data-path="sec-dfa-rotating-loadings.html"><a href="sec-dfa-rotating-loadings.html"><i class="fa fa-check"></i><b>9.8</b> Rotating trends and loadings</a></li>
+<li class="chapter" data-level="9.9" data-path="sec-dfa-estimated-states.html"><a href="sec-dfa-estimated-states.html"><i class="fa fa-check"></i><b>9.9</b> Estimated states and loadings</a></li>
+<li class="chapter" data-level="9.10" data-path="sec-dfa-plot-data.html"><a href="sec-dfa-plot-data.html"><i class="fa fa-check"></i><b>9.10</b> Plotting the data and model fits</a></li>
+<li class="chapter" data-level="9.11" data-path="sec-dfa-covariates.html"><a href="sec-dfa-covariates.html"><i class="fa fa-check"></i><b>9.11</b> Covariates in DFA models</a></li>
+<li class="chapter" data-level="9.12" data-path="sec-dfa-lakeWA.html"><a href="sec-dfa-lakeWA.html"><i class="fa fa-check"></i><b>9.12</b> Example from Lake Washington</a></li>
+<li class="chapter" data-level="9.13" data-path="sec-dfa-problems.html"><a href="sec-dfa-problems.html"><i class="fa fa-check"></i><b>9.13</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>8</b> JAGS for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="8.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>8.1</b> The airquality dataset</a></li>
-<li class="chapter" data-level="8.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>8.2</b> Linear regression with no covariates</a></li>
-<li class="chapter" data-level="8.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>8.3</b> Regression with autocorrelated errors</a></li>
-<li class="chapter" data-level="8.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>8.4</b> Random walk time series model</a></li>
-<li class="chapter" data-level="8.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>8.5</b> Autoregressive AR(1) time series models</a></li>
-<li class="chapter" data-level="8.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>8.6</b> Univariate state space model</a><ul>
-<li class="chapter" data-level="8.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>8.6.1</b> Including covariates</a></li>
+<li class="chapter" data-level="10" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>10</b> JAGS for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="10.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>10.1</b> The airquality dataset</a></li>
+<li class="chapter" data-level="10.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>10.2</b> Linear regression with no covariates</a></li>
+<li class="chapter" data-level="10.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>10.3</b> Regression with autocorrelated errors</a></li>
+<li class="chapter" data-level="10.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>10.4</b> Random walk time series model</a></li>
+<li class="chapter" data-level="10.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>10.5</b> Autoregressive AR(1) time series models</a></li>
+<li class="chapter" data-level="10.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>10.6</b> Univariate state space model</a><ul>
+<li class="chapter" data-level="10.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>10.6.1</b> Including covariates</a></li>
 </ul></li>
-<li class="chapter" data-level="8.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>8.7</b> Forecasting with JAGS models</a></li>
-<li class="chapter" data-level="8.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>8.8</b> Problems</a></li>
+<li class="chapter" data-level="10.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>10.7</b> Forecasting with JAGS models</a></li>
+<li class="chapter" data-level="10.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>10.8</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>9</b> Stan for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="9.1" data-path="sec-stan-packages-data.html"><a href="sec-stan-packages-data.html"><i class="fa fa-check"></i><b>9.1</b> Stan packages and chapter data sets</a></li>
-<li class="chapter" data-level="9.2" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>9.2</b> Linear regression</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>9.2.1</b> Burn-in and thinning</a></li>
+<li class="chapter" data-level="11" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>11</b> Stan for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="11.1" data-path="sec-stan-packages-data.html"><a href="sec-stan-packages-data.html"><i class="fa fa-check"></i><b>11.1</b> Stan packages and chapter data sets</a></li>
+<li class="chapter" data-level="11.2" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>11.2</b> Linear regression</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>11.2.1</b> Burn-in and thinning</a></li>
 </ul></li>
-<li class="chapter" data-level="9.3" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>9.3</b> Linear regression with correlated errors</a></li>
-<li class="chapter" data-level="9.4" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>9.4</b> Random walk model</a></li>
-<li class="chapter" data-level="9.5" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>9.5</b> Autoregressive models</a></li>
-<li class="chapter" data-level="9.6" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>9.6</b> Univariate state-space models</a></li>
-<li class="chapter" data-level="9.7" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>9.7</b> Dynamic factor analysis</a><ul>
-<li class="chapter" data-level="9.7.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>9.7.1</b> Using leave one out cross-validation to select models</a></li>
+<li class="chapter" data-level="11.3" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>11.3</b> Linear regression with correlated errors</a></li>
+<li class="chapter" data-level="11.4" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>11.4</b> Random walk model</a></li>
+<li class="chapter" data-level="11.5" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>11.5</b> Autoregressive models</a></li>
+<li class="chapter" data-level="11.6" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>11.6</b> Univariate state-space models</a></li>
+<li class="chapter" data-level="11.7" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>11.7</b> Dynamic factor analysis</a><ul>
+<li class="chapter" data-level="11.7.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>11.7.1</b> Using leave one out cross-validation to select models</a></li>
 </ul></li>
-<li class="chapter" data-level="9.8" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>9.8</b> Uncertainty intervals on states</a></li>
-<li class="chapter" data-level="9.9" data-path="stan-problems.html"><a href="stan-problems.html"><i class="fa fa-check"></i><b>9.9</b> Problems</a></li>
+<li class="chapter" data-level="11.8" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>11.8</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="11.9" data-path="stan-problems.html"><a href="stan-problems.html"><i class="fa fa-check"></i><b>11.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -342,24 +387,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="sec-jags-lr-no-covariates" class="section level2">
-<h2><span class="header-section-number">8.2</span> Linear regression with no covariates</h2>
-<p>We will start with the simplest time series model possible: linear regression with only an intercept, so that the predicted values of all observations are the same. There are several ways we can write this equation. First, the predicted values can be written as <span class="math inline">\(E[{y}_{t}] = \mu\)</span>. Assuming that the residuals are normally distributed, the model linking our predictions to observed data are written as
+<h2><span class="header-section-number">10.2</span> Linear regression with no covariates</h2>
+We will start with the simplest time series model possible: linear regression with only an intercept, so that the predicted values of all observations are the same. There are several ways we can write this equation. First, the predicted values can be written as <span class="math inline">\(E[{y}_{t}] = \mu\)</span>. Assuming that the residuals are normally distributed, the model linking our predictions to observed data are written as
 <span class="math display" id="eq:stan-obs-eqn">\[\begin{equation}
 y_t = \mu + e_t, e_t \sim \,\text{N}(0,\sigma^2)
-\tag{8.1}
+\tag{10.1}
 \end{equation}\]</span>
 An equivalent way to think about this model is that instead of the residuals as normally distributed with mean zero, we can think of the data <span class="math inline">\(y\)</span> as being normally distributed with a mean of the intercept, and the same residual standard deviation:
 <span class="math display" id="eq:stan-obs-eqn2">\[\begin{equation}
 y \sim \,\text{N}(E[y_t],\sigma^2)
-\tag{8.2}
+\tag{10.2}
 \end{equation}\]</span>
-Remember that in linear regression models, the residual error is interpreted as independent and identically distributed observation error.</p>
+<p>Remember that in linear regression models, the residual error is interpreted as independent and identically distributed observation error.</p>
 <p>To run the JAGS model, we will need to start by writing the model in JAGS notation. For our linear regression model, one way to construct the model is</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1. LINEAR REGRESSION with no covariates no covariates, so</span>
-<span class="co"># intercept only. The parameters are mean &#39;mu&#39; and</span>
-<span class="co"># precision/variance parameter &#39;tau.obs&#39;</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1. LINEAR REGRESSION with no covariates</span>
+<span class="co"># no covariates, so intercept only. The parameters are </span>
+<span class="co"># mean &#39;mu&#39; and precision/variance parameter &#39;tau.obs&#39;</span>
 
-model.loc =<span class="st"> &quot;lm_intercept.txt&quot;</span>  <span class="co"># name of the txt file</span>
+model.loc=<span class="st">&quot;lm_intercept.txt&quot;</span> <span class="co"># name of the txt file</span>
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">model {  </span>
 <span class="st">   # priors on parameters</span>
@@ -371,68 +416,65 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">      Y[i] ~ dnorm(mu, tau.obs);</span>
 <span class="st">   }</span>
 <span class="st">}  </span>
-<span class="st">&quot;</span>, 
-    <span class="dt">file =</span> model.loc)</code></pre>
+<span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)</code></pre></div>
 <p>A couple things to notice: JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and the <code>dnorm</code> notation means that we assume that value (on the left) is normally distributed around a particular mean with a particular precision (1 over the square root of the variance).</p>
 <p>The model can briefly be summarized as follows: there are 2 parameters in the model (the mean and variance of the observation error). JAGS is a bit funny in that instead of giving a normal distribution the standard deviation or variance, you pass in the precision (1/variance), so our prior on <span class="math inline">\(\mu\)</span> is pretty vague. The precision receives a gamma prior, which is equivalent to the variance receiving an inverse gamma prior (fairly common for standard Bayesian regression models). We will treat the standard deviation as derived (if we know the variance or precision, which we are estimating, we automatically know the standard deviation). Finally, we write a model for the data <span class="math inline">\(y_t\)</span> (<code>Y[i]</code>). Again we use the <code>dnorm</code> distribution to say that the data are normally distributed (equivalent to our likelihood).</p>
 <p>The function from the <strong>R2jags</strong> package that we actually use to run the model is <code>jags()</code>. There is a parallel version of the function called <code>jags.parallel()</code> which is useful for larger, more complex models. The details of both can be found with <code>?jags</code> or <code>?jags.parallel</code>.</p>
 <p>To actually run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS, (2) a vector of parameters that we want to monitor in JAGS and have returned back to R, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the <code>jags()</code> function.</p>
-<pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)  <span class="co"># named list of inputs</span>
-jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;mu&quot;</span>)  <span class="co"># parameters to be monitored</span>
-mod_lm_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, 
-    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, 
-    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N) <span class="co"># named list of inputs</span>
+jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>,<span class="st">&quot;mu&quot;</span>) <span class="co"># parameters to be monitored</span>
+mod_lm_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, 
+                <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin=</span><span class="dv">5000</span>,
+                <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </code></pre></div>
 <p>Notice that the <code>jags()</code> function contains a number of other important arguments. In general, larger is better for all arguments: we want to run multiple MCMC chains (maybe 3 or more), and have a burn-in of at least 5000. The total number of samples after the burn-in period is n.iter-n.burnin, which in this case is 5000 samples. Because we are doing this with 3 MCMC chains, and the thinning rate equals 1 (meaning we are saving every sample), we will retain a total of 1500 posterior samples for each parameter.</p>
 <p>The saved object storing our model diagnostics can be accessed directly, and includes some useful summary output.</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod_lm_intercept</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_lm_intercept</code></pre></div>
 <pre><code>Inference for Bugs model at &quot;lm_intercept.txt&quot;, fit using jags,
  3 chains, each with 10000 iterations (first 5000 discarded)
  n.sims = 15000 iterations saved
          mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
-mu         9.950   0.283   9.390   9.761   9.947  10.143  10.506 1.001
-sd.obs     3.536   0.204   3.161   3.396   3.526   3.665   3.967 1.001
-deviance 820.524   1.995 818.590 819.108 819.893 821.315 825.825 1.001
+mu         9.952   0.289   9.392   9.755   9.952  10.147  10.528 1.001
+sd.obs     3.543   0.207   3.162   3.401   3.532   3.677   3.972 1.001
+deviance 820.586   2.043 818.591 819.127 819.951 821.407 826.175 1.001
          n.eff
 mu       15000
-sd.obs   14000
-deviance 11000
+sd.obs   15000
+deviance 15000
 
 For each parameter, n.eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
 
 DIC info (using the rule, pD = var(deviance)/2)
-pD = 2.0 and DIC = 822.5
+pD = 2.1 and DIC = 822.7
 DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <p>The last 2 columns in the summary contain <code>Rhat</code> (which we want to be close to 1.0), and <code>neff</code> (the effective sample size of each set of posterior draws). To examine the output more closely, we can pull all of the results directly into R,</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach.jags</span>(mod_lm_intercept)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach.jags</span>(mod_lm_intercept)</code></pre></div>
 <pre><code>The following object is masked _by_ .GlobalEnv:
 
     mu</code></pre>
 <p>Attaching the <strong>R2jags</strong> object allows us to work with the named parameters directly in R. For example, we could make a histogram of the posterior distributions of the parameters <code>mu</code> and <code>sd.obs</code> with the following code,</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now we can make plots of posterior values</span>
-<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))
-<span class="kw">hist</span>(mu, <span class="dv">40</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Mean&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)
-<span class="kw">hist</span>(sd.obs, <span class="dv">40</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(sigma[obs]), 
-    <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now we can make plots of posterior values</span>
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))
+<span class="kw">hist</span>(mu,<span class="dv">40</span>,<span class="dt">col=</span><span class="st">&quot;grey&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;Mean&quot;</span>,<span class="dt">main=</span><span class="st">&quot;&quot;</span>)
+<span class="kw">hist</span>(sd.obs,<span class="dv">40</span>,<span class="dt">col=</span><span class="st">&quot;grey&quot;</span>,<span class="dt">xlab=</span><span class="kw">expression</span>(sigma[obs]),<span class="dt">main=</span><span class="st">&quot;&quot;</span>)</code></pre></div>
 
 <div class="figure"><span id="fig:jags-plot-hist-post"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-plot-hist-post-1.png" alt="Plot of the posteriors for the linear regression model." width="576" />
 <p class="caption">
-Figure 8.1: Plot of the posteriors for the linear regression model.
+Figure 10.1: Plot of the posteriors for the linear regression model.
 </p>
 </div>
 <p>Finally, we can run some useful diagnostics from the <strong>coda</strong> package on this model output. We have written a small function to make the creation of mcmc lists (an argument required for many of the diagnostics). The function</p>
-<pre class="sourceCode r"><code class="sourceCode r">createMcmcList =<span class="st"> </span><span class="cf">function</span>(jagsmodel) {
-    McmcArray =<span class="st"> </span><span class="kw">as.array</span>(jagsmodel<span class="op">$</span>BUGSoutput<span class="op">$</span>sims.array)
-    McmcList =<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;list&quot;</span>, <span class="dt">length =</span> <span class="kw">dim</span>(McmcArray)[<span class="dv">2</span>])
-    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(McmcList)) McmcList[[i]] =<span class="st"> </span><span class="kw">as.mcmc</span>(McmcArray[, 
-        i, ])
-    McmcList =<span class="st"> </span><span class="kw">mcmc.list</span>(McmcList)
-    <span class="kw">return</span>(McmcList)
-}</code></pre>
-<p>Creating the MCMC list preserves the random samples generated from each chain and allows you to extract the samples for a given parameter (such as <span class="math inline">\(\mu\)</span>) from any chain you want. To extract <span class="math inline">\(\mu\)</span> from the first chain, for example, you could use the following code. Because <code>createMcmcList()</code> returns a list of <strong>mcmc</strong> objects, we can summarize and plot these directly. Figure <a href="sec-jags-lr-no-covariates.html#fig:jags-plot-myList">8.2</a> shows the plot from <code>plot(myList[[1]])</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">myList =<span class="st"> </span><span class="kw">createMcmcList</span>(mod_lm_intercept)
-<span class="kw">summary</span>(myList[[<span class="dv">1</span>]])</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">createMcmcList =<span class="st"> </span><span class="cf">function</span>(jagsmodel) {
+McmcArray =<span class="st"> </span><span class="kw">as.array</span>(jagsmodel<span class="op">$</span>BUGSoutput<span class="op">$</span>sims.array)
+McmcList =<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;list&quot;</span>,<span class="dt">length=</span><span class="kw">dim</span>(McmcArray)[<span class="dv">2</span>])
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(McmcList)) McmcList[[i]] =<span class="st"> </span><span class="kw">as.mcmc</span>(McmcArray[,i,])
+McmcList =<span class="st"> </span><span class="kw">mcmc.list</span>(McmcList)
+<span class="kw">return</span>(McmcList)
+}</code></pre></div>
+<p>Creating the MCMC list preserves the random samples generated from each chain and allows you to extract the samples for a given parameter (such as <span class="math inline">\(\mu\)</span>) from any chain you want. To extract <span class="math inline">\(\mu\)</span> from the first chain, for example, you could use the following code. Because <code>createMcmcList()</code> returns a list of <strong>mcmc</strong> objects, we can summarize and plot these directly. Figure <a href="sec-jags-lr-no-covariates.html#fig:jags-plot-myList">10.2</a> shows the plot from <code>plot(myList[[1]])</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myList =<span class="st"> </span><span class="kw">createMcmcList</span>(mod_lm_intercept)
+<span class="kw">summary</span>(myList[[<span class="dv">1</span>]])</code></pre></div>
 <pre><code>
 Iterations = 1:5000
 Thinning interval = 1 
@@ -443,33 +485,32 @@ Sample size per chain = 5000
    plus standard error of the mean:
 
             Mean     SD Naive SE Time-series SE
-deviance 820.541 2.0350 0.028779       0.030093
-mu         9.952 0.2854 0.004037       0.004037
-sd.obs     3.539 0.2041 0.002886       0.002886
+deviance 820.571 2.0182 0.028541       0.028541
+mu         9.951 0.2894 0.004093       0.004103
+sd.obs     3.545 0.2048 0.002897       0.002914
 
 2. Quantiles for each variable:
 
             2.5%     25%     50%     75%   97.5%
-deviance 818.587 819.099 819.888 821.386 826.111
-mu         9.389   9.754   9.949  10.151  10.508
-sd.obs     3.158   3.406   3.529   3.666   3.968</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(myList[[<span class="dv">1</span>]])</code></pre>
+deviance 818.586 819.121 819.950 821.408 825.936
+mu         9.386   9.755   9.950  10.139  10.530
+sd.obs     3.172   3.400   3.529   3.677   3.974</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(myList[[<span class="dv">1</span>]])</code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/jags-make-myList-1.png" width="672" /></p>
 
 <div class="figure"><span id="fig:jags-plot-myList"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-plot-myList-1.png" alt="Plot of an object output from \(\texttt{creatMcmcList}\)." width="576" />
 <p class="caption">
-Figure 8.2: Plot of an object output from <span class="math inline">\(\texttt{creatMcmcList}\)</span>.
+Figure 10.2: Plot of an object output from <span class="math inline">\(\texttt{creatMcmcList}\)</span>.
 </p>
 </div>
-<p>For more quantitative diagnostics of MCMC convergence, we can rely on the <strong>coda</strong> package in R. There
-are several useful statistics available, including the Gelman-Rubin diagnostic (for one or several chains), autocorrelation diagnostics (similar to the ACF you calculated above), the Geweke diagnostic, and Heidelberger-Welch test of stationarity.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run the majority of the diagnostics that CODA() offers</span>
+<p>For more quantitative diagnostics of MCMC convergence, we can rely on the <strong>coda</strong> package in R. There are several useful statistics available, including the Gelman-Rubin diagnostic (for one or several chains), autocorrelation diagnostics (similar to the ACF you calculated above), the Geweke diagnostic, and Heidelberger-Welch test of stationarity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run the majority of the diagnostics that CODA() offers</span>
 <span class="kw">library</span>(coda)
-gelmanDiags =<span class="st"> </span><span class="kw">gelman.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept), <span class="dt">multivariate =</span> F)
+gelmanDiags =<span class="st"> </span><span class="kw">gelman.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept),<span class="dt">multivariate=</span>F)
 autocorDiags =<span class="st"> </span><span class="kw">autocorr.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept))
 gewekeDiags =<span class="st"> </span><span class="kw">geweke.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept))
-heidelDiags =<span class="st"> </span><span class="kw">heidel.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept))</code></pre>
+heidelDiags =<span class="st"> </span><span class="kw">heidel.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept))</code></pre></div>
 </div>
             </section>
 
@@ -507,14 +548,14 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/edit/master/cleanedRmd/intro-to-jags.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/intro-to-jags.Rmd",
 "text": "Edit"
 },
 "history": {
 "link": null,
 "text": null
 },
-"download": ["Applied Time Series Analysis.pdf"],
+"download": ["Applied_Time_Series_Analysis.pdf"],
 "toc": {
 "collapse": "section"
 }
@@ -527,7 +568,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

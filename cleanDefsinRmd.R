@@ -21,13 +21,15 @@ replace.defs = function(defsfile, inputfile, outputfile){
 basefiles=c(
   "Lab-basic-matrix/basic-matrix-math",
   "Lab-linear-regression/linear-regression-models-matrix",
-  "Lab-intro-to-ts/intro-ts-funcs",
+  "Lab-intro-to-ts/intro-to-ts",
+  "Lab-intro-to-ts/intro-ts-funcs-lab",
   "Lab-dynamic-factor-analysis/intro-to-dfa",
   "Lab-fitting-uni-ss-models/fitting-univariate-state-space",
   "Lab-fitting-multi-ss-models/multivariate-ss",
   "Lab-fitting-DLMs/DLM",
   "Lab-intro-to-jags/intro-to-jags",
-  "Lab-intro-to-stan/fitting-models-with-stan"
+  "Lab-intro-to-stan/fitting-models-with-stan",
+  "Lab-box-jenkins-method/box-jenkins"
 )
 for(basefile in basefiles){
   filename=str_split(basefile,"/")[[1]][2]
@@ -41,6 +43,15 @@ for(basefile in basefiles){
   filename=str_split(basefile,"/")[[1]][2]
   outputfile = paste("docs/Rcode/",filename,".R",sep="")
   knitr::purl(paste(basefile,".Rmd",sep=""), output= outputfile)
+}
+
+#Create the Rmd files
+require(stringr)
+for(basefile in basefiles){
+  filename=str_split(basefile,"/")[[1]][2]
+  inputfile = paste("cleanedRmd/",filename,".Rmd",sep="")
+  outputfile = paste("docs/Rmds/",filename,".Rmd",sep="")
+  file.copy(inputfile, outputfile, overwrite=TRUE)
 }
 
 ####################################################

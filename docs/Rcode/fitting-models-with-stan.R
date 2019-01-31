@@ -55,19 +55,19 @@ lm_intercept = fit_stan(y = Temp, x = rep(1, length(Temp)),
 pars = extract(lm_intercept)
 plot(pars$beta)
 
-## ----stan-lr-ar, cache=TRUE, results='hide'------------------------------
+## ----stan-lr-ar, cache=TRUE, message=FALSE, warning=FALSE, results='hide'----
 lm_intercept_cor = fit_stan(y = Temp, x = rep(1, length(Temp)),
   model_name = "regression_cor", 
   mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
 
-## ----stan-rw, cache=TRUE, results='hide'---------------------------------
+## ----stan-rw, cache=TRUE, message=FALSE, warning=FALSE, results='hide'----
 rw = fit_stan(y = Temp, est_drift = FALSE, model_name = "rw")
 
-## ----stan-ar1-fit, results='hide', cache=TRUE----------------------------
+## ----stan-ar1-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'----
 ar1 = fit_stan(y = Temp, x = matrix(1, nrow = length(Temp), ncol = 1), 
   model_name = "ar", est_drift=FALSE, P = 1)
 
-## ----stan-arrw, results='hide', cache=TRUE-------------------------------
+## ----stan-arrw, cache=TRUE, message=FALSE, warning=FALSE, results='hide'----
 ss_ar = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_ar")
 ss_rw = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
 
@@ -99,7 +99,7 @@ for(i in 1:5)
   plot(dat.ts[,i], type="b",
        main=colnames(dat.ts)[i],col="blue",pch=16)
 
-## ----stan-dfa.3.trend, results='hide', cache=TRUE------------------------
+## ----stan-dfa.3.trend, cache=TRUE, message=FALSE, warning=FALSE, results='hide'----
 mod_3 = fit_dfa(y = dat.spp.1980, num_trends=3)
 
 ## ----stan-dfa-rot--------------------------------------------------------
@@ -137,7 +137,7 @@ data("harborSealWA")
 matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
         ylab="Log abundance", xlab="")
 
-## ----stan-seal-fit, results='hide', cache=TRUE---------------------------
+## ----stan-seal-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'----
 seal.mod= fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
 
 ## ----stan-seal-trend-----------------------------------------------------

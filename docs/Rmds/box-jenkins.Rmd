@@ -1,0 +1,674 @@
+```{r boxjenkins-setup, include=FALSE, purl=FALSE}
+knitr::opts_knit$set(unnamed.chunk.label = "labboxjenkins-")
+```
+
+# Box-Jenkins method in R  {#chap-labboxjenkins-}
+\chaptermark{Box-Jenkins Method}
+
+In this chapter, you will practice selecting and fitting an ARIMA model to catch data using the Box-Jenkins method.  After fitting a model, you will prepare simple forecasts using the **forecast** package.  
+
+### Data
+
+Load catch landings from Greek waters [landings.RData](landings.RData) and the Chinook landings  [chinook.RData](chinook.RData) in Washington data.
+
+```{r bj-read-data, eval=FALSE}
+load("landings.RData")
+load("chinook.RData")
+```
+
+```{r bj-load-data-rmd, include=FALSE, purl=FALSE}
+#If bookdown is being run, then we are at the top level
+#If "gitbook" is not in the output
+#then user is running Rmd in the folder for debugging
+if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
+  #load the data
+  load("docs/data/landings.RData")
+  load("docs/data/chinook.RData")
+}else{
+  load("landings.RData")
+  load("chinook.RData")
+}
+```
+
+Ensure you have the necessary packages.
+
+```{r bj-load_packages}
+library(ggplot2)
+library(gridExtra)
+library(reshape2)
+library(tseries)
+library(urca)
+library(forecast)
+```
+
+```{r bj-set-seed-invisible, echo=FALSE}
+set.seed(123)
+```
+
+## Box-Jenkins method
+
+A. Model form selection
+
+  1. Evaluate stationarity
+  2. Selection of the differencing level (d) -- to fix stationarity problems
+  3. Selection of the AR level (p)
+  4. Selection of the MA level (q)
+
+B. Parameter estimation
+
+C. Model checking
+
+## Stationarity
+
+It is important to test and transform (via differencing) your data to ensure stationarity when fitting an ARMA model using standard algorithms. The standard algorithms for ARIMA models assume stationarity and we will be using those algorithms.  It possible to fit ARMA models without transforming the data.  We will cover that in later chapters. However, that is not commonly done in the literature on forecasting with ARMA models, certainly not in the literature on catch forecasting. 
+
+Keep in mind also that many ARMA models are stationary and you do not want to get in the situation of trying to fit an incompatible process model to your data.  We will see examples of this when we start fitting models to non-stationary data and random walks.
+
+### Look at stationarity in simulated data
+
+We will start by looking at white noise and a stationary AR(1) process from simulated data.  White noise is simply a string of random numbers drawn from a Normal distribution.  `rnorm()` with return random numbers drawn from a Normal distribution.  Use `?rnorm` to understand what the function requires.
+
+
+```{r bj-white-noise}
+TT <- 100
+y <- rnorm(TT, mean=0, sd=1) # 100 random numbers
+op <- par(mfrow=c(1,2))
+plot(y, type="l")
+acf(y)
+par(op)
+```
+
+Here we use `ggplot()` to plot 10 white noise time series.
+
+```{r bj-white-noise-ggplot}
+dat <- data.frame(t=1:TT, y=y)
+p1 <- ggplot(dat, aes(x=t, y=y)) + geom_line() + 
+  ggtitle("1 white noise time series") + xlab("") + ylab("value")
+ys <- matrix(rnorm(TT*10),TT,10)
+ys <- data.frame(ys)
+ys$id = 1:TT
+
+ys2 <- melt(ys, id.var="id")
+p2 <- ggplot(ys2, aes(x=id,y=value,group=variable)) +
+  geom_line() + xlab("") + ylab("value") +
+  ggtitle("10 white noise processes")
+grid.arrange(p1, p2, ncol = 1)
+```
+
+These are stationary because the variance and mean (level) does not change with time.
+
+An AR(1) process is also stationary.
+
+```{r bj-ar1-plot}
+theta <- 0.8
+nsim <- 10
+ar1 <- arima.sim(TT, model=list(ar=theta))
+plot(ar1)
+```
+
+We can use ggplot to plot 10 AR(1) time series, but we need to change the data to a data frame.
+
+```{r bj-ar1-ggplot}
+dat <- data.frame(t=1:TT, y=ar1)
+p1 <- ggplot(dat, aes(x=t, y=y)) + geom_line() + 
+  ggtitle("AR-1") + xlab("") + ylab("value")
+ys <- matrix(0,TT,nsim)
+for(i in 1:nsim) ys[,i] <- as.vector(arima.sim(TT, model=list(ar=theta)))
+ys <- data.frame(ys)
+ys$id <- 1:TT
+
+ys2 <- melt(ys, id.var="id")
+p2 <- ggplot(ys2, aes(x=id,y=value,group=variable)) +
+  geom_line() + xlab("") + ylab("value") +
+  ggtitle("The variance of an AR-1 process is steady")
+grid.arrange(p1, p2, ncol = 1)
+```
+
+### Stationary around a linear trend
+
+Fluctuating around a linear trend is a very common type of stationarity used in ARMA modeling and forecasting.  This is just a stationary process, like white noise or AR(1), around an linear trend up or down.
+
+```{r bj-wn-w-linear-trend}
+intercept <- .5
+trend <- 0.1
+sd <- 0.5
+TT <- 20
+wn <- rnorm(TT, sd=sd) #white noise
+wni <- wn+intercept #white noise witn interept
+wnti <- wn + trend*(1:TT) + intercept
+```
+
+See how the white noise with trend is just the white noise overlaid on a linear trend.
+
+```{r bj-wnt-plot}
+op <- par(mfrow=c(1,3))
+plot(wn, type="l")
+plot(trend*1:TT)
+plot(wnti, type="l")
+par(op)
+```
+
+We can make a similar plot with ggplot.
+
+```{r bj-wnt-ggplot}
+dat <- data.frame(t=1:TT, wn=wn, wni=wni, wnti=wnti)
+p1 <- ggplot(dat, aes(x=t, y=wn)) + geom_line() + ggtitle("White noise")
+p2 <- ggplot(dat, aes(x=t, y=wni)) + geom_line() + ggtitle("with non-zero mean")
+p3 <- ggplot(dat, aes(x=t, y=wnti)) + geom_line() + ggtitle("with linear trend")
+grid.arrange(p1, p2, p3, ncol = 3)
+```
+
+We can make a similar plot with AR(1) data.  Ignore the warnings about not knowing how to pick the scale.
+
+```{r bj-ar1-trend-plot}
+beta1 <- 0.8
+ar1 <- arima.sim(TT, model=list(ar=beta1), sd=sd)
+ar1i <- ar1 + intercept
+ar1ti <- ar1 + trend*(1:TT) + intercept
+dat <- data.frame(t=1:TT, ar1=ar1, ar1i=ar1i, ar1ti=ar1ti)
+p4 <- ggplot(dat, aes(x=t, y=ar1)) + geom_line() + ggtitle("AR1")
+p5 <- ggplot(dat, aes(x=t, y=ar1i)) + geom_line() + ggtitle("with non-zero mean")
+p6 <- ggplot(dat, aes(x=t, y=ar1ti)) + geom_line() + ggtitle("with linear trend")
+
+grid.arrange(p4, p5, p6, ncol = 3)
+```
+
+### Greek landing data
+
+We will look at the anchovy data.  Notice the two `==` in the subset call not one `=`.  We will use the Greek data before 1989 for the lab.
+
+```{r bj-anchovy}
+anchovy <- subset(landings, Species=="Anchovy" & Year <= 1989)$log.metric.tons
+anchovyts <- ts(anchovy, start=1964)
+```
+
+Plot the data.
+
+```{r bj-anchovy-plot}
+plot(anchovyts, ylab="log catch")
+```
+
+Questions to ask.
+
+* Does it have a trend (goes up or down)? Yes, definitely
+* Does it have a non-zero mean?  Yes
+* Does it look like it might be stationary around a trend? Maybe
+
+## Dickey-Fuller and Augmented Dickey-Fuller tests
+
+### Dickey-Fuller test
+
+The Dickey-Fuller test is testing if $\phi=0$ in this model of the data:
+$$y_t = \alpha + \beta t + \phi y_{t-1} + e_t$$
+which is written as
+$$\Delta y_t = y_t-y_{t-1}= \alpha + \beta t + \gamma y_{t-1} + e_t$$
+where $y_t$ is your data.  It is written this way so we can do a linear regression of $\Delta y_t$ against $t$ and $y_{t-1}$ and test if $\gamma$ is different from 0.  If $\gamma=0$, then we have a random walk process. If not and $-1<1+\gamma<1$, then we have a stationary process.
+
+### Augmented Dickey-Fuller test
+
+The Augmented Dickey-Fuller test allows for higher-order autoregressive processes by including $\Delta y_{t-p}$ in the model.  But our test is still if $\gamma = 0$.
+$$\Delta y_t = \alpha + \beta t + \gamma y_{t-1} + \delta_1 \Delta y_{t-1} + \delta_2 \Delta y_{t-2} + \dots$$
+
+The null hypothesis for both tests is that the data are non-stationary.  We want to REJECT the null hypothesis for this test, so we want a p-value of less that 0.05 (or smaller).
+
+### ADF test using `adf.test()`
+
+The `adf.test()` from the **tseries** package will do a Augmented Dickey-Fuller test (Dickey-Fuller if we set lags equal to 0) with a trend and an intercept.  Use `?adf.test` to read about this function.  The function is
+```
+adf.test(x, alternative = c("stationary", "explosive"),
+         k = trunc((length(x)-1)^(1/3)))
+```
+`x` are your data. `alternative="stationary"` means that $-2<\gamma<0$ ($-1<\phi<1$) and `alternative="explosive"` means that is outside these bounds. `k` is the number of $\delta$ lags.  For a Dickey-Fuller test, so only up to AR(1) time dependency in our stationary process, we set `k=0` so we have no $\delta$'s in our test.  Being able to control the lags in our test, allows us to avoid a stationarity test that is too complex to be supported by our data.
+
+#### Test on white noise
+
+Let's start by doing the test on data that we know are stationary, white noise.  We will use an Augmented Dickey-Fuller test where we use the default number of lags (amount of time-dependency) in our test. For a time-series of 100, this is 4.
+```{r bj-adf-wn}
+TT <- 100
+wn <- rnorm(TT) # white noise
+tseries::adf.test(wn)
+```
+The null hypothesis is rejected.
+
+Try a Dickey-Fuller test.  This is testing with a null hypothesis of AR(1) stationarity versus a null hypothesis with AR(4) stationarity when we used the default `k`.
+```{r bj-df-wn}
+tseries::adf.test(wn, k=0)
+```
+Notice that the test-statistic is smaller.  This is a more restrictive test and we can reject the null with a higher significance level.
+
+#### Test on white noise with trend
+
+Try the test on white noise with a trend and intercept.
+
+```{r bj-adf-wn-trend}
+intercept <- 1
+wnt <- wn + 1:TT + intercept
+tseries::adf.test(wnt)
+```
+
+The null hypothesis is still rejected.  `adf.test()` uses a model that allows an intercept and trend.
+
+#### Test on random walk
+
+Let's try the test on a random walk (nonstationary).
+
+```{r bj-adf-rw}
+rw <- cumsum(rnorm(TT))
+tseries::adf.test(rw)
+```
+The null hypothesis is NOT rejected as the p-value is greater than 0.05.
+
+Try a Dickey-Fuller test.  
+```{r bj-df-rw}
+tseries::adf.test(rw, k=0)
+```
+Notice that the test-statistic is larger. 
+
+#### Test the anchovy data
+
+```{r bj-df-anchovy}
+tseries::adf.test(anchovyts)
+```
+The p-value is greater than 0.05.  We cannot reject the null hypothesis.  The null hypothesis is that the data are non-stationary. 
+
+### ADF test using `ur.df()`
+
+The `ur.df()` Augmented Dickey-Fuller test in the **urca** package gives us a bit more information on and control over the test.
+```
+ur.df(y, type = c("none", "drift", "trend"), lags = 1,
+      selectlags = c("Fixed", "AIC", "BIC")) 
+```
+The `ur.df()` function allows us to specify whether to test stationarity around a zero-mean with no trend, around a non-zero mean with no trend, or around a trend with an intercept.  This can be useful when we know that our data have no trend, for example if you have removed the trend already.  `ur.df()` allows us to specify the lags or select them using model selection.
+
+
+#### Test on white noise
+
+Let's first do the test on data we know is stationary, white noise.  We have to choose the `type` and `lags`.  If you have no particular reason to not include an intercept and trend, then use `type="trend"`.  This allows both intercept and trend. When you might you have a particular reason not to use `"trend"`? When you have removed the trend and/or intercept.   
+
+Next you need to chose the `lags`.  We will use `lags=0` to do the Dickey-Fuller test.  Note the number of lags you can test will depend on the amount of data that you have.  `adf.test()` used a default of `trunc((length(x)-1)^(1/3))` for the lags, but `ur.df()` requires that you pass in a value or use a fixed default of 1.
+
+`lags=0` is fitting this model to the data. You are testing if the effect for `z.lag.1` is 0.  
+
+`z.diff = gamma * z.lag.1 + intercept + trend * tt`
+`z.diff` means $\Delta y_t$  and `z.lag.1` is $y_{t-1}$.
+
+When you use `summary()` for the output from `ur.df()`, you will see the estimated values for $\gamma$ (denoted `z.lag.1`), intercept and trend.  If you see `***` or `**` on the coefficients list for `z.lag.1`, it indicates that the effect of `z.lag.1` is significantly different than 0 and this supports the assumption of stationarity.
+
+The `intercept` and `tt` estimates indicate where there is a non-zero level (intercept) or linear trend (tt).
+
+```{r bj-df-wn2}
+wn <- rnorm(TT)
+test <- urca::ur.df(wn, type="trend", lags=0)
+summary(test)
+```
+
+The coefficient part of the summary indicates that `z.lag.1` is different than 0 (so stationary) and no support for intercept or trend.
+
+Notice that the test statistic is LESS than the critical value for `tau3` at 5 percent.  This means the null hypothesis is rejected at $\alpha=0.05$, a standard level for significance testing.
+
+#### When you might want to use `ur.df()`
+
+If you remove the trend (and/or level) from your data, the `ur.df()` test allows you to increase the power of the test by removing the trend and/or level from the model.  
+
+## KPSS test
+
+The null hypothesis for the KPSS test is that the data are stationary.  For this test, we do NOT want to reject the null hypothesis.  In other words, we want the p-value to be greater than 0.05 not less than 0.05.
+
+### Test on simulated data
+
+Let's try the KPSS test on white noise with a trend.  The default is a null hypothesis with no trend.  We will change this to `null="Trend"`.
+
+```{r bj-kpss-wnt}
+tseries::kpss.test(wnt, null="Trend")
+```
+
+The p-value is greater than 0.05.  The null hypothesis of stationarity around a trend is not rejected.
+
+Let's try the KPSS test on white noise with a trend but let's use the default of stationary with no trend.
+
+```{r bj-kpss-wnt-level}
+tseries::kpss.test(wnt, null="Level")
+```
+
+The p-value is less than 0.05.  The null hypothesis of stationarity around a level is rejected. This is white noise around a trend so it is definitely a stationary process but has a trend.  This illustrates that you need to be thoughtful when applying stationarity tests.
+
+### Test the anchovy data
+
+Let's try the anchovy data.
+
+```{r bj-kpss-anchovy}
+kpss.test(anchovyts, null="Trend")
+```
+
+The null is rejected (p-value less than 0.05).  Again stationarity is not supported.
+
+
+## Dealing with non-stationarity
+
+The anchovy data have failed both tests for the stationarity, the Augmented Dickey-Fuller and the KPSS test.  How do we fix this?  The approach in the Box-Jenkins method is to use differencing.
+
+Let's see how this works with random walk data.  A random walk is non-stationary but the difference is white noise so is stationary:
+
+$$x_t - x_{t-1} = e_t, e_t \sim N(0,\sigma)$$
+```{r bj-adf-wn-diff}
+adf.test(diff(rw))
+kpss.test(diff(rw))
+```
+If we difference random walk data, the null is rejected for the ADF test and not rejected for the KPSS test.  This is what we want.
+
+Let's try a single difference with the anchovy data.  A single difference means `dat(t)-dat(t-1)`.  We get this using `diff(anchovyts)`.
+
+```{r bj-adf-anchovy-diff}
+diff1dat <- diff(anchovyts)
+adf.test(diff1dat)
+kpss.test(diff1dat)
+```
+
+If a first difference were not enough, we would try a second difference which is the difference of a first difference.
+
+```{r bj-second-diff}
+diff2dat <- diff(diff1dat)
+adf.test(diff2dat)
+```
+The null hypothesis of a random walk is now rejected so you might think that a 2nd difference is needed for the anchovy data.  However the actual problem is that the default for `adf.test()` includes a trend but we removed the trend with our first difference.  Thus we included an unneeded trend parameter in our test.  Our data are not that long and this affects the result.  
+
+Let's repeat without the trend and we'll see that the null hypothesis is rejected.  The number of lags is set to be what would be used by `adf.test()`.  See `?adf.test`.
+
+```{r bj-urdf-test}
+k <- trunc((length(diff1dat)-1)^(1/3))
+test <- urca::ur.df(diff1dat, type="drift", lags=k)
+summary(test)
+```
+
+
+### `ndiffs()`
+
+As an alternative to trying many different differences and remembering to include or not include the trend or level, you can use the `ndiffs()` function in the forecast package.  This automates finding the number of differences needed.
+
+```{r bj-ndiff}
+forecast::ndiffs(anchovyts, test="kpss")
+forecast::ndiffs(anchovyts, test="adf")
+```
+
+One difference is required to pass both the ADF and KPSS stationarity tests.
+
+## Summary: stationarity testing
+
+The basic stationarity diagnostics are the following
+
+* Plot your data.  Look for
+    - An increasing trend
+    - A non-zero level (if no trend)
+    - Strange shocks or steps in your data (indicating something dramatic changed like the data collection methodology)
+* Apply stationarity tests
+    - `adf.test()` p-value should be less than 0.05 (reject null)
+    - `kpss.test()` p-value should be greater than 0.05 (do not reject null)
+* If stationarity tests are failed, then try differencing to correct
+    - Try `ndiffs()` in the forecast package or manually try different differences.
+  
+  
+## Estimating ARMA parameters
+
+Let's start with fitting to simulated data.
+
+### AR(2) data
+
+Simulate AR(2) data and add a mean level so that the data are not mean 0.
+
+$$x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\y_t = x_t + m$$
+
+
+```{r}
+m <- 1
+ar2 <- arima.sim(n=1000, model=list(ar=c(.8,.1))) + m
+```
+To see info on `arima.sim()`, type `?arima.sim`.
+
+### Fit with `Arima()`
+
+Fit an ARMA(2) with level to the data.
+
+```{r bj-Arima}
+forecast::Arima(ar2, order=c(2,0,0), include.constant=TRUE)
+```
+
+Note, the model being fit by `Arima()` is  not this model
+
+$$y_t = m + 0.8 y_{t-1} + 0.1 y_{t-2} + e_t$$
+It is this model:
+
+$$(y_t - m) = 0.8 (y_{t-1}-m) + 0.1 (y_{t-2}-m)+ e_t$$
+or as written above:
+$$x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\y_t = x_t + m$$
+
+We could also use `arima()` to fit to the data.
+```{r bj-arima}
+arima(ar2, order=c(2,0,0), include.mean=TRUE)
+```
+However we will not be using `arima()` directly because for if we have differenced data, it will not allow us to include and estimated mean level.  Unless we have  transformed our differenced data in a way that ensures it is mean zero, then we want to include a mean.
+
+_Try increasing the length of the simulated data (from 100 to 1000 say) and see how that affects your parameter estimates. Run the simulation a few times._
+
+### AR(1) simulated data
+
+```{r bj-arima-sim}
+ar1 <- arima.sim(n=100, model=list(ar=c(.8)))+m
+forecast::Arima(ar1, order=c(1,0,0), include.constant=TRUE)
+```
+
+### ARMA(1,2) simulated data
+
+Simulate ARMA(1,2)
+$$x_t = 0.8 x_{t-1} + e_t + 0.8 e_{t-1} + 0.2 e_{t-2}$$
+
+```{r bj-arima-sim-2}
+arma12 = arima.sim(n=100, model=list(ar=c(0.8), ma=c(0.8, 0.2)))+m
+forecast::Arima(arma12, order=c(1,0,2), include.constant=TRUE)
+```
+
+
+We will up the number of data points to 1000 because models with a MA component take a lot of data to estimate.  Models with MA(>1) are not very practical for fisheries data for that reason.
+
+### These functions work for data with missing values
+
+Create some AR(2) data and then add missing values (NA).
+
+```{r bj-arima-sim-miss}
+ar2miss <- arima.sim(n=100, model=list(ar=c(.8,.1)))
+ar2miss[sample(100,50)] <- NA
+plot(ar2miss, type="l")
+title("many missing values")
+```
+
+Fit
+
+```{r bj-Arima-2}
+fit <- forecast::Arima(ar2miss, order=c(2,0,0))
+fit
+```
+
+Note `fitted()` does not return the expected value at time $t$. It is the expected value of $y_t$ given the data up to time $t-1$.
+
+```{r bj-plot-Arima-fit-miss}
+plot(ar2miss, type="l")
+title("many missing values")
+lines(fitted(fit), col="blue")
+```
+It is easy enough to get the expected value of $y_t$ for all the missing values but we'll learn to do that when we learn the **MARSS** package and can apply the Kalman Smoother in that package.
+
+## Estimating the ARMA orders
+
+We will use the `auto.arima()` function in **forecast**.  This function will estimate the level of differencing needed to make our data stationary and estimate the AR and MA orders using AICc (or BIC if we choose).
+
+### Example: model selection for AR(2) data
+
+```{r bj-auto-arima}
+forecast::auto.arima(ar2)
+```
+
+Works with missing data too though might not estimate very close to the true model form.
+
+```{r bj-auto-arima-miss}
+forecast::auto.arima(ar2miss)
+```
+
+### Fitting to 100 simulated data sets
+
+Let's fit to 100 simulated data sets and see how often the true (generating) model form is selected.
+```{r bj-many-fits, cache=TRUE}
+save.fits <- rep(NA,100)
+for(i in 1:100){
+  a2 <- arima.sim(n=100, model=list(ar=c(.8,.1)))
+  fit <- auto.arima(a2, seasonal=FALSE, max.d=0, max.q=0)
+  save.fits[i] <- paste0(fit$arma[1], "-", fit$arma[2])
+}
+table(save.fits)
+```
+
+`auto.arima()` uses AICc for selection by default.  You can change that to AIC or BIC using `ic="aic"` or `ic="bic"`.
+
+_Repeat the simulation using AIC and BIC to see how the choice of the information criteria affects the model that is selected._
+
+### Trace=TRUE
+
+We can set `Trace=TRUE` to see what models `auto.arima()` fit.
+
+```{r bj-auto-arima-trace}
+forecast::auto.arima(ar2, trace=TRUE)
+```
+
+### stepwise=FALSE
+
+We can set `stepwise=FALSE` to use an exhaustive search.  The model may be different than the result from the non-exhaustive search.
+
+```{r bj-auto-arima-trace-2}
+forecast::auto.arima(ar2, trace=TRUE, stepwise=FALSE)
+```
+
+### Fit to the anchovy data
+
+```{r bj-auto-arima-anchovy}
+fit <- auto.arima(anchovyts)
+fit
+```
+
+Note `arima()` writes a MA model like:
+
+$$x_t = e_t + b_1 e_{t-1} + b_2 e_{t-2}$$
+
+while many authors use this notation:
+
+$$x_t = e_t - \theta_1 e_{t-1} - \theta_2 e_{t-2}$$
+
+so the MA parameters reported by `auto.arima()` will be NEGATIVE of that reported in Stergiou and Christou (1996) who analyze these same data.  *Note, in Stergiou and Christou, the model is written in backshift notation on page 112.  To see the model as the equation above, I translated from backshift to non-backshift notation.*
+
+
+## Check residuals
+
+We can do a test of autocorrelation of the residuals with `Box.test()` with `fitdf` adjusted for the number of parameters estimated in the fit.  In our case, MA(1) and drift parameters.
+
+```{r bj-resid-diagnostics}
+res <- resid(fit)
+Box.test(res, type="Ljung-Box", lag=12, fitdf=2)
+```
+
+`checkresiduals()` in the **forecast** package will automate this test and show some standard diagnostics plots.
+
+```{r bj-checkresiduals}
+forecast::checkresiduals(fit)
+```
+
+## Forecast from a fitted ARIMA model
+
+We can create a forecast from our anchovy ARIMA model using `forecast()`.  The shading is the 80% and 95% prediction intervals.
+
+```{r bj-forecast-anchovy}
+fr <- forecast::forecast(fit, h=10)
+plot(fr)
+```
+
+## Seasonal ARIMA model
+
+The Chinook data are monthly and start in January 1990.  To make this into a ts object do
+
+```{r bj-ts-chinook}
+chinookts <- ts(chinook$log.metric.tons, start=c(1990,1), 
+                frequency=12)
+```
+`start` is the year and month and frequency is the number of months in the year.  
+
+Use `?ts` to see more examples of how to set up ts objects.
+
+### Plot seasonal data
+
+```{r bj-plot-chinook}
+plot(chinookts)
+```
+
+### `auto.arima()` for seasonal ts
+
+`auto.arima()` will recognize that our data has season and fit a seasonal ARIMA model to our data by default.  Let's define the training data up to 1998 and use 1999 as the test data.
+
+```{r bj-fit-chinook}
+traindat <- window(chinookts, c(1990,10), c(1998,12))
+testdat <- window(chinookts, c(1999,1), c(1999,12))
+fit <- forecast::auto.arima(traindat)
+fit
+```
+
+Use `?window` to understand how subsetting a ts object works.
+
+## Forecast using a seasonal model
+
+Forecasting works the same using the `forecast()` function.
+
+```{r bj-forecast-chinook}
+fr <- forecast::forecast(fit, h=12)
+plot(fr)
+points(testdat)
+```
+
+
+## Problems
+
+For these problems, use the catch landings from Greek waters [landings.RData](landings.RData) and the Chinook landings  [chinook.RData](chinook.RData) in Washington data. After downloading, load both data sets into your workspace.
+```
+load("landings.RData")
+load("chinoook.RData")
+```
+
+1. Repeat the stationarity tests for another species in the landings data set.  Sardine, Chub.mackerel, and Horse.mackerel have enough data. Here is how to set up the data for another species.
+    b. Do a Dickey-Fuller test using `ur.df()` and `adf.test()`. What do you need to set the lags to to achieve that?
+    a. Do an Augmented Dickey-Fuller test using `ur.df()`. How did you choose to set the lags?
+    b. Do a KPSS test using `kpss.test()`.
+
+```{r get.another.species}
+datdf <- subset(landings, Species=="Chub.mackerel" & Year<=1989)
+dat <- ts(datdf$log.metric.tons, start=1964)
+```
+
+2. Repeat the stationarity tests and differencing tests for anchovy using the full data.  The full data go to 2007.  
+
+```{r read_data_prob2}
+datdf <- subset(landings, Species=="Anchovy")
+dat <- ts(datdf$log.metric.tons, start=1964)
+```
+    a. Do the conclusions regarding stationarity and the amount of differencing needed change? 
+    b. Repeat with only the data after 1987.  Are the conclusions different for only the recent data?
+    c. Fit the using `auto.arima()` to the full data (1964-2007) and recent data (1987 to present).  Do the selected models change?
+
+4. Fit each of the models listed under the `auto.arima()` trace using `Arima()` and show that you can produce the same AICc value that is shown in the trace table.
+
+```{r results='hide'}
+forecast::auto.arima(anchovy, trace=TRUE)
+```
+
+5. Use `auto.arima()` with `stepwise=FALSE` to find the top 3 models (according to AICc) for the anchovy.
+    a. Use `Arima()` to fit the top 3 models to the data.
+    a. Create a 5-year forecast for each of the top 3 models using the fits from (a).  
+    b. Do the forecasts differ?
+    
+6. 
+    a. Fit a seasonal model to the Chinook data up to 1999 using `auto.arima()`.  
+    b. Then create a forecast through 2015.
+    c. Plot the forecast with the 2014 and 2015 actual landings added as data points.

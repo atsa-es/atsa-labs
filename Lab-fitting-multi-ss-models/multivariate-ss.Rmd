@@ -8,7 +8,7 @@ knitr::opts_knit$set(unnamed.chunk.label = "mss-")
 
 This lab will show you how to fit multivariate state-space models using the **MARSS** package. This chapter is an example which uses model selection to test different population structures in west coast harbor seals.  See \citet{Holmesetal2014} for a fuller version of this example. 
 
-A script with all the R code in the chapter can be downloaded  [here](./Rcode/multivariate-ss.R). 
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/multivariate-ss.R). The Rmd for this chapter can be downloaded [here](./Rmds/multivariate-ss.Rmd)
 
 ### Data and packages  {-}
 
@@ -43,8 +43,8 @@ We have five regions (or sites) where harbor seals were censused from 1978-1999 
 The survey methodologies were consistent throughout the 20 years of the data but we do not know what fraction of the population that each region represents nor do we know the observation-error variance for each region.  Given differences between the numbers of haul-outs in each region, the observation errors may be quite different.  The regions have had different levels of sampling; the best sampled region has only 4 years missing while the worst has over half the years missing (Figure \@ref(fig:mss-fig1)).  
 
 ```{r mss-noshowlegend, echo=FALSE, results='hide'}
-d=harborSealWA
-legendnames = (unlist(dimnames(d)[2]))[2:ncol(d)]
+d <- harborSealWA
+legendnames <- (unlist(dimnames(d)[2]))[2:ncol(d)]
 for(i in 1:length(legendnames)) cat(paste(i,legendnames[i],"\n",sep=" "))
 ```
 
@@ -524,7 +524,7 @@ names(Z.models)=
 ### Fit the models  {#sec-fit-models-hyp}
 
 We loop through the models, fit and store the results:
-```{r mss-Cs05-run-models}
+```{r mss-Cs05-run-models, cache=TRUE}
 out.tab=NULL
 fits=list()
 for(i in 1:length(Z.models)){
@@ -624,7 +624,7 @@ model {
 
 Then we write the data list, parameter list, and pass the model to the ```jags()``` function:
 
-```{r mss-marss-jags, results='hide', message=FALSE}
+```{r mss-marss-jags, results='hide', message=FALSE, cache=TRUE}
 jags.data = list("Y"=Y,nSites=dim(Y)[2],nYears = dim(Y)[1]) # named list
 jags.params=c("X","U","Q") 
 model.loc="marss-jags.txt" # name of the txt file
@@ -656,7 +656,129 @@ for(i in 1:dim(means)[2]) {
           c(upperCI[,i],rev(lowerCI[,i]),upperCI[1,i]),col="skyblue",lty=0)
   lines(means[,i],lwd=3)
 }
+detach.jags()
 ```
- 
-```{r mss-Reset, echo=FALSE}
+
+```{r marss-jags-reset, include=FALSE, purl=FALSE}
+file.remove("marss-jags.txt")
 ```
+\clearpage
+
+## Problems {#sec-mss-problems}
+
+For these questions, use the `harborSealWA` data set in **MARSS**.  The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.
+```{r}
+require(MARSS)
+#Here is the dat to use for MARSS()
+dat <- t(harborSealWA[,2:6])
+```
+The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).
+
+![Regions in the harbor seal surveys](images/harborSealWA_regions.png)
+
+1. Plot the harbor seal data.  Use whatever plotting functions you wish (e.g. `ggplot()`, `plot(); points(); lines()`, `matplot()`).
+
+2. Fit a panmictic population model that assumes that each of the 5 sites is observing one "Inland WA" harbor seal population with trend $u$. Assume the observation errors are independent and identical. This means 1 variance on diagonal and 0s on off-diagonal.  This is the default assumption for `MARSS()`.
+
+    a. Write the $\mathbf{Z}$ for this model.
+The code to use for making a matrix in Rmarkdown is 
+```
+$$\begin{bmatrix}a & b & 0\\d & e & f\\0 & h & i\end{bmatrix}$$
+```
+
+    b. Write the $\mathbf{Z}$ matrix in R using `Z=matrix(...)` and using the factor short-cut for specifying $\mathbf{Z}$.  `Z=factor(c(...)`.
+    
+    c. Fit the model using `MARSS()`.  What is the estimated trend ($u$)? How fast was the population increasing (percent per year) based on this estimated $u$?
+    
+    d. Compute the confidence intervals for the parameter estimates. Compare the intervals using the Hessian approximation and using a parametric bootstrap. What differences do you see between the two approaches? Use this code:
+```
+library(broom)
+tidy(fit)
+# set nboot low so it doesn't take forever
+tidy(fit, method="parametric",nboot=100)
+```
+
+    e. What does an estimate of $\mathbf{Q}=0$ mean? What would the estimated state ($x$) look like when $\mathbf{Q}=0$?
+
+3. Using the same panmictic population model, compare 3 assumptions about the observation error structure.  
+    * The observation errors are independent with different variances.
+    * The observation errors are independent with the same variance.
+    * The observation errors are correlated with the same variance and same correlation.
+    
+    a. Write the $\mathbf{R}$ variance-covariance matrices for each assumption.  
+    
+    b. Create each R matrix in R.  To combine, numbers and characters in a matrix use a list matrix like so:
+```
+A <- matrix(list(0),3,3)
+A[1,1] <- "sigma2"
+```
+
+    c. Fit each model using `MARSS()` and compare the estimated $u$ (the population long-term trend).  Does the assumption about the errors change the $u$ estimate?
+    
+    d. Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit.  Are there any issues that you see?  Use this code to get your state residuals:
+```
+residuals(fit)$state.residuals[1,]
+```
+You need the `[1,]` since the residuals are returned as a matrix.
+
+4. Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC.  The $x$ part f the model is the population structure.  Assume that the observation errors are identical and independent (`R="diagonal and equal"`).  Assume that the process errors are unique and independent (`Q="diagonal and unequal"`).
+
+    a. Write the $\mathbf{x}$ equation. Make sure each matrix in the equation has the right number of rows and columns.
+    
+    b. Write the $\mathbf{Z}$ matrix.
+    
+    c. Write the $\mathbf{Z}$ in R using `Z=matrix(...)` and using the factor shortcut `Z=factor(c(...))`.
+    
+    d. Fit the model with `MARSS()`.
+    
+    e. What do the estimated $u$ and $\mathbf{Q}$ imply about the population dynamics in the 3 subpopulations?
+    
+5. Repeat the fit from Question 4 but assume that the 3 subpopulations covary. Use `Q="unconstrained"`.  
+
+    a. What does the estimated  $\mathbf{Q}$ matrix tell you about how the 3 subpopulation covary?
+    
+    b. Compare the AICc from the model in Question 4 and the one with `Q="unconstrained"`.  Which is more supported?
+    
+    c. Fit the model with `Q="equalvarcov"`.  Is this more supported based on AICc?
+
+6. Develop the following alternative models for the structure of the inland harbor seal population.  For each model assume that the observation errors are identical and independent (`R="diagonal and equal"`).  Assume that the process errors covary with equal variance and covariances (`Q="equalvarcov"`).
+
+    * 5 independent subpopulations with unique trends $u$.
+    * 5 independent subpopulations with the same trend $u$.
+    * 5 independent subpopulations with the same trend in 3 regions: SJF+SJI, PS+EBays, HC.
+    * 1 panmictic population (the model from question 2).
+    * 3 subpopulations. 1=SJF,SJI, 2=PS,EBays, 3=HC (the model from question 4).
+    * 2 subpopulations. 1=SJF,SJI,PS,EBays, 2=HC.
+    
+    a. Fit each model using `MARSS()`.
+    
+    b. Prepare a table of each model with a column for the AICc values. And a column for $\Delta AICc$ (AICc minus the lowest AICc in the group).  What is the most supported model?
+
+7. Do diagnostics on the model residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals.  This will put NAs in the model residuals where there is missing data. Then do the tests on each row of `resids`.
+    ```{r mss-resids, eval=FALSE}
+    resids <- residuals(fit)$model.residuals
+    resids[is.na(dat)] <- NA
+    ```
+
+    a. Plot the model residuals.
+   
+    b. Plot the ACF of the model residuals. Use `acf(..., na.action=na.pass)`.
+   
+    c. Plot the histogram of the model residuals.  
+    
+    d. Fit an ARIMA() model to your model residuals using `forecast::auto.arima()`.  Are the best fit models what you want?  Note, we cannot use the Augmented Dickey-Fuller or KPSS tests when there are missing values in our residuals time series.
+
+<!--
+8.  We cannot use the Augmented Dickey-Fuller test when there are missing values in our residuals time series.  Test the model residuals for autocorrelation using the Augmented Dickey-Fuller test using lag 1 and `urca::ur.df(..., type="trend", lags=1)`. Note this is the same as `tseries::adf.test(..., k=1)`.
+    
+    a. Compare the test using `type="none"` and `type="trend"`.  Which one do you think is appropriate for your residuals in this case?
+    
+         b. Plot the ACF of the model residuals. Use `acf(..., na.action=na.pass)`.
+   
+     c. Plot the histogram of the model residuals.  
+    
+     d. Fit an ARIMA() model to your model residuals using `forecast::auto.arima()`.  Are the best fit models what you want?  Note, we cannot use the Augmented Dickey-Fuller or KPSS tests when there are missing values in our residuals time series.
+
+
+-->
+
