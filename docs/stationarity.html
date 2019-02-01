@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-30">
+<meta name="date" content="2019-01-31">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -396,86 +422,84 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="look-at-stationarity-in-simulated-data" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Look at stationarity in simulated data</h3>
 <p>We will start by looking at white noise and a stationary AR(1) process from simulated data. White noise is simply a string of random numbers drawn from a Normal distribution. <code>rnorm()</code> with return random numbers drawn from a Normal distribution. Use <code>?rnorm</code> to understand what the function requires.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TT &lt;-<span class="st"> </span><span class="dv">100</span>
-y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>) <span class="co"># 100 random numbers</span>
-op &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-<span class="kw">plot</span>(y, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)
-<span class="kw">acf</span>(y)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">TT &lt;-<span class="st"> </span><span class="dv">100</span>
+y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)  <span class="co"># 100 random numbers</span>
+op &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))
+<span class="kw">plot</span>(y, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)
+<span class="kw">acf</span>(y)</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-white-noise-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(op)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(op)</code></pre>
 <p>Here we use <code>ggplot()</code> to plot 10 white noise time series.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">t=</span><span class="dv">1</span><span class="op">:</span>TT, <span class="dt">y=</span>y)
-p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span>t, <span class="dt">y=</span>y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;1 white noise time series&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;value&quot;</span>)
-ys &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(TT<span class="op">*</span><span class="dv">10</span>),TT,<span class="dv">10</span>)
+<pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>TT, <span class="dt">y =</span> y)
+p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;1 white noise time series&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;value&quot;</span>)
+ys &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(TT <span class="op">*</span><span class="st"> </span><span class="dv">10</span>), TT, <span class="dv">10</span>)
 ys &lt;-<span class="st"> </span><span class="kw">data.frame</span>(ys)
 ys<span class="op">$</span>id =<span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT
 
-ys2 &lt;-<span class="st"> </span><span class="kw">melt</span>(ys, <span class="dt">id.var=</span><span class="st">&quot;id&quot;</span>)
-p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(ys2, <span class="kw">aes</span>(<span class="dt">x=</span>id,<span class="dt">y=</span>value,<span class="dt">group=</span>variable)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;value&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;10 white noise processes&quot;</span>)
-<span class="kw">grid.arrange</span>(p1, p2, <span class="dt">ncol =</span> <span class="dv">1</span>)</code></pre></div>
+ys2 &lt;-<span class="st"> </span><span class="kw">melt</span>(ys, <span class="dt">id.var =</span> <span class="st">&quot;id&quot;</span>)
+p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(ys2, <span class="kw">aes</span>(<span class="dt">x =</span> id, <span class="dt">y =</span> value, <span class="dt">group =</span> variable)) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;value&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;10 white noise processes&quot;</span>)
+<span class="kw">grid.arrange</span>(p1, p2, <span class="dt">ncol =</span> <span class="dv">1</span>)</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-white-noise-ggplot-1.png" width="672" /></p>
 <p>These are stationary because the variance and mean (level) does not change with time.</p>
 <p>An AR(1) process is also stationary.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theta &lt;-<span class="st"> </span><span class="fl">0.8</span>
+<pre class="sourceCode r"><code class="sourceCode r">theta &lt;-<span class="st"> </span><span class="fl">0.8</span>
 nsim &lt;-<span class="st"> </span><span class="dv">10</span>
-ar1 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(TT, <span class="dt">model=</span><span class="kw">list</span>(<span class="dt">ar=</span>theta))
-<span class="kw">plot</span>(ar1)</code></pre></div>
+ar1 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(TT, <span class="dt">model =</span> <span class="kw">list</span>(<span class="dt">ar =</span> theta))
+<span class="kw">plot</span>(ar1)</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-ar1-plot-1.png" width="672" /></p>
 <p>We can use ggplot to plot 10 AR(1) time series, but we need to change the data to a data frame.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">t=</span><span class="dv">1</span><span class="op">:</span>TT, <span class="dt">y=</span>ar1)
-p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span>t, <span class="dt">y=</span>y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;AR-1&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;value&quot;</span>)
-ys &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>,TT,nsim)
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsim) ys[,i] &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">arima.sim</span>(TT, <span class="dt">model=</span><span class="kw">list</span>(<span class="dt">ar=</span>theta)))
+<pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>TT, <span class="dt">y =</span> ar1)
+p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;AR-1&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;value&quot;</span>)
+ys &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, TT, nsim)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nsim) ys[, i] &lt;-<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">arima.sim</span>(TT, <span class="dt">model =</span> <span class="kw">list</span>(<span class="dt">ar =</span> theta)))
 ys &lt;-<span class="st"> </span><span class="kw">data.frame</span>(ys)
 ys<span class="op">$</span>id &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT
 
-ys2 &lt;-<span class="st"> </span><span class="kw">melt</span>(ys, <span class="dt">id.var=</span><span class="st">&quot;id&quot;</span>)
-p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(ys2, <span class="kw">aes</span>(<span class="dt">x=</span>id,<span class="dt">y=</span>value,<span class="dt">group=</span>variable)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;value&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;The variance of an AR-1 process is steady&quot;</span>)
-<span class="kw">grid.arrange</span>(p1, p2, <span class="dt">ncol =</span> <span class="dv">1</span>)</code></pre></div>
+ys2 &lt;-<span class="st"> </span><span class="kw">melt</span>(ys, <span class="dt">id.var =</span> <span class="st">&quot;id&quot;</span>)
+p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(ys2, <span class="kw">aes</span>(<span class="dt">x =</span> id, <span class="dt">y =</span> value, <span class="dt">group =</span> variable)) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;value&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;The variance of an AR-1 process is steady&quot;</span>)
+<span class="kw">grid.arrange</span>(p1, p2, <span class="dt">ncol =</span> <span class="dv">1</span>)</code></pre>
 <pre><code>Don&#39;t know how to automatically pick scale for object of type ts. Defaulting to continuous.</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-ar1-ggplot-1.png" width="672" /></p>
 </div>
 <div id="stationary-around-a-linear-trend" class="section level3">
 <h3><span class="header-section-number">5.2.2</span> Stationary around a linear trend</h3>
 <p>Fluctuating around a linear trend is a very common type of stationarity used in ARMA modeling and forecasting. This is just a stationary process, like white noise or AR(1), around an linear trend up or down.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">intercept &lt;-<span class="st"> </span>.<span class="dv">5</span>
+<pre class="sourceCode r"><code class="sourceCode r">intercept &lt;-<span class="st"> </span><span class="fl">0.5</span>
 trend &lt;-<span class="st"> </span><span class="fl">0.1</span>
 sd &lt;-<span class="st"> </span><span class="fl">0.5</span>
 TT &lt;-<span class="st"> </span><span class="dv">20</span>
-wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT, <span class="dt">sd=</span>sd) <span class="co">#white noise</span>
-wni &lt;-<span class="st"> </span>wn<span class="op">+</span>intercept <span class="co">#white noise witn interept</span>
-wnti &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span>trend<span class="op">*</span>(<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>intercept</code></pre></div>
+wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT, <span class="dt">sd =</span> sd)  <span class="co">#white noise</span>
+wni &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span>intercept  <span class="co">#white noise witn interept</span>
+wnti &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span>trend <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>intercept</code></pre>
 <p>See how the white noise with trend is just the white noise overlaid on a linear trend.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">op &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
-<span class="kw">plot</span>(wn, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)
-<span class="kw">plot</span>(trend<span class="op">*</span><span class="dv">1</span><span class="op">:</span>TT)
-<span class="kw">plot</span>(wnti, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">op &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))
+<span class="kw">plot</span>(wn, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)
+<span class="kw">plot</span>(trend <span class="op">*</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT)
+<span class="kw">plot</span>(wnti, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-wnt-plot-1.png" width="672" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(op)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(op)</code></pre>
 <p>We can make a similar plot with ggplot.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">t=</span><span class="dv">1</span><span class="op">:</span>TT, <span class="dt">wn=</span>wn, <span class="dt">wni=</span>wni, <span class="dt">wnti=</span>wnti)
-p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span>t, <span class="dt">y=</span>wn)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;White noise&quot;</span>)
-p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span>t, <span class="dt">y=</span>wni)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;with non-zero mean&quot;</span>)
-p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span>t, <span class="dt">y=</span>wnti)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;with linear trend&quot;</span>)
-<span class="kw">grid.arrange</span>(p1, p2, p3, <span class="dt">ncol =</span> <span class="dv">3</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>TT, <span class="dt">wn =</span> wn, <span class="dt">wni =</span> wni, <span class="dt">wnti =</span> wnti)
+p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> wn)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;White noise&quot;</span>)
+p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> wni)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;with non-zero mean&quot;</span>)
+p3 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> wnti)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;with linear trend&quot;</span>)
+<span class="kw">grid.arrange</span>(p1, p2, p3, <span class="dt">ncol =</span> <span class="dv">3</span>)</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-wnt-ggplot-1.png" width="672" /></p>
 <p>We can make a similar plot with AR(1) data. Ignore the warnings about not knowing how to pick the scale.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta1 &lt;-<span class="st"> </span><span class="fl">0.8</span>
-ar1 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(TT, <span class="dt">model=</span><span class="kw">list</span>(<span class="dt">ar=</span>beta1), <span class="dt">sd=</span>sd)
+<pre class="sourceCode r"><code class="sourceCode r">beta1 &lt;-<span class="st"> </span><span class="fl">0.8</span>
+ar1 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(TT, <span class="dt">model =</span> <span class="kw">list</span>(<span class="dt">ar =</span> beta1), <span class="dt">sd =</span> sd)
 ar1i &lt;-<span class="st"> </span>ar1 <span class="op">+</span><span class="st"> </span>intercept
-ar1ti &lt;-<span class="st"> </span>ar1 <span class="op">+</span><span class="st"> </span>trend<span class="op">*</span>(<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>intercept
-dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">t=</span><span class="dv">1</span><span class="op">:</span>TT, <span class="dt">ar1=</span>ar1, <span class="dt">ar1i=</span>ar1i, <span class="dt">ar1ti=</span>ar1ti)
-p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span>t, <span class="dt">y=</span>ar1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;AR1&quot;</span>)
-p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span>t, <span class="dt">y=</span>ar1i)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;with non-zero mean&quot;</span>)
-p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x=</span>t, <span class="dt">y=</span>ar1ti)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;with linear trend&quot;</span>)
+ar1ti &lt;-<span class="st"> </span>ar1 <span class="op">+</span><span class="st"> </span>trend <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>intercept
+dat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">t =</span> <span class="dv">1</span><span class="op">:</span>TT, <span class="dt">ar1 =</span> ar1, <span class="dt">ar1i =</span> ar1i, <span class="dt">ar1ti =</span> ar1ti)
+p4 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> ar1)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;AR1&quot;</span>)
+p5 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> ar1i)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;with non-zero mean&quot;</span>)
+p6 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(dat, <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> ar1ti)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;with linear trend&quot;</span>)
 
-<span class="kw">grid.arrange</span>(p4, p5, p6, <span class="dt">ncol =</span> <span class="dv">3</span>)</code></pre></div>
+<span class="kw">grid.arrange</span>(p4, p5, p6, <span class="dt">ncol =</span> <span class="dv">3</span>)</code></pre>
 <pre><code>Don&#39;t know how to automatically pick scale for object of type ts. Defaulting to continuous.
 Don&#39;t know how to automatically pick scale for object of type ts. Defaulting to continuous.
 Don&#39;t know how to automatically pick scale for object of type ts. Defaulting to continuous.</code></pre>
@@ -484,10 +508,10 @@ Don&#39;t know how to automatically pick scale for object of type ts. Defaulting
 <div id="greek-landing-data" class="section level3">
 <h3><span class="header-section-number">5.2.3</span> Greek landing data</h3>
 <p>We will look at the anchovy data. Notice the two <code>==</code> in the subset call not one <code>=</code>. We will use the Greek data before 1989 for the lab.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">anchovy &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species<span class="op">==</span><span class="st">&quot;Anchovy&quot;</span> <span class="op">&amp;</span><span class="st"> </span>Year <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1989</span>)<span class="op">$</span>log.metric.tons
-anchovyts &lt;-<span class="st"> </span><span class="kw">ts</span>(anchovy, <span class="dt">start=</span><span class="dv">1964</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">anchovy &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Anchovy&quot;</span> <span class="op">&amp;</span><span class="st"> </span>Year <span class="op">&lt;=</span><span class="st"> </span><span class="dv">1989</span>)<span class="op">$</span>log.metric.tons
+anchovyts &lt;-<span class="st"> </span><span class="kw">ts</span>(anchovy, <span class="dt">start =</span> <span class="dv">1964</span>)</code></pre>
 <p>Plot the data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(anchovyts, <span class="dt">ylab=</span><span class="st">&quot;log catch&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(anchovyts, <span class="dt">ylab =</span> <span class="st">&quot;log catch&quot;</span>)</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-anchovy-plot-1.png" width="672" /></p>
 <p>Questions to ask.</p>
 <ul>
@@ -553,7 +577,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
