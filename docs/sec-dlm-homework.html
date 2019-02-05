@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-02-04">
+<meta name="date" content="2019-02-05">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -318,8 +318,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.6" data-path="sec-dlm-salmon-example.html"><a href="sec-dlm-salmon-example.html"><i class="fa fa-check"></i><b>8.6</b> Example: modeling salmon survival</a></li>
 <li class="chapter" data-level="8.7" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>8.7</b> Fitting a DLM with <code>MARSS()</code></a></li>
 <li class="chapter" data-level="8.8" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>8.8</b> Forecasting with a DLM</a><ul>
-<li class="chapter" data-level="8.8.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.8.1</b> Forecasting a DLM with MARSS</a></li>
-<li class="chapter" data-level="8.8.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>8.8.2</b> DLM forecast diagnostics</a></li>
+<li class="chapter" data-level="8.8.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#parameter-distribution"><i class="fa fa-check"></i><b>8.8.1</b> Parameter distribution</a></li>
+<li class="chapter" data-level="8.8.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.8.2</b> Forecasting a DLM with MARSS</a></li>
+<li class="chapter" data-level="8.8.3" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>8.8.3</b> DLM forecast diagnostics</a></li>
 </ul></li>
 <li class="chapter" data-level="8.9" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>8.9</b> Homework discussion and data</a><ul>
 <li class="chapter" data-level="8.9.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>8.9.1</b> Spawner-recruit data</a></li>
@@ -400,12 +401,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">8.9</span> Homework discussion and data</h2>
 <p>For the homework this week we will use a DLM to examine some of the time-varying properties of the spawner-recruit relationship for Pacific salmon. Much work has been done on this topic, particularly by Randall Peterman and his students and post-docs at Simon Fraser University. To do so, researchers commonly use a Ricker model because of its relatively simple form, such that the number of recruits (offspring) born in year <span class="math inline">\(t\)</span> (<span class="math inline">\(R_t\)</span>) from the number of spawners (parents) (<span class="math inline">\(S_t\)</span>) is</p>
 <span class="math display" id="eq:dlm-baseRicker">\[\begin{equation}
-\tag{8.13}
+\tag{8.17}
 R_t = a S_t e^{-b S + v_t}.
 \end{equation}\]</span>
 <p>The parameter <span class="math inline">\(a\)</span> determines the maximum reproductive rate in the absence of any density-dependent effects (the slope of the curve at the origin), <span class="math inline">\(b\)</span> is the strength of density dependence, and <span class="math inline">\(v_t \sim N(0,\sigma)\)</span>. In practice, the model is typically log-transformed so as to make it linear with respect to the predictor variable <span class="math inline">\(S_t\)</span>, such that</p>
 <span class="math display" id="eq:dlm-lnRicker">\[\begin{equation}
-\tag{8.14}
+\tag{8.18}
 \begin{aligned}
 \text{log}(R_t) &amp;= \text{log}(a) + \text{log}(S_t) -b S_t + v_t \\
 \text{log}(R_t) - \text{log}(S_t) &amp;= \text{log}(a) -b S_t + v_t \\
@@ -415,7 +416,7 @@ R_t = a S_t e^{-b S + v_t}.
 <p>Substituting <span class="math inline">\(y_t = \text{log}(R_t/S_t)\)</span>, <span class="math inline">\(x_t = S_t\)</span>, and <span class="math inline">\(\alpha = \text{log}(a)\)</span> yields a simple linear regression model with intercept <span class="math inline">\(\alpha\)</span> and slope <span class="math inline">\(b\)</span>.</p>
 <p>Unfortunately, however, residuals from this simple model typically show high-autocorrelation due to common environmental conditions that affect overlaping generations. Therefore, to correct for this and allow for an index of stock productivity that controls for any density-dependent effects, the model may be re-witten as</p>
 <span class="math display" id="eq:dlm-lnTVRicker">\[\begin{equation}
-\tag{8.15}
+\tag{8.19}
 \begin{aligned}
 \text{log}(R_t/S_t) &amp;= \alpha_t - b S_t + v_t, \\
 \alpha_t &amp;= \alpha_{t-1} + w_t,
@@ -424,7 +425,7 @@ R_t = a S_t e^{-b S + v_t}.
 <p>and <span class="math inline">\(w_t \sim N(0,q)\)</span>. By treating the brood-year specific productivity as a random walk, we allow it to vary, but in an autocorrelated manner so that consecutive years are not independent from one another.</p>
 <p>More recently, interest has grown in using covariates (<span class="math inline">\(e.g.\)</span>, sea-surface temperature) to explain the interannual variability in productivity. In that case, we can can write the model as</p>
 <span class="math display" id="eq:dlm-lnCovRicker">\[\begin{equation}
-\tag{8.16}
+\tag{8.20}
 \text{log}(R_t/S_t) = \alpha + \delta_t X_t - b S_t + v_t.
 \end{equation}\]</span>
 <p>In this case we are estimating some base-level productivity (<span class="math inline">\(\alpha\)</span>) plus the time-varying effect of some covariate <span class="math inline">\(X_t\)</span> (<span class="math inline">\(\delta_t\)</span>).</p>

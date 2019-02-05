@@ -20,37 +20,37 @@ The problem set uses an additional data set on spawners and recruits: [KvichakSo
 
 ## Overview {#sec-dlm-overview}
 
-We begin our description of DLMs with a *static* regression model, wherein the $i^{th}$ observation is a linear function of an intercept, predictor variable(s), and a random error term. For example, if we had one predictor variable ($F$), we could write the model as
+We begin our description of DLMs with a *static* regression model, wherein the $i^{th}$ observation is a linear function of an intercept, predictor variable(s), and a random error term. For example, if we had one predictor variable ($f$), we could write the model as
 \begin{equation}
 (\#eq:dlm-lm)
-y_i = \alpha + \beta F_i + v_i,
+y_i = \alpha + \beta f_i + v_i,
 \end{equation}
-where the $\alpha$ is the intercept, $\beta$ is the regression slope, $F_i$ is the predictor variable matched to the $i^{th}$ observation ($y_i$), and $v_i \sim \N(0,r)$. It is important to note here that there is no implicit ordering of the index $i$. That is, we could shuffle any/all of the $(y_i, F_i)$ pairs in our dataset with no effect on our ability to estimate the model parameters. 
+where the $\alpha$ is the intercept, $\beta$ is the regression slope, $f_i$ is the predictor variable matched to the $i^{th}$ observation ($y_i$), and $v_i \sim \text{N}(0,r)$. It is important to note here that there is no implicit ordering of the index $i$. That is, we could shuffle any/all of the $(y_i, f_i)$ pairs in our dataset with no effect on our ability to estimate the model parameters. 
 
-We can write the model in Equation \@ref(eq:dlm-lm) using matrix notation, as
+We can write Equation \@ref(eq:dlm-lm) using matrix notation, as
 \begin{align}
 (\#eq:dlm-lmVec)
-y_i &= \begin{bmatrix}1&F_i\end{bmatrix} 
+y_i &= \begin{bmatrix}1&f_i\end{bmatrix} 
 \begin{bmatrix}\alpha\\ \beta\end{bmatrix} + v_i \nonumber\\
-&= \FF_i^{\top}\ttheta + v_i,
+&= \mathbf{F}_i^{\top}\boldsymbol{\theta} + v_i,
 \end{align}
-where $\FF_i^{\top} = \begin{bmatrix}1&F_i\end{bmatrix}$ and $\ttheta = \begin{bmatrix}\alpha\\ \beta\end{bmatrix}$.
+where $\mathbf{F}_i^{\top} = \begin{bmatrix}1&f_i\end{bmatrix}$ and $\boldsymbol{\theta} = \begin{bmatrix}\alpha\\ \beta\end{bmatrix}$.
 
 In a DLM, however, the regression parameters are _dynamic_ in that they "evolve" over time. For a single observation at time $t$, we can write
 \begin{equation}
 (\#eq:dlm-dlm1)
-y_t = \FF_{t}^{\top}\ttheta_t + v_t,
+y_t = \mathbf{F}_{t}^{\top}\boldsymbol{\theta}_t + v_t,
 \end{equation}
 where $\FF_t$ is a column vector of predictor variables (covariates) at time $t$, $\ttheta_t$ is a column vector of regression parameters at time $t$ and $v_{t}\sim\N(0,r)$. This formulation presents two features that distinguish it from Equation \@ref(eq:dlm-lmVec). First, the observed data are explicitly time ordered (i.e., $\yy=\lbrace{y_1,y_2,y_3,\dots,y_T}\rbrace$), which means we expect them to contain implicit information. Second, the relationship between the observed datum and the predictor variables are unique at every time $t$ (i.e., $\ttheta=\lbrace{\ttheta_1,\ttheta_2,\ttheta_3,\dots,\ttheta_T}\rbrace$).
 
 However, closer examination of Equation \@ref(eq:dlm-dlm1) reveals an apparent complication for parameter estimation. With only one datum at each time step $t$, we could, at best, estimate only one regression parameter, and even then, the 1:1 correspondence between data and parameters would preclude any estimation of parameter uncertainty. To address this shortcoming, we return to the time ordering of model parameters. Rather than assume the regression parameters are independent from one time step to another, we instead model them as an autoregressive process where
 \begin{equation}
 (\#eq:dlm-dlm2)
-\ttheta_t = \GG_t\ttheta_{t-1} + \ww_t,
+\boldsymbol{\theta}_t = \GG_t\boldsymbol{\theta}_{t-1} + \mathbf{w}_t,
 \end{equation}
-$\GG_t$ is the parameter "evolution" matrix, and $\ww_t$ is a vector of process errors, such that $\ww_t \sim \MVN(\mathbf{0},\QQ)$. The elements of $\GG_t$ may be known and fixed *a priori*, or unknown and estimated from the data. Although we could allow $\GG_t$ to be time-varying, we will typically assume that it is time invariant or assume $\mathbf{G}_t$ is an $m \times m$ identity matrix $\mathbf{I}_m$.
+$\GG_t$ is the parameter "evolution" matrix, and $\mathbf{w}_t$ is a vector of process errors, such that $\mathbf{w}_t \sim \MVN(\mathbf{0},\mathbf{Q})$. The elements of $\mathbf{G}_t$ may be known and fixed *a priori*, or unknown and estimated from the data. Although we could allow $\mathbf{G}_t$ to be time-varying, we will typically assume that it is time invariant or assume $\mathbf{G}_t$ is an $m \times m$ identity matrix $\mathbf{I}_m$.
 
-The idea is that the evolution matrix $\GG_t$ deterministically maps the parameter space from one time step to the next, so the parameters at time $t$ are temporally related to those before and after. However, the process is corrupted by stochastic error, which amounts to a degradation of information over time. If the diagonal elements of $\QQ$ are relatively large, then the parameters can vary widely from $t$ to $t+1$. If $\QQ = \mathbf{0}$, then $\ttheta_1=\ttheta_2=\ttheta_T$ and we are back to the static model in Equation \@ref(eq:dlm-lm).
+The idea is that the evolution matrix $\mathbf{G}_t$ deterministically maps the parameter space from one time step to the next, so the parameters at time $t$ are temporally related to those before and after. However, the process is corrupted by stochastic error, which amounts to a degradation of information over time. If the diagonal elements of $\mathbf{Q}$ are relatively large, then the parameters can vary widely from $t$ to $t+1$. If $\mathbf{Q} = \mathbf{0}$, then $\boldsymbol{\theta}_1=\boldsymbol{\theta}_2=\boldsymbol{\theta}_T$ and we are back to the static model in Equation \@ref(eq:dlm-lm).
 
 ## DLM in state-space form
 
@@ -82,13 +82,15 @@ y_t = \mathbf{Z}_t \mathbf{x}_t + \boxed{\mathbf{D} \mathbf{d}_t} +v_t.
 
 The most simple DLM is stochastic level model, where the level is a random walk, and this level is observed with error.  We will write it first in using regression notation where the intercept is $\alpha$ and then in MARSS notation.  In the latter, $\alpha_t=x_t$.
 
-$$
+\begin{equation}
+(\#eq:dlm-stoch-level)
 y_t = \alpha_t + e_t \\
 \alpha_t = \alpha_{t-1} + w_t \\
 \Downarrow \\
 y_t = x_t + v_t \\
 x_t = x_{t-1} + w_t
-$$
+\end{equation}
+
 Using this model, we can model the Nile River level and fit the model using `MARSS()`.
 
 ```{r dlm-nile-fit}
@@ -116,23 +118,26 @@ lines(seq(start(Nile)[1], end(Nile)[1]), t(fit$states - 2*fit$states.se),
 We can add a drift term to the level model to allow the level to tend upward or downward with a deterministic rate $\eta$. This is a random walk with bias.
 
 
-$$
+\begin{equation}
+(\#eq:dlm-stoch-level-drift)
 y_t = \alpha_t + e_t \\
 \alpha_t = \alpha_{t-1} + \eta + w_t \\
 \Downarrow \\
 y_t = x_t + v_t \\
 x_t = x_{t-1} + u + w_t
-$$
+\end{equation}
 
 We can allow that the drift term $\eta$ evolves over time along with the level.  In this case, $\eta$ is modeled as a random walk along with $\alpha$. This model is
 
-$$
+\begin{equation}
+(\#eq:dlm-stoch-level-drift-2)
   y_t = \alpha_t + e_t \\
   \alpha_t = \alpha_{t-1} + \eta_{t-1} + w_{\alpha,t} \\
   \eta_t = \eta_{t-1} + w_{\eta,t}
-$$
+\end{equation}
 This can be written in matrix form as:
-$$
+\begin{equation}
+(\#eq:dlm-stoch-level-drift-3)
 y_t = \begin{bmatrix}1&0\end{bmatrix}\begin{bmatrix}
     \alpha \\
     \eta
@@ -150,13 +155,14 @@ y_t = \begin{bmatrix}1&0\end{bmatrix}\begin{bmatrix}
     w_{\alpha} \\
     w_{\eta}
   \end{bmatrix}_t
-$$
-This is a MARSS model
+\end{equation}
+This is a MARSS model.
 
-$$
+\begin{equation}
 y_t = \mathbf{Z}\mathbf{x}_t + v_t \\
 \mathbf{x}_t = \mathbf{B}\mathbf{x}_{t-1} + \mathbf{w}_t
-$$
+\end{equation}
+
 where $\mathbf{B}=\begin{bmatrix} 1 & 1 \\ 0 & 1\end{bmatrix}$, $\mathbf{x}=\begin{bmatrix}\alpha \\ \eta\end{bmatrix}$ and $\mathbf{Z}=\begin{bmatrix}1&0\end{bmatrix}$.
  
 
@@ -164,14 +170,13 @@ where $\mathbf{B}=\begin{bmatrix} 1 & 1 \\ 0 & 1\end{bmatrix}$, $\mathbf{x}=\beg
 
 The stochastic level models do not have covariates.  Let's add one covariate $f_t$ and write a simple DLM where the intercept $\alpha$ and slope $\beta$ are stochastic.  We will specify that $\alpha$ and $\beta$ evolve according to a simple random walk.  Normally $x$ is used for covariates in a regression model, but we will avoid that since we are using $x$ for the state equation in a state-space model. This model is
 
-$$
+\begin{equation}
   y_t = \alpha_t + \beta_t f_t + v_t \\
   \alpha_t = \alpha_{t-1} + w_{\alpha,t} \\
   \beta_t = \beta_{t-1} + w_{\beta,t}
-$$
+\end{equation}
 Written in matrix form, the model is
-
-$$
+\begin{equation}
 y_t = \begin{bmatrix}
     1 &
     f_t
@@ -191,14 +196,14 @@ y_t = \begin{bmatrix}
     w_{\alpha} \\
     w_{\beta}
   \end{bmatrix}_t 
-$$
+\end{equation}
 
-This is a MARSS model
+This is a MARSS model:
 
-$$
+\begin{equation}
 y_t = \mathbf{Z}\mathbf{x}_t + v_t \\
 \mathbf{x}_t = \mathbf{x}_{t-1} + \mathbf{w}_t
-$$
+\end{equation}
 where  $\mathbf{x}=\begin{bmatrix}\alpha \\ \beta\end{bmatrix}$ and $\mathbf{Z}=\begin{bmatrix}1&f_t\end{bmatrix}$.
 
 
@@ -206,7 +211,7 @@ where  $\mathbf{x}=\begin{bmatrix}\alpha \\ \beta\end{bmatrix}$ and $\mathbf{Z}=
 
 Let's add a simple fixed quarter effect to the regression model:
 
-$$
+\begin{equation}
 y_t = \alpha_t + \beta_t x_t + \gamma_{qtr} + e_t \\
 \gamma_{qtr} = 
 \begin{cases}
@@ -215,11 +220,11 @@ y_t = \alpha_t + \beta_t x_t + \gamma_{qtr} + e_t \\
   \gamma_{3} & \text{if } qtr = 3 \\
   \gamma_{4} & \text{if } qtr = 4
 \end{cases}
-$$
+\end{equation}
 
 We can write this in matrix form.  In our model for $\gamma$, we will set the variance to 0 so that the $\gamma$ does not change with time.
 
-$$
+\begin{equation}
 y_t = 
 \begin{bmatrix}
   1 & x_t & 1
@@ -240,11 +245,11 @@ y_t =
 \Downarrow \\
 y_t = \mathbf{Z}_{t}\mathbf{x}_{t}+v_t \\
 \mathbf{x}_{t} = \mathbf{x}_{t-1}+\mathbf{w}_{t}
-$$
+\end{equation}
 
 How do we select the right quarterly effect? Let's separate out the quarterly effects and add them to $\mathbf{x}$. We could then select the right $\gamma$ using 0s and 1s in the $\mathbf{Z}_t$ matrix.  For example, if $t$ is in quarter 1, our model would be
 
-$$
+\begin{equation}
 y_t = 
 \begin{bmatrix}
   1 & x_t & 1 & 0 & 0 & 0
@@ -252,11 +257,11 @@ y_t =
 \begin{bmatrix}
   \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
 \end{bmatrix} \\
-$$
+\end{equation}
 
 While if $t$ is in quarter 2, the model is
 
-$$
+\begin{equation}
 y_t = 
 \begin{bmatrix}
   1 & x_t & 0 & 1 & 0 & 0
@@ -264,13 +269,13 @@ y_t =
 \begin{bmatrix}
   \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
 \end{bmatrix} \\
-$$
+\end{equation}
 
 This would work, but we would have to have a different $\mathbf{Z}_t$ matrix and it might get cumbersome to keep track of the 0s and 1s. If we wanted the $\gamma$ to evolve with time, we might need to do this.  However, if the $\gamma$ are fixed, i.e. the quarterly effect does not change over time, a less cumbersome approach is possible.
 
 We could instead keep the $\mathbf{Z}_t$ matrix the same, but reorder the $\gamma_i$ within $\mathbf{x}$. If $t$ is in quarter 1,
 
-$$
+\begin{equation}
 y_t = 
 \begin{bmatrix}
   1 & x_t & 1 & 0 & 0 & 0
@@ -278,10 +283,10 @@ y_t =
 \begin{bmatrix}
   \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
 \end{bmatrix} \\
-$$
+\end{equation}
 While if $t$ is in quarter 2, 
 
-$$
+\begin{equation}
 y_t = 
 \begin{bmatrix}
   1 & x_t & 1 & 0 & 0 & 0
@@ -289,7 +294,7 @@ y_t =
 \begin{bmatrix}
   \alpha_t \\ \beta_t \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
 \end{bmatrix} \\
-$$
+\end{equation}
 
 We can use a non-diagonal $\mathbf{G}$ to to shift the correct quarter effect within $\mathbf{x}$.
 
@@ -307,7 +312,7 @@ $$
 
 With this $\mathbf{G}$, the $\gamma$ rotate within $\mathbf{x}$ with each time step.  If $t$ is in quarter 1, then $t+1$ is in quarter 2, and we want $\gamma_2$ to be in the 3rd row. 
 
-$$
+\begin{equation}
 \begin{bmatrix} \alpha \\ \beta \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
 \end{bmatrix}_{t+1} =
 \begin{bmatrix}
@@ -324,11 +329,11 @@ $$
 \begin{bmatrix}
   w_{\alpha} \\ w_{\beta}  \\ 0  \\0 \\ 0 \\ 0
 \end{bmatrix}_{t}
-$$
+\end{equation}
 
 At $t+2$, we are in quarter 3 and $\gamma_3$ will be in row 3.
 
-$$
+\begin{equation}
 \begin{bmatrix} \alpha \\ \beta \\ \gamma_3 \\ \gamma_4 \\ \gamma_1 \\ \gamma_2
 \end{bmatrix}_{t+2} =
 \begin{bmatrix}
@@ -345,7 +350,7 @@ $$
 \begin{bmatrix}
   w_{\alpha} \\ w_{\beta}  \\ 0  \\0 \\ 0 \\ 0
 \end{bmatrix}_{t}
-$$
+\end{equation}
 
 
 ## Example: modeling salmon survival {#sec-dlm-salmon-example}
@@ -367,21 +372,17 @@ Both the intercept and slope are time varying, so
 If we define $\ttheta_t = \begin{bmatrix}\alpha \\ \beta\end{bmatrix}_t$, $\GG_t = \II$, $\ww_t = \begin{bmatrix} w_\alpha \\ w_\beta\end{bmatrix}_t$, and $\QQ = \begin{bmatrix}q_\alpha& 0 \\ 0&q_\beta\end{bmatrix}$, we get Equation \@ref(eq:dlm-dlm2). If we define $y_t = survival_t$ and $\FF_t = \begin{bmatrix}1 \\ F_t\end{bmatrix}$, we can write out the full DLM as a state-space model with the following form:
 \begin{equation}
 (\#eq:dlm-dlmSW3)
-\begin{gathered}
 \ttheta_t = \GG_t\ttheta_{t-1} + \ww_t \text{ with } \ww_t \sim \MVN(\mathbf{0},\QQ)\\
 y_t = \FF_t^{\top}\ttheta_t + v_t \text{ with } v_t\sim\N(0,r)\\
 \ttheta_0 = \pipi_0.
-\end{gathered}
 \end{equation}
 
 Equation \@ref(eq:dlm-dlmSW3) is equivalent to our standard MARSS model: 
 \begin{equation}
 (\#eq:dlm-MARSSdlm)
-\begin{gathered}
 \xx_t = \BB_t\xx_{t-1} + \uu_t + \CC_t\cc_t + \ww_t \text{ with } \ww_t \sim \MVN(0,\QQ_t)\\
 \yy_t = \ZZ_t\xx_t + \aa_t + \DD_t\dd_t + \vv_t \text{ with } \vv_t \sim \MVN(0,\RR_t)\\
 \xx_0 = \pipi
-\end{gathered}
 \end{equation}
 where $\xx_t = \ttheta_t$, $\BB_t = \GG_t$, $\uu_t = \CC_t = \cc_t = \zer$, $\yy_t = y_t$ (i.e., $\yy_t$ is 1 $\mathsf{x}$ 1), $\ZZ_t = \FF_t^{\top}$, $\aa_t = \DD_t = \dd_t = \zer$, and $\RR_t = r$ (i.e., $\RR_t$ is 1 $\mathsf{x}$ 1).
 
@@ -480,8 +481,46 @@ axis(1,at=seq(1965,2005,5))
 mtext("Year of ocean entry", 1, line=3)
 ```
  
-
 ## Forecasting with a DLM {#sec-dlm-forecasting-with-a-univariate-dlm}
+
+Forecasting from a DLM involves four general steps:
+
+1. Get estimate of the $t+1$ parameter distribution from data up to time $t$
+
+2. Make a prediction for $t+1$ based on covariates at time $t+1$ and the estimate of the $t+1$ parameters
+
+3. Get observation for $t+1$
+
+4. Update parameters and repeat
+
+### Parameter distribution conditioned on $t$
+
+For step 1, we want to compute the distribution of the parameters at time $t+1$ conditioned on the data up to time $t$.  Let's start by defining the distribution of  $\boldsymbol{\theta}_t$ conditioned on $y_{1:t}$ as.
+
+\begin{equation}
+(\#eq:dlm-distthetatt)
+\boldsymbol{\theta}_t | y_{1:t} \sim \text{MVN}(\boldsymbol{\pi}_t, \end{equation}
+where $\boldsymbol{\pi}_t = \text{E}(\boldsymbol{\theta}_t)$ and $\mathbf{\Lambda}_t = \text{Var}(\boldsymbol{\theta}_t)$.
+
+Now we can compute the distribution of  $\boldsymbol{\theta}_{t+1}$ conditioned on $y_{1:t}$ using the process equation for $\boldsymbol{\theta}$:
+\begin{equation}
+\boldsymbol{\theta}_{t+1} | y_{1:t} = \mathbf{G}_t \boldsymbol{\theta}_t | y_{1:t} + \mathbf{w}_t ~ \text{with} ~ \mathbf{w}_t \sim \text{MVN}(\mathbf{0}, \mathbf{Q}) \\
+\end{equation}
+The expected value of $\boldsymbol{\theta}_{t+1}|y_{1:t}$ is
+\begin{equation}
+\text{E}(\boldsymbol{\theta}_{t+1}|y_{1:t}) = \mathbf{G}_t \boldsymbol{\theta}_t|y_{1:t} = \mathbf{G}_t \boldsymbol{\pi}_t
+\end{equation}
+The variance of $\boldsymbol{\theta}_{t+1}|y_{1:t}$ is
+\begin{equation}
+\text{Var}(\boldsymbol{\theta}_{t+1}|y_{1:t}) = \mathbf{G}_t \text{Var}(\boldsymbol{\theta}_{t}|y_{1:t}) \mathbf{G}_t^{\top} + \mathbf{Q} = \mathbf{G}_t \mathbf{\Lambda}_t \mathbf{G}_t^{\top} + \mathbf{Q}
+\end{equation}
+Thus the distribution of $\boldsymbol{\theta}_{t+1}$ conditioned on $y_{1:t}$ is 
+\begin{equation}
+\boldsymbol{\theta}_{t+1}|y_{1:t} \sim \text{MVN}(\mathbf{G}_t \boldsymbol{\pi}_t, \mathbf{G}_t \mathbf{\Lambda}_t \mathbf{G}_t^{\top} + \mathbf{Q})
+\end{equation}
+
+### Make a prediction for $t+1$
+
 
 @ScheuerellWilliams2005 were interested in how well upwelling could be used to actually \textit{forecast} expected survival of salmon, so let's look at how well our model does in that context. To do so, we need the predictive distributions for the regression parameters and observation.
 
@@ -705,12 +744,13 @@ For this exercise, we will use spawner-recruit data for sockeye salmon (_Oncorhy
 #If bookdown is being run, then we are at the top level
 #make sure the Rdata is in the docs folder
 #file.copy("Lab-fitting-DLMs/KvichakSockeye.RData", "docs/data/KvichakSockeye.RData", overwrite=TRUE)
+#if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
 if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
   #load the data
-  load("docs/data/KvichakSockeye.RData")
-}else{
-  load("KvichakSockeye.RData")
-}
+   load("docs/data/KvichakSockeye.RData")
+ }else{
+   load("KvichakSockeye.RData")
+ }
 ```
 
 Download the Rdata file for Kvichak River from here: [KvichakSockeye.RData](./data/KvichakSockeye.RData). Then load the Rdata file:
