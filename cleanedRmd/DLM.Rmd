@@ -202,9 +202,155 @@ $$
 where  $\mathbf{x}=\begin{bmatrix}\alpha \\ \beta\end{bmatrix}$ and $\mathbf{Z}=\begin{bmatrix}1&f_t\end{bmatrix}$.
 
 
+## DLM with seasonal effect
+
+Let's add a simple fixed quarter effect to the regression model:
+
+$$
+y_t = \alpha_t + \beta_t x_t + \gamma_{qtr} + e_t \\
+\gamma_{qtr} = 
+\begin{cases}
+  \gamma_{1} & \text{if } qtr = 1 \\
+  \gamma_{2} & \text{if } qtr = 2 \\
+  \gamma_{3} & \text{if } qtr = 3 \\
+  \gamma_{4} & \text{if } qtr = 4
+\end{cases}
+$$
+
+We can write this in matrix form.  In our model for $\gamma$, we will set the variance to 0 so that the $\gamma$ does not change with time.
+
+$$
+y_t = 
+\begin{bmatrix}
+  1 & x_t & 1
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_{qtr}
+\end{bmatrix}_t
++ e_t \\ 
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_{qtr}
+\end{bmatrix}_t =
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_{qtr}
+\end{bmatrix}_{t-1}+
+\begin{bmatrix}
+  w_{\alpha} \\ w_{\beta} \\ 0
+\end{bmatrix}_t\\
+\Downarrow \\
+y_t = \mathbf{Z}_{t}\mathbf{x}_{t}+v_t \\
+\mathbf{x}_{t} = \mathbf{x}_{t-1}+\mathbf{w}_{t}
+$$
+
+How do we select the right quarterly effect? Let's separate out the quarterly effects and add them to $\mathbf{x}$. We could then select the right $\gamma$ using 0s and 1s in the $\mathbf{Z}_t$ matrix.  For example, if $t$ is in quarter 1, our model would be
+
+$$
+y_t = 
+\begin{bmatrix}
+  1 & x_t & 1 & 0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
+\end{bmatrix} \\
+$$
+
+While if $t$ is in quarter 2, the model is
+
+$$
+y_t = 
+\begin{bmatrix}
+  1 & x_t & 0 & 1 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
+\end{bmatrix} \\
+$$
+
+This would work, but we would have to have a different $\mathbf{Z}_t$ matrix and it might get cumbersome to keep track of the 0s and 1s. If we wanted the $\gamma$ to evolve with time, we might need to do this.  However, if the $\gamma$ are fixed, i.e. the quarterly effect does not change over time, a less cumbersome approach is possible.
+
+We could instead keep the $\mathbf{Z}_t$ matrix the same, but reorder the $\gamma_i$ within $\mathbf{x}$. If $t$ is in quarter 1,
+
+$$
+y_t = 
+\begin{bmatrix}
+  1 & x_t & 1 & 0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
+\end{bmatrix} \\
+$$
+While if $t$ is in quarter 2, 
+
+$$
+y_t = 
+\begin{bmatrix}
+  1 & x_t & 1 & 0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha_t \\ \beta_t \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
+\end{bmatrix} \\
+$$
+
+We can use a non-diagonal $\mathbf{G}$ to to shift the correct quarter effect within $\mathbf{x}$.
+
+$$
+\mathbf{G} = 
+\begin{bmatrix}
+  1 & 0 & 0 & 0 & 0 & 0 \\
+  0 & 1 & 0 & 0 & 0 & 0 \\
+  0 & 0 & 0 & 1 & 0 & 0 \\
+  0 & 0 & 0 & 0 & 1 & 0 \\
+  0 & 0 & 0 & 0 & 0 & 1 \\
+  0 & 0 & 1 & 0 & 0 & 0
+\end{bmatrix}
+$$
+
+With this $\mathbf{G}$, the $\gamma$ rotate within $\mathbf{x}$ with each time step.  If $t$ is in quarter 1, then $t+1$ is in quarter 2, and we want $\gamma_2$ to be in the 3rd row. 
+
+$$
+\begin{bmatrix} \alpha \\ \beta \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
+\end{bmatrix}_{t+1} =
+\begin{bmatrix}
+  1 & 0 & 0 & 0 & 0 & 0 \\
+  0 & 1 & 0 & 0 & 0 & 0 \\
+  0 & 0 & 0 & 1 & 0 & 0 \\
+  0 & 0 & 0 & 0 & 1 & 0 \\
+  0 & 0 & 0 & 0 & 0 & 1 \\
+  0 & 0 & 1 & 0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
+\end{bmatrix}_{t} + 
+\begin{bmatrix}
+  w_{\alpha} \\ w_{\beta}  \\ 0  \\0 \\ 0 \\ 0
+\end{bmatrix}_{t}
+$$
+
+At $t+2$, we are in quarter 3 and $\gamma_3$ will be in row 3.
+
+$$
+\begin{bmatrix} \alpha \\ \beta \\ \gamma_3 \\ \gamma_4 \\ \gamma_1 \\ \gamma_2
+\end{bmatrix}_{t+2} =
+\begin{bmatrix}
+  1 & 0 & 0 & 0 & 0 & 0 \\
+  0 & 1 & 0 & 0 & 0 & 0 \\
+  0 & 0 & 0 & 1 & 0 & 0 \\
+  0 & 0 & 0 & 0 & 1 & 0 \\
+  0 & 0 & 0 & 0 & 0 & 1 \\
+  0 & 0 & 1 & 0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
+\end{bmatrix}_{t+1} + 
+\begin{bmatrix}
+  w_{\alpha} \\ w_{\beta}  \\ 0  \\0 \\ 0 \\ 0
+\end{bmatrix}_{t}
+$$
+
+
 ## Example: modeling salmon survival {#sec-dlm-salmon-example}
 
-Let's consider an example from the literature. @ScheuerellWilliams2005 used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell \& Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon ("smolts") entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year $t$,
+Let's see an  example of a DLM used to analyze real data from the literature. @ScheuerellWilliams2005 used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell \& Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon ("smolts") entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year $t$,
 \begin{equation}
 (\#eq:dlm-dlmSW1)
 survival_t = \alpha_t + \beta_t F_t + v_t \text{ with } v_{t}\sim\,\text{N}(0,r),
@@ -218,7 +364,7 @@ Both the intercept and slope are time varying, so
 \alpha_t &= \alpha_{t-1} + w_{\alpha,t} \text{ with } w_{\alpha,t} \sim \,\text{N}(0,q_{\alpha})\\
 \beta_t &= \beta_{t-1} + w_{\beta,t} \text{ with } w_{\beta,t} \sim \,\text{N}(0,q_{\beta}).
 \end{align}
-If we define $\boldsymbol{\theta}_t = \begin{bmatrix}\alpha \\ \beta\end{bmatrix}_t$, $\mathbf{G}_t = \mathbf{I}$, $\mathbf{w}_t = \begin{bmatrix} w_\alpha \\ w_\beta\end{bmatrix}_t$, and $\mathbf{Q} = \begin{bmatrix}q_\alpha& 0 \\ 0&q_\beta\end{bmatrix}$, we get Equation \@ref(eq:dlm-dlm2). If we define $y_t = survival_t$ and $\mathbf{F}_t = \begin{bmatrix}1 \\ F_t\end{bmatrix}$, we can write out the full univariate DLM as a state-space model with the following form:
+If we define $\boldsymbol{\theta}_t = \begin{bmatrix}\alpha \\ \beta\end{bmatrix}_t$, $\mathbf{G}_t = \mathbf{I}$, $\mathbf{w}_t = \begin{bmatrix} w_\alpha \\ w_\beta\end{bmatrix}_t$, and $\mathbf{Q} = \begin{bmatrix}q_\alpha& 0 \\ 0&q_\beta\end{bmatrix}$, we get Equation \@ref(eq:dlm-dlm2). If we define $y_t = survival_t$ and $\mathbf{F}_t = \begin{bmatrix}1 \\ F_t\end{bmatrix}$, we can write out the full DLM as a state-space model with the following form:
 \begin{equation}
 (\#eq:dlm-dlmSW3)
 \begin{gathered}
@@ -314,7 +460,7 @@ Notice that the MARSS output does not list any estimates of the regression param
 Time series of the estimated intercept and slope are shown in Figure \@ref(fig:plotdlm1). It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (```Q.q1```). In fact, although the effect of April upwelling appears to be increasing over time, it doesn't really become important as an explanatory variable until about 1990 when the approximate 95\% confidence interval for the slope no longer overlaps zero.
 <!-- % plot regression parameters -->
 
-(ref:plotdlm1) Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the univariate DLM specified by Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). Thin lines denote the mean $\pm$ 2 standard deviations.
+(ref:plotdlm1) Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the DLM specified by Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). Thin lines denote the mean $\pm$ 2 standard deviations.
 
 ```{r plotdlm1, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=4, fig.width=6, fig.cap='(ref:plotdlm1)'}
 ylabs = c(expression(alpha[t]), expression(beta[t]))
@@ -335,7 +481,7 @@ mtext("Year of ocean entry", 1, line=3)
 ```
  
 
-## Forecasting with a univariate DLM {#sec-dlm-forecasting-with-a-univariate-dlm}
+## Forecasting with a DLM {#sec-dlm-forecasting-with-a-univariate-dlm}
 
 @ScheuerellWilliams2005 were interested in how well upwelling could be used to actually \textit{forecast} expected survival of salmon, so let's look at how well our model does in that context. To do so, we need the predictive distributions for the regression parameters and observation.
 
@@ -360,7 +506,7 @@ y_{t}|y_{1:t-1} &\sim \,\text{N}(\zeta_{t},\Psi_{t}), \text{ where} \nonumber\\
 \end{align}
 
 
-### Forecasting a univariate DLM with MARSS {#sec-dlm-forecasting-a-univariate-dlm-with-marss}
+### Forecasting a DLM with MARSS {#sec-dlm-forecasting-a-univariate-dlm-with-marss}
 Working from Equation \@ref(eq:dlm-dlmFore3), we can now use ``MARSS()`` to compute the expected value of the forecast at time $t$ $(\,\text{E} [y_t|y_{1:t-1}] = \zeta_t)$, and its variance $(\,\text{var} [y_t|y_{1:t-1}] = \Psi_t)$. For the expectation, we need $\mathbf{F}_t\boldsymbol{\eta}_t$. Recall that $\mathbf{F}_t$ is our $1 \times m$ matrix of explanatory variables at time $t$ ($\mathbf{F}_t$ is called $\mathbf{Z}_t$ in MARSS notation). The one-step ahead forecasts of the parameters at time $t$ $(\boldsymbol{\eta}_t)$ are calculated as part of the Kalman filter algorithm---they are termed $\tilde{x}_t^{t-1}$ in ``MARSS()`` notation and stored as ``xtt1`` in the list produced by the ``MARSSkfss()`` function.
 ```{r univ.DLM.fore.mean, eval=TRUE}
 ## get list of Kalman filter output

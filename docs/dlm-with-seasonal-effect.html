@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>4.5 Correlation within and among time series | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>8.5 DLM with seasonal effect | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="4.5 Correlation within and among time series | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="8.5 DLM with seasonal effect | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4.5 Correlation within and among time series | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="8.5 DLM with seasonal effect | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html">
-<link rel="next" href="sec-ts-white-noise-wn.html">
+<link rel="prev" href="sec-dlm-regression.html">
+<link rel="next" href="sec-dlm-salmon-example.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -396,231 +396,140 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-ts-correlation-within-and-among-time-series" class="section level2">
-<h2><span class="header-section-number">4.5</span> Correlation within and among time series</h2>
-<p>The concepts of covariance and correlation are very important in time series analysis. In particular, we can examine the correlation structure of the original data or random errors from a decomposition model to help us identify possible form(s) of (non)stationary model(s) for the stochastic process.</p>
-<div id="sec-ts-autocorrelation-function-acf" class="section level3">
-<h3><span class="header-section-number">4.5.1</span> Autocorrelation function (ACF)</h3>
-<p>Autocorrelation is the correlation of a variable with itself at differing time lags. Recall from lecture that we defined the sample autocovariance function (ACVF), <span class="math inline">\(c_k\)</span>, for some lag <span class="math inline">\(k\)</span> as</p>
-<span class="math display" id="eq:ACVF">\[\begin{equation}
-\tag{4.10}
-c_k = \frac{1}{n}\sum_{t=1}^{n-k} \left(x_t-\bar{x}\right) \left(x_{t+k}-\bar{x}\right)
-\end{equation}\]</span>
-<p>Note that the sample autocovariance of <span class="math inline">\(\{x_t\}\)</span> at lag 0, <span class="math inline">\(c_0\)</span>, equals the sample variance of <span class="math inline">\(\{x_t\}\)</span> calculated with a denominator of <span class="math inline">\(n\)</span>. The sample autocorrelation function (ACF) is defined as</p>
-<span class="math display" id="eq:ACF">\[\begin{equation}
-\tag{4.11}
-r_k = \frac{c_k}{c_0} = \text{Cor}(x_t,x_{t+k})
-\end{equation}\]</span>
-<p>Recall also that an approximate 95% confidence interval on the ACF can be estimated by</p>
-<span class="math display" id="eq:ACF95CI">\[\begin{equation}
-\tag{4.12}
--\frac{1}{n} \pm \frac{2}{\sqrt{n}}
-\end{equation}\]</span>
-<p>where <span class="math inline">\(n\)</span> is the number of data points used in the calculation of the ACF.</p>
-<p>It is important to remember two things here. First, although the confidence interval is commonly plotted and interpreted as a horizontal line over all time lags, the interval itself actually grows as the lag increases because the number of data points <span class="math inline">\(n\)</span> used to estimate the correlation decreases by 1 for every integer increase in lag. Second, care must be exercised when interpreting the “significance” of the correlation at various lags because we should expect, <em>a priori</em>, that approximately 1 out of every 20 correlations will be significant based on chance alone.</p>
-<p>We can use the <code>acf()</code> function in R to compute the sample ACF (note that adding the option <code>type=&quot;covariance&quot;</code> will return the sample auto-covariance (ACVF) instead of the ACF–type <code>?acf</code> for details). Calling the function by itself will will automatically produce a correlogram (<em>i.e.</em>, a plot of the autocorrelation versus time lag). The argument <code>lag.max</code> allows you to set the number of positive and negative lags. Let’s try it for the CO<span class="math inline">\(_2\)</span> data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## correlogram of the CO2 data
-<span class="kw">acf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</code></pre></div>
-
-<div class="figure"><span id="fig:ts-plotACFb"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotACFb-1.png" alt="Correlogram of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i obtained with the function acf()." width="672" />
-<p class="caption">
-Figure 4.10: Correlogram of the observed atmospheric CO<span class="math inline">\(_2\)</span> concentration at Mauna Loa, Hawai’i obtained with the function <code>acf()</code>.
-</p>
-</div>
-<p>There are 4 things about Figure <a href="sec-ts-correlation-within-and-among-time-series.html#fig:ts-plotACFb">4.10</a> that are noteworthy:</p>
-<ol style="list-style-type: decimal">
-<li>the ACF at lag 0, <span class="math inline">\(r_0\)</span>, equals 1 by default (<em>i.e.</em>, the correlation of a time series with itself)–it’s plotted as a reference point;</li>
-<li>the <span class="math inline">\(x\)</span>-axis has decimal values for lags, which is caused by R using the year index as the lag rather than the month;</li>
-<li>the horizontal blue lines are the approximate 95% CI’s; and</li>
-<li>there is very high autocorrelation even out to lags of 36 months.</li>
-</ol>
-<p>As an alternative to the default plots for <strong>acf</strong> objects, let’s define a new plot function for <strong>acf</strong> objects with some better features:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## better ACF plot
-plot.acf &lt;-<span class="st"> </span><span class="cf">function</span>(ACFobj) {
-  rr &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>acf[<span class="op">-</span><span class="dv">1</span>]
-  kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)
-  nn &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>n.used
-  <span class="kw">plot</span>(<span class="kw">seq</span>(kk),rr,<span class="dt">type=</span><span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">yaxs=</span><span class="st">&quot;i&quot;</span>,<span class="dt">xaxs=</span><span class="st">&quot;i&quot;</span>,
-       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)),<span class="dv">1</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,kk<span class="op">+</span><span class="dv">1</span>),
-       <span class="dt">xlab=</span><span class="st">&quot;Lag&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Correlation&quot;</span>,<span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">h=</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>nn<span class="op">+</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn),<span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)
-  <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)
-}</code></pre></div>
-<p>Now we can assign the result of <code>acf()</code> to a variable and then use the information contained therein to plot the correlogram with our new plot function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## acf of the CO2 data
-co2.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)
-## correlogram of the CO2 data
-<span class="kw">plot.acf</span>(co2.acf)</code></pre></div>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/ts-DoOurACF-1.png" width="672" /></p>
-
-<div class="figure"><span id="fig:ts-plotbetterACF"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotbetterACF-1.png" alt="Correlogram of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i obtained with the function plot.acf()." width="672" />
-<p class="caption">
-Figure 4.11: Correlogram of the observed atmospheric CO<span class="math inline">\(_2\)</span> concentration at Mauna Loa, Hawai’i obtained with the function <code>plot.acf()</code>.
-</p>
-</div>
-<p>Notice that all of the relevant information is still there (Figure <a href="sec-ts-correlation-within-and-among-time-series.html#fig:ts-plotbetterACF">4.11</a>), but now <span class="math inline">\(r_0=1\)</span> is not plotted at lag-0 and the lags on the <span class="math inline">\(x\)</span>-axis are displayed correctly as integers.</p>
-<p>Before we move on to the PACF, let’s look at the ACF for some deterministic time series, which will help you identify interesting properties (<em>e.g.</em>, trends, seasonal effects) in a stochastic time series, and account for them in time series models–an important topic in this course. First, let’s look at a straight line.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## length of ts
-nn &lt;-<span class="st"> </span><span class="dv">100</span>
-## create straight line
-tt &lt;-<span class="st"> </span><span class="kw">seq</span>(nn)
-## set up plot area
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-## plot line
-<span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
-## get ACF
-line.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)
-## plot ACF
-<span class="kw">plot.acf</span>(line.acf)</code></pre></div>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/ts-LinearACF-1.png" width="672" /></p>
-
-<div class="figure"><span id="fig:ts-plotLinearACF"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotLinearACF-1.png" alt="Time series plot of a straight line (left) and the correlogram of its ACF (right)." width="672" />
-<p class="caption">
-Figure 4.12: Time series plot of a straight line (left) and the correlogram of its ACF (right).
-</p>
-</div>
-<p>The correlogram for a straight line is itself a linearly decreasing function over time (Figure <a href="sec-ts-correlation-within-and-among-time-series.html#fig:ts-plotLinearACF">4.12</a>).</p>
-<p>Now let’s examine the ACF for a sine wave and see what sort of pattern arises.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## create sine wave
-tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>)
-## set up plot area
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-## plot line
-<span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
-## get ACF
-sine.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)
-## plot ACF
-<span class="kw">plot.acf</span>(sine.acf)</code></pre></div>
-
-<div class="figure"><span id="fig:ts-plotSineACF"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotSineACF-1.png" alt="Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right)." width="672" />
-<p class="caption">
-Figure 4.13: Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right).
-</p>
-</div>
-<p>Perhaps not surprisingly, the correlogram for a sine wave is itself a sine wave whose amplitude decreases linearly over time (Figure <a href="sec-ts-correlation-within-and-among-time-series.html#fig:ts-plotSineACF">4.13</a>).</p>
-<p>Now let’s examine the ACF for a sine wave with a linear downward trend and see what sort of patterns arise.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## create sine wave with trend
-tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>) <span class="op">-</span><span class="st"> </span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">50</span>
-## set up plot area
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-## plot line
-<span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
-## get ACF
-sili.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)
-## plot ACF
-<span class="kw">plot.acf</span>(sili.acf)</code></pre></div>
-
-<div class="figure"><span id="fig:ts-plotSiLiACF"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotSiLiACF-1.png" alt="Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right)." width="672" />
-<p class="caption">
-Figure 4.14: Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right).
-</p>
-</div>
-<p>The correlogram for a sine wave with a trend is itself a nonsymmetrical sine wave whose amplitude and center decrease over time (Figure <a href="sec-ts-correlation-within-and-among-time-series.html#fig:ts-plotSiLiACF">4.14</a>).</p>
-<p>As we have seen, the ACF is a powerful tool in time series analysis for identifying important features in the data. As we will see later, the ACF is also an important diagnostic tool for helping to select the proper order of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> in ARMA(<span class="math inline">\(p\)</span>,<span class="math inline">\(q\)</span>) models.</p>
-</div>
-<div id="sec-ts-partial-autocorrelation-function-pacf" class="section level3">
-<h3><span class="header-section-number">4.5.2</span> Partial autocorrelation function (PACF)</h3>
-<p>The partial autocorrelation function (PACF) measures the linear correlation of a series <span class="math inline">\(\{x_t\}\)</span> and a lagged version of itself <span class="math inline">\(\{x_{t+k}\}\)</span> with the linear dependence of <span class="math inline">\(\{x_{t-1},x_{t-2},\dots,x_{t-(k-1)}\}\)</span> removed. Recall from lecture that we define the PACF as</p>
-<span class="math display" id="eq:PACFdefn">\[\begin{equation}
-\tag{4.13}
-f_k = \begin{cases}
-        \text{Cor}(x_1,x_0)=r_1 &amp; \text{if } k = 1;\\
-        \text{Cor}(x_k-x_k^{k-1},x_0-x_0^{k-1}) &amp; \text{if } k \geq 2;
-      \end{cases}
-\end{equation}\]</span>
-<p>with</p>
-
-<p>It’s easy to compute the PACF for a variable in R using the <code>pacf()</code> function, which will automatically plot a correlogram when called by itself (similar to <code>acf()</code>). Let’s look at the PACF for the CO<span class="math inline">\(_2\)</span> data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## PACF of the CO2 data
-<span class="kw">pacf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</code></pre></div>
-<p>The default plot for PACF is a bit better than for ACF, but here is another plotting function that might be useful.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## better PACF plot
-plot.pacf &lt;-<span class="st"> </span><span class="cf">function</span>(PACFobj) {
-  rr &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>acf
-  kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)
-  nn &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>n.used
-  <span class="kw">plot</span>(<span class="kw">seq</span>(kk),rr,<span class="dt">type=</span><span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">yaxs=</span><span class="st">&quot;i&quot;</span>,<span class="dt">xaxs=</span><span class="st">&quot;i&quot;</span>,
-       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)),<span class="dv">1</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,kk<span class="op">+</span><span class="dv">1</span>),
-       <span class="dt">xlab=</span><span class="st">&quot;Lag&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;PACF&quot;</span>,<span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">h=</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>nn<span class="op">+</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn),<span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)
-  <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)
-}</code></pre></div>
-
-<div class="figure"><span id="fig:ts-plotPACFb"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotPACFb-1.png" alt="Correlogram of the PACF for the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i obtained with the function pacf()." width="672" />
-<p class="caption">
-Figure 4.15: Correlogram of the PACF for the observed atmospheric CO<span class="math inline">\(_2\)</span> concentration at Mauna Loa, Hawai’i obtained with the function <code>pacf()</code>.
-</p>
-</div>
-<p>Notice in Figure <a href="sec-ts-correlation-within-and-among-time-series.html#fig:ts-plotPACFb">4.15</a> that the partial autocorrelation at lag-1 is very high (it equals the ACF at lag-1), but the other values at lags &gt; 1 are relatively small, unlike what we saw for the ACF. We will discuss this in more detail later on in this lab.</p>
-<p>Notice also that the PACF plot again has real-valued indices for the time lag, but it does not include any value for lag-0 because it is impossible to remove any intermediate autocorrelation between <span class="math inline">\(t\)</span> and <span class="math inline">\(t-k\)</span> when <span class="math inline">\(k=0\)</span>, and therefore the PACF does not exist at lag-0. If you would like, you can use the <code>plot.acf()</code> function we defined above to plot the PACF estimates because <code>acf()</code> and <code>pacf()</code> produce identical list structures (results not shown here).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## PACF of the CO2 data
-co2.pacf &lt;-<span class="st"> </span><span class="kw">pacf</span>(co2)
-## correlogram of the CO2 data
-<span class="kw">plot.acf</span>(co2.pacf)</code></pre></div>
-<p>As with the ACF, we will see later on how the PACF can also be used to help identify the appropriate order of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> in ARMA(<span class="math inline">\(p\)</span>,<span class="math inline">\(q\)</span>) models.</p>
-</div>
-<div id="sec-ts-cross-correlation-function-ccf" class="section level3">
-<h3><span class="header-section-number">4.5.3</span> Cross-correlation function (CCF)</h3>
-<p>Often we are interested in looking for relationships between 2 different time series. There are many ways to do this, but a simple method is via examination of their cross-covariance and cross-correlation.</p>
-<p>We begin by defining the sample cross-covariance function (CCVF) in a manner similar to the ACVF, in that</p>
-<span class="math display" id="eq:CCVF">\[\begin{equation}
-\tag{4.14}
-g_k^{xy} = \frac{1}{n}\sum_{t=1}^{n-k} \left(y_t-\bar{y}\right) \left(x_{t+k}-\bar{x}\right),
-\end{equation}\]</span>
-<p>but now we are estimating the correlation between a variable <span class="math inline">\(y\)</span> and a <em>different</em> time-shifted variable <span class="math inline">\(x_{t+k}\)</span>. The sample cross-correlation function (CCF) is then defined analogously to the ACF, such that</p>
-<span class="math display" id="eq:CCF">\[\begin{equation}
-\tag{4.15}
-r_k^{xy} = \frac{g_k^{xy}}{\sqrt{\text{SD}_x\text{SD}_y}};
-\end{equation}\]</span>
-<p>SD<span class="math inline">\(_x\)</span> and SD<span class="math inline">\(_y\)</span> are the sample standard deviations of <span class="math inline">\(\{x_t\}\)</span> and <span class="math inline">\(\{y_t\}\)</span>, respectively. It is important to re-iterate here that <span class="math inline">\(r_k^{xy} \neq r_{-k}^{xy}\)</span>, but <span class="math inline">\(r_k^{xy} = r_{-k}^{yx}\)</span>. Therefore, it is very important to pay particular attention to which variable you call <span class="math inline">\(y\)</span> (<em>i.e.</em>, the “response”) and which you call <span class="math inline">\(x\)</span> (<em>i.e.</em>, the “predictor”).</p>
-<p>As with the ACF, an approximate 95% confidence interval on the CCF can be estimated by</p>
-<span class="math display" id="eq:CCF95CI">\[\begin{equation}
-\tag{4.16}
--\frac{1}{n} \pm \frac{2}{\sqrt{n}}
-\end{equation}\]</span>
-<p>where <span class="math inline">\(n\)</span> is the number of data points used in the calculation of the CCF, and the same assumptions apply to its interpretation.</p>
-<p>Computing the CCF in R is easy with the function <code>ccf()</code> and it works just like <code>acf()</code>. In fact, <code>ccf()</code> is just a “wrapper” function that calls <code>acf()</code>. As an example, let’s examine the CCF between sunspot activity and number of lynx trapped in Canada as in the classic paper by Moran.</p>
-<p>To begin, let’s get the data, which are conveniently included in the <strong>datasets</strong> package included as part of the base installation of R. Before calculating the CCF, however, we need to find the matching years of data. Again, we’ll use the <code>ts.intersect()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## get the matching years of sunspot data
-suns &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx,sunspot.year)[,<span class="st">&quot;sunspot.year&quot;</span>]
-## get the matching lynx data
-lynx &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx,sunspot.year)[,<span class="st">&quot;lynx&quot;</span>]</code></pre></div>
-<p>Here are plots of the time series.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plot time series
-<span class="kw">plot</span>(<span class="kw">cbind</span>(suns,lynx), <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</code></pre></div>
-
-<div class="figure"><span id="fig:ts-plotSunsLynx"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotSunsLynx-1.png" alt="Time series of sunspot activity (top) and lynx trappings in Canada (bottom) from 1821-1934." width="672" />
-<p class="caption">
-Figure 4.16: Time series of sunspot activity (top) and lynx trappings in Canada (bottom) from 1821-1934.
-</p>
-</div>
-<p>It is important to remember which of the 2 variables you call <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> when calling <code>ccf(x, y, ...)</code>. In this case, it seems most relevant to treat lynx as the <span class="math inline">\(y\)</span> and sunspots as the <span class="math inline">\(x\)</span>, in which case we are mostly interested in the CCF at negative lags (<em>i.e.</em>, when sunspot activity predates inferred lynx abundance). Furthermore, we’ll use log-transformed lynx trappings.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## CCF of sunspots and lynx
-<span class="kw">ccf</span>(suns, <span class="kw">log</span>(lynx), <span class="dt">ylab=</span><span class="st">&quot;Cross-correlation&quot;</span>)</code></pre></div>
-
-<div class="figure"><span id="fig:ts-plotCCFb"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotCCFb-1.png" alt="CCF for annual sunspot activity and the log of the number of lynx trappings in Canada from 1821-1934." width="672" />
-<p class="caption">
-Figure 4.17: CCF for annual sunspot activity and the log of the number of lynx trappings in Canada from 1821-1934.
-</p>
-</div>
-<p>From Figures <a href="sec-ts-correlation-within-and-among-time-series.html#fig:ts-plotSunsLynx">4.16</a> and <a href="sec-ts-correlation-within-and-among-time-series.html#fig:ts-plotCCFb">4.17</a> it looks like lynx numbers are relatively low 3-5 years after high sunspot activity (<em>i.e.</em>, significant correlation at lags of -3 to -5).</p>
-</div>
+<div id="dlm-with-seasonal-effect" class="section level2">
+<h2><span class="header-section-number">8.5</span> DLM with seasonal effect</h2>
+<p>Let’s add a simple fixed quarter effect to the regression model:</p>
+<p><span class="math display">\[
+y_t = \alpha_t + \beta_t x_t + \gamma_{qtr} + e_t \\
+\gamma_{qtr} = 
+\begin{cases}
+  \gamma_{1} &amp; \text{if } qtr = 1 \\
+  \gamma_{2} &amp; \text{if } qtr = 2 \\
+  \gamma_{3} &amp; \text{if } qtr = 3 \\
+  \gamma_{4} &amp; \text{if } qtr = 4
+\end{cases}
+\]</span></p>
+<p>We can write this in matrix form. In our model for <span class="math inline">\(\gamma\)</span>, we will set the variance to 0 so that the <span class="math inline">\(\gamma\)</span> does not change with time.</p>
+<p><span class="math display">\[
+y_t = 
+\begin{bmatrix}
+  1 &amp; x_t &amp; 1
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_{qtr}
+\end{bmatrix}_t
++ e_t \\ 
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_{qtr}
+\end{bmatrix}_t =
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_{qtr}
+\end{bmatrix}_{t-1}+
+\begin{bmatrix}
+  w_{\alpha} \\ w_{\beta} \\ 0
+\end{bmatrix}_t\\
+\Downarrow \\
+y_t = \mathbf{Z}_{t}\mathbf{x}_{t}+v_t \\
+\mathbf{x}_{t} = \mathbf{x}_{t-1}+\mathbf{w}_{t}
+\]</span></p>
+<p>How do we select the right quarterly effect? Let’s separate out the quarterly effects and add them to <span class="math inline">\(\mathbf{x}\)</span>. We could then select the right <span class="math inline">\(\gamma\)</span> using 0s and 1s in the <span class="math inline">\(\mathbf{Z}_t\)</span> matrix. For example, if <span class="math inline">\(t\)</span> is in quarter 1, our model would be</p>
+<p><span class="math display">\[
+y_t = 
+\begin{bmatrix}
+  1 &amp; x_t &amp; 1 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
+\end{bmatrix} \\
+\]</span></p>
+<p>While if <span class="math inline">\(t\)</span> is in quarter 2, the model is</p>
+<p><span class="math display">\[
+y_t = 
+\begin{bmatrix}
+  1 &amp; x_t &amp; 0 &amp; 1 &amp; 0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
+\end{bmatrix} \\
+\]</span></p>
+<p>This would work, but we would have to have a different <span class="math inline">\(\mathbf{Z}_t\)</span> matrix and it might get cumbersome to keep track of the 0s and 1s. If we wanted the <span class="math inline">\(\gamma\)</span> to evolve with time, we might need to do this. However, if the <span class="math inline">\(\gamma\)</span> are fixed, i.e. the quarterly effect does not change over time, a less cumbersome approach is possible.</p>
+<p>We could instead keep the <span class="math inline">\(\mathbf{Z}_t\)</span> matrix the same, but reorder the <span class="math inline">\(\gamma_i\)</span> within <span class="math inline">\(\mathbf{x}\)</span>. If <span class="math inline">\(t\)</span> is in quarter 1,</p>
+<p><span class="math display">\[
+y_t = 
+\begin{bmatrix}
+  1 &amp; x_t &amp; 1 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha_t \\ \beta_t \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
+\end{bmatrix} \\
+\]</span> While if <span class="math inline">\(t\)</span> is in quarter 2,</p>
+<p><span class="math display">\[
+y_t = 
+\begin{bmatrix}
+  1 &amp; x_t &amp; 1 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha_t \\ \beta_t \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
+\end{bmatrix} \\
+\]</span></p>
+<p>We can use a non-diagonal <span class="math inline">\(\mathbf{G}\)</span> to to shift the correct quarter effect within <span class="math inline">\(\mathbf{x}\)</span>.</p>
+<p><span class="math display">\[
+\mathbf{G} = 
+\begin{bmatrix}
+  1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\
+  0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\]</span></p>
+<p>With this <span class="math inline">\(\mathbf{G}\)</span>, the <span class="math inline">\(\gamma\)</span> rotate within <span class="math inline">\(\mathbf{x}\)</span> with each time step. If <span class="math inline">\(t\)</span> is in quarter 1, then <span class="math inline">\(t+1\)</span> is in quarter 2, and we want <span class="math inline">\(\gamma_2\)</span> to be in the 3rd row.</p>
+<p><span class="math display">\[
+\begin{bmatrix} \alpha \\ \beta \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
+\end{bmatrix}_{t+1} =
+\begin{bmatrix}
+  1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\
+  0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_1 \\ \gamma_2 \\ \gamma_3 \\ \gamma_4
+\end{bmatrix}_{t} + 
+\begin{bmatrix}
+  w_{\alpha} \\ w_{\beta}  \\ 0  \\0 \\ 0 \\ 0
+\end{bmatrix}_{t}
+\]</span></p>
+<p>At <span class="math inline">\(t+2\)</span>, we are in quarter 3 and <span class="math inline">\(\gamma_3\)</span> will be in row 3.</p>
+<p><span class="math display">\[
+\begin{bmatrix} \alpha \\ \beta \\ \gamma_3 \\ \gamma_4 \\ \gamma_1 \\ \gamma_2
+\end{bmatrix}_{t+2} =
+\begin{bmatrix}
+  1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\
+  0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0
+\end{bmatrix}
+\begin{bmatrix}
+  \alpha \\ \beta \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
+\end{bmatrix}_{t+1} + 
+\begin{bmatrix}
+  w_{\alpha} \\ w_{\beta}  \\ 0  \\0 \\ 0 \\ 0
+\end{bmatrix}_{t}
+\]</span></p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-ts-differencing-to-remove-a-trend-or-seasonal-effects.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-ts-white-noise-wn.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-dlm-regression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-dlm-salmon-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -650,7 +559,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/intro-ts-funcs-lab.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/DLM.Rmd",
 "text": "Edit"
 },
 "history": {
