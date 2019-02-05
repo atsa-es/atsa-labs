@@ -1,6 +1,23 @@
 ## ----dlm-loadpackages, warning=FALSE, message=FALSE----------------------
 library(MARSS)
 
+## ----dlm-nile-fit--------------------------------------------------------
+library(datasets)
+data("Nile")
+mod_list <- list(B = "identity", U = "zero", Q = matrix("q"),
+                 Z = "identity", A = matrix("a"), R = matrix("r"))
+fit <- MARSS(matrix(Nile, nrow = 1), mod_list)
+
+## ----dlm-nile-fit-plot, echo=FALSE---------------------------------------
+plot.ts(Nile, las = 1, lwd = 2,
+        xlab = "Year", ylab = "Flow of the River Nile")
+lines(seq(start(Nile)[1], end(Nile)[1]),
+       lwd = 2, t(fit$states), col = "blue")
+lines(seq(start(Nile)[1], end(Nile)[1]), t(fit$states + 2*fit$states.se),
+       lwd = 2, lty = "dashed", col = "blue")
+lines(seq(start(Nile)[1], end(Nile)[1]), t(fit$states - 2*fit$states.se),
+       lwd = 2, lty = "dashed", col = "blue")
+
 ## ----read.in.data, eval=TRUE---------------------------------------------
 ## load the data
 data(SalmonSurvCUI)

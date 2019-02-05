@@ -120,14 +120,14 @@ mod_5 = fit_dfa(y = dat.spp.1980, num_trends=5)
 library(loo)
 loo(extract_log_lik(mod_1))$looic
 
-## ----stan-looic-table----------------------------------------------------
+## ----stan-looic-table, cache=TRUE----------------------------------------
 looics = c(
-loo(extract_log_lik(mod_1))$looic,
-loo(extract_log_lik(mod_2))$looic,
-loo(extract_log_lik(mod_3))$looic,
-loo(extract_log_lik(mod_4))$looic,
-loo(extract_log_lik(mod_5))$looic
-)
+  loo(extract_log_lik(mod_1))$looic,
+  loo(extract_log_lik(mod_2))$looic,
+  loo(extract_log_lik(mod_3))$looic,
+  loo(extract_log_lik(mod_4))$looic,
+  loo(extract_log_lik(mod_5))$looic
+  )
 looic.table = data.frame(trends=1:5, LOOIC=looics)
 looic.table
 

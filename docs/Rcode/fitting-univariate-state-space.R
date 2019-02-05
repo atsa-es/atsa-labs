@@ -334,7 +334,7 @@ ypos <- y[!is.na(y)]
 n_pos <- sum(!is.na(y)) #number on non-NA ys
 indx_pos <- which(!is.na(y)) #index on the non-NAs
 mod <- rstan::stan(model_code = scode, 
-  data = list(y=ypos, TT=length(y), n_pos=n_pos, indx_pos=indx_pos), 
+  data = list("y"=ypos, "TT"=length(y), "n_pos"=n_pos, "indx_pos"=indx_pos), 
   pars = c("sd_q","x", "sd_r", "u", "x0"),
   chains = 3, iter = 1000, thin = 1)
 

@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>8.3 Fitting a univariate DLM with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>8.6 Fitting a DLM with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="8.3 Fitting a univariate DLM with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="8.6 Fitting a DLM with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8.3 Fitting a univariate DLM with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="8.6 Fitting a DLM with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -25,14 +25,14 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-01-31">
+<meta name="date" content="2019-02-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-dlm-example-of-a-univariate-dlm.html">
+<link rel="prev" href="sec-dlm-salmon-example.html">
 <link rel="next" href="sec-dlm-forecasting-with-a-univariate-dlm.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -51,67 +51,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -334,16 +308,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html"><i class="fa fa-check"></i><b>8</b> Dynamic linear models</a><ul>
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data-1"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="8.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>8.1</b> Overview</a></li>
-<li class="chapter" data-level="8.2" data-path="sec-dlm-example-of-a-univariate-dlm.html"><a href="sec-dlm-example-of-a-univariate-dlm.html"><i class="fa fa-check"></i><b>8.2</b> Example of a univariate DLM</a></li>
-<li class="chapter" data-level="8.3" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>8.3</b> Fitting a univariate DLM with <code>MARSS()</code></a></li>
-<li class="chapter" data-level="8.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>8.4</b> Forecasting with a univariate DLM</a><ul>
-<li class="chapter" data-level="8.4.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.4.1</b> Forecasting a univariate DLM with MARSS</a></li>
-<li class="chapter" data-level="8.4.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>8.4.2</b> DLM forecast diagnostics</a></li>
+<li class="chapter" data-level="8.2" data-path="dlm-in-state-space-form.html"><a href="dlm-in-state-space-form.html"><i class="fa fa-check"></i><b>8.2</b> DLM in state-space form</a></li>
+<li class="chapter" data-level="8.3" data-path="sec-dlm-simple-examples.html"><a href="sec-dlm-simple-examples.html"><i class="fa fa-check"></i><b>8.3</b> Stochastic level examples</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="sec-dlm-simple-examples.html"><a href="sec-dlm-simple-examples.html#stochastic-level"><i class="fa fa-check"></i><b>8.3.1</b> Stochastic level</a></li>
+<li class="chapter" data-level="8.3.2" data-path="sec-dlm-simple-examples.html"><a href="sec-dlm-simple-examples.html#stochastic-level-with-drift"><i class="fa fa-check"></i><b>8.3.2</b> Stochastic level with drift</a></li>
 </ul></li>
-<li class="chapter" data-level="8.5" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>8.5</b> Homework discussion and data</a><ul>
-<li class="chapter" data-level="8.5.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>8.5.1</b> Spawner-recruit data</a></li>
+<li class="chapter" data-level="8.4" data-path="sec-dlm-regression.html"><a href="sec-dlm-regression.html"><i class="fa fa-check"></i><b>8.4</b> Stochastic regression example</a></li>
+<li class="chapter" data-level="8.5" data-path="sec-dlm-salmon-example.html"><a href="sec-dlm-salmon-example.html"><i class="fa fa-check"></i><b>8.5</b> Example: modeling salmon survival</a></li>
+<li class="chapter" data-level="8.6" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>8.6</b> Fitting a DLM with <code>MARSS()</code></a></li>
+<li class="chapter" data-level="8.7" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>8.7</b> Forecasting with a univariate DLM</a><ul>
+<li class="chapter" data-level="8.7.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.7.1</b> Forecasting a univariate DLM with MARSS</a></li>
+<li class="chapter" data-level="8.7.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>8.7.2</b> DLM forecast diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="8.6" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>8.6</b> Problems</a></li>
+<li class="chapter" data-level="8.8" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>8.8</b> Homework discussion and data</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>8.8.1</b> Spawner-recruit data</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>8.9</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sec-dfa.html"><a href="sec-dfa.html"><i class="fa fa-check"></i><b>9</b> Dynamic Factor Analysis</a><ul>
 <li class="chapter" data-level="" data-path="sec-dfa.html"><a href="sec-dfa.html#data-and-packages-4"><i class="fa fa-check"></i>Data and packages</a></li>
@@ -416,23 +396,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="sec-dlm-fitting-a-univariate-dlm-with-marss" class="section level2">
-<h2><span class="header-section-number">8.3</span> Fitting a univariate DLM with <code>MARSS()</code></h2>
-<p>Now let’s go ahead and analyze the DLM specified in Equations <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW1">(8.5)</a>–<a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(8.7)</a>. We begin by loading the data set (which is in the <strong>MARSS</strong> package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean (<code>year</code>), 2) logit-transformed survival  (<code>logit.s</code>), and 3) the coastal upwelling index for April (<code>CUI.apr</code>). There are 42 years of data (1964–2005).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## load the data</span>
+<h2><span class="header-section-number">8.6</span> Fitting a DLM with <code>MARSS()</code></h2>
+<p>Now let’s go ahead and analyze the DLM specified in Equations <a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW1">(8.6)</a>–<a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW3">(8.8)</a>. We begin by loading the data set (which is in the <strong>MARSS</strong> package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean (<code>year</code>), 2) logit-transformed survival  (<code>logit.s</code>), and 3) the coastal upwelling index for April (<code>CUI.apr</code>). There are 42 years of data (1964–2005).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## load the data
 <span class="kw">data</span>(SalmonSurvCUI)
-<span class="co">## get time indices</span>
-years =<span class="st"> </span>SalmonSurvCUI[, <span class="dv">1</span>]
-<span class="co">## number of years of data</span>
+## get time indices
+years =<span class="st"> </span>SalmonSurvCUI[,<span class="dv">1</span>]
+## number of years of data
 TT =<span class="st"> </span><span class="kw">length</span>(years)
-<span class="co">## get response data: logit(survival)</span>
-dat =<span class="st"> </span><span class="kw">matrix</span>(SalmonSurvCUI[, <span class="dv">2</span>], <span class="dt">nrow =</span> <span class="dv">1</span>)</code></pre>
+## get response data: logit(survival)
+dat =<span class="st"> </span><span class="kw">matrix</span>(SalmonSurvCUI[,<span class="dv">2</span>],<span class="dt">nrow=</span><span class="dv">1</span>)</code></pre></div>
 <p>As we have seen in other case studies, standardizing our covariate(s) to have zero-mean and unit-variance can be helpful in model fitting and interpretation. In this case, it’s a good idea because the variance of <code>CUI.apr</code> is orders of magnitude greater than <code>logit.s</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## get regressor variable</span>
-CUI =<span class="st"> </span>SalmonSurvCUI[, <span class="dv">3</span>]
-<span class="co">## z-score the CUI</span>
-CUI.z =<span class="st"> </span><span class="kw">matrix</span>((CUI <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(CUI))<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(CUI)), <span class="dt">nrow =</span> <span class="dv">1</span>)
-<span class="co">## number of regr params (slope + intercept)</span>
-m =<span class="st"> </span><span class="kw">dim</span>(CUI.z)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## get regressor variable
+CUI =<span class="st"> </span>SalmonSurvCUI[,<span class="dv">3</span>]
+## z-score the CUI
+CUI.z =<span class="st"> </span><span class="kw">matrix</span>((CUI <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(CUI))<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(CUI)), <span class="dt">nrow=</span><span class="dv">1</span>)
+## number of regr params (slope + intercept)
+m =<span class="st"> </span><span class="kw">dim</span>(CUI.z)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
 <p>Plots of logit-transformed survival and the <span class="math inline">\(z\)</span>-scored April upwelling index are shown in Figure <a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#fig:plotdata">8.1</a>.</p>
 
 <div class="figure"><span id="fig:plotdata"></span>
@@ -442,26 +422,26 @@ Figure 8.1: Time series of logit-transformed marine survival estimates for Snake
 </p>
 </div>
 <p>Next, we need to set up the appropriate matrices and vectors for MARSS. Let’s begin with those for the process equation because they are straightforward.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## for process eqn</span>
-B =<span class="st"> </span><span class="kw">diag</span>(m)  <span class="co">## 2x2; Identity</span>
-U =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow =</span> m, <span class="dt">ncol =</span> <span class="dv">1</span>)  <span class="co">## 2x1; both elements = 0</span>
-Q =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), m, m)  <span class="co">## 2x2; all 0 for now</span>
-<span class="kw">diag</span>(Q) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q.alpha&quot;</span>, <span class="st">&quot;q.beta&quot;</span>)  <span class="co">## 2x2; diag = (q1,q2)</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## for process eqn
+B =<span class="st"> </span><span class="kw">diag</span>(m)                     ## 2x2; Identity
+U =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dt">nrow=</span>m,<span class="dt">ncol=</span><span class="dv">1</span>)     ## 2x1; both elements = 0
+Q =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>),m,m)         ## 2x2; all 0 for now
+<span class="kw">diag</span>(Q) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q.alpha&quot;</span>,<span class="st">&quot;q.beta&quot;</span>) ## 2x2; diag = (q1,q2)</code></pre></div>
 <p>Defining the correct form for the observation model is a little more tricky, however, because of how we model the effect(s) of explanatory variables. In a DLM, we need to use <span class="math inline">\(\mathbf{Z}_t\)</span> (instead of <span class="math inline">\(\mathbf{d}_t\)</span>) as the matrix of known regressors/drivers that affect <span class="math inline">\(\mathbf{y}_t\)</span>, and <span class="math inline">\(\mathbf{x}_t\)</span> (instead of <span class="math inline">\(\mathbf{D}_t\)</span>) as the regression parameters. Therefore, we need to set <span class="math inline">\(\mathbf{Z}_t\)</span> equal to an <span class="math inline">\(n\)</span> <span class="math inline">\(\mathsf{x}\)</span> <span class="math inline">\(m\)</span> <span class="math inline">\(\mathsf{x}\)</span> <span class="math inline">\(T\)</span> array, where <span class="math inline">\(n\)</span> is the number of response variables (= 1; <span class="math inline">\(y_t\)</span> is univariate), <span class="math inline">\(m\)</span> is the number of regression parameters (= intercept + slope = 2), and <span class="math inline">\(T\)</span> is the length of the time series (= 42).</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## for observation eqn</span>
-Z =<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="kw">c</span>(<span class="dv">1</span>, m, TT))  <span class="co">## NxMxT; empty for now</span>
-Z[<span class="dv">1</span>, <span class="dv">1</span>, ] =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, TT)  <span class="co">## Nx1; 1&#39;s for intercept</span>
-Z[<span class="dv">1</span>, <span class="dv">2</span>, ] =<span class="st"> </span>CUI.z  <span class="co">## Nx1; regr variable</span>
-A =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>)  <span class="co">## 1x1; scalar = 0</span>
-R =<span class="st"> </span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>)  <span class="co">## 1x1; scalar = r</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## for observation eqn
+Z =<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="kw">c</span>(<span class="dv">1</span>,m,TT))   ## NxMxT; empty for now
+Z[<span class="dv">1</span>,<span class="dv">1</span>,] =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,TT)        ## Nx1; 1&#39;s for intercept
+Z[<span class="dv">1</span>,<span class="dv">2</span>,] =<span class="st"> </span>CUI.z            ## Nx1; regr variable
+A =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>)              ## 1x1; scalar = 0
+R =<span class="st"> </span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>)            ## 1x1; scalar = r</code></pre></div>
 <p>Lastly, we need to define our lists of initial starting values and model matrices/vectors.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## only need starting values for regr parameters</span>
-inits.list =<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow =</span> m))
-<span class="co">## list of model matrices &amp; vectors</span>
-mod.list =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## only need starting values for regr parameters
+inits.list =<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0=</span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow=</span>m))
+## list of model matrices &amp; vectors
+mod.list =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>B, <span class="dt">U=</span>U, <span class="dt">Q=</span>Q, <span class="dt">Z=</span>Z, <span class="dt">A=</span>A, <span class="dt">R=</span>R)</code></pre></div>
 <p>And now we can fit our DLM with MARSS.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## fit univariate DLM</span>
-dlm1 =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">inits =</span> inits.list, <span class="dt">model =</span> mod.list)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## fit univariate DLM
+dlm1 =<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">inits=</span>inits.list, <span class="dt">model=</span>mod.list)</code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 115 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -484,13 +464,12 @@ Initial states (x0) defined at t=0
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>Notice that the MARSS output does not list any estimates of the regression parameters themselves. Why not? Remember that in a DLM the matrix of states <span class="math inline">\((\mathbf{x})\)</span> contains the estimates of the regression parameters <span class="math inline">\((\boldsymbol{\theta})\)</span>. Therefore, we need to look in <code>dlm1$states</code> for the MLEs of the regression parameters, and in <code>dlm1$states.se</code> for their standard errors.</p>
-<p>Time series of the estimated intercept and slope are shown in Figure <a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#fig:plotdlm1">8.2</a>. It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (<code>Q.q1</code>). In fact, although the effect of April upwelling appears to be increasing over time, it doesn’t really become important as an explanatory variable until about 1990 when the approximate 95% confidence interval for the slope no longer overlaps zero.
-<!-- % plot regression parameters --></p>
+<p>Time series of the estimated intercept and slope are shown in Figure <a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#fig:plotdlm1">8.2</a>. It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (<code>Q.q1</code>). In fact, although the effect of April upwelling appears to be increasing over time, it doesn’t really become important as an explanatory variable until about 1990 when the approximate 95% confidence interval for the slope no longer overlaps zero. <!-- % plot regression parameters --></p>
 
 <div class="figure"><span id="fig:plotdlm1"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/plotdlm1-1.png" alt="Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the univariate DLM specified by Equations (8.5)–(8.7). Thin lines denote the mean \(\pm\) 2 standard deviations." width="576" />
+<img src="Applied_Time_Series_Analysis_files/figure-html/plotdlm1-1.png" alt="Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the univariate DLM specified by Equations (8.6)–(8.8). Thin lines denote the mean \(\pm\) 2 standard deviations." width="576" />
 <p class="caption">
-Figure 8.2: Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the univariate DLM specified by Equations <a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW1">(8.5)</a>–<a href="sec-dlm-example-of-a-univariate-dlm.html#eq:dlm-dlmSW3">(8.7)</a>. Thin lines denote the mean <span class="math inline">\(\pm\)</span> 2 standard deviations.
+Figure 8.2: Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the univariate DLM specified by Equations <a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW1">(8.6)</a>–<a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW3">(8.8)</a>. Thin lines denote the mean <span class="math inline">\(\pm\)</span> 2 standard deviations.
 </p>
 </div>
 </div>
@@ -499,7 +478,7 @@ Figure 8.2: Time series of estimated mean states (thick lines) for the intercept
           </div>
         </div>
       </div>
-<a href="sec-dlm-example-of-a-univariate-dlm.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-dlm-salmon-example.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="sec-dlm-forecasting-with-a-univariate-dlm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
@@ -550,7 +529,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
