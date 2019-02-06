@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>8.9 DLM forecast diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta property="og:title" content="8.9 DLM forecast diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta name="twitter:title" content="8.9 DLM forecast diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-
-<link rel="next" href="chap-basicmat.html">
+<link rel="prev" href="sec-dlm-forecasting-with-a-univariate-dlm.html">
+<link rel="next" href="sec-dlm-homework.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -426,23 +426,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Applied Time Series Analysis for Fisheries and Environmental Sciences</h1>
-<p class="author"><em>E. E. Holmes, M. D. Scheuerell, and E. J. Ward</em></p>
-<p class="date"><em>2019-02-05</em></p>
+<div id="sec-dlm-dlm-forecast-diagnostics" class="section level2">
+<h2><span class="header-section-number">8.9</span> DLM forecast diagnostics</h2>
+
+<p>In the literature on state-space models, the set of <span class="math inline">\(e_t\)</span> are commonly referred to as “innovations”. <code>MARSS()</code> calculates the innovations as part of the Kalman filter algorithm—they are stored as <code>Innov</code> in the list produced by the <code>MARSSkfss()</code> function.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## forecast errors</span>
+innov =<span class="st"> </span>kf.out<span class="op">$</span>Innov</code></pre>
+<p>Let’s see if our innovations meet the model assumptions. Beginning with (1), we can use a Q-Q plot to see whether the innovations are normally distributed with a mean of zero. We’ll use the <code>qqnorm()</code> function to plot the quantiles of the innovations on the <span class="math inline">\(y\)</span>-axis versus the theoretical quantiles from a Normal distribution on the <span class="math inline">\(x\)</span>-axis. If the 2 distributions are similar, the points should fall on the line defined by <span class="math inline">\(y = x\)</span>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## Q-Q plot of innovations</span>
+<span class="kw">qqnorm</span>(<span class="kw">t</span>(innov), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)
+<span class="co">## add y=x line for easier interpretation</span>
+<span class="kw">qqline</span>(<span class="kw">t</span>(innov))</code></pre>
+<!-- % diagnostics plot: QQ -->
+
+<div class="figure"><span id="fig:plotdlmQQ"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/plotdlmQQ-1.png" alt="Q-Q plot of the forecast errors (innovations) for the DLM specified in Equations (8.10)–(8.12)." width="384" />
+<p class="caption">
+Figure 8.5: Q-Q plot of the forecast errors (innovations) for the DLM specified in Equations <a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW1">(8.10)</a>–<a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW3">(8.12)</a>.
+</p>
 </div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>These are computer labs developed as part of a course we teach at the University of Washington on applied time series analysis for fisheries and environmental data. You can find our lectures on our course website . You can find our initial labs in the MARSS User Guide.</p>
-<p>The authors are research scientists at the Northwest Fisheries Science Center (NWFSC). This work was conducted as part of our jobs at the NWFSC, a research center for NOAA Fisheries which is a United States federal government agency.</p>
-<p>Links to more code and publications on MARSS applications can be found by following the links at our academic websites:</p>
-<ul>
-<li><a href="http://faculty.washington.edu/eeholmes" class="uri">http://faculty.washington.edu/eeholmes</a></li>
-<li><a href="http://faculty.washington.edu/scheuerl" class="uri">http://faculty.washington.edu/scheuerl</a></li>
-<li><a href="http://faculty.washington.edu/warde" class="uri">http://faculty.washington.edu/warde</a></li>
-</ul>
-<hr />
-<p>Holmes, E. E., M. D. Scheuerell, and E. J. Ward. Applied time series analysis for fisheries and environmental data. NOAA Fisheries, Northwest Fisheries Science Center, 2725 Montlake Blvd E., Seattle, WA 98112. Contacts <a href="mailto:eli.holmes@noaa.gov">eli.holmes@noaa.gov</a>, <a href="mailto:eric.ward@noaa.gov">eric.ward@noaa.gov</a>, and <a href="mailto:mark.scheuerell@noaa.gov">mark.scheuerell@noaa.gov</a></p>
+<p>The Q-Q plot (Figure <a href="sec-dlm-dlm-forecast-diagnostics.html#fig:plotdlmQQ">8.5</a>) indicates that the innovations appear to be more-or-less normally distributed (i.e., most points fall on the line). Furthermore, it looks like the mean of the innovations is about 0, but we should use a more reliable test than simple visual inspection. We can formally test whether the mean of the innovations is significantly different from 0 by using a one-sample <span class="math inline">\(t\)</span>-test. based on a null hypothesis of <span class="math inline">\(\,\text{E}(e_t)=0\)</span>. To do so, we will use the function <code>t.test()</code> and base our inference on a significance value of <span class="math inline">\(\alpha = 0.05\)</span>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## p-value for t-test of H0: E(innov) = 0</span>
+<span class="kw">t.test</span>(<span class="kw">t</span>(innov), <span class="dt">mu =</span> <span class="dv">0</span>)<span class="op">$</span>p.value</code></pre>
+<pre><code>[1] 0.4840901</code></pre>
+<p>The <span class="math inline">\(p\)</span>-value <span class="math inline">\(&gt;&gt;\)</span> 0.05 so we cannot reject the null hypothesis that <span class="math inline">\(\,\text{E}(e_t)=0\)</span>.</p>
+<p>Moving on to assumption (2), we can use the sample autocorrelation function (ACF) to examine whether the innovations covary with a time-lagged version of themselves. Using the <code>acf()</code> function, we can compute and plot the correlations of <span class="math inline">\(e_t\)</span> and <span class="math inline">\(e_{t-k}\)</span> for various values of <span class="math inline">\(k\)</span>. Assumption (2) will be met if none of the correlation coefficients exceed the 95% confidence intervals defined by <span class="math inline">\(\pm \, z_{0.975} / \sqrt{n}\)</span>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot ACF of innovations</span>
+<span class="kw">acf</span>(<span class="kw">t</span>(innov), <span class="dt">lag.max =</span> <span class="dv">10</span>)</code></pre>
+<!-- % diagnostics plot: ACF -->
+
+<div class="figure"><span id="fig:plotdlmACF"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/plotdlmACF-1.png" alt="Autocorrelation plot of the forecast errors (innovations) for the DLM specified in Equations (8.10)–(8.12). Horizontal blue lines define the upper and lower 95% confidence intervals." width="384" />
+<p class="caption">
+Figure 8.6: Autocorrelation plot of the forecast errors (innovations) for the DLM specified in Equations <a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW1">(8.10)</a>–<a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW3">(8.12)</a>. Horizontal blue lines define the upper and lower 95% confidence intervals.
+</p>
+</div>
+<p>The ACF plot (Figure <a href="sec-dlm-dlm-forecast-diagnostics.html#fig:plotdlmACF">8.6</a>) shows no significant autocorrelation in the innovations at lags 1–10, so it looks like both of our model assumptions have indeed been met.</p>
 
 </div>
             </section>
@@ -450,8 +469,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="chap-basicmat.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sec-dlm-forecasting-with-a-univariate-dlm.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-dlm-homework.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -481,7 +500,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/index.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/DLM.Rmd",
 "text": "Edit"
 },
 "history": {

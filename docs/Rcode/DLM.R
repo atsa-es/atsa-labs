@@ -93,7 +93,7 @@ eta = kf.out$xtt1
 ## ts of E(forecasts)
 fore.mean = vector()
 for(t in 1:TT) {
-  fore.mean[t] = Z[,,t] %*% eta[,t,drop=F]
+  fore.mean[t] = Z[,,t] %*% eta[,t,drop=FALSE]
 }
 
 ## ----univ.DLM.fore.Var, eval=TRUE----------------------------------------

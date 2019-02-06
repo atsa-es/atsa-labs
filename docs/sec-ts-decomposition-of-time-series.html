@@ -51,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -318,14 +344,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.6" data-path="sec-dlm-salmon-example.html"><a href="sec-dlm-salmon-example.html"><i class="fa fa-check"></i><b>8.6</b> Example: modeling salmon survival</a></li>
 <li class="chapter" data-level="8.7" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>8.7</b> Fitting a DLM with <code>MARSS()</code></a></li>
 <li class="chapter" data-level="8.8" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>8.8</b> Forecasting with a DLM</a><ul>
-<li class="chapter" data-level="8.8.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#parameter-distribution"><i class="fa fa-check"></i><b>8.8.1</b> Parameter distribution</a></li>
-<li class="chapter" data-level="8.8.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.8.2</b> Forecasting a DLM with MARSS</a></li>
-<li class="chapter" data-level="8.8.3" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>8.8.3</b> DLM forecast diagnostics</a></li>
+<li class="chapter" data-level="8.8.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#estimate-of-the-regression-parameters"><i class="fa fa-check"></i><b>8.8.1</b> Estimate of the regression parameters</a></li>
+<li class="chapter" data-level="8.8.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#predict-y_t"><i class="fa fa-check"></i><b>8.8.2</b> Predict <span class="math inline">\(y_t\)</span></a></li>
+<li class="chapter" data-level="8.8.3" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#computing-the-prediction"><i class="fa fa-check"></i><b>8.8.3</b> Computing the prediction</a></li>
+<li class="chapter" data-level="8.8.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#forecasting-salmon-survival"><i class="fa fa-check"></i><b>8.8.4</b> Forecasting salmon survival</a></li>
+<li class="chapter" data-level="8.8.5" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.8.5</b> Forecasting using MARSS</a></li>
 </ul></li>
-<li class="chapter" data-level="8.9" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>8.9</b> Homework discussion and data</a><ul>
-<li class="chapter" data-level="8.9.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>8.9.1</b> Spawner-recruit data</a></li>
+<li class="chapter" data-level="8.9" data-path="sec-dlm-dlm-forecast-diagnostics.html"><a href="sec-dlm-dlm-forecast-diagnostics.html"><i class="fa fa-check"></i><b>8.9</b> DLM forecast diagnostics</a></li>
+<li class="chapter" data-level="8.10" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>8.10</b> Homework discussion and data</a><ul>
+<li class="chapter" data-level="8.10.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>8.10.1</b> Spawner-recruit data</a></li>
 </ul></li>
-<li class="chapter" data-level="8.10" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>8.10</b> Problems</a></li>
+<li class="chapter" data-level="8.11" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>8.11</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sec-dfa.html"><a href="sec-dfa.html"><i class="fa fa-check"></i><b>9</b> Dynamic Factor Analysis</a><ul>
 <li class="chapter" data-level="" data-path="sec-dfa.html"><a href="sec-dfa.html#data-and-packages-4"><i class="fa fa-check"></i>Data and packages</a></li>
@@ -401,32 +430,32 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">4.3</span> Decomposition of time series</h2>
 <p>Plotting time series data is an important first step in analyzing their various components. Beyond that, however, we need a more formal means for identifying and removing characteristics such as a trend or seasonal variation. As discussed in lecture, the decomposition model reduces a time series into 3 components: trend, seasonal effects, and random errors. In turn, we aim to model the random errors as some form of stationary process.</p>
 <p>Let’s begin with a simple, additive decomposition model for a time series <span class="math inline">\(x_t\)</span></p>
-<span class="math display" id="eq:classDecomp">\[\begin{equation}
+<p><span class="math display" id="eq:classDecomp">\[\begin{equation}
 \tag{4.1}
 x_t = m_t + s_t + e_t,
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>where, at time <span class="math inline">\(t\)</span>, <span class="math inline">\(m_t\)</span> is the trend, <span class="math inline">\(s_t\)</span> is the seasonal effect, and <span class="math inline">\(e_t\)</span> is a random error that we generally assume to have zero-mean and to be correlated over time. Thus, by estimating and subtracting both <span class="math inline">\(\{m_t\}\)</span> and <span class="math inline">\(\{s_t\}\)</span> from <span class="math inline">\(\{x_t\}\)</span>, we hope to have a time series of stationary residuals <span class="math inline">\(\{e_t\}\)</span>.</p>
 <div id="sec-ts-estimating-trends" class="section level3">
 <h3><span class="header-section-number">4.3.1</span> Estimating trends</h3>
 <p>In lecture we discussed how linear filters are a common way to estimate trends in time series. One of the most common linear filters is the moving average, which for time lags from <span class="math inline">\(-a\)</span> to <span class="math inline">\(a\)</span> is defined as</p>
-<span class="math display" id="eq:linearFilter">\[\begin{equation}
+<p><span class="math display" id="eq:linearFilter">\[\begin{equation}
 \tag{4.2}
 \hat{m}_t = \sum_{k=-a}^{a} \left(\frac{1}{1+2a}\right) x_{t+k}.
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>This model works well for moving windows of odd-numbered lengths, but should be adjusted for even-numbered lengths by adding only <span class="math inline">\(\frac{1}{2}\)</span> of the 2 most extreme lags so that the filtered value at time <span class="math inline">\(t\)</span> lines up with the original observation at time <span class="math inline">\(t\)</span>. So, for example, in a case with monthly data such as the atmospheric CO<span class="math inline">\(_2\)</span> concentration where a 12-point moving average would be an obvious choice, the linear filter would be</p>
-<span class="math display" id="eq:linearFilterEx">\[\begin{equation}
+<p><span class="math display" id="eq:linearFilterEx">\[\begin{equation}
 \tag{4.3}
 \hat{m}_t = \frac{\frac{1}{2}x_{t-6} + x_{t-5} + \dots + x_{t-1} + x_t + x_{t+1} + \dots + x_{t+5} + \frac{1}{2}x_{t+6}}{12}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>It is important to note here that our time series of the estimated trend <span class="math inline">\(\{\hat{m}_t\}\)</span> is actually shorter than the observed time series by <span class="math inline">\(2a\)</span> units.</p>
 <p>Conveniently, R has the built-in function <code>filter()</code> for estimating moving-average (and other) linear filters. In addition to specifying the time series to be filtered, we need to pass in the filter weights (and 2 other arguments we won’t worry about here–type <code>?filter</code> to get more information). The easiest way to create the filter is with the <code>rep()</code> function:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## weights for moving avg
-fltr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,<span class="kw">rep</span>(<span class="dv">1</span>,<span class="dt">times=</span><span class="dv">11</span>),<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">12</span></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## weights for moving avg</span>
+fltr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dt">times =</span> <span class="dv">11</span>), <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">12</span></code></pre>
 <p>Now let’s get our estimate of the trend <span class="math inline">\(\{\hat{m}\}\)</span> with <code>filter()</code>} and plot it:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## estimate of trend
-co2.trend &lt;-<span class="st"> </span><span class="kw">filter</span>(co2, <span class="dt">filter=</span>fltr, <span class="dt">method=</span><span class="st">&quot;convo&quot;</span>, <span class="dt">sides=</span><span class="dv">2</span>)
-## plot the trend
-<span class="kw">plot.ts</span>(co2.trend, <span class="dt">ylab=</span><span class="st">&quot;Trend&quot;</span>, <span class="dt">cex=</span><span class="dv">1</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## estimate of trend</span>
+co2.trend &lt;-<span class="st"> </span><span class="kw">filter</span>(co2, <span class="dt">filter =</span> fltr, <span class="dt">method =</span> <span class="st">&quot;convo&quot;</span>, <span class="dt">sides =</span> <span class="dv">2</span>)
+<span class="co">## plot the trend</span>
+<span class="kw">plot.ts</span>(co2.trend, <span class="dt">ylab =</span> <span class="st">&quot;Trend&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</code></pre>
 <p>The trend is a more-or-less smoothly increasing function over time, the average slope of which does indeed appear to be increasing over time as well (Figure <a href="sec-ts-decomposition-of-time-series.html#fig:ts-plotTrendTSb">4.3</a>).</p>
 
 <div class="figure"><span id="fig:ts-plotTrendTSb"></span>
@@ -439,16 +468,16 @@ Figure 4.3: Time series of the estimated trend <span class="math inline">\(\{\ha
 <div id="sec-ts-estimating-seasonal-effects" class="section level3">
 <h3><span class="header-section-number">4.3.2</span> Estimating seasonal effects</h3>
 <p>Once we have an estimate of the trend for time <span class="math inline">\(t\)</span> (<span class="math inline">\(\hat{m}_t\)</span>) we can easily obtain an estimate of the seasonal effect at time <span class="math inline">\(t\)</span> (<span class="math inline">\(\hat{s}_t\)</span>) by subtraction</p>
-<span class="math display" id="eq:seasEst">\[\begin{equation}
+<p><span class="math display" id="eq:seasEst">\[\begin{equation}
 \tag{4.4}
 \hat{s}_t = x_t - \hat{m}_t,
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>which is really easy to do in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## seasonal effect over time
-co2.1T &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2.trend</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## seasonal effect over time</span>
+co2<span class="fl">.1</span>T &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2.trend</code></pre>
 <p>This estimate of the seasonal effect for each time <span class="math inline">\(t\)</span> also contains the random error <span class="math inline">\(e_t\)</span>, however, which can be seen by plotting the time series and careful comparison of Equations <a href="sec-ts-decomposition-of-time-series.html#eq:classDecomp">(4.1)</a> and <a href="sec-ts-decomposition-of-time-series.html#eq:seasEst">(4.4)</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plot the monthly seasonal effects
-<span class="kw">plot.ts</span>(co2.1T, <span class="dt">ylab=</span><span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Month&quot;</span>, <span class="dt">cex=</span><span class="dv">1</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the monthly seasonal effects</span>
+<span class="kw">plot.ts</span>(co2<span class="fl">.1</span>T, <span class="dt">ylab =</span> <span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotSeasTSb"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotSeasTSb-1.png" alt="Time series of seasonal effects plus random errors for the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i, measured monthly from March 1958 to present." width="672" />
@@ -457,24 +486,24 @@ Figure 4.4: Time series of seasonal effects plus random errors for the atmospher
 </p>
 </div>
 <p>We can obtain the overall seasonal effect by averaging the estimates of <span class="math inline">\(\{\hat{s}_t\}\)</span> for each month and repeating this sequence over all years.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## length of ts
-ll &lt;-<span class="st"> </span><span class="kw">length</span>(co2.1T)
-## frequency (ie, 12)
-ff &lt;-<span class="st"> </span><span class="kw">frequency</span>(co2.1T)
-## number of periods (years); %/% is integer division
-periods &lt;-<span class="st"> </span>ll <span class="op">%/%</span><span class="st"> </span>ff
-## index of cumulative month
-index &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,ll,<span class="dt">by=</span>ff) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
-## get mean by month
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## length of ts</span>
+ll &lt;-<span class="st"> </span><span class="kw">length</span>(co2<span class="fl">.1</span>T)
+<span class="co">## frequency (ie, 12)</span>
+ff &lt;-<span class="st"> </span><span class="kw">frequency</span>(co2<span class="fl">.1</span>T)
+<span class="co">## number of periods (years); %/% is integer division</span>
+periods &lt;-<span class="st"> </span>ll<span class="op">%/%</span>ff
+<span class="co">## index of cumulative month</span>
+index &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, ll, <span class="dt">by =</span> ff) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
+<span class="co">## get mean by month</span>
 mm &lt;-<span class="st"> </span><span class="kw">numeric</span>(ff)
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ff) {
-  mm[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(co2.1T[index<span class="op">+</span>i], <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ff) {
+    mm[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(co2<span class="fl">.1</span>T[index <span class="op">+</span><span class="st"> </span>i], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
 }
-## subtract mean to make overall mean=0
-mm &lt;-<span class="st"> </span>mm <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(mm)</code></pre></div>
+<span class="co">## subtract mean to make overall mean=0</span>
+mm &lt;-<span class="st"> </span>mm <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(mm)</code></pre>
 <p>Before we create the entire time series of seasonal effects, let’s plot them for each month to see what is happening within a year:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plot the monthly seasonal effects
-<span class="kw">plot.ts</span>(mm, <span class="dt">ylab=</span><span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Month&quot;</span>, <span class="dt">cex=</span><span class="dv">1</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the monthly seasonal effects</span>
+<span class="kw">plot.ts</span>(mm, <span class="dt">ylab =</span> <span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</code></pre>
 <p>It looks like, on average, that the CO<span class="math inline">\(_2\)</span> concentration is highest in spring (March) and lowest in summer (August) (Figure <a href="sec-ts-decomposition-of-time-series.html#fig:ts-plotSeasMean">4.5</a>). (<em>Aside</em>: Do you know why this is?)</p>
 
 <div class="figure"><span id="fig:ts-plotSeasMean"></span>
@@ -484,24 +513,23 @@ Figure 4.5: Estimated monthly seasonal effects for the atmospheric CO<span class
 </p>
 </div>
 <p>Finally, let’s create the entire time series of seasonal effects <span class="math inline">\(\{\hat{s}_t\}\)</span>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## create ts object for season
-co2.seas &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">rep</span>(mm, periods<span class="op">+</span><span class="dv">1</span>)[<span class="kw">seq</span>(ll)],
-               <span class="dt">start=</span><span class="kw">start</span>(co2.1T), 
-               <span class="dt">frequency=</span>ff)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## create ts object for season</span>
+co2.seas &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">rep</span>(mm, periods <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)[<span class="kw">seq</span>(ll)], <span class="dt">start =</span> <span class="kw">start</span>(co2<span class="fl">.1</span>T), 
+    <span class="dt">frequency =</span> ff)</code></pre>
 </div>
 <div id="sec-ts-completing-the-model" class="section level3">
 <h3><span class="header-section-number">4.3.3</span> Completing the model</h3>
 <p>The last step in completing our full decomposition model is obtaining the random errors <span class="math inline">\(\{\hat{e}_t\}\)</span>, which we can get via simple subtraction</p>
-<span class="math display" id="eq:errorEst">\[\begin{equation}
+<p><span class="math display" id="eq:errorEst">\[\begin{equation}
 \tag{4.5}
 \hat{e}_t = x_t - \hat{m}_t - \hat{s}_t.
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>Again, this is really easy in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## random errors over time
-co2.err &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2.trend <span class="op">-</span><span class="st"> </span>co2.seas</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## random errors over time</span>
+co2.err &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2.trend <span class="op">-</span><span class="st"> </span>co2.seas</code></pre>
 <p>Now that we have all 3 of our model components, let’s plot them together with the observed data <span class="math inline">\(\{x_t\}\)</span>. The results are shown in Figure <a href="sec-ts-decomposition-of-time-series.html#fig:ts-plotTrSeas">4.6</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plot the obs ts, trend &amp; seasonal effect
-<span class="kw">plot</span>(<span class="kw">cbind</span>(co2,co2.trend,co2.seas,co2.err),<span class="dt">main=</span><span class="st">&quot;&quot;</span>,<span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the obs ts, trend &amp; seasonal effect</span>
+<span class="kw">plot</span>(<span class="kw">cbind</span>(co2, co2.trend, co2.seas, co2.err), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotTrSeas"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotTrSeas-1.png" alt="Time series of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) along with the estimated trend, seasonal effects, and random errors." width="672" />
@@ -513,20 +541,20 @@ Figure 4.6: Time series of the observed atmospheric CO<span class="math inline">
 <div id="sec-ts-using-verbdecompose-for-decomposition" class="section level3">
 <h3><span class="header-section-number">4.3.4</span> Using <code>decompose()</code> for decomposition</h3>
 <p>Now that we have seen how to estimate and plot the various components of a classical decomposition model in a piecewise manner, let’s see how to do this in one step in R with the function <code>decompose()</code>, which accepts a <strong>ts</strong> object as input and returns an object of class <strong>decomposed.ts</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## decomposition of CO2 data
-co2.decomp &lt;-<span class="st"> </span><span class="kw">decompose</span>(co2)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## decomposition of CO2 data</span>
+co2.decomp &lt;-<span class="st"> </span><span class="kw">decompose</span>(co2)</code></pre>
 <p><code>co2.decomp</code> is a list with the following elements, which should be familiar by now:</p>
 <ul>
-<li><code>x</code> the observed time series <span class="math inline">\(\{x_t\}\)</span></li>
-<li><code>seasonal</code> time series of estimated seasonal component <span class="math inline">\(\{\hat{s}_t\}\)</span></li>
-<li><code>figure</code> mean seasonal effect (<code>length(figure) == frequency(x)</code>)</li>
-<li><code>trend</code> time series of estimated trend <span class="math inline">\(\{\hat{m}_t\}\)</span></li>
-<li><code>random</code> time series of random errors <span class="math inline">\(\{\hat{e}_t\}\)</span></li>
-<li><code>type</code> type of error (<code>&quot;additive&quot;</code> or <code>&quot;multiplicative&quot;</code>)</li>
+<li><pre><code>```x```   the observed time series $\{x_t\}$</code></pre></li>
+<li><pre><code>```seasonal```   time series of estimated seasonal component $\{\hat{s}_t\}$</code></pre></li>
+<li><pre><code>```figure```   mean seasonal effect (```length(figure) == frequency(x)```)</code></pre></li>
+<li><pre><code>```trend```   time series of estimated trend $\{\hat{m}_t\}$</code></pre></li>
+<li><pre><code>```random```   time series of random errors $\{\hat{e}_t\}$</code></pre></li>
+<li><pre><code>```type```   type of error (```&quot;additive&quot;``` or ```&quot;multiplicative&quot;```)</code></pre></li>
 </ul>
 <p>We can easily make plots of the output and compare them to those in Figure <a href="sec-ts-decomposition-of-time-series.html#fig:ts-plotTrSeas">4.6</a>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plot the obs ts, trend &amp; seasonal effect
-<span class="kw">plot</span>(co2.decomp, <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the obs ts, trend &amp; seasonal effect</span>
+<span class="kw">plot</span>(co2.decomp, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotDecompB"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotDecompB-1.png" alt="Time series of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) along with the estimated trend, seasonal effects, and random errors obtained with the function decompose()." width="672" />
@@ -594,7 +622,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

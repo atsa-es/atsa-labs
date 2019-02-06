@@ -51,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -318,14 +344,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.6" data-path="sec-dlm-salmon-example.html"><a href="sec-dlm-salmon-example.html"><i class="fa fa-check"></i><b>8.6</b> Example: modeling salmon survival</a></li>
 <li class="chapter" data-level="8.7" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>8.7</b> Fitting a DLM with <code>MARSS()</code></a></li>
 <li class="chapter" data-level="8.8" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>8.8</b> Forecasting with a DLM</a><ul>
-<li class="chapter" data-level="8.8.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#parameter-distribution"><i class="fa fa-check"></i><b>8.8.1</b> Parameter distribution</a></li>
-<li class="chapter" data-level="8.8.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.8.2</b> Forecasting a DLM with MARSS</a></li>
-<li class="chapter" data-level="8.8.3" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-dlm-forecast-diagnostics"><i class="fa fa-check"></i><b>8.8.3</b> DLM forecast diagnostics</a></li>
+<li class="chapter" data-level="8.8.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#estimate-of-the-regression-parameters"><i class="fa fa-check"></i><b>8.8.1</b> Estimate of the regression parameters</a></li>
+<li class="chapter" data-level="8.8.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#predict-y_t"><i class="fa fa-check"></i><b>8.8.2</b> Predict <span class="math inline">\(y_t\)</span></a></li>
+<li class="chapter" data-level="8.8.3" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#computing-the-prediction"><i class="fa fa-check"></i><b>8.8.3</b> Computing the prediction</a></li>
+<li class="chapter" data-level="8.8.4" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#forecasting-salmon-survival"><i class="fa fa-check"></i><b>8.8.4</b> Forecasting salmon survival</a></li>
+<li class="chapter" data-level="8.8.5" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>8.8.5</b> Forecasting using MARSS</a></li>
 </ul></li>
-<li class="chapter" data-level="8.9" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>8.9</b> Homework discussion and data</a><ul>
-<li class="chapter" data-level="8.9.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>8.9.1</b> Spawner-recruit data</a></li>
+<li class="chapter" data-level="8.9" data-path="sec-dlm-dlm-forecast-diagnostics.html"><a href="sec-dlm-dlm-forecast-diagnostics.html"><i class="fa fa-check"></i><b>8.9</b> DLM forecast diagnostics</a></li>
+<li class="chapter" data-level="8.10" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>8.10</b> Homework discussion and data</a><ul>
+<li class="chapter" data-level="8.10.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>8.10.1</b> Spawner-recruit data</a></li>
 </ul></li>
-<li class="chapter" data-level="8.10" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>8.10</b> Problems</a></li>
+<li class="chapter" data-level="8.11" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>8.11</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sec-dfa.html"><a href="sec-dfa.html"><i class="fa fa-check"></i><b>9</b> Dynamic Factor Analysis</a><ul>
 <li class="chapter" data-level="" data-path="sec-dfa.html"><a href="sec-dfa.html#data-and-packages-4"><i class="fa fa-check"></i>Data and packages</a></li>
@@ -406,12 +435,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The first, <code>frequency</code>, is a bit of a misnomer because it does not really refer to the number of cycles per unit time, but rather the number of observations/samples per cycle. So, for example, if the data were collected each hour of a day then <code>frequency=24</code>.</p>
 <p>The second, <code>start</code>, specifies the first sample in terms of (<span class="math inline">\(day\)</span>, <span class="math inline">\(hour\)</span>), (<span class="math inline">\(year\)</span>, <span class="math inline">\(month\)</span>), etc. So, for example, if the data were collected monthly beginning in November of 1969, then <code>frequency=12</code> and <code>start=c(1969,11)</code>. If the data were collected annually, then you simply specify <code>start</code> as a scalar (<em>e.g.</em>, <code>start=1991</code>) and omit <code>frequency</code> (<em>i.e.</em>, R will set <code>frequency=1</code> by default).</p>
 <p>The Mauna Loa time series is collected monthly and begins in March of 1958, which we can get from the data themselves, and then pass to <code>ts()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## create a time series (ts) object from the CO2 data
-co2 &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data=</span>CO2<span class="op">$</span>ppm, <span class="dt">frequency=</span><span class="dv">12</span>,
-          <span class="dt">start=</span><span class="kw">c</span>(CO2[<span class="dv">1</span>,<span class="st">&quot;year&quot;</span>],CO2[<span class="dv">1</span>,<span class="st">&quot;month&quot;</span>]))</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## create a time series (ts) object from the CO2 data</span>
+co2 &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> CO2<span class="op">$</span>ppm, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(CO2[<span class="dv">1</span>, <span class="st">&quot;year&quot;</span>], 
+    CO2[<span class="dv">1</span>, <span class="st">&quot;month&quot;</span>]))</code></pre>
 <p>Now let’s plot the data using <code>plot.ts()</code>, which is designed specifically for <strong>ts</strong> objects like the one we just created above. It’s nice because we don’t need to specify any <span class="math inline">\(x\)</span>-values as they are taken directly from the <strong>ts</strong> object.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plot the ts
-<span class="kw">plot.ts</span>(co2, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>],<span class="st">&quot; (ppm)&quot;</span>)))</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the ts</span>
+<span class="kw">plot.ts</span>(co2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>], <span class="st">&quot; (ppm)&quot;</span>)))</code></pre>
 
 <div class="figure"><span id="fig:ts-plotdata1"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotdata1-1.png" alt="Time series of the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i measured monthly from March 1958 to present." width="672" />
@@ -424,22 +453,23 @@ Figure 4.1: Time series of the atmospheric CO<span class="math inline">\(_2\)</s
 <div id="sec-ts-combining-and-plotting-multiple-textbfts-objects" class="section level3">
 <h3><span class="header-section-number">4.2.2</span> Combining and plotting multiple <strong>ts</strong> objects</h3>
 <p>Before we examine the CO<span class="math inline">\(_2\)</span> data further, however, let’s see a quick example of how you can combine and plot multiple time series together. We’ll use the <a href="sec-ts-data.html#sec-ts-data">data</a> on monthly mean temperature anomolies for the Northern Hemisphere (<code>Temp</code>). First convert <code>Temp</code> to a <code>ts</code> object.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data=</span>Temp<span class="op">$</span>Value, <span class="dt">frequency=</span><span class="dv">12</span>, <span class="dt">start=</span><span class="kw">c</span>(<span class="dv">1880</span>,<span class="dv">1</span>))</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">temp.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> Temp<span class="op">$</span>Value, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1880</span>, 
+    <span class="dv">1</span>))</code></pre>
 <p>Before we can plot the two time series together, however, we need to line up their time indices because the temperature data start in January of 1880, but the CO<span class="math inline">\(_2\)</span> data start in March of 1958. Fortunately, the <code>ts.intersect()</code> function makes this really easy once the data have been transformed to <strong>ts</strong> objects by trimming the data to a common time frame. Also, <code>ts.union()</code> works in a similar fashion, but it pads one or both series with the appropriate number of NA’s. Let’s try both.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## intersection (only overlapping times)
-datI &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(co2,temp.ts)
-## dimensions of common-time data
-<span class="kw">dim</span>(datI)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## intersection (only overlapping times)</span>
+datI &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(co2, temp.ts)
+<span class="co">## dimensions of common-time data</span>
+<span class="kw">dim</span>(datI)</code></pre>
 <pre><code>[1] 682   2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## union (all times)
-datU &lt;-<span class="st"> </span><span class="kw">ts.union</span>(co2,temp.ts)
-## dimensions of all-time data
-<span class="kw">dim</span>(datU)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## union (all times)</span>
+datU &lt;-<span class="st"> </span><span class="kw">ts.union</span>(co2, temp.ts)
+<span class="co">## dimensions of all-time data</span>
+<span class="kw">dim</span>(datU)</code></pre>
 <pre><code>[1] 1647    2</code></pre>
 <p>As you can see, the intersection of the two data sets is much smaller than the union. If you compare them, you will see that the first 938 rows of <code>datU</code> contains <code>NA</code> in the <code>co2</code> column.</p>
 <p>It turns out that the regular <code>plot()</code> function in R is smart enough to recognize a <strong>ts</strong> object and use the information contained therein appropriately. Here’s how to plot the intersection of the two time series together with the y-axes on alternate sides (results are shown in Figure <a href="sec-ts-time-series-plots.html#fig:ts-plotdata2">4.2</a>):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plot the ts
-<span class="kw">plot</span>(datI, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">## plot the ts</span>
+<span class="kw">plot</span>(datI, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</code></pre>
 
 <div class="figure"><span id="fig:ts-plotdata2"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plotdata2-1.png" alt="Time series of the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) and the mean temperature index for the Northern Hemisphere (bottom) measured monthly from March 1958 to present." width="672" />
@@ -505,7 +535,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

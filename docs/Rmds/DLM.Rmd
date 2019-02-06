@@ -358,9 +358,9 @@ At $t+2$, we are in quarter 3 and $\gamma_3$ will be in row 3.
 Let's see an  example of a DLM used to analyze real data from the literature. @ScheuerellWilliams2005 used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell \& Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon ("smolts") entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year $t$,
 \begin{equation}
 (\#eq:dlm-dlmSW1)
-survival_t = \alpha_t + \beta_t F_t + v_t \text{ with } v_{t}\sim\,\text{N}(0,r),
+survival_t = \alpha_t + \beta_t f_t + v_t \text{ with } v_{t}\sim\,\text{N}(0,r),
 \end{equation}
-and $F_t$ is the coastal upwelling index (cubic meters of seawater per second per 100 m of coastline) for the month of April in year $t$. 
+and $f_t$ is the coastal upwelling index (cubic meters of seawater per second per 100 m of coastline) for the month of April in year $t$. 
 
 Both the intercept and slope are time varying, so
 
@@ -369,22 +369,22 @@ Both the intercept and slope are time varying, so
 \alpha_t &= \alpha_{t-1} + w_{\alpha,t} \text{ with } w_{\alpha,t} \sim \,\text{N}(0,q_{\alpha})\\
 \beta_t &= \beta_{t-1} + w_{\beta,t} \text{ with } w_{\beta,t} \sim \,\text{N}(0,q_{\beta}).
 \end{align}
-If we define $\boldsymbol{\theta}_t = \begin{bmatrix}\alpha \\ \beta\end{bmatrix}_t$, $\mathbf{G}_t = \mathbf{I}$, $\mathbf{w}_t = \begin{bmatrix} w_\alpha \\ w_\beta\end{bmatrix}_t$, and $\mathbf{Q} = \begin{bmatrix}q_\alpha& 0 \\ 0&q_\beta\end{bmatrix}$, we get Equation \@ref(eq:dlm-dlm2). If we define $y_t = survival_t$ and $\mathbf{F}_t = \begin{bmatrix}1 \\ F_t\end{bmatrix}$, we can write out the full DLM as a state-space model with the following form:
+If we define $\boldsymbol{\theta}_t = \begin{bmatrix}\alpha \\ \beta\end{bmatrix}_t$, $\mathbf{G}_t = \mathbf{I}$, $\mathbf{w}_t = \begin{bmatrix} w_\alpha \\ w_\beta\end{bmatrix}_t$, and $\mathbf{Q} = \begin{bmatrix}q_\alpha& 0 \\ 0&q_\beta\end{bmatrix}$, we get Equation \@ref(eq:dlm-dlm2). If we define $y_t = survival_t$ and $\mathbf{F}_t = \begin{bmatrix}1 \\ f_t\end{bmatrix}$, we can write out the full DLM as a state-space model with the following form:
 \begin{equation}
 (\#eq:dlm-dlmSW3)
-\boldsymbol{\theta}_t = \mathbf{G}_t\boldsymbol{\theta}_{t-1} + \mathbf{w}_t \text{ with } \mathbf{w}_t \sim \,\text{MVN}(\mathbf{0},\mathbf{Q})\\
 y_t = \mathbf{F}_t^{\top}\boldsymbol{\theta}_t + v_t \text{ with } v_t\sim\,\text{N}(0,r)\\
+\boldsymbol{\theta}_t = \mathbf{G}_t\boldsymbol{\theta}_{t-1} + \mathbf{w}_t \text{ with } \mathbf{w}_t \sim \,\text{MVN}(\mathbf{0},\mathbf{Q})\\
 \boldsymbol{\theta}_0 = \boldsymbol{\pi}_0.
 \end{equation}
 
 Equation \@ref(eq:dlm-dlmSW3) is equivalent to our standard MARSS model: 
 \begin{equation}
 (\#eq:dlm-MARSSdlm)
-\mathbf{x}_t = \mathbf{B}_t\mathbf{x}_{t-1} + \mathbf{u}_t + \mathbf{C}_t\mathbf{c}_t + \mathbf{w}_t \text{ with } \mathbf{w}_t \sim \,\text{MVN}(0,\mathbf{Q}_t)\\
-\mathbf{y}_t = \mathbf{Z}_t\mathbf{x}_t + \mathbf{a}_t + \mathbf{D}_t\mathbf{d}_t + \mathbf{v}_t \text{ with } \mathbf{v}_t \sim \,\text{MVN}(0,\mathbf{R}_t)\\
+\mathbf{y}_t = \mathbf{Z}_t\mathbf{x}_t + \mathbf{a} + \mathbf{v}_t \text{ with } \mathbf{v}_t \sim \,\text{MVN}(0,\mathbf{R}_t)\\
+\mathbf{x}_t = \mathbf{B}_t\mathbf{x}_{t-1} + \mathbf{u} +  \mathbf{w}_t \text{ with } \mathbf{w}_t \sim \,\text{MVN}(0,\mathbf{Q}_t)\\
 \mathbf{x}_0 = \boldsymbol{\pi}
 \end{equation}
-where $\mathbf{x}_t = \boldsymbol{\theta}_t$, $\mathbf{B}_t = \mathbf{G}_t$, $\mathbf{u}_t = \mathbf{C}_t = \mathbf{c}_t = \mathbf{0}$, $\mathbf{y}_t = y_t$ (i.e., $\mathbf{y}_t$ is 1 $\mathsf{x}$ 1), $\mathbf{Z}_t = \mathbf{F}_t^{\top}$, $\mathbf{a}_t = \mathbf{D}_t = \mathbf{d}_t = \mathbf{0}$, and $\mathbf{R}_t = r$ (i.e., $\mathbf{R}_t$ is 1 $\mathsf{x}$ 1).
+where $\mathbf{x}_t = \boldsymbol{\theta}_t$, $\mathbf{B}_t = \mathbf{G}_t$, $\mathbf{y}_t = y_t$ (i.e., $\mathbf{y}_t$ is 1 $\times$ 1), $\mathbf{Z}_t = \mathbf{F}_t^{\top}$, $\mathbf{a} = \mathbf{u} = \mathbf{0}$, and $\mathbf{R}_t = r$ (i.e., $\mathbf{R}_t$ is 1 $\times$ 1).
 
 
 ## Fitting a DLM with `MARSS()` {#sec-dlm-fitting-a-univariate-dlm-with-marss}
@@ -483,70 +483,86 @@ mtext("Year of ocean entry", 1, line=3)
  
 ## Forecasting with a DLM {#sec-dlm-forecasting-with-a-univariate-dlm}
 
-Forecasting from a DLM involves four general steps:
+Forecasting from a DLM involves two steps:
 
-1. Get estimate of the $t+1$ parameter distribution from data up to time $t$
+1. Get an estimate of the regression parameters at time $t$ from data up to time $t-1$. These are also called the one-step ahead forecast (or prediction) of the regression parameters.
 
-2. Make a prediction for $t+1$ based on covariates at time $t+1$ and the estimate of the $t+1$ parameters
+2. Make a prediction of $y$ at time $t$ based on covariates at time $t$ and the estimate of the regression parameters at time $t$ (step 1). This is also called the one-step ahead forecast (or prediction) of the observation.
 
-3. Get observation for $t+1$
+### Estimate of the regression parameters
 
-4. Update parameters and repeat
-
-### Parameter distribution conditioned on $t$
-
-For step 1, we want to compute the distribution of the parameters at time $t+1$ conditioned on the data up to time $t$.  Let's start by defining the distribution of  $\boldsymbol{\theta}_t$ conditioned on $y_{1:t}$ as.
-
+For step 1, we want to compute the distribution of the regression parameters at time $t$ conditioned on the data up to time $t-1$, also known as the one-step ahead forecasts of the regression parameters. Let's denote $\boldsymbol{\theta}_{t-1}$ conditioned on $y_{1:t-1}$ as $\boldsymbol{\theta}_{t-1|t-1}$ and denote $\boldsymbol{\theta}_{t}$ conditioned on $y_{1:t-1}$ as $\boldsymbol{\theta}_{t|t-1}$.  We will start by defining the distribution of  $\boldsymbol{\theta}_{t|t}$ as follows
 \begin{equation}
 (\#eq:dlm-distthetatt)
-\boldsymbol{\theta}_t | y_{1:t} \sim \text{MVN}(\boldsymbol{\pi}_t, \end{equation}
-where $\boldsymbol{\pi}_t = \text{E}(\boldsymbol{\theta}_t)$ and $\mathbf{\Lambda}_t = \text{Var}(\boldsymbol{\theta}_t)$.
-
-Now we can compute the distribution of  $\boldsymbol{\theta}_{t+1}$ conditioned on $y_{1:t}$ using the process equation for $\boldsymbol{\theta}$:
+\boldsymbol{\theta}_{t|t} \sim \text{MVN}(\boldsymbol{\pi}_t,\boldsymbol{\Lambda}_t) \end{equation}
+where $\boldsymbol{\pi}_t = \text{E}(\boldsymbol{\theta}_{t|t})$ and $\mathbf{\Lambda}_t = \text{Var}(\boldsymbol{\theta}_{t|t})$.
+Now we can compute the distribution of  $\boldsymbol{\theta}_{t}$ conditioned on $y_{1:t-1}$ using the process equation for $\boldsymbol{\theta}$:
 \begin{equation}
-\boldsymbol{\theta}_{t+1} | y_{1:t} = \mathbf{G}_t \boldsymbol{\theta}_t | y_{1:t} + \mathbf{w}_t ~ \text{with} ~ \mathbf{w}_t \sim \text{MVN}(\mathbf{0}, \mathbf{Q}) \\
+\boldsymbol{\theta}_{t} = \mathbf{G}_t \boldsymbol{\theta}_{t-1} + \mathbf{w}_t ~ \text{with} ~ \mathbf{w}_t \sim \text{MVN}(\mathbf{0}, \mathbf{Q}) \\
 \end{equation}
-The expected value of $\boldsymbol{\theta}_{t+1}|y_{1:t}$ is
+The expected value of $\boldsymbol{\theta}_{t|t-1}$ is thus
 \begin{equation}
-\text{E}(\boldsymbol{\theta}_{t+1}|y_{1:t}) = \mathbf{G}_t \boldsymbol{\theta}_t|y_{1:t} = \mathbf{G}_t \boldsymbol{\pi}_t
+\text{E}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{G}_t \text{E}(\boldsymbol{\theta}_{t-1|t-1}) = \mathbf{G}_t \boldsymbol{\pi}_{t-1}
 \end{equation}
-The variance of $\boldsymbol{\theta}_{t+1}|y_{1:t}$ is
+The variance of $\boldsymbol{\theta}_{t|t-1}$ is
 \begin{equation}
-\text{Var}(\boldsymbol{\theta}_{t+1}|y_{1:t}) = \mathbf{G}_t \text{Var}(\boldsymbol{\theta}_{t}|y_{1:t}) \mathbf{G}_t^{\top} + \mathbf{Q} = \mathbf{G}_t \mathbf{\Lambda}_t \mathbf{G}_t^{\top} + \mathbf{Q}
+\text{Var}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{G}_t \text{Var}(\boldsymbol{\theta}_{t-1|t-1}) \mathbf{G}_t^{\top} + \mathbf{Q} = \mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q}
 \end{equation}
-Thus the distribution of $\boldsymbol{\theta}_{t+1}$ conditioned on $y_{1:t}$ is 
+Thus the distribution of $\boldsymbol{\theta}_{t}$ conditioned on $y_{1:t-1}$ is 
 \begin{equation}
-\boldsymbol{\theta}_{t+1}|y_{1:t} \sim \text{MVN}(\mathbf{G}_t \boldsymbol{\pi}_t, \mathbf{G}_t \mathbf{\Lambda}_t \mathbf{G}_t^{\top} + \mathbf{Q})
+(\#eq:dlm-distthetatplus1-t)
+\text{E}(\boldsymbol{\theta}_{t|t-1}) \sim \text{MVN}(\mathbf{G}_t \boldsymbol{\pi}_{t-1}, \mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q})
 \end{equation}
 
-### Make a prediction for $t+1$
+### Predict $y_t$
 
+For step 2, we make the prediction of $y_{t}$ given the covariates at time $t$ and the estimate of the regression parameters at time $t$. This is called the one-step ahead prediction for the observation at time $t$.  We will denote the prediction of $y$ as $\hat{y}$ and we want to compute its distribution (mean and variance).   We do this using the equation for $y_t$ but substituting the expected value of $\boldsymbol{\theta}_{t|t-1}$ for $\boldsymbol{\theta}_t$.
 
-@ScheuerellWilliams2005 were interested in how well upwelling could be used to actually \textit{forecast} expected survival of salmon, so let's look at how well our model does in that context. To do so, we need the predictive distributions for the regression parameters and observation.
-
-Beginning with our definition for the distribution of the parameters at time $t=0$, $\boldsymbol{\theta}_0 \sim \,\text{MVN}(\boldsymbol{\pi}_0,\boldsymbol{\Lambda}_0)$ in Equation \@ref(eq:dlm-dlmSW3), we write
 \begin{equation}
-(\#eq:dlm-dlmFore1)
-\boldsymbol{\theta}_{t-1}|y_{1:t-1} \sim \,\text{MVN}(\boldsymbol{\pi}_{t-1},\boldsymbol{\Lambda}_{t-1})
+(\#eq:dlm-predict-y-tplus1)
+\hat{y}_{t|t-1} = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) + e_{t} ~ \text{with} ~ e_{t} \sim \text{N}(0, r)  \\
 \end{equation}
-to indicate the distribution of $\boldsymbol{\theta}$ at time $t-1$ conditioned on the observed data through time $t-1$ (i.e., $y_{1:t-1}$). Then, we can write the one-step ahead predictive distribution for $\boldsymbol{\theta}_t$ given $y_{1:t-1}$ as
+Our prediction of $y$ at $t$ has a normal distribution with mean (expected value) and variance.  The expected value of $\hat{y}_{t|t-1}$ is
+\begin{equation}
+(\#eq:dlm-predict-y-mean)
+\text{E}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{F}^{\top}_{t} (\mathbf{G}_t \boldsymbol{\pi}_{t-1}) \\
+\end{equation}
+and the variance of $\hat{y}_{t|t-1}$ is
 \begin{align}
-(\#eq:dlm-dlmFore2)
-\boldsymbol{\theta}_{t}|y_{1:t-1} &\sim \,\text{MVN}(\boldsymbol{\eta}_{t},\boldsymbol{\Phi}_{t}), \text{ where} \nonumber\\
-\boldsymbol{\eta}_{t} &= \mathbf{G}_t\boldsymbol{\pi}_{t-1}, \text{ and}\\
-\boldsymbol{\Phi}_{t} &= \mathbf{G}_t\boldsymbol{\Lambda}_{t-1}\mathbf{G}_t^{\top} + \mathbf{Q} \nonumber.
+(\#eq:dlm-predict-y-var)
+\text{Var}(\hat{y}_{t|t-1}) &= \mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + r \\
+ &= \mathbf{F}^{\top}_{t} (\mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q}) \mathbf{F}_{t} + r \\
 \end{align}
-Consequently, the one-step ahead predictive distribution for the observation at time $t$ given $y_{1:t-1}$ is
-\begin{align}
+
+### Computing the prediction
+
+The expectations and variance of $\boldsymbol{\theta}_t$ conditioned on $y_{1:t}$ and $y_{1:t-1}$ are standard output from the Kalman filter.  Thus to produce the predictions, all we need to do is run our DLM state-space model through a Kalman filter to get $\text{E}(\boldsymbol{\theta}_{t|t-1})$ and $\text{Var}(\boldsymbol{\theta}_{t|t-1})$ and then use Equation \@ref(eq:dlm-predict-y-mean) to compute the mean prediction and Equation \@ref(eq:dlm-predict-y-var) to compute its variance.  
+
+The Kalman filter will need $\mathbf{F}_t$, $\mathbf{G}_t$ and estimates of $\mathbf{Q}$ and $r$.  The latter are calculated by fitting the DLM to the data $y_{1:t}$, using for example the `MARSS()` function.
+
+Let's see an example with the salmon survival DLM.  We will use the Kalman filter function in the **MARSS** package and the DLM fit from `MARSS()`.
+
+### Forecasting salmon survival
+
+@ScheuerellWilliams2005 were interested in how well upwelling could be used to actually _forecast_ expected survival of salmon, so let's look at how well our model does in that context. To do so, we need the predictive distribution for the survival at time $t$ given the upwelling at time $t$ and the predicted regression parameters at $t$.
+
+In the salmon survival DLM, the $\mathbf{G}_t$ matrix is the identity matrix, thus the mean and variance of the one-step ahead predictive distribution for the observation at time $t$ reduces to (from Equations \@ref(eq:dlm-predict-y-mean) and \@ref(eq:dlm-predict-y-var))
+\begin{equation}
 (\#eq:dlm-dlmFore3)
-y_{t}|y_{1:t-1} &\sim \,\text{N}(\zeta_{t},\Psi_{t}), \text{ where} \nonumber\\
-\zeta_{t} &= \mathbf{F}_t\boldsymbol{\eta}_{t}, \text{ and}\\
-\Psi_{t} &= \mathbf{F}_t\Phi_{t}\mathbf{F}_t^{\top} + \mathbf{R} \nonumber.
-\end{align}
+\text{E}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) \\ 
+\text{Var}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}
+\end{equation}
+where
+$$
+\mathbf{F}_{t}=\begin{bmatrix}1 \\ f_{t}\end{bmatrix}
+$$
+and $f_{t}$ is the upwelling index at $t+1$. $\hat{r}$ is the estimated observation variance from our model fit.
 
+### Forecasting using MARSS {#sec-dlm-forecasting-a-univariate-dlm-with-marss}
+Working from Equation \@ref(eq:dlm-dlmFore3), we can compute the expected value of the forecast at time $t$  and its variance using the Kalman filter. For the expectation, we need $\mathbf{F}_{t}^\top\text{E}(\boldsymbol{\theta}_{t|t-1})$. 
+$\mathbf{F}_t^\top$ is called $\mathbf{Z}_t$ in MARSS notation. The one-step ahead forecasts of the regression parameters at time $t$, the $\text{E}(\boldsymbol{\theta}_{t|t-1})$, are calculated as part of the Kalman filter algorithm---they are termed $\tilde{x}_t^{t-1}$ in MARSS notation and stored as ``xtt1`` in the list produced by the ``MARSSkfss()`` Kalman filter function.
 
-### Forecasting a DLM with MARSS {#sec-dlm-forecasting-a-univariate-dlm-with-marss}
-Working from Equation \@ref(eq:dlm-dlmFore3), we can now use ``MARSS()`` to compute the expected value of the forecast at time $t$ $(\,\text{E} [y_t|y_{1:t-1}] = \zeta_t)$, and its variance $(\,\text{var} [y_t|y_{1:t-1}] = \Psi_t)$. For the expectation, we need $\mathbf{F}_t\boldsymbol{\eta}_t$. Recall that $\mathbf{F}_t$ is our $1 \times m$ matrix of explanatory variables at time $t$ ($\mathbf{F}_t$ is called $\mathbf{Z}_t$ in MARSS notation). The one-step ahead forecasts of the parameters at time $t$ $(\boldsymbol{\eta}_t)$ are calculated as part of the Kalman filter algorithm---they are termed $\tilde{x}_t^{t-1}$ in ``MARSS()`` notation and stored as ``xtt1`` in the list produced by the ``MARSSkfss()`` function.
+Using the `Z` defined in \@ref(sec-dlm-salmon-example), we compute the mean forecast as folllows:
 ```{r univ.DLM.fore.mean, eval=TRUE}
 ## get list of Kalman filter output
 kf.out = MARSSkfss(dlm1)
@@ -555,11 +571,14 @@ eta = kf.out$xtt1
 ## ts of E(forecasts)
 fore.mean = vector()
 for(t in 1:TT) {
-  fore.mean[t] = Z[,,t] %*% eta[,t,drop=F]
+  fore.mean[t] = Z[,,t] %*% eta[,t,drop=FALSE]
 }
 ```
 
-For the variance of the forecasts, we need $\mathbf{F}_t\Phi_{t}\mathbf{F}_t^{\top} + \mathbf{R}$. As with the mean, $\mathbf{F}_t \equiv \mathbf{Z}_t$. The variances of the one-step ahead forecasts of the parameters at time $t$ $(\Phi_t)$ are also calculated as part of the Kalman filter algorithm---they are stored as ```Vtt1``` in the list produced by the ```MARSSkfss()``` function. Lastly, the observation variance $\mathbf{R}$ is part of the standard MARSS output.
+For the variance of the forecasts, we need 
+$\mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}$. As with the mean, $\mathbf{F}^\top_t \equiv \mathbf{Z}_t$. The variances of the one-step ahead forecasts of the regression parameters at time $t$, $\text{Var}(\boldsymbol{\theta}_{t|t-1})$, are also calculated as part of the Kalman filter algorithm---they are stored as ```Vtt1``` in the list produced by the ```MARSSkfss()``` function. Lastly, the observation variance $\hat{r}$ was estimated when we fit the DLM to the data using  `MARSS()` and can be extracted from the `dlm1` fit.
+
+Putting this together, we can compute the forecast variance:
 ```{r univ.DLM.fore.Var, eval=TRUE}
 ## variance of regr parameters; 1x2xT array
 Phi = kf.out$Vtt1
@@ -611,11 +630,12 @@ lines(years, flo)
 axis(1,at=seq(1965,2005,5))
 mtext("Year of ocean entry", 1, line=3)
 ```
- 
 
-### DLM forecast diagnostics {#sec-dlm-dlm-forecast-diagnostics}
+Notice that we passed the DLM fit to all the data to `MARSSkfss()`.  This meant that the Kalman filter used estimates of $\mathbf{Q}$ and $r$ using all the data in the `xtt1` and `Vtt1` calculations. Thus our predictions at time $t$ are not entirely based on only data up to time $t-1$ since the $\mathbf{Q}$ and $r$ estimates were from all the data from 1964 to 2005.
+
+## DLM forecast diagnostics {#sec-dlm-dlm-forecast-diagnostics}
 \begin{samepage}
-As with other time series models, evaluation of a DLM should include some model diagnostics. In a forecasting context, we are often interested in the forecast errors, which are simply the observed data minus the forecasts $(e_t = y_t - \zeta_t)$. In particular, the following assumptions should hold true for $e_t$:
+As with other time series models, evaluation of a DLM should include some model diagnostics. In a forecasting context, we are often interested in the forecast errors, which are simply the observed data minus the forecasts $e_t = y_t - \text{E}(y_t|y_{1:t-1})$. In particular, the following assumptions should hold true for $e_t$:
 
 1.  $e_t \sim \,\text{N}(0,\sigma^2)$;
 2.  $\,\text{cov}(e_t,e_{t-k}) = 0$.
