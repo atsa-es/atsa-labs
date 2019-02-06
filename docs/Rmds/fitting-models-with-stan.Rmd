@@ -9,21 +9,20 @@ For this lab, we will use [Stan](http://mc-stan.org/documentation/) for fitting 
 
 A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-models-with-stan.R).
 
-## Stan packages and chapter data sets {#sec-stan-packages-data}
+## Data and packages {-}
 
 You will need the **atsar** package we have written for fitting state-space time series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/nwfsc-timeseries/atsar).  Install  using the **devtools** package.
 ```{r stan-load, eval=FALSE}
 library(devtools)
 devtools::install_github("nwfsc-timeseries/atsar")
 ```
-
-In addition, you will need the **rstan** and **datasets** packages. After installing, if needed, load the packages:
+In addition, you will need the **rstan**, **datasets**. and **loo** packages. After installing, if needed, load the packages:
 ```{r stan-loadpackages, results='hide', warning=FALSE, message=FALSE}
 library(atsar)
 library(rstan)
 library(datasets)
+library(loo)
 ```
-
 Once you have Stan and **rstan** installed, optimize Stan on your machine:
 ```{r stan-rstan-setup, warning=FALSE, message=FALSE, results='hide'}
 rstan_options(auto_write = TRUE)
@@ -33,7 +32,7 @@ options(mc.cores = parallel::detectCores())
 For this lab, we will use a data set on airquality in New York from the **datasets** package. Load the data and create a couple new variables for future use. 
 
 ```{r stan-data}
-data(airquality)
+data(airquality, package="datasets")
 Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 ```
@@ -174,10 +173,10 @@ ss_rw = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
 
 ## Dynamic factor analysis {#sec-stan-dfa}
 
-First load the plankton dataset from the MARSS package.
+First load the plankton dataset from the **MARSS** package.
 ```{r stan-dfa-data}
  library(MARSS)
- data(lakeWAplankton)
+ data(lakeWAplankton, package="MARSS")
  # we want lakeWAplanktonTrans, which has been transformed
  # so the 0s are replaced with NAs and the data z-scored
  dat = lakeWAplanktonTrans
@@ -234,7 +233,7 @@ mod_4 = fit_dfa(y = dat.spp.1980, num_trends=4)
 mod_5 = fit_dfa(y = dat.spp.1980, num_trends=5)
 ```
 
-We will compute the Leave One Out Information Criterion (LOOIC) using the loo package.  Like AIC, lower is better.
+We will compute the Leave One Out Information Criterion (LOOIC) using the **loo** package.  Like AIC, lower is better.
 
 ```{r stan-looic}
 library(loo)
@@ -259,7 +258,7 @@ looic.table
 We will look at the effect of missing data on the uncertainty intervals on estimates states using a DFA on the harbor seal dataset.
 
 ```{r stan-harborseal-data}
-data("harborSealWA")
+data(harborSealWA, package="MARSS")
 #the first column is year
 matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
         ylab="Log abundance", xlab="")

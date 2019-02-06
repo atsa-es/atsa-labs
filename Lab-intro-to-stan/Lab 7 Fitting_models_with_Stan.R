@@ -11,7 +11,7 @@ rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
 ## ------------------------------------------------------------------------
-data(airquality)
+data(airquality, package="datasets")
 Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 

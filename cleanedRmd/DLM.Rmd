@@ -1,5 +1,6 @@
 ```{r dlm-setup, include=FALSE, purl=FALSE}
-knitr::opts_knit$set(unnamed.chunk.label = "dlm-", fig.align="center")
+knitr::opts_knit$set(unnamed.chunk.label = "dlm-")
+knitr::opts_chunk$set(fig.align='center', out.width = '80%')
 ```
 
 
@@ -20,7 +21,7 @@ The problem set uses an additional data set on spawners and recruits: [KvichakSo
 
 ## Overview {#sec-dlm-overview}
 
-We begin our description of DLMs with a *static* regression model, wherein the $i^{th}$ observation is a linear function of an intercept, predictor variable(s), and a random error term. For example, if we had one predictor variable ($f$), we could write the model as
+We begin our description of DLMs with a *static* regression model, wherein the $i^{th}$ observation (response variable) is a linear function of an intercept, predictor variable(s), and a random error term. For example, if we had one predictor variable ($f$), we could write the model as
 \begin{equation}
 (\#eq:dlm-lm)
 y_i = \alpha + \beta f_i + v_i,
@@ -64,7 +65,7 @@ y_t = \mathbf{Z}_t \mathbf{x}_t + v_t \\
 \mathbf{x}_t = \mathbf{B} \mathbf{x}_{t-1} + \mathbf{w}_t
 \end{equation}
 
-Note that DLMs include covariates (predictor variables) in the observation equation much differently than other forms of MARSS models.  In a DLM, $\mathbf{Z}$ is covariates and $\mathbf{x}_t$ are the time-evolving regression parameters.
+Note that DLMs include predictor variables (covariates) in the observation equation much differently than other forms of MARSS models.  In a DLM, $\mathbf{Z}$ is a matrix of predictor variables and $\mathbf{x}_t$ are the time-evolving regression parameters.
 
 \begin{equation}
 y_t = \boxed{\mathbf{Z}_t \mathbf{x}_t} + v_t.
@@ -76,11 +77,9 @@ In many other MARSS models, $\mathbf{d}_t$ is a time-varying column vector of co
 y_t = \mathbf{Z}_t \mathbf{x}_t + \boxed{\mathbf{D} \mathbf{d}_t} +v_t.
 \end{equation}
 
-## Stochastic level examples {#sec-dlm-simple-examples}
+## Stochastic level models {#sec-dlm-simple-examples}
 
-### Stochastic level
-
-The most simple DLM is stochastic level model, where the level is a random walk, and this level is observed with error.  We will write it first in using regression notation where the intercept is $\alpha$ and then in MARSS notation.  In the latter, $\alpha_t=x_t$.
+The most simple DLM is a stochastic level model, where the level is a random walk without drift, and this level is observed with error.  We will write it first in using regression notation where the intercept is $\alpha$ and then in MARSS notation.  In the latter, $\alpha_t=x_t$.
 
 \begin{equation}
 (\#eq:dlm-stoch-level)
@@ -94,8 +93,7 @@ x_t = x_{t-1} + w_t
 Using this model, we can model the Nile River level and fit the model using `MARSS()`.
 
 ```{r dlm-nile-fit}
-library(datasets)
-data("Nile")
+data(Nile, package="datasets")
 mod_list <- list(B = "identity", U = "zero", Q = matrix("q"),
                  Z = "identity", A = matrix("a"), R = matrix("r"))
 fit <- MARSS(matrix(Nile, nrow = 1), mod_list)
@@ -135,7 +133,7 @@ We can allow that the drift term $\eta$ evolves over time along with the level. 
   \alpha_t = \alpha_{t-1} + \eta_{t-1} + w_{\alpha,t} \\
   \eta_t = \eta_{t-1} + w_{\eta,t}
 \end{equation}
-This can be written in matrix form as:
+Equation \@ref(eq:dlm-stoch-level-drift-2) can be written in matrix form as:
 \begin{equation}
 (\#eq:dlm-stoch-level-drift-3)
 y_t = \begin{bmatrix}1&0\end{bmatrix}\begin{bmatrix}
@@ -156,7 +154,7 @@ y_t = \begin{bmatrix}1&0\end{bmatrix}\begin{bmatrix}
     w_{\eta}
   \end{bmatrix}_t
 \end{equation}
-This is a MARSS model.
+Equation \@ref(eq:dlm-stoch-level-drift-3) is a MARSS model.
 
 \begin{equation}
 y_t = \mathbf{Z}\mathbf{x}_t + v_t \\
@@ -165,18 +163,21 @@ y_t = \mathbf{Z}\mathbf{x}_t + v_t \\
 
 where $\mathbf{B}=\begin{bmatrix} 1 & 1 \\ 0 & 1\end{bmatrix}$, $\mathbf{x}=\begin{bmatrix}\alpha \\ \eta\end{bmatrix}$ and $\mathbf{Z}=\begin{bmatrix}1&0\end{bmatrix}$.
  
+See Section \@ref(sec-uss-examples-using-the-nile-river-data) for more discussion of stochastic level models and Section \@ref() to see how to fit this model with the `StructTS(sec-uss-the-structts-function)` function in the **stats** package.
 
-## Stochastic regression example {#sec-dlm-regression}
+## Stochastic regression model {#sec-dlm-regression}
 
-The stochastic level models do not have covariates.  Let's add one covariate $f_t$ and write a simple DLM where the intercept $\alpha$ and slope $\beta$ are stochastic.  We will specify that $\alpha$ and $\beta$ evolve according to a simple random walk.  Normally $x$ is used for covariates in a regression model, but we will avoid that since we are using $x$ for the state equation in a state-space model. This model is
+The stochastic level models in Section \@ref(sec-dlm-simple-examples) do not have predictor variables (covariates).  Let's add one predictor variable $f_t$ and write a simple DLM where the intercept $\alpha$ and slope $\beta$ are stochastic.  We will specify that $\alpha$ and $\beta$ evolve according to a simple random walk.  Normally $x$ is used for the predictor variables in a regression model, but we will avoid that since we are using $x$ for the state equation in a state-space model. This model is
 
 \begin{equation}
+(\#eq:dlm-stoch-regression-1)
   y_t = \alpha_t + \beta_t f_t + v_t \\
   \alpha_t = \alpha_{t-1} + w_{\alpha,t} \\
   \beta_t = \beta_{t-1} + w_{\beta,t}
 \end{equation}
 Written in matrix form, the model is
 \begin{equation}
+(\#eq:dlm-stoch-regression-2)
 y_t = \begin{bmatrix}
     1 &
     f_t
@@ -198,8 +199,7 @@ y_t = \begin{bmatrix}
   \end{bmatrix}_t 
 \end{equation}
 
-This is a MARSS model:
-
+Equation \@ref(eq:dlm-stoch-regression-2) is a MARSS model:
 \begin{equation}
 y_t = \mathbf{Z}\mathbf{x}_t + v_t \\
 \mathbf{x}_t = \mathbf{x}_{t-1} + \mathbf{w}_t
@@ -212,6 +212,7 @@ where  $\mathbf{x}=\begin{bmatrix}\alpha \\ \beta\end{bmatrix}$ and $\mathbf{Z}=
 Let's add a simple fixed quarter effect to the regression model:
 
 \begin{equation}
+(\#eq:dlm-seasonal-effect)
 y_t = \alpha_t + \beta_t x_t + \gamma_{qtr} + e_t \\
 \gamma_{qtr} = 
 \begin{cases}
@@ -222,9 +223,10 @@ y_t = \alpha_t + \beta_t x_t + \gamma_{qtr} + e_t \\
 \end{cases}
 \end{equation}
 
-We can write this in matrix form.  In our model for $\gamma$, we will set the variance to 0 so that the $\gamma$ does not change with time.
+We can write Equation \@ref(eq:dlm-seasonal-effect) in matrix form.  In our model for $\gamma$, we will set the variance to 0 so that the $\gamma$ does not change with time.
 
 \begin{equation}
+(\#eq:dlm-seasonal-effect-2)
 y_t = 
 \begin{bmatrix}
   1 & x_t & 1
@@ -250,6 +252,7 @@ y_t = \mathbf{Z}_{t}\mathbf{x}_{t}+v_t \\
 How do we select the right quarterly effect? Let's separate out the quarterly effects and add them to $\mathbf{x}$. We could then select the right $\gamma$ using 0s and 1s in the $\mathbf{Z}_t$ matrix.  For example, if $t$ is in quarter 1, our model would be
 
 \begin{equation}
+(\#eq:dlm-seasonal-effect-3)
 y_t = 
 \begin{bmatrix}
   1 & x_t & 1 & 0 & 0 & 0
@@ -262,6 +265,7 @@ y_t =
 While if $t$ is in quarter 2, the model is
 
 \begin{equation}
+(\#eq:dlm-seasonal-effect-4)
 y_t = 
 \begin{bmatrix}
   1 & x_t & 0 & 1 & 0 & 0
@@ -276,6 +280,7 @@ This would work, but we would have to have a different $\mathbf{Z}_t$ matrix and
 We could instead keep the $\mathbf{Z}_t$ matrix the same, but reorder the $\gamma_i$ within $\mathbf{x}$. If $t$ is in quarter 1,
 
 \begin{equation}
+(\#eq:dlm-seasonal-effect-5)
 y_t = 
 \begin{bmatrix}
   1 & x_t & 1 & 0 & 0 & 0
@@ -287,6 +292,7 @@ y_t =
 While if $t$ is in quarter 2, 
 
 \begin{equation}
+(\#eq:dlm-seasonal-effect-6)
 y_t = 
 \begin{bmatrix}
   1 & x_t & 1 & 0 & 0 & 0
@@ -313,6 +319,7 @@ $$
 With this $\mathbf{G}$, the $\gamma$ rotate within $\mathbf{x}$ with each time step.  If $t$ is in quarter 1, then $t+1$ is in quarter 2, and we want $\gamma_2$ to be in the 3rd row. 
 
 \begin{equation}
+(\#eq:dlm-seasonal-effect-7)
 \begin{bmatrix} \alpha \\ \beta \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
 \end{bmatrix}_{t+1} =
 \begin{bmatrix}
@@ -334,6 +341,7 @@ With this $\mathbf{G}$, the $\gamma$ rotate within $\mathbf{x}$ with each time s
 At $t+2$, we are in quarter 3 and $\gamma_3$ will be in row 3.
 
 \begin{equation}
+(\#eq:dlm-seasonal-effect-8)
 \begin{bmatrix} \alpha \\ \beta \\ \gamma_3 \\ \gamma_4 \\ \gamma_1 \\ \gamma_2
 \end{bmatrix}_{t+2} =
 \begin{bmatrix}
@@ -353,7 +361,7 @@ At $t+2$, we are in quarter 3 and $\gamma_3$ will be in row 3.
 \end{equation}
 
 
-## Example: modeling salmon survival {#sec-dlm-salmon-example}
+## Analysis of salmon survival {#sec-dlm-salmon-example}
 
 Let's see an  example of a DLM used to analyze real data from the literature. @ScheuerellWilliams2005 used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell \& Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon ("smolts") entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year $t$,
 \begin{equation}
@@ -387,23 +395,23 @@ Equation \@ref(eq:dlm-dlmSW3) is equivalent to our standard MARSS model:
 where $\mathbf{x}_t = \boldsymbol{\theta}_t$, $\mathbf{B}_t = \mathbf{G}_t$, $\mathbf{y}_t = y_t$ (i.e., $\mathbf{y}_t$ is 1 $\times$ 1), $\mathbf{Z}_t = \mathbf{F}_t^{\top}$, $\mathbf{a} = \mathbf{u} = \mathbf{0}$, and $\mathbf{R}_t = r$ (i.e., $\mathbf{R}_t$ is 1 $\times$ 1).
 
 
-## Fitting a DLM with `MARSS()` {#sec-dlm-fitting-a-univariate-dlm-with-marss}
+## Fitting with `MARSS()` {#sec-dlm-fitting-a-univariate-dlm-with-marss}
 
 Now let's go ahead and analyze the DLM specified in Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). We begin by loading the data set (which is in the **MARSS** package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean (``year``), 2) logit-transformed survival \footnote{Survival in the original context was defined as the proportion of juveniles that survive to adulthood. Thus, we use the logit function, defined as $logit(p)=log_e(p/[1-p])$, to map survival from the open interval (0,1) onto the interval $(-\infty,\infty)$, which allows us to meet our assumption of normally distributed observation errors.} (``logit.s``), and 3) the coastal upwelling index for April (``CUI.apr``). There are 42 years of data (1964--2005).
 ```{r read.in.data, eval=TRUE}
 ## load the data
-data(SalmonSurvCUI)
+data(SalmonSurvCUI, package="MARSS")
 ## get time indices
 years = SalmonSurvCUI[,1]
 ## number of years of data
 TT = length(years)
-## get response data: logit(survival)
+## get response variable: logit(survival)
 dat = matrix(SalmonSurvCUI[,2],nrow=1)
 ```
 
 As we have seen in other case studies, standardizing our covariate(s) to have zero-mean and unit-variance can be helpful in model fitting and interpretation. In this case, it's a good idea because the variance of ``CUI.apr`` is orders of magnitude greater than ``logit.s``.
 ```{r z.score, eval=TRUE}
-## get regressor variable
+## get predictor variable
 CUI = SalmonSurvCUI[,3]
 ## z-score the CUI
 CUI.z = matrix((CUI - mean(CUI))/sqrt(var(CUI)), nrow=1)
@@ -433,12 +441,12 @@ Q = matrix(list(0),m,m)         ## 2x2; all 0 for now
 diag(Q) = c("q.alpha","q.beta") ## 2x2; diag = (q1,q2)
 ```
 
-Defining the correct form for the observation model is a little more tricky, however, because of how we model the effect(s) of explanatory variables. In a DLM, we need to use $\mathbf{Z}_t$ (instead of $\mathbf{d}_t$) as the matrix of known regressors/drivers that affect $\mathbf{y}_t$, and $\mathbf{x}_t$ (instead of $\mathbf{D}_t$) as the regression parameters. Therefore, we need to set $\mathbf{Z}_t$ equal to an $n$ $\mathsf{x}$ $m$ $\mathsf{x}$ $T$ array, where $n$ is the number of response variables (= 1; $y_t$ is univariate), $m$ is the number of regression parameters (= intercept + slope = 2), and $T$ is the length of the time series (= 42). 
+Defining the correct form for the observation model is a little more tricky, however, because of how we model the effect(s) of predictor variables. In a DLM, we need to use $\mathbf{Z}_t$ (instead of $\mathbf{d}_t$) as the matrix of predictor variables that affect $\mathbf{y}_t$, and we use $\mathbf{x}_t$ (instead of $\mathbf{D}_t$) as the regression parameters. Therefore, we need to set $\mathbf{Z}_t$ equal to an $n\times m\times T$ array, where $n$ is the number of response variables (= 1; $y_t$ is univariate), $m$ is the number of regression parameters (= intercept + slope = 2), and $T$ is the length of the time series (= 42). 
 ```{r univ.DLM.obs, eval=TRUE}
 ## for observation eqn
 Z = array(NA, c(1,m,TT))   ## NxMxT; empty for now
 Z[1,1,] = rep(1,TT)        ## Nx1; 1's for intercept
-Z[1,2,] = CUI.z            ## Nx1; regr variable
+Z[1,2,] = CUI.z            ## Nx1; predictor variable
 A = matrix(0)              ## 1x1; scalar = 0
 R = matrix("r")            ## 1x1; scalar = r
 ```
@@ -458,7 +466,7 @@ dlm1 = MARSS(dat, inits=inits.list, model=mod.list)
 
 Notice that the MARSS output does not list any estimates of the regression parameters themselves. Why not? Remember that in a DLM the matrix of states $(\mathbf{x})$ contains the estimates of the regression parameters $(\boldsymbol{\theta})$. Therefore, we need to look in ```dlm1$states``` for the MLEs of the regression parameters, and in ```dlm1$states.se``` for their standard errors.
 
-Time series of the estimated intercept and slope are shown in Figure \@ref(fig:plotdlm1). It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (```Q.q1```). In fact, although the effect of April upwelling appears to be increasing over time, it doesn't really become important as an explanatory variable until about 1990 when the approximate 95\% confidence interval for the slope no longer overlaps zero.
+Time series of the estimated intercept and slope are shown in Figure \@ref(fig:plotdlm1). It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (```Q.q1```). In fact, although the effect of April upwelling appears to be increasing over time, it doesn't really become important as a predictor variable until about 1990 when the approximate 95\% confidence interval for the slope no longer overlaps zero.
 <!-- % plot regression parameters -->
 
 (ref:plotdlm1) Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the DLM specified by Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). Thin lines denote the mean $\pm$ 2 standard deviations.
@@ -481,13 +489,13 @@ axis(1,at=seq(1965,2005,5))
 mtext("Year of ocean entry", 1, line=3)
 ```
  
-## Forecasting with a DLM {#sec-dlm-forecasting-with-a-univariate-dlm}
+## Forecasting {#sec-dlm-forecasting-with-a-univariate-dlm}
 
 Forecasting from a DLM involves two steps:
 
 1. Get an estimate of the regression parameters at time $t$ from data up to time $t-1$. These are also called the one-step ahead forecast (or prediction) of the regression parameters.
 
-2. Make a prediction of $y$ at time $t$ based on covariates at time $t$ and the estimate of the regression parameters at time $t$ (step 1). This is also called the one-step ahead forecast (or prediction) of the observation.
+2. Make a prediction of $y$ at time $t$ based on the predictor variables at time $t$ and the estimate of the regression parameters at time $t$ (step 1). This is also called the one-step ahead forecast (or prediction) of the observation.
 
 ### Estimate of the regression parameters
 
@@ -502,10 +510,12 @@ Now we can compute the distribution of  $\boldsymbol{\theta}_{t}$ conditioned on
 \end{equation}
 The expected value of $\boldsymbol{\theta}_{t|t-1}$ is thus
 \begin{equation}
+(\#eq:dlm-distthetatt-mean)
 \text{E}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{G}_t \text{E}(\boldsymbol{\theta}_{t-1|t-1}) = \mathbf{G}_t \boldsymbol{\pi}_{t-1}
 \end{equation}
 The variance of $\boldsymbol{\theta}_{t|t-1}$ is
 \begin{equation}
+(\#eq:dlm-distthetatt-var)
 \text{Var}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{G}_t \text{Var}(\boldsymbol{\theta}_{t-1|t-1}) \mathbf{G}_t^{\top} + \mathbf{Q} = \mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q}
 \end{equation}
 Thus the distribution of $\boldsymbol{\theta}_{t}$ conditioned on $y_{1:t-1}$ is 
@@ -514,9 +524,9 @@ Thus the distribution of $\boldsymbol{\theta}_{t}$ conditioned on $y_{1:t-1}$ is
 \text{E}(\boldsymbol{\theta}_{t|t-1}) \sim \text{MVN}(\mathbf{G}_t \boldsymbol{\pi}_{t-1}, \mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q})
 \end{equation}
 
-### Predict $y_t$
+### Prediction of the response variable $y_t$
 
-For step 2, we make the prediction of $y_{t}$ given the covariates at time $t$ and the estimate of the regression parameters at time $t$. This is called the one-step ahead prediction for the observation at time $t$.  We will denote the prediction of $y$ as $\hat{y}$ and we want to compute its distribution (mean and variance).   We do this using the equation for $y_t$ but substituting the expected value of $\boldsymbol{\theta}_{t|t-1}$ for $\boldsymbol{\theta}_t$.
+For step 2, we make the prediction of $y_{t}$ given the predictor variables at time $t$ and the estimate of the regression parameters at time $t$. This is called the one-step ahead prediction for the observation at time $t$.  We will denote the prediction of $y$ as $\hat{y}$ and we want to compute its distribution (mean and variance).   We do this using the equation for $y_t$ but substituting the expected value of $\boldsymbol{\theta}_{t|t-1}$ for $\boldsymbol{\theta}_t$.
 
 \begin{equation}
 (\#eq:dlm-predict-y-tplus1)
@@ -562,7 +572,7 @@ and $f_{t}$ is the upwelling index at $t+1$. $\hat{r}$ is the estimated observat
 Working from Equation \@ref(eq:dlm-dlmFore3), we can compute the expected value of the forecast at time $t$  and its variance using the Kalman filter. For the expectation, we need $\mathbf{F}_{t}^\top\text{E}(\boldsymbol{\theta}_{t|t-1})$. 
 $\mathbf{F}_t^\top$ is called $\mathbf{Z}_t$ in MARSS notation. The one-step ahead forecasts of the regression parameters at time $t$, the $\text{E}(\boldsymbol{\theta}_{t|t-1})$, are calculated as part of the Kalman filter algorithm---they are termed $\tilde{x}_t^{t-1}$ in MARSS notation and stored as ``xtt1`` in the list produced by the ``MARSSkfss()`` Kalman filter function.
 
-Using the `Z` defined in \@ref(sec-dlm-salmon-example), we compute the mean forecast as folllows:
+Using the `Z` defined in \@ref(sec-dlm-salmon-example), we compute the mean forecast as follows:
 ```{r univ.DLM.fore.mean, eval=TRUE}
 ## get list of Kalman filter output
 kf.out = MARSSkfss(dlm1)
@@ -633,9 +643,9 @@ mtext("Year of ocean entry", 1, line=3)
 
 Notice that we passed the DLM fit to all the data to `MARSSkfss()`.  This meant that the Kalman filter used estimates of $\mathbf{Q}$ and $r$ using all the data in the `xtt1` and `Vtt1` calculations. Thus our predictions at time $t$ are not entirely based on only data up to time $t-1$ since the $\mathbf{Q}$ and $r$ estimates were from all the data from 1964 to 2005.
 
-## DLM forecast diagnostics {#sec-dlm-dlm-forecast-diagnostics}
+## Forecast diagnostics {#sec-dlm-dlm-forecast-diagnostics}
 \begin{samepage}
-As with other time series models, evaluation of a DLM should include some model diagnostics. In a forecasting context, we are often interested in the forecast errors, which are simply the observed data minus the forecasts $e_t = y_t - \text{E}(y_t|y_{1:t-1})$. In particular, the following assumptions should hold true for $e_t$:
+As with other time series models, evaluation of a DLM should include diagnostics. In a forecasting context, we are often interested in the forecast errors, which are simply the observed data minus the forecasts $e_t = y_t - \text{E}(y_t|y_{1:t-1})$. In particular, the following assumptions should hold true for $e_t$:
 
 1.  $e_t \sim \,\text{N}(0,\sigma^2)$;
 2.  $\,\text{cov}(e_t,e_{t-k}) = 0$.
@@ -729,7 +739,7 @@ R_t = a S_t e^{-b S + v_t}.
 
 \noindent Substituting $y_t = \text{log}(R_t/S_t)$, $x_t = S_t$, and $\alpha = \text{log}(a)$ yields a simple linear regression model with intercept $\alpha$ and slope $b$.
 
-Unfortunately, however, residuals from this simple model typically show high-autocorrelation due to common environmental conditions that affect overlaping generations.  Therefore, to correct for this and allow for an index of stock productivity that controls for any density-dependent effects, the model may be re-witten as
+Unfortunately, however, residuals from this simple model typically show high-autocorrelation due to common environmental conditions that affect overlapping generations.  Therefore, to correct for this and allow for an index of stock productivity that controls for any density-dependent effects, the model may be re-written as
 
 \begin{equation}
 (\#eq:dlm-lnTVRicker)
@@ -807,5 +817,5 @@ This model assumes no density-dependent survival in that the number of recruits 
 
 4. Fit the model specified by Equation \@ref(eq:dlm-lnCovRicker) with the winter PDO index as the covariate (```PDO.t3```). What is the mean level of productivity?  Plot the ts of $\delta_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.
 
-5. Based on AICc, which of the models above is the most parsimonius?  Is it well behaved ($i.e.$, are the model assumptions met)?  Plot the model forecasts for the best model.  Is this a good forecast model?  
+5. Based on AICc, which of the models above is the most parsimonious?  Is it well behaved ($i.e.$, are the model assumptions met)?  Plot the model forecasts for the best model.  Is this a good forecast model?  
 

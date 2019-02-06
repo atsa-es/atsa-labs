@@ -7,7 +7,7 @@ knitr::opts_knit$set(unnamed.chunk.label = "labboxjenkins-")
 
 In this chapter, you will practice selecting and fitting an ARIMA model to catch data using the Box-Jenkins method.  After fitting a model, you will prepare simple forecasts using the **forecast** package.  
 
-### Data
+### Data and packages {-}
 
 Load catch landings from Greek waters [landings.RData](landings.RData) and the Chinook landings  [chinook.RData](chinook.RData) in Washington data.
 
@@ -383,7 +383,7 @@ summary(test)
 
 ### `ndiffs()`
 
-As an alternative to trying many different differences and remembering to include or not include the trend or level, you can use the `ndiffs()` function in the forecast package.  This automates finding the number of differences needed.
+As an alternative to trying many different differences and remembering to include or not include the trend or level, you can use the `ndiffs()` function in the **forecast** package.  This automates finding the number of differences needed.
 
 ```{r bj-ndiff}
 forecast::ndiffs(anchovyts, test="kpss")
@@ -404,7 +404,7 @@ The basic stationarity diagnostics are the following
     - `adf.test()` p-value should be less than 0.05 (reject null)
     - `kpss.test()` p-value should be greater than 0.05 (do not reject null)
 * If stationarity tests are failed, then try differencing to correct
-    - Try `ndiffs()` in the forecast package or manually try different differences.
+    - Try `ndiffs()` in the **forecast** package or manually try different differences.
   
   
 ## Estimating ARMA parameters

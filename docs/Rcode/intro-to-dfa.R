@@ -3,7 +3,7 @@ library(MARSS)
 
 ## ----dfa-read_data-------------------------------------------------------
 ## load the data (there are 3 datasets contained here)
-data(lakeWAplankton)
+data(lakeWAplankton, package="MARSS")
 ## we want lakeWAplanktonTrans, which has been transformed
 ## so the 0s are replaced with NAs and the data z-scored
 all_dat <- lakeWAplanktonTrans

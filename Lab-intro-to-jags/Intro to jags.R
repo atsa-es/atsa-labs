@@ -16,7 +16,7 @@ require(R2jags)
 ###################################################
 ### code chunk number 3: Intro to jags.Rnw:29-33
 ###################################################
-data(airquality)
+data(airquality, package="datasets")
 Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 N = dim(airquality)[1] # number of data points

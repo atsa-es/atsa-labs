@@ -21,7 +21,7 @@ library(forecast)
 library(datasets)
 ```
 
-To run the JAGS code example (optional), you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed and the **R2jags**, **rjags** and **coda** R packages.  To run the STAN code example (optional), you will need the **rstan** package.
+To run the JAGS code example (optional), you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed and the **R2jags**, **rjags** and **coda** R packages.  To run the Stan code example (optional), you will need the **rstan** package.
 
 
 ## Fitting a state-space model with MARSS {#sec-uss-fitting-a-state-space-model-with-marss}
@@ -235,7 +235,7 @@ Figure \@ref(fig:uss-plotfit) shows all the models along with their AICc values.
 
 
 ## The StructTS function {#sec-uss-the-structts-function}
-The ``StructTS`` function in R will also fit the stochastic level model:
+The ``StructTS`` function in the **stats** package in R will also fit the stochastic level model:
 ```{r uss-fit.data.2.structTS, eval=TRUE}
 fit.sts <- StructTS(dat, type="level")
 fit.sts
@@ -517,9 +517,9 @@ title("State estimate and data from\nJAGS (black) versus MARSS (red)")
 file.remove("ss_model.txt")
 ```
  
-## Fitting with STAN {#sec-uss-fitting-with-stan}
+## Fitting with Stan {#sec-uss-fitting-with-stan}
 
-Let's fit the same model with STAN using the **rstan** package. If you have not already, you will need to install the **rstan** package.  This package depends on a number of other packages which should install automatically when you install **rstan**.
+Let's fit the same model with Stan using the **rstan** package. If you have not already, you will need to install the **rstan** package.  This package depends on a number of other packages which should install automatically when you install **rstan**.
 
 ```{r uss-stan-setup, message=FALSE}
 library(datasets)

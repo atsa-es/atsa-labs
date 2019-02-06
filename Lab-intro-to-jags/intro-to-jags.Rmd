@@ -23,7 +23,7 @@ library(R2jags)
 For data for this lab, we will include a dataset on air quality in New York. We will load the data and create a couple new variables for future use. For the majority of our models, we are going to treat wind speed as the response variable for our time series models. 
 
 ```{r jags-loaddata, echo=TRUE, results='hide', eval=TRUE}
-data(airquality)
+data(airquality, package="datasets")
 Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 N = dim(airquality)[1] # number of data points

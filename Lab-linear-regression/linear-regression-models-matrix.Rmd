@@ -34,9 +34,9 @@ library(MARSS)
 library(datasets)
 ```
 
-We will work with the ```stackloss``` dataset available in R.  The dataset consists of 21 observations on the efficiency of a plant that produces nitric acid as a function of three explanatory variables: air flow, water temperature and acid concentration.  We are going to use just the first 4 datapoints so that it is easier to write the matrices, but the concepts extend to as many datapoints as you have.
+We will work with the ```stackloss``` dataset available in the **datasets** package.  The dataset consists of 21 observations on the efficiency of a plant that produces nitric acid as a function of three explanatory variables: air flow, water temperature and acid concentration.  We are going to use just the first 4 datapoints so that it is easier to write the matrices, but the concepts extend to as many datapoints as you have.
 ```{r mlr-stackloss.data}
-data(stackloss)
+data(stackloss, package="datasets")
 dat = stackloss[1:4,] #subsetted first 4 rows
 dat
 ```
@@ -666,7 +666,7 @@ We do not need to add 1s and 0s to our $\ZZ$ matrix in Form 2; we just add subsc
 With our 4 data points, we are limited to estimating 4 parameters.  Let's use the full 21 data points so we can estimate some more complex models.  We'll add an owner variable and a quarter variable to the stackloss dataset.
 
 ```{r mlr-set-up-big-dataset}
-data(stackloss)
+data(stackloss, package="datasets")
 fulldat=stackloss
 n=nrow(fulldat)
 fulldat=cbind(fulldat, 
@@ -751,8 +751,7 @@ Once you start developing your own models, you will need to make sure that all y
 
 For the homework questions, we will using part of the ```airquality``` data set in R.  Load that as
 ```{r mlr-homework-data, tidy=FALSE}
-library(datasets)
-data(airquality)
+data(airquality, package="datasets")
 #remove any rows with NAs omitted.
 airquality=na.omit(airquality)
 #make Month a factor (i.e., the Month number is a name rather than a number)

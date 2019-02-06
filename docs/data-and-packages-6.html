@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>1.2 Matrix multiplication, addition and transpose | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>Data and packages | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="1.2 Matrix multiplication, addition and transpose | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="Data and packages | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="1.2 Matrix multiplication, addition and transpose | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="Data and packages | Applied Time Series Analysis for Fisheries and Environmental Sciences />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-basicmat-create.html">
-<link rel="next" href="sec-basicmat-subset.html">
+<link rel="prev" href="chap-stan.html">
+<link rel="next" href="sec-stan-lr.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -399,52 +399,31 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-basicmat-multiply" class="section level2">
-<h2><span class="header-section-number">1.2</span> Matrix multiplication, addition and transpose</h2>
-<p>You will need to be very solid in matrix multiplication for the course. If you haven’t done it in awhile, google `matrix multiplication youtube’ and you find lots of 5min videos to remind you.</p>
-<p>In R, you use the <code>%*%</code> operation to do matrix multiplication. When you do matrix multiplication, the columns of the matrix on the left must equal the rows of the matrix on the right. The result is a matrix that has the number of rows of the matrix on the left and number of columns of the matrix on the right. <span class="math display">\[(n \times m)(m \times p) = (n \times p)\]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="co">#2 rows, 3 columns</span>
-B=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">2</span>) <span class="co">#3 rows, 2 columns</span>
-A<span class="op">%*%</span>B <span class="co">#this works</span></code></pre></div>
-<pre><code>     [,1] [,2]
-[1,]   22   49
-[2,]   28   64</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">B<span class="op">%*%</span>A <span class="co">#this works</span></code></pre></div>
-<pre><code>     [,1] [,2] [,3]
-[1,]    9   19   29
-[2,]   12   26   40
-[3,]   15   33   51</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">try</span>(B<span class="op">%*%</span>B) <span class="co">#this doesn&#39;t</span></code></pre></div>
-<p>To add two matrices use <code>+</code>. The matrices have to have the same dimensions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A<span class="op">+</span>A <span class="co">#works</span></code></pre></div>
-<pre><code>     [,1] [,2] [,3]
-[1,]    2    6   10
-[2,]    4    8   12</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A<span class="op">+</span><span class="kw">t</span>(B) <span class="co">#works</span></code></pre></div>
-<pre><code>     [,1] [,2] [,3]
-[1,]    2    5    8
-[2,]    6    9   12</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">try</span>(A<span class="op">+</span>B) <span class="co">#does not work since A has 2 rows and B has 3</span></code></pre></div>
-<p>The transpose of a matrix is denoted <span class="math inline">\(\mathbf{A}^\top\)</span> or <span class="math inline">\(\mathbf{A}^\prime\)</span>. To transpose a matrix in R, you use <code>t()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="co">#2 rows, 3 columns</span>
-<span class="kw">t</span>(A) <span class="co">#is the transpose of A</span></code></pre></div>
-<pre><code>     [,1] [,2]
-[1,]    1    2
-[2,]    3    4
-[3,]    5    6</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">try</span>(A<span class="op">%*%</span>A) <span class="co">#this won&#39;t work</span>
-A<span class="op">%*%</span><span class="kw">t</span>(A) <span class="co">#this will</span></code></pre></div>
-<pre><code>     [,1] [,2]
-[1,]   35   44
-[2,]   44   56</code></pre>
+<div id="data-and-packages-6" class="section level2 unnumbered">
+<h2>Data and packages</h2>
+<p>You will need the <strong>atsar</strong> package we have written for fitting state-space time series models with Stan. This is hosted on Github <a href="https://github.com/nwfsc-timeseries/atsar">safs-timeseries</a>. Install using the <strong>devtools</strong> package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(devtools)
+devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</code></pre></div>
+<p>In addition, you will need the <strong>rstan</strong>, <strong>datasets</strong>. and <strong>loo</strong> packages. After installing, if needed, load the packages:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(atsar)
+<span class="kw">library</span>(rstan)
+<span class="kw">library</span>(datasets)
+<span class="kw">library</span>(loo)</code></pre></div>
+<p>Once you have Stan and <strong>rstan</strong> installed, optimize Stan on your machine:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)
+<span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</code></pre></div>
+<p>For this lab, we will use a data set on airquality in New York from the <strong>datasets</strong> package. Load the data and create a couple new variables for future use.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(airquality, <span class="dt">package=</span><span class="st">&quot;datasets&quot;</span>)
+Wind =<span class="st"> </span>airquality<span class="op">$</span>Wind <span class="co"># wind speed</span>
+Temp =<span class="st"> </span>airquality<span class="op">$</span>Temp <span class="co"># air temperature</span></code></pre></div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-basicmat-create.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-basicmat-subset.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="chap-stan.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sec-stan-lr.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -474,7 +453,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/basic-matrix-math.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/fitting-models-with-stan.Rmd",
 "text": "Edit"
 },
 "history": {

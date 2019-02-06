@@ -9,13 +9,14 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 library(atsar)
 library(rstan)
 library(datasets)
+library(loo)
 
 ## ----stan-rstan-setup, warning=FALSE, message=FALSE, results='hide'------
 rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 
 ## ----stan-data-----------------------------------------------------------
-data(airquality)
+data(airquality, package="datasets")
 Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 
@@ -73,7 +74,7 @@ ss_rw = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
 
 ## ----stan-dfa-data-------------------------------------------------------
  library(MARSS)
- data(lakeWAplankton)
+ data(lakeWAplankton, package="MARSS")
  # we want lakeWAplanktonTrans, which has been transformed
  # so the 0s are replaced with NAs and the data z-scored
  dat = lakeWAplanktonTrans
@@ -132,7 +133,7 @@ looic.table = data.frame(trends=1:5, LOOIC=looics)
 looic.table
 
 ## ----stan-harborseal-data------------------------------------------------
-data("harborSealWA")
+data(harborSealWA, package="MARSS")
 #the first column is year
 matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
         ylab="Log abundance", xlab="")

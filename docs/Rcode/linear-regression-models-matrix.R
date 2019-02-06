@@ -4,7 +4,7 @@ library(MARSS)
 library(datasets)
 
 ## ----mlr-stackloss.data--------------------------------------------------
-data(stackloss)
+data(stackloss, package="datasets")
 dat = stackloss[1:4,] #subsetted first 4 rows
 dat
 
@@ -156,7 +156,7 @@ Z=model.matrix(fit5)
 Z[1:4,]
 
 ## ----mlr-set-up-big-dataset----------------------------------------------
-data(stackloss)
+data(stackloss, package="datasets")
 fulldat=stackloss
 n=nrow(fulldat)
 fulldat=cbind(fulldat, 
@@ -201,8 +201,7 @@ fit=lm(stack.loss ~ Air.Flow + reg2 + qtr, data=fulldat2)
 coef(fit)
 
 ## ----mlr-homework-data, tidy=FALSE---------------------------------------
-library(datasets)
-data(airquality)
+data(airquality, package="datasets")
 #remove any rows with NAs omitted.
 airquality=na.omit(airquality)
 #make Month a factor (i.e., the Month number is a name rather than a number)

@@ -2,8 +2,7 @@
 library(MARSS)
 
 ## ----dlm-nile-fit--------------------------------------------------------
-library(datasets)
-data("Nile")
+data(Nile, package="datasets")
 mod_list <- list(B = "identity", U = "zero", Q = matrix("q"),
                  Z = "identity", A = matrix("a"), R = matrix("r"))
 fit <- MARSS(matrix(Nile, nrow = 1), mod_list)
@@ -20,16 +19,16 @@ lines(seq(start(Nile)[1], end(Nile)[1]), t(fit$states - 2*fit$states.se),
 
 ## ----read.in.data, eval=TRUE---------------------------------------------
 ## load the data
-data(SalmonSurvCUI)
+data(SalmonSurvCUI, package="MARSS")
 ## get time indices
 years = SalmonSurvCUI[,1]
 ## number of years of data
 TT = length(years)
-## get response data: logit(survival)
+## get response variable: logit(survival)
 dat = matrix(SalmonSurvCUI[,2],nrow=1)
 
 ## ----z.score, eval=TRUE--------------------------------------------------
-## get regressor variable
+## get predictor variable
 CUI = SalmonSurvCUI[,3]
 ## z-score the CUI
 CUI.z = matrix((CUI - mean(CUI))/sqrt(var(CUI)), nrow=1)
@@ -54,7 +53,7 @@ diag(Q) = c("q.alpha","q.beta") ## 2x2; diag = (q1,q2)
 ## for observation eqn
 Z = array(NA, c(1,m,TT))   ## NxMxT; empty for now
 Z[1,1,] = rep(1,TT)        ## Nx1; 1's for intercept
-Z[1,2,] = CUI.z            ## Nx1; regr variable
+Z[1,2,] = CUI.z            ## Nx1; predictor variable
 A = matrix(0)              ## 1x1; scalar = 0
 R = matrix("r")            ## 1x1; scalar = r
 

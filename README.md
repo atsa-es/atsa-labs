@@ -12,6 +12,12 @@
 * [Building a chapter](#build-a-chapter)
 * [.gitignore file](#gitignore-file)
 
+<!--
+    source("cleanDefsinRmd.R")
+    bookdown::render_book("index.Rmd", "bookdown::gitbook")
+    bookdown::render_book("index.Rmd", "bookdown::pdf_book")
+-->
+
 ## Installing bookdown
 [back to top](#installing-bookdown)
 

@@ -4,7 +4,7 @@ library(rjags)
 library(R2jags)
 
 ## ----jags-loaddata, echo=TRUE, results='hide', eval=TRUE-----------------
-data(airquality)
+data(airquality, package="datasets")
 Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 N = dim(airquality)[1] # number of data points

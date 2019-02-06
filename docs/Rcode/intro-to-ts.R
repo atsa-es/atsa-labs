@@ -1,10 +1,10 @@
 ## ----ts-plot-www, fig.cap = "Number of users connected to the internet"----
-data(WWWusage)
+data(WWWusage, package="datasets")
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(WWWusage, ylab = "", las = 1, col = "blue", lwd = 2)
 
 ## ----ts-plot-lynx, fig.cap = "Number of lynx trapped in Canada from 1821-1934"----
-data(lynx)
+data(lynx, package="datasets")
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(lynx, ylab = "", las = 1, col = "blue", lwd = 2)
 
