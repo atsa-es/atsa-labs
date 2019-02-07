@@ -727,27 +727,23 @@ R_t = a S_t e^{-b S + v_t}.
 
 \noindent The parameter $a$ determines the maximum reproductive rate in the absence of any density-dependent effects (the slope of the curve at the origin), $b$ is the strength of density dependence, and $v_t \sim N(0,\sigma)$.  In practice, the model is typically log-transformed so as to make it linear with respect to the predictor variable $S_t$, such that
 
-\begin{equation}
+\begin{align}
 (\#eq:dlm-lnRicker)
-\begin{aligned}
 \text{log}(R_t) &= \text{log}(a) + \text{log}(S_t) -b S_t + v_t \\
 \text{log}(R_t) - \text{log}(S_t) &= \text{log}(a) -b S_t + v_t \\
 \text{log}(R_t/S_t) &= \text{log}(a) - b S_t + v_t.
-\end{aligned}
-\end{equation}
+\end{align}
 
 
 \noindent Substituting $y_t = \text{log}(R_t/S_t)$, $x_t = S_t$, and $\alpha = \text{log}(a)$ yields a simple linear regression model with intercept $\alpha$ and slope $b$.
 
 Unfortunately, however, residuals from this simple model typically show high-autocorrelation due to common environmental conditions that affect overlapping generations.  Therefore, to correct for this and allow for an index of stock productivity that controls for any density-dependent effects, the model may be re-written as
 
-\begin{equation}
+\begin{align}
 (\#eq:dlm-lnTVRicker)
-\begin{aligned}
 \text{log}(R_t/S_t) &= \alpha_t - b S_t + v_t, \\
 \alpha_t &= \alpha_{t-1} + w_t,
-\end{aligned}
-\end{equation}
+\end{align}
 
 \noindent and $w_t \sim N(0,q)$.  By treating the brood-year specific productivity as a random walk, we allow it to vary, but in an autocorrelated manner so that consecutive years are not independent from one another.
 
@@ -802,12 +798,10 @@ head(SRdata)
 
 1. Begin by fitting a reduced form of Equation \@ref(eq:dlm-lnTVRicker) that includes only a time-varying level ($\alpha_t$) and observation error ($v_t$).  That is,
 
-\begin{equation*}
-\begin{aligned}
+\begin{align*}
 \text{log}(R_t) &= \alpha_t + \text{log}(S_t) + v_t \\
 \text{log}(R_t/S_t) &= \alpha_t + v_t
-\end{aligned}
-\end{equation*}
+\end{align*}
 
 This model assumes no density-dependent survival in that the number of recruits is an ascending function of spawners.  Plot the ts of $\alpha_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.
 

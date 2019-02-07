@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-02-06">
+<meta name="date" content="2019-02-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -401,7 +427,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="sec-mss-segind" class="section level2">
 <h2><span class="header-section-number">7.4</span> Four subpopulations with temporally uncorrelated errors</h2>
-The model for one well-mixed population was not very good. Another reasonable assumption is that the different census regions are measuring four different temporally independent subpopulations. We write a model of the log subpopulation abundances for this case as:
+<p>The model for one well-mixed population was not very good. Another reasonable assumption is that the different census regions are measuring four different temporally independent subpopulations. We write a model of the log subpopulation abundances for this case as:
 <span class="math display" id="eq:mss-seg-mod1">\[\begin{equation}
 \begin{gathered}
 \begin{bmatrix}x_1\\x_2\\x_3\\x_4\end{bmatrix}_t = 
@@ -424,11 +450,11 @@ The model for one well-mixed population was not very good. Another reasonable as
 \end{gathered}
 \tag{7.7}
 \end{equation}\]</span>
-<p>The <span class="math inline">\(\mathbf{Q}\)</span> matrix is diagonal with one variance value. This means that the process variance (variance in year-to-year population growth rates) is independent (good and bad years are not correlated) but the level of variability is the same across regions. We made the <span class="math inline">\(\mathbf{u}\)</span> matrix with one <span class="math inline">\(u\)</span> value. This means that we assume the population growth rates are the same across regions.</p>
+The <span class="math inline">\(\mathbf{Q}\)</span> matrix is diagonal with one variance value. This means that the process variance (variance in year-to-year population growth rates) is independent (good and bad years are not correlated) but the level of variability is the same across regions. We made the <span class="math inline">\(\mathbf{u}\)</span> matrix with one <span class="math inline">\(u\)</span> value. This means that we assume the population growth rates are the same across regions.</p>
 <p>Notice that we set the <span class="math inline">\(\mathbf{B}\)</span> matrix equal to a diagonal matrix with 1 on the diagonal. This is the “identity” matrix and it is like a 1 but for matrices. We do not need <span class="math inline">\(\mathbf{B}\)</span> for our model, but <code>MARSS()</code> requires a value.</p>
 <div id="sec-mss-the-observation-process-2" class="section level3">
 <h3><span class="header-section-number">7.4.1</span> The observation process</h3>
-In this model, each survey is an observation of a different <span class="math inline">\(x\)</span>:
+<p>In this model, each survey is an observation of a different <span class="math inline">\(x\)</span>:
 <span class="math display" id="eq:mss-meas-mod1">\[\begin{equation}
  \left[ \begin{array}{c}
     y_{1} \\
@@ -452,8 +478,8 @@ In this model, each survey is an observation of a different <span class="math in
     v_{4}  \end{array} \right]_t 
 \tag{7.8}
 \end{equation}\]</span>
-<p>No <span class="math inline">\(a\)</span>’s can be estimated since we do not have multiple observations of a given <span class="math inline">\(x\)</span> time series. Our <span class="math inline">\(\mathbf{R}\)</span> matrix doesn’t change; the observation errors are still assumed to the independent with different variances.</p>
-Notice that our <span class="math inline">\(\mathbf{Z}\)</span> matrix changed. <span class="math inline">\(\mathbf{Z}\)</span> is specifying which <span class="math inline">\(y_i\)</span> goes to which <span class="math inline">\(x_j\)</span>. The one we have specified means that <span class="math inline">\(y_1\)</span> is observing <span class="math inline">\(x_1\)</span>, <span class="math inline">\(y_2\)</span> observes <span class="math inline">\(x_2\)</span>, etc. We could have set up <span class="math inline">\(\mathbf{Z}\)</span> like so
+No <span class="math inline">\(a\)</span>’s can be estimated since we do not have multiple observations of a given <span class="math inline">\(x\)</span> time series. Our <span class="math inline">\(\mathbf{R}\)</span> matrix doesn’t change; the observation errors are still assumed to the independent with different variances.</p>
+<p>Notice that our <span class="math inline">\(\mathbf{Z}\)</span> matrix changed. <span class="math inline">\(\mathbf{Z}\)</span> is specifying which <span class="math inline">\(y_i\)</span> goes to which <span class="math inline">\(x_j\)</span>. The one we have specified means that <span class="math inline">\(y_1\)</span> is observing <span class="math inline">\(x_1\)</span>, <span class="math inline">\(y_2\)</span> observes <span class="math inline">\(x_2\)</span>, etc. We could have set up <span class="math inline">\(\mathbf{Z}\)</span> like so
 <span class="math display">\[\begin{equation}
 \begin{bmatrix}
     0 &amp; 1 &amp; 0 &amp; 0 \\
@@ -461,24 +487,18 @@ Notice that our <span class="math inline">\(\mathbf{Z}\)</span> matrix changed. 
     0 &amp; 0 &amp; 0 &amp; 1 \\
     0 &amp; 0 &amp; 1 &amp; 0 
 \end{bmatrix}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>This would mean that <span class="math inline">\(y_1\)</span> observes <span class="math inline">\(x_2\)</span>, <span class="math inline">\(y_2\)</span> observes <span class="math inline">\(x_1\)</span>, <span class="math inline">\(y_3\)</span> observes <span class="math inline">\(x_4\)</span>, and <span class="math inline">\(y_4\)</span> observes <span class="math inline">\(x_3\)</span>. Which <span class="math inline">\(x\)</span> goes to which <span class="math inline">\(y\)</span> is arbitrary; we need to make sure it is one-to-one. We will stay with <span class="math inline">\(\mathbf{Z}\)</span> as an identity matrix since <span class="math inline">\(y_i\)</span> observing <span class="math inline">\(x_i\)</span> makes it easier to remember which <span class="math inline">\(x\)</span> goes with which <span class="math inline">\(y\)</span>.</p>
 </div>
 <div id="sec-mss-fitting-mod1" class="section level3">
 <h3><span class="header-section-number">7.4.2</span> Fitting the model</h3>
 <p>We set up the model list for <code>MARSS()</code> as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod.list.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">list</span>(
-<span class="dt">B=</span><span class="st">&quot;identity&quot;</span>,
-<span class="dt">U=</span><span class="st">&quot;equal&quot;</span>,
-<span class="dt">Q=</span><span class="st">&quot;diagonal and equal&quot;</span>,
-<span class="dt">Z=</span><span class="st">&quot;identity&quot;</span>,
-<span class="dt">A=</span><span class="st">&quot;scaling&quot;</span>,
-<span class="dt">R=</span><span class="st">&quot;diagonal and unequal&quot;</span>,
-<span class="dt">x0=</span><span class="st">&quot;unequal&quot;</span>,
-<span class="dt">tinitx=</span><span class="dv">0</span> )</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">mod.list<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">U =</span> <span class="st">&quot;equal&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and equal&quot;</span>, 
+    <span class="dt">Z =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>, <span class="dt">R =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, 
+    <span class="dt">x0 =</span> <span class="st">&quot;unequal&quot;</span>, <span class="dt">tinitx =</span> <span class="dv">0</span>)</code></pre>
 <p>We introduced a few more short-cuts. <code>&quot;equal&quot;</code> means all the values in the matrix are the same. <code>&quot;diagonal and equal&quot;</code> means that the matrix is diagonal with one value on the diagonal. <code>&quot;unequal&quot;</code> means that all values in the matrix are different.</p>
 <p>We can then fit our model for 4 subpopulations as:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit.<span class="dv">1</span> &lt;-<span class="st"> </span>MARSS<span class="op">::</span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>mod.list.<span class="dv">1</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">fit<span class="fl">.1</span> &lt;-<span class="st"> </span>MARSS<span class="op">::</span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.list<span class="fl">.1</span>)</code></pre>
 </div>
 </div>
             </section>
@@ -537,7 +557,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

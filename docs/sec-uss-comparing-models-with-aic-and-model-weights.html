@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-02-06">
+<meta name="date" content="2019-02-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,41 +51,67 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -403,20 +429,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">6.4</span> Comparing models with AIC and model weights</h2>
 <p>To get the AIC or AICc values for a model fit from a MARSS fit, use <code>fit$AIC</code> or <code>fit$AICc</code>. The log-likelihood is in <code>fit$logLik</code> and the number of estimated parameters in <code>fit$num.params</code>. For fits from other functions, try <code>AIC(fit)</code> or look at the function documentation.</p>
 <p>Let’s put the AICc values 3 Nile models together:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nile.aic =<span class="st"> </span><span class="kw">c</span>(kem.<span class="dv">0</span><span class="op">$</span>AICc, kem.<span class="dv">1</span><span class="op">$</span>AICc, kem.<span class="dv">2</span><span class="op">$</span>AICc, kem.<span class="dv">3</span><span class="op">$</span>AICc)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">nile.aic =<span class="st"> </span><span class="kw">c</span>(kem<span class="fl">.0</span><span class="op">$</span>AICc, kem<span class="fl">.1</span><span class="op">$</span>AICc, kem<span class="fl">.2</span><span class="op">$</span>AICc, kem<span class="fl">.3</span><span class="op">$</span>AICc)</code></pre>
 <p>Then we calculate the AICc minus the minus AICc in our model set and compute the model weights. <span class="math inline">\(\Delta\text{AIC}\)</span> is the AIC values minus the minimum AIC value in your model set.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">delAIC &lt;-<span class="st"> </span>nile.aic<span class="op">-</span><span class="kw">min</span>(nile.aic)
-relLik &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>delAIC)
-aicweight &lt;-<span class="st"> </span>relLik<span class="op">/</span><span class="kw">sum</span>(relLik)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">delAIC &lt;-<span class="st"> </span>nile.aic <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(nile.aic)
+relLik &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>delAIC)
+aicweight &lt;-<span class="st"> </span>relLik<span class="op">/</span><span class="kw">sum</span>(relLik)</code></pre>
 <p>And this leads to our model weights table:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">aic.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
-<span class="dt">AICc=</span>nile.aic, 
-<span class="dt">delAIC=</span>delAIC, 
-<span class="dt">relLik=</span>relLik, 
-<span class="dt">weight=</span>aicweight)
-<span class="kw">rownames</span>(aic.table) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;flat level&quot;</span>,<span class="st">&quot;linear trend&quot;</span>, <span class="st">&quot;stoc level&quot;</span>, <span class="st">&quot;stoc level w drift&quot;</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">aic.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">AICc =</span> nile.aic, <span class="dt">delAIC =</span> delAIC, <span class="dt">relLik =</span> relLik, 
+    <span class="dt">weight =</span> aicweight)
+<span class="kw">rownames</span>(aic.table) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;flat level&quot;</span>, <span class="st">&quot;linear trend&quot;</span>, <span class="st">&quot;stoc level&quot;</span>, 
+    <span class="st">&quot;stoc level w drift&quot;</span>)</code></pre>
 <p>Here the table is printed using <code>round()</code> to limit the number of digits shown.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">round</span>(aic.table, <span class="dt">digits=</span><span class="dv">3</span>)</code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">round</span>(aic.table, <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre>
 <pre><code>                       AICc delAIC relLik weight
 flat level         1313.155 31.379  0.000  0.000
 linear trend       1290.882  9.106  0.011  0.007
@@ -480,7 +504,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
