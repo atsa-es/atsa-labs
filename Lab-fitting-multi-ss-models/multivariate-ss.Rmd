@@ -764,7 +764,7 @@ ggplot(pdat , aes(x = year , y = mean)) +
 For these questions, use the `harborSealWA` data set in **MARSS**.  The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.
 ```{r}
 require(MARSS)
-#Here is the dat to use for MARSS()
+data(harborSealWA, package="MARSS")
 dat <- t(harborSealWA[,2:6])
 ```
 The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).
