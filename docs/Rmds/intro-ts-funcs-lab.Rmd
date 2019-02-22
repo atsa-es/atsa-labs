@@ -1,8 +1,8 @@
-```{r ts-setup-lab, include=FALSE, purl=FALSE}
+```{r tslab-setup-lab, include=FALSE, purl=FALSE}
 knitr::opts_knit$set(unnamed.chunk.label = "tslab-")
 ```
 
-# Basic time series functions in R  {#chap-ts-lab}
+# Basic time series functions in R  {#chap-tslab}
 \chaptermark{Basic ts functions in R}
 
 This chapter introduces you to some of the basic functions in R for plotting and analyzing univariate time series data.  Many of the things you learn here will be relevant when we start examining multivariate time series as well.  We will begin with the creation and plotting of time series objects in R, and then moves on to decomposition, differencing, and correlation (*e.g.*, ACF, PACF) before ending with fitting and simulation of ARMA models.
@@ -11,25 +11,25 @@ A script with all the R code in the chapter can be downloaded  [here](./Rcode/in
 
 ### Data and packages {-}
 
-The chapter uses two data sets described in Section \@ref(sec-ts-data).  The main one is a CO$_2$ data set: [CO2_data.RData](./data/CO2_data.RData). The second is   a Northern Hemisphere temperature data set:  [NHemiTemp_data.RData](./data/NHemiTemp_data.RData).  The problems use a data set on hourly phytoplankton counts: [hourly_phyto.RData](./data/hourly_phyto.RData). After downloading via the links, load the data
-```{r ts-load-datasets, eval=FALSE}
+The chapter uses two data sets described in Section \@ref(sec-tslab-data).  The main one is a CO$_2$ data set: [CO2_data.RData](./data/CO2_data.RData). The second is   a Northern Hemisphere temperature data set:  [NHemiTemp_data.RData](./data/NHemiTemp_data.RData).  The problems use a data set on hourly phytoplankton counts: [hourly_phyto.RData](./data/hourly_phyto.RData). After downloading via the links, load the data
+```{r tslab-load-datasets, eval=FALSE}
 load("CO2_data.RData")
 load("NHemiTemp_data.RData")
 load("hourly_phyto.RData")
 ```
 
 This chapter uses the **stats** package, which is often loaded by default when you start R, the **MARSS** package and the **forecast** package. The problems use a dataset in the **datasets** package.  After installing the packages, if needed, load:
-```{r ts-loadpackages, warning=FALSE, message=FALSE, results='hide'}
+```{r tslab-loadpackages, warning=FALSE, message=FALSE, results='hide'}
 library(stats)
 library(MARSS)
 library(forecast)
 library(datasets)
 ```
 
-## CO$_2$ and global temperature data set {#sec-ts-data}
+## CO$_2$ and global temperature data set {#sec-tslab-data}
 
 For this chapter we will use the time series of the atmospheric concentration of CO$_2$ collected at the Mauna Loa Observatory in Hawai'i.  We downloaded this data and created the `CO2` dataframe with the following code:
-```{r ts-CO2data, eval=FALSE}
+```{r tslab-CO2data, eval=FALSE}
 library(RCurl)
 ## get CO2 data from Mauna Loa observatory
 ww1 <- "ftp://aftp.cmdl.noaa.gov/products/"
@@ -42,7 +42,7 @@ save(CO2, CO2fulltext, file="CO2_data.RData")
 ```
 The data file contains some extra information that we don't need, so we only save a subset of the data, specifically columns ( 1, 2 \& 5), and save this to `CO2`. The object `CO2fulltext` contains information on the data.  Use `cat(CO2fulltext)` to read.  You can read in the RData file here: [CO2_data.RData](./data/CO2_data.RData). 
 
-```{r ts-copy-data-file-to-doc, include=FALSE, purl=FALSE}
+```{r tslab-copy-data-file-to-doc, include=FALSE, purl=FALSE}
 #If bookdown is being run, then we are at the top level
 #make sure the Rdata is in the docs folder
 #file.copy("Lab-intro-to-ts/CO2_data.RData", "docs/data/CO2_data.RData", overwrite=TRUE)
@@ -57,7 +57,7 @@ if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){
 ```
 
 The second data set we will use is Northern Hemisphere land and ocean temperature anomalies from NOAA. You can read in the RData file here:  [NHemiTemp_data.RData](./data/NHemiTemp_data.RData).  We downloaded these data and created the RData file with the following code:
-```{r ts-temp-data, eval=FALSE}
+```{r tslab-temp-data, eval=FALSE}
 library(RCurl)
 ww1 <- "https://www.ncdc.noaa.gov/cag/time-series/"
 ww2 <- "global/nhem/land_ocean/p12/12/1880-2014.csv"
@@ -65,7 +65,7 @@ Temp <- read.csv(text=getURL(paste0(ww1,ww2)), skip=4)
 save(Temp, file="NHemiTemp_data.RData")
 ```
 
-```{r ts-copy-temp-data-to-doc, include=FALSE, purl=FALSE}
+```{r tslab-copy-temp-data-to-doc, include=FALSE, purl=FALSE}
 #If bookdown is being run, then we are at the top level
 #make sure the Rdata is in the docs folder
 #file.copy("Lab-intro-to-ts/NHemiTemp_data.RData", "docs/data/NHemiTemp_data.RData", overwrite=TRUE)
@@ -85,14 +85,14 @@ load("CO2_data.RData")
 load("NHemiTemp_data.RData")
 ```
 
-## Time series plots {#sec-ts-time-series-plots}
+## Time series plots {#sec-tslab-time-series-plots}
 
 Time series plots are an excellent way to begin the process of understanding what sort of process might have generated the data of interest.  Traditionally, time series have been plotted with the observed data on the $y$-axis and time on the $x$-axis.  Sequential time points are usually connected with some form of line, but sometimes other plot forms can be a useful way of conveying important information in the time series (*e.g.*, barplots of sea-surface temperature anomolies show nicely the contrasting El Niño and La Niña phenomena).
 
 
-### **ts** objects and ```plot.ts()```  {#sec-ts-textbfts-objects-and-verbplotts}
+### **ts** objects and ```plot.ts()```  {#sec-tslab-textbfts-objects-and-verbplotts}
 
-The CO$_2$ [data](#sec-ts-data) are stored in R as a ```data.frame``` object, but we would like to transform the class to a more user-friendly format for dealing with time series.  Fortunately, the ```ts()``` function will do just that, and return an object of class **ts** as well.  In addition to the data themselves, we need to provide ```ts()``` with 2 pieces of information about the time index for the data.
+The CO$_2$ [data](#sec-tslab-data) are stored in R as a ```data.frame``` object, but we would like to transform the class to a more user-friendly format for dealing with time series.  Fortunately, the ```ts()``` function will do just that, and return an object of class **ts** as well.  In addition to the data themselves, we need to provide ```ts()``` with 2 pieces of information about the time index for the data.
 
 The first, ```frequency```, is a bit of a misnomer because it does not really refer to the number of cycles per unit time, but rather the number of observations/samples per cycle.  So, for example, if the data were collected each hour of a day then ```frequency=24```.
 
@@ -100,7 +100,7 @@ The second, ```start```, specifies the first sample in terms of ($day$, $hour$),
 
 The Mauna Loa time series is collected monthly and begins in March of 1958, which we can get from the data themselves, and then pass to ```ts()```.  
 
-```{r ts-CO2ts, echo=TRUE, eval=TRUE}
+```{r tslab-CO2ts, echo=TRUE, eval=TRUE}
 ## create a time series (ts) object from the CO2 data
 co2 <- ts(data=CO2$ppm, frequency=12,
           start=c(CO2[1,"year"],CO2[1,"month"]))
@@ -109,15 +109,15 @@ co2 <- ts(data=CO2$ppm, frequency=12,
 
 Now let's plot the data using ```plot.ts()```, which is designed specifically for **ts** objects like the one we just created above.  It's nice because we don't need to specify any $x$-values as they are taken directly from the **ts** object.
 
-```{r ts-plotdataPar1, eval=FALSE, echo=TRUE}
+```{r tslab-plotdataPar1, eval=FALSE, echo=TRUE}
 ## plot the ts
 plot.ts(co2, ylab=expression(paste("CO"[2]," (ppm)")))
 ```
 
 
-(ref:ts-plotdata1) Time series of the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i measured monthly from March 1958 to present.
+(ref:tslab-plotdata1) Time series of the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i measured monthly from March 1958 to present.
 
-```{r ts-plotdata1, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotdata1)'}
+```{r tslab-plotdata1, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotdata1)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -125,20 +125,20 @@ plot.ts(co2, ylab=expression(paste("CO"[2]," (ppm)")))
 ```
  
 
-Examination of the plotted time series (Figure \@ref(fig:ts-plotdata1)) shows 2 obvious features that would violate any assumption of stationarity: 1) an increasing (and perhaps non-linear) trend over time, and 2) strong seasonal patterns. (*Aside*: Do you know the causes of these 2 phenomena?)
+Examination of the plotted time series (Figure \@ref(fig:tslab-plotdata1)) shows 2 obvious features that would violate any assumption of stationarity: 1) an increasing (and perhaps non-linear) trend over time, and 2) strong seasonal patterns. (*Aside*: Do you know the causes of these 2 phenomena?)
 
 
-### Combining and plotting multiple **ts** objects {#sec-ts-combining-and-plotting-multiple-textbfts-objects}
+### Combining and plotting multiple **ts** objects {#sec-tslab-combining-and-plotting-multiple-textbfts-objects}
 
-Before we examine the CO$_2$ data further, however, let's see a quick example of how you can combine and plot multiple time series together. We'll use the [data](#sec-ts-data) on monthly mean temperature anomolies for the Northern Hemisphere (``Temp``).  First convert ``Temp`` to a ``ts`` object.
+Before we examine the CO$_2$ data further, however, let's see a quick example of how you can combine and plot multiple time series together. We'll use the [data](#sec-tslab-data) on monthly mean temperature anomolies for the Northern Hemisphere (``Temp``).  First convert ``Temp`` to a ``ts`` object.
 
-```{r ts-Temp-data-ts}
+```{r tslab-Temp-data-ts}
 temp.ts <- ts(data=Temp$Value, frequency=12, start=c(1880,1))
 ```
 
 Before we can plot the two time series together, however, we need to line up their time indices because the temperature data start in January of 1880, but the CO$_2$ data start in March of 1958.  Fortunately, the ```ts.intersect()``` function makes this really easy once the data have been transformed to **ts** objects by trimming the data to a common time frame.  Also, ```ts.union()``` works in a similar fashion, but it pads one or both series with the appropriate number of NA's.  Let's try both.
 
-```{r ts-alignData, echo=TRUE, eval=TRUE}
+```{r tslab-alignData, echo=TRUE, eval=TRUE}
 ## intersection (only overlapping times)
 datI <- ts.intersect(co2,temp.ts)
 ## dimensions of common-time data
@@ -151,17 +151,17 @@ dim(datU)
 
 \noindent As you can see, the intersection of the two data sets is much smaller than the union.  If you compare them, you will see that the first 938 rows of ```datU``` contains ```NA``` in the ```co2``` column.
 
-It turns out that the regular ```plot()``` function in R is smart enough to recognize a **ts** object and use the information contained therein appropriately.  Here's how to plot the intersection of the two time series together with the y-axes on alternate sides (results are shown in Figure \@ref(fig:ts-plotdata2)):
+It turns out that the regular ```plot()``` function in R is smart enough to recognize a **ts** object and use the information contained therein appropriately.  Here's how to plot the intersection of the two time series together with the y-axes on alternate sides (results are shown in Figure \@ref(fig:tslab-plotdata2)):
 
-```{r ts-plotdataPar2, eval=FALSE, echo=TRUE, fig.show='hide'}
+```{r tslab-plotdataPar2, eval=FALSE, echo=TRUE, fig.show='hide'}
 ## plot the ts
 plot(datI, main="", yax.flip=TRUE)
 ```
 
 
-(ref:ts-plotdata2) Time series of the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i (top) and the mean temperature index for the Northern Hemisphere (bottom) measured monthly from March 1958 to present.
+(ref:tslab-plotdata2) Time series of the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i (top) and the mean temperature index for the Northern Hemisphere (bottom) measured monthly from March 1958 to present.
 
-```{r ts-plotdata2, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=5, fig.cap='(ref:ts-plotdata2)'}
+```{r tslab-plotdata2, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=5, fig.cap='(ref:tslab-plotdata2)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -170,7 +170,7 @@ plot(datI, main="", yax.flip=TRUE)
  
 
 
-## Decomposition of time series {#sec-ts-decomposition-of-time-series}
+## Decomposition of time series {#sec-tslab-decomposition-of-time-series}
 
 Plotting time series data is an important first step in analyzing their various components.  Beyond that, however, we need a more formal means for identifying and removing characteristics such as a trend or seasonal variation.  As discussed in lecture, the decomposition model reduces a time series into 3 components: trend, seasonal effects, and random errors.  In turn, we aim to model the random errors as some form of stationary process.
 
@@ -184,7 +184,7 @@ x_t = m_t + s_t + e_t,
 \noindent where, at time $t$, $m_t$ is the trend, $s_t$ is the seasonal effect, and $e_t$ is a random error that we generally assume to have zero-mean and to be correlated over time.  Thus, by estimating and subtracting both $\{m_t\}$ and $\{s_t\}$ from $\{x_t\}$, we hope to have a time series of stationary residuals $\{e_t\}$.
 
 
-### Estimating trends {#sec-ts-estimating-trends}
+### Estimating trends {#sec-tslab-estimating-trends}
 
 In lecture we discussed how linear filters are a common way to estimate trends in time series.  One of the most common linear filters is the moving average, which for time lags from $-a$ to $a$ is defined as
 
@@ -204,26 +204,26 @@ In lecture we discussed how linear filters are a common way to estimate trends i
 
 Conveniently, R has the built-in function ```filter()``` for estimating moving-average (and other) linear filters.  In addition to specifying the time series to be filtered, we need to pass in the filter weights (and 2 other arguments we won't worry about here--type ```?filter``` to get more information).  The easiest way to create the filter is with the ```rep()``` function:
 
-```{r ts-makeFilter, eval=TRUE, echo=TRUE}
+```{r tslab-makeFilter, eval=TRUE, echo=TRUE}
 ## weights for moving avg
 fltr <- c(1/2,rep(1,times=11),1/2)/12
 ```
 
 Now let's get our estimate of the trend $\{\hat{m}\}$ with ```filter()```} and plot it:
 
-```{r ts-plotTrendTSa, eval=FALSE, echo=TRUE}
+```{r tslab-plotTrendTSa, eval=FALSE, echo=TRUE}
 ## estimate of trend
 co2.trend <- filter(co2, filter=fltr, method="convo", sides=2)
 ## plot the trend
 plot.ts(co2.trend, ylab="Trend", cex=1)
 ```
 
-\noindent The trend is a more-or-less smoothly increasing function over time, the average slope of which does indeed appear to be increasing over time as well (Figure \@ref(fig:ts-plotTrendTSb)).
+\noindent The trend is a more-or-less smoothly increasing function over time, the average slope of which does indeed appear to be increasing over time as well (Figure \@ref(fig:tslab-plotTrendTSb)).
 
 
-(ref:ts-plotTrendTSb) Time series of the estimated trend $\{\hat{m}_t\}$ for the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i.
+(ref:tslab-plotTrendTSb) Time series of the estimated trend $\{\hat{m}_t\}$ for the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i.
 
-```{r ts-plotTrendTSb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotTrendTSb)'}
+```{r tslab-plotTrendTSb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotTrendTSb)'}
 ## estimate of trend
 co2.trend <- filter(co2, filter=fltr, method="convo", sides=2)
 ## set the margins & text size
@@ -234,7 +234,7 @@ plot.ts(co2.trend, ylab="Trend", cex=1)
  
 
 
-### Estimating seasonal effects {#sec-ts-estimating-seasonal-effects}
+### Estimating seasonal effects {#sec-tslab-estimating-seasonal-effects}
 
 Once we have an estimate of the trend for time $t$ ($\hat{m}_t$) we can easily obtain an estimate of the seasonal effect at time $t$ ($\hat{s}_t$) by subtraction
 
@@ -245,22 +245,22 @@ Once we have an estimate of the trend for time $t$ ($\hat{m}_t$) we can easily o
 
 \noindent which is really easy to do in R:
 
-```{r ts-getSeason, eval=TRUE, echo=TRUE}
+```{r tslab-getSeason, eval=TRUE, echo=TRUE}
 ## seasonal effect over time
 co2.1T <- co2 - co2.trend
 ```
 
 This estimate of the seasonal effect for each time $t$ also contains the random error $e_t$, however, which can be seen by plotting the time series and careful comparison of Equations \@ref(eq:classDecomp) and \@ref(eq:seasEst).
 
-```{r ts-plotSeasTSa, eval=FALSE, echo=TRUE, fig.show='hide'}
+```{r tslab-plotSeasTSa, eval=FALSE, echo=TRUE, fig.show='hide'}
 ## plot the monthly seasonal effects
 plot.ts(co2.1T, ylab="Seasonal effect", xlab="Month", cex=1)
 ```
 
 
-(ref:ts-plotSeasTSb) Time series of seasonal effects plus random errors for the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i, measured monthly from March 1958 to present.
+(ref:tslab-plotSeasTSb) Time series of seasonal effects plus random errors for the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i, measured monthly from March 1958 to present.
 
-```{r ts-plotSeasTSb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotSeasTSb)'}
+```{r tslab-plotSeasTSb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotSeasTSb)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -270,7 +270,7 @@ plot.ts(co2.1T, ylab="Seasonal effect plus errors", xlab="Month", cex=1)
 
 We can obtain the overall seasonal effect by averaging the estimates of $\{\hat{s}_t\}$ for each month and repeating this sequence over all years.
 
-```{r ts-getSeasonTS, eval=TRUE, echo=TRUE}
+```{r tslab-getSeasonTS, eval=TRUE, echo=TRUE}
 ## length of ts
 ll <- length(co2.1T)
 ## frequency (ie, 12)
@@ -290,17 +290,17 @@ mm <- mm - mean(mm)
 
 Before we create the entire time series of seasonal effects, let's plot them for each month to see what is happening within a year:
 
-```{r ts-plotdataPar3, eval=FALSE, echo=TRUE, fig.show='hide'}
+```{r tslab-plotdataPar3, eval=FALSE, echo=TRUE, fig.show='hide'}
 ## plot the monthly seasonal effects
 plot.ts(mm, ylab="Seasonal effect", xlab="Month", cex=1)
 ```
 
-\noindent It looks like, on average, that the CO$_2$ concentration is highest in spring (March) and lowest in summer (August) (Figure \@ref(fig:ts-plotSeasMean)).  (*Aside*: Do you know why this is?)
+\noindent It looks like, on average, that the CO$_2$ concentration is highest in spring (March) and lowest in summer (August) (Figure \@ref(fig:tslab-plotSeasMean)).  (*Aside*: Do you know why this is?)
 
 
-(ref:ts-plotSeasMean) Estimated monthly seasonal effects for the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i.
+(ref:tslab-plotSeasMean) Estimated monthly seasonal effects for the atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i.
 
-```{r ts-plotSeasMean, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotSeasMean)'}
+```{r tslab-plotSeasMean, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotSeasMean)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -310,7 +310,7 @@ plot.ts(mm, ylab="Seasonal effect", xlab="Month", cex=1)
 
 Finally, let's create the entire time series of seasonal effects $\{\hat{s}_t\}$:
 
-```{r ts-getSeasonMean, eval=TRUE, echo=TRUE}
+```{r tslab-getSeasonMean, eval=TRUE, echo=TRUE}
 ## create ts object for season
 co2.seas <- ts(rep(mm, periods+1)[seq(ll)],
                start=start(co2.1T), 
@@ -318,7 +318,7 @@ co2.seas <- ts(rep(mm, periods+1)[seq(ll)],
 ```
 
 
-### Completing the model {#sec-ts-completing-the-model}
+### Completing the model {#sec-tslab-completing-the-model}
 
 The last step in completing our full decomposition model is obtaining the random errors $\{\hat{e}_t\}$, which we can get via simple subtraction
 
@@ -329,22 +329,22 @@ The last step in completing our full decomposition model is obtaining the random
 
 \noindent Again, this is really easy in R:
 
-```{r ts-getError, eval=TRUE, echo=TRUE}
+```{r tslab-getError, eval=TRUE, echo=TRUE}
 ## random errors over time
 co2.err <- co2 - co2.trend - co2.seas
 ```
   
-Now that we have all 3 of our model components, let's plot them together with the observed data $\{x_t\}$.  The results are shown in Figure \@ref(fig:ts-plotTrSeas).
+Now that we have all 3 of our model components, let's plot them together with the observed data $\{x_t\}$.  The results are shown in Figure \@ref(fig:tslab-plotTrSeas).
 
-```{r ts-plotdataPar4, eval=FALSE, echo=TRUE, fig.show='hide'}
+```{r tslab-plotdataPar4, eval=FALSE, echo=TRUE, fig.show='hide'}
 ## plot the obs ts, trend & seasonal effect
 plot(cbind(co2,co2.trend,co2.seas,co2.err),main="",yax.flip=TRUE)
 ```
 
 
-(ref:ts-plotTrSeas) Time series of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i (top) along with the estimated trend, seasonal effects, and random errors.
+(ref:tslab-plotTrSeas) Time series of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i (top) along with the estimated trend, seasonal effects, and random errors.
 
-```{r ts-plotTrSeas, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=6, fig.cap='(ref:ts-plotTrSeas)'}
+```{r tslab-plotTrSeas, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=6, fig.cap='(ref:tslab-plotTrSeas)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -353,11 +353,11 @@ plot(cbind(co2,co2.trend,co2.seas,co2.err), main="", yax.flip=TRUE)
  
 
 
-### Using ```decompose()``` for decomposition {#sec-ts-using-verbdecompose-for-decomposition}
+### Using ```decompose()``` for decomposition {#sec-tslab-using-verbdecompose-for-decomposition}
 
 Now that we have seen how to estimate and plot the various components of a classical decomposition model in a piecewise manner, let's see how to do this in one step in R with the function ```decompose()```, which accepts a **ts** object as input and returns an object of class **decomposed.ts**.
 
-```{r ts-decompCO2, eval=TRUE, echo=TRUE}
+```{r tslab-decompCO2, eval=TRUE, echo=TRUE}
 ## decomposition of CO2 data
 co2.decomp <- decompose(co2)
 ```
@@ -373,17 +373,17 @@ co2.decomp <- decompose(co2)
 *     ```type```   type of error (```"additive"``` or ```"multiplicative"```)
 
 
-We can easily make plots of the output and compare them to those in Figure \@ref(fig:ts-plotTrSeas):
+We can easily make plots of the output and compare them to those in Figure \@ref(fig:tslab-plotTrSeas):
 
-```{r ts-plotDecompA, eval=FALSE, echo=TRUE, fig.show='hide'}
+```{r tslab-plotDecompA, eval=FALSE, echo=TRUE, fig.show='hide'}
 ## plot the obs ts, trend & seasonal effect
 plot(co2.decomp, yax.flip=TRUE)
 ```
 
 
-(ref:ts-plotDecompB) Time series of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i (top) along with the estimated trend, seasonal effects, and random errors obtained with the function ```decompose()```.
+(ref:tslab-plotDecompB) Time series of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i (top) along with the estimated trend, seasonal effects, and random errors obtained with the function ```decompose()```.
 
-```{r ts-plotDecompB, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=6, fig.cap='(ref:ts-plotDecompB)'}
+```{r tslab-plotDecompB, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=6, fig.cap='(ref:tslab-plotDecompB)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -391,12 +391,12 @@ plot(co2.decomp, yax.flip=TRUE)
 ```
  
 
-\noindent The results obtained with ```decompose()``` (Figure \@ref(fig:ts-plotDecompB)) are identical to those we estimated previously.
+\noindent The results obtained with ```decompose()``` (Figure \@ref(fig:tslab-plotDecompB)) are identical to those we estimated previously.
 
 Another nice feature of the ```decompose()``` function is that it can be used for decomposition models with multiplicative (*i.e.*, non-additive) errors (*e.g.*, if the original time series had a seasonal amplitude that increased with time).  To do, so pass in the argument ```type="multiplicative"```, which is set to ```type="additive"``` by default.
 
 
-## Differencing to remove a trend or seasonal effects {#sec-ts-differencing-to-remove-a-trend-or-seasonal-effects}
+## Differencing to remove a trend or seasonal effects {#sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects}
 
 An alternative to decomposition for removing trends is differencing.  We saw in lecture how the difference operator works and how it can be used to remove linear and nonlinear trends as well as various seasonal features that might be evident in the data.  As a reminder, we define the difference operator as
 
@@ -432,28 +432,28 @@ So, for example, a random walk is one of the most simple and widely used time se
 \end{equation}
 
 
-### Using the ```diff()``` function {#sec-ts-using-the-verbdiff-function}
+### Using the ```diff()``` function {#sec-tslab-using-the-verbdiff-function}
 
 In R we can use the ```diff()``` function for differencing a time series, which requires 3 arguments: ```x``` (the data),  ```lag``` (the lag at which to difference), and ```differences``` (the order of differencing; $d$ in Equation \@ref(eq:diffDefnB)).  For example, first-differencing a time series will remove a linear trend (*i.e.*, ```differences=1```); twice-differencing will remove a quadratic trend (*i.e.*, ```differences=2```).  In addition, first-differencing a time series at a lag equal to the period will remove a seasonal trend (*e.g.*, set ```lag=12``` for monthly data).
 
-Let's use ```diff()``` to remove the trend and seasonal signal from the CO$_2$ time series, beginning with the trend.  Close inspection of Figure \@ref(fig:ts-plotdata1) would suggest that there is a nonlinear increase in CO$_2$ concentration over time, so we'll set ```differences=2```):
+Let's use ```diff()``` to remove the trend and seasonal signal from the CO$_2$ time series, beginning with the trend.  Close inspection of Figure \@ref(fig:tslab-plotdata1) would suggest that there is a nonlinear increase in CO$_2$ concentration over time, so we'll set ```differences=2```):
   
-```{r ts-plotCO2diff2Echo, eval=FALSE, echo=TRUE, fig.show='hide'}
+```{r tslab-plotCO2diff2Echo, eval=FALSE, echo=TRUE, fig.show='hide'}
 ## twice-difference the CO2 data
 co2.D2 <- diff(co2, differences=2)
 ## plot the differenced data
 plot(co2.D2, ylab=expression(paste(nabla^2,"CO"[2])))
 ```
 
-```{r ts-plotCO2diff2eval, eval=TRUE, echo=FALSE}
+```{r tslab-plotCO2diff2eval, eval=TRUE, echo=FALSE}
 ## twice-difference the CO2 data
 co2.D2 <- diff(co2, differences=2)
 ```
   
 
-(ref:ts-plotCO2diff2) Time series of the twice-differenced atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i.
+(ref:tslab-plotCO2diff2) Time series of the twice-differenced atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i.
 
-```{r ts-plotCO2diff2, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotCO2diff2)'}
+```{r tslab-plotCO2diff2, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotCO2diff2)'}
 ## set the margins & text size
 par(mar=c(4,4.5,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the differenced data
@@ -461,9 +461,9 @@ plot(co2.D2, ylab=expression(paste(nabla^2,"CO"[2])))
 ```
  
 
-We were apparently successful in removing the trend, but the seasonal effect still appears obvious (Figure \@ref(fig:ts-plotCO2diff2)).  Therefore, let's go ahead and difference that series at lag-12 because our data were collected monthly.
+We were apparently successful in removing the trend, but the seasonal effect still appears obvious (Figure \@ref(fig:tslab-plotCO2diff2)).  Therefore, let's go ahead and difference that series at lag-12 because our data were collected monthly.
 
-```{r ts-plotCO2diff12Echo, eval=FALSE, echo=TRUE}
+```{r tslab-plotCO2diff12Echo, eval=FALSE, echo=TRUE}
 ## difference the differenced CO2 data
 co2.D2D12 <- diff(co2.D2, lag=12)
 ## plot the newly differenced data
@@ -471,15 +471,15 @@ plot(co2.D2D12,
      ylab=expression(paste(nabla,"(",nabla^2,"CO"[2],")")))
 ```
 
-```{r ts-plotCO2diff12eval, eval=TRUE, echo=FALSE}
+```{r tslab-plotCO2diff12eval, eval=TRUE, echo=FALSE}
 ## difference the differenced CO2 data
 co2.D2D12 <- diff(co2.D2, lag=12)
 ```
   
 
-(ref:ts-plotCO2diff12) Time series of the lag-12 difference of the twice-differenced atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i.
+(ref:tslab-plotCO2diff12) Time series of the lag-12 difference of the twice-differenced atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i.
 
-```{r ts-plotCO2diff12, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotCO2diff12)'}
+```{r tslab-plotCO2diff12, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotCO2diff12)'}
 ## set the margins & text size
 par(mar=c(4,4.5,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the newly differenced data
@@ -487,15 +487,15 @@ plot(co2.D2D12, ylab=expression(paste(nabla,"(",nabla^2,"CO"[2],")")))
 ```
  
 
-\noindent Now we have a time series that appears to be random errors without any obvious trend or seasonal components (Figure \@ref(fig:ts-plotCO2diff12)).
+\noindent Now we have a time series that appears to be random errors without any obvious trend or seasonal components (Figure \@ref(fig:tslab-plotCO2diff12)).
 
 
-## Correlation within and among time series {#sec-ts-correlation-within-and-among-time-series}
+## Correlation within and among time series {#sec-tslab-correlation-within-and-among-time-series}
   
 The concepts of covariance and correlation are very important in time series analysis.  In particular, we can examine the correlation structure of the original data or random errors from a decomposition model to help us identify possible form(s) of (non)stationary model(s) for the stochastic process.
 
 
-### Autocorrelation function (ACF) {#sec-ts-autocorrelation-function-acf}
+### Autocorrelation function (ACF) {#sec-tslab-autocorrelation-function-acf}
 
 Autocorrelation is the correlation of a variable with itself at differing time lags. Recall from lecture that we defined the sample autocovariance function (ACVF), $c_k$, for some lag $k$ as
 
@@ -524,15 +524,15 @@ It is important to remember two things here.  First, although the confidence int
 
 We can use the ```acf()``` function in R to compute the sample ACF (note that adding the option ```type="covariance"``` will return the sample auto-covariance (ACVF) instead of the ACF--type ```?acf``` for details).  Calling the function by itself will will automatically produce a correlogram (*i.e.*, a plot of the autocorrelation versus time lag).  The argument ```lag.max``` allows you to set the number of positive and negative lags.  Let's try it for the CO$_2$ data.
 
-```{r ts-plotACFa, eval=FALSE, echo=TRUE}
+```{r tslab-plotACFa, eval=FALSE, echo=TRUE}
 ## correlogram of the CO2 data
 acf(co2, lag.max=36)
 ```
 
 
-(ref:ts-plotACFb) Correlogram of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i obtained with the function ```acf()```.
+(ref:tslab-plotACFb) Correlogram of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i obtained with the function ```acf()```.
 
-```{r ts-plotACFb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotACFb)'}
+```{r tslab-plotACFb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotACFb)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## correlogram of the CO2 data
@@ -540,7 +540,7 @@ acf(co2, lag.max=36)
 ```
  
 
-There are 4 things about Figure \@ref(fig:ts-plotACFb) that are noteworthy:
+There are 4 things about Figure \@ref(fig:tslab-plotACFb) that are noteworthy:
 
 
 1.  the ACF at lag 0, $r_0$, equals 1 by default (*i.e.*, the correlation of a time series with itself)--it's plotted as a reference point;
@@ -550,7 +550,7 @@ There are 4 things about Figure \@ref(fig:ts-plotACFb) that are noteworthy:
 
 As an alternative to the default plots for **acf** objects, let's define a new plot function for **acf** objects with some better features:
 
-```{r ts-BetterPlotACF, eval=TRUE, echo=TRUE}
+```{r tslab-BetterPlotACF, eval=TRUE, echo=TRUE}
 ## better ACF plot
 plot.acf <- function(ACFobj) {
   rr <- ACFobj$acf[-1]
@@ -566,32 +566,32 @@ plot.acf <- function(ACFobj) {
 
 Now we can assign the result of ```acf()``` to a variable and then use the information contained therein to plot the correlogram with our new plot function.
 
-```{r ts-betterACF, eval=FALSE, echo=TRUE}
+```{r tslab-betterACF, eval=FALSE, echo=TRUE}
 ## acf of the CO2 data
 co2.acf <- acf(co2, lag.max=36)
 ## correlogram of the CO2 data
 plot.acf(co2.acf)
 ```
 
-```{r ts-DoOurACF, eval=TRUE, echo=FALSE}
+```{r tslab-DoOurACF, eval=TRUE, echo=FALSE}
 ## acf of the CO2 data
 co2.acf <- acf(co2, lag.max=36)
 ```
 
 
-(ref:ts-plotbetterACF) Correlogram of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i obtained with the function ```plot.acf()```.
+(ref:tslab-plotbetterACF) Correlogram of the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i obtained with the function ```plot.acf()```.
 
-```{r ts-plotbetterACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotbetterACF)'}
+```{r tslab-plotbetterACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotbetterACF)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## correlogram of the CO2 data
 plot.acf(co2.acf)
 ```
-Notice that all of the relevant information is still there (Figure \@ref(fig:ts-plotbetterACF)), but now $r_0=1$ is not plotted at lag-0 and the lags on the $x$-axis are displayed correctly as integers.
+Notice that all of the relevant information is still there (Figure \@ref(fig:tslab-plotbetterACF)), but now $r_0=1$ is not plotted at lag-0 and the lags on the $x$-axis are displayed correctly as integers.
 
 Before we move on to the PACF, let's look at the ACF for some deterministic time series, which will help you identify interesting properties (*e.g.*, trends, seasonal effects) in a stochastic time series, and account for them in time series models--an important topic in this course.  First, let's look at a straight line.
 
-```{r ts-LinearACFecho, eval=FALSE, echo=TRUE}
+```{r tslab-LinearACFecho, eval=FALSE, echo=TRUE}
 ## length of ts
 nn <- 100
 ## create straight line
@@ -606,7 +606,7 @@ line.acf <- acf(tt, plot=FALSE)
 plot.acf(line.acf)
 ```
 
-```{r ts-LinearACF, eval=TRUE, echo=FALSE}
+```{r tslab-LinearACF, eval=TRUE, echo=FALSE}
 ## length of ts
 nn <- 100
 ## create straight line
@@ -616,9 +616,9 @@ line.acf <- acf(tt)
 ```
   
 
-(ref:ts-plotLinearACF) Time series plot of a straight line (left) and the correlogram of its ACF (right).
+(ref:tslab-plotLinearACF) Time series plot of a straight line (left) and the correlogram of its ACF (right).
 
-```{r ts-plotLinearACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotLinearACF)'}
+```{r tslab-plotLinearACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotLinearACF)'}
 ## set the margins & text size
 par(mfrow=c(1,2), mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot line
@@ -626,11 +626,11 @@ plot.ts(tt, ylab=expression(italic(x[t])))
 ## plot ACF
 plot.acf(line.acf)
 ```
-The correlogram for a straight line is itself a linearly decreasing function over time (Figure \@ref(fig:ts-plotLinearACF)).
+The correlogram for a straight line is itself a linearly decreasing function over time (Figure \@ref(fig:tslab-plotLinearACF)).
 
 Now let's examine the ACF for a sine wave and see what sort of pattern arises.
 
-```{r ts-SineACFecho, eval=FALSE, echo=TRUE}
+```{r tslab-SineACFecho, eval=FALSE, echo=TRUE}
 ## create sine wave
 tt <- sin(2*pi*seq(nn)/12)
 ## set up plot area
@@ -643,7 +643,7 @@ sine.acf <- acf(tt, plot=FALSE)
 plot.acf(sine.acf)
 ```
 
-```{r ts-SineACF, eval=TRUE, echo=FALSE}
+```{r tslab-SineACF, eval=TRUE, echo=FALSE}
 ## create sine wave
 tt <- sin(2*pi*seq(nn)/12)
 ## get ACF
@@ -651,9 +651,9 @@ sine.acf <- acf(tt, plot=FALSE)
 ```
   
 
-(ref:ts-plotSineACF) Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right).
+(ref:tslab-plotSineACF) Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right).
 
-```{r ts-plotSineACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotSineACF)'}
+```{r tslab-plotSineACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotSineACF)'}
 ## set the margins & text size
 par(mfrow=c(1,2), mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot line
@@ -661,11 +661,11 @@ plot.ts(tt, ylab=expression(italic(x[t])))
 ## plot ACF
 plot.acf(sine.acf)
 ```
-Perhaps not surprisingly, the correlogram for a sine wave is itself a sine wave whose amplitude decreases linearly over time (Figure \@ref(fig:ts-plotSineACF)).
+Perhaps not surprisingly, the correlogram for a sine wave is itself a sine wave whose amplitude decreases linearly over time (Figure \@ref(fig:tslab-plotSineACF)).
 
 Now let's examine the ACF for a sine wave with a linear downward trend and see what sort of patterns arise.
 
-```{r ts-SiLineACFecho, eval=FALSE, echo=TRUE}
+```{r tslab-SiLineACFecho, eval=FALSE, echo=TRUE}
 ## create sine wave with trend
 tt <- sin(2*pi*seq(nn)/12) - seq(nn)/50
 ## set up plot area
@@ -678,7 +678,7 @@ sili.acf <- acf(tt, plot=FALSE)
 plot.acf(sili.acf)
 ```
 
-```{r ts-SiLiACF, eval=TRUE, echo=FALSE}
+```{r tslab-SiLiACF, eval=TRUE, echo=FALSE}
 ## create sine wave with trend
 tt <- sin(2*pi*seq(nn)/12) - seq(nn)/50
 ## get ACF
@@ -686,9 +686,9 @@ sili.acf <- acf(tt, plot=FALSE)
 ```
   
 
-(ref:ts-plotSiLiACF) Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right).
+(ref:tslab-plotSiLiACF) Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right).
 
-```{r ts-plotSiLiACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotSiLiACF)'}
+```{r tslab-plotSiLiACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotSiLiACF)'}
 ## set the margins & text size
 par(mfrow=c(1,2), mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot line
@@ -696,12 +696,12 @@ plot.ts(tt, ylab=expression(italic(x[t])))
 ## plot ACF
 plot.acf(sili.acf)
 ```
-The correlogram for a sine wave with a trend is itself a nonsymmetrical sine wave whose amplitude and center decrease over time (Figure \@ref(fig:ts-plotSiLiACF)).
+The correlogram for a sine wave with a trend is itself a nonsymmetrical sine wave whose amplitude and center decrease over time (Figure \@ref(fig:tslab-plotSiLiACF)).
 
 As we have seen, the ACF is a powerful tool in time series analysis for identifying important features in the data.  As we will see later, the ACF is also an important diagnostic tool for helping to select the proper order of $p$ and $q$ in ARMA($p$,$q$) models.
 
 
-### Partial autocorrelation function (PACF) {#sec-ts-partial-autocorrelation-function-pacf}
+### Partial autocorrelation function (PACF) {#sec-tslab-partial-autocorrelation-function-pacf}
 
 The partial autocorrelation function (PACF) measures the linear correlation of a series $\{x_t\}$ and a lagged version of itself $\{x_{t+k}\}$ with the linear dependence of $\{x_{t-1},x_{t-2},\dots,x_{t-(k-1)}\}$ removed.  Recall from lecture that we define the PACF as
 
@@ -724,14 +724,14 @@ with
 
 It's easy to compute the PACF for a variable in R using the ```pacf()``` function, which will automatically plot a correlogram when called by itself (similar to ```acf()```).  Let's look at the PACF for the CO$_2$ data.
 
-```{r ts-plotPACFa, eval=FALSE, echo=TRUE}
+```{r tslab-plotPACFa, eval=FALSE, echo=TRUE}
 ## PACF of the CO2 data
 pacf(co2, lag.max=36)
 ```
 
 The default plot for PACF is a bit better than for ACF, but here is another plotting function that might be useful.
 
-```{r ts-BetterPlotPACF, eval=TRUE, echo=TRUE}
+```{r tslab-BetterPlotPACF, eval=TRUE, echo=TRUE}
 ## better PACF plot
 plot.pacf <- function(PACFobj) {
   rr <- PACFobj$acf
@@ -746,19 +746,19 @@ plot.pacf <- function(PACFobj) {
 ```
 
 
-(ref:ts-plotPACFb) Correlogram of the PACF for the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i obtained with the function ```pacf()```.
+(ref:tslab-plotPACFb) Correlogram of the PACF for the observed atmospheric CO$_2$ concentration at Mauna Loa, Hawai'i obtained with the function ```pacf()```.
 
-```{r ts-plotPACFb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotPACFb)'}
+```{r tslab-plotPACFb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotPACFb)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## correlogram of the CO2 data
 pacf(co2, lag.max=36)
 ```
-Notice in Figure \@ref(fig:ts-plotPACFb) that the partial autocorrelation at lag-1 is very high (it equals the ACF at lag-1), but the other values at lags > 1 are relatively small, unlike what we saw for the ACF.  We will discuss this in more detail later on in this lab.
+Notice in Figure \@ref(fig:tslab-plotPACFb) that the partial autocorrelation at lag-1 is very high (it equals the ACF at lag-1), but the other values at lags > 1 are relatively small, unlike what we saw for the ACF.  We will discuss this in more detail later on in this lab.
 
 Notice also that the PACF plot again has real-valued indices for the time lag, but it does not include any value for lag-0 because it is impossible to remove any intermediate autocorrelation between $t$ and $t-k$ when $k=0$, and therefore the PACF does not exist at lag-0.  If you would like, you can use the ```plot.acf()``` function we defined above to plot the PACF estimates because ```acf()``` and ```pacf()``` produce identical list structures (results not shown here).
 
-```{r ts-CO2PACFecho, eval=FALSE, echo=TRUE}
+```{r tslab-CO2PACFecho, eval=FALSE, echo=TRUE}
 ## PACF of the CO2 data
 co2.pacf <- pacf(co2)
 ## correlogram of the CO2 data
@@ -768,7 +768,7 @@ plot.acf(co2.pacf)
 As with the ACF, we will see later on how the PACF can also be used to help identify the appropriate order of $p$ and $q$ in ARMA($p$,$q$) models.
 
 
-### Cross-correlation function (CCF) {#sec-ts-cross-correlation-function-ccf}
+### Cross-correlation function (CCF) {#sec-tslab-cross-correlation-function-ccf}
 
 Often we are interested in looking for relationships between 2 different time series.  There are many ways to do this, but a simple method is via examination of their cross-covariance and cross-correlation.
 
@@ -801,7 +801,7 @@ Computing the CCF in R is easy with the function ```ccf()``` and it works just l
 
 To begin, let's get the data, which are conveniently included in the **datasets** package included as part of the base installation of R.  Before calculating the CCF, however, we need to find the matching years of data.  Again, we'll use the ```ts.intersect()``` function.
 
-```{r ts-LynxSunspotCCF, eval=TRUE, echo=TRUE}
+```{r tslab-LynxSunspotCCF, eval=TRUE, echo=TRUE}
 ## get the matching years of sunspot data
 suns <- ts.intersect(lynx,sunspot.year)[,"sunspot.year"]
 ## get the matching lynx data
@@ -810,15 +810,15 @@ lynx <- ts.intersect(lynx,sunspot.year)[,"lynx"]
 
 Here are plots of the time series.
 
-```{r ts-plotSunsLynxEcho, eval=FALSE, echo=TRUE}
+```{r tslab-plotSunsLynxEcho, eval=FALSE, echo=TRUE}
 ## plot time series
 plot(cbind(suns,lynx), yax.flip=TRUE)
 ```
 
 
-(ref:ts-plotSunsLynx) Time series of sunspot activity (top) and lynx trappings in Canada (bottom) from 1821-1934.
+(ref:tslab-plotSunsLynx) Time series of sunspot activity (top) and lynx trappings in Canada (bottom) from 1821-1934.
 
-```{r ts-plotSunsLynx, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=6, fig.cap='(ref:ts-plotSunsLynx)'}
+```{r tslab-plotSunsLynx, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=6, fig.cap='(ref:tslab-plotSunsLynx)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -829,15 +829,15 @@ plot(cbind(suns,lynx), main="", yax.flip=TRUE)
 
 It is important to remember which of the 2 variables you call $y$ and $x$ when calling ```ccf(x, y, ...)```.  In this case, it seems most relevant to treat lynx as the $y$ and sunspots as the $x$, in which case we are mostly interested in the CCF at negative lags (*i.e.*, when sunspot activity predates inferred lynx abundance).  Furthermore, we'll use log-transformed lynx trappings.
 
-```{r ts-plotCCFa, eval=FALSE, echo=TRUE}
+```{r tslab-plotCCFa, eval=FALSE, echo=TRUE}
 ## CCF of sunspots and lynx
 ccf(suns, log(lynx), ylab="Cross-correlation")
 ```
 
 
-(ref:ts-plotCCFb) CCF for annual sunspot activity and the log of the number of lynx trappings in Canada from 1821-1934.
+(ref:tslab-plotCCFb) CCF for annual sunspot activity and the log of the number of lynx trappings in Canada from 1821-1934.
 
-```{r ts-plotCCFb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotCCFb)'}
+```{r tslab-plotCCFb, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotCCFb)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## CCF of sunspots and lynx
@@ -845,10 +845,10 @@ ccf(suns, lynx, ylab="Cross-correlation")
 ```
  
 
-From Figures \@ref(fig:ts-plotSunsLynx) and \@ref(fig:ts-plotCCFb) it looks like lynx numbers are relatively low 3-5 years after high sunspot activity (*i.e.*, significant correlation at lags of -3 to -5).
+From Figures \@ref(fig:tslab-plotSunsLynx) and \@ref(fig:tslab-plotCCFb) it looks like lynx numbers are relatively low 3-5 years after high sunspot activity (*i.e.*, significant correlation at lags of -3 to -5).
 
 
-## White noise (WN) {#sec-ts-white-noise-wn}
+## White noise (WN) {#sec-tslab-white-noise-wn}
 
 A time series $\{w_t\}$ is a discrete white noise series (DWN) if the $w_1, w_1, \dots, w_t$ are independent and identically distributed (IID) with a mean of zero. For most of the examples in this course we will assume that the $w_t \sim \text{N}(0,q)$, and therefore we refer to the time series $\{w_t\}$ as Gaussian white noise.  If our time series model has done an adequate job of removing all of the serial autocorrelation in the time series with trends, seasonal effects, etc., then the model residuals ($e_t = y_t - \hat{y}_t$) will be a WN sequence with the following properties for its mean ($\bar{e}$), covariance ($c_k$), and autocorrelation ($r_k$):
 
@@ -868,13 +868,13 @@ A time series $\{w_t\}$ is a discrete white noise series (DWN) if the $w_1, w_1,
 \end{equation}
 
 
-### Simulating white noise {#sec-ts-simulating-white-noise}
+### Simulating white noise {#sec-tslab-simulating-white-noise}
 
 Simulating WN in R is straightforward with a variety of built-in random number generators for continuous and discrete distributions.  Once you know R's abbreviation for the distribution of interest, you add an $\texttt{r}$ to the beginning to get the function's name.  For example, a Gaussian (or normal) distribution is abbreviated $\texttt{norm}$ and so the function is ```rnorm()```.  All of the random number functions require two things: the number of samples from the distribution and the parameters for the distribution itself (*e.g.*, mean \& SD of a normal).  Check the help file for the distribution of interest to find out what parameters you must specify (*e.g.*, type ```?rnorm``` to see the help for a normal distribution).
 
 Here's how to generate 100 samples from a normal distribution with mean of 5 and standard deviation of 0.2, and 50 samples from a Poisson distribution with a rate ($\lambda$) of 20.
 
-```{r ts-DWNsim, echo=TRUE, eval=TRUE}
+```{r tslab-DWNsim, echo=TRUE, eval=TRUE}
 set.seed(123)
 ## random normal variates
 GWN <- rnorm(n=100, mean=5, sd=0.2)
@@ -884,7 +884,7 @@ PWN <- rpois(n=50, lambda=20)
 
 Here are plots of the time series.  Notice that on one occasion the same number was drawn twice in a row from the Poisson distribution, which is discrete.  That is virtually guaranteed to never happen with a continuous distribution.
 
-```{r ts-DWNsimPlotEcho, echo=TRUE, eval=FALSE}
+```{r tslab-DWNsimPlotEcho, echo=TRUE, eval=FALSE}
 ## set up plot region
 par(mfrow=c(1,2))
 ## plot normal variates with mean
@@ -896,9 +896,9 @@ abline(h=20, col="blue", lty="dashed")
 ```
 
 
-(ref:ts-plotDWNsims) Time series plots of simulated Gaussian (left) and Poisson (right) white noise.
+(ref:tslab-plotDWNsims) Time series plots of simulated Gaussian (left) and Poisson (right) white noise.
 
-```{r ts-plotDWNsims, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotDWNsims)'}
+```{r tslab-plotDWNsims, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotDWNsims)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1, mfrow=c(1,2))
 ## plot normal variates with mean
@@ -912,7 +912,7 @@ abline(h=20, col="blue", lty="dashed")
 
 Now let's examine the ACF for the 2 white noise series and see if there is, in fact, zero autocorrelation for lags $\geq$ 1.
 
-```{r ts-DWNacfEcho, echo=TRUE, eval=FALSE}
+```{r tslab-DWNacfEcho, echo=TRUE, eval=FALSE}
 ## set up plot region
 par(mfrow=c(1,2))
 ## plot normal variates with mean
@@ -922,9 +922,9 @@ acf(PWN, main="", lag.max=20)
 ```
 
 
-(ref:ts-plotACFdwn) ACF's for the simulated Gaussian (left) and Poisson (right) white noise shown in Figure \@ref(fig:ts-plotDWNsims).
+(ref:tslab-plotACFdwn) ACF's for the simulated Gaussian (left) and Poisson (right) white noise shown in Figure \@ref(fig:tslab-plotDWNsims).
 
-```{r ts-plotACFdwn, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotACFdwn)'}
+```{r tslab-plotACFdwn, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotACFdwn)'}
 ## set the margins & text size
 par(mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1, mfrow=c(1,2))
 ## plot normal variates with mean
@@ -938,7 +938,7 @@ Interestingly, the $r_k$ are all greater than zero in absolute value although th
 
 
 
-## Random walks (RW) {#sec-ts-random-walks-rw}
+## Random walks (RW) {#sec-tslab-random-walks-rw}
 
 Random walks receive considerable attention in time series analyses because of their ability to fit a wide range of data despite their surprising simplicity.  In fact, random walks are the most simple non-stationary time series model.  A random walk is a time series $\{x_t\}$ where
 
@@ -950,11 +950,11 @@ Random walks receive considerable attention in time series analyses because of t
 \noindent and $w_t$ is a discrete white noise series where all values are independent and identically distributed (IID) with a mean of zero. In practice, we will almost always assume that the $w_t$ are Gaussian white noise, such that $w_t \sim \text{N}(0,q)$.  We will see later that a random walk is a special case of an autoregressive model.
 
 
-### Simulating a random walk {#sec-ts-simulating-a-random-walk}
+### Simulating a random walk {#sec-tslab-simulating-a-random-walk}
 
 Simulating a RW model in R is straightforward with a for loop and the use of ```rnorm()``` to generate Gaussian errors (type ```?rnorm``` to see details on the function and its useful relatives ```dnorm()``` and ```pnorm()```).  Let's create 100 obs (we'll also set the random number seed so everyone gets the same results).  
 
-```{r ts-RWsim, eval=TRUE, echo=TRUE}
+```{r tslab-RWsim, eval=TRUE, echo=TRUE}
 ## set random number seed
 set.seed(123)
 ## length of time series
@@ -967,7 +967,7 @@ for(t in 2:TT) { xx[t] <- xx[t-1] + ww[t] }
 
 Now let's plot the simulated time series and its ACF.
 
-```{r ts-plotRWecho, eval=FALSE, echo=TRUE}
+```{r tslab-plotRWecho, eval=FALSE, echo=TRUE}
 ## setup plot area
 par(mfrow=c(1,2))
 ## plot line
@@ -976,14 +976,14 @@ plot.ts(xx, ylab=expression(italic(x[t])))
 plot.acf(acf(xx, plot=FALSE))
 ```
 
-```{r ts-calcRWACF, eval=TRUE, echo=FALSE}
+```{r tslab-calcRWACF, eval=TRUE, echo=FALSE}
 xx.acf <- acf(xx, plot=FALSE)
 ```
 
 
-(ref:ts-plotRW) Simulated time series of a random walk model (left) and its associated ACF (right).
+(ref:tslab-plotRW) Simulated time series of a random walk model (left) and its associated ACF (right).
 
-```{r ts-plotRW, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotRW)'}
+```{r tslab-plotRW, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotRW)'}
 ## setup plot area
 par(mfrow=c(1,2), mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot line
@@ -993,10 +993,10 @@ plot.acf(xx.acf)
 ```
  
 
-\noindent Perhaps not surprisingly based on their names, autoregressive models such as RW's have a high degree of autocorrelation out to long lags (Figure \@ref(fig:ts-plotRW)).
+\noindent Perhaps not surprisingly based on their names, autoregressive models such as RW's have a high degree of autocorrelation out to long lags (Figure \@ref(fig:tslab-plotRW)).
 
 
-### Alternative formulation of a random walk {#sec-ts-alternative-formulation-of-a-random-walk}
+### Alternative formulation of a random walk {#sec-tslab-alternative-formulation-of-a-random-walk}
 
 As an aside, let's use an alternative formulation of a random walk model to see an even shorter way to simulate an RW in R.  Based on our definition of a random walk in Equation \@ref(eq:defnRW2), it is easy to see that
 
@@ -1029,14 +1029,14 @@ As an aside, let's use an alternative formulation of a random walk model to see 
 
 From Equation \@ref(eq:defnRWalt3) it is easy to see that the value of an RW process at time step $t$ is the sum of all the random errors up through time $t$.  Therefore, in R we can easily simulate a realization from an RW process using the ```cumsum(x)``` function, which does cumulative summation of the vector ```x``` over its entire length.  If we use the same errors as before, we should get the same results.
 
-```{r ts-RWsimAlt, eval=TRUE, echo=TRUE}
+```{r tslab-RWsimAlt, eval=TRUE, echo=TRUE}
 ## simulate RW
 x2 <- cumsum(ww)
 ```
 
 \noindent Let's plot both time series to see if it worked.
 
-```{r ts-plotRWsimEcho, eval=FALSE, echo=TRUE}
+```{r tslab-plotRWsimEcho, eval=FALSE, echo=TRUE}
 ## setup plot area
 par(mfrow=c(1,2))
 ## plot 1st RW
@@ -1046,9 +1046,9 @@ plot.ts(x2, ylab=expression(italic(x[t])))
 ```
 
 
-(ref:ts-plotRWalt) Time series of the same random walk model formulated as Equation \@ref(eq:defnRW2) and simulated via a for loop (left), and as Equation \@ref(eq:defnRWalt3) and simulated via ```cumsum()``` (right).
+(ref:tslab-plotRWalt) Time series of the same random walk model formulated as Equation \@ref(eq:defnRW2) and simulated via a for loop (left), and as Equation \@ref(eq:defnRWalt3) and simulated via ```cumsum()``` (right).
 
-```{r ts-plotRWalt, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotRWalt)'}
+```{r tslab-plotRWalt, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotRWalt)'}
 ## setup plot area
 par(mfrow=c(1,2), mar=c(4,4,1,1), oma=c(0,0,0,0), cex=1)
 ## plot 1st RW
@@ -1062,7 +1062,7 @@ plot.ts(x2, ylab=expression(italic(x[t])))
 
 
 
-## Autoregressive (AR) models {#sec-ts-autoregressive-ar-models}
+## Autoregressive (AR) models {#sec-tslab-autoregressive-ar-models}
 
 Autoregressive models of order $p$, abbreviated AR($p$), are commonly used in time series analyses.  In particular, AR(1) models (and their multivariate extensions) see considerable use in ecology as we will see later in the course.  Recall from lecture that an AR($p$) model is written as
 
@@ -1074,7 +1074,7 @@ Autoregressive models of order $p$, abbreviated AR($p$), are commonly used in ti
 \noindent where $\{w_t\}$ is a white noise sequence with zero mean and some variance $\sigma^2$.  For our purposes we usually assume that $w_t \sim \text{N}(0,q)$.  Note that the random walk in Equation \@ref(eq:defnRW2) is a special case of an AR(1) model where $\phi_1=1$ and $\phi_k=0$ for $k \geq 2$.
 
 
-### Simulating an AR($p$) process {#sec-ts-simulating-an-arp-process}
+### Simulating an AR($p$) process {#sec-tslab-simulating-an-arp-process}
 
 Although we could simulate an AR($p$) process in R using a for loop just as we did for a random walk, it's much easier with the function ```arima.sim()```, which works for all forms and subsets of ARIMA models.  To do so, remember that the AR in ARIMA stands for "autoregressive", the I for "integrated", and the MA for "moving-average"; we specify the order of ARIMA models as $p,d,q$.  So, for example, we would specify an AR(2) model as ARIMA(2,0,0), or an MA(1) model as ARIMA(0,0,1).  If we had an ARMA(3,1) model that we applied to data that had been twice-differenced, then we would have an ARIMA(3,2,1) model. 
 
@@ -1091,7 +1091,7 @@ Although we could simulate an AR($p$) process in R using a for loop just as we d
 
 Let's begin by simulating some AR(1) models and comparing their behavior.  First, let's choose models with contrasting AR coefficients.  Recall that in order for an AR(1) model to be stationary, $\phi < \lvert 1 \rvert$, so we'll try 0.1 and 0.9.  We'll again set the random number seed so we will get the same answers. 
 
-```{r ts-simAR1, echo=TRUE, eval=TRUE}
+```{r tslab-simAR1, echo=TRUE, eval=TRUE}
 set.seed(456)
 ## list description for AR(1) model with small coef
 AR.sm <- list(order=c(1,0,0), ar=0.1, sd=0.1)
@@ -1104,7 +1104,7 @@ AR1.lg <- arima.sim(n=50, model=AR.lg)
 
 \noindent Now let's plot the 2 simulated series.
 
-```{r ts-plotAR1sims, eval=FALSE, echo=TRUE}
+```{r tslab-plotAR1sims, eval=FALSE, echo=TRUE}
 ## setup plot region
 par(mfrow=c(1,2))
 ## get y-limits for common plots
@@ -1118,15 +1118,15 @@ plot.ts(AR1.lg, ylim=ylm,
         main=expression(paste(phi," = 0.9")))
 ```
 
-```{r ts-getPlotLims, eval=TRUE, echo=FALSE}
+```{r tslab-getPlotLims, eval=TRUE, echo=FALSE}
 ## get y-limits for common plots
 ylm <- c(min(AR1.sm,AR1.lg), max(AR1.sm,AR1.lg))
 ```
 
 
-(ref:ts-plotAR1contrast) Time series of simulated AR(1) processes with $\phi=0.1$ (left) and $\phi=0.9$ (right).
+(ref:tslab-plotAR1contrast) Time series of simulated AR(1) processes with $\phi=0.1$ (left) and $\phi=0.9$ (right).
 
-```{r ts-plotAR1contrast, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotAR1contrast)'}
+```{r tslab-plotAR1contrast, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotAR1contrast)'}
 ## set the margins & text size
 par(mfrow=c(1,2), mar=c(4,4,1.5,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -1139,11 +1139,11 @@ plot.ts(AR1.lg, ylim=ylm,
 ```
  
 
-What do you notice about the two plots in Figure \@ref(fig:ts-plotAR1contrast)?  It looks like the time series with the smaller AR coefficient is more "choppy" and seems to stay closer to 0 whereas the time series with the larger AR coefficient appears to wander around more.  Remember that as the coefficient in an AR(1) model goes to 0, the model approaches a WN sequence, which is stationary in both the mean and variance.  As the coefficient goes to 1, however, the model approaches a random walk, which is not stationary in either the mean or variance.
+What do you notice about the two plots in Figure \@ref(fig:tslab-plotAR1contrast)?  It looks like the time series with the smaller AR coefficient is more "choppy" and seems to stay closer to 0 whereas the time series with the larger AR coefficient appears to wander around more.  Remember that as the coefficient in an AR(1) model goes to 0, the model approaches a WN sequence, which is stationary in both the mean and variance.  As the coefficient goes to 1, however, the model approaches a random walk, which is not stationary in either the mean or variance.
 
 Next, let's generate two AR(1) models that have the same magnitude coeficient, but opposite signs, and compare their behavior.
 
-```{r ts-simAR1opps, echo=TRUE, eval=TRUE}
+```{r tslab-simAR1opps, echo=TRUE, eval=TRUE}
 set.seed(123)
 ## list description for AR(1) model with small coef
 AR.pos <- list(order=c(1,0,0), ar=0.5, sd=0.1)
@@ -1156,7 +1156,7 @@ AR1.neg <- arima.sim(n=50, model=AR.neg)
 
 \noindent OK, let's plot the 2 simulated series.
 
-```{r ts-plotAR1oppsEcho, eval=FALSE, echo=TRUE}
+```{r tslab-plotAR1oppsEcho, eval=FALSE, echo=TRUE}
 ## setup plot region
 par(mfrow=c(1,2))
 ## get y-limits for common plots
@@ -1170,15 +1170,15 @@ plot.ts(AR1.neg,
         main=expression(paste(phi[1]," = -0.5")))
 ```
 
-```{r ts-getPlotLimsOpps, eval=TRUE, echo=FALSE}
+```{r tslab-getPlotLimsOpps, eval=TRUE, echo=FALSE}
 ## get y-limits for common plots
 ylm <- c(min(AR1.pos,AR1.neg), max(AR1.pos,AR1.neg))
 ```
 
 
-(ref:ts-plotAR1opps) Time series of simulated AR(1) processes with $\phi_1=0.5$ (left) and $\phi_1=-0.5$ (right).
+(ref:tslab-plotAR1opps) Time series of simulated AR(1) processes with $\phi_1=0.5$ (left) and $\phi_1=-0.5$ (right).
 
-```{r ts-plotAR1opps, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotAR1opps)'}
+```{r tslab-plotAR1opps, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotAR1opps)'}
 ## set the margins & text size
 par(mfrow=c(1,2), mar=c(4,4,1.5,1), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -1195,17 +1195,17 @@ plot.ts(AR1.neg, ylim=ylm,
 
 We can simulate higher order AR($p$) models in the same manner, but care must be exercised when choosing a set of coefficients that result in a stationary model or else ```arima.sim()``` will fail and report an error.  For example, an AR(2) model with both coefficients equal to 0.5 is not stationary, and therefore this function call will not work:
 
-```{r ts-ARpFail, eval=FALSE, echo=TRUE}
+```{r tslab-ARpFail, eval=FALSE, echo=TRUE}
 arima.sim(n=100, model=list(order(2,0,0), ar=c(0.5,0.5)))
 ```
 \noindent If you try, R will respond that the "```'ar' part of model is not stationary```".
 
 
-### Correlation structure of AR($p$) processes {#sec-ts-correlation-structure-of-arp-processes}
+### Correlation structure of AR($p$) processes {#sec-tslab-correlation-structure-of-arp-processes}
 
 Let's review what we learned in lecture about the general behavior of the ACF and PACF for AR($p$) models.  To do so, we'll simulate four stationary AR($p$) models of increasing order $p$ and then examine their ACF's and PACF's.  Let's use a really big $n$ so as to make them "pure", which will provide a much better estimate of the correlation structure.
 
-```{r ts-ARpSims, eval=TRUE, echo=TRUE}
+```{r tslab-ARpSims, eval=TRUE, echo=TRUE}
 set.seed(123)
 ## the 4 AR coefficients
 ARp <- c(0.7, 0.2, -0.1, -0.3)
@@ -1220,7 +1220,7 @@ for(p in 1:4) {
 
 Now that we have our four AR($p$) models, lets look at plots of the time series, ACF's, and PACF's.
 
-```{r ts-plotARpCompsEcho, eval=FALSE, echo=TRUE}
+```{r tslab-plotARpCompsEcho, eval=FALSE, echo=TRUE}
 ## set up plot region
 par(mfrow=c(4,3))
 ## loop over orders of p
@@ -1233,9 +1233,9 @@ for(p in 1:4) {
 ```
 
 
-(ref:ts-plotARpComps) Time series of simulated AR($p$) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF's (center column) and PACF's (right column).  Note that only the first 50 values of $x_t$ are plotted.
+(ref:tslab-plotARpComps) Time series of simulated AR($p$) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF's (center column) and PACF's (right column).  Note that only the first 50 values of $x_t$ are plotted.
 
-```{r ts-plotARpComps, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=8, fig.cap='(ref:ts-plotARpComps)'}
+```{r tslab-plotARpComps, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=8, fig.cap='(ref:tslab-plotARpComps)'}
 ## set the margins & text size
 par(mfrow=c(4,3), mar=c(4,4,0.5,0.5), oma=c(0,0,0,0), cex=1)
 ## loop over orders of p
@@ -1247,10 +1247,10 @@ for(p in 1:4) {
 ```
  
 
-\noindent As we saw in lecture and is evident from our examples shown in Figure \@ref(fig:ts-plotARpComps), the ACF for an AR($p$) process tails off toward zero very slowly, but the PACF goes to zero for lags > $p$.  This is an important diagnostic tool when trying to identify the order of $p$ in ARMA($p,q$) models.
+\noindent As we saw in lecture and is evident from our examples shown in Figure \@ref(fig:tslab-plotARpComps), the ACF for an AR($p$) process tails off toward zero very slowly, but the PACF goes to zero for lags > $p$.  This is an important diagnostic tool when trying to identify the order of $p$ in ARMA($p,q$) models.
 
 
-## Moving-average (MA) models {#sec-ts-moving-average-ma-models}
+## Moving-average (MA) models {#sec-tslab-moving-average-ma-models}
 
 A moving-averge process of order $q$, or MA($q$), is a weighted sum of the current random error plus the $q$ most recent errors, and can be written as
 
@@ -1278,11 +1278,11 @@ w_t &= x_t + \theta x_{t-1} + \theta^2 x_{t-2} + \theta^3 x_{t-3} + \dots
 
 
 
-### Simulating an MA($q$) process {#sec-ts-simulating-an-maq-process}
+### Simulating an MA($q$) process {#sec-tslab-simulating-an-maq-process}
 
 We can simulate MA($q$) processes just as we did for AR($p$) processes using ```arima.sim()```.  Here are 3 different ones with contrasting $\theta$'s:
 
-```{r ts-simMA1opps, echo=TRUE, eval=TRUE}
+```{r tslab-simMA1opps, echo=TRUE, eval=TRUE}
 set.seed(123)
 ## list description for MA(1) model with small coef
 MA.sm <- list(order=c(0,0,1), ma=0.2, sd=0.1)
@@ -1298,7 +1298,7 @@ MA1.neg <- arima.sim(n=50, model=MA.neg)
 
 \noindent with their associated plots.
 
-```{r ts-plotMA1oppsEcho, eval=FALSE, echo=TRUE}
+```{r tslab-plotMA1oppsEcho, eval=FALSE, echo=TRUE}
 ## setup plot region
 par(mfrow=c(1,3))
 ## plot the ts
@@ -1314,9 +1314,9 @@ plot.ts(MA1.neg,
 ```
 
 
-(ref:ts-plotMA1opps) Time series of simulated MA(1) processes with $\theta=0.2$ (left), $\theta=0.8$ (middle), and $\theta=-0.5$ (right).
+(ref:tslab-plotMA1opps) Time series of simulated MA(1) processes with $\theta=0.2$ (left), $\theta=0.8$ (middle), and $\theta=-0.5$ (right).
 
-```{r ts-plotMA1opps, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:ts-plotMA1opps)'}
+```{r tslab-plotMA1opps, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.cap='(ref:tslab-plotMA1opps)'}
 ## set the margins & text size
 par(mfrow=c(1,3), mar=c(4,4,1.5,0.5), oma=c(0,0,0,0), cex=1)
 ## plot the ts
@@ -1336,11 +1336,11 @@ In contrast to AR(1) processes, MA(1) models do not exhibit radically different 
 
 
 
-### Correlation structure of MA($q$) processes {#sec-ts-correlation-structure-of-maq-processes}
+### Correlation structure of MA($q$) processes {#sec-tslab-correlation-structure-of-maq-processes}
 
 We saw in lecture and above how the ACF and PACF have distinctive features for AR($p$) models, and they do for MA($q$) models as well.  Here are examples of four MA($q$) processes.  As before, we'll use a really big $n$ so as to make them "pure", which will provide a much better estimate of the correlation structure.
 
-```{r ts-MAqSims, eval=TRUE, echo=TRUE}
+```{r tslab-MAqSims, eval=TRUE, echo=TRUE}
 set.seed(123)
 ## the 4 MA coefficients
 MAq <- c(0.7, 0.2, -0.1, -0.3)
@@ -1355,7 +1355,7 @@ for(q in 1:4) {
 
 Now that we have our four MA($q$) models, lets look at plots of the time series, ACF's, and PACF's.
 
-```{r ts-plotMApCompsEcho, eval=FALSE, echo=TRUE}
+```{r tslab-plotMApCompsEcho, eval=FALSE, echo=TRUE}
 ## set up plot region
 par(mfrow=c(4,3))
 ## loop over orders of q
@@ -1368,9 +1368,9 @@ for(q in 1:4) {
 ```
 
 
-(ref:ts-plotMApComps) Time series of simulated MA($q$) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF's (center column) and PACF's (right column).  Note that only the first 50 values of $x_t$ are plotted.
+(ref:tslab-plotMApComps) Time series of simulated MA($q$) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF's (center column) and PACF's (right column).  Note that only the first 50 values of $x_t$ are plotted.
 
-```{r ts-plotMApComps, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=8, fig.cap='(ref:ts-plotMApComps)'}
+```{r tslab-plotMApComps, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=8, fig.cap='(ref:tslab-plotMApComps)'}
 ## set the margins & text size
 par(mfrow=c(4,3), mar=c(4,4,0.5,0.5), oma=c(0,0,0,0), cex=1)
 ## loop over orders of q
@@ -1382,11 +1382,11 @@ for(q in 1:4) {
 ```
  
 
-\noindent Note very little qualitative difference in the realizations of the four MA($q$) processes (Figure \@ref(fig:ts-plotMApComps)).  As we saw in lecture and is evident from our examples here, however, the ACF for an MA($q$) process goes to zero for lags > $q$, but the PACF tails off toward zero very slowly.  This is an important diagnostic tool when trying to identify the order of $q$ in ARMA($p,q$) models.
+\noindent Note very little qualitative difference in the realizations of the four MA($q$) processes (Figure \@ref(fig:tslab-plotMApComps)).  As we saw in lecture and is evident from our examples here, however, the ACF for an MA($q$) process goes to zero for lags > $q$, but the PACF tails off toward zero very slowly.  This is an important diagnostic tool when trying to identify the order of $q$ in ARMA($p,q$) models.
 
 
 
-## Autoregressive moving-average (ARMA) models {#sec-ts-autoregressive-moving-average-arma-models}
+## Autoregressive moving-average (ARMA) models {#sec-tslab-autoregressive-moving-average-arma-models}
 
 ARMA($p,q$) models have a rich history in the time series literature, but they are not nearly as common in ecology as plain AR($p$) models.  As we discussed in lecture, both the ACF and PACF are important tools when trying to identify the appropriate order of $p$ and $q$.  Here we will see how to simulate time series from AR($p$), MA($q$), and ARMA($p,q$) processes, as well as fit time series models to data based on insights gathered from the ACF and PACF.
 
@@ -1400,7 +1400,7 @@ x_t = \phi_1x_{t-1} + \phi_2x_{t-2} + \dots + \phi_p x_{t-p} + w_t + \theta w_{t
 \noindent and the $w_t$ are white noise.
 
 
-### Fitting ARMA($p,q$) models with ```arima()``` {#sec-ts-fitting-armapq-models-with-verbarima}
+### Fitting ARMA($p,q$) models with ```arima()``` {#sec-tslab-fitting-armapq-models-with-verbarima}
 
 We have already seen how to simulate AR($p$) and MA($q$) models with ```arima.sim()```; the same concepts apply to ARMA($p,q$) models and therefore we will not do that here.  Instead, we will move on to fitting ARMA($p,q$) models when we only have a realization of the process (*i.e.*, data) and do not know the underlying parameters that generated it.
 
@@ -1422,7 +1422,7 @@ x_t = \mu + \phi (x_{t-1} - \mu) + w_t.
 
 Let's see an example of how ```arima()``` works.  First we'll simulate an ARMA(2,2) model and then estimate the parameters to see how well we can recover them.  In addition, we'll add in a constant to create a non-zero mean, which ```arima()``` reports as ```intercept``` in its output.
 
-```{r ts-ARMAest, eval=TRUE, echo=TRUE}
+```{r tslab-ARMAest, eval=TRUE, echo=TRUE}
 set.seed(123)
 ## ARMA(2,2) description for arim.sim()
 ARMA22 <- list(order=c(2,0,2), ar=c(-0.7,0.2), ma=c(0.7,0.2))
@@ -1437,11 +1437,11 @@ arima(x=ARMA.sim, order=c(2,0,2))
 It looks like we were pretty good at estimating the true parameters, but our sample size was admittedly quite large; the estimate of the variance of the process errors is reported as ```sigma^2``` below the other coefficients.  As an exercise, try decreasing the length of time series in the  ```arima.sim()``` call above from 10,000 to something like 100 and see what effect it has on the parameter estimates.
 
 
-### Searching over model orders {#sec-ts-searching-over-model-orders}
+### Searching over model orders {#sec-tslab-searching-over-model-orders}
 
 In an ideal situation, you could examine the ACF and PACF of the time series of interest and immediately decipher what orders of $p$ and $q$ must have generated the data, but that doesn't always work in practice.  Instead, we are often left with the task of searching over several possible model forms and seeing which of them provides the most parsimonious fit to the data.  There are two easy ways to do this for ARIMA models in R.  The first is to write a little script that loops ove the possible dimensions of $p$ and $q$.  Let's try that for the process we simulated above and search over orders of $p$ and $q$ from 0-3 (it will take a few moments to run and will likely report an error about a "```possible convergence problem```", which you can ignore).
 
-```{r ts-ARMAsearch1, eval=TRUE, echo=TRUE, cache=TRUE}
+```{r tslab-ARMAsearch1, eval=TRUE, echo=TRUE, cache=TRUE}
 ## empty list to store model fits
 ARMA.res <- list()
 ## set counter
@@ -1462,7 +1462,7 @@ ARMA.res[[which(ARMA.AIC==min(ARMA.AIC))]]
 
 It looks like our search worked, so let's look at the other method for fitting ARIMA models.  The ```auto.arima()``` function in the **forecast** package  will conduct an automatic search over all possible orders of ARIMA models that you specify.  For details, type ```?auto.arima``` after loading the package.  Let's repeat our search using the same criteria.
 
-```{r ts-autoARIMA, eval=TRUE, echo=TRUE, cache=TRUE}
+```{r tslab-autoARIMA, eval=TRUE, echo=TRUE, cache=TRUE}
 ## find best ARMA(p,q) model
 auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
 ```
@@ -1472,7 +1472,7 @@ auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
 
 \clearpage
 
-## Problems {#sec-ts-problems}
+## Problems {#sec-tslab-problems}
 
 We have seen how to do a variety of introductory time series analyses with R.  Now it is your turn to apply the information you learned here and in lecture to complete some analyses.  You have been asked by a colleague to help analyze some time series data she collected as part of an experiment on the effects of light and nutrients on the population dynamics of phytoplankton.  Specifically, after controlling for differences in light and temperature, she wants to know if the natural log of population density can be modeled with some form of ARMA($p,q$) model.  
 
@@ -1481,7 +1481,7 @@ The data are expressed as the number of cells per milliliter recorded every hour
 Use the information above to do the following:
 
 1. Convert ``pDat``, which is a **data.frame** object, into a **ts** object.  This bit of code might be useful to get you started:
-    ```{r ts-HW1_1, eval=FALSE, echo=TRUE}
+    ```{r tslab-HW1_1, eval=FALSE, echo=TRUE}
     ## what day of 2014 is Dec 1st?
     dBegin <- as.Date("2014-12-01")
     dayOfYear <- (dBegin - as.Date("2014-01-01") + 1)

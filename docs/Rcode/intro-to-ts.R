@@ -1,3 +1,7 @@
+## ----ts-setup, include=FALSE---------------------------------------------
+knitr::opts_knit$set(unnamed.chunk.label = "ts-")
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
+
 ## ----ts-plot-www, fig.cap = "Number of users connected to the internet"----
 data(WWWusage, package="datasets")
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))

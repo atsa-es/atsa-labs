@@ -1,22 +1,24 @@
 ```{r mss-setup, include=FALSE, purl=FALSE}
 knitr::opts_knit$set(unnamed.chunk.label = "mss-")
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
 ```
 
 
-# Multivariate state-space models without covariates  {#chap-mss}
+# MARSS models  {#chap-mss}
 \chaptermark{Multivariate state-space models}
 
-This lab will show you how to fit multivariate state-space models using the **MARSS** package. This chapter is an example which uses model selection to test different population structures in west coast harbor seals.  See \citet{Holmesetal2014} for a fuller version of this example. 
+This lab will show you how to fit multivariate state-space (MARSS) models using the **MARSS** package. This class of time-series model is also called vector autoregressive state-space (VARSS) models.  This chapter works through an example which uses model selection to test different population structures in west coast harbor seals.  See \citet{Holmesetal2014} for a fuller version of this example. 
 
 A script with all the R code in the chapter can be downloaded  [here](./Rcode/multivariate-ss.R). The Rmd for this chapter can be downloaded [here](./Rmds/multivariate-ss.Rmd)
 
 ### Data and packages  {-}
 
-All the data used in the chapter are in the **MARSS** package. For most examples, we will use the ``MARSS()`` function to fit models via maximum-likelihood.  We also show how to fit a Bayesian model using JAGS.  For this section you will need the **R2jags** and **coda** packages.  To run the JAGS code, you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed.  See Chapter \@ref(chap-jags) for more details on JAGS.  
+All the data used in the chapter are in the **MARSS** package. For most examples, we will use the ``MARSS()`` function to fit models via maximum-likelihood.  We also show how to fit a Bayesian model using JAGS and Stan.  For these sectiosn you will need the **R2jags**, **coda** and **rstan**  packages.  To run the JAGS code, you will also need [JAGS](http://mcmc-jags.sourceforge.net/) installed.  See Chapter \@ref(chap-jags) for more details on JAGS and Chapter \@ref(chap-stan) for more details on Stan.  
 ```{r mss-loadpackages, results='hide', message=FALSE, warning=FALSE}
 library(MARSS)
 library(R2jags)
 library(coda)
+library(rstan)
 ```
 
 ## Overview {#sec-mss-overview}
@@ -63,7 +65,8 @@ p + ggtitle("Puget Sound Harbor Seal Surveys")
 
 The harbor seal data are included in the **MARSS** package as matrix with years in column 1 and the logged counts in the other columns. Let's look at the first few years of data:
 ```{r mss-Cs2-showdata}
-print(MARSS::harborSealWA[1:8,], digits=3)
+data(harborSealWA, package="MARSS")
+print(harborSealWA[1:8,], digits=3)
 ```
 We are going to leave out Hood Canal (HC) since that region is somewhat isolated from the others and experiencing very different conditions due to hypoxic events and periodic intense killer whale predation.  We will set up the data as follows:
 
@@ -573,9 +576,10 @@ print(out.tab.1[,c("H","delta.AICc","AIC.weight", "converged")], row.names=FALSE
 
 Here we show you how to fit a MARSS model for the harbor seal data using JAGS. We will focus on four time series from inland Washington and set up the data as follows:
 
-```{r mss-set-up-seal-data}
+```{r mss-set-up-seal-data-jags}
+data(harborSealWA, package="MARSS")
 sites <- c("SJF","SJI","EBays","PSnd")
-Y <- MARSS::harborSealWA[,sites]
+Y <- harborSealWA[,sites]
 Y <- t(Y) # time across columns
 ```
 
@@ -669,7 +673,7 @@ file.remove("marss-jags.txt")
 
 ## Fitting a MARSS model with Stan {#sec-marss-fitting-with-stan}
 
-Let's fit the same model with Stan using the **rstan** package. If you have not already, you will need to install the **rstan** package.  This package depends on a number of other packages which should install automatically when you install **rstan**.
+Let's fit the same model as in Section \@ref(sec-mss-multivariate-state-space-models-with-jags) with Stan using the **rstan** package. If you have not already, you will need to install the **rstan** package.  This package depends on a number of other packages which should install automatically when you install **rstan**.
 
 First we write the model.  We could write this to a file (recommended), but for this example, we write as a character object. Though the syntax is different from the JAGS code, it has many similarities.  Note that Stan does not allow missing values in the data, thus we need to pass in only the non-missing values along with the row and column indices of those values.  The latter is so we can match them to the appropriate state ($x$) values.
 
@@ -729,20 +733,24 @@ indx_pos <- which(!is.na(Y), arr.ind=TRUE) #index on the non-NAs
 col_indx_pos <- as.vector(indx_pos[,"col"])
 row_indx_pos <- as.vector(indx_pos[,"row"])
 mod <- rstan::stan(model_code = scode, 
-                  data = list(y=ypos, TT=ncol(Y), N=nrow(Y), n_pos=n_pos, col_indx_pos=col_indx_pos, row_indx_pos=row_indx_pos), 
+                  data = list(y=ypos, TT=ncol(Y), N=nrow(Y), n_pos=n_pos, 
+col_indx_pos=col_indx_pos, row_indx_pos=row_indx_pos), 
                   pars = c("sd_q","x", "sd_r", "u", "x0"),
                   chains = 3, 
                   iter = 1000, 
                   thin = 1)
 ```
 
-We use `extract()` to extract the parameters from the fitted model and we can plot.  The estimated level is `x` and we will plot that with the 95% credible intervals.
-```{r marss-stan-plot, fig.cap="Estimated level and 95% credible intervals.", echo=FALSE}
+We use `extract()` to extract the parameters from the fitted model and then the means and 95% credible intervals.
+```{r marss-stan-extract, message=FALSE}
 pars <- rstan::extract(mod)
 means <- apply(pars$x, c(2,3), mean)
 upperCI <- apply(pars$x, c(2,3), quantile, 0.975)
 lowerCI <- apply(pars$x, c(2,3), quantile, 0.025)
 colnames(means) <- colnames(upperCI) <- colnames(lowerCI) <- rownames(Y)
+```
+
+```{r marss-stan-plot, fig.cap="Estimated level and 95% credible intervals.", echo=FALSE}
 temp <- as.data.frame(means)
 pdat1 <- reshape2::melt(temp, variable.name = "region", value.name="mean")
 temp <- as.data.frame(upperCI)
@@ -762,9 +770,9 @@ ggplot(pdat , aes(x = year , y = mean)) +
 ## Problems {#sec-mss-problems}
 
 For these questions, use the `harborSealWA` data set in **MARSS**.  The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.
-```{r}
+```{r mss-problems-data}
 require(MARSS)
-#Here is the dat to use for MARSS()
+data(harborSealWA, package="MARSS")
 dat <- t(harborSealWA[,2:6])
 ```
 The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).

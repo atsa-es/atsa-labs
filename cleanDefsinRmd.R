@@ -26,6 +26,7 @@ basefiles=c(
   "Lab-dynamic-factor-analysis/intro-to-dfa",
   "Lab-fitting-uni-ss-models/fitting-univariate-state-space",
   "Lab-fitting-multi-ss-models/multivariate-ss",
+  "Lab-fitting-multi-ss-models/multivariate-ss-cov",
   "Lab-fitting-DLMs/DLM",
   "Lab-intro-to-jags/intro-to-jags",
   "Lab-intro-to-stan/fitting-models-with-stan",

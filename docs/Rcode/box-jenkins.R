@@ -1,6 +1,13 @@
-## ----bj-read-data, eval=FALSE--------------------------------------------
-## load("landings.RData")
-## load("chinook.RData")
+## ----bj-load, eval=FALSE-------------------------------------------------
+## library(devtools)
+## devtools::install_github("Fish-Forecast/FishForecast")
+
+## ----bj-read-data--------------------------------------------------------
+data(greeklandings, package="FishForecast")
+landings <- greeklandings
+# Use the monthly data
+data(chinook, package="FishForecast")
+chinook <- chinook.month
 
 ## ----bj-load_packages----------------------------------------------------
 library(ggplot2)
@@ -157,7 +164,7 @@ summary(test)
 forecast::ndiffs(anchovyts, test="kpss")
 forecast::ndiffs(anchovyts, test="adf")
 
-## ------------------------------------------------------------------------
+## ----bj-sim-ar2----------------------------------------------------------
 m <- 1
 ar2 <- arima.sim(n=1000, model=list(ar=c(.8,.1))) + m
 

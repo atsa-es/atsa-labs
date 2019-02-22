@@ -1,5 +1,6 @@
-```{r ts-setup, include=FALSE, purl=FALSE}
+```{r ts-setup, include=FALSE}
 knitr::opts_knit$set(unnamed.chunk.label = "ts-")
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
 ```
 
 # Introduction to time series {#chap-ts}
@@ -13,7 +14,7 @@ A script with all the R code in the chapter can be downloaded  [here](./Rcode/in
 <center><img src="https://www.esrl.noaa.gov/gmd/webdata/ccgg/trends/co2_data_mlo.png"></center>
 
 
-## Examples of time series
+## Examples of time series {#sec-ts-examples}
 
 ```{r ts-plot-www, fig.cap = "Number of users connected to the internet"}
 data(WWWusage, package="datasets")
@@ -28,7 +29,7 @@ plot.ts(lynx, ylab = "", las = 1, col = "blue", lwd = 2)
 ```
 
 
-## Classification of time series
+## Classification of time series {#sec-ts-classification}
 
 A ts can be represented as a set
 
@@ -42,7 +43,7 @@ $$
 $$
 It can be further classified.
 
-### By some _index set_
+### By some _index set_ 
 
 Interval across real time; $x(t)$    
 
@@ -80,7 +81,7 @@ Real (eg, fish mass = 10.2 g)
 Complex (eg, cos(2π2.43) + _i_ sin(2π2.43))
 
 
-## Statistical analyses of time series
+## Statistical analyses of time series {#sec-ts-stat-analysis}
 
 Most statistical analyses are concerned with estimating properties of a population from a sample.  For example, we use fish caught in a seine to infer the mean size of fish in a lake.  Time series analysis, however, presents a different situation:
 
@@ -99,7 +100,7 @@ getSymbols("MSFT", src = "yahoo", from = start, to = end)
 plot(MSFT[, "MSFT.Close"], main = "MSFT")
 ```
 
-## What is a time series model?
+## What is a time series model? {#sec-ts-definition}
 
 We use a time series model to analyze time series data.  A _time series model_ for $\{x_t\}$ is a specification of the joint distributions of a sequence of random variables $\{X_t\}$, of which $\{x_t\}$ is thought to be a realization.  
 
@@ -127,7 +128,7 @@ lines(ww[,1], col = "blue", lwd = 2)
 ```
 
 
-## Two simple and classic time series models
+## Two simple and classic time series models {#sec-ts-two-examples}
 
 White noise: $x_t \sim N(0,1)$
 
@@ -148,7 +149,7 @@ matplot(apply(ww, 2, cumsum), type="l", lty="solid",  las = 1,
 ```
 
 
-## Classical decomposition
+## Classical decomposition {#sec-ts-classical-decomposition}
 
 Model time series $\{x_t\}$ as a combination of
 
@@ -288,7 +289,7 @@ par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(ee, las = 1, ylab = "")
 ```
 
-## Decomposition on log-transformed data
+## Decomposition on log-transformed data {#sec-ts-decomposition-log-data}
 
 Let's repeat the decomposition with the log of the airline data.
 

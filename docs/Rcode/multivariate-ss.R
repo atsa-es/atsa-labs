@@ -2,6 +2,7 @@
 library(MARSS)
 library(R2jags)
 library(coda)
+library(rstan)
 
 ## ----mss-noshowlegend, echo=FALSE, results='hide'------------------------
 d <- MARSS::harborSealWA
@@ -15,7 +16,8 @@ p <- ggplot(pdat, aes(x=Year, y=value, col=region)) + geom_point() + geom_line()
 p + ggtitle("Puget Sound Harbor Seal Surveys")
 
 ## ----mss-Cs2-showdata----------------------------------------------------
-print(MARSS::harborSealWA[1:8,], digits=3)
+data(harborSealWA, package="MARSS")
+print(harborSealWA[1:8,], digits=3)
 
 ## ----mss-Cs2-readindata--------------------------------------------------
 dat <- MARSS::harborSealWA
@@ -196,9 +198,10 @@ out.tab.1$delta.AICc <- round(out.tab.1$delta.AICc, digits=2)
 out.tab.1$AIC.weight <- round(out.tab.1$AIC.weight, digits=3)
 print(out.tab.1[,c("H","delta.AICc","AIC.weight", "converged")], row.names=FALSE)
 
-## ----mss-set-up-seal-data------------------------------------------------
+## ----mss-set-up-seal-data-jags-------------------------------------------
+data(harborSealWA, package="MARSS")
 sites <- c("SJF","SJI","EBays","PSnd")
-Y <- MARSS::harborSealWA[,sites]
+Y <- harborSealWA[,sites]
 Y <- t(Y) # time across columns
 
 ## ----mss-jagsscript------------------------------------------------------
@@ -315,18 +318,21 @@ indx_pos <- which(!is.na(Y), arr.ind=TRUE) #index on the non-NAs
 col_indx_pos <- as.vector(indx_pos[,"col"])
 row_indx_pos <- as.vector(indx_pos[,"row"])
 mod <- rstan::stan(model_code = scode, 
-                  data = list(y=ypos, TT=ncol(Y), N=nrow(Y), n_pos=n_pos, col_indx_pos=col_indx_pos, row_indx_pos=row_indx_pos), 
+                  data = list(y=ypos, TT=ncol(Y), N=nrow(Y), n_pos=n_pos, 
+col_indx_pos=col_indx_pos, row_indx_pos=row_indx_pos), 
                   pars = c("sd_q","x", "sd_r", "u", "x0"),
                   chains = 3, 
                   iter = 1000, 
                   thin = 1)
 
-## ----marss-stan-plot, fig.cap="Estimated level and 95% credible intervals.", echo=FALSE----
+## ----marss-stan-extract, message=FALSE-----------------------------------
 pars <- rstan::extract(mod)
 means <- apply(pars$x, c(2,3), mean)
 upperCI <- apply(pars$x, c(2,3), quantile, 0.975)
 lowerCI <- apply(pars$x, c(2,3), quantile, 0.025)
 colnames(means) <- colnames(upperCI) <- colnames(lowerCI) <- rownames(Y)
+
+## ----marss-stan-plot, fig.cap="Estimated level and 95% credible intervals.", echo=FALSE----
 temp <- as.data.frame(means)
 pdat1 <- reshape2::melt(temp, variable.name = "region", value.name="mean")
 temp <- as.data.frame(upperCI)
@@ -340,9 +346,9 @@ ggplot(pdat , aes(x = year , y = mean)) +
   geom_ribbon(aes(x=year, ymin=low, ymax=high, group=region), alpha=0.2)+
   theme_bw()
 
-## ------------------------------------------------------------------------
+## ----mss-problems-data---------------------------------------------------
 require(MARSS)
-#Here is the dat to use for MARSS()
+data(harborSealWA, package="MARSS")
 dat <- t(harborSealWA[,2:6])
 
 ## ----mss-resids, eval=FALSE----------------------------------------------

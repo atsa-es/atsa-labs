@@ -2,21 +2,30 @@
 knitr::opts_knit$set(unnamed.chunk.label = "labboxjenkins-")
 ```
 
-# Box-Jenkins method in R  {#chap-labboxjenkins-}
+# Box-Jenkins method {#chap-boxjenkins-}
 \chaptermark{Box-Jenkins Method}
 
 In this chapter, you will practice selecting and fitting an ARIMA model to catch data using the Box-Jenkins method.  After fitting a model, you will prepare simple forecasts using the **forecast** package.  
 
 ### Data and packages {-}
 
-Load catch landings from Greek waters [landings.RData](landings.RData) and the Chinook landings  [chinook.RData](chinook.RData) in Washington data.
-
-```{r bj-read-data, eval=FALSE}
-load("landings.RData")
-load("chinook.RData")
+We will catch landings from Greek waters (`greeklandings`) and the Chinook landings  (`chinook`) in Washington data. These datasets are in the **FishForecast** package hosted on  Github [safs-timeseries](https://github.com/Fish-Forecast/FishForecast).  Install  using the **devtools** package.
+```{r bj-load, eval=FALSE}
+library(devtools)
+devtools::install_github("Fish-Forecast/FishForecast")
 ```
 
-```{r bj-load-data-rmd, include=FALSE, purl=FALSE}
+Load the data.
+
+```{r bj-read-data}
+data(greeklandings, package="FishForecast")
+landings <- greeklandings
+# Use the monthly data
+data(chinook, package="FishForecast")
+chinook <- chinook.month
+```
+
+```{r bj-load-data-rmd, include=FALSE, purl=FALSE, eval=FALSE}
 #If bookdown is being run, then we are at the top level
 #If "gitbook" is not in the output
 #then user is running Rmd in the folder for debugging
@@ -45,7 +54,7 @@ library(forecast)
 set.seed(123)
 ```
 
-## Box-Jenkins method
+## Box-Jenkins method {#sec-boxjenkins-intro}
 
 A. Model form selection
 
@@ -58,7 +67,7 @@ B. Parameter estimation
 
 C. Model checking
 
-## Stationarity
+## Stationarity  {#sec-boxjenkins-stationarity}
 
 It is important to test and transform (via differencing) your data to ensure stationarity when fitting an ARMA model using standard algorithms. The standard algorithms for ARIMA models assume stationarity and we will be using those algorithms.  It possible to fit ARMA models without transforming the data.  We will cover that in later chapters. However, that is not commonly done in the literature on forecasting with ARMA models, certainly not in the literature on catch forecasting. 
 
@@ -194,7 +203,7 @@ Questions to ask.
 * Does it have a non-zero mean?  Yes
 * Does it look like it might be stationary around a trend? Maybe
 
-## Dickey-Fuller and Augmented Dickey-Fuller tests
+## Dickey-Fuller and Augmented Dickey-Fuller tests {#sec-boxjenkins-aug-dickey-fuller}
 
 ### Dickey-Fuller test
 
@@ -310,7 +319,7 @@ Notice that the test statistic is LESS than the critical value for `tau3` at 5 p
 
 If you remove the trend (and/or level) from your data, the `ur.df()` test allows you to increase the power of the test by removing the trend and/or level from the model.  
 
-## KPSS test
+## KPSS test {#sec-boxjenkins-kpss}
 
 The null hypothesis for the KPSS test is that the data are stationary.  For this test, we do NOT want to reject the null hypothesis.  In other words, we want the p-value to be greater than 0.05 not less than 0.05.
 
@@ -343,7 +352,7 @@ kpss.test(anchovyts, null="Trend")
 The null is rejected (p-value less than 0.05).  Again stationarity is not supported.
 
 
-## Dealing with non-stationarity
+## Dealing with non-stationarity {#sec-boxjenkins-non-stationarity}
 
 The anchovy data have failed both tests for the stationarity, the Augmented Dickey-Fuller and the KPSS test.  How do we fix this?  The approach in the Box-Jenkins method is to use differencing.
 
@@ -392,7 +401,7 @@ forecast::ndiffs(anchovyts, test="adf")
 
 One difference is required to pass both the ADF and KPSS stationarity tests.
 
-## Summary: stationarity testing
+## Summary: stationarity testing  {#sec-boxjenkins-stationarity-summary}
 
 The basic stationarity diagnostics are the following
 
@@ -407,7 +416,7 @@ The basic stationarity diagnostics are the following
     - Try `ndiffs()` in the **forecast** package or manually try different differences.
   
   
-## Estimating ARMA parameters
+## Estimating ARMA parameters {#sec-boxjenkins-est-ARMA-params}
 
 Let's start with fitting to simulated data.
 
@@ -418,7 +427,7 @@ Simulate AR(2) data and add a mean level so that the data are not mean 0.
 $$x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\y_t = x_t + m$$
 
 
-```{r}
+```{r bj-sim-ar2}
 m <- 1
 ar2 <- arima.sim(n=1000, model=list(ar=c(.8,.1))) + m
 ```
@@ -496,7 +505,7 @@ lines(fitted(fit), col="blue")
 ```
 It is easy enough to get the expected value of $y_t$ for all the missing values but we'll learn to do that when we learn the **MARSS** package and can apply the Kalman Smoother in that package.
 
-## Estimating the ARMA orders
+## Estimating the ARMA orders {#sec-boxjenkins-est-ARMA-orders}
 
 We will use the `auto.arima()` function in **forecast**.  This function will estimate the level of differencing needed to make our data stationary and estimate the AR and MA orders using AICc (or BIC if we choose).
 
@@ -563,7 +572,7 @@ $$x_t = e_t - \theta_1 e_{t-1} - \theta_2 e_{t-2}$$
 so the MA parameters reported by `auto.arima()` will be NEGATIVE of that reported in Stergiou and Christou (1996) who analyze these same data.  *Note, in Stergiou and Christou, the model is written in backshift notation on page 112.  To see the model as the equation above, I translated from backshift to non-backshift notation.*
 
 
-## Check residuals
+## Check residuals {#sec-boxjenkins-check-resids}
 
 We can do a test of autocorrelation of the residuals with `Box.test()` with `fitdf` adjusted for the number of parameters estimated in the fit.  In our case, MA(1) and drift parameters.
 
@@ -578,7 +587,7 @@ Box.test(res, type="Ljung-Box", lag=12, fitdf=2)
 forecast::checkresiduals(fit)
 ```
 
-## Forecast from a fitted ARIMA model
+## Forecast from a fitted ARIMA model {#sec-boxjenkins-forecast}
 
 We can create a forecast from our anchovy ARIMA model using `forecast()`.  The shading is the 80% and 95% prediction intervals.
 
@@ -587,7 +596,7 @@ fr <- forecast::forecast(fit, h=10)
 plot(fr)
 ```
 
-## Seasonal ARIMA model
+## Seasonal ARIMA model {#sec-boxjenkins-seasonal}
 
 The Chinook data are monthly and start in January 1990.  To make this into a ts object do
 
@@ -618,7 +627,7 @@ fit
 
 Use `?window` to understand how subsetting a ts object works.
 
-## Forecast using a seasonal model
+## Forecast using a seasonal model {#sec-boxjenkins-forecast-seasonal}
 
 Forecasting works the same using the `forecast()` function.
 
@@ -628,8 +637,9 @@ plot(fr)
 points(testdat)
 ```
 
+\clearpage
 
-## Problems
+## Problems {#sec-boxjenkins-problems}
 
 For these problems, use the catch landings from Greek waters [landings.RData](landings.RData) and the Chinook landings  [chinook.RData](chinook.RData) in Washington data. After downloading, load both data sets into your workspace.
 ```

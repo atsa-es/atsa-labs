@@ -1,5 +1,5 @@
 ```{r stan-setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
 ```
 
 # Stan for Bayesian time series analysis {#chap-stan}
@@ -9,18 +9,17 @@ For this lab, we will use [Stan](http://mc-stan.org/documentation/) for fitting 
 
 A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-models-with-stan.R).
 
-## Data and packages {-}
+### Data and packages {-}
 
 You will need the **atsar** package we have written for fitting state-space time series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/nwfsc-timeseries/atsar).  Install  using the **devtools** package.
 ```{r stan-load, eval=FALSE}
 library(devtools)
 devtools::install_github("nwfsc-timeseries/atsar")
 ```
-In addition, you will need the **rstan**, **datasets**. and **loo** packages. After installing, if needed, load the packages:
+In addition, you will need the **rstan**, **datasets**, **parallel** and **loo** packages. After installing, if needed, load the packages:
 ```{r stan-loadpackages, results='hide', warning=FALSE, message=FALSE}
 library(atsar)
 library(rstan)
-library(datasets)
 library(loo)
 ```
 Once you have Stan and **rstan** installed, optimize Stan on your machine:
@@ -33,8 +32,8 @@ For this lab, we will use a data set on airquality in New York from the **datase
 
 ```{r stan-data}
 data(airquality, package="datasets")
-Wind = airquality$Wind # wind speed
-Temp = airquality$Temp # air temperature
+Wind <- airquality$Wind # wind speed
+Temp <- airquality$Temp # air temperature
 ```
 
 ## Linear regression {#sec-stan-lr}
@@ -49,13 +48,13 @@ Remember that in linear regression models, the residual error is interpreted as 
 To run this model using our package, we'll need to specify the response and predictor variables. The covariate matrix with an intercept only is a matrix of 1s. To double check, you could always look at 
 
 ```{r stan-lm}
-x = model.matrix(lm(Temp~1))
+x <- model.matrix(lm(Temp~1))
 ```
 
 Fitting the model using our function is done with this code, 
 
 ```{r stan-lr1, warning=FALSE, message=FALSE, results='hide', cache=TRUE}
-lm_intercept = fit_stan(y = as.numeric(Temp), x = rep(1, length(Temp)),
+lm_intercept <- atsar::fit_stan(y = as.numeric(Temp), x = rep(1, length(Temp)),
   model_name = "regression")
 ```
 
@@ -63,13 +62,13 @@ Coarse summaries of ``stanfit`` objects can be examined by typing one of the fol
 
 ```{r stan-lm-sum, results='hide'}
 lm_intercept
-#this is huge
+# this is huge
 summary(lm_intercept)
 ```
 
 But to get more detailed output for each parameter, you have to use the ``extract()`` function, 
 ```{r stan-extract-lm}
-pars = extract(lm_intercept)
+pars <- rstan::extract(lm_intercept)
 names(pars)
 ```
 
@@ -99,7 +98,7 @@ points(Wind, col="red")
 To illustrate the effects of the burn-in/warmup period and thinning, we can re-run the above model, but for just 1 MCMC chain (the default is 3).  
 
 ```{r stan-lm2, cache=TRUE, results='hide'}
-lm_intercept = fit_stan(y = Temp, x = rep(1, length(Temp)),
+lm_intercept <- atsar::fit_stan(y = Temp, x = rep(1, length(Temp)),
   model_name = "regression", 
   mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
 ```
@@ -107,7 +106,7 @@ lm_intercept = fit_stan(y = Temp, x = rep(1, length(Temp)),
 Here is a plot of the time series of `beta` with one chain and no burn-in. Based on visual inspection, when does the chain converge? 
 
 ```{r stan-fig-burnin, fig.cap='A time series of our posterior draws using one chain and no burn-in.'}
-pars = extract(lm_intercept)
+pars <- rstan::extract(lm_intercept)
 plot(pars$beta)
 ```
 
@@ -124,7 +123,7 @@ Like in our first model, we assume that the data follows a normal likelihood (or
 We can fit this regression with autocorrelated errors by changing the model name to  'regression_cor' 
 
 ```{r stan-lr-ar, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-lm_intercept_cor = fit_stan(y = Temp, x = rep(1, length(Temp)),
+lm_intercept_cor <- atsar::fit_stan(y = Temp, x = rep(1, length(Temp)),
   model_name = "regression_cor", 
   mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
 ```
@@ -139,7 +138,7 @@ And the ${e}_{t} \sim N(0, \sigma)$. Remember back to the autocorrelated model (
 
 We can fit the random walk model using argument `model_name = 'rw'` passed to the ``fit_stan()`` function.
 ```{r stan-rw, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-rw = fit_stan(y = Temp, est_drift = FALSE, model_name = "rw")
+rw <- atsar::fit_stan(y = Temp, est_drift = FALSE, model_name = "rw")
 ```
 
 
@@ -151,7 +150,7 @@ $$y_t = \phi y_{t-1} + e_{t}$$.
 The ``fit_stan()`` function can fit higher order AR models, but for now we just want to fit an AR(1) model and make a histogram of phi.
 
 ```{r stan-ar1-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-ar1 = fit_stan(y = Temp, x = matrix(1, nrow = length(Temp), ncol = 1), 
+ar1 <- atsar::fit_stan(y = Temp, x = matrix(1, nrow = length(Temp), ncol = 1), 
   model_name = "ar", est_drift=FALSE, P = 1)
 ```
 
@@ -167,8 +166,8 @@ In the two above models, we'll refer to $q$ as the standard deviation of the pro
 
 We can fit the state-space AR(1) and random walk models using the ``fit_stan()`` function:
 ```{r stan-arrw, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-ss_ar = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_ar")
-ss_rw = fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
+ss_ar <- atsar::fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_ar")
+ss_rw <- atsar::fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
 ```
 
 ## Dynamic factor analysis {#sec-stan-dfa}
@@ -179,17 +178,17 @@ First load the plankton dataset from the **MARSS** package.
  data(lakeWAplankton, package="MARSS")
  # we want lakeWAplanktonTrans, which has been transformed
  # so the 0s are replaced with NAs and the data z-scored
- dat = lakeWAplanktonTrans
+ dat <- lakeWAplanktonTrans
  # use only the 10 years from 1980-1989
- plankdat = dat[dat[,"Year"]>=1980 & dat[,"Year"]<1990,]
+ plankdat <- dat[dat[,"Year"]>=1980 & dat[,"Year"]<1990,]
  # create vector of phytoplankton group names
- phytoplankton = c("Cryptomonas", "Diatoms", "Greens",
+ phytoplankton <- c("Cryptomonas", "Diatoms", "Greens",
                    "Unicells", "Other.algae")
  # get only the phytoplankton
- dat.spp.1980 = t(plankdat[,phytoplankton])
+ dat.spp.1980 <- t(plankdat[,phytoplankton])
  # z-score the data since we subsetted time
- dat.spp.1980 = dat.spp.1980-apply(dat.spp.1980,1,mean,na.rm=TRUE)
- dat.spp.1980 = dat.spp.1980/sqrt(apply(dat.spp.1980,1,var,na.rm=TRUE))
+ dat.spp.1980 <- dat.spp.1980-apply(dat.spp.1980,1,mean,na.rm=TRUE)
+ dat.spp.1980 <- dat.spp.1980/sqrt(apply(dat.spp.1980,1,var,na.rm=TRUE))
  #check our z-score
  apply(dat.spp.1980,1,mean,na.rm=TRUE)
  apply(dat.spp.1980,1,var,na.rm=TRUE)
@@ -198,7 +197,7 @@ First load the plankton dataset from the **MARSS** package.
 Plot the data.
 ```{r stan-plot-dfa, fig=TRUE, fig.cap='Phytoplankton data.'}
 #make into ts since easier to plot
-dat.ts=ts(t(dat.spp.1980),frequency=12, start=c(1980,1))
+dat.ts <- ts(t(dat.spp.1980),frequency=12, start=c(1980,1))
 par(mfrow=c(3,2),mar=c(2,2,2,2))
 for(i in 1:5) 
   plot(dat.ts[,i], type="b",
@@ -206,13 +205,13 @@ for(i in 1:5)
 ```
 
 Run a 3 trend model on these data.
-```{r stan-dfa.3.trend, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-mod_3 = fit_dfa(y = dat.spp.1980, num_trends=3)
+```{r stan-dfa-3-trend, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
+mod_3 <- atsar::fit_dfa(y = dat.spp.1980, num_trends=3)
 ```
 
 Rotate the estimated trends and look at what it produces.
 ```{r stan-dfa-rot}
-rot = rotate_trends(mod_3)
+rot <- atsar::rotate_trends(mod_3)
 names(rot)
 ```
 
@@ -225,31 +224,30 @@ matplot(t(rot$trends_mean),type="l",lwd=2,ylab="mean trend")
 
 We will fit multiple DFA with different numbers of trends and use leave one out (LOO) cross-validation to choose the best model.
 
-```{r stan-dfa.5.models, results='hide', cache=TRUE}
-mod_1 = fit_dfa(y = dat.spp.1980, num_trends=1)
-mod_2 = fit_dfa(y = dat.spp.1980, num_trends=2)
-mod_3 = fit_dfa(y = dat.spp.1980, num_trends=3)
-mod_4 = fit_dfa(y = dat.spp.1980, num_trends=4)
-mod_5 = fit_dfa(y = dat.spp.1980, num_trends=5)
+```{r stan-dfa-5-models, results='hide', cache=TRUE}
+mod_1 = atsar::fit_dfa(y = dat.spp.1980, num_trends=1)
+mod_2 = atsar::fit_dfa(y = dat.spp.1980, num_trends=2)
+mod_3 = atsar::fit_dfa(y = dat.spp.1980, num_trends=3)
+mod_4 = atsar::fit_dfa(y = dat.spp.1980, num_trends=4)
+mod_5 = atsar::fit_dfa(y = dat.spp.1980, num_trends=5)
 ```
 
 We will compute the Leave One Out Information Criterion (LOOIC) using the **loo** package.  Like AIC, lower is better.
 
-```{r stan-looic}
-library(loo)
-loo(extract_log_lik(mod_1))$looic
+```{r stan-looic, cache=TRUE}
+loo::loo(loo::extract_log_lik(mod_1))$looic
 ```
 
 Table of the LOOIC values:
 ```{r stan-looic-table, cache=TRUE}
 looics = c(
-  loo(extract_log_lik(mod_1))$looic,
-  loo(extract_log_lik(mod_2))$looic,
-  loo(extract_log_lik(mod_3))$looic,
-  loo(extract_log_lik(mod_4))$looic,
-  loo(extract_log_lik(mod_5))$looic
+  loo::loo(loo::extract_log_lik(mod_1))$looic,
+  loo::loo(loo::extract_log_lik(mod_2))$looic,
+  loo::loo(loo::extract_log_lik(mod_3))$looic,
+  loo::loo(loo::extract_log_lik(mod_4))$looic,
+  loo::loo(loo::extract_log_lik(mod_5))$looic
   )
-looic.table = data.frame(trends=1:5, LOOIC=looics)
+looic.table <- data.frame(trends=1:5, LOOIC=looics)
 looic.table
 ```
 
@@ -266,24 +264,26 @@ matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
 
 Assume they are all observing a single trend.
 ```{r stan-seal-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-seal.mod= fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
+seal.mod <- atsar::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
 ```
 
-```{r stan-seal-trend}
-pars = extract(seal.mod)
+```{r stan-seal-trend, cache=TRUE}
+pars <- rstan::extract(seal.mod)
 ```
 
 ```{r stan-plot-seal, fig = TRUE, fig.cap='Estimated states and 95% credible intervals.'}
-pred_mean = c(apply(pars$x, c(2,3), mean))
-pred_lo = c(apply(pars$x, c(2,3), quantile, 0.025))
-pred_hi = c(apply(pars$x, c(2,3), quantile, 0.975))
+pred_mean <- c(apply(pars$x, c(2,3), mean))
+pred_lo <- c(apply(pars$x, c(2,3), quantile, 0.025))
+pred_hi <- c(apply(pars$x, c(2,3), quantile, 0.975))
 
 plot(pred_mean, type="l", lwd = 3, ylim = range(c(pred_mean, pred_lo, pred_hi)), main = "Trend")
 lines(pred_lo)
 lines(pred_hi)
 ```
 
-## Problems {#stan-problems}
+\clearpage
+
+## Problems {#sec-stan-problems}
 
 1. By adapting the code in Section \@ref(sec-stan-lr), fit a regression model that includes the intercept and a slope, modeling the effect of Wind. What is the mean wind effect you estimate?
 

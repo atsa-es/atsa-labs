@@ -1,6 +1,6 @@
 ```{r dlm-setup, include=FALSE, purl=FALSE}
 knitr::opts_knit$set(unnamed.chunk.label = "dlm-")
-knitr::opts_chunk$set(fig.align='center', out.width = '80%')
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
 ```
 
 
@@ -53,7 +53,7 @@ $\mathbf{G}_t$ is the parameter "evolution" matrix, and $\mathbf{w}_t$ is a vect
 
 The idea is that the evolution matrix $\mathbf{G}_t$ deterministically maps the parameter space from one time step to the next, so the parameters at time $t$ are temporally related to those before and after. However, the process is corrupted by stochastic error, which amounts to a degradation of information over time. If the diagonal elements of $\mathbf{Q}$ are relatively large, then the parameters can vary widely from $t$ to $t+1$. If $\mathbf{Q} = \mathbf{0}$, then $\boldsymbol{\theta}_1=\boldsymbol{\theta}_2=\boldsymbol{\theta}_T$ and we are back to the static model in Equation \@ref(eq:dlm-lm).
 
-## DLM in state-space form
+## DLM in state-space form {#sec-dlm-state-space-form}
 
 A DLM is a state-space model and can be written in MARSS form:
 \begin{equation}
@@ -207,7 +207,7 @@ y_t = \mathbf{Z}\mathbf{x}_t + v_t \\
 where  $\mathbf{x}=\begin{bmatrix}\alpha \\ \beta\end{bmatrix}$ and $\mathbf{Z}=\begin{bmatrix}1&f_t\end{bmatrix}$.
 
 
-## DLM with seasonal effect
+## DLM with seasonal effect {#sec-dlm-with-season}
 
 Let's add a simple fixed quarter effect to the regression model:
 
@@ -399,31 +399,31 @@ where $\mathbf{x}_t = \boldsymbol{\theta}_t$, $\mathbf{B}_t = \mathbf{G}_t$, $\m
 
 Now let's go ahead and analyze the DLM specified in Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). We begin by loading the data set (which is in the **MARSS** package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean (``year``), 2) logit-transformed survival \footnote{Survival in the original context was defined as the proportion of juveniles that survive to adulthood. Thus, we use the logit function, defined as $logit(p)=log_e(p/[1-p])$, to map survival from the open interval (0,1) onto the interval $(-\infty,\infty)$, which allows us to meet our assumption of normally distributed observation errors.} (``logit.s``), and 3) the coastal upwelling index for April (``CUI.apr``). There are 42 years of data (1964--2005).
 ```{r read.in.data, eval=TRUE}
-## load the data
+# load the data
 data(SalmonSurvCUI, package="MARSS")
-## get time indices
-years = SalmonSurvCUI[,1]
-## number of years of data
-TT = length(years)
-## get response variable: logit(survival)
-dat = matrix(SalmonSurvCUI[,2],nrow=1)
+# get time indices
+years <- SalmonSurvCUI[,1]
+# number of years of data
+TT <- length(years)
+# get response variable: logit(survival)
+dat <- matrix(SalmonSurvCUI[,2],nrow=1)
 ```
 
 As we have seen in other case studies, standardizing our covariate(s) to have zero-mean and unit-variance can be helpful in model fitting and interpretation. In this case, it's a good idea because the variance of ``CUI.apr`` is orders of magnitude greater than ``logit.s``.
 ```{r z.score, eval=TRUE}
-## get predictor variable
-CUI = SalmonSurvCUI[,3]
+# get predictor variable
+CUI <- SalmonSurvCUI[,3]
 ## z-score the CUI
-CUI.z = matrix((CUI - mean(CUI))/sqrt(var(CUI)), nrow=1)
-## number of regr params (slope + intercept)
-m = dim(CUI.z)[1] + 1
+CUI.z <- matrix((CUI - mean(CUI))/sqrt(var(CUI)), nrow=1)
+# number of regr params (slope + intercept)
+m <- dim(CUI.z)[1] + 1
 ```
 Plots of logit-transformed survival and the $z$-scored April upwelling index are shown in Figure \@ref(fig:plotdata).
 
 
 (ref:plotdata) Time series of logit-transformed marine survival estimates for Snake River spring/summer Chinook salmon (top) and *z*-scores of the coastal upwelling index at 45N 125W (bottom). The *x*-axis indicates the year that the salmon smolts entered the ocean.
 
-```{r plotdata, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=4, fig.width=6, fig.cap='(ref:plotdata)'}
+```{r dlm-plotdata, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=4, fig.width=6, fig.cap='(ref:plotdata)'}
 par(mfrow=c(m,1), mar=c(4,4,0.1,0), oma=c(0,0,2,0.5))
 plot(years, dat, xlab="", ylab="Logit(s)", bty="n", xaxt="n", pch=16, col="darkgreen", type="b")
 plot(years, CUI.z, xlab="", ylab="CUI", bty="n", xaxt="n", pch=16, col="blue", type="b")
@@ -434,34 +434,34 @@ mtext("Year of ocean entry", 1, line=3)
 
 Next, we need to set up the appropriate matrices and vectors for MARSS. Let's begin with those for the process equation because they are straightforward.
 ```{r univ.DLM.proc, eval=TRUE}
-## for process eqn
-B = diag(m)                     ## 2x2; Identity
-U = matrix(0,nrow=m,ncol=1)     ## 2x1; both elements = 0
-Q = matrix(list(0),m,m)         ## 2x2; all 0 for now
-diag(Q) = c("q.alpha","q.beta") ## 2x2; diag = (q1,q2)
+# for process eqn
+B <- diag(m)                     ## 2x2; Identity
+U <- matrix(0,nrow=m,ncol=1)     ## 2x1; both elements = 0
+Q <- matrix(list(0),m,m)         ## 2x2; all 0 for now
+diag(Q) <- c("q.alpha","q.beta") ## 2x2; diag = (q1,q2)
 ```
 
 Defining the correct form for the observation model is a little more tricky, however, because of how we model the effect(s) of predictor variables. In a DLM, we need to use $\mathbf{Z}_t$ (instead of $\mathbf{d}_t$) as the matrix of predictor variables that affect $\mathbf{y}_t$, and we use $\mathbf{x}_t$ (instead of $\mathbf{D}_t$) as the regression parameters. Therefore, we need to set $\mathbf{Z}_t$ equal to an $n\times m\times T$ array, where $n$ is the number of response variables (= 1; $y_t$ is univariate), $m$ is the number of regression parameters (= intercept + slope = 2), and $T$ is the length of the time series (= 42). 
 ```{r univ.DLM.obs, eval=TRUE}
-## for observation eqn
-Z = array(NA, c(1,m,TT))   ## NxMxT; empty for now
-Z[1,1,] = rep(1,TT)        ## Nx1; 1's for intercept
-Z[1,2,] = CUI.z            ## Nx1; predictor variable
-A = matrix(0)              ## 1x1; scalar = 0
-R = matrix("r")            ## 1x1; scalar = r
+# for observation eqn
+Z <- array(NA, c(1,m,TT))   ## NxMxT; empty for now
+Z[1,1,] <- rep(1,TT)        ## Nx1; 1's for intercept
+Z[1,2,] <- CUI.z            ## Nx1; predictor variable
+A <- matrix(0)              ## 1x1; scalar = 0
+R <- matrix("r")            ## 1x1; scalar = r
 ```
 
 Lastly, we need to define our lists of initial starting values and model matrices/vectors. 
 ```{r univ.DLM.list, eval=TRUE}
-## only need starting values for regr parameters
-inits.list = list(x0=matrix(c(0, 0), nrow=m))
-## list of model matrices & vectors
-mod.list = list(B=B, U=U, Q=Q, Z=Z, A=A, R=R)
+# only need starting values for regr parameters
+inits.list <- list(x0=matrix(c(0, 0), nrow=m))
+# list of model matrices & vectors
+mod.list <- list(B=B, U=U, Q=Q, Z=Z, A=A, R=R)
 ```
 And now we can fit our DLM with MARSS.
 ```{r univ.DLM.fit, eval=TRUE}
-## fit univariate DLM
-dlm1 = MARSS(dat, inits=inits.list, model=mod.list)
+# fit univariate DLM
+dlm1 <- MARSS(dat, inits=inits.list, model=mod.list)
 ```
 
 Notice that the MARSS output does not list any estimates of the regression parameters themselves. Why not? Remember that in a DLM the matrix of states $(\mathbf{x})$ contains the estimates of the regression parameters $(\boldsymbol{\theta})$. Therefore, we need to look in ```dlm1$states``` for the MLEs of the regression parameters, and in ```dlm1$states.se``` for their standard errors.
@@ -471,13 +471,13 @@ Time series of the estimated intercept and slope are shown in Figure \@ref(fig:p
 
 (ref:plotdlm1) Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the DLM specified by Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). Thin lines denote the mean $\pm$ 2 standard deviations.
 
-```{r plotdlm1, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=4, fig.width=6, fig.cap='(ref:plotdlm1)'}
-ylabs = c(expression(alpha[t]), expression(beta[t]))
-colr = c("darkgreen","blue")
+```{r dlm-plotdlm1, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=4, fig.width=6, fig.cap='(ref:plotdlm1)'}
+ylabs <- c(expression(alpha[t]), expression(beta[t]))
+colr <- c("darkgreen","blue")
 par(mfrow=c(m,1), mar=c(4,4,0.1,0), oma=c(0,0,2,0.5))
 for(i in 1:m) {
-  mn = dlm1$states[i,]
-  se = dlm1$states.se[i,]
+  mn <- dlm1$states[i,]
+  se <- dlm1$states.se[i,]
   plot(years,mn,xlab="",ylab=ylabs[i],bty="n",xaxt="n",type="n",
   ylim=c(min(mn-2*se),max(mn+2*se)))
   lines(years, rep(0,TT), lty="dashed")
@@ -569,19 +569,20 @@ $$
 and $f_{t}$ is the upwelling index at $t+1$. $\hat{r}$ is the estimated observation variance from our model fit.
 
 ### Forecasting using MARSS {#sec-dlm-forecasting-a-univariate-dlm-with-marss}
+
 Working from Equation \@ref(eq:dlm-dlmFore3), we can compute the expected value of the forecast at time $t$  and its variance using the Kalman filter. For the expectation, we need $\mathbf{F}_{t}^\top\text{E}(\boldsymbol{\theta}_{t|t-1})$. 
 $\mathbf{F}_t^\top$ is called $\mathbf{Z}_t$ in MARSS notation. The one-step ahead forecasts of the regression parameters at time $t$, the $\text{E}(\boldsymbol{\theta}_{t|t-1})$, are calculated as part of the Kalman filter algorithm---they are termed $\tilde{x}_t^{t-1}$ in MARSS notation and stored as ``xtt1`` in the list produced by the ``MARSSkfss()`` Kalman filter function.
 
 Using the `Z` defined in \@ref(sec-dlm-salmon-example), we compute the mean forecast as follows:
 ```{r univ.DLM.fore.mean, eval=TRUE}
-## get list of Kalman filter output
-kf.out = MARSSkfss(dlm1)
+# get list of Kalman filter output
+kf.out <- MARSSkfss(dlm1)
 ## forecasts of regr parameters; 2xT matrix
-eta = kf.out$xtt1
+eta <- kf.out$xtt1
 ## ts of E(forecasts)
-fore.mean = vector()
+fore.mean <- vector()
 for(t in 1:TT) {
-  fore.mean[t] = Z[,,t] %*% eta[,t,drop=FALSE]
+  fore.mean[t] <- Z[,,t] %*% eta[,t,drop=FALSE]
 }
 ```
 
@@ -590,15 +591,15 @@ $\mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + 
 
 Putting this together, we can compute the forecast variance:
 ```{r univ.DLM.fore.Var, eval=TRUE}
-## variance of regr parameters; 1x2xT array
-Phi = kf.out$Vtt1
+# variance of regr parameters; 1x2xT array
+Phi <- kf.out$Vtt1
 ## obs variance; 1x1 matrix
-R.est = coef(dlm1, type="matrix")$R
+R.est <- coef(dlm1, type="matrix")$R
 ## ts of Var(forecasts)
-fore.var = vector()
+fore.var <- vector()
 for(t in 1:TT) {
-  tZ = matrix(Z[,,t],m,1) ## transpose of Z
-  fore.var[t] = Z[,,t] %*% Phi[,,t] %*% tZ + R.est
+  tZ <- matrix(Z[,,t],m,1) ## transpose of Z
+  fore.var[t] <- Z[,,t] %*% Phi[,,t] %*% tZ + R.est
 }
 ```
 
@@ -607,7 +608,7 @@ Plots of the model mean forecasts with their estimated uncertainty are shown in 
 
 (ref:plotdlmForeLogit) Time series of logit-transformed survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95\% prediction intervals.
 
-```{r plotdlmForeLogit, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.width=6, fig.cap='(ref:plotdlmForeLogit)'}
+```{r dlm-plotdlmForeLogit, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.width=6, fig.cap='(ref:plotdlmForeLogit)'}
 par(mar=c(4,4,0.1,0), oma=c(0,0,2,0.5))
 ylims=c(min(fore.mean-2*sqrt(fore.var)),max(fore.mean+2*sqrt(fore.var)))
 plot(years, t(dat), type="p", pch=16, ylim=ylims,
@@ -625,7 +626,7 @@ Although our model forecasts look reasonable in logit-space, it is worthwhile to
 
 (ref:plotdlmForeRaw) Time series of survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95\% prediction intervals.
 
-```{r plotdlmForeRaw, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.width=6, fig.cap='(ref:plotdlmForeRaw)'}
+```{r dlm-plotdlmForeRaw, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=3, fig.width=6, fig.cap='(ref:plotdlmForeRaw)'}
 invLogit = function(x) {1/(1+exp(-x))}
 ff = invLogit(fore.mean)
 fup = invLogit(fore.mean+2*sqrt(fore.var))
@@ -644,6 +645,7 @@ mtext("Year of ocean entry", 1, line=3)
 Notice that we passed the DLM fit to all the data to `MARSSkfss()`.  This meant that the Kalman filter used estimates of $\mathbf{Q}$ and $r$ using all the data in the `xtt1` and `Vtt1` calculations. Thus our predictions at time $t$ are not entirely based on only data up to time $t-1$ since the $\mathbf{Q}$ and $r$ estimates were from all the data from 1964 to 2005.
 
 ## Forecast diagnostics {#sec-dlm-dlm-forecast-diagnostics}
+
 \begin{samepage}
 As with other time series models, evaluation of a DLM should include diagnostics. In a forecasting context, we are often interested in the forecast errors, which are simply the observed data minus the forecasts $e_t = y_t - \text{E}(y_t|y_{1:t-1})$. In particular, the following assumptions should hold true for $e_t$:
 
@@ -654,58 +656,58 @@ As with other time series models, evaluation of a DLM should include diagnostics
 
 In the literature on state-space models, the set of $e_t$ are commonly referred to as "innovations". ```MARSS()``` calculates the innovations as part of the Kalman filter algorithm---they are stored as ```Innov``` in the list produced by the ```MARSSkfss()``` function.
 ```{r dlmInnov, eval=TRUE, echo=TRUE}
-## forecast errors
-innov = kf.out$Innov
+# forecast errors
+innov <- kf.out$Innov
 ```
 
 Let's see if our innovations meet the model assumptions. Beginning with (1), we can use a Q-Q plot to see whether the innovations are normally distributed with a mean of zero. We'll use the ```qqnorm()``` function to plot the quantiles of the innovations on the $y$-axis versus the theoretical quantiles from a Normal distribution on the $x$-axis. If the 2 distributions are similar, the points should fall on the line defined by $y = x$.
 ```{r dlmQQplot, eval=FALSE, echo=TRUE}
-## Q-Q plot of innovations
+# Q-Q plot of innovations
 qqnorm(t(innov), main="", pch=16, col="blue")
-## add y=x line for easier interpretation
+# add y=x line for easier interpretation
 qqline(t(innov))
 ```
 <!-- % diagnostics plot: QQ -->
 
 (ref:plotdlmQQ) Q-Q plot of the forecast errors (innovations) for the DLM specified in Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3).
 
-```{r plotdlmQQ, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=2, fig.width=4, fig.cap='(ref:plotdlmQQ)'}
-## use layout to get nicer plots
+```{r dlm-plotdlmQQ, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=2, fig.width=4, fig.cap='(ref:plotdlmQQ)'}
+# use layout to get nicer plots
 layout(matrix(c(0,1,1,1,0),1,5,byrow=TRUE))
-## set up L plotting space
+# set up L plotting space
 par(mar=c(4,4,1,0), oma=c(0,0,0,0.5))
-## Q-Q plot of innovations
+# Q-Q plot of innovations
 qqnorm(t(innov), main="", pch=16, col="blue")
 qqline(t(innov))
-## set up R plotting space
-##par(mar=c(4,0,1,1)) ##, oma=c(0,0,0,0.5))
-## boxplot of innovations
-##boxplot(t(innov), axes=FALSE)
+# set up R plotting space
+# par(mar=c(4,0,1,1)) ##, oma=c(0,0,0,0.5))
+# boxplot of innovations
+# boxplot(t(innov), axes=FALSE)
 ```
  
 
 The Q-Q plot (Figure \@ref(fig:plotdlmQQ)) indicates that the innovations appear to be more-or-less normally distributed (i.e., most points fall on the line). Furthermore, it looks like the mean of the innovations is about 0, but we should use a more reliable test than simple visual inspection. We can formally test whether the mean of the innovations is significantly different from 0 by using a one-sample $t$-test.  based on a null hypothesis of $\E(e_t)=0$. To do so, we will use the function ```t.test()``` and base our inference on a significance value of $\alpha = 0.05$.
 ```{r dlmInnovTtest, eval=TRUE, echo=TRUE}
-## p-value for t-test of H0: E(innov) = 0
+# p-value for t-test of H0: E(innov) = 0
 t.test(t(innov), mu=0)$p.value
 ```
 The $p$-value $>>$ 0.05 so we cannot reject the null hypothesis that $\E(e_t)=0$.
 
 Moving on to assumption (2), we can use the sample autocorrelation function (ACF) to examine whether the innovations covary with a time-lagged version of themselves. Using the ```acf()``` function, we can compute and plot the correlations of $e_t$ and $e_{t-k}$ for various values of $k$. Assumption (2) will be met if none of the correlation coefficients exceed the 95\% confidence intervals defined by $\pm \, z_{0.975} / \sqrt{n}$.
 ```{r dlmACFplot, eval=FALSE, echo=TRUE}
-## plot ACF of innovations
+# plot ACF of innovations
 acf(t(innov), lag.max=10)
 ```
 <!-- % diagnostics plot: ACF -->
 
 (ref:plotdlmACF) Autocorrelation plot of the forecast errors (innovations) for the DLM specified in Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). Horizontal blue lines define the upper and lower 95\% confidence intervals.
 
-```{r plotdlmACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=2, fig.width=4, fig.cap='(ref:plotdlmACF)'}
-## use layout to get nicer plots
+```{r dlm-plotdlmACF, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=2, fig.width=4, fig.cap='(ref:plotdlmACF)'}
+# use layout to get nicer plots
 layout(matrix(c(0,1,1,1,0),1,5,byrow=TRUE))
-## set up plotting space
+# set up plotting space
 par(mar=c(4,4,1,0), oma=c(0,0,0,0.5))
-## ACF of innovations
+# ACF of innovations
 acf(t(innov), lwd=2, lag.max=10)
 ```
  
@@ -786,7 +788,7 @@ load("KvichakSockeye.RData")
 
 The data are a dataframe with columns for brood year (`brood.yr`), number of spawners (`Sp`), number of recruits (`Rec`) and PDO at year $t-2$ (`PDO.t2`) and $t-3$ (`PDO.t3`).
 ```{r dlm-data-head}
-## head of data file
+# head of data file
 head(SRdata)
 ```
 
@@ -794,7 +796,7 @@ head(SRdata)
 
 ## Problems {#sec-dlm-problems}
 
-\noindent Use the information and data in the previous section to answer the following questions. Note that if any model is not converging, then you will need to increase the ```maxit``` parameter in the ```control``` argument/list that gets passed to ```MARSS()```. For example, you might try ```control=list(maxit=2000)```.
+\noindent Use the information and data in the previous section to answer the following questions. Note that if any model is not converging, then you will need to increase the `maxit` parameter in the `control` argument/list that gets passed to `MARSS()`. For example, you might try `control=list(maxit=2000)`.
 
 1. Begin by fitting a reduced form of Equation \@ref(eq:dlm-lnTVRicker) that includes only a time-varying level ($\alpha_t$) and observation error ($v_t$).  That is,
 
@@ -807,9 +809,9 @@ This model assumes no density-dependent survival in that the number of recruits 
 
 2. Fit the full model specified by Equation \@ref(eq:dlm-lnTVRicker).  For this model, obtain the time series of $\alpha_t$, which is an estimate of the stock productivity in the absence of density-dependent effects. How do these estimates of productivity compare to those from the previous question?  Plot the ts of $\alpha_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.  ($Hint$: If you don't want a parameter to vary with time, what does that say about its process variance?)
 
-3. Fit the model specified by Equation \@ref(eq:dlm-lnCovRicker) with the summer PDO index as the covariate (```PDO.t2```). What is the mean level of productivity?  Plot the ts of $\delta_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.
+3. Fit the model specified by Equation \@ref(eq:dlm-lnCovRicker) with the summer PDO index as the covariate (`PDO.t2`). What is the mean level of productivity?  Plot the ts of $\delta_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.
 
-4. Fit the model specified by Equation \@ref(eq:dlm-lnCovRicker) with the winter PDO index as the covariate (```PDO.t3```). What is the mean level of productivity?  Plot the ts of $\delta_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.
+4. Fit the model specified by Equation \@ref(eq:dlm-lnCovRicker) with the winter PDO index as the covariate (`PDO.t3`). What is the mean level of productivity?  Plot the ts of $\delta_t$ and note the AICc for this model.  Also plot appropriate model diagnostics.
 
 5. Based on AICc, which of the models above is the most parsimonious?  Is it well behaved ($i.e.$, are the model assumptions met)?  Plot the model forecasts for the best model.  Is this a good forecast model?  
 
