@@ -1,0 +1,88 @@
+```{r msscov-setup, include=FALSE, purl=FALSE}
+knitr::opts_knit$set(unnamed.chunk.label = "mssmiss-")
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
+```
+
+# Covariates with Missing Values {#chap-mssmiss}
+\chaptermark{Covariates with NAs}
+
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/multivariate-ss-missing-cov.R). The Rmd for this chapter can be downloaded [here](./Rmds/multivariate-ss-missing-cov.Rmd)
+
+### Data and packages {-}
+
+
+## Covariates with missing values or observation error {#sec-mssmiss-overview}
+
+The specific formulation of Equation \@ref(eq:msscov-covars) creates restrictions on the assumptions regarding the covariate data. You have to assume that your covariate data has no error, which is probably not true.  You cannot have missing values in your covariate data, again unlikely.  You cannot combine instrument time series; for example, if you have two temperature recorders with different error rates and biases.  Also, what if you have one noisy temperature sensor in the first part of your time series and then you switch to a much better sensor in the second half of your time series?  All these problems require pre-analysis massaging of the covariate data, leaving out noisy and gappy covariate data, and making what can feel like arbitrary choices about which covariate time series to include. 
+
+To circumvent these potential problems and allow more flexibility in how we incorporate covariate data, one can instead treat the covariates as components of an auto-regressive process by including them in both the process and observation models. Beginning with the process equation, we can write
+\begin{equation}
+\begin{gathered}
+\begin{bmatrix}\xx^{(v)} \\ \xx^{(c)}\end{bmatrix}_t
+= \begin{bmatrix}\BB^{(v)} & \CC \\ 0 & \BB^{(c)}\end{bmatrix}
+\begin{bmatrix}\xx^{(v)} \\ \xx^{(c)}\end{bmatrix}_{t-1}
++ \begin{bmatrix}\uu^{(v)} \\ \uu^{(c)} \end{bmatrix}
++ \ww_t,\\
+\ww_t \sim \MVN\begin{pmatrix}0,\begin{bmatrix}\QQ^{(v)} & 0 \\ 0 & \QQ^{(c)} \end{bmatrix} \end{pmatrix}  
+\end{gathered}
+(\#eq:mssmiss-marsscovarx)
+\end{equation}
+The elements with superscript ${(v)}$ are for the $k$ variate states and those with superscript ${(c)}$ are for the $q$ covariate states. The dimension of $\xx^{(c)}$ is $q \times 1$ and $q$ is not necessarily equal to $p$, the number of covariate observation time series in your dataset.  Imagine, for example, that you have two temperature sensors and you are combining these data.  Then you have two covariate observation time series ($p=2$) but only one underlying covariate state time series ($q=1$). The matrix $\CC$ is dimension $k \times q$, and $\BB^{(c)}$ and  $\QQ^{(c)}$ are dimension $q \times q$.  The dimension of $\xx^{(v)}$ is $k \times 1$,  and $\BB^{(v)}$ and  $\QQ^{(v)}$ are dimension $k \times k$. The dimension of $\xx$ is always denoted $m$.  If your process model includes only variates, then $k=m$, but now your process model includes $k$ variates and $q$ covariate states so $m=k+q$.
+
+Next, we can write the observation equation in an analogous manner, such that
+\begin{equation}
+\begin{gathered}
+\begin{bmatrix} \yy^{(v)} \\ \yy^{(c)} \end{bmatrix}_t
+= \begin{bmatrix}\ZZ^{(v)} & \DD \\ 0 & \ZZ^{(c)} \end{bmatrix}
+\begin{bmatrix}\xx^{(v)} \\ \xx^{(c)} \end{bmatrix}_t
++ \begin{bmatrix} \aa^{(v)} \\ \aa^{(c)} \end{bmatrix}
++ \vv_t,\\
+\vv_t \sim \MVN\begin{pmatrix}0,\begin{bmatrix}\RR^{(v)} & 0 \\ 0 & \RR^{(c)} \end{bmatrix} \end{pmatrix} 
+\end{gathered}
+(\#eq:mssmiss-marsscovary)
+\end{equation}
+The dimension of $\yy^{(c)}$ is $p \times 1$, where $p$ is the number of covariate observation time series in your dataset.  The dimension of $\yy^{(v)}$ is $l \times 1$, where $l$ is the number of variate observation time series in your dataset.  The total dimension of $\yy$ is $l+p$.  The matrix $\DD$ is dimension $l \times q$, $\ZZ^{(c)}$ is dimension $p \times q$, and  $\RR^{(c)}$ are dimension $p \times p$.  The dimension of  $\ZZ^{(v)}$ is dimension $l \times k$, and  $\RR^{(v)}$ are dimension $l \times l$.
+
+The $\DD$ matrix would presumably have a number of all zero rows in it, as would the $\CC$ matrix.   The covariates that affect the states would often be different than the covariates that affect the observations.  For example, mean annual temperature might affect population growth rates for many species while having little or no affect on observability, and turbidity might strongly affect observability in many types of aquatic surveys but have little affect on population growth rate.
+
+Our MARSS model with covariates now looks on the surface like a regular MARSS model: 
+\begin{equation}
+\begin{gathered}
+\xx_t = \BB\xx_{t-1} + \uu + \ww_t, \text{ where } \ww_t \sim \MVN(0,\QQ) \\
+\yy_t = \ZZ\xx_t + \aa  + \vv_t, \text{ where } \vv_t \sim \MVN(0,\RR) 
+\end{gathered}
+\end{equation}
+with the $\xx_t$, $\yy_t$ and parameter matrices redefined as in Equations \ref{eqn:marsscovarx} and \ref{eqn:marsscovary}:
+\begin{equation}\label{eqn:marsscovarparams}
+\begin{gathered}
+\xx=\begin{bmatrix}\xx^{(v)}\\ \xx^{(c)}\end{bmatrix}  \quad \BB=\begin{bmatrix}\BB^{(v)} & \CC \\ 0 & \BB^{(c)}\end{bmatrix}  \quad \uu=\begin{bmatrix}\uu^{(v)}\\ \uu^{(c)}\end{bmatrix} \quad \QQ=\begin{bmatrix}\QQ^{(v)} & 0 \\ 0 & \QQ^{(c)}\end{bmatrix} \\
+\yy=\begin{bmatrix}\yy^{(v)}\\ \yy^{(c)}\end{bmatrix}  \quad \ZZ=\begin{bmatrix}\ZZ^{(v)} & \DD \\ 0 & \ZZ^{(c)}\end{bmatrix}  \quad \aa=\begin{bmatrix}\aa^{(v)}\\ \aa^{(c)}\end{bmatrix} \quad \RR=\begin{bmatrix}\RR^{(v)} & 0 \\ 0 & \RR^{(c)}\end{bmatrix} 
+\end{gathered}
+(\#eq:mssmiss-marss-covar)
+\end{equation}
+Note $\QQ$ and $\RR$ are written as block diagonal matrices, but you could allow covariances if that made sense.  $\uu$ and $\aa$ are column vectors here.  We can fit the model (Equation \@ref(eq:mssmiss-marss-covar)) as usual using the `MARSS()` function. 
+
+The log-likelihood that is returned by MARSS will include the log-likelihood of the covariates under the covariate state model.  If you want only the the log-likelihood of the non-covariate data, you will need to subtract off the log-likelihood of the covariate model:
+\begin{equation}
+\begin{gathered}
+\xx^{(c)}_t = \BB^{(c)}\xx_{t-1}^{(c)} + \uu^{(c)} + \ww_t, \text{ where } \ww_t \sim \MVN(0,\QQ^{(c)}) \\
+\yy^{(c)}_t = \ZZ^{(c)}\xx_t^{(c)} + \aa^{(c)}  + \vv_t, \text{ where } \vv_t \sim \MVN(0,\RR^{(c)}) 
+\end{gathered}
+(\#eq:mssmiss-covar-dummy)
+\end{equation}
+An easy way to get this log-likelihood for the covariate data only is use
+the augmented model (Equation \@ref(eq:mssmiss-marsscovary) with terms defined as
+in Equation \ref{eqn:marsscovarparams}) but pass in missing values for the
+non-covariate data.  The following code shows how to do this.
+```{r get-LL-aug, eval=FALSE}
+y.aug = rbind(data,covariates)
+fit.aug = MARSS(y.aug, model=model.aug)
+```
+`fit.aug` is the MLE object that can be passed to `MARSSkf()`.  You need to make a version of this MLE object with the non-covariate data filled with NAs so that you can compute the log-likelihood without the covariates.  This needs to be done in the `marss` element since that is what is used by `MARSSkf()`.  Below is code to do this.
+```{r get-LL-aug-2, eval=FALSE}
+fit.cov = fit.aug
+fit.cov$marss$data[1:dim(data)[1],] = NA
+extra.LL = MARSSkf(fit.cov)$logLik
+```
+
+Note that when you fit the augmented model, the estimates of $\CC$ and $\BB^{(c)}$ are affected by the non-covariate data since the model for both the non-covariate and covariate data are estimated simultaneously and are not independent (since the covariate states affect the non-covariates states).  If you want the covariate model to be unaffected by the non-covariate data, you can fit the covariate model separately and use the estimates for $\BB^{(c)}$ and $\QQ^{(c)}$ as fixed values in your augmented model.
