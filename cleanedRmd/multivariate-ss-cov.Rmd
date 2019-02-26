@@ -321,12 +321,11 @@ colnames(seas.2) <- month.abb
 ```
 The middle panel in Figure \@ref(fig:msscov-mon-effects) shows the estimated seasonal effects for this polynomial model.
 
-Note: Setting the covariates up like this means that our covariates are collinear since $m$ and $m^2$ are correlated, obviously.  A better approach is to use to use the `poly()` function to create orthogonal polynomial covariate:
+Note: Setting the covariates up like this means that our covariates are collinear since $m$, $m^2$ and $m^3$ are correlated, obviously.  A better approach is to use the `poly()` function to create an orthogonal polynomial covariate matrix `c.m.poly.o`:
 ```{r msscov-poly}
-month.cov.ortho <- t(cbind(1, poly(1:period, poly.order)))
-c.m.poly.ortho <- matrix(month.cov, poly.order+1, TT+period, byrow=FALSE)
-# trim c.in to correct start & length
-c.m.poly.ortho <- c.m.poly[,(1:TT)+(per.1st-1)]
+month.cov.o <- cbind(1, poly(1:period, poly.order))
+c.m.poly.o <- matrix(t(month.cov.o), poly.order+1, TT+period, byrow=FALSE)
+c.m.poly.o <- c.m.poly.o[,(1:TT)+(per.1st-1)]
 ```
 
 

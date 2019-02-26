@@ -160,10 +160,9 @@ rownames(seas.2) <- phytos
 colnames(seas.2) <- month.abb
 
 ## ----msscov-poly---------------------------------------------------------
-month.cov.ortho <- t(cbind(1, poly(1:period, poly.order)))
-c.m.poly.ortho <- matrix(month.cov, poly.order+1, TT+period, byrow=FALSE)
-# trim c.in to correct start & length
-c.m.poly.ortho <- c.m.poly[,(1:TT)+(per.1st-1)]
+month.cov.o <- cbind(1, poly(1:period, poly.order))
+c.m.poly.o <- matrix(t(month.cov.o), poly.order+1, TT+period, byrow=FALSE)
+c.m.poly.o <- c.m.poly.o[,(1:TT)+(per.1st-1)]
 
 ## ----msscov-seasonal-fourier---------------------------------------------
 cos.t <- cos(2 * pi * seq(TT) / period)

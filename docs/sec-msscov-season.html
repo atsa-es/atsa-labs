@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-02-22">
+<meta name="date" content="2019-02-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -551,12 +551,11 @@ seas<span class="fl">.2</span> =<span class="st"> </span>C<span class="fl">.2</s
 <span class="kw">rownames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>phytos
 <span class="kw">colnames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>month.abb</code></pre>
 <p>The middle panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this polynomial model.</p>
-<p>Note: Setting the covariates up like this means that our covariates are collinear since <span class="math inline">\(m\)</span> and <span class="math inline">\(m^2\)</span> are correlated, obviously. A better approach is to use to use the <code>poly()</code> function to create orthogonal polynomial covariate:</p>
-<pre class="sourceCode r"><code class="sourceCode r">month.cov.ortho &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">poly</span>(<span class="dv">1</span><span class="op">:</span>period, poly.order)))
-c.m.poly.ortho &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.cov, poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, 
+<p>Note: Setting the covariates up like this means that our covariates are collinear since <span class="math inline">\(m\)</span>, <span class="math inline">\(m^2\)</span> and <span class="math inline">\(m^3\)</span> are correlated, obviously. A better approach is to use the <code>poly()</code> function to create an orthogonal polynomial covariate matrix <code>c.m.poly.o</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">month.cov.o &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">poly</span>(<span class="dv">1</span><span class="op">:</span>period, poly.order))
+c.m.poly.o &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">t</span>(month.cov.o), poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, 
     <span class="dt">byrow =</span> <span class="ot">FALSE</span>)
-<span class="co"># trim c.in to correct start &amp; length</span>
-c.m.poly.ortho &lt;-<span class="st"> </span>c.m.poly[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</code></pre>
+c.m.poly.o &lt;-<span class="st"> </span>c.m.poly.o[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</code></pre>
 </div>
 <div id="sec-msscov-season-fourier" class="section level3">
 <h3><span class="header-section-number">8.6.3</span> Seasonal effects as a Fourier series</h3>
