@@ -454,7 +454,9 @@ Here are some guidelines to help you answer the questions:
 
 ## Problems {#sec-msscov-problems}
 
-Read Section \@ref(sec-msscov-hw-discussion) for the data and tips on answering the questions and setting up your models.
+Read Section \@ref(sec-msscov-hw-discussion) for the data and tips on answering the questions and setting up your models.  Note the questions asking about the effects on *growth rate* are asking about the _C_ matrix in 
+$$\mathbf{x}_t=\mathbf{B}\mathbf{x}_{t-1}+\mathbf{C}\mathbf{c}_t+\mathbf{w}_t$$
+The $\mathbf{C}\mathbf{c}_t+\mathbf{w}_t$ are the process errors and represent the growth rates (growth above or below what you would expect given $\mathbf{x}_{t-1}$.  Use your raw data in the MARSS model.  You do not need to difference the data to get at the growth rates since the process model is modeling that.
 
 1. How does month affect the mean phytoplankton population growth rates? Show a plot of mean growth rate versus month. Estimate seasonal effects without any covariate (Temp, TP) effects.
 2. It is likely that both temperature and total phosphorus (TP) affect phytoplankton population growth rates. Using MARSS models, evaluate which is the more important driver or if both are important. Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates.
