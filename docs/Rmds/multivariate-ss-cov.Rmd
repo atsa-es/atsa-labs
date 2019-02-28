@@ -65,7 +65,7 @@ plot(LWA, main="", yax.flip=TRUE)
 
 We can estimate the effect of the covariates using a process-error only model, an observation-error only model, or a model with both types of error.  An observation-error only model is a multivariate regression, and we will start here so you see the relationship of MARSS model to more familiar linear regression models.
 
-In a standard multivariate linear regression, we only have an observation model with independent errors (\emph{i.e.}, the state process does not appear in the model):
+In a standard multivariate linear regression, we only have an observation model with independent errors (the state process does not appear in the model):
 \begin{equation}
 \mathbf{y}_t = \mathbf{a} + \mathbf{D}\mathbf{d}_t + \mathbf{v}_t, \text{ where } \mathbf{v}_t \sim \text{MVN}(0,\mathbf{R}) 
 (\#eq:msscov-y)
@@ -124,7 +124,7 @@ model.list <- list(B=B,U=U,Q=Q,Z=Z,A=A,R=R,C=C,c=covariates)
 kem <- MARSS(dat, model=model.list)
 ```
 
-Now, it looks like temperature has a strong negative effect on algae?  Also our log-likelihood dropped a lot.  Well, the data do not look at all like a random walk model (\emph{i.e.}, where $\mathbf{B}=1$), which we can see from the plot of the data (Figure \@ref(fig:msscov-plank-plot)).  The data are fluctuating about some mean so let's switch to a better autoregressive model---a mean-reverting model.  To do this, we will allow the diagonal elements of $\mathbf{B}$ to be something other than 1.
+Now, it looks like temperature has a strong negative effect on algae?  Also our log-likelihood dropped a lot.  Well, the data do not look at all like a random walk model (where $\mathbf{B}=1$), which we can see from the plot of the data (Figure \@ref(fig:msscov-plank-plot)).  The data are fluctuating about some mean so let's switch to a better autoregressive model---a mean-reverting model.  To do this, we will allow the diagonal elements of $\mathbf{B}$ to be something other than 1.
 
 ```{r msscov-covar-model-1c }
 model.list$B <- "diagonal and unequal"
@@ -218,7 +218,7 @@ TT <- dim(dat)[2]
 
 ### Seasonal effects as fixed factors {#sec-msscov-season-factors}
 
-One common approach for estimating seasonal effects is to treat each one as a fixed factor, such that the number of parameters equals the number of ``seasons'' (\emph{e.g.}, 24 hours per day, 4 quarters per year). The plankton data are collected monthly, so we will treat each month as a fixed factor.  To fit a model with fixed month effects, we create a 12 $\times$ \emph{T} covariate matrix $\mathbf{c}$ with one row for each month (Jan, Feb, ...) and one column for each time point. We put a 1 in the January row for each column corresponding to a January time point, a 1 in the February row for each column corresponding to a February time point, and so on. All other values of $\mathbf{c}$ equal 0. The following code will create such a $\mathbf{c}$ matrix.
+One common approach for estimating seasonal effects is to treat each one as a fixed factor, such that the number of parameters equals the number of ``seasons'' (e.g., 24 hours per day, 4 quarters per year). The plankton data are collected monthly, so we will treat each month as a fixed factor.  To fit a model with fixed month effects, we create a $12 \times T$ covariate matrix $\mathbf{c}$ with one row for each month (Jan, Feb, ...) and one column for each time point. We put a 1 in the January row for each column corresponding to a January time point, a 1 in the February row for each column corresponding to a February time point, and so on. All other values of $\mathbf{c}$ equal 0. The following code will create such a $\mathbf{c}$ matrix.
 
 ```{r msscov-set-up-month-factors}
 # number of "seasons" (e.g., 12 months per year)
@@ -291,7 +291,7 @@ The top panel in Figure \@ref(fig:msscov-mon-effects) shows the estimated season
 
 ### Seasonal effects as a polynomial {#sec-msscov-season-polynomial}
 
-The fixed factor approach required estimating 60 effects.  Another approach is to model the month effect as a 3$^\emph{rd}$-order (or higher) polynomial: $a+b\times m + c\times m^2 + d \times m^3$ where $m$ is the month number. This approach has less flexibility but requires only 20 estimated parameters (\emph{i.e.}, 4 regression parameters times 5 taxa).  To do so, we create a 4 $\times$ \emph{T} covariate matrix $\mathbf{c}$ with the rows corresponding to 1, $m$, $m^2$, and $m^3$, and the columns again corresponding to the time points.  Here is how to set up this matrix:
+The fixed factor approach required estimating 60 effects.  Another approach is to model the month effect as a 3rd-order (or higher) polynomial: $a+b\times m + c\times m^2 + d \times m^3$ where $m$ is the month number. This approach has less flexibility but requires only 20 estimated parameters (i.e., 4 regression parameters times 5 taxa).  To do so, we create a $4 \times T$ covariate matrix $\mathbf{c}$ with the rows corresponding to 1, $m$, $m^2$, and $m^3$, and the columns again corresponding to the time points.  Here is how to set up this matrix:
 
 ```{r msscov-poly-month-factor, results='hide'}
 # number of "seasons" (e.g., 12 months per year)
@@ -331,9 +331,9 @@ c.m.poly.o <- c.m.poly.o[,(1:TT)+(per.1st-1)]
 
 ### Seasonal effects as a Fourier series {#sec-msscov-season-fourier}
 
-The factor approach required estimating 60 effects, and the 3rd order polynomial model was an improvement at only 20 parameters. A third option is to use a discrete Fourier series, which is combination of sine and cosine waves; it would require only 10 parameters. Specifically, the effect of month $m$ on taxon $i$ is $a_i \times \cos(2 \pi m/p) + b_i \times \sin(2 \pi m/p)$, where $p$ is the period (\emph{e.g.}, 12 months, 4 quarters), and $a_i$ and $b_i$ are contained in the $i$-th row of $\mathbf{C}$.
+The factor approach required estimating 60 effects, and the 3rd order polynomial model was an improvement at only 20 parameters. A third option is to use a discrete Fourier series, which is combination of sine and cosine waves; it would require only 10 parameters. Specifically, the effect of month $m$ on taxon $i$ is $a_i \times \cos(2 \pi m/p) + b_i \times \sin(2 \pi m/p)$, where $p$ is the period (e.g., 12 months, 4 quarters), and $a_i$ and $b_i$ are contained in the $i$-th row of $\mathbf{C}$.
 
-We begin by defining the 2 $\times$ \emph{T} seasonal covariate matrix $\mathbf{c}$ as a combination of 1 cosine and 1 sine wave:
+We begin by defining the $2 \times T$ seasonal covariate matrix $\mathbf{c}$ as a combination of 1 cosine and 1 sine wave:
 ```{r msscov-seasonal-fourier}
 cos.t <- cos(2 * pi * seq(TT) / period)
 sin.t <- sin(2 * pi * seq(TT) / period)

@@ -480,7 +480,7 @@ Initial states (x0) defined at t=0
 
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
-<p>Now, it looks like temperature has a strong negative effect on algae? Also our log-likelihood dropped a lot. Well, the data do not look at all like a random walk model (, where <span class="math inline">\(\mathbf{B}=1\)</span>), which we can see from the plot of the data (Figure <a href="sec-msscov-prepare-data.html#fig:msscov-plank-plot">8.1</a>). The data are fluctuating about some mean so let’s switch to a better autoregressive model—a mean-reverting model. To do this, we will allow the diagonal elements of <span class="math inline">\(\mathbf{B}\)</span> to be something other than 1.</p>
+<p>Now, it looks like temperature has a strong negative effect on algae? Also our log-likelihood dropped a lot. Well, the data do not look at all like a random walk model (where <span class="math inline">\(\mathbf{B}=1\)</span>), which we can see from the plot of the data (Figure <a href="sec-msscov-prepare-data.html#fig:msscov-plank-plot">8.1</a>). The data are fluctuating about some mean so let’s switch to a better autoregressive model—a mean-reverting model. To do this, we will allow the diagonal elements of <span class="math inline">\(\mathbf{B}\)</span> to be something other than 1.</p>
 <pre class="sourceCode r"><code class="sourceCode r">model.list<span class="op">$</span>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span>
 kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</code></pre>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
