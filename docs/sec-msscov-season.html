@@ -9,7 +9,7 @@
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="8.6 Including seasonal effects in MARSS models | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="8.6 Including seasonal effects in MARSS models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="8.6 Including seasonal effects in MARSS models | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="8.6 Including seasonal effects in MARSS models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-02-28">
+<meta name="date" content="2019-03-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,67 +51,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -393,32 +367,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.12" data-path="sec-dfa-lakeWA.html"><a href="sec-dfa-lakeWA.html"><i class="fa fa-check"></i><b>10.12</b> Example from Lake Washington</a></li>
 <li class="chapter" data-level="10.13" data-path="sec-dfa-problems.html"><a href="sec-dfa-problems.html"><i class="fa fa-check"></i><b>10.13</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>11</b> JAGS for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="11.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>11.1</b> The airquality dataset</a></li>
-<li class="chapter" data-level="11.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>11.2</b> Linear regression with no covariates</a></li>
-<li class="chapter" data-level="11.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>11.3</b> Regression with autocorrelated errors</a></li>
-<li class="chapter" data-level="11.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>11.4</b> Random walk time series model</a></li>
-<li class="chapter" data-level="11.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>11.5</b> Autoregressive AR(1) time series models</a></li>
-<li class="chapter" data-level="11.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>11.6</b> Univariate state space model</a><ul>
-<li class="chapter" data-level="11.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>11.6.1</b> Including covariates</a></li>
+<li class="chapter" data-level="11" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html"><i class="fa fa-check"></i><b>11</b> Covariates with Missing Values</a><ul>
+<li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
+<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a></li>
+<li class="chapter" data-level="11.3" data-path="estimate-february-swe-for-all-sites.html"><a href="estimate-february-swe-for-all-sites.html"><i class="fa fa-check"></i><b>11.3</b> Estimate February SWE for all sites</a></li>
 </ul></li>
-<li class="chapter" data-level="11.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>11.7</b> Forecasting with JAGS models</a></li>
-<li class="chapter" data-level="11.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>11.8</b> Problems</a></li>
+<li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="12.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>12.1</b> The airquality dataset</a></li>
+<li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
+<li class="chapter" data-level="12.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>12.3</b> Regression with autocorrelated errors</a></li>
+<li class="chapter" data-level="12.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>12.4</b> Random walk time series model</a></li>
+<li class="chapter" data-level="12.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>12.5</b> Autoregressive AR(1) time series models</a></li>
+<li class="chapter" data-level="12.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>12.6</b> Univariate state space model</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>12.6.1</b> Including covariates</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>12</b> Stan for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="12.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>12.1</b> Linear regression</a><ul>
-<li class="chapter" data-level="12.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>12.1.1</b> Burn-in and thinning</a></li>
+<li class="chapter" data-level="12.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.7</b> Forecasting with JAGS models</a></li>
+<li class="chapter" data-level="12.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.8</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="12.2" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with correlated errors</a></li>
-<li class="chapter" data-level="12.3" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>12.3</b> Random walk model</a></li>
-<li class="chapter" data-level="12.4" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>12.4</b> Autoregressive models</a></li>
-<li class="chapter" data-level="12.5" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>12.5</b> Univariate state-space models</a></li>
-<li class="chapter" data-level="12.6" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>12.6</b> Dynamic factor analysis</a><ul>
-<li class="chapter" data-level="12.6.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>12.6.1</b> Using leave one out cross-validation to select models</a></li>
+<li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
 </ul></li>
-<li class="chapter" data-level="12.7" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>12.7</b> Uncertainty intervals on states</a></li>
-<li class="chapter" data-level="12.8" data-path="sec-stan-problems.html"><a href="sec-stan-problems.html"><i class="fa fa-check"></i><b>12.8</b> Problems</a></li>
+<li class="chapter" data-level="13.2" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>13.2</b> Linear regression with correlated errors</a></li>
+<li class="chapter" data-level="13.3" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>13.3</b> Random walk model</a></li>
+<li class="chapter" data-level="13.4" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>13.4</b> Autoregressive models</a></li>
+<li class="chapter" data-level="13.5" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>13.5</b> Univariate state-space models</a></li>
+<li class="chapter" data-level="13.6" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>13.6</b> Dynamic factor analysis</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>13.6.1</b> Using leave one out cross-validation to select models</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>13.7</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="13.8" data-path="sec-stan-problems.html"><a href="sec-stan-problems.html"><i class="fa fa-check"></i><b>13.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -445,37 +425,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">8.6</span> Including seasonal effects in MARSS models</h2>
 <p>Time-series data are often collected at intervals with some implicit ``seasonality.’’ For example, quarterly earnings for a business, monthly rainfall totals, or hourly air temperatures. In those cases, it is often helpful to extract any recurring seasonal patterns that might otherwise mask some of the other temporal dynamics we are interested in examining.</p>
 <p>Here we show a few approaches for including seasonal effects using the Lake Washington plankton data, which were collected monthly. The following examples will use all five phytoplankton species from Lake Washington. First, let’s set up the data.</p>
-<pre class="sourceCode r"><code class="sourceCode r">years &lt;-<span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1965</span> <span class="op">&amp;</span><span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;</span><span class="st"> </span><span class="dv">1975</span>
-phytos &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Bluegreens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, <span class="st">&quot;Other.algae&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">years &lt;-<span class="st"> </span>fulldat[,<span class="st">&quot;Year&quot;</span>]<span class="op">&gt;=</span><span class="dv">1965</span> <span class="op">&amp;</span><span class="st"> </span>fulldat[,<span class="st">&quot;Year&quot;</span>]<span class="op">&lt;</span><span class="dv">1975</span>
+phytos &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Bluegreens&quot;</span>,
+           <span class="st">&quot;Unicells&quot;</span>, <span class="st">&quot;Other.algae&quot;</span>)
 dat &lt;-<span class="st"> </span><span class="kw">t</span>(fulldat[years, phytos])
 
 <span class="co"># z.score data because we changed the mean when we subsampled</span>
-the.mean &lt;-<span class="st"> </span><span class="kw">apply</span>(dat, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
-the.sigma &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
-dat &lt;-<span class="st"> </span>(dat <span class="op">-</span><span class="st"> </span>the.mean) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>the.sigma)
+the.mean &lt;-<span class="st"> </span><span class="kw">apply</span>(dat,<span class="dv">1</span>,mean,<span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+the.sigma &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat,<span class="dv">1</span>,var,<span class="dt">na.rm=</span><span class="ot">TRUE</span>))
+dat &lt;-<span class="st"> </span>(dat<span class="op">-</span>the.mean)<span class="op">*</span>(<span class="dv">1</span><span class="op">/</span>the.sigma)
 <span class="co"># number of time periods/samples</span>
-TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat)[<span class="dv">2</span>]</code></pre>
+TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat)[<span class="dv">2</span>]</code></pre></div>
 <div id="sec-msscov-season-factors" class="section level3">
 <h3><span class="header-section-number">8.6.1</span> Seasonal effects as fixed factors</h3>
 <p>One common approach for estimating seasonal effects is to treat each one as a fixed factor, such that the number of parameters equals the number of ``seasons’’ (e.g., 24 hours per day, 4 quarters per year). The plankton data are collected monthly, so we will treat each month as a fixed factor. To fit a model with fixed month effects, we create a <span class="math inline">\(12 \times T\)</span> covariate matrix <span class="math inline">\(\mathbf{c}\)</span> with one row for each month (Jan, Feb, …) and one column for each time point. We put a 1 in the January row for each column corresponding to a January time point, a 1 in the February row for each column corresponding to a February time point, and so on. All other values of <span class="math inline">\(\mathbf{c}\)</span> equal 0. The following code will create such a <span class="math inline">\(\mathbf{c}\)</span> matrix.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># number of &quot;seasons&quot; (e.g., 12 months per year)</span>
 period &lt;-<span class="st"> </span><span class="dv">12</span>
-<span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span>
-per<span class="fl">.1</span>st &lt;-<span class="st"> </span><span class="dv">1</span>
+<span class="co"># first &quot;season&quot; (e.g., Jan = 1, July = 7)</span>
+per.1st &lt;-<span class="st"> </span><span class="dv">1</span>
 <span class="co"># create factors for seasons</span>
 c.in &lt;-<span class="st"> </span><span class="kw">diag</span>(period)
-<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>(<span class="kw">ceiling</span>(TT<span class="op">/</span>period))) {
-    c.in &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.in, <span class="kw">diag</span>(period))
-}
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>(<span class="kw">ceiling</span>(TT<span class="op">/</span>period)))
+  {c.in &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.in,<span class="kw">diag</span>(period))}
 <span class="co"># trim c.in to correct start &amp; length</span>
-c.in &lt;-<span class="st"> </span>c.in[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]
+c.in &lt;-<span class="st"> </span>c.in[,(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">+</span>(per.1st<span class="op">-</span><span class="dv">1</span>)]
 <span class="co"># better row names</span>
-<span class="kw">rownames</span>(c.in) &lt;-<span class="st"> </span>month.abb</code></pre>
-<p>Next we need to set up the form of the <span class="math inline">\(\mathbf{C}\)</span> matrix which defines any constraints we want to set on the month effects. <span class="math inline">\(\mathbf{C}\)</span> is a <span class="math inline">\(5 \times 12\)</span> matrix. Five taxon and 12 month effects.
-If we wanted each taxon to have the same month effect, i.e. there is a common month effect across all taxon, then
-we have the same value in each <span class="math inline">\(\mathbf{C}\)</span> column:</p>
-<pre class="sourceCode r"><code class="sourceCode r">C &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.abb, <span class="dv">5</span>, <span class="dv">12</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)
-C</code></pre>
+<span class="kw">rownames</span>(c.in) &lt;-<span class="st"> </span>month.abb</code></pre></div>
+<p>Next we need to set up the form of the <span class="math inline">\(\mathbf{C}\)</span> matrix which defines any constraints we want to set on the month effects. <span class="math inline">\(\mathbf{C}\)</span> is a <span class="math inline">\(5 \times 12\)</span> matrix. Five taxon and 12 month effects. If we wanted each taxon to have the same month effect, i.e. there is a common month effect across all taxon, then we have the same value in each <span class="math inline">\(\mathbf{C}\)</span> column:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">C &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.abb,<span class="dv">5</span>,<span class="dv">12</span>,<span class="dt">byrow=</span><span class="ot">TRUE</span>)
+C</code></pre></div>
 <pre><code>     [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9]  [,10] [,11]
 [1,] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot;
 [2,] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot;
@@ -488,92 +466,85 @@ C</code></pre>
 [3,] &quot;Dec&quot;
 [4,] &quot;Dec&quot;
 [5,] &quot;Dec&quot;</code></pre>
-<p>Notice, that <span class="math inline">\(\mathbf{C}\)</span> only has 12 values in it, the 12 common month effects.
-However, for this example, we will let each taxon have a different month effect thus allowing different seasonality for each taxon. For this model, we want each value in <span class="math inline">\(\mathbf{C}\)</span> to be unique:</p>
-<pre class="sourceCode r"><code class="sourceCode r">C &lt;-<span class="st"> &quot;unconstrained&quot;</span></code></pre>
+<p>Notice, that <span class="math inline">\(\mathbf{C}\)</span> only has 12 values in it, the 12 common month effects. However, for this example, we will let each taxon have a different month effect thus allowing different seasonality for each taxon. For this model, we want each value in <span class="math inline">\(\mathbf{C}\)</span> to be unique:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">C &lt;-<span class="st"> &quot;unconstrained&quot;</span></code></pre></div>
 <p>Now <span class="math inline">\(\mathbf{C}\)</span> has 5 <span class="math inline">\(\times\)</span> 12 = 60 separate effects.</p>
 <p>Then we set up the form for the rest of the model parameters. We make the following assumptions:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Each taxon has unique density-dependence</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Each taxon has unique density-dependence</span>
 B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span>
 <span class="co"># Assume independent process errors</span>
 Q &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span>
-<span class="co"># We have demeaned the data &amp; are fitting a mean-reverting</span>
-<span class="co"># model by estimating a diagonal B, thus</span>
+<span class="co"># We have demeaned the data &amp; are fitting a mean-reverting model</span>
+<span class="co"># by estimating a diagonal B, thus</span>
 U &lt;-<span class="st"> &quot;zero&quot;</span>
 <span class="co"># Each obs time series is associated with only one process</span>
-Z &lt;-<span class="st"> &quot;identity&quot;</span>
+Z &lt;-<span class="st"> &quot;identity&quot;</span> 
 <span class="co"># The data are demeaned &amp; fluctuate around a mean</span>
-A &lt;-<span class="st"> &quot;zero&quot;</span>
-<span class="co"># We assume observation errors are independent, but they have</span>
-<span class="co"># similar variance due to similar collection methods</span>
+A &lt;-<span class="st"> &quot;zero&quot;</span> 
+<span class="co"># We assume observation errors are independent, but they</span>
+<span class="co"># have similar variance due to similar collection methods</span>
 R &lt;-<span class="st"> &quot;diagonal and equal&quot;</span>
 <span class="co"># We are not including covariate effects in the obs equation</span>
 D &lt;-<span class="st"> &quot;zero&quot;</span>
-d &lt;-<span class="st"> &quot;zero&quot;</span></code></pre>
+d &lt;-<span class="st"> &quot;zero&quot;</span></code></pre></div>
 <p>Now we can set up the model list for MARSS and fit the model (results are not shown since they are verbose with 60 different month effects).</p>
-<pre class="sourceCode r"><code class="sourceCode r">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, 
-    <span class="dt">C =</span> C, <span class="dt">c =</span> c.in, <span class="dt">D =</span> D, <span class="dt">d =</span> d)
-seas.mod<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>B,<span class="dt">U=</span>U,<span class="dt">Q=</span>Q,<span class="dt">Z=</span>Z,<span class="dt">A=</span>A,<span class="dt">R=</span>R,<span class="dt">C=</span>C,<span class="dt">c=</span>c.in,<span class="dt">D=</span>D,<span class="dt">d=</span>d)
+seas.mod.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat,<span class="dt">model=</span>model.list,<span class="dt">control=</span><span class="kw">list</span>(<span class="dt">maxit=</span><span class="dv">1500</span>))
 
-<span class="co"># Get the estimated seasonal effects rows are taxa, cols are</span>
-<span class="co"># seasonal effects</span>
-seas<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.1</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C
-<span class="kw">rownames</span>(seas<span class="fl">.1</span>) &lt;-<span class="st"> </span>phytos
-<span class="kw">colnames</span>(seas<span class="fl">.1</span>) &lt;-<span class="st"> </span>month.abb</code></pre>
+<span class="co"># Get the estimated seasonal effects</span>
+<span class="co"># rows are taxa, cols are seasonal effects</span>
+seas.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod.<span class="dv">1</span>,<span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C
+<span class="kw">rownames</span>(seas.<span class="dv">1</span>) &lt;-<span class="st"> </span>phytos
+<span class="kw">colnames</span>(seas.<span class="dv">1</span>) &lt;-<span class="st"> </span>month.abb</code></pre></div>
 <p>The top panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this model. Note that if we had set U=“unequal”, we would need to set one of the columns of <span class="math inline">\(\mathbf{C}\)</span> to zero because the model would be under-determined (infinite number of solutions). If we substracted the mean January abundance off each time series, we could set the January column in <span class="math inline">\(\mathbf{C}\)</span> to 0 and get rid of 5 estimated effects.</p>
 </div>
 <div id="sec-msscov-season-polynomial" class="section level3">
 <h3><span class="header-section-number">8.6.2</span> Seasonal effects as a polynomial</h3>
 <p>The fixed factor approach required estimating 60 effects. Another approach is to model the month effect as a 3rd-order (or higher) polynomial: <span class="math inline">\(a+b\times m + c\times m^2 + d \times m^3\)</span> where <span class="math inline">\(m\)</span> is the month number. This approach has less flexibility but requires only 20 estimated parameters (i.e., 4 regression parameters times 5 taxa). To do so, we create a <span class="math inline">\(4 \times T\)</span> covariate matrix <span class="math inline">\(\mathbf{c}\)</span> with the rows corresponding to 1, <span class="math inline">\(m\)</span>, <span class="math inline">\(m^2\)</span>, and <span class="math inline">\(m^3\)</span>, and the columns again corresponding to the time points. Here is how to set up this matrix:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># number of &quot;seasons&quot; (e.g., 12 months per year)</span>
 period &lt;-<span class="st"> </span><span class="dv">12</span>
-<span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span>
-per<span class="fl">.1</span>st &lt;-<span class="st"> </span><span class="dv">1</span>
+<span class="co"># first &quot;season&quot; (e.g., Jan = 1, July = 7)</span>
+per.1st &lt;-<span class="st"> </span><span class="dv">1</span>
 <span class="co"># order of polynomial</span>
 poly.order &lt;-<span class="st"> </span><span class="dv">3</span>
 <span class="co"># create polynomials of months</span>
-month.cov &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, period)
-<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>poly.order) {
-    month.cov =<span class="st"> </span><span class="kw">rbind</span>(month.cov, (<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>)<span class="op">^</span>i)
-}
+month.cov &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>,<span class="dv">1</span>,period)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>poly.order) {month.cov =<span class="st"> </span><span class="kw">rbind</span>(month.cov,(<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>)<span class="op">^</span>i)}
 <span class="co"># our c matrix is month.cov replicated once for each year</span>
-c.m.poly &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.cov, poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, <span class="dt">byrow =</span> <span class="ot">FALSE</span>)
+c.m.poly &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.cov, poly.order<span class="op">+</span><span class="dv">1</span>, TT<span class="op">+</span>period, <span class="dt">byrow=</span><span class="ot">FALSE</span>)
 <span class="co"># trim c.in to correct start &amp; length</span>
-c.m.poly &lt;-<span class="st"> </span>c.m.poly[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]
+c.m.poly &lt;-<span class="st"> </span>c.m.poly[,(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">+</span>(per.1st<span class="op">-</span><span class="dv">1</span>)]
 
 <span class="co"># Everything else remains the same as in the previous example</span>
-model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, 
-    <span class="dt">C =</span> C, <span class="dt">c =</span> c.m.poly, <span class="dt">D =</span> D, <span class="dt">d =</span> d)
-seas.mod<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</code></pre>
+model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>B,<span class="dt">U=</span>U,<span class="dt">Q=</span>Q,<span class="dt">Z=</span>Z,<span class="dt">A=</span>A,<span class="dt">R=</span>R,<span class="dt">C=</span>C,<span class="dt">c=</span>c.m.poly,<span class="dt">D=</span>D,<span class="dt">d=</span>d)
+seas.mod.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>model.list, <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">maxit=</span><span class="dv">1500</span>))</code></pre></div>
 <p>The effect of month <span class="math inline">\(m\)</span> for taxon <span class="math inline">\(i\)</span> is <span class="math inline">\(a_i + b_i \times m + c_i \times m^2 + d_i \times m^3\)</span>, where <span class="math inline">\(a_i\)</span>, <span class="math inline">\(b_i\)</span>, <span class="math inline">\(c_i\)</span> and <span class="math inline">\(d_i\)</span> are in the <span class="math inline">\(i\)</span>-th row of <span class="math inline">\(\mathbf{C}\)</span>. We can now calculate the matrix of seasonal effects as follows, where each row is a taxon and each column is a month:</p>
-<pre class="sourceCode r"><code class="sourceCode r">C<span class="fl">.2</span> =<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C
-seas<span class="fl">.2</span> =<span class="st"> </span>C<span class="fl">.2</span> <span class="op">%*%</span><span class="st"> </span>month.cov
-<span class="kw">rownames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>phytos
-<span class="kw">colnames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>month.abb</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">C.<span class="dv">2</span> =<span class="st"> </span><span class="kw">coef</span>(seas.mod.<span class="dv">2</span>,<span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C
+seas.<span class="dv">2</span> =<span class="st"> </span>C.<span class="dv">2</span> <span class="op">%*%</span><span class="st"> </span>month.cov
+<span class="kw">rownames</span>(seas.<span class="dv">2</span>) &lt;-<span class="st"> </span>phytos
+<span class="kw">colnames</span>(seas.<span class="dv">2</span>) &lt;-<span class="st"> </span>month.abb</code></pre></div>
 <p>The middle panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this polynomial model.</p>
 <p>Note: Setting the covariates up like this means that our covariates are collinear since <span class="math inline">\(m\)</span>, <span class="math inline">\(m^2\)</span> and <span class="math inline">\(m^3\)</span> are correlated, obviously. A better approach is to use the <code>poly()</code> function to create an orthogonal polynomial covariate matrix <code>c.m.poly.o</code>:</p>
-<pre class="sourceCode r"><code class="sourceCode r">month.cov.o &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">poly</span>(<span class="dv">1</span><span class="op">:</span>period, poly.order))
-c.m.poly.o &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">t</span>(month.cov.o), poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, 
-    <span class="dt">byrow =</span> <span class="ot">FALSE</span>)
-c.m.poly.o &lt;-<span class="st"> </span>c.m.poly.o[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">month.cov.o &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">poly</span>(<span class="dv">1</span><span class="op">:</span>period, poly.order))
+c.m.poly.o &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">t</span>(month.cov.o), poly.order<span class="op">+</span><span class="dv">1</span>, TT<span class="op">+</span>period, <span class="dt">byrow=</span><span class="ot">FALSE</span>)
+c.m.poly.o &lt;-<span class="st"> </span>c.m.poly.o[,(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">+</span>(per.1st<span class="op">-</span><span class="dv">1</span>)]</code></pre></div>
 </div>
 <div id="sec-msscov-season-fourier" class="section level3">
 <h3><span class="header-section-number">8.6.3</span> Seasonal effects as a Fourier series</h3>
 <p>The factor approach required estimating 60 effects, and the 3rd order polynomial model was an improvement at only 20 parameters. A third option is to use a discrete Fourier series, which is combination of sine and cosine waves; it would require only 10 parameters. Specifically, the effect of month <span class="math inline">\(m\)</span> on taxon <span class="math inline">\(i\)</span> is <span class="math inline">\(a_i \times \cos(2 \pi m/p) + b_i \times \sin(2 \pi m/p)\)</span>, where <span class="math inline">\(p\)</span> is the period (e.g., 12 months, 4 quarters), and <span class="math inline">\(a_i\)</span> and <span class="math inline">\(b_i\)</span> are contained in the <span class="math inline">\(i\)</span>-th row of <span class="math inline">\(\mathbf{C}\)</span>.</p>
 <p>We begin by defining the <span class="math inline">\(2 \times T\)</span> seasonal covariate matrix <span class="math inline">\(\mathbf{c}\)</span> as a combination of 1 cosine and 1 sine wave:</p>
-<pre class="sourceCode r"><code class="sourceCode r">cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)
-sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)
-c.Four &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t, sin.t)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT) <span class="op">/</span><span class="st"> </span>period)
+sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT) <span class="op">/</span><span class="st"> </span>period)
+c.Four &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t,sin.t)</code></pre></div>
 <p>Everything else remains the same and we can fit this model as follows:</p>
-<pre class="sourceCode r"><code class="sourceCode r">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, 
-    <span class="dt">C =</span> C, <span class="dt">c =</span> c.Four, <span class="dt">D =</span> D, <span class="dt">d =</span> d)
-seas.mod<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>B,<span class="dt">U=</span>U,<span class="dt">Q=</span>Q,<span class="dt">Z=</span>Z,<span class="dt">A=</span>A,<span class="dt">R=</span>R,<span class="dt">C=</span>C,<span class="dt">c=</span>c.Four,<span class="dt">D=</span>D,<span class="dt">d=</span>d)
+seas.mod.<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>model.list, <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">maxit=</span><span class="dv">1500</span>))</code></pre></div>
 <p>We make our seasonal effect matrix as follows:</p>
-<pre class="sourceCode r"><code class="sourceCode r">C<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.3</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">C.<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod.<span class="dv">3</span>, <span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C
 <span class="co"># The time series of net seasonal effects</span>
-seas<span class="fl">.3</span> &lt;-<span class="st"> </span>C<span class="fl">.3</span> <span class="op">%*%</span><span class="st"> </span>c.Four[, <span class="dv">1</span><span class="op">:</span>period]
-<span class="kw">rownames</span>(seas<span class="fl">.3</span>) &lt;-<span class="st"> </span>phytos
-<span class="kw">colnames</span>(seas<span class="fl">.3</span>) &lt;-<span class="st"> </span>month.abb</code></pre>
+seas.<span class="dv">3</span> &lt;-<span class="st"> </span>C.<span class="dv">3</span> <span class="op">%*%</span><span class="st"> </span>c.Four[,<span class="dv">1</span><span class="op">:</span>period]
+<span class="kw">rownames</span>(seas.<span class="dv">3</span>) &lt;-<span class="st"> </span>phytos
+<span class="kw">colnames</span>(seas.<span class="dv">3</span>) &lt;-<span class="st"> </span>month.abb</code></pre></div>
 <p>The bottom panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this seasonal-effects model based on a discrete Fourier series.</p>
 
 <div class="figure" style="text-align: center"><span id="fig:msscov-mon-effects"></span>
@@ -583,8 +554,10 @@ Figure 8.2: Estimated monthly effects for the three approaches to estimating sea
 </p>
 </div>
 <p>Rather than rely on our eyes to judge model fits, we should formally assess which of the 3 approaches offers the most parsimonious fit to the data. Here is a table of AICc values for the 3 models:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(<span class="dt">Model =</span> <span class="kw">c</span>(<span class="st">&quot;Fixed&quot;</span>, <span class="st">&quot;Cubic&quot;</span>, <span class="st">&quot;Fourier&quot;</span>), <span class="dt">AICc =</span> <span class="kw">round</span>(<span class="kw">c</span>(seas.mod<span class="fl">.1</span><span class="op">$</span>AICc, 
-    seas.mod<span class="fl">.2</span><span class="op">$</span>AICc, seas.mod<span class="fl">.3</span><span class="op">$</span>AICc), <span class="dv">1</span>))</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data.frame</span>(<span class="dt">Model=</span><span class="kw">c</span>(<span class="st">&quot;Fixed&quot;</span>, <span class="st">&quot;Cubic&quot;</span>, <span class="st">&quot;Fourier&quot;</span>),
+           <span class="dt">AICc=</span><span class="kw">round</span>(<span class="kw">c</span>(seas.mod.<span class="dv">1</span><span class="op">$</span>AICc,
+                        seas.mod.<span class="dv">2</span><span class="op">$</span>AICc,
+                        seas.mod.<span class="dv">3</span><span class="op">$</span>AICc),<span class="dv">1</span>))</code></pre></div>
 <pre><code>    Model   AICc
 1   Fixed 1188.4
 2   Cubic 1144.9
@@ -648,7 +621,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

@@ -418,7 +418,7 @@ CUI.z <- matrix((CUI - mean(CUI))/sqrt(var(CUI)), nrow=1)
 # number of regr params (slope + intercept)
 m <- dim(CUI.z)[1] + 1
 ```
-Plots of logit-transformed survival and the $z$-scored April upwelling index are shown in Figure \@ref(fig:plotdata).
+Plots of logit-transformed survival and the $z$-scored April upwelling index are shown in Figure \@ref(fig:dlm-plotdata).
 
 
 (ref:plotdata) Time series of logit-transformed marine survival estimates for Snake River spring/summer Chinook salmon (top) and *z*-scores of the coastal upwelling index at 45N 125W (bottom). The *x*-axis indicates the year that the salmon smolts entered the ocean.
@@ -466,7 +466,7 @@ dlm1 <- MARSS(dat, inits=inits.list, model=mod.list)
 
 Notice that the MARSS output does not list any estimates of the regression parameters themselves. Why not? Remember that in a DLM the matrix of states $(\mathbf{x})$ contains the estimates of the regression parameters $(\boldsymbol{\theta})$. Therefore, we need to look in ```dlm1$states``` for the MLEs of the regression parameters, and in ```dlm1$states.se``` for their standard errors.
 
-Time series of the estimated intercept and slope are shown in Figure \@ref(fig:plotdlm1). It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (```Q.q1```). In fact, although the effect of April upwelling appears to be increasing over time, it doesn't really become important as a predictor variable until about 1990 when the approximate 95\% confidence interval for the slope no longer overlaps zero.
+Time series of the estimated intercept and slope are shown in Figure \@ref(fig:dlm-plotdlm1). It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (```Q.q1```). In fact, although the effect of April upwelling appears to be increasing over time, it doesn't really become important as a predictor variable until about 1990 when the approximate 95\% confidence interval for the slope no longer overlaps zero.
 <!-- % plot regression parameters -->
 
 (ref:plotdlm1) Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the DLM specified by Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). Thin lines denote the mean $\pm$ 2 standard deviations.
@@ -603,7 +603,7 @@ for(t in 1:TT) {
 }
 ```
 
-Plots of the model mean forecasts with their estimated uncertainty are shown in Figure \@ref(fig:plotdlmForeLogit). Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time $t$ based on data available only through time $t-1$. In this case, however, MARSS is actually estimating the states at $t=0$ ($\boldsymbol{\theta}_0$), which allows us to compute a forecast for the first time point.
+Plots of the model mean forecasts with their estimated uncertainty are shown in Figure \@ref(fig:dlm-plotdlmForeLogit). Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time $t$ based on data available only through time $t-1$. In this case, however, MARSS is actually estimating the states at $t=0$ ($\boldsymbol{\theta}_0$), which allows us to compute a forecast for the first time point.
 <!-- % forecast plot - logit space -->
 
 (ref:plotdlmForeLogit) Time series of logit-transformed survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95\% prediction intervals.
@@ -621,7 +621,7 @@ mtext("Year of ocean entry", 1, line=3)
 ```
  
 
-Although our model forecasts look reasonable in logit-space, it is worthwhile to examine how well they look when the survival data and forecasts are back-transformed onto the interval [0,1] (Figure \@ref(fig:plotdlmForeRaw)). In that case, the accuracy does not seem to be affected, but the precision appears much worse, especially during the early and late portions of the time series when survival is changing rapidly.
+Although our model forecasts look reasonable in logit-space, it is worthwhile to examine how well they look when the survival data and forecasts are back-transformed onto the interval [0,1] (Figure \@ref(fig:dlm-plotdlmForeRaw)). In that case, the accuracy does not seem to be affected, but the precision appears much worse, especially during the early and late portions of the time series when survival is changing rapidly.
 <!-- % forecast plot - normal space -->
 
 (ref:plotdlmForeRaw) Time series of survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95\% prediction intervals.
@@ -686,7 +686,7 @@ qqline(t(innov))
 ```
  
 
-The Q-Q plot (Figure \@ref(fig:plotdlmQQ)) indicates that the innovations appear to be more-or-less normally distributed (i.e., most points fall on the line). Furthermore, it looks like the mean of the innovations is about 0, but we should use a more reliable test than simple visual inspection. We can formally test whether the mean of the innovations is significantly different from 0 by using a one-sample $t$-test.  based on a null hypothesis of $\,\text{E}(e_t)=0$. To do so, we will use the function ```t.test()``` and base our inference on a significance value of $\alpha = 0.05$.
+The Q-Q plot (Figure \@ref(fig:dlm-plotdlmQQ)) indicates that the innovations appear to be more-or-less normally distributed (i.e., most points fall on the line). Furthermore, it looks like the mean of the innovations is about 0, but we should use a more reliable test than simple visual inspection. We can formally test whether the mean of the innovations is significantly different from 0 by using a one-sample $t$-test.  based on a null hypothesis of $\,\text{E}(e_t)=0$. To do so, we will use the function ```t.test()``` and base our inference on a significance value of $\alpha = 0.05$.
 ```{r dlmInnovTtest, eval=TRUE, echo=TRUE}
 # p-value for t-test of H0: E(innov) = 0
 t.test(t(innov), mu=0)$p.value
@@ -711,7 +711,7 @@ par(mar=c(4,4,1,0), oma=c(0,0,0,0.5))
 acf(t(innov), lwd=2, lag.max=10)
 ```
  
-The ACF plot (Figure \@ref(fig:plotdlmACF)) shows no significant autocorrelation in the innovations at lags 1--10, so it looks like both of our model assumptions have indeed been met.
+The ACF plot (Figure \@ref(fig:dlm-plotdlmACF)) shows no significant autocorrelation in the innovations at lags 1--10, so it looks like both of our model assumptions have indeed been met.
 
 
 \newpage

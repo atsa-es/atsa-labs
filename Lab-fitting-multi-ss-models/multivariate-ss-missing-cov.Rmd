@@ -1,4 +1,4 @@
-```{r msscov-setup, include=FALSE, purl=FALSE}
+```{r mssmiss-setup, include=FALSE, purl=FALSE}
 knitr::opts_knit$set(unnamed.chunk.label = "mssmiss-")
 knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
 ```
@@ -6,7 +6,7 @@ knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.
 # Covariates with Missing Values {#chap-mssmiss}
 \chaptermark{Covariates with NAs}
 
-A script with all the R code in the chapter can be downloaded  [here](./Rcode/multivariate-ss-missing-cov.R). The Rmd for this chapter can be downloaded [here](./Rmds/multivariate-ss-missing-cov.Rmd)
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/multivariate-ss-missing-cov.R). The Rmd for this chapter can be downloaded [here](./Rmds/multivariate-ss-missing-cov.Rmd). The SNOTEL data are available [here](./data/snotel.RData).
 
 ### Data and packages {-}
 
@@ -79,10 +79,139 @@ y.aug = rbind(data,covariates)
 fit.aug = MARSS(y.aug, model=model.aug)
 ```
 `fit.aug` is the MLE object that can be passed to `MARSSkf()`.  You need to make a version of this MLE object with the non-covariate data filled with NAs so that you can compute the log-likelihood without the covariates.  This needs to be done in the `marss` element since that is what is used by `MARSSkf()`.  Below is code to do this.
-```{r get-LL-aug-2, eval=FALSE}
+```{r mssmiss-get-LL-aug-2, eval=FALSE}
 fit.cov = fit.aug
 fit.cov$marss$data[1:dim(data)[1],] = NA
 extra.LL = MARSSkf(fit.cov)$logLik
 ```
 
 Note that when you fit the augmented model, the estimates of $\CC$ and $\BB^{(c)}$ are affected by the non-covariate data since the model for both the non-covariate and covariate data are estimated simultaneously and are not independent (since the covariate states affect the non-covariates states).  If you want the covariate model to be unaffected by the non-covariate data, you can fit the covariate model separately and use the estimates for $\BB^{(c)}$ and $\QQ^{(c)}$ as fixed values in your augmented model.
+
+## Example: Snotel Data
+
+Let's see an example using the Washington SNOTEL data.  The data we will use is the snow water equivalent percent of normal. This represents the snow water equivalent compared to the average value for that site on the same day.  We will look at a subset of sites in the Central Cascades in our `snotel` dataset.
+
+```{r mssmiss-loaddata, include=FALSE}
+#If bookdown is being run, then we are at the top level
+#If "gitbook" is not in the output
+#then user is running Rmd in the folder for debugging
+if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
+  #load the data
+  a <- load("docs/data/snotel.RData")
+}else{
+  load("snotel.RData")
+}
+```
+
+```{r mssmiss-loadsno, eval=FALSE}
+load("snotel.RData")
+```
+
+```{r mssmiss-setupsnoteldata}
+y <- snotelmeta
+# Just use a subset
+y = y[which(y$Longitude < -121.4),]
+y = y[which(y$Longitude > -122.5),]
+y = y[which(y$Latitude < 47.5),]
+y = y[which(y$Latitude > 46.5),]
+```
+
+```{r mssmiss-plotsnotel, echo=FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(ggmap)
+ylims=c(min(snotelmeta$Latitude)-1,max(snotelmeta$Latitude)+1)
+xlims=c(min(snotelmeta$Longitude)-1,max(snotelmeta$Longitude)+1)
+base = get_map(location=c(xlims[1],ylims[1],xlims[2],ylims[2]), zoom=7, maptype="terrain-background")
+map1 = ggmap(base)
+map1 + geom_point(data=y, aes(x=Longitude, y=Latitude), color="blue", cex=2.5) + 
+  labs(x="Latitude", y="Longitude", title="SnoTel sites") + 
+  theme_bw()
+```
+
+We are just going to look at February Snow Water Equivalent (SWE).  There are many missing years among some of our sites.
+
+```{r mssmiss-plotsnotelts, warning=FALSE}
+yy <- snotel
+yy <- yy[yy$Station.Id %in% y$Station.Id & yy$Month=="Feb",]
+p <- ggplot(yy, aes(x=Date, y=SWE)) + geom_line()
+p + facet_wrap(~Station)
+```
+
+## Estimate February SWE for all sites
+
+Imagine that for our study we need an estimate of SWE for all sites.  We will use the information from the sites with full data to estimate the missing SWE for other sites.  We will use a MARSS model to use all the available data.
+
+$$\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+b&0&\dots&0 \\ 
+0&b&\dots&0 \\ 
+\dots&\dots&\dots&\dots \\ 
+0&0&\dots&b
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_{t-1} + 
+\begin{bmatrix}
+u_1 \\ u_2 \\ \dots \\ u_{15}
+\end{bmatrix}_{t} +
+\begin{bmatrix}
+w_1 \\ w_2 \\ \dots \\ w_{15}
+\end{bmatrix}_{t} \\
+\begin{bmatrix}
+y_1 \\ y_2 \\ \dots \\ y_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_t + 
+\begin{bmatrix}
+v_1 \\ v_2 \\ \dots \\ v_{15}
+\end{bmatrix}_t
+$$
+
+We will use an unconstrained variance-covariance structure for $\mathbf{w}$ and assume that $\mathbf{v}$ is identical and independent and very low (SNOTEL instrument variability).  The $u_i$ determine the level of the $x_i$; the level will be $u_i/(1-b)$.
+
+We need our data to be in rows.  We will use `reshape2::acast()`.
+
+```{r mssmiss-snotel-acast}
+dat <- reshape2::acast(yy, Station ~ Year, value.var="SWE")
+```
+We set up the model for MARSS.
+
+```{r mssmiss-snotel-marss-model}
+ns <- length(unique(yy$Station))
+B <- matrix(list(0), ns, ns); diag(B)="b"
+Q <- "unconstrained"
+R <- diag(0.01,ns)
+U <- "unequal"
+x0 <- matrix(apply(dat,1,mean,na.rm=TRUE),ns,1)
+mod.list = list(B=B, Q=Q,R=R, U=U, x0=x0)
+```
+
+
+Now we can fit a MARSS model and get estimates of the missing SWEs.
+
+```{r mssmiss-snotelfit, results="hide"}
+library(MARSS)
+fit <- MARSS(dat, model=mod.list, control=list(maxit=1000))
+```
+
+Let's plot the estimated SWEs for the missing years. These estimates use all the information about the correlation with other sites and uses information about correlation with the prior and subsequent years.  We will use the `tidy()` function from the **broom** package to get the estimated 95% confidence intervals for the estimated states.  Notice that for some sites, CIs are low in early years as these sites are highly correlated with site for which there are data.  In other sites, the uncertainty is high in early years because the sites with data in those years are not highly correlated.
+
+```{r mssmiss-snotelplotstates, warnings=FALSE}
+library(broom)
+library(ggplot2)
+d <- tidy(fit, type="states")
+d$Year <- d$t + 1980
+d$Station <- stringr::str_replace(d$term,"X.","")
+p <- ggplot(data = d) + 
+  geom_line(aes(Year, estimate)) +
+  geom_ribbon(aes(x=Year, ymin=conf.low, ymax=conf.high), linetype=2, alpha=0.5)
+p <- p + geom_point(data=yy, mapping = aes(x=Year, y=SWE))
+p + facet_wrap(~Station) + xlab("") + ylab("SWE")
+```
+
+If we were using these SWE as covariates in a site specific model, we could then use the estimates as our covariates, however this would not incorporate uncertainty.  Alternatively we could use Equation \@ref(eq:mssmiss-marsscovarx) and set the parameters for the covariate process to those estimated for our covariate-only model. This approach will incorporate the uncertainty in the SWE estimates in the early years for the sites with no data.
+
+Note, we should do some cross-validation (fitting with data left out) to ensure that the estimated SWEs are well-matched to actual measurements.  It would probably be best to do 'leave-three' out instead of 'leave-one' out since the estimates for time $t$ uses information from $t-1$ and $t+1$ (if present).

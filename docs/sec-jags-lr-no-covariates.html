@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>11.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>12.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="11.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="12.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="11.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="12.2 Linear regression with no covariates | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-02-28">
+<meta name="date" content="2019-03-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,67 +51,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -393,32 +367,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.12" data-path="sec-dfa-lakeWA.html"><a href="sec-dfa-lakeWA.html"><i class="fa fa-check"></i><b>10.12</b> Example from Lake Washington</a></li>
 <li class="chapter" data-level="10.13" data-path="sec-dfa-problems.html"><a href="sec-dfa-problems.html"><i class="fa fa-check"></i><b>10.13</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>11</b> JAGS for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="11.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>11.1</b> The airquality dataset</a></li>
-<li class="chapter" data-level="11.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>11.2</b> Linear regression with no covariates</a></li>
-<li class="chapter" data-level="11.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>11.3</b> Regression with autocorrelated errors</a></li>
-<li class="chapter" data-level="11.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>11.4</b> Random walk time series model</a></li>
-<li class="chapter" data-level="11.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>11.5</b> Autoregressive AR(1) time series models</a></li>
-<li class="chapter" data-level="11.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>11.6</b> Univariate state space model</a><ul>
-<li class="chapter" data-level="11.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>11.6.1</b> Including covariates</a></li>
+<li class="chapter" data-level="11" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html"><i class="fa fa-check"></i><b>11</b> Covariates with Missing Values</a><ul>
+<li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
+<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a></li>
+<li class="chapter" data-level="11.3" data-path="estimate-february-swe-for-all-sites.html"><a href="estimate-february-swe-for-all-sites.html"><i class="fa fa-check"></i><b>11.3</b> Estimate February SWE for all sites</a></li>
 </ul></li>
-<li class="chapter" data-level="11.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>11.7</b> Forecasting with JAGS models</a></li>
-<li class="chapter" data-level="11.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>11.8</b> Problems</a></li>
+<li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="12.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>12.1</b> The airquality dataset</a></li>
+<li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
+<li class="chapter" data-level="12.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>12.3</b> Regression with autocorrelated errors</a></li>
+<li class="chapter" data-level="12.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>12.4</b> Random walk time series model</a></li>
+<li class="chapter" data-level="12.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>12.5</b> Autoregressive AR(1) time series models</a></li>
+<li class="chapter" data-level="12.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>12.6</b> Univariate state space model</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>12.6.1</b> Including covariates</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>12</b> Stan for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="12.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>12.1</b> Linear regression</a><ul>
-<li class="chapter" data-level="12.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>12.1.1</b> Burn-in and thinning</a></li>
+<li class="chapter" data-level="12.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.7</b> Forecasting with JAGS models</a></li>
+<li class="chapter" data-level="12.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.8</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="12.2" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with correlated errors</a></li>
-<li class="chapter" data-level="12.3" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>12.3</b> Random walk model</a></li>
-<li class="chapter" data-level="12.4" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>12.4</b> Autoregressive models</a></li>
-<li class="chapter" data-level="12.5" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>12.5</b> Univariate state-space models</a></li>
-<li class="chapter" data-level="12.6" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>12.6</b> Dynamic factor analysis</a><ul>
-<li class="chapter" data-level="12.6.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>12.6.1</b> Using leave one out cross-validation to select models</a></li>
+<li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
 </ul></li>
-<li class="chapter" data-level="12.7" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>12.7</b> Uncertainty intervals on states</a></li>
-<li class="chapter" data-level="12.8" data-path="sec-stan-problems.html"><a href="sec-stan-problems.html"><i class="fa fa-check"></i><b>12.8</b> Problems</a></li>
+<li class="chapter" data-level="13.2" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>13.2</b> Linear regression with correlated errors</a></li>
+<li class="chapter" data-level="13.3" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>13.3</b> Random walk model</a></li>
+<li class="chapter" data-level="13.4" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>13.4</b> Autoregressive models</a></li>
+<li class="chapter" data-level="13.5" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>13.5</b> Univariate state-space models</a></li>
+<li class="chapter" data-level="13.6" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>13.6</b> Dynamic factor analysis</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>13.6.1</b> Using leave one out cross-validation to select models</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>13.7</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="13.8" data-path="sec-stan-problems.html"><a href="sec-stan-problems.html"><i class="fa fa-check"></i><b>13.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -442,24 +422,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="sec-jags-lr-no-covariates" class="section level2">
-<h2><span class="header-section-number">11.2</span> Linear regression with no covariates</h2>
-<p>We will start with the simplest time series model possible: linear regression with only an intercept, so that the predicted values of all observations are the same. There are several ways we can write this equation. First, the predicted values can be written as <span class="math inline">\(E[{y}_{t}] = \mu\)</span>. Assuming that the residuals are normally distributed, the model linking our predictions to observed data are written as
+<h2><span class="header-section-number">12.2</span> Linear regression with no covariates</h2>
+We will start with the simplest time series model possible: linear regression with only an intercept, so that the predicted values of all observations are the same. There are several ways we can write this equation. First, the predicted values can be written as <span class="math inline">\(E[{y}_{t}] = \mu\)</span>. Assuming that the residuals are normally distributed, the model linking our predictions to observed data are written as
 <span class="math display" id="eq:stan-obs-eqn">\[\begin{equation}
 y_t = \mu + e_t, e_t \sim \,\text{N}(0,\sigma^2)
-\tag{11.1}
+\tag{12.1}
 \end{equation}\]</span>
 An equivalent way to think about this model is that instead of the residuals as normally distributed with mean zero, we can think of the data <span class="math inline">\(y\)</span> as being normally distributed with a mean of the intercept, and the same residual standard deviation:
 <span class="math display" id="eq:stan-obs-eqn2">\[\begin{equation}
 y \sim \,\text{N}(E[y_t],\sigma^2)
-\tag{11.2}
+\tag{12.2}
 \end{equation}\]</span>
-Remember that in linear regression models, the residual error is interpreted as independent and identically distributed observation error.</p>
+<p>Remember that in linear regression models, the residual error is interpreted as independent and identically distributed observation error.</p>
 <p>To run the JAGS model, we will need to start by writing the model in JAGS notation. For our linear regression model, one way to construct the model is</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1. LINEAR REGRESSION with no covariates no covariates, so</span>
-<span class="co"># intercept only. The parameters are mean &#39;mu&#39; and</span>
-<span class="co"># precision/variance parameter &#39;tau.obs&#39;</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># 1. LINEAR REGRESSION with no covariates</span>
+<span class="co"># no covariates, so intercept only. The parameters are </span>
+<span class="co"># mean &#39;mu&#39; and precision/variance parameter &#39;tau.obs&#39;</span>
 
-model.loc =<span class="st"> &quot;lm_intercept.txt&quot;</span>  <span class="co"># name of the txt file</span>
+model.loc=<span class="st">&quot;lm_intercept.txt&quot;</span> <span class="co"># name of the txt file</span>
 jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span>
 <span class="st">model {  </span>
 <span class="st">   # priors on parameters</span>
@@ -471,31 +451,31 @@ jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st
 <span class="st">      Y[i] ~ dnorm(mu, tau.obs);</span>
 <span class="st">   }</span>
 <span class="st">}  </span>
-<span class="st">&quot;</span>, 
-    <span class="dt">file =</span> model.loc)</code></pre>
+<span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)</code></pre></div>
 <p>A couple things to notice: JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and the <code>dnorm</code> notation means that we assume that value (on the left) is normally distributed around a particular mean with a particular precision (1 over the square root of the variance).</p>
 <p>The model can briefly be summarized as follows: there are 2 parameters in the model (the mean and variance of the observation error). JAGS is a bit funny in that instead of giving a normal distribution the standard deviation or variance, you pass in the precision (1/variance), so our prior on <span class="math inline">\(\mu\)</span> is pretty vague. The precision receives a gamma prior, which is equivalent to the variance receiving an inverse gamma prior (fairly common for standard Bayesian regression models). We will treat the standard deviation as derived (if we know the variance or precision, which we are estimating, we automatically know the standard deviation). Finally, we write a model for the data <span class="math inline">\(y_t\)</span> (<code>Y[i]</code>). Again we use the <code>dnorm</code> distribution to say that the data are normally distributed (equivalent to our likelihood).</p>
 <p>The function from the <strong>R2jags</strong> package that we actually use to run the model is <code>jags()</code>. There is a parallel version of the function called <code>jags.parallel()</code> which is useful for larger, more complex models. The details of both can be found with <code>?jags</code> or <code>?jags.parallel</code>.</p>
 <p>To actually run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS, (2) a vector of parameters that we want to monitor in JAGS and have returned back to R, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the <code>jags()</code> function.</p>
-<pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)  <span class="co"># named list of inputs</span>
-jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;mu&quot;</span>)  <span class="co"># parameters to be monitored</span>
-mod_lm_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, 
-    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, 
-    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N) <span class="co"># named list of inputs</span>
+jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>,<span class="st">&quot;mu&quot;</span>) <span class="co"># parameters to be monitored</span>
+mod_lm_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, 
+                <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin=</span><span class="dv">5000</span>,
+                <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </code></pre></div>
+<pre><code>module glm loaded</code></pre>
 <p>Notice that the <code>jags()</code> function contains a number of other important arguments. In general, larger is better for all arguments: we want to run multiple MCMC chains (maybe 3 or more), and have a burn-in of at least 5000. The total number of samples after the burn-in period is n.iter-n.burnin, which in this case is 5000 samples. Because we are doing this with 3 MCMC chains, and the thinning rate equals 1 (meaning we are saving every sample), we will retain a total of 1500 posterior samples for each parameter.</p>
 <p>The saved object storing our model diagnostics can be accessed directly, and includes some useful summary output.</p>
-<pre class="sourceCode r"><code class="sourceCode r">mod_lm_intercept</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mod_lm_intercept</code></pre></div>
 <pre><code>Inference for Bugs model at &quot;lm_intercept.txt&quot;, fit using jags,
  3 chains, each with 10000 iterations (first 5000 discarded)
  n.sims = 15000 iterations saved
          mu.vect sd.vect    2.5%     25%     50%     75%   97.5%  Rhat
-mu         9.951   0.289   9.377   9.759   9.952  10.147  10.516 1.001
-sd.obs     3.543   0.202   3.176   3.402   3.533   3.669   3.971 1.001
-deviance 820.543   2.041 818.594 819.099 819.905 821.303 826.095 1.001
+mu         9.948   0.287   9.380   9.758   9.949  10.138  10.515 1.001
+sd.obs     3.540   0.203   3.172   3.400   3.529   3.669   3.967 1.001
+deviance 820.546   2.030 818.590 819.115 819.919 821.298 825.947 1.001
          n.eff
-mu       15000
+mu        5200
 sd.obs   15000
-deviance 11000
+deviance 15000
 
 For each parameter, n.eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor (at convergence, Rhat=1).
@@ -504,35 +484,33 @@ DIC info (using the rule, pD = var(deviance)/2)
 pD = 2.1 and DIC = 822.6
 DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <p>The last 2 columns in the summary contain <code>Rhat</code> (which we want to be close to 1.0), and <code>neff</code> (the effective sample size of each set of posterior draws). To examine the output more closely, we can pull all of the results directly into R,</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach.jags</span>(mod_lm_intercept)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">attach.jags</span>(mod_lm_intercept)</code></pre></div>
 <pre><code>The following object is masked _by_ .GlobalEnv:
 
     mu</code></pre>
 <p>Attaching the <strong>R2jags</strong> object allows us to work with the named parameters directly in R. For example, we could make a histogram of the posterior distributions of the parameters <code>mu</code> and <code>sd.obs</code> with the following code,</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now we can make plots of posterior values</span>
-<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))
-<span class="kw">hist</span>(mu, <span class="dv">40</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Mean&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)
-<span class="kw">hist</span>(sd.obs, <span class="dv">40</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">xlab =</span> <span class="kw">expression</span>(sigma[obs]), 
-    <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now we can make plots of posterior values</span>
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))
+<span class="kw">hist</span>(mu,<span class="dv">40</span>,<span class="dt">col=</span><span class="st">&quot;grey&quot;</span>,<span class="dt">xlab=</span><span class="st">&quot;Mean&quot;</span>,<span class="dt">main=</span><span class="st">&quot;&quot;</span>)
+<span class="kw">hist</span>(sd.obs,<span class="dv">40</span>,<span class="dt">col=</span><span class="st">&quot;grey&quot;</span>,<span class="dt">xlab=</span><span class="kw">expression</span>(sigma[obs]),<span class="dt">main=</span><span class="st">&quot;&quot;</span>)</code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:jags-plot-hist-post"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-plot-hist-post-1.png" alt="Plot of the posteriors for the linear regression model." width="80%" />
 <p class="caption">
-Figure 11.1: Plot of the posteriors for the linear regression model.
+Figure 12.1: Plot of the posteriors for the linear regression model.
 </p>
 </div>
 <p>Finally, we can run some useful diagnostics from the <strong>coda</strong> package on this model output. We have written a small function to make the creation of mcmc lists (an argument required for many of the diagnostics). The function</p>
-<pre class="sourceCode r"><code class="sourceCode r">createMcmcList =<span class="st"> </span><span class="cf">function</span>(jagsmodel) {
-    McmcArray =<span class="st"> </span><span class="kw">as.array</span>(jagsmodel<span class="op">$</span>BUGSoutput<span class="op">$</span>sims.array)
-    McmcList =<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;list&quot;</span>, <span class="dt">length =</span> <span class="kw">dim</span>(McmcArray)[<span class="dv">2</span>])
-    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(McmcList)) McmcList[[i]] =<span class="st"> </span><span class="kw">as.mcmc</span>(McmcArray[, 
-        i, ])
-    McmcList =<span class="st"> </span><span class="kw">mcmc.list</span>(McmcList)
-    <span class="kw">return</span>(McmcList)
-}</code></pre>
-<p>Creating the MCMC list preserves the random samples generated from each chain and allows you to extract the samples for a given parameter (such as <span class="math inline">\(\mu\)</span>) from any chain you want. To extract <span class="math inline">\(\mu\)</span> from the first chain, for example, you could use the following code. Because <code>createMcmcList()</code> returns a list of <strong>mcmc</strong> objects, we can summarize and plot these directly. Figure <a href="sec-jags-lr-no-covariates.html#fig:jags-plot-myList">11.2</a> shows the plot from <code>plot(myList[[1]])</code>.</p>
-<pre class="sourceCode r"><code class="sourceCode r">myList =<span class="st"> </span><span class="kw">createMcmcList</span>(mod_lm_intercept)
-<span class="kw">summary</span>(myList[[<span class="dv">1</span>]])</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">createMcmcList =<span class="st"> </span><span class="cf">function</span>(jagsmodel) {
+McmcArray =<span class="st"> </span><span class="kw">as.array</span>(jagsmodel<span class="op">$</span>BUGSoutput<span class="op">$</span>sims.array)
+McmcList =<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;list&quot;</span>,<span class="dt">length=</span><span class="kw">dim</span>(McmcArray)[<span class="dv">2</span>])
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(McmcList)) McmcList[[i]] =<span class="st"> </span><span class="kw">as.mcmc</span>(McmcArray[,i,])
+McmcList =<span class="st"> </span><span class="kw">mcmc.list</span>(McmcList)
+<span class="kw">return</span>(McmcList)
+}</code></pre></div>
+<p>Creating the MCMC list preserves the random samples generated from each chain and allows you to extract the samples for a given parameter (such as <span class="math inline">\(\mu\)</span>) from any chain you want. To extract <span class="math inline">\(\mu\)</span> from the first chain, for example, you could use the following code. Because <code>createMcmcList()</code> returns a list of <strong>mcmc</strong> objects, we can summarize and plot these directly. Figure <a href="sec-jags-lr-no-covariates.html#fig:jags-plot-myList">12.2</a> shows the plot from <code>plot(myList[[1]])</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">myList =<span class="st"> </span><span class="kw">createMcmcList</span>(mod_lm_intercept)
+<span class="kw">summary</span>(myList[[<span class="dv">1</span>]])</code></pre></div>
 <pre><code>
 Iterations = 1:5000
 Thinning interval = 1 
@@ -543,33 +521,32 @@ Sample size per chain = 5000
    plus standard error of the mean:
 
             Mean     SD Naive SE Time-series SE
-deviance 820.522 2.0605 0.029140       0.030572
-mu         9.950 0.2878 0.004070       0.004070
-sd.obs     3.543 0.2012 0.002845       0.002845
+deviance 820.565 2.0657 0.029213       0.029213
+mu         9.953 0.2897 0.004096       0.004096
+sd.obs     3.540 0.2042 0.002888       0.002888
 
 2. Quantiles for each variable:
 
-            2.5%     25%     50%     75%  97.5%
-deviance 818.595 819.096 819.880 821.252 826.03
-mu         9.385   9.759   9.953  10.146  10.51
-sd.obs     3.182   3.405   3.532   3.667   3.98</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(myList[[<span class="dv">1</span>]])</code></pre>
+            2.5%     25%     50%     75%   97.5%
+deviance 818.597 819.115 819.913 821.300 826.194
+mu         9.387   9.761   9.953  10.148  10.515
+sd.obs     3.178   3.401   3.528   3.669   3.974</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(myList[[<span class="dv">1</span>]])</code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/jags-make-myList-1.png" width="80%" style="display: block; margin: auto;" /></p>
 
 <div class="figure" style="text-align: center"><span id="fig:jags-plot-myList"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-plot-myList-1.png" alt="Plot of an object output from \(\texttt{creatMcmcList}\)." width="80%" />
 <p class="caption">
-Figure 11.2: Plot of an object output from <span class="math inline">\(\texttt{creatMcmcList}\)</span>.
+Figure 12.2: Plot of an object output from <span class="math inline">\(\texttt{creatMcmcList}\)</span>.
 </p>
 </div>
-<p>For more quantitative diagnostics of MCMC convergence, we can rely on the <strong>coda</strong> package in R. There
-are several useful statistics available, including the Gelman-Rubin diagnostic (for one or several chains), autocorrelation diagnostics (similar to the ACF you calculated above), the Geweke diagnostic, and Heidelberger-Welch test of stationarity.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run the majority of the diagnostics that CODA() offers</span>
+<p>For more quantitative diagnostics of MCMC convergence, we can rely on the <strong>coda</strong> package in R. There are several useful statistics available, including the Gelman-Rubin diagnostic (for one or several chains), autocorrelation diagnostics (similar to the ACF you calculated above), the Geweke diagnostic, and Heidelberger-Welch test of stationarity.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run the majority of the diagnostics that CODA() offers</span>
 <span class="kw">library</span>(coda)
-gelmanDiags =<span class="st"> </span><span class="kw">gelman.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept), <span class="dt">multivariate =</span> F)
+gelmanDiags =<span class="st"> </span><span class="kw">gelman.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept),<span class="dt">multivariate=</span>F)
 autocorDiags =<span class="st"> </span><span class="kw">autocorr.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept))
 gewekeDiags =<span class="st"> </span><span class="kw">geweke.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept))
-heidelDiags =<span class="st"> </span><span class="kw">heidel.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept))</code></pre>
+heidelDiags =<span class="st"> </span><span class="kw">heidel.diag</span>(<span class="kw">createMcmcList</span>(mod_lm_intercept))</code></pre></div>
 </div>
             </section>
 
@@ -627,7 +604,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');

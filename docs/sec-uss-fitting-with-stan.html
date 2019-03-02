@@ -9,7 +9,7 @@
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
   <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="6.7 Fitting with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta property="og:title" content="6.7 Fitting with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -17,7 +17,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6.7 Fitting with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences />
+  <meta name="twitter:title" content="6.7 Fitting with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-02-28">
+<meta name="date" content="2019-03-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,67 +51,41 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
-}
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {  }
-@media screen {
-a.sourceLine::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -393,32 +367,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.12" data-path="sec-dfa-lakeWA.html"><a href="sec-dfa-lakeWA.html"><i class="fa fa-check"></i><b>10.12</b> Example from Lake Washington</a></li>
 <li class="chapter" data-level="10.13" data-path="sec-dfa-problems.html"><a href="sec-dfa-problems.html"><i class="fa fa-check"></i><b>10.13</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>11</b> JAGS for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="11.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>11.1</b> The airquality dataset</a></li>
-<li class="chapter" data-level="11.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>11.2</b> Linear regression with no covariates</a></li>
-<li class="chapter" data-level="11.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>11.3</b> Regression with autocorrelated errors</a></li>
-<li class="chapter" data-level="11.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>11.4</b> Random walk time series model</a></li>
-<li class="chapter" data-level="11.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>11.5</b> Autoregressive AR(1) time series models</a></li>
-<li class="chapter" data-level="11.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>11.6</b> Univariate state space model</a><ul>
-<li class="chapter" data-level="11.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>11.6.1</b> Including covariates</a></li>
+<li class="chapter" data-level="11" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html"><i class="fa fa-check"></i><b>11</b> Covariates with Missing Values</a><ul>
+<li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
+<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a></li>
+<li class="chapter" data-level="11.3" data-path="estimate-february-swe-for-all-sites.html"><a href="estimate-february-swe-for-all-sites.html"><i class="fa fa-check"></i><b>11.3</b> Estimate February SWE for all sites</a></li>
 </ul></li>
-<li class="chapter" data-level="11.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>11.7</b> Forecasting with JAGS models</a></li>
-<li class="chapter" data-level="11.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>11.8</b> Problems</a></li>
+<li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="12.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>12.1</b> The airquality dataset</a></li>
+<li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
+<li class="chapter" data-level="12.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>12.3</b> Regression with autocorrelated errors</a></li>
+<li class="chapter" data-level="12.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>12.4</b> Random walk time series model</a></li>
+<li class="chapter" data-level="12.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>12.5</b> Autoregressive AR(1) time series models</a></li>
+<li class="chapter" data-level="12.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>12.6</b> Univariate state space model</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>12.6.1</b> Including covariates</a></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>12</b> Stan for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="12.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>12.1</b> Linear regression</a><ul>
-<li class="chapter" data-level="12.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>12.1.1</b> Burn-in and thinning</a></li>
+<li class="chapter" data-level="12.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.7</b> Forecasting with JAGS models</a></li>
+<li class="chapter" data-level="12.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.8</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="12.2" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with correlated errors</a></li>
-<li class="chapter" data-level="12.3" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>12.3</b> Random walk model</a></li>
-<li class="chapter" data-level="12.4" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>12.4</b> Autoregressive models</a></li>
-<li class="chapter" data-level="12.5" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>12.5</b> Univariate state-space models</a></li>
-<li class="chapter" data-level="12.6" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>12.6</b> Dynamic factor analysis</a><ul>
-<li class="chapter" data-level="12.6.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>12.6.1</b> Using leave one out cross-validation to select models</a></li>
+<li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
 </ul></li>
-<li class="chapter" data-level="12.7" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>12.7</b> Uncertainty intervals on states</a></li>
-<li class="chapter" data-level="12.8" data-path="sec-stan-problems.html"><a href="sec-stan-problems.html"><i class="fa fa-check"></i><b>12.8</b> Problems</a></li>
+<li class="chapter" data-level="13.2" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>13.2</b> Linear regression with correlated errors</a></li>
+<li class="chapter" data-level="13.3" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>13.3</b> Random walk model</a></li>
+<li class="chapter" data-level="13.4" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>13.4</b> Autoregressive models</a></li>
+<li class="chapter" data-level="13.5" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>13.5</b> Univariate state-space models</a></li>
+<li class="chapter" data-level="13.6" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>13.6</b> Dynamic factor analysis</a><ul>
+<li class="chapter" data-level="13.6.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>13.6.1</b> Using leave one out cross-validation to select models</a></li>
+</ul></li>
+<li class="chapter" data-level="13.7" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>13.7</b> Uncertainty intervals on states</a></li>
+<li class="chapter" data-level="13.8" data-path="sec-stan-problems.html"><a href="sec-stan-problems.html"><i class="fa fa-check"></i><b>13.8</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -444,11 +424,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-uss-fitting-with-stan" class="section level2">
 <h2><span class="header-section-number">6.7</span> Fitting with Stan</h2>
 <p>Let’s fit the same model with Stan using the <strong>rstan</strong> package. If you have not already, you will need to install the <strong>rstan</strong> package. This package depends on a number of other packages which should install automatically when you install <strong>rstan</strong>.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(datasets)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(datasets)
 <span class="kw">library</span>(rstan)
-y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(Nile)</code></pre>
+y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(Nile)</code></pre></div>
 <p>First we write the model. We could write this to a file (recommended), but for this example, we write as a character object. Though the syntax is different from the JAGS code, it has many similarities. Note, unlike the JAGS, the Stan does <strong>not allow</strong> any NAs in your data. Thus we have to specify the location of the NAs in our data. The Nile data does not have NAs, but we want to write the code so it would work even if there were NAs.</p>
-<pre class="sourceCode r"><code class="sourceCode r">scode &lt;-<span class="st"> &quot;</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scode &lt;-<span class="st"> &quot;</span>
 <span class="st">data {</span>
 <span class="st">  int&lt;lower=0&gt; TT;</span>
 <span class="st">  int&lt;lower=0&gt; n_pos; // number of non-NA values</span>
@@ -483,25 +463,26 @@ y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(Nile)</code></
 <span class="st">  vector[n_pos] log_lik;</span>
 <span class="st">  for (i in 1:n_pos) log_lik[i] = normal_lpdf(y[i] | x[indx_pos[i]], sd_r);</span>
 <span class="st">}</span>
-<span class="st">&quot;</span></code></pre>
+<span class="st">&quot;</span></code></pre></div>
 <p>Then we call <code>stan()</code> and pass in the data, names of parameter we wish to have returned, and information on number of chains, samples (iter), and thinning. The output is verbose (hidden here) and may have some warnings.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We pass in the non-NA ys as vector</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># We pass in the non-NA ys as vector</span>
 ypos &lt;-<span class="st"> </span>y[<span class="op">!</span><span class="kw">is.na</span>(y)]
-n_pos &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="op">!</span><span class="kw">is.na</span>(y))  <span class="co">#number on non-NA ys</span>
-indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(y))  <span class="co">#index on the non-NAs</span>
-mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> ypos, 
-    <span class="dt">TT =</span> <span class="kw">length</span>(y), <span class="dt">n_pos =</span> n_pos, <span class="dt">indx_pos =</span> indx_pos), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>, 
-    <span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">chains =</span> <span class="dv">3</span>, <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">thin =</span> <span class="dv">1</span>)</code></pre>
+n_pos &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="op">!</span><span class="kw">is.na</span>(y)) <span class="co">#number on non-NA ys</span>
+indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(y)) <span class="co">#index on the non-NAs</span>
+mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, 
+  <span class="dt">data =</span> <span class="kw">list</span>(<span class="st">&quot;y&quot;</span>=ypos, <span class="st">&quot;TT&quot;</span>=<span class="kw">length</span>(y), <span class="st">&quot;n_pos&quot;</span>=n_pos, <span class="st">&quot;indx_pos&quot;</span>=indx_pos), 
+  <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>,<span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>),
+  <span class="dt">chains =</span> <span class="dv">3</span>, <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">thin =</span> <span class="dv">1</span>)</code></pre></div>
 <p>We use <code>extract()</code> to extract the parameters from the fitted model and we can plot. The estimated level is <code>x</code> and we will plot that with the 95% credible intervals.</p>
-<pre class="sourceCode r"><code class="sourceCode r">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod)
 pred_mean &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, mean)
 pred_lo &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>)
 pred_hi &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>)
-<span class="kw">plot</span>(pred_mean, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(pred_mean, 
-    pred_lo, pred_hi)), <span class="dt">ylab =</span> <span class="st">&quot;Nile River Level&quot;</span>)
+<span class="kw">plot</span>(pred_mean, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, 
+     <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(pred_mean, pred_lo, pred_hi)), <span class="dt">ylab =</span> <span class="st">&quot;Nile River Level&quot;</span>)
 <span class="kw">lines</span>(pred_lo)
 <span class="kw">lines</span>(pred_hi)
-<span class="kw">points</span>(y, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</code></pre>
+<span class="kw">points</span>(y, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-stan-ar-level"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-stan-ar-level-1.png" alt="Estimated level and 95% credible intervals.  Blue dots are the actual Nile River levels." width="80%" />
 <p class="caption">
@@ -509,12 +490,13 @@ Figure 6.7: Estimated level and 95% credible intervals. Blue dots are the actual
 </p>
 </div>
 <p>Here is a <code>ggplot()</code> version of the plot.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-nile &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">year =</span> <span class="dv">1871</span><span class="op">:</span><span class="dv">1970</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+nile &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y=</span>y, <span class="dt">year=</span><span class="dv">1871</span><span class="op">:</span><span class="dv">1970</span>)
 h &lt;-<span class="st"> </span><span class="kw">ggplot</span>(nile, <span class="kw">aes</span>(year))
-h <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> pred_lo, <span class="dt">ymax =</span> pred_hi), <span class="dt">fill =</span> <span class="st">&quot;grey70&quot;</span>) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_mean), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> y), 
-    <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Nile River level&quot;</span>)</code></pre>
+h <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> pred_lo, <span class="dt">ymax =</span> pred_hi), <span class="dt">fill =</span> <span class="st">&quot;grey70&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_mean), <span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> y), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Nile River level&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-stan-ar-level-ggplot"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-stan-ar-level-ggplot-1.png" alt="Estimated level and 95% credible intervals" width="80%" />
 <p class="caption">
@@ -522,15 +504,15 @@ Figure 6.8: Estimated level and 95% credible intervals
 </p>
 </div>
 <p>We can plot the histogram of the samples against the values estimated via maximum likelihood.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))
 <span class="kw">hist</span>(pars<span class="op">$</span>x0)
-<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem.<span class="dv">3</span>)<span class="op">$</span>x0, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
 <span class="kw">hist</span>(pars<span class="op">$</span>u)
-<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem.<span class="dv">3</span>)<span class="op">$</span>U, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
 <span class="kw">hist</span>(<span class="kw">log</span>(pars<span class="op">$</span>sd_q<span class="op">^</span><span class="dv">2</span>))
-<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem.<span class="dv">3</span>)<span class="op">$</span>Q), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)
 <span class="kw">hist</span>(<span class="kw">log</span>(pars<span class="op">$</span>sd_r<span class="op">^</span><span class="dv">2</span>))
-<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre>
+<span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem.<span class="dv">3</span>)<span class="op">$</span>R), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-stan-hist-pars"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-stan-hist-pars-1.png" alt="Histogram of the parameter samples versus the estimate (red line) from maximum likelihood." width="80%" />
 <p class="caption">
@@ -594,7 +576,7 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "true";
+    var src = "";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
