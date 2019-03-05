@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-03-01">
+<meta name="date" content="2019-03-04">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 <link rel="prev" href="example-snotel-data.html">
-<link rel="next" href="chap-jags.html">
+<link rel="next" href="modeling-swe-using-a-dfa.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -371,7 +371,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a></li>
-<li class="chapter" data-level="11.3" data-path="estimate-february-swe-for-all-sites.html"><a href="estimate-february-swe-for-all-sites.html"><i class="fa fa-check"></i><b>11.3</b> Estimate February SWE for all sites</a></li>
+<li class="chapter" data-level="11.3" data-path="estimate-february-swe-for-all-sites.html"><a href="estimate-february-swe-for-all-sites.html"><i class="fa fa-check"></i><b>11.3</b> Estimate February SWE for all sites</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="estimate-february-swe-for-all-sites.html"><a href="estimate-february-swe-for-all-sites.html#diagnostics"><i class="fa fa-check"></i><b>11.3.1</b> Diagnostics</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="modeling-swe-using-a-dfa.html"><a href="modeling-swe-using-a-dfa.html"><i class="fa fa-check"></i><b>11.4</b> Modeling SWE using a DFA</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="modeling-swe-using-a-dfa.html"><a href="modeling-swe-using-a-dfa.html#diagnostics-1"><i class="fa fa-check"></i><b>11.4.1</b> Diagnostics</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a><ul>
 <li class="chapter" data-level="12.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>12.1</b> The airquality dataset</a></li>
@@ -481,16 +486,174 @@ p <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap<
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-snotelplotstates-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>If we were using these SWE as covariates in a site specific model, we could then use the estimates as our covariates, however this would not incorporate uncertainty. Alternatively we could use Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marsscovarx">(11.1)</a> and set the parameters for the covariate process to those estimated for our covariate-only model. This approach will incorporate the uncertainty in the SWE estimates in the early years for the sites with no data.</p>
 <p>Note, we should do some cross-validation (fitting with data left out) to ensure that the estimated SWEs are well-matched to actual measurements. It would probably be best to do ‘leave-three’ out instead of ‘leave-one’ out since the estimates for time <span class="math inline">\(t\)</span> uses information from <span class="math inline">\(t-1\)</span> and <span class="math inline">\(t+1\)</span> (if present).</p>
+<div id="diagnostics" class="section level3">
+<h3><span class="header-section-number">11.3.1</span> Diagnostics</h3>
+<p>It should be noted that this covariate model has some problems as the state residuals have clear negative auto-correlation at lag 1. The data often show a saw-toothed pattern, suggestive of a AR(1) with negative AR parameter. However the estimated model has an AR parameter close to 1 (random walk).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>))
+<span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>], <span class="dv">1</span>, acf)</code></pre></div>
+<pre><code>warning: the variance of the residuals at t = 1 is not invertible.  NAs returned for std.residuals at t = 1 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 2 is not invertible.  NAs returned for std.residuals at t = 2 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 3 is not invertible.  NAs returned for std.residuals at t = 3 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 4 is not invertible.  NAs returned for std.residuals at t = 4 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 5 is not invertible.  NAs returned for std.residuals at t = 5 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 7 is not invertible.  NAs returned for std.residuals at t = 7 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 8 is not invertible.  NAs returned for std.residuals at t = 8 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 9 is not invertible.  NAs returned for std.residuals at t = 9 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 10 is not invertible.  NAs returned for std.residuals at t = 10 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 11 is not invertible.  NAs returned for std.residuals at t = 11 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 13 is not invertible.  NAs returned for std.residuals at t = 13 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 15 is not invertible.  NAs returned for std.residuals at t = 15 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 22 is not invertible.  NAs returned for std.residuals at t = 22 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 24 is not invertible.  NAs returned for std.residuals at t = 24 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 26 is not invertible.  NAs returned for std.residuals at t = 26 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 27 is not invertible.  NAs returned for std.residuals at t = 27 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 28 is not invertible.  NAs returned for std.residuals at t = 28 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 29 is not invertible.  NAs returned for std.residuals at t = 29 . See MARSSinfo(&quot;residvarinv&quot;)
+warning: the variance of the residuals at t = 30 is not invertible.  NAs returned for std.residuals at t = 30 . See MARSSinfo(&quot;residvarinv&quot;)</code></pre>
+<pre><code>$`X.Burnt Mountain`
 
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.595  0.297 -0.217  0.057  0.006 -0.163  0.160 -0.118  0.205 
+    10     11     12     13     14 
+-0.227  0.276 -0.204  0.136 -0.210 
+
+$`X.Cayuse Pass`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.313 -0.088 -0.121  0.064 -0.116  0.180 -0.062 -0.135  0.076 
+    10     11     12     13     14 
+-0.011  0.062 -0.151  0.218 -0.107 
+
+$`X.Corral Pass`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.565  0.211 -0.241  0.094  0.114 -0.256  0.331 -0.327  0.248 
+    10     11     12     13     14 
+-0.063  0.072 -0.127 -0.001 -0.012 
+
+$`X.Cougar Mountain`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.634  0.359 -0.281  0.142 -0.085 -0.038  0.109 -0.147  0.212 
+    10     11     12     13     14 
+-0.298  0.367 -0.241  0.189 -0.279 
+
+$`X.Huckleberry Creek`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.479  0.164 -0.223  0.112 -0.098 -0.098  0.217 -0.252  0.362 
+    10     11     12     13     14 
+-0.333  0.334 -0.246  0.112 -0.206 
+
+$`X.Lynn Lake`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.420  0.045 -0.066 -0.017 -0.045  0.073 -0.159  0.043  0.246 
+    10     11     12     13     14 
+-0.290  0.197 -0.190  0.102 -0.011 
+
+$`X.Meadows Pass`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.651  0.403 -0.356  0.177 -0.051 -0.036  0.106 -0.173  0.199 
+    10     11     12     13     14 
+-0.240  0.279 -0.252  0.234 -0.282 
+
+$`X.Morse Lake`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.545  0.216 -0.291  0.209  0.036 -0.230  0.205 -0.204  0.231 
+    10     11     12     13     14 
+-0.206  0.180 -0.113  0.060 -0.099 
+
+$`X.Mount Gardner`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.635  0.390 -0.322  0.126 -0.047 -0.052  0.129 -0.170  0.212 
+    10     11     12     13     14 
+-0.249  0.287 -0.248  0.216 -0.263 
+
+$X.Mowich
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.190 -0.004 -0.226  0.005 -0.266  0.031  0.155 -0.105  0.303 
+    10     11     12     13     14 
+ 0.082  0.019 -0.434 -0.012 -0.061 
+
+$`X.Olallie Meadows`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.642  0.417 -0.332  0.161 -0.049 -0.124  0.157 -0.180  0.183 
+    10     11     12     13     14 
+-0.132  0.146 -0.144  0.185 -0.212 
+
+$X.Paradise
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.657  0.449 -0.343  0.092  0.011 -0.168  0.257 -0.198  0.176 
+    10     11     12     13     14 
+-0.129  0.117 -0.199  0.209 -0.224 
+
+$`X.Rex River`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.625  0.404 -0.339  0.129 -0.068 -0.042  0.105 -0.120  0.198 
+    10     11     12     13     14 
+-0.226  0.220 -0.259  0.253 -0.295 
+
+$`X.Sawmill Ridge`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.260 -0.101  0.007 -0.026  0.046 -0.081 -0.269  0.207  0.244 
+    10     11     12     13     14 
+-0.280  0.078 -0.134  0.141  0.004 
+
+$`X.Tinkham Creek`
+
+Autocorrelations of series &#39;newX[, i]&#39;, by lag
+
+     0      1      2      3      4      5      6      7      8      9 
+ 1.000 -0.619  0.386 -0.370  0.178 -0.048 -0.028  0.080 -0.172  0.183 
+    10     11     12     13     14 
+-0.172  0.237 -0.247  0.255 -0.290 </code></pre>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-4-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
-<!-- </div> -->
+</div>
             </section>
 
           </div>
         </div>
       </div>
 <a href="example-snotel-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="chap-jags.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="modeling-swe-using-a-dfa.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
