@@ -6,10 +6,18 @@ knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.
 # Covariates with Missing Values {#chap-mssmiss}
 \chaptermark{Covariates with NAs}
 
-A script with all the R code in the chapter can be downloaded  [here](./Rcode/multivariate-ss-missing-cov.R). The Rmd for this chapter can be downloaded [here](./Rmds/multivariate-ss-missing-cov.Rmd). The SNOTEL data are available [here](./data/snotel.RData).
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/multivariate-ss-missing-cov.R). The Rmd for this chapter can be downloaded [here](./Rmds/multivariate-ss-missing-cov.Rmd). 
 
 ### Data and packages {-}
 
+The SNOTEL data are available [here](./data/snotel.RData).
+
+```{r mssmiss-loadpackages, message=FALSE}
+library(MARSS)
+library(forecast)
+library(ggplot2)
+library(ggmap)
+```
 
 ## Covariates with missing values or observation error {#sec-mssmiss-overview}
 
@@ -117,12 +125,10 @@ y = y[which(y$Latitude > 46.5),]
 ```
 
 ```{r mssmiss-plotsnotel, echo=FALSE, warning=FALSE, message=FALSE}
-library(ggplot2)
-library(ggmap)
 ylims=c(min(snotelmeta$Latitude)-1,max(snotelmeta$Latitude)+1)
 xlims=c(min(snotelmeta$Longitude)-1,max(snotelmeta$Longitude)+1)
-base = get_map(location=c(xlims[1],ylims[1],xlims[2],ylims[2]), zoom=7, maptype="terrain-background")
-map1 = ggmap(base)
+base = ggmap::get_map(location=c(xlims[1],ylims[1],xlims[2],ylims[2]), zoom=7, maptype="terrain-background")
+map1 = ggmap::ggmap(base)
 map1 + geom_point(data=y, aes(x=Longitude, y=Latitude), color="blue", cex=2.5) + 
   labs(x="Latitude", y="Longitude", title="SnoTel sites") + 
   theme_bw()
@@ -168,6 +174,7 @@ a_1 \\ a_2 \\ \dots \\ a_{15}
 \begin{bmatrix}
 v_1 \\ v_2 \\ \dots \\ v_{15}
 \end{bmatrix}_t
+(\#eq:mssmiss-ar1)
 $$
 
 We will use an unconstrained variance-covariance structure for $\mathbf{w}$ and assume that $\mathbf{v}$ is identical and independent and very low (SNOTEL instrument variability).  The $a_i$ determine the level of the $x_i$.
@@ -362,7 +369,6 @@ apply(residuals(fit2)$model.residual, 1, function(x){acf(na.omit(x))})
 ```
 
 
-<!--
 ## Modeling Seasonal SWE
 
 When we look at all months, we see that SWE is highly seasonal.  Note October and November are missing for all years.
@@ -375,54 +381,82 @@ p + facet_wrap(~Station) +
   scale_x_date(breaks=as.Date(paste0(2011:2013,"-01-01")), labels=2011:2013)
 ```
 
+An AR(2) or AR(1) model for the seasonal differences fits well for most of the time series.  The table shows the $\Delta AICc$ for different ARMA models for the seasonally differenced data in different locations.  AR(1) is within 2 of the AR(2) model in most cases and the AR(2) or AR(1) is best in all but 2 locations.
+
+```{r echo=FALSE}
+fitb <- function(x){
+  a <- ts(x, start=1981, frequency=12)
+  fit1 <- Arima(a, order=c(1,0,2), seasonal=c(0,1,0))
+  fit4 <- Arima(a, order=c(2,0,1), seasonal=c(0,1,0))
+  fit2 <- Arima(a, order=c(2,0,0), seasonal=c(0,1,0))
+  fit3 <- Arima(a, order=c(1,0,0), seasonal=c(0,1,0))
+  b <- c(fit1$aicc, fit4$aicc, fit2$aicc, fit3$aicc)
+  b - min(b)
+}
+a <- tapply(y3$SWE, y3$Station, fitb)
+b <- a
+dim(b) <- NULL; names(b) <- names(a)
+ta <- reshape2::melt(b)
+ta$model <- rep(c("(1,0,2)","(2,0,1)","(2,0,0)","(1,0,0)"),length(b))
+ta2 <- reshape2::dcast(ta, L1 ~ model)
+knitr::kable(ta2)
+```
+
+We will model the seasonal differences using the \@ref(eq:mssmiss-ar1) AR(1) model.  Denote the seaonal difference as $\Delta \mathbf{x}_t = \mathbf{x}_t - \mathbf{x}_{t-12}$.  We incorporate an observation model to allow the NAs in the The model is
 
 $$
-\begin{bmatrix}
-x_{1,t} \\ x_{2,t} \\ \dots \\ x_{15,t}
-\end{bmatrix}_t =
+\Delta \mathbf{x}_t =
 \begin{bmatrix}
 b&0&\dots&0 \\ 
 0&b&\dots&0 \\ 
 \dots&\dots&\dots&\dots \\ 
 0&0&\dots&b
 \end{bmatrix}
-\begin{bmatrix}
-x_1 \\ x_2 \\ \dots \\ x_{15}
-\end{bmatrix}_{t-1} + 
-\begin{bmatrix}
-u_1 \\ u_2 \\ \dots \\ u_{15}
-\end{bmatrix}_{t} +
+\Delta \mathbf{x}_{t-1} + 
 \begin{bmatrix}
 w_1 \\ w_2 \\ \dots \\ w_{15}
 \end{bmatrix}_{t} \\
-\begin{bmatrix}
-x_{1} \\ x_{2} \\ \dots \\ x_{15}
-\end{bmatrix}_t =
-\begin{bmatrix}
-\phi&0&\dots&0 \\ 
-0&\phi&\dots&0 \\ 
-\dots&\dots&\dots&\dots \\ 
-0&0&\dots&\phi&
-\end{bmatrix}
-\begin{bmatrix}
-x_{1} \\ x_{2} \\ \dots \\ x_{15}
-\end{bmatrix}_{t-12} + 
-\begin{bmatrix}
-u_1 \\ u_2 \\ \dots \\ u_{15}
-\end{bmatrix}_{t} +
-\begin{bmatrix}
-w_1 \\ w_2 \\ \dots \\ w_{15}
-\end{bmatrix}_{t} \\
-\begin{bmatrix}
-y_1 \\ y_2 \\ \dots \\ y_{15}
-\end{bmatrix}_t =
-\begin{bmatrix}
-x_1 \\ x_2 \\ \dots \\ x_{15}
-\end{bmatrix}_t + 
-\begin{bmatrix}
-v_1 \\ v_2 \\ \dots \\ v_{15}
-\end{bmatrix}_t
+\, \\
+\Delta \mathbf{y}_t =
+\Delta \mathbf{x}_t + 
+\mathbf{v}_t
 $$
 
--->
+In this model, we use the seasonal difference is the previous month (how above or below the prior year) to inform this month's seasonal difference.  We also allow that the errors are correlated between sites.
 
+We set up the model for MARSS.
+
+```{r mssmiss-snotel-marss-seasonal}
+ns <- length(unique(yy$Station))
+B <- "diagonal and equal"
+Q <- "unconstrained"
+R <- diag(0.01,ns)
+U <- "zero"
+A <- "zero"
+x0 <- "zero"
+mod.list = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A)
+```
+
+Set up a matrix of the seasonal differences.  Each row is a station.
+
+```{r mssmiss-snotel-acast}
+dat <- snotel
+dat <- dat[dat$Station.Id %in% y$Station.Id,]
+dat$Month <- factor(dat$Month, level=month.abb)
+dat <- reshape2::acast(dat, Station ~ Year+Month, value.var="SWE")
+diffdat <- t(apply(dat, 1, diff, lag=12))
+```
+
+Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence is slow.  
+
+
+```{r mssmiss-snotelfit, results="hide"}
+library(MARSS)
+fit <- MARSS(diffdat, model=mod.list, control=list(maxit=5000))
+```
+
+The estimated model has a $b$ close to 0 which indicates no information in the prior February SWE on the current February SWE.
+
+```{r}
+coef(fit)$B
+```
