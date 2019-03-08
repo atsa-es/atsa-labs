@@ -138,9 +138,9 @@ map1 + geom_point(data=y, aes(x=Longitude, y=Latitude), color="blue", cex=2.5) +
 For the first analysis, we are just going to look at February Snow Water Equivalent (SWE).  Our subset of stations is `y$Station.Id`.  There are many missing years among some of our stations.
 
 ```{r mssmiss-plotsnotelts, warning=FALSE}
-swe.Feb <- snotel
-swe.Feb <- swe.Feb[swe.Feb$Station.Id %in% y$Station.Id & swe.Feb$Month=="Feb",]
-p <- ggplot(swe.Feb, aes(x=Date, y=SWE)) + geom_line()
+swe.feb <- snotel
+swe.feb <- swe.feb[swe.feb$Station.Id %in% y$Station.Id & swe.feb$Month=="Feb",]
+p <- ggplot(swe.feb, aes(x=Date, y=SWE)) + geom_line()
 p + facet_wrap(~Station)
 ```
 
@@ -184,7 +184,7 @@ We will use an unconstrained variance-covariance structure for $\mathbf{w}$ and 
 We need our data to be in rows.  We will use `reshape2::acast()`.
 
 ```{r mssmiss-snotel-acast}
-dat <- reshape2::acast(yy, Station ~ Year, value.var="SWE")
+dat.feb <- reshape2::acast(swe.feb, Station ~ Year, value.var="SWE")
 ```
 
 We set up the model for MARSS so that it is the same as \@ref(eq:mssmiss-ar1).  We will fix the measurement error to be small; we could use 0 but the fitting is more stable if we use a small variance instead.  When estimating $\mathbf{B}$, setting the initial value to be at $t=1$ instead of $t=0$ works better.
@@ -206,7 +206,7 @@ Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence
 ```{r mssmiss-snotelfit, results="hide"}
 library(MARSS)
 m <- apply(dat, 1, mean, na.rm=TRUE)
-fit.ar1 <- MARSS(dat, model=mod.list.ar1, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
+fit.ar1 <- MARSS(dat.feb, model=mod.list.ar1, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
 ```
 
 
@@ -225,7 +225,7 @@ d$Station <- stringr::str_replace(d$term,"X.","")
 p <- ggplot(data = d) + 
   geom_line(aes(Year, estimate)) +
   geom_ribbon(aes(x=Year, ymin=conf.low, ymax=conf.high), linetype=2, alpha=0.5)
-p <- p + geom_point(data=yy, mapping = aes(x=Year, y=SWE))
+p <- p + geom_point(data=swe.feb, mapping = aes(x=Year, y=SWE))
 p + facet_wrap(~Station) + xlab("") + ylab("SWE")
 ```
 
@@ -306,7 +306,7 @@ mod.list.corr = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=0)
 Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence is slow.  We set $\mathbf{a}$ equal to the mean of the time series to speed convergence.
 
 ```{r mssmiss-snotelfit2, results="hide"}
-m <- apply(dat, 1, mean, na.rm=TRUE)
+m <- apply(dat.feb, 1, mean, na.rm=TRUE)
 fit.corr <- MARSS(dat, model=mod.list.corr, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
 ```
 
@@ -383,7 +383,7 @@ ns <- dim(dat)[1]
 B <- matrix(list(0),2,2)
 B[1,1] <- "b1"; B[2,2] <- "b2"
 Q <- diag(1,2)
-R <- "diagonal and equal"
+R <- "diagonal and unequal"
 U <- "zero"
 x0 <- "zero"
 Z <- matrix(list(0),ns,2)
@@ -396,10 +396,10 @@ mod.list.dfa = list(B=B, Z=Z, Q=Q, R=R, U=U, A=A, x0=x0)
 
 Now we can fit a MARSS model and get estimates of the missing SWEs.  We pass in the initial value for $\mathbf{a}$ as the mean level so it fits easier.
 
-```{r mssmiss-snotelfit2, results="hide"}
+```{r mssmiss-snotelfit-dfa, results="hide"}
 library(MARSS)
-m <- apply(dat, 1, mean, na.rm=TRUE)
-fit.dfa <- MARSS(dat, model=mod.list.dfa, control=list(maxit=1000), inits=list(A=matrix(m,ns,1)))
+m <- apply(dat.feb, 1, mean, na.rm=TRUE)
+fit.dfa <- MARSS(dat.feb, model=mod.list.dfa, control=list(maxit=1000), inits=list(A=matrix(m,ns,1)))
 ```
 
 ```{r mssmiss-ifwewantedloadings, include=FALSE}
@@ -438,9 +438,9 @@ d$Station <- d$.rownames
 p <- ggplot(data = d) + 
   geom_line(aes(Year, .fitted)) +
   geom_ribbon(aes(x=Year, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
-yy2 <- reshape2::melt(dat-apply(dat,1,mean,na.rm=TRUE))
+yy2 <- reshape2::melt(dat.feb-apply(dat.feb,1,mean,na.rm=TRUE))
 colnames(yy2) <- c("Station","Year","SWE")
-p <- p + geom_point(data=yy, mapping = aes(x=Year, y=SWE))
+p <- p + geom_point(data=swe.feb, mapping = aes(x=Year, y=SWE))
 p + facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
 ```
 
@@ -501,14 +501,14 @@ knitr::kable(ta2)
 ```
 -->
 
-Set up a matrix of the seasonal differences.  Each row is a station.
+Set up the monthly data matrix:
 
 ```{r mssmiss-snotel-acast}
-dat <- snotel
-dat <- dat[dat$Station.Id %in% y$Station.Id,]
-dat$Station <- droplevels(dat$Station)
-dat$Month <- factor(dat$Month, level=month.abb)
-dat <- reshape2::acast(dat, Station ~ Year+Month, value.var="SWE")
+dat.yr <- snotel
+dat.yr <- dat.yr[dat.yr$Station.Id %in% y$Station.Id,]
+dat.yr$Station <- droplevels(dat.yr$Station)
+dat.yr$Month <- factor(dat.yr$Month, level=month.abb)
+dat.yr <- reshape2::acast(dat.yr, Station ~ Year+Month, value.var="SWE")
 ```
 
 We will model the seasonal differences using a periodic model.  The covariates are
@@ -520,43 +520,12 @@ cos.t <- cos(2 * pi * seq(TT) / period)
 sin.t <- sin(2 * pi * seq(TT) / period)
 c.seas <- rbind(cos.t,sin.t)
 ```
-  
-```{r mssmiss-month-factor-marss-params}
-ns <- dim(dat)[1]
-B <- "diagonal and equal"
-Q <- "unconstrained"
-U <- "zero"
-A <- "unequal" 
-R <- diag(0.01, ns)
-C <- "unconstrained"
-c <- c.seas
-x0 <- "zero"
-mod.list.seas <- list(B=B, U=U, Q=Q, A=A, R=R, C=C, c=c, x0=x0, tinitx=0)
-```
 
-```{r mssmiss-seas-ar1, results="hide"}
-m <- apply(dat, 1, mean, na.rm=TRUE)
-fit.seas <- MARSS(dat, model=mod.list.seas, control=list(maxit=500), inits=list(A=matrix(m,ns,1)))
-```
-
-Fitted values:
-
-```{r mssmiss-seas, warning=FALSE, echo=FALSE}
-fit <- fit.seas
-d <- augment(fit, interval="confidence")
-d$Year <- rep(rep(1981:2013, each=12),ns)
-d <- subset(d, Year<1990)
-d$Station <- d$.rownames
-p <- ggplot(data = d) + 
-  geom_line(aes(t, .fitted)) +
-  geom_ribbon(aes(x=t, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
-p + facet_wrap(~Station) + xlab("") + ylab("SWE")
-```
-
+We will create a state for the seasonal cycle and each station will have a scaled effect of that seasonal cycle.  The observations will have the seasonal effect plus a mean and residuals (observation - season - mean) will be allowed to correlate across stations.
 
 
 ```{r mssmiss-month-dfa}
-ns <- length(unique(yy$Station))
+ns <- dim(dat)[1]
 B <- "zero"
 Q <- matrix(1)
 R <- "unconstrained"
@@ -570,21 +539,46 @@ c <- c.seas
 mod.list.seas <- list(B=B, U=U, Q=Q, A=A, R=R, Z=Z, C=C, c=c, x0=x0, tinitx=0)
 ```
 
-```{r mssmiss-seas-ar1, results="hide"}
-m <- apply(dat, 1, mean, na.rm=TRUE)
-fit.seas <- MARSS(dat, model=mod.list.seas, control=list(maxit=500), inits=list(A=matrix(m,ns,1)))
+Now we can fit the model:
+
+```{r mssmiss-seas-fit, results="hide"}
+m <- apply(dat.yr, 1, mean, na.rm=TRUE)
+fit.seas <- MARSS(dat.yr, model=mod.list.seas, control=list(maxit=500), inits=list(A=matrix(m,ns,1)))
 ```
 
-Fitted values:
+Figure () shows the seasonal estimate plus mean for each station. This is $z_i x_i + a_i$.
 
 ```{r mssmiss-seas, warning=FALSE, echo=FALSE}
+#this is the estimate using only the season
 fit <- fit.seas
 d <- augment(fit, interval="confidence")
-d$Year <- rep(rep(1981:2013, each=12),ns)
+d$Year <- swe.yr$Year
+d$Date <- swe.yr$Date
 d <- subset(d, Year<1990)
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
   geom_line(aes(t, .fitted)) +
   geom_ribbon(aes(x=t, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
+p + facet_wrap(~Station) + xlab("") + ylab("SWE seasonal component")
+```
+
+The estimated SWE at each station is $E(y_i|y_{1:T})$.  This is the estimate conditioned on all the data and includes the seasonal component plus the information from the data from other stations.  Because we estimated a $\mathbf{R}$ matrix with covariance, stations with data at time $t$ help inform the value of stations without data at time $t$. Only years up to 1990 are shown, but the model is fit to all years.
+
+```{r}
+#this is the estimate of y conditioned on all the data
+dd <- MARSShatyt(fit.seas)$ytT
+rownames(dd) <- rownames(dat)
+colnames(dd) <- colnames(dat)
+ddd <- reshape2::melt(dd)
+ddd$Var2 <- factor(ddd$Var2, levels=paste0(rep(1981:2013,each=12),"_", month.abb))
+colnames(ddd) <- c("Station", "Year_Month", "SWE")
+ddd <- ddd[order(ddd$Station, ddd$Year_Month),]
+ddd$Date <- swe.yr$Date
+ddd$Year <- swe.yr$Year
+ddd <- subset(ddd, Year<1990)
+p <- ggplot(data = ddd) + 
+  geom_line(aes(x=Date, y=SWE))
+p <- p + geom_point(data=subset(swe.yr, Year<1990), 
+                    mapping = aes(x=Date, y=SWE))
 p + facet_wrap(~Station) + xlab("") + ylab("SWE")
 ```
