@@ -17,6 +17,7 @@ library(MARSS)
 library(forecast)
 library(ggplot2)
 library(ggmap)
+library(broom)
 ```
 
 ## Covariates with missing values or observation error {#sec-mssmiss-overview}
@@ -134,20 +135,21 @@ map1 + geom_point(data=y, aes(x=Longitude, y=Latitude), color="blue", cex=2.5) +
   theme_bw()
 ```
 
-We are just going to look at February Snow Water Equivalent (SWE).  There are many missing years among some of our sites.
+For the first analysis, we are just going to look at February Snow Water Equivalent (SWE).  Our subset of stations is `y$Station.Id`.  There are many missing years among some of our stations.
 
 ```{r mssmiss-plotsnotelts, warning=FALSE}
-yy <- snotel
-yy <- yy[yy$Station.Id %in% y$Station.Id & yy$Month=="Feb",]
-p <- ggplot(yy, aes(x=Date, y=SWE)) + geom_line()
+swe.Feb <- snotel
+swe.Feb <- swe.Feb[swe.Feb$Station.Id %in% y$Station.Id & swe.Feb$Month=="Feb",]
+p <- ggplot(swe.Feb, aes(x=Date, y=SWE)) + geom_line()
 p + facet_wrap(~Station)
 ```
 
-## Estimate Feb SWE using correlation model
+### Estimate Feb SWE using AR(1) with spatial correlation
 
 Imagine that for our study we need an estimate of SWE for all sites.  We will use the information from the sites with full data to estimate the missing SWE for other sites.  We will use a MARSS model to use all the available data.
 
-$$\begin{bmatrix}
+\begin{equation}
+\begin{bmatrix}
 x_1 \\ x_2 \\ \dots \\ x_{15}
 \end{bmatrix}_t =
 \begin{bmatrix}
@@ -175,7 +177,7 @@ a_1 \\ a_2 \\ \dots \\ a_{15}
 v_1 \\ v_2 \\ \dots \\ v_{15}
 \end{bmatrix}_t
 (\#eq:mssmiss-ar1)
-$$
+\end{equation}
 
 We will use an unconstrained variance-covariance structure for $\mathbf{w}$ and assume that $\mathbf{v}$ is identical and independent and very low (SNOTEL instrument variability).  The $a_i$ determine the level of the $x_i$.
 
@@ -184,7 +186,8 @@ We need our data to be in rows.  We will use `reshape2::acast()`.
 ```{r mssmiss-snotel-acast}
 dat <- reshape2::acast(yy, Station ~ Year, value.var="SWE")
 ```
-We set up the model for MARSS.
+
+We set up the model for MARSS so that it is the same as \@ref(eq:mssmiss-ar1).  We will fix the measurement error to be small; we could use 0 but the fitting is more stable if we use a small variance instead.  When estimating $\mathbf{B}$, setting the initial value to be at $t=1$ instead of $t=0$ works better.
 
 ```{r mssmiss-snotel-marss-model}
 ns <- length(unique(yy$Station))
@@ -193,30 +196,29 @@ Q <- "unconstrained"
 R <- diag(0.01,ns)
 U <- "zero"
 A <- "unequal"
-x0 <- "zero"
-mod.list = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A)
+x0 <- "unequal"
+mod.list.ar1 = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=1)
 ```
 
 
-Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence is slow.  
+Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence is slow.  We set $\mathbf{a}$ equal to the mean of the time series to speed convergence.
 
 ```{r mssmiss-snotelfit, results="hide"}
 library(MARSS)
 m <- apply(dat, 1, mean, na.rm=TRUE)
-fit <- MARSS(dat, model=mod.list, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
+fit.ar1 <- MARSS(dat, model=mod.list.ar1, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
 ```
 
-The estimated model has a $b$ close to 0 which indicates no information in the prior February SWE on the current February SWE.
+
 
 ```{r}
-coef(fit)$B
+coef(fit.ar1)$B
 ```
 
 Let's plot the estimated SWEs for the missing years. These estimates use all the information about the correlation with other sites and uses information about correlation with the prior and subsequent years.  We will use the `tidy()` function from the **broom** package to get the estimated 95% confidence intervals for the estimated states.  Notice that for some sites, CIs are low in early years as these sites are highly correlated with site for which there are data.  In other sites, the uncertainty is high in early years because the sites with data in those years are not highly correlated.
 
 ```{r mssmiss-snotelplotstates, include=FALSE}
-library(broom)
-library(ggplot2)
+fit <- fit.ar1
 d <- tidy(fit, type="states")
 d$Year <- d$t + 1980
 d$Station <- stringr::str_replace(d$term,"X.","")
@@ -228,8 +230,7 @@ p + facet_wrap(~Station) + xlab("") + ylab("SWE")
 ```
 
 ```{r mssmiss-snotelplotfits, warning=FALSE, results='hide'}
-library(broom)
-library(ggplot2)
+fit <- fit.ar1
 d <- augment(fit, interval="confidence")
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
@@ -244,18 +245,109 @@ If we were using these SWE as covariates in a site specific model, we could then
 
 Note, we should do some cross-validation (fitting with data left out) to ensure that the estimated SWEs are well-matched to actual measurements.  It would probably be best to do 'leave-three' out instead of 'leave-one' out since the estimates for time $t$ uses information from $t-1$ and $t+1$ (if present).
 
-### Diagnostics
+#### Diagnostics
 
-The state residuals have little autocorrelation.  
+The state residuals have a tendency for negative autocorrelation at lag-1.  
+
+```{r mssmiss-stateresids-plot-fit1, warning=FALSE, results='hide'}
+fit <- fit.ar1
+par(mfrow=c(4,4),mar=c(2,2,1,1))
+apply(residuals(fit)$state.residuals[,1:30], 1, acf)
+```
+
+### Estimate Feb SWE using only correlation
+
+Another approach is to treat the February data as temporally uncorrelated. The two longest time series (Paradise and Olallie Meadows) show minimal autocorrelation so we might decide to just use the correlation across stations for our estimates. In this case, the state of the missing SWE values at time $t$ is the expected value conditioned on all the stations with data at time $t$ given the estimated variance-covariance matrix $\mathbf{Q}$.
+
+\begin{equation}
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+w_1 \\ w_2 \\ \dots \\ w_{15}
+\end{bmatrix}_{t}, \, 
+\begin{bmatrix}
+w_1 \\ w_2 \\ \dots \\ w_{15}
+\end{bmatrix}_{t} \sim 
+\begin{bmatrix}
+\sigma_1&\zeta_{1,2}&\dots&\zeta_{1,15} \\ 
+\zeta_{2,1}&\sigma_2&\dots&\zeta_{2,15} \\ 
+\dots&\dots&\dots&\dots \\ 
+\zeta_{15,1}&\zeta_{15,2}&\dots&\sigma_{15}
+\end{bmatrix} \\
+\begin{bmatrix}
+y_1 \\ y_2 \\ \dots \\ y_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_t + 
+\begin{bmatrix}
+a_1 \\ a_2 \\ \dots \\ a_{15}
+\end{bmatrix}_{t} +
+\begin{bmatrix}
+v_1 \\ v_2 \\ \dots \\ v_{15}
+\end{bmatrix}_t
+(\#eq:mssmiss-tempind)
+\end{equation}
+Again $\mathbf{a}$ is the mean level in the time series.  Note that the expected value of $\mathbf{x}$ is zero if there are no data, so $E(\mathbf{x}_0)=0$.
+
+```{r mssmiss-snotel-marss-model}
+ns <- length(unique(yy$Station))
+B <- "zero"
+Q <- "unconstrained"
+R <- diag(0.01,ns)
+U <- "zero"
+A <- "unequal"
+x0 <- "zero"
+mod.list.corr = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=0)
+```
+
+
+Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence is slow.  We set $\mathbf{a}$ equal to the mean of the time series to speed convergence.
+
+```{r mssmiss-snotelfit2, results="hide"}
+m <- apply(dat, 1, mean, na.rm=TRUE)
+fit.corr <- MARSS(dat, model=mod.list.corr, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
+```
+
+
+The estimated SWEs for the missing years uses the information about the correlation with other sites only.  
+
+```{r mssmiss-snotelplotstates2, include=FALSE}
+d <- tidy(fit2, type="states")
+d$Year <- d$t + 1980
+d$Station <- stringr::str_replace(d$term,"X.","")
+p <- ggplot(data = d) + 
+  geom_line(aes(Year, estimate)) +
+  geom_ribbon(aes(x=Year, ymin=conf.low, ymax=conf.high), linetype=2, alpha=0.5)
+p <- p + geom_point(data=yy, mapping = aes(x=Year, y=SWE))
+p + facet_wrap(~Station) + xlab("") + ylab("SWE")
+```
+
+```{r mssmiss-snotelplotfits, warning=FALSE, results='hide'}
+fit <- fit.corr
+d <- broom::augment(fit, interval="confidence")
+d$Year <- d$t + 1980
+d$Station <- d$.rownames
+p <- ggplot(data = d) + 
+  geom_line(aes(Year, .fitted)) +
+  geom_ribbon(aes(x=Year, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
+p <- p + geom_point(data=yy, mapping = aes(x=Year, y=SWE))
+p + facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+```
+
+#### Diagnostics
+
+The state residuals have a tendency for negative autocorrelation at lag-1.  
 
 ```{r mssmiss-stateresids-plot-fit1, warning=FALSE, results='hide'}
 par(mfrow=c(4,4),mar=c(2,2,1,1))
 apply(residuals(fit)$state.residuals[,1:30], 1, acf)
 ```
 
-##Estimate Feb SWE using DFA
+### Estimate Feb SWE using DFA
 
-Another approach we might take is to model SWE using Dynamic Factor Analysis.  Our model might take the following form with two factors, modeled as AR-1 processes. $\mathbf{a}$ is the mean level of the time series.
+Another approach we might take is to model SWE using Dynamic Factor Analysis.  Our model might take the following form with two factors, modeled as AR(1) processes. $\mathbf{a}$ is the mean level of the time series.
 
 $$
 \begin{bmatrix}
@@ -267,7 +359,7 @@ b_1&0\\0&b_2
 \begin{bmatrix}
 x_1 \\ x_2
 \end{bmatrix}_{t-1} + \begin{bmatrix}
-e_1 \\ e_2
+w_1 \\ w_2
 \end{bmatrix}_{t} \\
 \begin{bmatrix}
 y_1 \\ y_2 \\ \dots \\ y_{15}
@@ -286,8 +378,8 @@ v_1 \\ v_2 \\ \dots \\ v_{15}
 $$
 
 The model is set up as follows:
-```{r mssmiss-snotel-marss-model2}
-ns <- length(unique(yy$Station))
+```{r mssmiss-snotel-dfa}
+ns <- dim(dat)[1]
 B <- matrix(list(0),2,2)
 B[1,1] <- "b1"; B[2,2] <- "b2"
 Q <- diag(1,2)
@@ -298,7 +390,7 @@ Z <- matrix(list(0),ns,2)
 Z[1:(ns*2)] <- c(paste0("z1",1:ns),paste0("z2",1:ns))
 Z[1,2] <- 0
 A <- "unequal"
-mod.list2 = list(B=B, Z=Z, Q=Q, R=R, U=U, A=A, x0=x0)
+mod.list.dfa = list(B=B, Z=Z, Q=Q, R=R, U=U, A=A, x0=x0)
 ```
 
 
@@ -307,12 +399,13 @@ Now we can fit a MARSS model and get estimates of the missing SWEs.  We pass in 
 ```{r mssmiss-snotelfit2, results="hide"}
 library(MARSS)
 m <- apply(dat, 1, mean, na.rm=TRUE)
-fit2 <- MARSS(dat, model=mod.list2, control=list(maxit=1000), inits=list(A=matrix(m,ns,1)))
+fit.dfa <- MARSS(dat, model=mod.list.dfa, control=list(maxit=1000), inits=list(A=matrix(m,ns,1)))
 ```
 
 ```{r mssmiss-ifwewantedloadings, include=FALSE}
+fit <- fit.dfa
 # get the inverse of the rotation matrix
-Z.est = coef(fit2, type="matrix")$Z
+Z.est = coef(fit, type="matrix")$Z
 H.inv = 1
 if(ncol(Z.est)>1) H.inv = varimax(coef(fit2, type="matrix")$Z)$rotmat
 # rotate factor loadings
@@ -338,9 +431,8 @@ mtext(paste("Factor loadings on trend",i,sep=" "),side=3,line=.5)
 ```
 
 ```{r mssmiss-snotelplotstates2, warning=FALSE, echo=FALSE}
-library(broom)
-library(ggplot2)
-d <- augment(fit2, interval="confidence")
+fit <- fit.dfa
+d <- augment(fit, interval="confidence")
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
@@ -373,14 +465,20 @@ apply(residuals(fit2)$model.residual, 1, function(x){acf(na.omit(x))})
 
 When we look at all months, we see that SWE is highly seasonal.  Note October and November are missing for all years.
 
+```{r mssmiss-swe-all-months}
+swe.yr <- snotel
+swe.yr <- swe.yr[swe.yr$Station.Id %in% y$Station.Id,]
+swe.yr$Station <- droplevels(swe.yr$Station)
+```
+
 ```{r mssmiss-seasonal-swe-plot, echo=FALSE, warning=FALSE}
-y3 <- snotel
-y3 <- y3[y3$Station.Id %in% y$Station.Id & y3$Year>2010,]
+y3 <- swe.yr[swe.yr$Year>2010,]
 p <- ggplot(y3, aes(x=Date, y=SWE)) + geom_line()
 p + facet_wrap(~Station) + 
   scale_x_date(breaks=as.Date(paste0(2011:2013,"-01-01")), labels=2011:2013)
 ```
 
+<!--
 An AR(2) or AR(1) model for the seasonal differences fits well for most of the time series.  The table shows the $\Delta AICc$ for different ARMA models for the seasonally differenced data in different locations.  AR(1) is within 2 of the AR(2) model in most cases and the AR(2) or AR(1) is best in all but 2 locations.
 
 ```{r echo=FALSE}
@@ -393,7 +491,7 @@ fitb <- function(x){
   b <- c(fit1$aicc, fit4$aicc, fit2$aicc, fit3$aicc)
   b - min(b)
 }
-a <- tapply(y3$SWE, y3$Station, fitb)
+a <- tapply(swe.yr$SWE, swe.yr$Station, fitb)
 b <- a
 dim(b) <- NULL; names(b) <- names(a)
 ta <- reshape2::melt(b)
@@ -401,62 +499,92 @@ ta$model <- rep(c("(1,0,2)","(2,0,1)","(2,0,0)","(1,0,0)"),length(b))
 ta2 <- reshape2::dcast(ta, L1 ~ model)
 knitr::kable(ta2)
 ```
-
-We will model the seasonal differences using the \@ref(eq:mssmiss-ar1) AR(1) model.  Denote the seaonal difference as $\Delta \mathbf{x}_t = \mathbf{x}_t - \mathbf{x}_{t-12}$.  We incorporate an observation model to allow the NAs in the The model is
-
-$$
-\Delta \mathbf{x}_t =
-\begin{bmatrix}
-b&0&\dots&0 \\ 
-0&b&\dots&0 \\ 
-\dots&\dots&\dots&\dots \\ 
-0&0&\dots&b
-\end{bmatrix}
-\Delta \mathbf{x}_{t-1} + 
-\begin{bmatrix}
-w_1 \\ w_2 \\ \dots \\ w_{15}
-\end{bmatrix}_{t} \\
-\, \\
-\Delta \mathbf{y}_t =
-\Delta \mathbf{x}_t + 
-\mathbf{v}_t
-$$
-
-In this model, we use the seasonal difference is the previous month (how above or below the prior year) to inform this month's seasonal difference.  We also allow that the errors are correlated between sites.
-
-We set up the model for MARSS.
-
-```{r mssmiss-snotel-marss-seasonal}
-ns <- length(unique(yy$Station))
-B <- "diagonal and equal"
-Q <- "unconstrained"
-R <- diag(0.01,ns)
-U <- "zero"
-A <- "zero"
-x0 <- "zero"
-mod.list = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A)
-```
+-->
 
 Set up a matrix of the seasonal differences.  Each row is a station.
 
 ```{r mssmiss-snotel-acast}
 dat <- snotel
 dat <- dat[dat$Station.Id %in% y$Station.Id,]
+dat$Station <- droplevels(dat$Station)
 dat$Month <- factor(dat$Month, level=month.abb)
 dat <- reshape2::acast(dat, Station ~ Year+Month, value.var="SWE")
-diffdat <- t(apply(dat, 1, diff, lag=12))
 ```
 
-Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence is slow.  
+We will model the seasonal differences using a periodic model.  The covariates are
 
-
-```{r mssmiss-snotelfit, results="hide"}
-library(MARSS)
-fit <- MARSS(diffdat, model=mod.list, control=list(maxit=5000))
+```{r mssmis-seasonal-fourier}
+period <- 12
+TT <- dim(dat)[2]
+cos.t <- cos(2 * pi * seq(TT) / period)
+sin.t <- sin(2 * pi * seq(TT) / period)
+c.seas <- rbind(cos.t,sin.t)
+```
+  
+```{r mssmiss-month-factor-marss-params}
+ns <- dim(dat)[1]
+B <- "diagonal and equal"
+Q <- "unconstrained"
+U <- "zero"
+A <- "unequal" 
+R <- diag(0.01, ns)
+C <- "unconstrained"
+c <- c.seas
+x0 <- "zero"
+mod.list.seas <- list(B=B, U=U, Q=Q, A=A, R=R, C=C, c=c, x0=x0, tinitx=0)
 ```
 
-The estimated model has a $b$ close to 0 which indicates no information in the prior February SWE on the current February SWE.
+```{r mssmiss-seas-ar1, results="hide"}
+m <- apply(dat, 1, mean, na.rm=TRUE)
+fit.seas <- MARSS(dat, model=mod.list.seas, control=list(maxit=500), inits=list(A=matrix(m,ns,1)))
+```
 
-```{r}
-coef(fit)$B
+Fitted values:
+
+```{r mssmiss-seas, warning=FALSE, echo=FALSE}
+fit <- fit.seas
+d <- augment(fit, interval="confidence")
+d$Year <- rep(rep(1981:2013, each=12),ns)
+d <- subset(d, Year<1990)
+d$Station <- d$.rownames
+p <- ggplot(data = d) + 
+  geom_line(aes(t, .fitted)) +
+  geom_ribbon(aes(x=t, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
+p + facet_wrap(~Station) + xlab("") + ylab("SWE")
+```
+
+
+
+```{r mssmiss-month-dfa}
+ns <- length(unique(yy$Station))
+B <- "zero"
+Q <- matrix(1)
+R <- "unconstrained"
+U <- "zero"
+x0 <- "zero"
+Z <- matrix(paste0("z",1:ns),ns,1)
+A <- "unequal"
+mod.list.dfa = list(B=B, Z=Z, Q=Q, R=R, U=U, A=A, x0=x0)
+C <- matrix(c("c1","c2"),1,2)
+c <- c.seas
+mod.list.seas <- list(B=B, U=U, Q=Q, A=A, R=R, Z=Z, C=C, c=c, x0=x0, tinitx=0)
+```
+
+```{r mssmiss-seas-ar1, results="hide"}
+m <- apply(dat, 1, mean, na.rm=TRUE)
+fit.seas <- MARSS(dat, model=mod.list.seas, control=list(maxit=500), inits=list(A=matrix(m,ns,1)))
+```
+
+Fitted values:
+
+```{r mssmiss-seas, warning=FALSE, echo=FALSE}
+fit <- fit.seas
+d <- augment(fit, interval="confidence")
+d$Year <- rep(rep(1981:2013, each=12),ns)
+d <- subset(d, Year<1990)
+d$Station <- d$.rownames
+p <- ggplot(data = d) + 
+  geom_line(aes(t, .fitted)) +
+  geom_ribbon(aes(x=t, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
+p + facet_wrap(~Station) + xlab("") + ylab("SWE")
 ```
