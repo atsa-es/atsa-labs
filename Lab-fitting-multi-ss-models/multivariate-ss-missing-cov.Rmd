@@ -214,7 +214,7 @@ m <- apply(dat.feb, 1, mean, na.rm=TRUE)
 fit.ar1 <- MARSS(dat.feb, model=mod.list.ar1, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
 ```
 
-The $b$ estimate is `r coef(fit.ar1)`.
+The $b$ estimate is ```r coef(fit.ar1)$B[1]```.
 
 Let's plot the estimated SWEs for the missing years (Figure \@ref(fig:mssmiss-snotelplotfits-ar1)). These estimates use all the information about the correlation with other sites and uses information about correlation with the prior and subsequent years.  We will use the `tidy()` function from the **broom** package to get the estimated 95% confidence intervals for the estimated states.  Notice that for some sites, CIs are low in early years as these sites are highly correlated with site for which there are data.  In other sites, the uncertainty is high in early years because the sites with data in those years are not highly correlated.
 
@@ -250,9 +250,11 @@ Note, we should do some cross-validation (fitting with data left out) to ensure 
 
 #### Diagnostics
 
-The state residuals have a tendency for negative autocorrelation at lag-1.  
+The state residuals have a tendency for negative autocorrelation at lag-1 (Figure \@ref(fig:mssmiss-stateresids-ar1)).  
 
-```{r mssmiss-stateresids-plot-fit-ar1, warning=FALSE, results='hide'}
+(ref:mssmiss-stateresids-ar1) State residuals for the AR(1) model.  Many stations for autocorrelation at lag-1.
+
+```{r mssmiss-stateresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-stateresids-ar1)'}
 fit <- fit.ar1
 par(mfrow=c(4,4),mar=c(2,2,1,1))
 apply(residuals(fit)$state.residuals[,1:30], 1, acf)
@@ -262,13 +264,35 @@ apply(residuals(fit)$state.residuals[,1:30], 1, acf)
 
 Another approach is to treat the February data as temporally uncorrelated. The two longest time series (Paradise and Olallie Meadows) show minimal autocorrelation so we might decide to just use the correlation across stations for our estimates. In this case, the state of the missing SWE values at time $t$ is the expected value conditioned on all the stations with data at time $t$ given the estimated variance-covariance matrix $\mathbf{Q}$.
 
+We could set this model up as
+\begin{equation}
+\begin{bmatrix}
+y_1 \\ y_2 \\ \dots \\ y_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+a_1 \\ a_2 \\ \dots \\ a_{15}
+\end{bmatrix}_{t} +
+\begin{bmatrix}
+v_1 \\ v_2 \\ \dots \\ v_{15}
+\end{bmatrix}_t, \,\,\, 
+\begin{bmatrix}
+\sigma_1&\zeta_{1,2}&\dots&\zeta_{1,15} \\ 
+\zeta_{2,1}&\sigma_2&\dots&\zeta_{2,15} \\ 
+\dots&\dots&\dots&\dots \\ 
+\zeta_{15,1}&\zeta_{15,2}&\dots&\sigma_{15}
+\end{bmatrix}
+(\#eq:mssmiss-corr1)
+\end{equation}
+
+However the EM algorithm used by `MARSS()` runs into numerical issues.  Instead we will set the model up as follows.  Allowing a hidden state observed with small error makes the estimation more stable.
+
 \begin{equation}
 \begin{bmatrix}
 x_1 \\ x_2 \\ \dots \\ x_{15}
 \end{bmatrix}_t =
 \begin{bmatrix}
 w_1 \\ w_2 \\ \dots \\ w_{15}
-\end{bmatrix}_{t}, \, 
+\end{bmatrix}_{t}, \,\,\,
 \begin{bmatrix}
 w_1 \\ w_2 \\ \dots \\ w_{15}
 \end{bmatrix}_{t} \sim 
@@ -289,12 +313,17 @@ a_1 \\ a_2 \\ \dots \\ a_{15}
 \end{bmatrix}_{t} +
 \begin{bmatrix}
 v_1 \\ v_2 \\ \dots \\ v_{15}
-\end{bmatrix}_t
-(\#eq:mssmiss-tempind)
+\end{bmatrix}_t, \,\,\, \begin{bmatrix}
+0.01&0&\dots&0 \\ 
+0&0.01&\dots&0 \\ 
+\dots&\dots&\dots&\dots \\ 
+0&0&\dots&0.01
+\end{bmatrix}
+(\#eq:mssmiss-corr)
 \end{equation}
 Again $\mathbf{a}$ is the mean level in the time series.  Note that the expected value of $\mathbf{x}$ is zero if there are no data, so $E(\mathbf{x}_0)=0$.
 
-```{r mssmiss-snotel-marss-model2}
+```{r mssmiss-snotel-marss-model-corr}
 ns <- length(unique(swe.feb$Station))
 B <- "zero"
 Q <- "unconstrained"
@@ -305,10 +334,9 @@ x0 <- "zero"
 mod.list.corr = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=0)
 ```
 
-
 Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence is slow.  We set $\mathbf{a}$ equal to the mean of the time series to speed convergence.
 
-```{r mssmiss-snotelfit2, results="hide"}
+```{r mssmiss-snotelfit-corr, results="hide"}
 m <- apply(dat.feb, 1, mean, na.rm=TRUE)
 fit.corr <- MARSS(dat.feb, model=mod.list.corr, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
 ```
@@ -328,7 +356,9 @@ p <- p + geom_point(data=swe.feb, mapping = aes(x=Year, y=SWE))
 p + facet_wrap(~Station) + xlab("") + ylab("SWE")
 ```
 
-```{r mssmiss-snotelplotfits, warning=FALSE, results='hide'}
+(ref:mssmiss-snotelplotfits-corr) Estimated SWEs from the expected value of the states $\hat{x}$ conditioned on all the data for the model with only correlation across stations at time $t$.
+
+```{r mssmiss-snotelplotfits-corr, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-snotelplotfits-corr)'}
 fit <- fit.corr
 d <- broom::augment(fit, interval="confidence")
 d$Year <- d$t + 1980
@@ -342,12 +372,20 @@ p + facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
 
 #### Diagnostics
 
-The state residuals have a tendency for negative autocorrelation at lag-1.  
+The state and model residuals have no tendency towards negative autocorrelation now that we removed the autoregressive component from the process ($x$) model. 
 
-```{r mssmiss-stateresids-plot-fit-corr, warning=FALSE, results='hide'}
+```{r mssmiss-stateresids-fit-corr-states, warning=FALSE, results='hide'}
 fit <- fit.corr
 par(mfrow=c(4,4),mar=c(2,2,1,1))
 apply(residuals(fit)$state.residuals[,1:30], 1, acf)
+mtext("State Residuals ACF", outer=TRUE, side=3)
+```
+
+```{r mssmiss-stateresids-fit-corr-model, warning=FALSE, results='hide'}
+fit <- fit.corr
+par(mfrow=c(4,4),mar=c(2,2,1,1))
+apply(residuals(fit)$model.residuals[,1:30], 1, acf)
+mtext("Model Residuals ACF", outer=TRUE, side=3)
 ```
 
 ### Estimate Feb SWE using DFA
@@ -408,17 +446,18 @@ fit.dfa <- MARSS(dat.feb, model=mod.list.dfa, control=list(maxit=1000), inits=li
 ```
 
 ```{r mssmiss-ifwewantedloadings-dfa, include=FALSE}
+# if you want factor loadings
 fit <- fit.dfa
 # get the inverse of the rotation matrix
 Z.est = coef(fit, type="matrix")$Z
 H.inv = 1
-if(ncol(Z.est)>1) H.inv = varimax(coef(fit2, type="matrix")$Z)$rotmat
+if(ncol(Z.est)>1) H.inv = varimax(coef(fit, type="matrix")$Z)$rotmat
 # rotate factor loadings
 Z.rot = Z.est %*% H.inv
 # rotate trends
-trends.rot = solve(H.inv) %*% fit2$states
+trends.rot = solve(H.inv) %*% fit$states
 #plot the factor loadings
-spp = rownames(dat)
+spp = rownames(dat.feb)
 minZ = 0.00
 m=dim(trends.rot)[1]
 ylims = c(-1.1*max(abs(Z.rot)), 1.1*max(abs(Z.rot)))
@@ -453,7 +492,7 @@ p + facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
 
 The state residuals are uncorrelated. 
 
-```{r mssmiss-stateresit-fit2, results='hide'}
+```{r mssmiss-stateresit-fit-dfa, results='hide'}
 fit <- fit.dfa
 par(mfrow=c(1,2),mar=c(2,2,1,1))
 apply(residuals(fit)$state.residuals[,1:30,drop=FALSE], 1, acf)
@@ -461,7 +500,7 @@ apply(residuals(fit)$state.residuals[,1:30,drop=FALSE], 1, acf)
 
 As are the model residuals: 
 
-```{r mssmiss-modelresids-fit2, results='hide'}
+```{r mssmiss-modelresids-fit-dfa-model, results='hide'}
 par(mfrow=c(4,4),mar=c(2,2,1,1))
 apply(residuals(fit)$model.residual, 1, function(x){acf(na.omit(x))})
 ```
@@ -576,8 +615,8 @@ The estimated SWE at each station is $E(y_i|y_{1:T})$.  This is the estimate con
 ```{r mssmiss-plotfit-seas}
 #this is the estimate of y conditioned on all the data
 dd <- MARSShatyt(fit.seas)$ytT
-rownames(dd) <- rownames(dat)
-colnames(dd) <- colnames(dat)
+rownames(dd) <- rownames(dat.yr)
+colnames(dd) <- colnames(dat.yr)
 ddd <- reshape2::melt(dd)
 ddd$Var2 <- factor(ddd$Var2, levels=paste0(rep(1981:2013,each=12),"_", month.abb))
 colnames(ddd) <- c("Station", "Year_Month", "SWE")
