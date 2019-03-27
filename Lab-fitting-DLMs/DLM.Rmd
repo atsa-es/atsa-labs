@@ -17,7 +17,7 @@ Most of the data used in the chapter are from the **MARSS** package.  Install th
 ```{r dlm-loadpackages, warning=FALSE, message=FALSE}
 library(MARSS)
 ```
-The problem set uses an additional data set on spawners and recruits: [KvichakSockeye.RData](./data/KvichakSockeye.RData).  
+The problem set uses an additional data set on spawners and recruits (`KvichakSockeye`) in the `atsalibrary` package.  
 
 ## Overview {#sec-dlm-overview}
 
@@ -764,26 +764,21 @@ More recently, interest has grown in using covariates ($e.g.$, sea-surface tempe
 
 The data come from a large public database begun by Ransom Myers many years ago.  If you are interested, you can find lots of time series of spawning-stock, recruitment, and harvest for a variety of fishes around the globe.  Here is the website:
 \newline
- http://ram.biology.dal.ca/~myers/about_site.html 
+https://www.ramlegacy.org/
 
 For this exercise, we will use spawner-recruit data for sockeye salmon (_Oncorhynchus nerka_) from the Kvichak River in SW Alaska that span the years 1952-1989.  In addition, we'll examine the potential effects of the Pacific Decadal Oscillation (PDO) during the salmon's first year in the ocean, which is widely believed to be a "bottleneck" to survival.
 
-```{r dlm-copy-data-file-to-doc, include=FALSE, purl=FALSE}
-#If bookdown is being run, then we are at the top level
-#make sure the Rdata is in the docs folder
-#file.copy("Lab-fitting-DLMs/KvichakSockeye.RData", "docs/data/KvichakSockeye.RData", overwrite=TRUE)
-#if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
-if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
-  #load the data
-   load("docs/data/KvichakSockeye.RData")
- }else{
-   load("KvichakSockeye.RData")
- }
+These data are in the **atsalibrary** package on GitHub.  If needed, install  using the **devtools** package.
+```{r bj-load, eval=FALSE}
+library(devtools)
+devtools::install_github("nwfsc-timeseries/atsa-package")
 ```
 
-Download the Rdata file for Kvichak River from here: [KvichakSockeye.RData](./data/KvichakSockeye.RData). Then load the Rdata file:
-```{r dlm-SRdata, echo=TRUE, eval=FALSE}
-load("KvichakSockeye.RData")
+Load the data.
+
+```{r bj-read-data}
+data(KvichakSockeye, package="atsalibrary")
+SRdata <- SRdata.Kvichak
 ```
 
 The data are a dataframe with columns for brood year (`brood.yr`), number of spawners (`Sp`), number of recruits (`Rec`) and PDO at year $t-2$ (`PDO.t2`) and $t-3$ (`PDO.t3`).

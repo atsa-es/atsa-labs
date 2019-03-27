@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-03-04">
+<meta name="date" content="2019-03-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 <link rel="prev" href="sec-mssmiss-overview.html">
-<link rel="next" href="estimate-feb-swe-using-correlation-model.html">
+<link rel="next" href="modeling-seasonal-swe.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -370,12 +370,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html"><i class="fa fa-check"></i><b>11</b> Covariates with Missing Values</a><ul>
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
-<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a></li>
-<li class="chapter" data-level="11.3" data-path="estimate-feb-swe-using-correlation-model.html"><a href="estimate-feb-swe-using-correlation-model.html"><i class="fa fa-check"></i><b>11.3</b> Estimate Feb SWE using correlation model</a><ul>
-<li class="chapter" data-level="11.3.1" data-path="estimate-feb-swe-using-correlation-model.html"><a href="estimate-feb-swe-using-correlation-model.html#diagnostics"><i class="fa fa-check"></i><b>11.3.1</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="11.4" data-path="estimate-feb-swe-using-dfa.html"><a href="estimate-feb-swe-using-dfa.html"><i class="fa fa-check"></i><b>11.4</b> Estimate Feb SWE using DFA</a><ul>
-<li class="chapter" data-level="11.4.1" data-path="estimate-feb-swe-using-dfa.html"><a href="estimate-feb-swe-using-dfa.html#diagnostics-1"><i class="fa fa-check"></i><b>11.4.1</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a><ul>
@@ -428,7 +430,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="example-snotel-data" class="section level2">
 <h2><span class="header-section-number">11.2</span> Example: Snotel Data</h2>
-<p>Let’s see an example using the Washington SNOTEL data. The data we will use is the snow water equivalent percent of normal. This represents the snow water equivalent compared to the average value for that site on the same day. We will look at a subset of sites in the Central Cascades in our <code>snotel</code> dataset.</p>
+<p>Let’s see an example using the Washington SNOTEL data. The data we will use is the snow water equivalent percent of normal. This represents the snow water equivalent compared to the average value for that site on the same day. We will look at a subset of sites in the Central Cascades in our <code>snotel</code> dataset (Figure <a href="example-snotel-data.html#fig:mssmiss-plotsnotel">11.1</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;snotel.RData&quot;</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span>snotelmeta
 <span class="co"># Just use a subset</span>
@@ -436,14 +438,281 @@ y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$<
 y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Longitude <span class="op">&gt;</span><span class="st"> </span><span class="op">-</span><span class="fl">122.5</span>), ]
 y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Latitude <span class="op">&lt;</span><span class="st"> </span><span class="fl">47.5</span>), ]
 y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Latitude <span class="op">&gt;</span><span class="st"> </span><span class="fl">46.5</span>), ]</code></pre></div>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-plotsnotel-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>We are just going to look at February Snow Water Equivalent (SWE). There are many missing years among some of our sites.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">yy &lt;-<span class="st"> </span>snotel
-yy &lt;-<span class="st"> </span>yy[yy<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id <span class="op">&amp;</span><span class="st"> </span>yy<span class="op">$</span>Month <span class="op">==</span><span class="st"> &quot;Feb&quot;</span>, 
-    ]
-p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(yy, <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> SWE)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()
+
+<div class="figure" style="text-align: center"><span id="fig:mssmiss-plotsnotel"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-plotsnotel-1.png" alt="Subset of SNOTEL sties used in this chapter." width="80%" />
+<p class="caption">
+Figure 11.1: Subset of SNOTEL sties used in this chapter.
+</p>
+</div>
+<p>For the first analysis, we are just going to look at February Snow Water Equivalent (SWE). Our subset of stations is <code>y$Station.Id</code>. There are many missing years among some of our stations (Figure <a href="example-snotel-data.html#fig:mssmiss-plotsnotelts">11.2</a>).</p>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">swe.feb &lt;-<span class="st"> </span>snotel
+swe.feb &lt;-<span class="st"> </span>swe.feb[swe.feb<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id <span class="op">&amp;</span><span class="st"> </span>swe.feb<span class="op">$</span>Month <span class="op">==</span><span class="st"> </span>
+<span class="st">    &quot;Feb&quot;</span>, ]
+p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(swe.feb, <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> SWE)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()
 p <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station)</code></pre></div>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-plotsnotelts-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="figure" style="text-align: center"><span id="fig:mssmiss-plotsnotelts"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-plotsnotelts-1.png" alt="Snow water equivalent time series from each SNOTEL station." width="80%" />
+<p class="caption">
+Figure 11.2: Snow water equivalent time series from each SNOTEL station.
+</p>
+</div>
+<div id="estimate-feb-swe-using-ar1-with-spatial-correlation" class="section level3">
+<h3><span class="header-section-number">11.2.1</span> Estimate Feb SWE using AR(1) with spatial correlation</h3>
+<p>Imagine that for our study we need an estimate of SWE for all sites. We will use the information from the sites with full data to estimate the missing SWE for other sites. We will use a MARSS model to use all the available data.</p>
+<span class="math display" id="eq:mssmiss-ar1">\[\begin{equation}
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+b&amp;0&amp;\dots&amp;0 \\ 
+0&amp;b&amp;\dots&amp;0 \\ 
+\dots&amp;\dots&amp;\dots&amp;\dots \\ 
+0&amp;0&amp;\dots&amp;b
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_{t-1} + 
+\begin{bmatrix}
+w_1 \\ w_2 \\ \dots \\ w_{15}
+\end{bmatrix}_{t} \\
+\begin{bmatrix}
+y_1 \\ y_2 \\ \dots \\ y_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_t + 
+\begin{bmatrix}
+a_1 \\ a_2 \\ \dots \\ a_{15}
+\end{bmatrix}_{t} +
+\begin{bmatrix}
+v_1 \\ v_2 \\ \dots \\ v_{15}
+\end{bmatrix}_t
+\tag{11.5}
+\end{equation}\]</span>
+<p>We will use an unconstrained variance-covariance structure for <span class="math inline">\(\mathbf{w}\)</span> and assume that <span class="math inline">\(\mathbf{v}\)</span> is identical and independent and very low (SNOTEL instrument variability). The <span class="math inline">\(a_i\)</span> determine the level of the <span class="math inline">\(x_i\)</span>.</p>
+<p>We need our data to be in rows. We will use <code>reshape2::acast()</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat.feb &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">acast</span>(swe.feb, Station <span class="op">~</span><span class="st"> </span>Year, <span class="dt">value.var =</span> <span class="st">&quot;SWE&quot;</span>)</code></pre></div>
+<p>We set up the model for MARSS so that it is the same as <a href="example-snotel-data.html#eq:mssmiss-ar1">(11.5)</a>. We will fix the measurement error to be small; we could use 0 but the fitting is more stable if we use a small variance instead. When estimating <span class="math inline">\(\mathbf{B}\)</span>, setting the initial value to be at <span class="math inline">\(t=1\)</span> instead of <span class="math inline">\(t=0\)</span> works better.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ns &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(swe.feb<span class="op">$</span>Station))
+B &lt;-<span class="st"> &quot;diagonal and equal&quot;</span>
+Q &lt;-<span class="st"> &quot;unconstrained&quot;</span>
+R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.01</span>, ns)
+U &lt;-<span class="st"> &quot;zero&quot;</span>
+A &lt;-<span class="st"> &quot;unequal&quot;</span>
+x0 &lt;-<span class="st"> &quot;unequal&quot;</span>
+mod.list.ar1 =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">x0 =</span> x0, <span class="dt">A =</span> A, 
+    <span class="dt">tinitx =</span> <span class="dv">1</span>)</code></pre></div>
+<p>Now we can fit a MARSS model and get estimates of the missing SWEs. Convergence is slow. We set <span class="math inline">\(\mathbf{a}\)</span> equal to the mean of the time series to speed convergence.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MARSS)
+m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+fit.ar1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.ar1, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">5000</span>), 
+    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</code></pre></div>
+<p>The <span class="math inline">\(b\)</span> estimate is <code>0.4494841</code>.</p>
+<p>Let’s plot the estimated SWEs for the missing years (Figure <a href="example-snotel-data.html#fig:mssmiss-snotelplotfits-ar1">11.3</a>). These estimates use all the information about the correlation with other sites and uses information about correlation with the prior and subsequent years. We will use the <code>tidy()</code> function from the <strong>broom</strong> package to get the estimated 95% confidence intervals for the estimated states. Notice that for some sites, CIs are low in early years as these sites are highly correlated with site for which there are data. In other sites, the uncertainty is high in early years because the sites with data in those years are not highly correlated.</p>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span>fit.ar1
+d &lt;-<span class="st"> </span><span class="kw">augment</span>(fit, <span class="dt">interval =</span> <span class="st">&quot;confidence&quot;</span>)
+d<span class="op">$</span>Year &lt;-<span class="st"> </span>d<span class="op">$</span>t <span class="op">+</span><span class="st"> </span><span class="dv">1980</span>
+d<span class="op">$</span>Station &lt;-<span class="st"> </span>d<span class="op">$</span>.rownames
+p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(Year, .fitted)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Year, 
+    <span class="dt">ymin =</span> .conf.low, <span class="dt">ymax =</span> .conf.up), <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>)
+p &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> swe.feb, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> SWE))
+p <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;SWE (demeaned)&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:mssmiss-snotelplotfits-ar1"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-snotelplotfits-ar1-1.png" alt="Estimated SWEs from the expected value of the states \(\hat{x}\) conditioned on all the data. Note we could also use the expected value of the \(y\) conditioned on all the data." width="80%" />
+<p class="caption">
+Figure 11.3: Estimated SWEs from the expected value of the states <span class="math inline">\(\hat{x}\)</span> conditioned on all the data. Note we could also use the expected value of the <span class="math inline">\(y\)</span> conditioned on all the data.
+</p>
+</div>
+<p>If we were using these SWE as covariates in a site specific model, we could then use the estimates as our covariates, however this would not incorporate uncertainty. Alternatively we could use Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marsscovarx">(11.1)</a> and set the parameters for the covariate process to those estimated for our covariate-only model. This approach will incorporate the uncertainty in the SWE estimates in the early years for the sites with no data.</p>
+<p>Note, we should do some cross-validation (fitting with data left out) to ensure that the estimated SWEs are well-matched to actual measurements. It would probably be best to do ‘leave-three’ out instead of ‘leave-one’ out since the estimates for time <span class="math inline">\(t\)</span> uses information from <span class="math inline">\(t-1\)</span> and <span class="math inline">\(t+1\)</span> (if present).</p>
+<div id="diagnostics" class="section level4">
+<h4><span class="header-section-number">11.2.1.1</span> Diagnostics</h4>
+<p>The state residuals have a tendency for negative autocorrelation at lag-1 (Figure <a href="example-snotel-data.html#fig:mssmiss-stateresids-ar1">11.4</a>).</p>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span>fit.ar1
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))
+<span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>], <span class="dv">1</span>, acf)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:mssmiss-stateresids-ar1"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresids-ar1-1.png" alt="State residuals for the AR(1) model. Many stations for autocorrelation at lag-1." width="80%" />
+<p class="caption">
+Figure 11.4: State residuals for the AR(1) model. Many stations for autocorrelation at lag-1.
+</p>
+</div>
+</div>
+</div>
+<div id="estimate-feb-swe-using-only-correlation" class="section level3">
+<h3><span class="header-section-number">11.2.2</span> Estimate Feb SWE using only correlation</h3>
+<p>Another approach is to treat the February data as temporally uncorrelated. The two longest time series (Paradise and Olallie Meadows) show minimal autocorrelation so we might decide to just use the correlation across stations for our estimates. In this case, the state of the missing SWE values at time <span class="math inline">\(t\)</span> is the expected value conditioned on all the stations with data at time <span class="math inline">\(t\)</span> given the estimated variance-covariance matrix <span class="math inline">\(\mathbf{Q}\)</span>.</p>
+We could set this model up as
+<span class="math display" id="eq:mssmiss-corr1">\[\begin{equation}
+\begin{bmatrix}
+y_1 \\ y_2 \\ \dots \\ y_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+a_1 \\ a_2 \\ \dots \\ a_{15}
+\end{bmatrix}_{t} +
+\begin{bmatrix}
+v_1 \\ v_2 \\ \dots \\ v_{15}
+\end{bmatrix}_t, \,\,\, 
+\begin{bmatrix}
+\sigma_1&amp;\zeta_{1,2}&amp;\dots&amp;\zeta_{1,15} \\ 
+\zeta_{2,1}&amp;\sigma_2&amp;\dots&amp;\zeta_{2,15} \\ 
+\dots&amp;\dots&amp;\dots&amp;\dots \\ 
+\zeta_{15,1}&amp;\zeta_{15,2}&amp;\dots&amp;\sigma_{15}
+\end{bmatrix}
+\tag{11.6}
+\end{equation}\]</span>
+<p>However the EM algorithm used by <code>MARSS()</code> runs into numerical issues. Instead we will set the model up as follows. Allowing a hidden state observed with small error makes the estimation more stable.</p>
+<span class="math display" id="eq:mssmiss-corr">\[\begin{equation}
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+w_1 \\ w_2 \\ \dots \\ w_{15}
+\end{bmatrix}_{t}, \,\,\,
+\begin{bmatrix}
+w_1 \\ w_2 \\ \dots \\ w_{15}
+\end{bmatrix}_{t} \sim 
+\begin{bmatrix}
+\sigma_1&amp;\zeta_{1,2}&amp;\dots&amp;\zeta_{1,15} \\ 
+\zeta_{2,1}&amp;\sigma_2&amp;\dots&amp;\zeta_{2,15} \\ 
+\dots&amp;\dots&amp;\dots&amp;\dots \\ 
+\zeta_{15,1}&amp;\zeta_{15,2}&amp;\dots&amp;\sigma_{15}
+\end{bmatrix} \\
+\begin{bmatrix}
+y_1 \\ y_2 \\ \dots \\ y_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+x_1 \\ x_2 \\ \dots \\ x_{15}
+\end{bmatrix}_t + 
+\begin{bmatrix}
+a_1 \\ a_2 \\ \dots \\ a_{15}
+\end{bmatrix}_{t} +
+\begin{bmatrix}
+v_1 \\ v_2 \\ \dots \\ v_{15}
+\end{bmatrix}_t, \,\,\, \begin{bmatrix}
+0.01&amp;0&amp;\dots&amp;0 \\ 
+0&amp;0.01&amp;\dots&amp;0 \\ 
+\dots&amp;\dots&amp;\dots&amp;\dots \\ 
+0&amp;0&amp;\dots&amp;0.01
+\end{bmatrix}
+\tag{11.7}
+\end{equation}\]</span>
+<p>Again <span class="math inline">\(\mathbf{a}\)</span> is the mean level in the time series. Note that the expected value of <span class="math inline">\(\mathbf{x}\)</span> is zero if there are no data, so <span class="math inline">\(E(\mathbf{x}_0)=0\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ns &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(swe.feb<span class="op">$</span>Station))
+B &lt;-<span class="st"> &quot;zero&quot;</span>
+Q &lt;-<span class="st"> &quot;unconstrained&quot;</span>
+R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.01</span>, ns)
+U &lt;-<span class="st"> &quot;zero&quot;</span>
+A &lt;-<span class="st"> &quot;unequal&quot;</span>
+x0 &lt;-<span class="st"> &quot;zero&quot;</span>
+mod.list.corr =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">x0 =</span> x0, <span class="dt">A =</span> A, 
+    <span class="dt">tinitx =</span> <span class="dv">0</span>)</code></pre></div>
+<p>Now we can fit a MARSS model and get estimates of the missing SWEs. Convergence is slow. We set <span class="math inline">\(\mathbf{a}\)</span> equal to the mean of the time series to speed convergence.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+fit.corr &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.corr, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">5000</span>), 
+    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</code></pre></div>
+<p>The estimated SWEs for the missing years uses the information about the correlation with other sites only.</p>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span>fit.corr
+d &lt;-<span class="st"> </span>broom<span class="op">::</span><span class="kw">augment</span>(fit, <span class="dt">interval =</span> <span class="st">&quot;confidence&quot;</span>)
+d<span class="op">$</span>Year &lt;-<span class="st"> </span>d<span class="op">$</span>t <span class="op">+</span><span class="st"> </span><span class="dv">1980</span>
+d<span class="op">$</span>Station &lt;-<span class="st"> </span>d<span class="op">$</span>.rownames
+p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(Year, .fitted)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Year, 
+    <span class="dt">ymin =</span> .conf.low, <span class="dt">ymax =</span> .conf.up), <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>)
+p &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> swe.feb, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> SWE))
+p <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;SWE (demeaned)&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:mssmiss-snotelplotfits-corr"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-snotelplotfits-corr-1.png" alt="Estimated SWEs from the expected value of the states \(\hat{x}\) conditioned on all the data for the model with only correlation across stations at time \(t\)." width="80%" />
+<p class="caption">
+Figure 11.5: Estimated SWEs from the expected value of the states <span class="math inline">\(\hat{x}\)</span> conditioned on all the data for the model with only correlation across stations at time <span class="math inline">\(t\)</span>.
+</p>
+</div>
+<div id="diagnostics-1" class="section level4">
+<h4><span class="header-section-number">11.2.2.1</span> Diagnostics</h4>
+<p>The state and model residuals have no tendency towards negative autocorrelation now that we removed the autoregressive component from the process (<span class="math inline">\(x\)</span>) model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span>fit.corr
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))
+<span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>], <span class="dv">1</span>, acf)
+<span class="kw">mtext</span>(<span class="st">&quot;State Residuals ACF&quot;</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">side =</span> <span class="dv">3</span>)</code></pre></div>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresids-fit-corr-states-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span>fit.corr
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))
+<span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>], <span class="dv">1</span>, acf)
+<span class="kw">mtext</span>(<span class="st">&quot;Model Residuals ACF&quot;</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">side =</span> <span class="dv">3</span>)</code></pre></div>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresids-fit-corr-model-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="estimate-feb-swe-using-dfa" class="section level3">
+<h3><span class="header-section-number">11.2.3</span> Estimate Feb SWE using DFA</h3>
+<p>Another approach we might take is to model SWE using Dynamic Factor Analysis. Our model might take the following form with two factors, modeled as AR(1) processes. <span class="math inline">\(\mathbf{a}\)</span> is the mean level of the time series.</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+x_1 \\ x_2
+\end{bmatrix}_t = 
+\begin{bmatrix}
+b_1&amp;0\\0&amp;b_2
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\ x_2
+\end{bmatrix}_{t-1} + \begin{bmatrix}
+w_1 \\ w_2
+\end{bmatrix}_{t} \\
+\begin{bmatrix}
+y_1 \\ y_2 \\ \dots \\ y_{15}
+\end{bmatrix}_t =
+\begin{bmatrix}
+z_{1,1}&amp;0\\z_{2,1}&amp;z_{2,2}\\ \dots\\z_{3,1}&amp;z_{3,2}
+\end{bmatrix}\begin{bmatrix}
+x_1 \\ x_2
+\end{bmatrix}_t + 
+\begin{bmatrix}
+a_1 \\ a_2 \\ \dots \\ a_{15}
+\end{bmatrix} +
+\begin{bmatrix}
+v_1 \\ v_2 \\ \dots \\ v_{15}
+\end{bmatrix}_t
+\]</span></p>
+<p>The model is set up as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ns &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.feb)[<span class="dv">1</span>]
+B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), <span class="dv">2</span>, <span class="dv">2</span>)
+B[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> &quot;b1&quot;</span>
+B[<span class="dv">2</span>, <span class="dv">2</span>] &lt;-<span class="st"> &quot;b2&quot;</span>
+Q &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span>, <span class="dv">2</span>)
+R &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span>
+U &lt;-<span class="st"> &quot;zero&quot;</span>
+x0 &lt;-<span class="st"> &quot;zero&quot;</span>
+Z &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), ns, <span class="dv">2</span>)
+Z[<span class="dv">1</span><span class="op">:</span>(ns <span class="op">*</span><span class="st"> </span><span class="dv">2</span>)] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;z1&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns), <span class="kw">paste0</span>(<span class="st">&quot;z2&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns))
+Z[<span class="dv">1</span>, <span class="dv">2</span>] &lt;-<span class="st"> </span><span class="dv">0</span>
+A &lt;-<span class="st"> &quot;unequal&quot;</span>
+mod.list.dfa =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Z =</span> Z, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">A =</span> A, 
+    <span class="dt">x0 =</span> x0)</code></pre></div>
+<p>Now we can fit a MARSS model and get estimates of the missing SWEs. We pass in the initial value for <span class="math inline">\(\mathbf{a}\)</span> as the mean level so it fits easier.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MARSS)
+m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+fit.dfa &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.dfa, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1000</span>), 
+    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</code></pre></div>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-snotelplotstates-dfa-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="diagnostics-2" class="section level3">
+<h3><span class="header-section-number">11.2.4</span> Diagnostics</h3>
+<p>The state residuals are uncorrelated.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span>fit.dfa
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))
+<span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>], <span class="dv">1</span>, 
+    acf)</code></pre></div>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresit-fit-dfa-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>As are the model residuals:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))
+<span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>model.residual, <span class="dv">1</span>, <span class="cf">function</span>(x) {
+    <span class="kw">acf</span>(<span class="kw">na.omit</span>(x))
+})</code></pre></div>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-modelresids-fit-dfa-model-1.png" width="80%" style="display: block; margin: auto;" /></p>
+</div>
 </div>
             </section>
 
@@ -451,7 +720,7 @@ p <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap<
         </div>
       </div>
 <a href="sec-mssmiss-overview.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="estimate-feb-swe-using-correlation-model.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="modeling-seasonal-swe.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

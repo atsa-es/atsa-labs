@@ -3,11 +3,13 @@ library(coda)
 library(rjags)
 library(R2jags)
 
+
 ## ----jags-loaddata, echo=TRUE, results='hide', eval=TRUE-----------------
 data(airquality, package="datasets")
 Wind = airquality$Wind # wind speed
 Temp = airquality$Temp # air temperature
 N = dim(airquality)[1] # number of data points
+
 
 ## ----jags-lr1, results='hide', cache=TRUE--------------------------------
 # 1. LINEAR REGRESSION with no covariates
@@ -28,6 +30,8 @@ model {
 }  
 ",file=model.loc)
 
+
+
 ## ----jags-call-fun1, results='hide', cache=TRUE--------------------------
 jags.data = list("Y"=Wind,"N"=N) # named list of inputs
 jags.params=c("sd.obs","mu") # parameters to be monitored
@@ -35,11 +39,14 @@ mod_lm_intercept = jags(jags.data, parameters.to.save=jags.params,
                 model.file=model.loc, n.chains = 3, n.burnin=5000,
                 n.thin=1, n.iter=10000, DIC=TRUE)  
 
+
 ## ----jags-lm1-mod--------------------------------------------------------
 mod_lm_intercept
 
+
 ## ----jags-lm1-attach-----------------------------------------------------
 attach.jags(mod_lm_intercept)
+
 
 ## ----jags-plot-lm1, echo=TRUE, eval=TRUE, fig.show='hide'----------------
 # Now we can make plots of posterior values
@@ -47,10 +54,12 @@ par(mfrow = c(2,1))
 hist(mu,40,col="grey",xlab="Mean",main="")
 hist(sd.obs,40,col="grey",xlab=expression(sigma[obs]),main="")
 
+
 ## ----jags-plot-hist-post, fig=TRUE, echo=FALSE, fig.width=6, fig.height=6, fig.cap='(ref:jags-plot-hist-post)'----
 par(mfrow = c(2,1))
 hist(mu,40,col="grey",xlab="Mean",main="")
 hist(sd.obs,40,col="grey",xlab=expression(sigma[obs]),main="")
+
 
 ## ----jags-lm1-mcmclist-func, cache=TRUE----------------------------------
 createMcmcList = function(jagsmodel) {
@@ -61,13 +70,16 @@ McmcList = mcmc.list(McmcList)
 return(McmcList)
 }
 
+
 ## ----jags-make-myList----------------------------------------------------
 myList = createMcmcList(mod_lm_intercept)
 summary(myList[[1]])
 plot(myList[[1]])
 
+
 ## ----jags-plot-myList,fig=TRUE, echo=FALSE, fig.width=6, fig.height=6, fig.cap='(ref:jags-plot-myList)'----
 plot(myList[[1]])
+
 
 ## ----jags-coda, results='hide', eval=FALSE-------------------------------
 ## # Run the majority of the diagnostics that CODA() offers
@@ -76,6 +88,7 @@ plot(myList[[1]])
 ## autocorDiags = autocorr.diag(createMcmcList(mod_lm_intercept))
 ## gewekeDiags = geweke.diag(createMcmcList(mod_lm_intercept))
 ## heidelDiags = heidel.diag(createMcmcList(mod_lm_intercept))
+
 
 ## ----jags-lm1ar, results='hide', cache=TRUE------------------------------
 # 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS
@@ -101,12 +114,15 @@ model {
 }
 ",file=model.loc)
 
+
+
 ## ----jags-lm1ar-mod, results='hide', cache=TRUE--------------------------
 jags.data = list("Y"=Wind,"N"=N)
 jags.params=c("sd.obs","predY","mu","phi")
 mod_lmcor_intercept = jags(jags.data, parameters.to.save=jags.params, 
         model.file=model.loc, n.chains = 3, n.burnin=5000,
         n.thin=1, n.iter=10000, DIC=TRUE)   
+
 
 ## ----jags-lm1ar-plot-func, results='hide'--------------------------------
 plotModelOutput = function(jagsmodel, Y) {
@@ -124,11 +140,14 @@ lines(summaryPredictions[,2])
 points(Y)
 }
 
+
 ## ----jags-lm1ar-plot, results='hide', eval=FALSE, fig.show='hide'--------
 ## plotModelOutput(mod_lmcor_intercept, Wind)
 
+
 ## ----jags-lm1ar-plot1, fig=TRUE, echo=FALSE, fig.width=6, fig.height=6, fig.cap='(ref:jags-lm1ar-plot1)'----
 plotModelOutput(mod_lmcor_intercept, Wind)
+
 
 ## ----jags-ar1, results='hide', cache=TRUE--------------------------------
 # 3. AR(1) MODEL WITH NO ESTIMATED AR COEFFICIENT = RANDOM WALK
@@ -154,6 +173,8 @@ jags.data = list("Y"=Wind,"N"=N)
 jags.params=c("sd.pro","predY","mu")
 mod_rw_intercept = jags(jags.data, parameters.to.save=jags.params, model.file=model.loc, 
 n.chains = 3, n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
+
+
 
 ## ----jags-ar1est, echo=TRUE, results='hide', cache=TRUE------------------
 # 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT
@@ -181,6 +202,8 @@ jags.params=c("sd.pro","predY","mu","phi")
 mod_ar1_intercept = jags(jags.data, parameters.to.save=jags.params, 
         model.file=model.loc, n.chains = 3, n.burnin=5000, n.thin=1, 
         n.iter=10000, DIC=TRUE)  
+
+
 
 ## ----jags-ss1, echo=TRUE, results='hide', cache=TRUE---------------------
 # 5. MAKE THE SS MODEL a univariate random walk
@@ -215,6 +238,8 @@ jags.params=c("sd.q","sd.r","predY","mu")
 mod_ss = jags(jags.data, parameters.to.save=jags.params, model.file=model.loc, n.chains = 3, 
 n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
 
+
+
 ## ----jags-cov, results='hide', cache=TRUE--------------------------------
 # 6. Include some covariates in a linear regression
 # Use temperature as a predictor of wind
@@ -240,6 +265,8 @@ mod_lm = jags(jags.data, parameters.to.save=jags.params,
         model.file=model.loc, n.chains = 3, n.burnin=5000, 
         n.thin=1, n.iter=10000, DIC=TRUE)  
 
+
+
 ## ----jags-cov-forecast, results='hide', cache=TRUE-----------------------
 jags.data = list("Y"=c(Wind,NA,NA,NA),"N"=(N+3))
 jags.params=c("sd.q","sd.r","predY","mu")
@@ -247,6 +274,7 @@ model.loc=("ss_model.txt")
 mod_ss_forecast = jags(jags.data, parameters.to.save=jags.params,
       model.file=model.loc, n.chains = 3, n.burnin=5000, n.thin=1,
       n.iter=10000, DIC=TRUE)
+
 
 ## ----jags-hwdata, echo=TRUE----------------------------------------------
 Spawners = c(2662,1806,1707,1339,1686,2220,3121,5028,9263,4567,1850,3353,2836,3961,4624,3262,3898,3039,5966,5931,7346,4911,3116,3185,5590,2485,2987,3829,4921,2348,1932,3151,2306,1686,4584,2635,2339,1454,3705,1510,1331,942,884,666,1521,409,2388,1043,3262,2606,4866,1161,3070,3320)

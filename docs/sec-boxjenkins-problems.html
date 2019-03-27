@@ -25,7 +25,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
 
 
-<meta name="date" content="2019-03-04">
+<meta name="date" content="2019-03-26">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -370,12 +370,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="11" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html"><i class="fa fa-check"></i><b>11</b> Covariates with Missing Values</a><ul>
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
-<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a></li>
-<li class="chapter" data-level="11.3" data-path="estimate-feb-swe-using-correlation-model.html"><a href="estimate-feb-swe-using-correlation-model.html"><i class="fa fa-check"></i><b>11.3</b> Estimate Feb SWE using correlation model</a><ul>
-<li class="chapter" data-level="11.3.1" data-path="estimate-feb-swe-using-correlation-model.html"><a href="estimate-feb-swe-using-correlation-model.html#diagnostics"><i class="fa fa-check"></i><b>11.3.1</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
 </ul></li>
-<li class="chapter" data-level="11.4" data-path="estimate-feb-swe-using-dfa.html"><a href="estimate-feb-swe-using-dfa.html"><i class="fa fa-check"></i><b>11.4</b> Estimate Feb SWE using DFA</a><ul>
-<li class="chapter" data-level="11.4.1" data-path="estimate-feb-swe-using-dfa.html"><a href="estimate-feb-swe-using-dfa.html#diagnostics-1"><i class="fa fa-check"></i><b>11.4.1</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a><ul>
@@ -432,40 +434,62 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>load(&quot;landings.RData&quot;)
 load(&quot;chinoook.RData&quot;)</code></pre>
 <ol style="list-style-type: decimal">
-<li>Repeat the stationarity tests for another species in the landings data set. Sardine, Chub.mackerel, and Horse.mackerel have enough data. Here is how to set up the data for another species.
-<ol start="2" style="list-style-type: lower-alpha">
-<li>Do a Dickey-Fuller test using <code>ur.df()</code> and <code>adf.test()</code>. What do you need to set the lags to to achieve that?</li>
-<li>Do an Augmented Dickey-Fuller test using <code>ur.df()</code>. How did you choose to set the lags?</li>
-<li>Do a KPSS test using <code>kpss.test()</code>.</li>
+<li>Augmented Dickey-Fuller tests in R.
+<ol style="list-style-type: lower-alpha">
+<li>What is the null hypothesis for the Dickey-Fuller and Augmented Dickey-Fuller tests?</li>
+<li>How do the Dickey-Fuller and Augmented Dickey-Fuller tests differ?</li>
+<li>For <code>adf.test()</code>, does the test allow the data to have a non-zero level? Does the test allow the data to be stationarity around a trend (a linear slope)?</li>
+<li>For <code>ur.df()</code>, what does type = “none”, “drift”, and “trend” mean? Which one gives you the same result as <code>adf.test()</code>? What do you have to set the lags equal to get the default lags in <code>adf.test()</code>?</li>
+<li>For <code>ur.df()</code>, how do you determine if the null hypothesis is rejected?</li>
+<li>For <code>ur.df()</code>, how do you determine if there is a significant trend in the data? How do you determine if the intercept is different than zero?</li>
 </ol></li>
+<li>KPSS tests in R.
+<ol style="list-style-type: lower-alpha">
+<li>What is the null hypothesis for the KPSS test?</li>
+<li>For <code>kpss.test()</code>, what does setting null equal to “Level” versus “Trend” change?</li>
+</ol></li>
+<li>Repeat the stationarity tests for sardine 1964-1987 in the landings data set. Here is how to set up the data for another species.</li>
 </ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species<span class="op">==</span><span class="st">&quot;Chub.mackerel&quot;</span> <span class="op">&amp;</span><span class="st"> </span>Year<span class="op">&lt;=</span><span class="dv">1989</span>)
-dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start=</span><span class="dv">1964</span>)</code></pre></div>
-<ol start="2" style="list-style-type: decimal">
-<li>Repeat the stationarity tests and differencing tests for anchovy using the full data. The full data go to 2007.</li>
-</ol>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species<span class="op">==</span><span class="st">&quot;Anchovy&quot;</span>)
-dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start=</span><span class="dv">1964</span>)</code></pre></div>
-<pre><code>a. Do the conclusions regarding stationarity and the amount of differencing needed change? 
-b. Repeat with only the data after 1987.  Are the conclusions different for only the recent data?
-c. Fit the using `auto.arima()` to the full data (1964-2007) and recent data (1987 to present).  Do the selected models change?</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Sardine&quot;</span>)
+dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)
+dat &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</code></pre></div>
+<pre><code>a. Do a Dickey-Fuller (DF) test using `ur.df()` and `adf.test()`. You have to set the lags. What does the result tell you?
+a. Do an Augmented Dickey-Fuller (ADF) test using `ur.df()`. How did you choose to set the lags? How is the ADF test different than the DF test?
+b. Do a KPSS test using `kpss.test()`. What does the result tell you?</code></pre>
 <ol start="4" style="list-style-type: decimal">
-<li>Fit each of the models listed under the <code>auto.arima()</code> trace using <code>Arima()</code> and show that you can produce the same AICc value that is shown in the trace table.</li>
+<li>Using the anchovy 1964-1987 data, fit using <code>auto.arima()</code> with <code>trace=TRUE</code>.</li>
 </ol>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">forecast<span class="op">::</span><span class="kw">auto.arima</span>(anchovy, <span class="dt">trace=</span><span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>a. Fit each of the models listed using `Arima()` and show that you can produce the same AICc value that is shown in the trace table.
+b. What models are within $\Delta$AIC of 2? What is different about these models?</code></pre>
 <ol start="5" style="list-style-type: decimal">
-<li>Use <code>auto.arima()</code> with <code>stepwise=FALSE</code> to find the top 3 models (according to AICc) for the anchovy.
+<li>Repeat the stationarity tests and differencing tests for anchovy using the following two time ranges: 1964-1987 and 1988-2007. The following shows you how to subset the data:</li>
+</ol>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Anchovy&quot;</span>)
+dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)
+dat64.<span class="dv">87</span> &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</code></pre></div>
+<pre><code>a. Plot the time series for the two time periods. For the `kpss.test()`, which null is appropriate, &quot;Level&quot; or &quot;Trend&quot;?
+a. Do the conclusions regarding stationarity and the amount of differencing needed change depending on which time period you analyze? For both time periods, use `adf.test()` with default values and `kpss.test()` with null=&quot;Trend&quot;.
+c. Fit each time period using `auto.arima()`.  Do the selected models change? What do the coefficients mean? Coefficients means the mean and drifts terms and the AR and MA terms.
+d. Discuss the best models for each time period.  How are they different?
+e. You cannot compare the AIC values for an Arima(0,1,0) and Arima(0,0,1). Why do you think that is? Hint when comparing AICs, the data being fit must be the same for each model.</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>For the anchovy 1964-2007 data, use <code>auto.arima()</code> with <code>stepwise=FALSE</code> to fit models.
 <ol style="list-style-type: lower-alpha">
-<li>Use <code>Arima()</code> to fit the top 3 models to the data.</li>
-<li>Create a 5-year forecast for each of the top 3 models using the fits from (a).<br />
+<li>find the set of models within <span class="math inline">\(\Delta AICc=2\)</span> of the top model.</li>
+<li>Use <code>Arima()</code> to fit the models with Inf or -Inf in the list. Does the set of models within <span class="math inline">\(\Delta AICc=2\)</span> change?</li>
+<li>Create a 5-year forecast for each of the top 3 models according to AICc.<br />
 </li>
-<li>Do the forecasts differ?</li>
+<li>How do the forecasts differ in trend and size of prediction intervals?</li>
 </ol></li>
-<li><ol style="list-style-type: lower-alpha">
-<li>Fit a seasonal model to the Chinook data up to 1999 using <code>auto.arima()</code>.<br />
+<li>Using the <code>chinook</code> data set,
+<ol style="list-style-type: lower-alpha">
+<li>Set up a monthly time series object for the Chinook log metric tons catch for Jan 1990 to Dec 2015.</li>
+<li>Fit a seasonal model to the Chinook Jan 1990 to Dec 1999 data using <code>auto.arima()</code>.<br />
 </li>
-<li>Then create a forecast through 2015.</li>
+<li>Create a forecast through 2015 using the model in part b.</li>
 <li>Plot the forecast with the 2014 and 2015 actual landings added as data points.</li>
+<li>The model from part b has drift. Fit this model using <code>Arima()</code> without drift and compare the 2015 forecast with this model.</li>
 </ol></li>
 </ol>
 

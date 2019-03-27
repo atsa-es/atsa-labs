@@ -11,13 +11,6 @@ A script with all the R code in the chapter can be downloaded  [here](./Rcode/in
 
 ### Data and packages {-}
 
-The chapter uses two data sets described in Section \@ref(sec-tslab-data).  The main one is a CO$_2$ data set: [CO2_data.RData](./data/CO2_data.RData). The second is   a Northern Hemisphere temperature data set:  [NHemiTemp_data.RData](./data/NHemiTemp_data.RData).  The problems use a data set on hourly phytoplankton counts: [hourly_phyto.RData](./data/hourly_phyto.RData). After downloading via the links, load the data
-```{r tslab-load-datasets, eval=FALSE}
-load("CO2_data.RData")
-load("NHemiTemp_data.RData")
-load("hourly_phyto.RData")
-```
-
 This chapter uses the **stats** package, which is often loaded by default when you start R, the **MARSS** package and the **forecast** package. The problems use a dataset in the **datasets** package.  After installing the packages, if needed, load:
 ```{r tslab-loadpackages, warning=FALSE, message=FALSE, results='hide'}
 library(stats)
@@ -26,64 +19,25 @@ library(forecast)
 library(datasets)
 ```
 
-## CO$_2$ and global temperature data set {#sec-tslab-data}
-
-For this chapter we will use the time series of the atmospheric concentration of CO$_2$ collected at the Mauna Loa Observatory in Hawai'i.  We downloaded this data and created the `CO2` dataframe with the following code:
-```{r tslab-CO2data, eval=FALSE}
-library(RCurl)
-## get CO2 data from Mauna Loa observatory
-ww1 <- "ftp://aftp.cmdl.noaa.gov/products/"
-ww2 <- "trends/co2/co2_mm_mlo.txt"
-CO2fulltext <- getURL(paste0(ww1,ww2))
-CO2 <- read.table(text=CO2fulltext)[,c(1,2,5)]
-## assign better column names
-colnames(CO2) <- c("year","month","ppm")
-save(CO2, CO2fulltext, file="CO2_data.RData")
-```
-The data file contains some extra information that we don't need, so we only save a subset of the data, specifically columns ( 1, 2 \& 5), and save this to `CO2`. The object `CO2fulltext` contains information on the data.  Use `cat(CO2fulltext)` to read.  You can read in the RData file here: [CO2_data.RData](./data/CO2_data.RData). 
-
-```{r tslab-copy-data-file-to-doc, include=FALSE, purl=FALSE}
-#If bookdown is being run, then we are at the top level
-#make sure the Rdata is in the docs folder
-#file.copy("Lab-intro-to-ts/CO2_data.RData", "docs/data/CO2_data.RData", overwrite=TRUE)
-#If "gitbook" is not in the output
-#then user is running Rmd in the folder for debugging
-if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
-  #load the data
-  load("docs/data/CO2_data.RData")
-}else{
-  load("CO2_data.RData")
-}
+The chapter uses data sets which are in the **atsalibrary** package.  If needed, install  using the **devtools** package.
+```{r bj-load, eval=FALSE}
+library(devtools)
+devtools::install_github("nwfsc-timeseries/atsa-package")
 ```
 
-The second data set we will use is Northern Hemisphere land and ocean temperature anomalies from NOAA. You can read in the RData file here:  [NHemiTemp_data.RData](./data/NHemiTemp_data.RData).  We downloaded these data and created the RData file with the following code:
-```{r tslab-temp-data, eval=FALSE}
-library(RCurl)
-ww1 <- "https://www.ncdc.noaa.gov/cag/time-series/"
-ww2 <- "global/nhem/land_ocean/p12/12/1880-2014.csv"
-Temp <- read.csv(text=getURL(paste0(ww1,ww2)), skip=4)
-save(Temp, file="NHemiTemp_data.RData")
+The main one is a time series of the atmospheric concentration of CO$_2$ collected at the Mauna Loa Observatory in Hawai'i (`MLCO2`). The second is Northern Hemisphere land and ocean temperature anomalies from NOAA. (`NHTemp`).  The problems use a data set on hourly phytoplankton counts (`hourlyphyto`). Use `?MLCO2`, `?NHTemp` and `?hourlyphyto` for information on these datasets.
+
+Load the data.
+
+```{r tslab-load-data}
+data(NHTemp, package="atsalibrary")
+Temp <- NHTemp
+data(MLCO2, package="atsalibrary")
+CO2 <- MLCO2
+data(hourlyphyto, package="atsalibrary")
+pDat <- hourlyphyto
 ```
 
-```{r tslab-copy-temp-data-to-doc, include=FALSE, purl=FALSE}
-#If bookdown is being run, then we are at the top level
-#make sure the Rdata is in the docs folder
-#file.copy("Lab-intro-to-ts/NHemiTemp_data.RData", "docs/data/NHemiTemp_data.RData", overwrite=TRUE)
-#If "gitbook" is not in the output
-#then user is running Rmd in the folder for debugging
-if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
-  #load the data
-  load("docs/data/NHemiTemp_data.RData")
-}else{
-  load("NHemiTemp_data.RData")
-}
-```
-
-Once you have downloaded the RData files (or created your own with the code), load the data files with:
-```{r eval=FALSE}
-load("CO2_data.RData")
-load("NHemiTemp_data.RData")
-```
 
 ## Time series plots {#sec-tslab-time-series-plots}
 
@@ -1476,7 +1430,11 @@ auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
 
 We have seen how to do a variety of introductory time series analyses with R.  Now it is your turn to apply the information you learned here and in lecture to complete some analyses.  You have been asked by a colleague to help analyze some time series data she collected as part of an experiment on the effects of light and nutrients on the population dynamics of phytoplankton.  Specifically, after controlling for differences in light and temperature, she wants to know if the natural log of population density can be modeled with some form of ARMA($p,q$) model.  
 
-The data are expressed as the number of cells per milliliter recorded every hour for one week beginning at 8:00 AM on December 1, 2014. You can download the data here: [hourly_phyto.RData](./data/hourly_phyto.RData).
+The data are expressed as the number of cells per milliliter recorded every hour for one week beginning at 8:00 AM on December 1, 2014. You can load the data using
+```{r tslab-HWdata}
+data(hourlyphyto, package="atsalibrary")
+pDat <- hourlyphyto
+```
 
 Use the information above to do the following:
 

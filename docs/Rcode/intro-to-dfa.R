@@ -1,6 +1,7 @@
 ## ----dfa-load-packages, results='hide', message=FALSE, warnings=FALSE----
 library(MARSS)
 
+
 ## ----dfa-read_data-------------------------------------------------------
 ## load the data (there are 3 datasets contained here)
 data(lakeWAplankton, package="MARSS")
@@ -17,6 +18,7 @@ phytoplankton <- c("Cryptomonas", "Diatoms", "Greens",
 ## get only the phytoplankton
 dat_1980 <- plank_dat[,phytoplankton]
 
+
 ## ----dfa-trans_data------------------------------------------------------
 ## transpose data so time goes across columns
 dat_1980 <- t(dat_1980)
@@ -25,10 +27,12 @@ N_ts <- dim(dat_1980)[1]
 ## get length of time series
 TT <- dim(dat_1980)[2] 
 
+
 ## ----dfa-demean_data-----------------------------------------------------
 y_bar <- apply(dat_1980, 1, mean, na.rm=TRUE)
 dat <- dat_1980 - y_bar
 rownames(dat) <- rownames(dat_1980)
+
 
 ## ----dfa-plot-phytos, fig.height=9, fig.width=8, fig.cap='Demeaned time series of Lake Washington phytoplankton.'----
 spp <- rownames(dat_1980)
@@ -41,6 +45,7 @@ for(i in spp){
   title(i)
   cnt <- cnt + 1
   }
+
 
 ## ----dfa-dfa_obs_eqn-----------------------------------------------------
 ## 'ZZ' is loadings matrix
@@ -59,6 +64,7 @@ dd <- "zero"  # matrix(0,1,wk_last)
 ## 'RR' is var-cov matrix for obs errors
 RR <- "diagonal and unequal"
 
+
 ## ----dfa-dfa_proc_eqn----------------------------------------------------
 ## number of processes
 mm <- 3
@@ -72,6 +78,7 @@ cc <- "zero"  # matrix(0,1,wk_last)
 ## 'QQ' is identity
 QQ <- "identity"  # diag(mm)
 
+
 ## ----dfa-create_model_lists----------------------------------------------
 ## list with specifications for model vectors/matrices
 mod_list <- list(Z=ZZ, A=aa, D=DD, d=dd, R=RR,
@@ -81,9 +88,11 @@ init_list <- list(x0 = matrix(rep(0, mm), mm, 1))
 ## list with model control parameters
 con_list <- list(maxit = 3000, allow.degen = TRUE)
 
+
 ## ----dfa-fit_dfa_1, cache=TRUE-------------------------------------------
 ## fit MARSS
 dfa_1 <- MARSS(y = dat, model = mod_list, inits = init_list, control = con_list)
+
 
 ## ----dfa-get_H_inv-------------------------------------------------------
 ## get the estimated ZZ
@@ -91,11 +100,13 @@ Z_est <- coef(dfa_1, type="matrix")$Z
 ## get the inverse of the rotation matrix
 H_inv <- varimax(Z_est)$rotmat
 
+
 ## ----dfa-rotate_Z_x------------------------------------------------------
 ## rotate factor loadings
 Z_rot = Z_est %*% H_inv   
 ## rotate processes
 proc_rot = solve(H_inv) %*% dfa_1$states
+
 
 ## ----dfa-plot-dfa1, fig.height=9, fig.width=8, eval=TRUE, fig.cap='Estimated states from the DFA model.'----
 ylbl <- phytoplankton
@@ -132,9 +143,11 @@ for(i in 1:mm) {
   mtext(paste("Factor loadings on state",i),side=3,line=0.5)
 }
 
+
 ## ----dfa-xy-states12, height=4, width=5, fig.cap='Cross-correlation plot of the two rotations.'----
 par(mai=c(0.9,0.9,0.1,0.1))
 ccf(proc_rot[1,],proc_rot[2,], lag.max = 12, main="")
+
 
 ## ----dfa-defn_get_DFA_fits-----------------------------------------------
 get_DFA_fits <- function(MLEobj,dd=NULL,alpha=0.05) {
@@ -174,6 +187,7 @@ get_DFA_fits <- function(MLEobj,dd=NULL,alpha=0.05) {
  	return(fits)
 }
 
+
 ## ----dfa-plot-dfa-fits, fig.height=9, fig.width=8, fig.cap='Data and fits from the DFA model.'----
 ## get model fits & CI's
 mod_fit <- get_DFA_fits(dfa_1)
@@ -193,9 +207,11 @@ for(i in 1:N_ts) {
   lines(w_ts, lo, col="darkgray")
 }
 
+
 ## ----dfa-get_covars------------------------------------------------------
 temp <- t(plank_dat[,"Temp",drop=FALSE])
 TP <- t(plank_dat[,"TP",drop=FALSE])
+
 
 ## ----dfa-fit_DFA_covars, cache=TRUE, results='hide'----------------------
 mod_list=list(m=3, R="diagonal and unequal")
@@ -206,10 +222,12 @@ dfa_TP <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
 dfa_both <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
                   control = con_list, covariates=rbind(temp,TP))
 
+
 ## ----dfa_model_selection-------------------------------------------------
 print(cbind(model=c("no covars", "Temp", "TP", "Temp & TP"),
       AICc=round(c(dfa_1$AICc, dfa_temp$AICc, dfa_TP$AICc, dfa_both$AICc))),
       quote=FALSE)
+
 
 ## ----dfa-fit_dfa_dummy, cache=TRUE---------------------------------------
 cos_t <- cos(2 * pi * seq(TT) / 12)
@@ -218,6 +236,7 @@ dd <- rbind(cos_t,sin_t)
 dfa_seas <- MARSS(dat_1980, model = mod_list, form = "dfa", z.score=TRUE,
                   control = con_list, covariates=dd)
 dfa_seas$AICc
+
 
 ## ----dfa-plot_dfa_temp_fits, fig.height=9, fig.width=8, fig.cap='Data and model fits for the DFA with covariates.'----
 ## get model fits & CI's

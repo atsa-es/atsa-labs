@@ -100,7 +100,7 @@ Note that when you fit the augmented model, the estimates of $\mathbf{C}$ and $\
 
 Let's see an example using the Washington SNOTEL data.  The data we will use is the snow water equivalent percent of normal. This represents the snow water equivalent compared to the average value for that site on the same day.  We will look at a subset of sites in the Central Cascades in our `snotel` dataset (Figure \@ref(fig:mssmiss-plotsnotel)).
 
-```{r mssmiss-loaddata, include=FALSE, eval=FALSE}
+```{r mssmiss-loaddata, include=FALSE}
 #If bookdown is being run, then we are at the top level
 #If "gitbook" is not in the output
 #then user is running Rmd in the folder for debugging
@@ -112,7 +112,7 @@ if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){
 }
 ```
 
-```{r mssmiss-loadsno}
+```{r mssmiss-loadsno, eval=FALSE}
 load("snotel.RData")
 ```
 
