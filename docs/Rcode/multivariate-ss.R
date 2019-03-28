@@ -370,7 +370,7 @@ lowerCI <- apply(pars$x, c(2,3), quantile, 0.025)
 colnames(means) <- colnames(upperCI) <- colnames(lowerCI) <- rownames(Y)
 
 
-## ----marss-stan-plot, fig.cap="Estimated level and 95% credible intervals.", echo=FALSE----
+## ----marss-stan-plot, fig.cap="Estimated level and 95 percent credible intervals.", echo=FALSE----
 temp <- as.data.frame(means)
 pdat1 <- reshape2::melt(temp, variable.name = "region", value.name="mean")
 temp <- as.data.frame(upperCI)

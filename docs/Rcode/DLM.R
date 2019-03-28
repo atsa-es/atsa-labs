@@ -193,10 +193,14 @@ par(mar=c(4,4,1,0), oma=c(0,0,0,0.5))
 acf(t(innov), lwd=2, lag.max=10)
 
 
+## ----dlm-load-atsa, eval=FALSE-------------------------------------------
+## library(devtools)
+## devtools::install_github("nwfsc-timeseries/atsalibrary")
 
 
-## ----dlm-SRdata, echo=TRUE, eval=FALSE-----------------------------------
-## load("KvichakSockeye.RData")
+## ----dlm-read-data-------------------------------------------------------
+data(KvichakSockeye, package="atsalibrary")
+SRdata <- KvichakSockeye
 
 
 ## ----dlm-data-head-------------------------------------------------------

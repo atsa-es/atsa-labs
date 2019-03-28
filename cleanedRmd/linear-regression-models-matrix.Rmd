@@ -2,22 +2,6 @@
 knitr::opts_knit$set(unnamed.chunk.label = "mlr-")
 ```
 
-\newcommand{\mathbf{e}}{\mathbf{e}}
-\newcommand{\mathbf{x}}{\mathbf{x}}
-\newcommand{\mathbf{y}}{\mathbf{y}}
-\newcommand{\mathbf{Z}}{\mathbf{Z}}
-\newcommand{\,\text{MVN}}{\,\text{MVN}}
-\newcommand{\,\text{N}}{\,\text{N}}
-\renewcommand{\mathbf{A}}{\mathbf{A}}
-\renewcommand{\mathbf{a}}{\mathbf{a}}
-\newcommand{\mathbf{B}}{\mathbf{B}}
-\newcommand{\mathbf{D}}{\mathbf{D}}
-\newcommand{\mathbf{d}}{\mathbf{d}}
-\newcommand{\mathbf{I}}{\mathbf{I}}
-\newcommand{\mathbf{M}}{\mathbf{M}}
-\newcommand{\mathbf{P}}{\mathbf{P}}
-\newcommand{\mathbf{p}}{\mathbf{p}}
-
 # Linear regression in matrix form  {#chap-mlr}
 \chaptermark{Linear regression}
 
@@ -53,7 +37,7 @@ lm(stack.loss ~ Air.Flow, data=dat)
 This fits the following model for the $i$-th measurment:
 \begin{equation}
 (\#eq:stacklossi)
-stack.loss_i = \alpha + \beta air_i + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
+stack.loss_i = \alpha + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 We will write the model for all the measurements together in two different ways, Form 1 and Form 2.
 
@@ -111,7 +95,7 @@ Move $\mathbf{x}$ to the right by itself, to get
 
 Let's assume our errors, the $\mathbf{e}$, are i.i.d. which means that
 \begin{equation*}
-\mathbf{e} \sim \,\text{MVN}\begin{pmatrix}0,
+\mathbf{e} \sim \text{MVN}\begin{pmatrix}0,
 \begin{bmatrix}
 \sigma^2&0&0&0\\ 0&\sigma^2&0&0\\ 0&0&\sigma^2&0\\ 0&0&0&\sigma^2
 \end{bmatrix}
@@ -402,12 +386,12 @@ Go through this code line by line at the R command line.  Look at ```Z```. It is
 Let's say that the odd numbered plants are in the north and the even numbered are in the south. We want to include this as a factor in our model that affects the intercept.  Let's go back to just having air flow be our explanatory variable.  Now if the plant is in the north our model is
 \begin{equation}
 (\#eq:groups-intercepts1)
-stack.loss_i = \alpha_n + \beta air_i + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
+stack.loss_i = \alpha_n + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 If the plant is in the south, our model is
 \begin{equation}
 (\#eq:groups-intercepts2)
-stack.loss_i = \alpha_s + \beta air_i + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
+stack.loss_i = \alpha_s + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 We'll add north/south as a factor called `reg' (region) to our dataframe:
 ```{r mlr-newstackloss}
@@ -500,12 +484,12 @@ Make sure you understand the code used to form the $\mathbf{Z}$ matrix.  Also no
 Now let's say that the plants have different owners, Sue and Aneesh, and we want to have $\beta$ for the air flow effect vary by owner.  If the plant is in the north and owned by Sue, the model is
 \begin{equation}
 (\#eq:groups-betas1)
-stack.loss_i = \alpha_n + \beta_s air_i + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
+stack.loss_i = \alpha_n + \beta_s air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 If it is in the south and owned by Aneesh, the model is
 \begin{equation}
-(\#eq:groups-betas1)
-stack.loss_i = \alpha_s + \beta_a air_i + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
+(\#eq:groups-betas2)
+stack.loss_i = \alpha_s + \beta_a air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 You get the idea.
 
@@ -589,12 +573,12 @@ Let's imagine that the data were taken consecutively in time by quarter.  We wan
 If the data were collected in quarter 1, the model is
 \begin{equation}
 (\#eq:season-i)
-stack.loss_i = \alpha_1 + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
+stack.loss_i = \alpha_1 + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 If collected in quarter 2, the model is
 \begin{equation}
 (\#eq:season-i2)
-stack.loss_i = \alpha_2 + e_i, \text{ where } e_i \sim \,\text{N}(0,\sigma^2) 
+stack.loss_i = \alpha_2 + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 etc.
 

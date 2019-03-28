@@ -12,7 +12,7 @@ In this chapter, you will practice selecting and fitting an ARIMA model to catch
 We will use the catch landings from Greek waters (`greeklandings`) and the Chinook landings  (`chinook`) in Washington data sets for this chapter. These datasets are in the **atsalibrary** package on GitHub.  Install  using the **devtools** package.
 ```{r bj-load, eval=FALSE}
 library(devtools)
-devtools::install_github("nwfsc-timeseries/atsa-package")
+devtools::install_github("nwfsc-timeseries/atsalibrary")
 ```
 
 Load the data.
@@ -28,7 +28,7 @@ chinook <- chinook.month
 
 Ensure you have the necessary packages.
 
-```{r bj-load_packages}
+```{r bj-load-packages}
 library(ggplot2)
 library(gridExtra)
 library(reshape2)
@@ -576,7 +576,7 @@ forecast::checkresiduals(fit)
 
 ## Forecast from a fitted ARIMA model {#sec-boxjenkins-forecast}
 
-We can create a forecast from our anchovy ARIMA model using `forecast()`.  The shading is the 80% and 95% prediction intervals.
+We can create a forecast from our anchovy ARIMA model using `forecast()`.  The shading is the 80\% and 95\% prediction intervals.
 
 ```{r bj-forecast-anchovy}
 fr <- forecast::forecast(fit, h=10)
@@ -629,7 +629,7 @@ points(testdat)
 ## Problems {#sec-boxjenkins-problems}
 
 For these problems, use the catch landings from Greek waters (`greeklandings`) and the Chinook landings  (`chinook`) in Washington data. Load the data as follows:
-```{r bj-read-data}
+```{r bj-read-data-problems}
 data(greeklandings, package="atsalibrary")
 landings <- greeklandings
 data(chinook, package="atsalibrary")

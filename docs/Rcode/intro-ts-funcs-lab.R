@@ -1,9 +1,3 @@
-## ----tslab-load-datasets, eval=FALSE-------------------------------------
-## load("CO2_data.RData")
-## load("NHemiTemp_data.RData")
-## load("hourly_phyto.RData")
-
-
 ## ----tslab-loadpackages, warning=FALSE, message=FALSE, results='hide'----
 library(stats)
 library(MARSS)
@@ -11,33 +5,18 @@ library(forecast)
 library(datasets)
 
 
-## ----tslab-CO2data, eval=FALSE-------------------------------------------
-## library(RCurl)
-## ## get CO2 data from Mauna Loa observatory
-## ww1 <- "ftp://aftp.cmdl.noaa.gov/products/"
-## ww2 <- "trends/co2/co2_mm_mlo.txt"
-## CO2fulltext <- getURL(paste0(ww1,ww2))
-## CO2 <- read.table(text=CO2fulltext)[,c(1,2,5)]
-## ## assign better column names
-## colnames(CO2) <- c("year","month","ppm")
-## save(CO2, CO2fulltext, file="CO2_data.RData")
+## ----tslab-load-atsa, eval=FALSE-----------------------------------------
+## library(devtools)
+## devtools::install_github("nwfsc-timeseries/atsalibrary")
 
 
-
-
-## ----tslab-temp-data, eval=FALSE-----------------------------------------
-## library(RCurl)
-## ww1 <- "https://www.ncdc.noaa.gov/cag/time-series/"
-## ww2 <- "global/nhem/land_ocean/p12/12/1880-2014.csv"
-## Temp <- read.csv(text=getURL(paste0(ww1,ww2)), skip=4)
-## save(Temp, file="NHemiTemp_data.RData")
-
-
-
-
-## ----eval=FALSE----------------------------------------------------------
-## load("CO2_data.RData")
-## load("NHemiTemp_data.RData")
+## ----tslab-load-data-----------------------------------------------------
+data(NHTemp, package="atsalibrary")
+Temp <- NHTemp
+data(MLCO2, package="atsalibrary")
+CO2 <- MLCO2
+data(hourlyphyto, package="atsalibrary")
+pDat <- hourlyphyto
 
 
 ## ----tslab-CO2ts, echo=TRUE, eval=TRUE-----------------------------------
@@ -775,6 +754,11 @@ ARMA.res[[which(ARMA.AIC==min(ARMA.AIC))]]
 ## ----tslab-autoARIMA, eval=TRUE, echo=TRUE, cache=TRUE-------------------
 ## find best ARMA(p,q) model
 auto.arima(ARMA.sim, start.p=0, max.p=3, start.q=0, max.q=3)
+
+
+## ----tslab-HWdata--------------------------------------------------------
+data(hourlyphyto, package="atsalibrary")
+pDat <- hourlyphyto
 
 
 ## ----tslab-HW1_1, eval=FALSE, echo=TRUE----------------------------------

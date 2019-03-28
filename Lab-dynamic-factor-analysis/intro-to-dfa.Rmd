@@ -284,7 +284,7 @@ Any of these options for $\RR$ (and other custom options as well) are available 
 
 For this exercise, we will use the Lake Washington phytoplankton data contained in the **MARSS** package. Let's begin by reading in the monthly values for all of the data, including metabolism, chemistry, and climate.
 
-```{r dfa-read_data}
+```{r dfa-read-data}
 ## load the data (there are 3 datasets contained here)
 data(lakeWAplankton, package="MARSS")
 ## we want lakeWAplanktonTrans, which has been transformed
@@ -303,7 +303,7 @@ dat_1980 <- plank_dat[,phytoplankton]
 
 Next, we transpose the data matrix and calculate the number of time series and their length.
 
-```{r dfa-trans_data}
+```{r dfa-trans-data}
 ## transpose data so time goes across columns
 dat_1980 <- t(dat_1980)
 ## get number of time series
@@ -314,7 +314,7 @@ TT <- dim(dat_1980)[2]
 
 It will be easier to estimate the real parameters of interest if we de-mean the data, so let's do that.
 
-```{r dfa-demean_data}
+```{r dfa-demean-data}
 y_bar <- apply(dat_1980, 1, mean, na.rm=TRUE)
 dat <- dat_1980 - y_bar
 rownames(dat) <- rownames(dat_1980)
@@ -347,7 +347,7 @@ Notice that the code below uses some of the **MARSS** shortcuts for specifying f
 
 Here we will fit the DFA model above where we have `R N_ts` observed time series and we want 3 hidden states. Now we need to set up the observation model for `MARSS`. Here are the vectors and matrices for our first model where each nutrient follows its own process. Recall that we will need to set the elements in the upper R corner of $\ZZ$ to 0. We will assume that the observation errors have different variances and they are independent of one another.
 
-```{r dfa-dfa_obs_eqn}
+```{r dfa-dfa-obs-eqn}
 ## 'ZZ' is loadings matrix
 Z_vals <- list("z11",  0  ,  0  ,
                "z21","z22",  0  ,
@@ -369,7 +369,7 @@ RR <- "diagonal and unequal"
 
 We need to specify the explicit form for all of the vectors and matrices in the full form of the MARSS model we defined in Sec 3.1. Note that we do not have to specify anything for the states $(\mathbf{x})$ -- those are elements that `MARSS` will identify and estimate itself based on our definitions of the other vectors and matrices.
 
-```{r dfa-dfa_proc_eqn}
+```{r dfa-dfa-proc-eqn}
 ## number of processes
 mm <- 3
 ## 'BB' is identity: 1's along the diagonal & 0's elsewhere
@@ -391,7 +391,7 @@ Now it's time to fit our first DFA model To do so, we need to create three lists
 2. A list of any initial values -- `MARSS` will pick its own otherwise;
 3. A list of control parameters for the `MARSS()` function.
 
-```{r dfa-create_model_lists}
+```{r dfa-create-model-lists}
 ## list with specifications for model vectors/matrices
 mod_list <- list(Z=ZZ, A=aa, D=DD, d=dd, R=RR,
                  B=BB, U=uu, C=CC, c=cc, Q=QQ)
@@ -403,7 +403,7 @@ con_list <- list(maxit = 3000, allow.degen = TRUE)
 
 Now we can fit the model.
 
-```{r dfa-fit_dfa_1, cache=TRUE}
+```{r dfa-fit-dfa-1, cache=TRUE}
 ## fit MARSS
 dfa_1 <- MARSS(y = dat, model = mod_list, inits = init_list, control = con_list)
 ```
@@ -440,7 +440,7 @@ There are many ways of doing factor rotations, but a common method is the "varim
  
 The varimax rotation is easy to compute because R has a built in function for this: `varimax()`. Interestingly, the function returns the inverse of $\HH$, which we need anyway.  
 
-```{r dfa-get_H_inv}
+```{r dfa-get-H-inv}
 ## get the estimated ZZ
 Z_est <- coef(dfa_1, type="matrix")$Z
 ## get the inverse of the rotation matrix
@@ -449,7 +449,7 @@ H_inv <- varimax(Z_est)$rotmat
 
 We can now rotate both $\ZZ$ and $\xx$.
 
-```{r dfa-rotate_Z_x}
+```{r dfa-rotate-Z-x}
 ## rotate factor loadings
 Z_rot = Z_est %*% H_inv   
 ## rotate processes
@@ -507,7 +507,7 @@ ccf(proc_rot[1,],proc_rot[2,], lag.max = 12, main="")
 
 We can plot the fits for our DFA model along with the data. The following function will return the fitted values ± (1-$\alpha$)% confidence intervals.
 
-```{r dfa-defn_get_DFA_fits}
+```{r dfa-defn-get-DFA-fits}
 get_DFA_fits <- function(MLEobj,dd=NULL,alpha=0.05) {
   ## empty list for results
   fits <- list()
@@ -546,7 +546,7 @@ get_DFA_fits <- function(MLEobj,dd=NULL,alpha=0.05) {
 }
 ```
 
-Here are time series of the five phytoplankton groups (points) with the mean of the DFA fits (black line) and the 95% confidence intervals (gray lines). 
+Here are time series of the five phytoplankton groups (points) with the mean of the DFA fits (black line) and the 95\% confidence intervals (gray lines). 
 
 ```{r dfa-plot-dfa-fits, fig.height=9, fig.width=8, fig.cap='Data and fits from the DFA model.'}
 ## get model fits & CI's
@@ -588,14 +588,14 @@ where the $q \times 1$ vector $\dd_t$ contains the covariate(s) at time $t$, and
 
 The Lake Washington dataset has two environmental covariates that we might expect to have effects on phytoplankton growth, and hence, abundance: temperature (`Temp`) and total phosphorous (`TP`). We need the covariate inputs to have the same number of time steps as the variate data, and thus we limit the covariate data to the years 1980-1994 also.
 
-```{r dfa-get_covars}
+```{r dfa-get-covars}
 temp <- t(plank_dat[,"Temp",drop=FALSE])
 TP <- t(plank_dat[,"TP",drop=FALSE])
 ```
 
 We will now fit three different models that each add covariate effects (i.e., `Temp`, `TP`, `Temp` and `TP`) to our existing model above where $m$ = 3 and $\RR$ is `"diagonal and unequal"`.
 
-```{r dfa-fit_DFA_covars, cache=TRUE, results='hide'}
+```{r dfa-fit-DFA-covars, cache=TRUE, results='hide'}
 mod_list=list(m=3, R="diagonal and unequal")
 dfa_temp <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
                   control = con_list, covariates=temp)
@@ -607,7 +607,7 @@ dfa_both <- MARSS(dat, model = mod_list, form = "dfa", z.score = FALSE,
 
 Next we can compare whether the addition of the covariates improves the model fit.
 
-```{r dfa_model_selection}
+```{r dfa-model-selection}
 print(cbind(model=c("no covars", "Temp", "TP", "Temp & TP"),
       AICc=round(c(dfa_1$AICc, dfa_temp$AICc, dfa_TP$AICc, dfa_both$AICc))),
       quote=FALSE)
@@ -617,7 +617,7 @@ This suggests that adding temperature or phosphorus to the model, either alone o
 
 Now let's try to fit a model with a dummy variable for season, and see how that does.
 
-```{r dfa-fit_dfa_dummy, cache=TRUE}
+```{r dfa-fit-dfa-dummy, cache=TRUE}
 cos_t <- cos(2 * pi * seq(TT) / 12)
 sin_t <- sin(2 * pi * seq(TT) / 12)
 dd <- rbind(cos_t,sin_t)
@@ -628,7 +628,7 @@ dfa_seas$AICc
 
 The model with a dummy seasonal factor does much better than the covariate models, but still not as well as the model with only 3 trends. The model fits for the seasonal effects model are shown below.
 
-```{r dfa-plot_dfa_temp_fits, fig.height=9, fig.width=8, fig.cap='Data and model fits for the DFA with covariates.'}
+```{r dfa-plot-dfa-temp-fits, fig.height=9, fig.width=8, fig.cap="Data and model fits for the DFA with covariates."}
 ## get model fits & CI's
 mod_fit <- get_DFA_fits(dfa_seas,dd=dd)
 ## plot the fits

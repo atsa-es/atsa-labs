@@ -1,3 +1,7 @@
+## ----mssmiss-load-data---------------------------------------------------
+data(snotel, package="atsalibrary")
+
+
 ## ----mssmiss-loadpackages, message=FALSE---------------------------------
 library(MARSS)
 library(forecast)

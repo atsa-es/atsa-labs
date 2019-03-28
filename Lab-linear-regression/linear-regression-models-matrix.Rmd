@@ -2,22 +2,6 @@
 knitr::opts_knit$set(unnamed.chunk.label = "mlr-")
 ```
 
-\newcommand{\ee}{\mathbf{e}}
-\newcommand{\xx}{\mathbf{x}}
-\newcommand{\yy}{\mathbf{y}}
-\newcommand{\ZZ}{\mathbf{Z}}
-\newcommand{\MVN}{\,\text{MVN}}
-\newcommand{\N}{\,\text{N}}
-\renewcommand{\AA}{\mathbf{A}}
-\renewcommand{\aa}{\mathbf{a}}
-\newcommand{\BB}{\mathbf{B}}
-\newcommand{\DD}{\mathbf{D}}
-\newcommand{\dd}{\mathbf{d}}
-\newcommand{\II}{\mathbf{I}}
-\newcommand{\MM}{\mathbf{M}}
-\newcommand{\PP}{\mathbf{P}}
-\newcommand{\pp}{\mathbf{p}}
-
 # Linear regression in matrix form  {#chap-mlr}
 \chaptermark{Linear regression}
 
@@ -53,7 +37,7 @@ lm(stack.loss ~ Air.Flow, data=dat)
 This fits the following model for the $i$-th measurment:
 \begin{equation}
 (\#eq:stacklossi)
-stack.loss_i = \alpha + \beta air_i + e_i, \text{ where } e_i \sim \N(0,\sigma^2) 
+stack.loss_i = \alpha + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 We will write the model for all the measurements together in two different ways, Form 1 and Form 2.
 
@@ -75,9 +59,9 @@ You should work through the matrix algebra to make sure you understand why Equat
 We can write the first line of Equation \@ref(eq:stackloss-form1) succinctly as
 \begin{equation}
 (\#eq:stackloss-form1-succinct)
-\yy = \ZZ\xx + \ee
+\mathbf{y} = \mathbf{Z}\mathbf{x} + \mathbf{e}
 \end{equation}
-where $\xx$ are our parameters, $\yy$ are our response variables, and $\ZZ$ are our explanatory variables (with a 1 column for the intercept).  The ```lm()``` function uses Form 1, and we can recover the $\ZZ$ matrix for Form 1 by using the ```model.matrix()``` function on the output from a ```lm()``` call:
+where $\mathbf{x}$ are our parameters, $\mathbf{y}$ are our response variables, and $\mathbf{Z}$ are our explanatory variables (with a 1 column for the intercept).  The ```lm()``` function uses Form 1, and we can recover the $\mathbf{Z}$ matrix for Form 1 by using the ```model.matrix()``` function on the output from a ```lm()``` call:
 ```{r mlr-model.matrix}
 fit=lm(stack.loss ~ Air.Flow, data=dat)
 Z=model.matrix(fit)
@@ -89,38 +73,38 @@ Z[1:4,]
 
 Note: You will not need to know how to solve linear matrix equations for this course.  This section just shows you what the ```lm()``` function is doing to estimate the parameters.
 
-Notice that $\ZZ$ is not a square matrix and its inverse does not exist but the inverse of $\ZZ^\top\ZZ$ exists---if this is a solveable problem.  We can go through the following steps to solve for $\xx$, our parameters $\alpha$ and $\beta$.
+Notice that $\mathbf{Z}$ is not a square matrix and its inverse does not exist but the inverse of $\mathbf{Z}^\top\mathbf{Z}$ exists---if this is a solveable problem.  We can go through the following steps to solve for $\mathbf{x}$, our parameters $\alpha$ and $\beta$.
 
-Start with $\yy = \ZZ\xx + \ee$ and multiply by $\ZZ^\top$ on the left to get
+Start with $\mathbf{y} = \mathbf{Z}\mathbf{x} + \mathbf{e}$ and multiply by $\mathbf{Z}^\top$ on the left to get
 \begin{equation*}
-\ZZ^\top\yy = \ZZ^\top\ZZ\xx + \ZZ^\top\ee
+\mathbf{Z}^\top\mathbf{y} = \mathbf{Z}^\top\mathbf{Z}\mathbf{x} + \mathbf{Z}^\top\mathbf{e}
 \end{equation*}
-Multiply that by $(\ZZ^\top\ZZ)^{-1}$ on the left to get
+Multiply that by $(\mathbf{Z}^\top\mathbf{Z})^{-1}$ on the left to get
 \begin{equation*}
-(\ZZ^\top\ZZ)^{-1}\ZZ^\top\yy = (\ZZ^\top\ZZ)^{-1}\ZZ^\top\ZZ\xx + (\ZZ^\top\ZZ)^{-1}\ZZ^\top\ee
+(\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{Z}\mathbf{x} + (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{e}
 \end{equation*}
-$(\ZZ^\top\ZZ)^{-1}\ZZ^\top\ZZ$  equals the identity matrix, thus
+$(\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{Z}$  equals the identity matrix, thus
 \begin{equation*}
-(\ZZ^\top\ZZ)^{-1}\ZZ^\top\yy = \xx + (\ZZ^\top\ZZ)^{-1}\ZZ^\top\ee\\
+(\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y} = \mathbf{x} + (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{e}\\
 \end{equation*}
-Move $\xx$ to the right by itself, to get
+Move $\mathbf{x}$ to the right by itself, to get
 \begin{equation*}
-(\ZZ^\top\ZZ)^{-1}\ZZ^\top\yy - (\ZZ^\top\ZZ)^{-1}\ZZ^\top\ee = \xx
+(\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y} - (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{e} = \mathbf{x}
 \end{equation*}
 
 
-Let's assume our errors, the $\ee$, are i.i.d. which means that
+Let's assume our errors, the $\mathbf{e}$, are i.i.d. which means that
 \begin{equation*}
-\ee \sim \MVN\begin{pmatrix}0,
+\mathbf{e} \sim \text{MVN}\begin{pmatrix}0,
 \begin{bmatrix}
 \sigma^2&0&0&0\\ 0&\sigma^2&0&0\\ 0&0&\sigma^2&0\\ 0&0&0&\sigma^2
 \end{bmatrix}
 \end{pmatrix}
 \end{equation*}
-This equation means $\ee$ is drawn from a multivariate normal distribution with a variance-covariance matrix that is diagonal with equal variances.
-Under that assumption, the expected value of $(\ZZ^\top\ZZ)^{-1}\ZZ^\top\ee$ is zero.  So we can solve for $\xx$ as
+This equation means $\mathbf{e}$ is drawn from a multivariate normal distribution with a variance-covariance matrix that is diagonal with equal variances.
+Under that assumption, the expected value of $(\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{e}$ is zero.  So we can solve for $\mathbf{x}$ as
 \begin{equation*}
-\xx = (\ZZ^\top\ZZ)^{-1}\ZZ^\top\yy
+\mathbf{x} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y}
 \end{equation*}
 
 Let's try that with R and compare to what you get with ```lm()```:
@@ -154,14 +138,14 @@ Written in matrix form (Form 1), this is
 +
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
 \end{equation}
-Now $\ZZ$ is a matrix with 4 columns and $\xx$ is a column vector with 4 rows.  We can show the $\ZZ$ matrix again directly from our ```lm()``` fit:
+Now $\mathbf{Z}$ is a matrix with 4 columns and $\mathbf{x}$ is a column vector with 4 rows.  We can show the $\mathbf{Z}$ matrix again directly from our ```lm()``` fit:
 ```{r mlr-model.matrix.mult.exp.var}
 Z=model.matrix(fit1.mult)
 Z
 ```
 
 
-We can solve for $\xx$ just like before and compare to what we get with ```lm()```:
+We can solve for $\mathbf{x}$ just like before and compare to what we get with ```lm()```:
 ```{r mlr-stackloss3}
 y=matrix(dat$stack.loss, ncol=1)
 Z=cbind(1,dat$Air.Flow, dat$Water.Temp, dat$Acid.Conc)
@@ -169,12 +153,12 @@ Z=cbind(1,dat$Air.Flow, dat$Water.Temp, dat$Acid.Conc)
 solve(t(Z)%*%Z)%*%t(Z)%*%y
 coef(fit1.mult)
 ```
-Take a look at the $\ZZ$ we made in R.  It looks exactly like what is in our model written in matrix form (Equation \@ref(eq:stackloss-form1-mult)).
+Take a look at the $\mathbf{Z}$ we made in R.  It looks exactly like what is in our model written in matrix form (Equation \@ref(eq:stackloss-form1-mult)).
 
 
 ### When does Form 1 arise?  {#sec-mlr-form1when}
 
-This form of writing a regression model will come up when you work with dynamic linear models (DLMs).  With DLMs, you will be fitting models of the form $\yy_t=\ZZ_t\xx_t+\ee_t$.  In these models you have multiple $\yy$ at regular time points and you allow your regression parameters, the $\xx$, to evolve through time as a random walk.
+This form of writing a regression model will come up when you work with dynamic linear models (DLMs).  With DLMs, you will be fitting models of the form $\mathbf{y}_t=\mathbf{Z}_t\mathbf{x}_t+\mathbf{e}_t$.  In these models you have multiple $\mathbf{y}$ at regular time points and you allow your regression parameters, the $\mathbf{x}$, to evolve through time as a random walk.
 
 
 ### Matrix Form 1b: The transpose of Form 1  {#sec-mlr-form1b}
@@ -190,10 +174,10 @@ We could also write Form 1 as follows:
 \begin{bmatrix}e_1&e_2&e_3&e_4\end{bmatrix}
 \end{split}
 \end{equation}
-This is just the transpose of Form 1.  Work through the matrix algebra to make sure you understand why Equation \@ref(eq:stackloss-form1b) is Equation \@ref(eq:stacklossi) for all the $i$ data points together and why it is equal to the transpose of Equation \@ref(eq:stackloss-form1).  You'll need the relationship $(\AA\BB)^\top=\BB^\top \AA^\top$.
+This is just the transpose of Form 1.  Work through the matrix algebra to make sure you understand why Equation \@ref(eq:stackloss-form1b) is Equation \@ref(eq:stacklossi) for all the $i$ data points together and why it is equal to the transpose of Equation \@ref(eq:stackloss-form1).  You'll need the relationship $(\mathbf{A}\mathbf{B})^\top=\mathbf{B}^\top \mathbf{A}^\top$.
 
-Let's write Equation \@ref(eq:stackloss-form1b) as $\yy = \DD\dd$, where $\DD$ contains our parameters.  Then we can solve for $\DD$ following the steps in Section \@ref(sec-mlr-solveform1) but multiplying from the right instead of from the left.  Work through the steps to show that 
-$\dd = \yy\dd^\top(\dd\dd^\top)^{-1}$.
+Let's write Equation \@ref(eq:stackloss-form1b) as $\mathbf{y} = \DD\dd$, where $\DD$ contains our parameters.  Then we can solve for $\DD$ following the steps in Section \@ref(sec-mlr-solveform1) but multiplying from the right instead of from the left.  Work through the steps to show that 
+$\dd = \mathbf{y}\dd^\top(\dd\dd^\top)^{-1}$.
 
 ```{r mlr-stack.loss.form1b.comp}
 y=matrix(dat$stack.loss, nrow=1)
@@ -225,18 +209,18 @@ Work through the matrix algebra to make sure you understand why Equation \@ref(e
 We will write Form 2 succinctly as
 \begin{equation}
 (\#eq:form2-succinct)
-\yy=\ZZ\xx+\ee
+\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}
 
 
 ### Form 2 with multiple explanatory variables  {#sec-mlr-form2m}
 
-The $\xx$ is a column vector of the explanatory variables. If we have more explanatory variables, we add them to the column vector at the bottom.  So if we had air flow, water temperature and acid concentration as explanatory variables, $\xx$ looks like
+The $\mathbf{x}$ is a column vector of the explanatory variables. If we have more explanatory variables, we add them to the column vector at the bottom.  So if we had air flow, water temperature and acid concentration as explanatory variables, $\mathbf{x}$ looks like
 \begin{equation}
 (\#eq:ss2-form2)
 \begin{bmatrix}1 \\ air_1 \\ air_2 \\ air_3 \\ air_4 \\ water_1 \\ water_2 \\ water_3 \\ water_4 \\ acid_1 \\ acid_2 \\ acid_3 \\ acid_4 \end{bmatrix}
 \end{equation}
-Add columns to the  $\ZZ$ matrix for each new variable.
+Add columns to the  $\mathbf{Z}$ matrix for each new variable.
 \begin{equation}
 \begin{bmatrix}
 \alpha & \beta_1 & 0 & 0 & 0 & \beta_2 & 0 & 0 & 0 & \beta_3 & 0 & 0 & 0\\
@@ -245,7 +229,7 @@ Add columns to the  $\ZZ$ matrix for each new variable.
 \alpha&0&0&0&\beta_1&0&0&0&\beta_2&0&0&0&\beta_3
 \end{bmatrix}
 \end{equation}
-The number of rows of $\ZZ$ is always $n$, the number of rows of $\yy$, because the number of rows on the left and right of the equal sign must match.  The number of columns in $\ZZ$ is determined by the size of $\xx$.  If there is an intercept, there is a 1 in $\xx$.  Then each explanatory variable (like air flow and wind) appears $n$ times.  So if the number of explanatory variables is $k$, the number of columns in $\ZZ$ is $1+k \times n$ if there is an intercept term and $k \times n$ if there is not.
+The number of rows of $\mathbf{Z}$ is always $n$, the number of rows of $\mathbf{y}$, because the number of rows on the left and right of the equal sign must match.  The number of columns in $\mathbf{Z}$ is determined by the size of $\mathbf{x}$.  If there is an intercept, there is a 1 in $\mathbf{x}$.  Then each explanatory variable (like air flow and wind) appears $n$ times.  So if the number of explanatory variables is $k$, the number of columns in $\mathbf{Z}$ is $1+k \times n$ if there is an intercept term and $k \times n$ if there is not.
 
 
 ### When does Form 2 arise?  {#sec-mlr-form2when}
@@ -264,13 +248,13 @@ Form 2 is similar to how multivariate time series models are typically written f
 +
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}_t
 \end{equation}
-In this case, $\yy_t$ is the set of 4 observations at time $t$ and $\xx_t$ is the set of 2 explanatory variables at time $t$. The $\ZZ$ is showing how we are modeling the effects of $x_1$ and $x_2$ on the $y$s.  Notice that the effects are not consistent across the $x$ and $y$.  This model would not be possible to fit with ```lm()``` but will be easy to fit with ```MARSS()```.  
+In this case, $\mathbf{y}_t$ is the set of 4 observations at time $t$ and $\mathbf{x}_t$ is the set of 2 explanatory variables at time $t$. The $\mathbf{Z}$ is showing how we are modeling the effects of $x_1$ and $x_2$ on the $y$s.  Notice that the effects are not consistent across the $x$ and $y$.  This model would not be possible to fit with ```lm()``` but will be easy to fit with ```MARSS()```.  
 
 
 ### Solving for the parameters for Form 2  {#sec-mlr-solveform2}
 \textit{You can just skim this section if you want but make sure you carefully look at the code in \@ref(sec-mlr-solveform2code). You will need to adapt that for the homework.  Though you will not need any of the math discussed here for the course, this section will help you practice matrix multiplication and will introduce you to `permutation' matrices which will be handy in many other contexts. }
 
-To solve for $\alpha$ and $\beta$, we need our parameters in a column matrix like so $\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]$.  We do this by rewritting $\ZZ\xx$ in Equation \@ref(eq:form2-succinct) in `vec' form:  if $\ZZ$ is a $n \times m$ matrix and  $\xx$ is a matrix with 1 column and $m$ rows, then $\ZZ\xx = (\xx^\top \otimes \II_n)\vec(\ZZ)$. The symbol $\otimes$ means Kronecker product and just ignore it since you'll never see it again in our course (or google 'kronecker product' if you are curious).   The "vec" of a matrix is that matrix rearranged as a single column:
+To solve for $\alpha$ and $\beta$, we need our parameters in a column matrix like so $\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]$.  We do this by rewritting $\mathbf{Z}\mathbf{x}$ in Equation \@ref(eq:form2-succinct) in `vec' form:  if $\mathbf{Z}$ is a $n \times m$ matrix and  $\mathbf{x}$ is a matrix with 1 column and $m$ rows, then $\mathbf{Z}\mathbf{x} = (\mathbf{x}^\top \otimes \II_n)\vec(\mathbf{Z})$. The symbol $\otimes$ means Kronecker product and just ignore it since you'll never see it again in our course (or google 'kronecker product' if you are curious).   The "vec" of a matrix is that matrix rearranged as a single column:
 \begin{equation*}
 \vec \begin{bmatrix}
 1&2\\
@@ -300,7 +284,7 @@ To show how we solve for $\alpha$ and $\beta$, let's use an example with only 3 
 +
 \begin{bmatrix}e_1\\e_2\\e_3\end{bmatrix}
 \end{equation}
-Using $\ZZ\xx = (\xx^\top \otimes \II_n)\vec(\ZZ)$, this means
+Using $\mathbf{Z}\mathbf{x} = (\mathbf{x}^\top \otimes \II_n)\vec(\mathbf{Z})$, this means
 \begin{equation}
 \begin{bmatrix}
 \alpha&\beta&0&0\\
@@ -324,7 +308,7 @@ Using $\ZZ\xx = (\xx^\top \otimes \II_n)\vec(\ZZ)$, this means
 \beta
 \end{bmatrix}
 \end{equation}
-We need to rewrite the $\vec(\ZZ)$ as a `permutation' matrix times $\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]$:
+We need to rewrite the $\vec(\mathbf{Z})$ as a `permutation' matrix times $\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]$:
 \begin{equation}
 \begin{bmatrix}
 \alpha\\
@@ -364,16 +348,16 @@ where $\PP$ is the permutation matrix and $\pp=\left[ \begin{smallmatrix}\alpha\
 Thus,
 \begin{equation}
 (\#eq:stackloss-form2-small2)
-\yy=\ZZ\xx+\ee = (\xx^\top \otimes \II_n)\PP\begin{bmatrix}\alpha\\ \beta\end{bmatrix} = \MM\pp + \ee
+\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e} = (\mathbf{x}^\top \otimes \II_n)\PP\begin{bmatrix}\alpha\\ \beta\end{bmatrix} = \MM\pp + \mathbf{e}
 \end{equation}
-where $\MM=(\xx^\top \otimes \II_n)\PP$.
+where $\MM=(\mathbf{x}^\top \otimes \II_n)\PP$.
 We can solve for $\pp$, the parameters, using 
-$$(\MM^\top\MM)^{-1}\MM^\top\yy$$
+$$(\MM^\top\MM)^{-1}\MM^\top\mathbf{y}$$
 as before.  
 
 
 ### Code to solve for parameters in Form 2  {#sec-mlr-solveform2code}
-In the homework, you will use the R code in this section to solve for the parameters in Form 2.  Later when you are fitting multivariate time series models, you will not solve for parameters this way but you will need to both construct $\ZZ$ matrices in R and read $\ZZ$ matrices. The homework will give you practice creating $\ZZ$ matrices in R.
+In the homework, you will use the R code in this section to solve for the parameters in Form 2.  Later when you are fitting multivariate time series models, you will not solve for parameters this way but you will need to both construct $\mathbf{Z}$ matrices in R and read $\mathbf{Z}$ matrices. The homework will give you practice creating $\mathbf{Z}$ matrices in R.
 
 ```{r mlr-stackloss.form2.solve, tidy=FALSE}
 #make your y and x matrices
@@ -402,12 +386,12 @@ Go through this code line by line at the R command line.  Look at ```Z```. It is
 Let's say that the odd numbered plants are in the north and the even numbered are in the south. We want to include this as a factor in our model that affects the intercept.  Let's go back to just having air flow be our explanatory variable.  Now if the plant is in the north our model is
 \begin{equation}
 (\#eq:groups-intercepts1)
-stack.loss_i = \alpha_n + \beta air_i + e_i, \text{ where } e_i \sim \N(0,\sigma^2) 
+stack.loss_i = \alpha_n + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 If the plant is in the south, our model is
 \begin{equation}
 (\#eq:groups-intercepts2)
-stack.loss_i = \alpha_s + \beta air_i + e_i, \text{ where } e_i \sim \N(0,\sigma^2) 
+stack.loss_i = \alpha_s + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 We'll add north/south as a factor called `reg' (region) to our dataframe:
 ```{r mlr-newstackloss}
@@ -434,13 +418,13 @@ Written in matrix form, Form 1 for this model is
 +
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
 \end{equation}
-Notice that odd plants get $\alpha_n$ and even plants get $\alpha_s$.  Use ```model.matrix()``` to see that this is the $\ZZ$ matrix that ```lm()``` formed. Notice the matrix output by ```model.matrix()``` looks exactly like $\ZZ$ in Equation \@ref(eq:stackloss-form1-ns).
+Notice that odd plants get $\alpha_n$ and even plants get $\alpha_s$.  Use ```model.matrix()``` to see that this is the $\mathbf{Z}$ matrix that ```lm()``` formed. Notice the matrix output by ```model.matrix()``` looks exactly like $\mathbf{Z}$ in Equation \@ref(eq:stackloss-form1-ns).
 ```{r mlr-newstackloss-lm-model-matrix}
 Z=model.matrix(fit2)
 Z[1:4,]
 ```
 
-We can solve for the parameters using $\xx = (\ZZ^\top\ZZ)^{-1}\ZZ^\top\yy$ as we did for Form 1 before by adding on the 1s and 0s columns we see in the $\ZZ$ matrix in Equation \@ref(eq:stackloss-form1-ns).  We could build this $\ZZ$ using the following R code:
+We can solve for the parameters using $\mathbf{x} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y}$ as we did for Form 1 before by adding on the 1s and 0s columns we see in the $\mathbf{Z}$ matrix in Equation \@ref(eq:stackloss-form1-ns).  We could build this $\mathbf{Z}$ using the following R code:
 ```{r mlr-stackloss-form1-Z}
 Z=cbind(dat$Air.Flow,c(1,0,1,0),c(0,1,0,1))
 colnames(Z)=c("beta","regn","regs")
@@ -474,10 +458,10 @@ We would write this model in Form 2 as
 \alpha_s&0&0&0&\beta
 \end{bmatrix}\begin{bmatrix}1\\air_1\\air_2\\air_3\\air_4\end{bmatrix}
 +
-\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\ZZ\xx+\ee
+\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}
 
-To estimate the parameters, we need to be able to write a list matrix that looks like $\ZZ$ in Equation \@ref(eq:stackloss-form2-ns). We can use the same code we used in Section \@ref(sec-mlr-solveform2code) with $\ZZ$ changed to look like that in Equation \@ref(eq:stackloss-form2-ns).
+To estimate the parameters, we need to be able to write a list matrix that looks like $\mathbf{Z}$ in Equation \@ref(eq:stackloss-form2-ns). We can use the same code we used in Section \@ref(sec-mlr-solveform2code) with $\mathbf{Z}$ changed to look like that in Equation \@ref(eq:stackloss-form2-ns).
 ```{r mlr-stackloss.form2.ns}
 y=matrix(dat$stack.loss, ncol=1)
 x=matrix(c(1,dat$Air.Flow),ncol=1)
@@ -492,7 +476,7 @@ P=MARSS:::convert.model.mat(Z)$free[,,1]
 M=kronecker(t(x),diag(n))%*%P
 solve(t(M)%*%M)%*%t(M)%*%y
 ```
-Make sure you understand the code used to form the $\ZZ$ matrix.  Also notice that ```class(Z[1,3])="numeric"``` while ```class(Z[1,2])="character"```.  This is important.  ```0``` in R is a number while ```"0"``` would be a character (the name of a parameter).
+Make sure you understand the code used to form the $\mathbf{Z}$ matrix.  Also notice that ```class(Z[1,3])="numeric"``` while ```class(Z[1,2])="character"```.  This is important.  ```0``` in R is a number while ```"0"``` would be a character (the name of a parameter).
 
 
 ## Groups of $\beta$'s  {#sec-mlr-betas}
@@ -500,12 +484,12 @@ Make sure you understand the code used to form the $\ZZ$ matrix.  Also notice th
 Now let's say that the plants have different owners, Sue and Aneesh, and we want to have $\beta$ for the air flow effect vary by owner.  If the plant is in the north and owned by Sue, the model is
 \begin{equation}
 (\#eq:groups-betas1)
-stack.loss_i = \alpha_n + \beta_s air_i + e_i, \text{ where } e_i \sim \N(0,\sigma^2) 
+stack.loss_i = \alpha_n + \beta_s air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 If it is in the south and owned by Aneesh, the model is
 \begin{equation}
-(\#eq:groups-betas1)
-stack.loss_i = \alpha_s + \beta_a air_i + e_i, \text{ where } e_i \sim \N(0,\sigma^2) 
+(\#eq:groups-betas2)
+stack.loss_i = \alpha_s + \beta_a air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 You get the idea.
 
@@ -532,17 +516,17 @@ Written in Form 1, this model is
 \begin{bmatrix}1&0&0&air_1\\ 0&1&air_2&0 \\ 1&0&0&air_3\\ 0&1&air_4&0\end{bmatrix}
 \begin{bmatrix}\alpha_n \\ \alpha_s \\ \beta_a \\ \beta_s \end{bmatrix}
 +
-\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\ZZ\xx+\ee
+\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}
-The air data have been written to the right of the 1s and 0s for north/south intercepts because that is how ```lm()``` writes this model in Form 1 and I want to duplicate that (for teaching purposes). Also the $\beta$'s are ordered to be alphabetical because ```lm()``` writes the $\ZZ$ matrix like that.
+The air data have been written to the right of the 1s and 0s for north/south intercepts because that is how ```lm()``` writes this model in Form 1 and I want to duplicate that (for teaching purposes). Also the $\beta$'s are ordered to be alphabetical because ```lm()``` writes the $\mathbf{Z}$ matrix like that.
 
-Now our model is more complicated and using ```model.matrix()``` to get our $\ZZ$ saves us a lot tedious matrix building.
+Now our model is more complicated and using ```model.matrix()``` to get our $\mathbf{Z}$ saves us a lot tedious matrix building.
 ```{r mlr-stackloss.form1.Z.lm.beta}
 fit3=lm(stack.loss ~ -1 + Air.Flow:owner + reg, data=dat)
 Z=model.matrix(fit3)
 Z[1:4,]
 ```
-Notice the matrix output by ```model.matrix()``` looks exactly like $\ZZ$ in Equation \@ref(eq:stackloss-form1-owner) (ignore the attributes info).  Now we can solve for the parameters:
+Notice the matrix output by ```model.matrix()``` looks exactly like $\mathbf{Z}$ in Equation \@ref(eq:stackloss-form1-owner) (ignore the attributes info).  Now we can solve for the parameters:
 ```{r mlr-stackloss.form1.owner.solve}
 y=matrix(dat$stack.loss, ncol=1)
 solve(t(Z)%*%Z)%*%t(Z)%*%y
@@ -551,7 +535,7 @@ Compare to the output from ```lm()``` and you will see it is the same.
 
 
 ### Owner $\beta$'s in Form 2  {#sec-mlr-betas-form2}
-To write this model in Form 2, we just add subscripts to the $\beta$'s in our Form 2 $\ZZ$ matrix:
+To write this model in Form 2, we just add subscripts to the $\beta$'s in our Form 2 $\mathbf{Z}$ matrix:
 \begin{equation}
 (\#eq:stackloss-form2-owners)
 \begin{bmatrix}stack.loss_1\\ stack.loss_2\\ stack.loss_3\\ stack.loss_4\end{bmatrix}
@@ -563,10 +547,10 @@ To write this model in Form 2, we just add subscripts to the $\beta$'s in our Fo
 \alpha_s&0&0&0&\beta_a
 \end{bmatrix}\begin{bmatrix}1\\air_1\\air_2\\air_3\\air_4\end{bmatrix}
 +
-\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\ZZ\xx+\ee
+\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}
 
-To estimate the parameters, we change the $\beta$'s in our $\ZZ$ list matrix to have owner designations:
+To estimate the parameters, we change the $\beta$'s in our $\mathbf{Z}$ list matrix to have owner designations:
 ```{r mlr-stackloss.form2.owners}
 y=matrix(dat$stack.loss, ncol=1)
 x=matrix(c(1,dat$Air.Flow),ncol=1)
@@ -580,7 +564,7 @@ P=MARSS:::convert.model.mat(Z)$free[,,1]
 M=kronecker(t(x),diag(n))%*%P
 solve(t(M)%*%M)%*%t(M)%*%y
 ```
-The parameters estimates are the same, though $\beta$'s are given in reversed order simply due to the way ```convert.model.mat()``` is ordering the columns in Form 2's $\ZZ$.
+The parameters estimates are the same, though $\beta$'s are given in reversed order simply due to the way ```convert.model.mat()``` is ordering the columns in Form 2's $\mathbf{Z}$.
 
 
 ## Seasonal effect as a factor  {#sec-mlr-season-factor}
@@ -589,12 +573,12 @@ Let's imagine that the data were taken consecutively in time by quarter.  We wan
 If the data were collected in quarter 1, the model is
 \begin{equation}
 (\#eq:season-i)
-stack.loss_i = \alpha_1 + e_i, \text{ where } e_i \sim \N(0,\sigma^2) 
+stack.loss_i = \alpha_1 + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 If collected in quarter 2, the model is
 \begin{equation}
 (\#eq:season-i2)
-stack.loss_i = \alpha_2 + e_i, \text{ where } e_i \sim \N(0,\sigma^2) 
+stack.loss_i = \alpha_2 + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}
 etc.
 
@@ -617,7 +601,7 @@ Why does it look like that when -1 is missing from the ```lm()``` call?  Where d
 
 
 ### Seasonal intercepts written in Form 1  {#sec-mlr-season-form1}
-Remembering that ```lm()``` puts models in Form 1, look at the $\ZZ$ matrix for Form 1:
+Remembering that ```lm()``` puts models in Form 1, look at the $\mathbf{Z}$ matrix for Form 1:
 ```{r mlr-stackloss.form1.Z.lm.qtr1}
 fit4=lm(stack.loss ~ -1 + qtr, data=dat)
 Z=model.matrix(fit4)
@@ -632,7 +616,7 @@ Written in Form 1, this model is
 \begin{bmatrix}1&0&0&0\\ 0&1&0&0 \\ 0&0&1&0\\ 0&0&0&1\end{bmatrix}
 \begin{bmatrix}\alpha_1 \\ \alpha_2 \\ \alpha_3 \\ \alpha_4 \end{bmatrix}
 +
-\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\ZZ\xx+\ee
+\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}
 
 
@@ -646,7 +630,7 @@ Z[1:4,]
 
 ### Seasonal intercepts written in Form 2  {#sec-mlr-season-form2}
 
-We do not need to add 1s and 0s to our $\ZZ$ matrix in Form 2; we just add subscripts to our intercepts like we did when we had north-south intercepts.  In this model, we do not have any explanatory variables (except intercept) so our $\xx$ is just a $1 \times 1$ matrix:
+We do not need to add 1s and 0s to our $\mathbf{Z}$ matrix in Form 2; we just add subscripts to our intercepts like we did when we had north-south intercepts.  In this model, we do not have any explanatory variables (except intercept) so our $\mathbf{x}$ is just a $1 \times 1$ matrix:
 \begin{equation}
 (\#eq:stackloss-form2-season)
 \begin{bmatrix}stack.loss_1\\ stack.loss_2\\ stack.loss_3\\ stack.loss_4\end{bmatrix}
@@ -658,7 +642,7 @@ We do not need to add 1s and 0s to our $\ZZ$ matrix in Form 2; we just add subsc
 \alpha_4
 \end{bmatrix}\begin{bmatrix}1\end{bmatrix}
 +
-\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\ZZ\xx+\ee
+\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}
 
 
@@ -687,21 +671,21 @@ With ```lm()```, we fit the model as:
 fit7 = lm(stack.loss ~ -1 + qtr + Air.Flow:qtr:owner, data=fulldat)
 ```
 
-Take a look at $\ZZ$ for Form 1 using ```model.matrix(Z)```.  It's not shown since it is large:
+Take a look at $\mathbf{Z}$ for Form 1 using ```model.matrix(Z)```.  It's not shown since it is large:
 ```{r mlr-complex.lm.Z, results='hide'}
 model.matrix(fit7)
 ```
-The $\xx$ will be
+The $\mathbf{x}$ will be
 $$\begin{bmatrix}\alpha_1 \\ \alpha_2 \\ \alpha_3 \\ \alpha_4 \\ \beta_{1,a} \\ \beta_{2,a} \\ \beta_{3,a} \\ \dots \end{bmatrix}$$
 
-Take a look at the model matrix that ```lm()``` is using and make sure you understand how $\ZZ\xx$ produces Equation \@ref(eq:stackloss-mult-beta).
+Take a look at the model matrix that ```lm()``` is using and make sure you understand how $\mathbf{Z}\mathbf{x}$ produces Equation \@ref(eq:stackloss-mult-beta).
 ```{r mlr-complex.form1.solve, results='hide'}
 Z=model.matrix(fit7)
 ```
 
-For Form 2, our $\ZZ$ size doesn't change; number of rows is $n$ (the number data points) and number of columns is 1 (for intercept) plus the number of explanatory variables times $n$.  So in this case, we only have one explanatory variable (air flow) so $\ZZ$ has 1+21 columns.  To allow the intercept to vary by quarter, we use $\alpha_1$ in the rows of $\ZZ$ where the data is from quarter 1, use $\alpha_2$ where the data is from quarter 2, etc.  Similarly we use the appropriate $\beta_{j,k}$ depending on the quarter and owner for that data point.
+For Form 2, our $\mathbf{Z}$ size doesn't change; number of rows is $n$ (the number data points) and number of columns is 1 (for intercept) plus the number of explanatory variables times $n$.  So in this case, we only have one explanatory variable (air flow) so $\mathbf{Z}$ has 1+21 columns.  To allow the intercept to vary by quarter, we use $\alpha_1$ in the rows of $\mathbf{Z}$ where the data is from quarter 1, use $\alpha_2$ where the data is from quarter 2, etc.  Similarly we use the appropriate $\beta_{j,k}$ depending on the quarter and owner for that data point.
 
-We could construct $\ZZ$, $\xx$ and $\yy$ for Form 2 using
+We could construct $\mathbf{Z}$, $\mathbf{x}$ and $\mathbf{y}$ for Form 2 using
 ```{r mlr-complex.form2.solve, tidy=FALSE, results='hide'}
 y=matrix(fulldat$stack.loss, ncol=1)
 x=matrix(c(1,fulldat$Air.Flow),ncol=1)
@@ -718,7 +702,7 @@ solve(t(M)%*%M)%*%t(M)%*%y
 ```
 Note, the estimates are the same as for ```lm()``` but are not listed in the same order.
 
-Make sure to look at the $\ZZ$ and $\xx$ for the models and that you understand why they look like they do.
+Make sure to look at the $\mathbf{Z}$ and $\mathbf{x}$ for the models and that you understand why they look like they do.
 
 
 ## Models with confounded parameters*  {#sec-mlr-confound}
@@ -727,7 +711,7 @@ Try adding region as another factor in your model along with quarter and fit wit
 ```{r mlr-confounded}
 coef(lm(stack.loss ~ -1 + Air.Flow + reg + qtr, data=fulldat))
 ```
-The estimate for quarter 1 is gone (actually it was set to 0) and the estimate for quarter 4 is NA.  Look at the $\ZZ$ matrix for Form 1 and see if you can figure out the problem.  Try also writing out the model for the 1st plant and you'll see what part of the problem is and why the estimate for quarter 1 is fixed at 0.  
+The estimate for quarter 1 is gone (actually it was set to 0) and the estimate for quarter 4 is NA.  Look at the $\mathbf{Z}$ matrix for Form 1 and see if you can figure out the problem.  Try also writing out the model for the 1st plant and you'll see what part of the problem is and why the estimate for quarter 1 is fixed at 0.  
 ```{r mlr-confounded2}
 fit=lm(stack.loss ~ -1 + Air.Flow + reg + qtr, data=fulldat)
 Z=model.matrix(fit)
@@ -763,22 +747,22 @@ homeworkdat = airquality[1:5,]
 ```
 
 
-1. Using Form 1 $\yy=\ZZ\xx+\ee$, write out the model, showing the $\ZZ$ and $\xx$ matrices, being fit by this command
+1. Using Form 1 $\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e}$, write out the model, showing the $\mathbf{Z}$ and $\mathbf{x}$ matrices, being fit by this command
     ```{r mlr-hw1}
     fit=lm(Ozone ~ Wind + Temp, data=homeworkdat)
     ```
 
 2. For the above model, write out the following R code.
-    a. Create the $\yy$ and $\ZZ$ matrices in R.
-    b. Solve for $\xx$ (the parameters).  Show that they match what you get from the first ```lm()``` call.
+    a. Create the $\mathbf{y}$ and $\mathbf{Z}$ matrices in R.
+    b. Solve for $\mathbf{x}$ (the parameters).  Show that they match what you get from the first ```lm()``` call.
 
 3. Add -1 to your ```lm()``` call in question 1: 
     ```{r mlr-hw1b}
     fit=lm(Ozone ~ -1 + Wind + Temp, data=homeworkdat)
     ```
     a. What changes in  your model? 
-    b. Write out the in Form 1 as an equation. Show the new $\ZZ$ and $\xx$ matrices. 
-    c. Solve for the parameters ($\xx$) and show they match what is returned by ```lm()```.
+    b. Write out the in Form 1 as an equation. Show the new $\mathbf{Z}$ and $\mathbf{x}$ matrices. 
+    c. Solve for the parameters ($\mathbf{x}$) and show they match what is returned by ```lm()```.
 
 4.  For the model for question 1,
     a. Write in Form 2 as an equation.
@@ -799,7 +783,7 @@ homeworkdat = airquality[1:5,]
    b. Write out the `Z` and `x` in R code.
    c. Solve for the parameter values and show that they match what you get from the ```lm()``` call.  To do this, you adapt the code from subsection \@ref(sec-mlr-solveform2code).
 
-7. Write the model below in Form 2 as an equation. Show the $\ZZ$, $\yy$ and $\xx$ matrices.
+7. Write the model below in Form 2 as an equation. Show the $\mathbf{Z}$, $\mathbf{y}$ and $\mathbf{x}$ matrices.
     ```{r mlr-hw5}
     fit=lm(Ozone ~ Temp:region, data=homeworkdat)
     ```

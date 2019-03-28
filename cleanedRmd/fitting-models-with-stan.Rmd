@@ -234,12 +234,12 @@ mod_5 = atsar::fit_dfa(y = dat.spp.1980, num_trends=5)
 
 We will compute the Leave One Out Information Criterion (LOOIC) using the **loo** package.  Like AIC, lower is better.
 
-```{r stan-looic, cache=TRUE}
+```{r stan-looic, cache=TRUE, warning=FALSE}
 loo::loo(loo::extract_log_lik(mod_1))$looic
 ```
 
 Table of the LOOIC values:
-```{r stan-looic-table, cache=TRUE}
+```{r stan-looic-table, cache=TRUE, warning=FALSE}
 looics = c(
   loo::loo(loo::extract_log_lik(mod_1))$looic,
   loo::loo(loo::extract_log_lik(mod_2))$looic,
@@ -271,7 +271,7 @@ seal.mod <- atsar::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
 pars <- rstan::extract(seal.mod)
 ```
 
-```{r stan-plot-seal, fig = TRUE, fig.cap='Estimated states and 95% credible intervals.'}
+```{r stan-plot-seal, fig = TRUE, fig.cap='Estimated states and 95 percent credible intervals.'}
 pred_mean <- c(apply(pars$x, c(2,3), mean))
 pred_lo <- c(apply(pars$x, c(2,3), quantile, 0.025))
 pred_hi <- c(apply(pars$x, c(2,3), quantile, 0.975))
@@ -289,7 +289,7 @@ lines(pred_hi)
 
 2. Using the results from the linear regression model fit with no burn-in (Section \@ref(sec-stan-burn)),  calculate the ACF of the `beta` time series using `acf()`. Would thinning more be appropriate?  How much?
 
-3. Using the fit of the random walk model to the temperature data (Section \@ref(sec-stan-rw)), plot the predicted values (states) and 95% CIs.
+3. Using the fit of the random walk model to the temperature data (Section \@ref(sec-stan-rw)), plot the predicted values (states) and 95\% CIs.
 
 4. To see the effect of this increased flexibility in estimating the autocorrelation, make a plot of the predictions from the AR(1) model (Section \@ref(sec-stan-ar1) and the RW model (\@ref(sec-stan-rw)).
 

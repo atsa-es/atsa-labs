@@ -581,8 +581,8 @@ mod <- rstan::stan(model_code = scode,
   chains = 3, iter = 1000, thin = 1)
 ```
 
-We use `extract()` to extract the parameters from the fitted model and we can plot.  The estimated level is `x` and we will plot that with the 95% credible intervals.
-```{r uss-stan-ar-level, fig.cap="Estimated level and 95% credible intervals.  Blue dots are the actual Nile River levels."}
+We use `extract()` to extract the parameters from the fitted model and we can plot.  The estimated level is `x` and we will plot that with the 95\% credible intervals.
+```{r uss-stan-ar-level, fig.cap="Estimated level and 95 percent credible intervals.  Blue dots are the actual Nile River levels."}
 pars <- rstan::extract(mod)
 pred_mean <- apply(pars$x, 2, mean)
 pred_lo <- apply(pars$x, 2, quantile, 0.025)
@@ -596,7 +596,7 @@ points(y, col="blue")
 
 Here is a `ggplot()` version of the plot.
 
-```{r uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95% credible intervals"}
+```{r uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95 percent credible intervals"}
 library(ggplot2)
 nile <- data.frame(y=y, year=1871:1970)
 h <- ggplot(nile, aes(year))

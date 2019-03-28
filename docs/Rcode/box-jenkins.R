@@ -1,19 +1,17 @@
 ## ----bj-load, eval=FALSE-------------------------------------------------
 ## library(devtools)
-## devtools::install_github("Fish-Forecast/FishForecast")
+## devtools::install_github("nwfsc-timeseries/atsalibrary")
 
 
 ## ----bj-read-data--------------------------------------------------------
-data(greeklandings, package="FishForecast")
+data(greeklandings, package="atsalibrary")
 landings <- greeklandings
 # Use the monthly data
-data(chinook, package="FishForecast")
+data(chinook, package="atsalibrary")
 chinook <- chinook.month
 
 
-
-
-## ----bj-load_packages----------------------------------------------------
+## ----bj-load-packages----------------------------------------------------
 library(ggplot2)
 library(gridExtra)
 library(reshape2)
@@ -301,6 +299,13 @@ fit
 fr <- forecast::forecast(fit, h=12)
 plot(fr)
 points(testdat)
+
+
+## ----bj-read-data-problems-----------------------------------------------
+data(greeklandings, package="atsalibrary")
+landings <- greeklandings
+data(chinook, package="atsalibrary")
+chinook <- chinook.month
 
 
 ## ----get.another.species-------------------------------------------------

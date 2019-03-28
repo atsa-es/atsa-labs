@@ -9,39 +9,26 @@ In this chapter, you will practice selecting and fitting an ARIMA model to catch
 
 ### Data and packages {-}
 
-We will use the catch landings from Greek waters (`greeklandings`) and the Chinook landings  (`chinook`) in Washington data sets for this chapter. These datasets are in the **FishForecast** package hosted on  Github [safs-timeseries](https://github.com/Fish-Forecast/FishForecast).  Install  using the **devtools** package.
+We will use the catch landings from Greek waters (`greeklandings`) and the Chinook landings  (`chinook`) in Washington data sets for this chapter. These datasets are in the **atsalibrary** package on GitHub.  Install  using the **devtools** package.
 ```{r bj-load, eval=FALSE}
 library(devtools)
-devtools::install_github("Fish-Forecast/FishForecast")
+devtools::install_github("nwfsc-timeseries/atsalibrary")
 ```
 
 Load the data.
 
 ```{r bj-read-data}
-data(greeklandings, package="FishForecast")
+data(greeklandings, package="atsalibrary")
 landings <- greeklandings
 # Use the monthly data
-data(chinook, package="FishForecast")
+data(chinook, package="atsalibrary")
 chinook <- chinook.month
 ```
 
-```{r bj-load-data-rmd, include=FALSE, purl=FALSE, eval=FALSE}
-#If bookdown is being run, then we are at the top level
-#If "gitbook" is not in the output
-#then user is running Rmd in the folder for debugging
-if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
-  #load the data
-  load("docs/data/landings.RData")
-  load("docs/data/chinook.RData")
-}else{
-  load("landings.RData")
-  load("chinook.RData")
-}
-```
 
 Ensure you have the necessary packages.
 
-```{r bj-load_packages}
+```{r bj-load-packages}
 library(ggplot2)
 library(gridExtra)
 library(reshape2)
@@ -589,7 +576,7 @@ forecast::checkresiduals(fit)
 
 ## Forecast from a fitted ARIMA model {#sec-boxjenkins-forecast}
 
-We can create a forecast from our anchovy ARIMA model using `forecast()`.  The shading is the 80% and 95% prediction intervals.
+We can create a forecast from our anchovy ARIMA model using `forecast()`.  The shading is the 80\% and 95\% prediction intervals.
 
 ```{r bj-forecast-anchovy}
 fr <- forecast::forecast(fit, h=10)
@@ -641,10 +628,12 @@ points(testdat)
 
 ## Problems {#sec-boxjenkins-problems}
 
-For these problems, use the catch landings from Greek waters [landings.RData](landings.RData) and the Chinook landings  [chinook.RData](chinook.RData) in Washington data. After downloading, load both data sets into your workspace.
-```
-load("landings.RData")
-load("chinoook.RData")
+For these problems, use the catch landings from Greek waters (`greeklandings`) and the Chinook landings  (`chinook`) in Washington data. Load the data as follows:
+```{r bj-read-data-problems}
+data(greeklandings, package="atsalibrary")
+landings <- greeklandings
+data(chinook, package="atsalibrary")
+chinook <- chinook.month
 ```
 
 1. Augmented Dickey-Fuller tests in R.

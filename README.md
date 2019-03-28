@@ -200,7 +200,7 @@ Look at the other Rmd files and follow the conventions for the first page.  Thes
 
 * A link to the R code for the chapter in docs/Rcode folder.
 * A section about the packages and data.  If short, this can be on page 1 of chapter.  If long, a separate section.
-* Links to the data as RData files in docs/data folder.
+* Data should be put in the **atsalibrary** package and loaded from there.
 
 At the top of the Rmd files, add a hidden chunk that sets the tag if you forget to label a chunk.  You cannot duplicate chunk names across all Rmd files, so the tag makes sure that doesn't happen.
 

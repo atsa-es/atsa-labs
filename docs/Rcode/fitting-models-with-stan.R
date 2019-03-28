@@ -139,11 +139,11 @@ mod_4 = atsar::fit_dfa(y = dat.spp.1980, num_trends=4)
 mod_5 = atsar::fit_dfa(y = dat.spp.1980, num_trends=5)
 
 
-## ----stan-looic, cache=TRUE----------------------------------------------
+## ----stan-looic, cache=TRUE, warning=FALSE-------------------------------
 loo::loo(loo::extract_log_lik(mod_1))$looic
 
 
-## ----stan-looic-table, cache=TRUE----------------------------------------
+## ----stan-looic-table, cache=TRUE, warning=FALSE-------------------------
 looics = c(
   loo::loo(loo::extract_log_lik(mod_1))$looic,
   loo::loo(loo::extract_log_lik(mod_2))$looic,
@@ -170,7 +170,7 @@ seal.mod <- atsar::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
 pars <- rstan::extract(seal.mod)
 
 
-## ----stan-plot-seal, fig = TRUE, fig.cap='Estimated states and 95% credible intervals.'----
+## ----stan-plot-seal, fig = TRUE, fig.cap='Estimated states and 95 percent credible intervals.'----
 pred_mean <- c(apply(pars$x, c(2,3), mean))
 pred_lo <- c(apply(pars$x, c(2,3), quantile, 0.025))
 pred_hi <- c(apply(pars$x, c(2,3), quantile, 0.975))

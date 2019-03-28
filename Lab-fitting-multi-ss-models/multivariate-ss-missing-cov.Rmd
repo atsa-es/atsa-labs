@@ -10,7 +10,13 @@ A script with all the R code in the chapter can be downloaded  [here](./Rcode/mu
 
 ### Data and packages {-}
 
-The SNOTEL data are available [here](./data/snotel.RData).
+This chapter will use a SNOTEL dataset.  These are data on snow water equivalency at locations throughtout the state of Washington.  The data are in the **atsalibrary** package.
+
+```{r mssmiss-load-data}
+data(snotel, package="atsalibrary")
+```
+
+The main packages used in this chapter are **MARSS** and **forecast**.
 
 ```{r mssmiss-loadpackages, message=FALSE}
 library(MARSS)
@@ -61,8 +67,8 @@ Our MARSS model with covariates now looks on the surface like a regular MARSS mo
 \yy_t = \ZZ\xx_t + \aa  + \vv_t, \text{ where } \vv_t \sim \MVN(0,\RR) 
 \end{gathered}
 \end{equation}
-with the $\xx_t$, $\yy_t$ and parameter matrices redefined as in Equations \ref{eqn:marsscovarx} and \ref{eqn:marsscovary}:
-\begin{equation}\label{eqn:marsscovarparams}
+with the $\xx_t$, $\yy_t$ and parameter matrices redefined as in Equations \@ref(eq:mssmiss-marsscovarx) and \@ref(eq:mssmiss-marsscovary):
+\begin{equation}
 \begin{gathered}
 \xx=\begin{bmatrix}\xx^{(v)}\\ \xx^{(c)}\end{bmatrix}  \quad \BB=\begin{bmatrix}\BB^{(v)} & \CC \\ 0 & \BB^{(c)}\end{bmatrix}  \quad \uu=\begin{bmatrix}\uu^{(v)}\\ \uu^{(c)}\end{bmatrix} \quad \QQ=\begin{bmatrix}\QQ^{(v)} & 0 \\ 0 & \QQ^{(c)}\end{bmatrix} \\
 \yy=\begin{bmatrix}\yy^{(v)}\\ \yy^{(c)}\end{bmatrix}  \quad \ZZ=\begin{bmatrix}\ZZ^{(v)} & \DD \\ 0 & \ZZ^{(c)}\end{bmatrix}  \quad \aa=\begin{bmatrix}\aa^{(v)}\\ \aa^{(c)}\end{bmatrix} \quad \RR=\begin{bmatrix}\RR^{(v)} & 0 \\ 0 & \RR^{(c)}\end{bmatrix} 
@@ -81,7 +87,7 @@ The log-likelihood that is returned by MARSS will include the log-likelihood of 
 \end{equation}
 An easy way to get this log-likelihood for the covariate data only is use
 the augmented model (Equation \@ref(eq:mssmiss-marsscovary) with terms defined as
-in Equation \ref{eqn:marsscovarparams}) but pass in missing values for the
+in Equation \@ref(eq:mssmiss-marss-covar) but pass in missing values for the
 non-covariate data.  The following code shows how to do this.
 ```{r get-LL-aug, eval=FALSE}
 y.aug = rbind(data,covariates)
@@ -216,7 +222,7 @@ fit.ar1 <- MARSS(dat.feb, model=mod.list.ar1, control=list(maxit=5000), inits=li
 
 The $b$ estimate is ```r coef(fit.ar1)$B[1]```.
 
-Let's plot the estimated SWEs for the missing years (Figure \@ref(fig:mssmiss-snotelplotfits-ar1)). These estimates use all the information about the correlation with other sites and uses information about correlation with the prior and subsequent years.  We will use the `tidy()` function from the **broom** package to get the estimated 95% confidence intervals for the estimated states.  Notice that for some sites, CIs are low in early years as these sites are highly correlated with site for which there are data.  In other sites, the uncertainty is high in early years because the sites with data in those years are not highly correlated.
+Let's plot the estimated SWEs for the missing years (Figure \@ref(fig:mssmiss-snotelplotfits-ar1)). These estimates use all the information about the correlation with other sites and uses information about correlation with the prior and subsequent years.  We will use the `tidy()` function from the **broom** package to get the estimated 95\% confidence intervals for the estimated states.  Notice that for some sites, CIs are low in early years as these sites are highly correlated with site for which there are data.  In other sites, the uncertainty is high in early years because the sites with data in those years are not highly correlated.
 
 ```{r mssmiss-snotelplotstates, include=FALSE}
 fit <- fit.ar1

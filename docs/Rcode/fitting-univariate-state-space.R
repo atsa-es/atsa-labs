@@ -385,7 +385,7 @@ mod <- rstan::stan(model_code = scode,
   chains = 3, iter = 1000, thin = 1)
 
 
-## ----uss-stan-ar-level, fig.cap="Estimated level and 95% credible intervals.  Blue dots are the actual Nile River levels."----
+## ----uss-stan-ar-level, fig.cap="Estimated level and 95 percent credible intervals.  Blue dots are the actual Nile River levels."----
 pars <- rstan::extract(mod)
 pred_mean <- apply(pars$x, 2, mean)
 pred_lo <- apply(pars$x, 2, quantile, 0.025)
@@ -397,7 +397,7 @@ lines(pred_hi)
 points(y, col="blue")
 
 
-## ----uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95% credible intervals"----
+## ----uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95 percent credible intervals"----
 library(ggplot2)
 nile <- data.frame(y=y, year=1871:1970)
 h <- ggplot(nile, aes(year))
