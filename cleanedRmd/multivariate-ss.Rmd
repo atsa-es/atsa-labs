@@ -816,7 +816,7 @@ A <- matrix(list(0),3,3)
 A[1,1] <- "sigma2"
 ```
 
-    c. Fit each model using `MARSS()` and compare the estimated $u$ (the population long-term trend).  Does the assumption about the errors change the $u$ estimate?
+    c. Fit each model using `MARSS()` and compute the confidence intervals (CIs) for the estimated parameters.  Compare the estimated $u$ (the population long-term trend) along with their CIs.  Does the assumption about the observation errors change the $u$ estimate?
     
     d. Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit.  Are there any issues that you see?  Use this code to get your state residuals:
 ```
@@ -824,7 +824,7 @@ residuals(fit)$state.residuals[1,]
 ```
 You need the `[1,]` since the residuals are returned as a matrix.
 
-4. Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC.  The $x$ part f the model is the population structure.  Assume that the observation errors are identical and independent (`R="diagonal and equal"`).  Assume that the process errors are unique and independent (`Q="diagonal and unequal"`).
+4. Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC.  The $x$ part of the model is the population structure.  Assume that the observation errors are identical and independent (`R="diagonal and equal"`).  Assume that the process errors are unique and independent (`Q="diagonal and unequal"`). Assume that the $u$ are unique among the 3 subpopulation.
 
     a. Write the $\mathbf{x}$ equation. Make sure each matrix in the equation has the right number of rows and columns.
     
@@ -846,12 +846,12 @@ You need the `[1,]` since the residuals are returned as a matrix.
 
 6. Develop the following alternative models for the structure of the inland harbor seal population.  For each model assume that the observation errors are identical and independent (`R="diagonal and equal"`).  Assume that the process errors covary with equal variance and covariances (`Q="equalvarcov"`).
 
-    * 5 independent subpopulations with unique trends $u$.
-    * 5 independent subpopulations with the same trend $u$.
-    * 5 independent subpopulations with the same trend in 3 regions: SJF+SJI, PS+EBays, HC.
-    * 1 panmictic population (the model from question 2).
-    * 3 subpopulations. 1=SJF,SJI, 2=PS,EBays, 3=HC (the model from question 4).
-    * 2 subpopulations. 1=SJF,SJI,PS,EBays, 2=HC.
+    * 5 subpopulations with unique $u$.
+    * 5 subpopulations with shared (equal) $u$.
+    * 5 subpopulations but with $u$ shared in some regions: SJF+SJI shared, PS+EBays shared, HC unique.
+    * 1 panmictic population.
+    * 3 subpopulations, 1=SJF,SJI, 2=PS,EBays, 3=HC, with unique $u$
+    * 2 subpopulations, 1=SJF,SJI,PS,EBays, 2=HC, with unique $u$
     
     a. Fit each model using `MARSS()`.
     
