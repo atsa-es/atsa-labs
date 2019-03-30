@@ -414,8 +414,9 @@ for(i in 1:3) {
 
 ## Homework data and discussion {#sec-msscov-hw-discussion}
 
-For these problems, use the following code to load in phytoplankton data, covariates, and z-score all the data.  Then use `dat` and `covars` directly in your code.
+For these problems, use the following code to load in phytoplankton data, covariates, and z-score all the data.  For the covariates, you'll use 5-month lagged phosphorous and 1-month lagged temperature.  Then use `dat` and `covars` directly in your code.
 ```{r msscov-problems-dat}
+library(MARSS)
 phytos <- c("Cryptomonas", "Diatoms", "Greens",
             "Unicells", "Other.algae")
 yrs <- lakeWAplanktonTrans[,"Year"]%in%1985:1994
@@ -425,13 +426,22 @@ avg <- apply(dat, 1, mean, na.rm=TRUE)
 sd <- sqrt(apply(dat, 1, var, na.rm=TRUE))
 dat <- (dat-avg)/sd
 rownames(dat)=phytos
+#lag the temp by one month and TP by 5 months
+yrs1 <- which(lakeWAplanktonTrans[,"Year"]==1984&lakeWAplanktonTrans[,"Month"]==12)
+yrs2 <- which(lakeWAplanktonTrans[,"Year"]==1994&lakeWAplanktonTrans[,"Month"]==11)
+yrs3 <- which(lakeWAplanktonTrans[,"Year"]==1984&lakeWAplanktonTrans[,"Month"]==8)
+yrs4 <- which(lakeWAplanktonTrans[,"Year"]==1994&lakeWAplanktonTrans[,"Month"]==7)
 #z-score the covariates
-covars <- rbind(Temp=lakeWAplanktonTrans[yrs,"Temp"],
-               TP=lakeWAplanktonTrans[yrs,"TP"])
+df<-data.frame(Temp=lakeWAplanktonTrans[yrs1:yrs2,"Temp"], Month=rep(month.abb,10))
+dc.temp <- residuals(lm(Temp~Month, data=df))
+df<-data.frame(TP=lakeWAplanktonTrans[yrs1:yrs2,"TP"], Month=rep(month.abb,10))
+dc.tp <- residuals(lm(TP~Month, data=df))
+covars <- rbind(Temp=dc.temp, TP=dc.tp)
 avg <- apply(covars, 1, mean)
 sd <- sqrt(apply(covars, 1, var, na.rm=TRUE))
 covars <- (covars-avg)/sd
-rownames(covars) <- c("Temp","TP")
+covars <- rbind(covars, covars[1,]*covars[2,])
+rownames(covars) <- c("Temp","TP","Inter")
 
 #always check that the mean and variance are 1 after z-scoring
 apply(dat,1,mean, na.rm=TRUE) #this should be 0
@@ -458,8 +468,12 @@ Read Section \@ref(sec-msscov-hw-discussion) for the data and tips on answering 
 $$\mathbf{x}_t=\mathbf{B}\mathbf{x}_{t-1}+\mathbf{C}\mathbf{c}_t+\mathbf{w}_t$$
 The $\mathbf{C}\mathbf{c}_t+\mathbf{w}_t$ are the process errors and represent the growth rates (growth above or below what you would expect given $\mathbf{x}_{t-1}$).  Use your raw data in the MARSS model.  You do not need to difference the data to get at the growth rates since the process model is modeling that.
 
-1. How does month affect the mean phytoplankton population growth rates? Show a plot of mean growth rate versus month. Estimate seasonal effects without any covariate (Temp, TP) effects.
-2. It is likely that both temperature and total phosphorus (TP) affect phytoplankton population growth rates. Using MARSS models, evaluate which is the more important driver or if both are important. Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates.
+1. How does month affect the mean phytoplankton population growth rates? Show a plot of mean growth rate versus month for each taxon. Estimate seasonal effects without any covariate (Temp, TP) effects.
+
+2. It is likely that both temperature and total phosphorus (TP) affect phytoplankton population growth rates. Using MARSS models, evaluate which is the more important driver or if both are important. 
+
+
+Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates.
 3. Evaluate whether the effect of temperature on phytoplankton manifests itself via their underlying physiology (by affecting algal growth rates and thus abundance) or because physical changes in the water stratification makes them easier/harder to sample in some months. Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates.
 4. Is there support for temperature or TP  affecting all functional groups' growth rates the same, or are the effects on one taxon different from another?
 5. Compare your results for questions 2-4 using an observation error only model, by using the `lm()` function.
