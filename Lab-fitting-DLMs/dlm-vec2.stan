@@ -2,7 +2,7 @@ data {
   int<lower=0> N; // length of dependent variable
   int<lower=0> K; // number of indep vars
   vector[N] y;
-  row_vector[K] F[N]; // row_vectors of
+  row_vector[K] F[N]; // N vectors of size K (array[N,K])
 }
 
 transformed data {
@@ -12,40 +12,46 @@ transformed data {
 }
 
 parameters {
-  vector[K] Theta0; // init Theta
-  real mu0[K];
-  real<lower=0> alpha;
-  real<lower=0> rho;
-  real<lower=0> R; // model error scale
-  vector[K] a;
-
+  real<lower=0> R; // model error
+  vector<lower=0>[K] A; // init error
+  vector[K] zA; // scale init error
+  cholesky_factor_corr[K] L_Omega; // prior cholesky factor corr
+  vector<lower=0>[K] tau; // prior scale
+  vector[K] z[N]; // std normal
 }
 
 transformed parameters {
   matrix[K, K] L;
-  matrix[K, K] Q = cov_exp_quad(mu0, alpha, rho);
-  vector[N] F_Theta;
+  vector[K] Theta0; // init Theta
   vector[K] Theta[N]; // state space paramater
-  L = cholesky_decompose(Q);
+  vector[N] F_Theta;
 
-  Theta[1] = Theta0 + L * a;
-  for (n in 2:N) {
-    Theta[n] = Theta[n-1] + L * a;
-  }
+  L = diag_pre_multiply(tau, L_Omega);
 
-  for (n in 1:N) {
+  for (k in 1:K)
+    Theta0[k] = A[k] * zA[k];
+
+  Theta[1] = Theta0 + L * z[1];
+  for (n in 2:N)
+    Theta[n] = Theta[n-1] + L * z[n];
+
+  for (n in 1:N)
     F_Theta[n] = F[n]*Theta[n];
-  }
 
 }
 
 model {
-  Theta0 ~ normal(0, 5);
-  mu0  ~ normal(0, 5);
-  alpha  ~ std_normal();
-  rho  ~ inv_gamma(2,2);
-  R  ~ exponential(1);
-  a  ~ std_normal();
+  R ~ exponential(1);
+  A ~ exponential(1);
+  zA ~ normal(0,1);
+  L_Omega ~ lkj_corr_cholesky(1);
+  tau ~ exponential(1);
+  for (n in 1:N)
+    z[n] ~ normal(0, 1);
   y ~ normal(F_Theta, R);
 }
 
+generated quantities {
+  matrix[K, K] Q;
+  Q = L * L';
+}
