@@ -130,11 +130,12 @@ rstan_options(auto_write = TRUE)
 #
 y <- SalmonSurvCUI[, 2]
 FF <- cbind(1, scale(SalmonSurvCUI[,3]))
-mcmc_list = list(n_iter = 10000, n_chain = 1, n_thin = 1, n_warmup = 2000)
+mcmc_list = list(n_iter = 10000, n_chain = 2, n_thin = 1, n_warmup = 2000)
 data_list <- list("N" = length(y), "K" = dim(FF)[2], "F" = FF, "y" = y)
-mod <- rstan::stan( here::here("Lab-fitting-DLMS/dlm-vec.stan"), data = data_list,
-  pars = c("F_Theta", "Theta", "Theta0", "tau", "L_Omega", "A", "R", "L", "Q"),
-  control = list(adapt_delta = .98),
+mod <- rstan::stan( here::here("Lab-fitting-DLMS/dlm-vec2.stan"), data = data_list,
+  # pars = c("F_Theta", "Theta", "Theta0", "tau", "L_Omega"),
+  pars = c("F_Theta", "Theta", "Theta0", "tau", "L_Omega", "Q", "R", "L", "Q", "z0", "Q0", "mu0"),
+  control = list(adapt_delta = .95, max_treedepth = 15),
   cores = 4L,
   chains = mcmc_list$n_chain,
   warmup = mcmc_list$n_warmup,

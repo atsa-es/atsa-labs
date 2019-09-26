@@ -13,8 +13,9 @@ transformed data {
 
 parameters {
   real<lower=0> R; // model error
-  vector<lower=0>[K] A; // init error
-  vector[K] zA; // scale init error
+  vector<lower=0>[K] Q0; // init error
+  vector[K] z0; // scale init error
+  vector[K] mu0; // scale init error
   cholesky_factor_corr[K] L_Omega; // prior cholesky factor corr
   vector<lower=0>[K] tau; // prior scale
   vector[K] z[N]; // std normal
@@ -29,7 +30,7 @@ transformed parameters {
   L = diag_pre_multiply(tau, L_Omega);
 
   for (k in 1:K)
-    Theta0[k] = A[k] * zA[k];
+    Theta0[k] = mu0[k] + Q0[k] * z0[k];
 
   Theta[1] = Theta0 + L * z[1];
   for (n in 2:N)
@@ -41,9 +42,10 @@ transformed parameters {
 }
 
 model {
-  R ~ exponential(1);
-  A ~ exponential(1);
-  zA ~ normal(0,1);
+  R  ~ exponential(1);
+  Q0  ~ exponential(1);
+  z0  ~ normal(0,1);
+  mu0 ~ normal(0,5);
   L_Omega ~ lkj_corr_cholesky(1);
   tau ~ exponential(1);
   for (n in 1:N)
