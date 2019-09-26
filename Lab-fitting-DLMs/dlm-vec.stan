@@ -32,9 +32,9 @@ transformed parameters {
 
 model {
   R ~ exponential(1);
+  Theta0 ~ normal(0, 5);
   L_Omega ~ lkj_corr_cholesky(1);
   tau ~ exponential(1);
-  Theta0 ~ normal(0, 5);
   Theta[1] ~ multi_normal_cholesky(Theta0, L);
   for (n in 2:N)
     Theta[n] ~ multi_normal_cholesky(Theta[n-1], L);
@@ -45,3 +45,4 @@ generated quantities {
   matrix[K, K] Q;
   Q = L * L';
 }
+
