@@ -29,7 +29,6 @@ transformed parameters {
     F_Theta[n] = F[n]*Theta[n];
 }
 
-
 model {
   R ~ exponential(1);
   Theta0 ~ normal(0, 5);

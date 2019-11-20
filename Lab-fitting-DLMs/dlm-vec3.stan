@@ -14,21 +14,23 @@ transformed data {
 parameters {
   vector[K] Theta0; // init Theta
   real<lower=0> R; // model error
-  cholesky_factor_corr[K] L_Omega; // cholesky factor of correlation matrix Omega
-  vector<lower=0>[K] tau; // scale values for Thetas
-  vector[K] z[N]; // std normal for each iteration of Theta
+  cholesky_factor_corr[K] L_Omega[N]; // cholesky factor of correlation matrix Omega
+  vector<lower=0>[K] tau[N]; // scale values for Thetas
+  vector[K] z[N]; // std normal
 }
 
 transformed parameters {
-  matrix[K, K] L;
+  matrix[K, K] L[N];
   vector[K] Theta[N]; // state space paramater
   vector[N] F_Theta;
 
-  L = diag_pre_multiply(tau, L_Omega);
+  // produce covariance matrix for each Theta[n]
+  for (n in 1:N)
+    L[n] = diag_pre_multiply(tau[n], L_Omega[n]);
 
-  Theta[1] = Theta0 + L * z[1];
+  Theta[1] = Theta0 + L[1] * z[1];
   for (n in 2:N)
-    Theta[n] = Theta[n-1] + L * z[n];
+    Theta[n] = Theta[n-1] + L[n] * z[n];
 
   for (n in 1:N)
     F_Theta[n] = F[n]*Theta[n];
@@ -38,16 +40,18 @@ transformed parameters {
 model {
   R  ~ exponential(1);
   Theta0 ~ normal(0, 5);
-  L_Omega ~ lkj_corr_cholesky(1);
-  tau ~ exponential(1);
-  for (n in 1:N)
-    z[n] ~ normal(0, 1);
+  for (n in 1:N) {
+      z[n] ~ normal(0, 1);
+      L_Omega[n] ~ lkj_corr_cholesky(1);
+      tau[n] ~ exponential(1);
+  }
   y ~ normal(F_Theta, R);
 }
 
 generated quantities {
-  matrix[K, K] Q;
-  Q = L * L';
+  matrix[K, K] Q[N];
+  for (n in 1:N)
+   Q[n] = L[n] * L[n]';
 }
 
 

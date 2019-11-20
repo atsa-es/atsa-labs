@@ -123,58 +123,91 @@ mtext("Year of ocean entry", 1, line=3)
 
 ###########################################
 # FIT STAN ---------------
-##########################################
+###########################################
+plot_F_Theta <- function(m) {
+  pars = extract(m)
+  fc <- apply(pars$F_Theta, 2, mean)
+  fc_lb <- apply(pars$F_Theta, 2, quantile, 0.01)
+  fc_ub <- rev(apply(pars$F_Theta, 2, quantile, 0.99))
+  xx <- c(years, rev(years))
+  plot(x = years, y = y, pch = 16, col="blue", ylim = c(-10,0))
+  polygon(x = xx, y = c(fc_lb, fc_ub), col = scales::alpha('gray70', .5), border = NA)
+  lines(x = years, y = fc, type="l", lwd = 2)
+}
+
+# load the data
+data(SalmonSurvCUI, package="MARSS")
+# get time indices
+years <- SalmonSurvCUI[,1]
+
 library(rstan)
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
 #
 y <- SalmonSurvCUI[, 2]
 FF <- cbind(1, scale(SalmonSurvCUI[,3]))
-mcmc_list = list(n_iter = 4000, n_chain = 2, n_thin = 1, n_warmup = 1000)
+mcmc_list = list(n_iter = 6000, n_chain = 1, n_thin = 1, n_warmup = 3000,
+  control = list(adapt_delta = .995, max_treedepth = 12))
 data_list <- list("N" = length(y), "K" = dim(FF)[2], "F" = FF, "y" = y)
-mod <- rstan::stan( here::here("Lab-fitting-DLMS/dlm-vec2.stan"), data = data_list,
+
+# fit models --------------------------
+# model uses multi_normal_cholesky
+# ends up with issues of low ESS (can solve increasing iterations and longer warm up)
+# layout(matrix(1:2))
+# mod1 <- rstan::stan(
+#   here::here("Lab-fitting-DLMS/dlm-vec.stan"),
+#   data = data_list,
+#   pars = c("F_Theta", "Theta", "Theta0", "tau", "L_Omega", "R", "L", "Q"),
+#   control = mcmc_list$control,
+#   cores = 4L,
+#   chains = mcmc_list$n_chain,
+#   warmup = mcmc_list$n_warmup,
+#   iter = mcmc_list$n_iter,
+#   thin = mcmc_list$n_thin)
+# plot_F_Theta(mod1)
+
+# model uses non-centered. seems to be efficient and have less divergence and no low ESS problems
+mod2 <- rstan::stan(
+  here::here("Lab-fitting-DLMS/dlm-vec2.stan"),
+  data = data_list,
   pars = c("F_Theta", "Theta", "Theta0", "tau", "L_Omega", "R", "L", "Q"),
-  control = list(adapt_delta = .995, max_treedepth = 15),
+  control = mcmc_list$control,
   cores = 4L,
   chains = mcmc_list$n_chain,
   warmup = mcmc_list$n_warmup,
   iter = mcmc_list$n_iter,
   thin = mcmc_list$n_thin)
+plot_F_Theta(mod2)
 
-mod0 <- rstan::stan( here::here("Lab-fitting-DLMS/dlm-vec.stan"), data = data_list,
-  pars = c("F_Theta", "Theta", "Theta0", "tau", "L_Omega", "R", "L", "Q"),
-  control = list(adapt_delta = .995, max_treedepth = 15),
-  cores = 4L,
-  chains = mcmc_list$n_chain,
-  warmup = mcmc_list$n_warmup,
-  iter = mcmc_list$n_iter,
-  thin = mcmc_list$n_thin)
+# model fits multiple variance matrices
+# overfits? def takes too long.
+# mod3 <- rstan::stan(
+#   here::here("Lab-fitting-DLMS/dlm-vec3.stan"),
+#   data = data_list,
+#   pars = c("F_Theta", "Theta", "Theta0", "tau", "L_Omega", "R", "L", "Q"),
+#   control = list(adapt_delta = .8, max_treedepth = 15),
+#   cores = 4L,
+#   chains = mcmc_list$n_chain,
+#   warmup = mcmc_list$n_warmup,
+#   iter = mcmc_list$n_iter,
+#   thin = mcmc_list$n_thin)
+# plot_F_Theta(mod3)
 
-pars = extract(mod)
-fc <- apply(pars$F_Theta, 2, mean)
-fc_lb <- apply(pars$F_Theta, 2, quantile, 0.01)
-fc_ub <- rev(apply(pars$F_Theta, 2, quantile, 0.99))
-xx <- c(years, rev(years))
-layout(1)
-plot(x = years, y = y, pch = 16, col="blue", ylim = c(-10,0))
-polygon(x = xx, y = c(fc_lb, fc_ub), col = scales::alpha('gray', .5), border = NA)
-lines(x = years, y = fc, type="l")
-
-pairs_stan <- function(chain, stan_model, pars, filter = '.*') {
-  energy <- as.matrix(sapply(get_sampler_params(stan_model, inc_warmup = F),
-                             function(x) x[,"energy__"]))
-  pars <- extract(stan_model, pars = pars, permuted = F)[,chain,]
-  pars <- pars[, grepl(filter, colnames(pars))]
-  df <- data.frame(energy[,chain], pars)
-  names(df)[1] <- "energy"
-  GGally::ggpairs(df, title = paste0("Chain", chain),
-                  lower = list(continuous = GGally::wrap("points", alpha = 0.2)))
-}
-
-pairs_stan(1, mod, 'Theta', 'Theta\\[\\d[01]?,2\\]')
+# pairs_stan <- function(chain, stan_model, pars, filter = '.*') {
+#   energy <- as.matrix(sapply(get_sampler_params(stan_model, inc_warmup = F),
+#                              function(x) x[,"energy__"]))
+#   pars <- extract(stan_model, pars = pars, permuted = F)[,chain,]
+#   pars <- pars[, grepl(filter, colnames(pars))]
+#   df <- data.frame(energy[,chain], pars)
+#   names(df)[1] <- "energy"
+#   GGally::ggpairs(df, title = paste0("Chain", chain),
+#                   lower = list(continuous = GGally::wrap("points", alpha = 0.2)))
+# }
+# pairs_stan(1, mod, 'Theta', 'Theta\\[\\d[01]?,2\\]')
 
 # COMPARE MARSS vs myDLM STAN ---------------------
 layout(matrix(1:2))
+xx <- c(years, rev(years))
 ylims=c(min(fore.mean-2*sqrt(fore.var)),max(fore.mean+2*sqrt(fore.var)))
 plot(years, t(dat), type="p", pch=16, ylim=ylims,
      col="blue", xlab="", ylab="Logit(s)", xaxt="n")
@@ -184,22 +217,19 @@ polygon(x = xx, y = fore.b, col = scales::alpha('gray', .5), border = NA)
 axis(1,at=seq(1965,2005,5))
 mtext("Year of ocean entry", 1, line=3)
 #
-plot(x = years, y = y, pch = 16, col="blue", ylim = ylims)
-polygon(x = xx, y = c(fc_lb, fc_ub), col = scales::alpha('gray', .5), border = NA)
-lines(x = years, y = fc, type="l")
+plot_F_Theta(mod2)
 
 # COMPARE atsar vs mine -----------------------
 library(atsar)
 lmmod = lm(SalmonSurvCUI$logit.s ~ SalmonSurvCUI$CUI.apr)
-mod2 = fit_stan(y = SalmonSurvCUI$logit.s,
+mod0 = fit_stan(y = SalmonSurvCUI$logit.s,
                x = model.matrix(lmmod),
                model_name="dlm")
 
-pars = extract(mod2)
+pars = extract(mod0)
 fc2 <- apply(pars$pred, 2, mean)
 fc_lb2 <- apply(pars$pred, 2, quantile, 0.025)
 fc_ub2 <- rev(apply(pars$pred, 2, quantile, 0.975))
-xx <- c(years, rev(years))
 layout(matrix(1:2))
 plot(x = years, y = y, pch = 16, col="blue", ylim = c(-10,0))
 polygon(x = xx, y = c(fc_lb2, fc_ub2), col = scales::alpha('gray', .5), border = NA)
