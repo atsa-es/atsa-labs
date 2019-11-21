@@ -1,8 +1,8 @@
 data {
   int<lower=0> N; // length of dependent variable
   int<lower=0> K; // number of indep vars
-  vector[N] y;
-  row_vector[K] F[N]; // row_vectors of
+  vector[N] y; // univariate time series
+  row_vector[K] F[N]; // N vectors of size K (array[N,K])
 }
 
 transformed data {
@@ -14,9 +14,11 @@ transformed data {
 parameters {
   vector[K] Theta0; // init Theta
   real<lower=0> R; // model error
-  cholesky_factor_corr[K] L_Omega; //prior correlation
-  vector<lower=0>[K] tau; // prior scale
-
+  real muR; // hyperparameter mu for R error
+  real<lower=0> sigR; //hyperparameter sig for R error
+  cholesky_factor_corr[K] L_Omega; // cholesky factor of correlation matrix Omega
+  vector<lower=0>[K] tau; // scale values for Thetas
+  vector[K] z[N]; // std normal for each iteration of Theta
 }
 
 transformed parameters {
@@ -26,23 +28,26 @@ transformed parameters {
 
   L = diag_pre_multiply(tau, L_Omega);
 
-
-
-
+  // non-centered multivariate normal reparameterization
+  // learned from http://modernstatisticalworkflow.blogspot.com/2017/07/a-few-simple-reparameterizations.html
+  Theta[1] = Theta0 + L * z[1];
+  for (n in 2:N)
+    Theta[n] = Theta[n-1] + L * z[n];
 
   for (n in 1:N)
     F_Theta[n] = F[n]*Theta[n];
-
 }
 
 model {
-  R ~ exponential(1);
+  R  ~ normal(muR, sigR);
+  sigR ~ exponential(1);
+  muR ~ normal(0,5);
   Theta0 ~ normal(0, 5);
   L_Omega ~ lkj_corr_cholesky(1);
   tau ~ exponential(1);
-  Theta[1] ~ multi_normal_cholesky(Theta0, L);
-  for (n in 2:N)
-    Theta[n] ~ multi_normal_cholesky(Theta[n-1], L);
+
+  for (n in 1:N)
+    z[n] ~ normal(0, 1);
   y ~ normal(F_Theta, R);
 }
 
@@ -50,4 +55,5 @@ generated quantities {
   matrix[K, K] Q;
   Q = L * L';
 }
+
 
