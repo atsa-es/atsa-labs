@@ -13,20 +13,26 @@ transformed data {
 
 parameters {
   vector[K] Theta0; // init Theta
-  vector[K] Theta[N]; // state space paramater
   real<lower=0> R; // model error
   cholesky_factor_corr[K] L_Omega; //prior correlation
   vector<lower=0>[K] tau; // prior scale
+
 }
 
 transformed parameters {
   matrix[K, K] L;
+  vector[K] Theta[N]; // state space paramater
   vector[N] F_Theta;
 
   L = diag_pre_multiply(tau, L_Omega);
 
+
+
+
+
   for (n in 1:N)
     F_Theta[n] = F[n]*Theta[n];
+
 }
 
 model {

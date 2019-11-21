@@ -40,6 +40,7 @@ model {
   Theta0 ~ normal(0, 5);
   L_Omega ~ lkj_corr_cholesky(1);
   tau ~ exponential(1);
+
   for (n in 1:N)
     z[n] ~ normal(0, 1);
   y ~ normal(F_Theta, R);

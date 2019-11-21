@@ -151,8 +151,9 @@ mcmc_list = list(n_iter = 6000, n_chain = 1, n_thin = 1, n_warmup = 3000,
 data_list <- list("N" = length(y), "K" = dim(FF)[2], "F" = FF, "y" = y)
 
 # fit models --------------------------
+# MODEL 1 -- multi normal
 # model uses multi_normal_cholesky
-# ends up with issues of low ESS (can solve increasing iterations and longer warm up)
+#> ends up with issues of low ESS (can solve increasing iterations and longer warm up)
 # layout(matrix(1:2))
 # mod1 <- rstan::stan(
 #   here::here("Lab-fitting-DLMS/dlm-vec.stan"),
@@ -166,6 +167,8 @@ data_list <- list("N" = length(y), "K" = dim(FF)[2], "F" = FF, "y" = y)
 #   thin = mcmc_list$n_thin)
 # plot_F_Theta(mod1)
 
+# non centered model --------------
+# MODEL 2 -- non centered model
 # model uses non-centered. seems to be efficient and have less divergence and no low ESS problems
 mod2 <- rstan::stan(
   here::here("Lab-fitting-DLMS/dlm-vec2.stan"),
@@ -179,6 +182,8 @@ mod2 <- rstan::stan(
   thin = mcmc_list$n_thin)
 plot_F_Theta(mod2)
 
+# deeper mulit level models ------------
+# MODEL 3 -- allows different variances measures
 # model fits multiple variance matrices
 # overfits? def takes too long.
 # mod3 <- rstan::stan(
@@ -205,7 +210,7 @@ plot_F_Theta(mod2)
 # }
 # pairs_stan(1, mod, 'Theta', 'Theta\\[\\d[01]?,2\\]')
 
-# COMPARE MARSS vs myDLM STAN ---------------------
+# COMPARE MARSS vs danton DLM STAN ---------------------
 layout(matrix(1:2))
 xx <- c(years, rev(years))
 ylims=c(min(fore.mean-2*sqrt(fore.var)),max(fore.mean+2*sqrt(fore.var)))
@@ -219,13 +224,14 @@ mtext("Year of ocean entry", 1, line=3)
 #
 plot_F_Theta(mod2)
 
-# COMPARE atsar vs mine -----------------------
+# COMPARE atsar DLM vs mine -----------------------
 library(atsar)
 lmmod = lm(SalmonSurvCUI$logit.s ~ SalmonSurvCUI$CUI.apr)
 mod0 = fit_stan(y = SalmonSurvCUI$logit.s,
                x = model.matrix(lmmod),
                model_name="dlm")
 
+# plot ------------
 pars = extract(mod0)
 fc2 <- apply(pars$pred, 2, mean)
 fc_lb2 <- apply(pars$pred, 2, quantile, 0.025)
@@ -235,6 +241,10 @@ plot(x = years, y = y, pch = 16, col="blue", ylim = c(-10,0))
 polygon(x = xx, y = c(fc_lb2, fc_ub2), col = scales::alpha('gray', .5), border = NA)
 lines(x = years, y = fc2, type="l")
 #
+pars = extract(mod2)
+fc <- apply(pars$F_Theta, 2, mean)
+fc_lb <- apply(pars$F_Theta, 2, quantile, 0.025)
+fc_ub <- rev(apply(pars$F_Theta, 2, quantile, 0.975))
 plot(x = years, y = y, pch = 16, col="blue", ylim = ylims)
 polygon(x = xx, y = c(fc_lb, fc_ub), col = scales::alpha('gray', .5), border = NA)
 lines(x = years, y = fc, type="l")
