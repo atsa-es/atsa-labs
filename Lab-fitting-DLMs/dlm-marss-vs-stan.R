@@ -171,9 +171,9 @@ xx <- c(years, rev(years))
 ylims=c(-10,0)
 plot(years, t(dat), type="p", pch=16, ylim=ylims, main="MARSS",
      col="tomato", xlab="", ylab="Logit(s)", xaxt="n")
-lines(years, fore.mean, type="l", xaxt="n", ylab="", lwd=3)
-fore.b = c(fore.mean-2*sqrt(fore.var), rev(fore.mean+2*sqrt(fore.var)))
-polygon(x = xx, y = fore.b, col = scales::alpha('gray', .5), border = NA)
+tmp <- broom::augment(dlm1, interval="confidence")
+polygon(x = xx, y = c(tmp$.conf.low, rev(tmp$.conf.up)), col = scales::alpha('gray', .5), border = NA)
+lines(years, tmp$.fitted, type="l", xaxt="n", ylab="")
 axis(1,at=seq(1965,2005,5))
 mtext("Year of ocean entry", 1, line=2.5)
 #
