@@ -20,9 +20,11 @@ CUI.z <- matrix((CUI - mean(CUI))/sqrt(var(CUI)), nrow=1)
 m <- dim(CUI.z)[1] + 1
 
 ## plot data
-par(mfrow=c(m,1), mar=c(4,4,0.1,0), oma=c(0,0,2,0.5))
-plot(years, dat, xlab="", ylab="Logit(s)", bty="n", xaxt="n", pch=16, col="darkgreen", type="b")
-plot(years, CUI.z, xlab="", ylab="CUI", bty="n", xaxt="n", pch=16, col="blue", type="b")
+par(mfrow=c(m,1), mar=c(4,4,0.9,0) + 0.1, oma=c(0,0,2,0.5))
+plot(years, dat, xlab="", ylab="Logit(s)", bty="n",
+  xaxt="n", pch=16, col="darkgreen", type="b")
+plot(years, CUI.z, xlab="", ylab="CUI", bty="n",
+  xaxt="n", pch=16, col="blue", type="b")
 axis(1,at=seq(1965,2005,5))
 mtext("Year of ocean entry", 1, line=3)
 
@@ -53,7 +55,6 @@ dlm1 <- MARSS(dat, inits=inits.list, model=mod.list)
 ## PLOT STATES -----------------------------
 ylabs <- c(expression(alpha[t]), expression(beta[t]))
 colr <- c("darkgreen","blue")
-par(mfrow=c(m,1), mar=c(4,4,0.1,0), oma=c(0,0,2,0.5))
 for(i in 1:m) {
   mn <- dlm1$states[i,]
   se <- dlm1$states.se[i,]
@@ -126,8 +127,10 @@ plot_F_Theta <- function(m) {
   fc_lb <- apply(pars$F_Theta, 2, quantile, 0.01)
   fc_ub <- rev(apply(pars$F_Theta, 2, quantile, 0.99))
   xx <- c(years, rev(years))
-  plot(x = years, y = y, pch = 16, col="blue", ylim = c(-10,0))
-  polygon(x = xx, y = c(fc_lb, fc_ub), col = scales::alpha('gray70', .5), border = NA)
+  plot(x = years, y = y, pch = 16, col="blue", ylim = c(-10,0),
+    main="DRN Stan DLM", xlab="")
+  polygon(x = xx, y = c(fc_lb, fc_ub), col = scales::alpha('gray70', .5),
+    border = NA)
   lines(x = years, y = fc, type="l", lwd = 2)
 }
 
@@ -165,14 +168,14 @@ plot_F_Theta(mod1)
 # COMPARE MARSS vs danton DLM STAN ---------------------
 layout(matrix(1:2))
 xx <- c(years, rev(years))
-ylims=c(min(fore.mean-2*sqrt(fore.var)),max(fore.mean+2*sqrt(fore.var)))
-plot(years, t(dat), type="p", pch=16, ylim=ylims,
-     col="blue", xlab="", ylab="Logit(s)", xaxt="n")
+ylims=c(-10,0)
+plot(years, t(dat), type="p", pch=16, ylim=ylims, main="MARSS",
+     col="tomato", xlab="", ylab="Logit(s)", xaxt="n")
 lines(years, fore.mean, type="l", xaxt="n", ylab="", lwd=3)
 fore.b = c(fore.mean-2*sqrt(fore.var), rev(fore.mean+2*sqrt(fore.var)))
 polygon(x = xx, y = fore.b, col = scales::alpha('gray', .5), border = NA)
 axis(1,at=seq(1965,2005,5))
-mtext("Year of ocean entry", 1, line=3)
+mtext("Year of ocean entry", 1, line=2.5)
 #
 plot_F_Theta(mod1)
 
@@ -190,15 +193,19 @@ fc2 <- apply(pars$pred, 2, mean)
 fc_lb2 <- apply(pars$pred, 2, quantile, 0.025)
 fc_ub2 <- rev(apply(pars$pred, 2, quantile, 0.975))
 layout(matrix(1:2))
-plot(x = years, y = y, pch = 16, col="blue", ylim = c(-10,0))
+plot(x = years, y = y, pch = 16, col="tomato", ylim = c(-10,0),
+  main="atsar fit_stan dlm", xlab="")
 polygon(x = xx, y = c(fc_lb2, fc_ub2), col = scales::alpha('gray', .5), border = NA)
-lines(x = years, y = fc2, type="l")
+lines(x = years, y = fc2, type="l", lwd = 2)
+mtext("Year of ocean entry", 1, line=2.5)
 #
 pars = extract(mod1)
 fc <- apply(pars$F_Theta, 2, mean)
 fc_lb <- apply(pars$F_Theta, 2, quantile, 0.025)
 fc_ub <- rev(apply(pars$F_Theta, 2, quantile, 0.975))
-plot(x = years, y = y, pch = 16, col="blue", ylim = ylims)
-polygon(x = xx, y = c(fc_lb, fc_ub), col = scales::alpha('gray', .5), border = NA)
-lines(x = years, y = fc, type="l")
+plot(x = years, y = y, pch = 16, col="blue", ylim = ylims,
+  main="DRN Stan DLM", xlab="")
+polygon(x = xx, y = c(fc_lb, fc_ub),
+  col = scales::alpha('gray', .5), border = NA)
+lines(x = years, y = fc, type="l", lwd = 2)
 
