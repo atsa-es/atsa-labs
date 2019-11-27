@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2.4 Groups of intercepts | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
-  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
+  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2.4 Groups of intercepts | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
 
-<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
+<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-03-28">
+<meta name="date" content="2019-11-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-mlr-form2.html">
-<link rel="next" href="sec-mlr-betas.html">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="sec-mlr-form2.html"/>
+<link rel="next" href="sec-mlr-betas.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -51,41 +53,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -109,7 +136,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="preface-1.html"><a href="preface-1.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
@@ -434,7 +460,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="sec-mlr-intercepts" class="section level2">
 <h2><span class="header-section-number">2.4</span> Groups of intercepts</h2>
-Let’s say that the odd numbered plants are in the north and the even numbered are in the south. We want to include this as a factor in our model that affects the intercept. Let’s go back to just having air flow be our explanatory variable. Now if the plant is in the north our model is
+<p>Let’s say that the odd numbered plants are in the north and the even numbered are in the south. We want to include this as a factor in our model that affects the intercept. Let’s go back to just having air flow be our explanatory variable. Now if the plant is in the north our model is
 <span class="math display" id="eq:groups-intercepts1">\[\begin{equation}
 \tag{2.13}
 stack.loss_i = \alpha_n + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
@@ -444,23 +470,23 @@ If the plant is in the south, our model is
 \tag{2.14}
 stack.loss_i = \alpha_s + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}\]</span>
-<p>We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">reg=</span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;s&quot;</span>),n)[<span class="dv">1</span><span class="op">:</span>n])
-dat</code></pre></div>
+We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">reg=</span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;s&quot;</span>),n)[<span class="dv">1</span><span class="op">:</span>n])</a>
+<a class="sourceLine" id="cb145-2" title="2">dat</a></code></pre></div>
 <pre><code>  Air.Flow Water.Temp Acid.Conc. stack.loss reg
 1       80         27         89         42   n
 2       80         27         88         37   s
 3       75         25         90         37   n
 4       62         24         87         28   s</code></pre>
 <p>And we can easily fit this model with <code>lm()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit2 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data=</span>dat)
-<span class="kw">coef</span>(fit2)</code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1">fit2 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data=</span>dat)</a>
+<a class="sourceLine" id="cb147-2" title="2"><span class="kw">coef</span>(fit2)</a></code></pre></div>
 <pre><code>  Air.Flow       regn       regs 
  0.5358166 -2.0257880 -5.5429799 </code></pre>
 <p>The -1 is added to the <code>lm()</code> call to get rid of <span class="math inline">\(\alpha\)</span>. We just want the <span class="math inline">\(\alpha_n\)</span> and <span class="math inline">\(\alpha_s\)</span> intercepts coming from our regions.</p>
 <div id="sec-mlr-intercepts-form1" class="section level3">
 <h3><span class="header-section-number">2.4.1</span> North/South intercepts in Form 1</h3>
-Written in matrix form, Form 1 for this model is
+<p>Written in matrix form, Form 1 for this model is
 <span class="math display" id="eq:stackloss-form1-ns">\[\begin{equation}
 \tag{2.15}
 \begin{bmatrix}stack.loss_1\\ stack.loss_2\\ stack.loss_3\\ stack.loss_4\end{bmatrix}
@@ -470,40 +496,40 @@ Written in matrix form, Form 1 for this model is
 +
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
 \end{equation}\]</span>
-<p>Notice that odd plants get <span class="math inline">\(\alpha_n\)</span> and even plants get <span class="math inline">\(\alpha_s\)</span>. Use <code>model.matrix()</code> to see that this is the <span class="math inline">\(\mathbf{Z}\)</span> matrix that <code>lm()</code> formed. Notice the matrix output by <code>model.matrix()</code> looks exactly like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Z=<span class="kw">model.matrix</span>(fit2)
-Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</code></pre></div>
+Notice that odd plants get <span class="math inline">\(\alpha_n\)</span> and even plants get <span class="math inline">\(\alpha_s\)</span>. Use <code>model.matrix()</code> to see that this is the <span class="math inline">\(\mathbf{Z}\)</span> matrix that <code>lm()</code> formed. Notice the matrix output by <code>model.matrix()</code> looks exactly like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>.</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1">Z=<span class="kw">model.matrix</span>(fit2)</a>
+<a class="sourceLine" id="cb149-2" title="2">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>  Air.Flow regn regs
 1       80    1    0
 2       80    0    1
 3       75    1    0
 4       62    0    1</code></pre>
 <p>We can solve for the parameters using <span class="math inline">\(\mathbf{x} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y}\)</span> as we did for Form 1 before by adding on the 1s and 0s columns we see in the <span class="math inline">\(\mathbf{Z}\)</span> matrix in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>. We could build this <span class="math inline">\(\mathbf{Z}\)</span> using the following R code:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Z=<span class="kw">cbind</span>(dat<span class="op">$</span>Air.Flow,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))
-<span class="kw">colnames</span>(Z)=<span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;regn&quot;</span>,<span class="st">&quot;regs&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">Z=<span class="kw">cbind</span>(dat<span class="op">$</span>Air.Flow,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb151-2" title="2"><span class="kw">colnames</span>(Z)=<span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;regn&quot;</span>,<span class="st">&quot;regs&quot;</span>)</a></code></pre></div>
 <p>Or just use <code>model.matrix()</code>. This will save time when models are more complex.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Z=<span class="kw">model.matrix</span>(fit2)
-Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" title="1">Z=<span class="kw">model.matrix</span>(fit2)</a>
+<a class="sourceLine" id="cb152-2" title="2">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
 <pre><code>  Air.Flow regn regs
 1       80    1    0
 2       80    0    1
 3       75    1    0
 4       62    0    1</code></pre>
 <p>Now we can solve for the parameters:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)
-<span class="kw">solve</span>(<span class="kw">t</span>(Z)<span class="op">%*%</span>Z)<span class="op">%*%</span><span class="kw">t</span>(Z)<span class="op">%*%</span>y</code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb154-1" title="1">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb154-2" title="2"><span class="kw">solve</span>(<span class="kw">t</span>(Z)<span class="op">%*%</span>Z)<span class="op">%*%</span><span class="kw">t</span>(Z)<span class="op">%*%</span>y</a></code></pre></div>
 <pre><code>               [,1]
 Air.Flow  0.5358166
 regn     -2.0257880
 regs     -5.5429799</code></pre>
 <p>Compare to the output from <code>lm()</code> and you will see it is the same.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(fit2)</code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb156-1" title="1"><span class="kw">coef</span>(fit2)</a></code></pre></div>
 <pre><code>  Air.Flow       regn       regs 
  0.5358166 -2.0257880 -5.5429799 </code></pre>
 </div>
 <div id="sec-mlr-intercepts-form2" class="section level3">
 <h3><span class="header-section-number">2.4.2</span> North/South intercepts in Form 2</h3>
-We would write this model in Form 2 as
+<p>We would write this model in Form 2 as
 <span class="math display" id="eq:stackloss-form2-ns">\[\begin{equation}
 \tag{2.16}
 \begin{bmatrix}stack.loss_1\\ stack.loss_2\\ stack.loss_3\\ stack.loss_4\end{bmatrix}
@@ -516,25 +542,25 @@ We would write this model in Form 2 as
 \end{bmatrix}\begin{bmatrix}1\\air_1\\air_2\\air_3\\air_4\end{bmatrix}
 +
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>To estimate the parameters, we need to be able to write a list matrix that looks like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.16)</a>. We can use the same code we used in Section <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a> with <span class="math inline">\(\mathbf{Z}\)</span> changed to look like that in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.16)</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)
-x=<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,dat<span class="op">$</span>Air.Flow),<span class="dt">ncol=</span><span class="dv">1</span>)
-n=<span class="kw">nrow</span>(dat)
-k=<span class="dv">1</span>
-<span class="co">#list matrix allows us to combine numbers and character strings</span>
-Z=<span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>),n,k<span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>)
-Z[<span class="kw">seq</span>(<span class="dv">1</span>,n,<span class="dv">2</span>),<span class="dv">1</span>]=<span class="st">&quot;alphanorth&quot;</span>
-Z[<span class="kw">seq</span>(<span class="dv">2</span>,n,<span class="dv">2</span>),<span class="dv">1</span>]=<span class="st">&quot;alphasouth&quot;</span>
-<span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n,<span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">:</span>n])=<span class="st">&quot;beta&quot;</span>
-P=MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[,,<span class="dv">1</span>]
-M=<span class="kw">kronecker</span>(<span class="kw">t</span>(x),<span class="kw">diag</span>(n))<span class="op">%*%</span>P
-<span class="kw">solve</span>(<span class="kw">t</span>(M)<span class="op">%*%</span>M)<span class="op">%*%</span><span class="kw">t</span>(M)<span class="op">%*%</span>y</code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb158-2" title="2">x=<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,dat<span class="op">$</span>Air.Flow),<span class="dt">ncol=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb158-3" title="3">n=<span class="kw">nrow</span>(dat)</a>
+<a class="sourceLine" id="cb158-4" title="4">k=<span class="dv">1</span></a>
+<a class="sourceLine" id="cb158-5" title="5"><span class="co">#list matrix allows us to combine numbers and character strings</span></a>
+<a class="sourceLine" id="cb158-6" title="6">Z=<span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>),n,k<span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb158-7" title="7">Z[<span class="kw">seq</span>(<span class="dv">1</span>,n,<span class="dv">2</span>),<span class="dv">1</span>]=<span class="st">&quot;alphanorth&quot;</span></a>
+<a class="sourceLine" id="cb158-8" title="8">Z[<span class="kw">seq</span>(<span class="dv">2</span>,n,<span class="dv">2</span>),<span class="dv">1</span>]=<span class="st">&quot;alphasouth&quot;</span></a>
+<a class="sourceLine" id="cb158-9" title="9"><span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n,<span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">:</span>n])=<span class="st">&quot;beta&quot;</span></a>
+<a class="sourceLine" id="cb158-10" title="10">P=MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[,,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb158-11" title="11">M=<span class="kw">kronecker</span>(<span class="kw">t</span>(x),<span class="kw">diag</span>(n))<span class="op">%*%</span>P</a>
+<a class="sourceLine" id="cb158-12" title="12"><span class="kw">solve</span>(<span class="kw">t</span>(M)<span class="op">%*%</span>M)<span class="op">%*%</span><span class="kw">t</span>(M)<span class="op">%*%</span>y</a></code></pre></div>
 <pre><code>                 [,1]
 alphanorth -2.0257880
 alphasouth -5.5429799
 beta        0.5358166</code></pre>
-<p>Make sure you understand the code used to form the <span class="math inline">\(\mathbf{Z}\)</span> matrix. Also notice that <code>class(Z[1,3])=&quot;numeric&quot;</code> while <code>class(Z[1,2])=&quot;character&quot;</code>. This is important. <code>0</code> in R is a number while <code>&quot;0&quot;</code> would be a character (the name of a parameter).</p>
+<p>Make sure you understand the code used to form the <span class="math inline">\(\mathbf{Z}\)</span> matrix. Also notice that <code>class(Z[1,3])="numeric"</code> while <code>class(Z[1,2])="character"</code>. This is important. <code>0</code> in R is a number while <code>"0"</code> would be a character (the name of a parameter).</p>
 </div>
 </div>
             </section>
@@ -548,24 +574,24 @@ beta        0.5358166</code></pre>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -593,10 +619,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4.6 Random walks (RW) | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
-  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
+  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4.6 Random walks (RW) | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
 
-<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
+<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-03-28">
+<meta name="date" content="2019-11-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-tslab-white-noise-wn.html">
-<link rel="next" href="sec-tslab-autoregressive-ar-models.html">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="sec-tslab-white-noise-wn.html"/>
+<link rel="next" href="sec-tslab-autoregressive-ar-models.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -51,41 +53,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -109,7 +136,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="preface-1.html"><a href="preface-1.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
@@ -435,29 +461,29 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-tslab-random-walks-rw" class="section level2">
 <h2><span class="header-section-number">4.6</span> Random walks (RW)</h2>
 <p>Random walks receive considerable attention in time series analyses because of their ability to fit a wide range of data despite their surprising simplicity. In fact, random walks are the most simple non-stationary time series model. A random walk is a time series <span class="math inline">\(\{x_t\}\)</span> where</p>
-<span class="math display" id="eq:defnRW2">\[\begin{equation}
+<p><span class="math display" id="eq:defnRW2">\[\begin{equation}
 \tag{4.18}
   x_t = x_{t-1} + w_t,
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>and <span class="math inline">\(w_t\)</span> is a discrete white noise series where all values are independent and identically distributed (IID) with a mean of zero. In practice, we will almost always assume that the <span class="math inline">\(w_t\)</span> are Gaussian white noise, such that <span class="math inline">\(w_t \sim \text{N}(0,q)\)</span>. We will see later that a random walk is a special case of an autoregressive model.</p>
 <div id="sec-tslab-simulating-a-random-walk" class="section level3">
 <h3><span class="header-section-number">4.6.1</span> Simulating a random walk</h3>
 <p>Simulating a RW model in R is straightforward with a for loop and the use of <code>rnorm()</code> to generate Gaussian errors (type <code>?rnorm</code> to see details on the function and its useful relatives <code>dnorm()</code> and <code>pnorm()</code>). Let’s create 100 obs (we’ll also set the random number seed so everyone gets the same results).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## set random number seed
-<span class="kw">set.seed</span>(<span class="dv">123</span>)
-## length of time series
-TT &lt;-<span class="st"> </span><span class="dv">100</span>
-## initialize {x_t} and {w_t}
-xx &lt;-<span class="st"> </span>ww &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span>TT, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)
-## compute values 2 thru TT
-<span class="cf">for</span>(t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>TT) { xx[t] &lt;-<span class="st"> </span>xx[t<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>ww[t] }</code></pre></div>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" title="1"><span class="co">## set random number seed</span></a>
+<a class="sourceLine" id="cb249-2" title="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb249-3" title="3"><span class="co">## length of time series</span></a>
+<a class="sourceLine" id="cb249-4" title="4">TT &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb249-5" title="5"><span class="co">## initialize {x_t} and {w_t}</span></a>
+<a class="sourceLine" id="cb249-6" title="6">xx &lt;-<span class="st"> </span>ww &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n=</span>TT, <span class="dt">mean=</span><span class="dv">0</span>, <span class="dt">sd=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb249-7" title="7"><span class="co">## compute values 2 thru TT</span></a>
+<a class="sourceLine" id="cb249-8" title="8"><span class="cf">for</span>(t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>TT) { xx[t] &lt;-<span class="st"> </span>xx[t<span class="dv">-1</span>] <span class="op">+</span><span class="st"> </span>ww[t] }</a></code></pre></div>
 <p>Now let’s plot the simulated time series and its ACF.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## setup plot area
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-## plot line
-<span class="kw">plot.ts</span>(xx, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
-## plot ACF
-<span class="kw">plot.acf</span>(<span class="kw">acf</span>(xx, <span class="dt">plot=</span><span class="ot">FALSE</span>))</code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" title="1"><span class="co">## setup plot area</span></a>
+<a class="sourceLine" id="cb250-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb250-3" title="3"><span class="co">## plot line</span></a>
+<a class="sourceLine" id="cb250-4" title="4"><span class="kw">plot.ts</span>(xx, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
+<a class="sourceLine" id="cb250-5" title="5"><span class="co">## plot ACF</span></a>
+<a class="sourceLine" id="cb250-6" title="6"><span class="kw">plot.acf</span>(<span class="kw">acf</span>(xx, <span class="dt">plot=</span><span class="ot">FALSE</span>))</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotRW"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotRW-1.png" alt="Simulated time series of a random walk model (left) and its associated ACF (right)." width="80%" />
@@ -470,7 +496,7 @@ Figure 4.20: Simulated time series of a random walk model (left) and its associa
 <div id="sec-tslab-alternative-formulation-of-a-random-walk" class="section level3">
 <h3><span class="header-section-number">4.6.2</span> Alternative formulation of a random walk</h3>
 <p>As an aside, let’s use an alternative formulation of a random walk model to see an even shorter way to simulate an RW in R. Based on our definition of a random walk in Equation <a href="sec-tslab-random-walks-rw.html#eq:defnRW2">(4.18)</a>, it is easy to see that</p>
-<span class="math display" id="eq:defnRWalt">\[\begin{equation}
+<p><span class="math display" id="eq:defnRWalt">\[\begin{equation}
 \tag{4.19}
   \begin{aligned}
   x_t &amp;= x_{t-1} + w_t \\
@@ -478,30 +504,30 @@ Figure 4.20: Simulated time series of a random walk model (left) and its associa
   x_{t-2} &amp;= x_{t-3} + w_{t-2} \\
   &amp;\; \; \vdots
   \end{aligned}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>Therefore, if we substitute <span class="math inline">\(x_{t-2} + w_{t-1}\)</span> for <span class="math inline">\(x_{t-1}\)</span> in the first equation, and then <span class="math inline">\(x_{t-3} + w_{t-2}\)</span> for <span class="math inline">\(x_{t-2}\)</span>, and so on in a recursive manner, we get</p>
-<span class="math display" id="eq:defnRWalt2">\[\begin{equation}
+<p><span class="math display" id="eq:defnRWalt2">\[\begin{equation}
 \tag{4.20}
   x_t = w_t + w_{t-1} + w_{t-2} + \dots + w_{t-\infty} + x_{t-\infty}.
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>In practice, however, the time series will not start an infinite time ago, but rather at some <span class="math inline">\(t=1\)</span>, in which case we can write</p>
-<span class="math display" id="eq:defnRWalt3">\[\begin{equation}
+<p><span class="math display" id="eq:defnRWalt3">\[\begin{equation}
 \tag{4.21}
   \begin{aligned}
   x_t &amp;= w_1 + w_2 + \dots + w_t \\
       &amp;= \sum_{t=1}^{T} w_t.
   \end{aligned}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>From Equation <a href="sec-tslab-random-walks-rw.html#eq:defnRWalt3">(4.21)</a> it is easy to see that the value of an RW process at time step <span class="math inline">\(t\)</span> is the sum of all the random errors up through time <span class="math inline">\(t\)</span>. Therefore, in R we can easily simulate a realization from an RW process using the <code>cumsum(x)</code> function, which does cumulative summation of the vector <code>x</code> over its entire length. If we use the same errors as before, we should get the same results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## simulate RW
-x2 &lt;-<span class="st"> </span><span class="kw">cumsum</span>(ww)</code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" title="1"><span class="co">## simulate RW</span></a>
+<a class="sourceLine" id="cb251-2" title="2">x2 &lt;-<span class="st"> </span><span class="kw">cumsum</span>(ww)</a></code></pre></div>
 <p>Let’s plot both time series to see if it worked.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## setup plot area
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-## plot 1st RW
-<span class="kw">plot.ts</span>(xx, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
-## plot 2nd RW
-<span class="kw">plot.ts</span>(x2, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb252-1" title="1"><span class="co">## setup plot area</span></a>
+<a class="sourceLine" id="cb252-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb252-3" title="3"><span class="co">## plot 1st RW</span></a>
+<a class="sourceLine" id="cb252-4" title="4"><span class="kw">plot.ts</span>(xx, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
+<a class="sourceLine" id="cb252-5" title="5"><span class="co">## plot 2nd RW</span></a>
+<a class="sourceLine" id="cb252-6" title="6"><span class="kw">plot.ts</span>(x2, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotRWalt"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotRWalt-1.png" alt="Time series of the same random walk model formulated as Equation (4.18) and simulated via a for loop (left), and as Equation (4.21) and simulated via cumsum() (right)." width="80%" />
@@ -523,24 +549,24 @@ Figure 4.21: Time series of the same random walk model formulated as Equation <a
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -568,10 +594,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

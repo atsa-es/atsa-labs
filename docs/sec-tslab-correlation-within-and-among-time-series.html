@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4.4 Correlation within and among time series | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
-  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
+  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4.4 Correlation within and among time series | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
 
-<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
+<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-03-28">
+<meta name="date" content="2019-11-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects.html">
-<link rel="next" href="sec-tslab-white-noise-wn.html">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects.html"/>
+<link rel="next" href="sec-tslab-white-noise-wn.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -51,41 +53,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -109,7 +136,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="preface-1.html"><a href="preface-1.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
@@ -438,25 +464,25 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-tslab-autocorrelation-function-acf" class="section level3">
 <h3><span class="header-section-number">4.4.1</span> Autocorrelation function (ACF)</h3>
 <p>Autocorrelation is the correlation of a variable with itself at differing time lags. Recall from lecture that we defined the sample autocovariance function (ACVF), <span class="math inline">\(c_k\)</span>, for some lag <span class="math inline">\(k\)</span> as</p>
-<span class="math display" id="eq:ACVF">\[\begin{equation}
+<p><span class="math display" id="eq:ACVF">\[\begin{equation}
 \tag{4.10}
 c_k = \frac{1}{n}\sum_{t=1}^{n-k} \left(x_t-\bar{x}\right) \left(x_{t+k}-\bar{x}\right)
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>Note that the sample autocovariance of <span class="math inline">\(\{x_t\}\)</span> at lag 0, <span class="math inline">\(c_0\)</span>, equals the sample variance of <span class="math inline">\(\{x_t\}\)</span> calculated with a denominator of <span class="math inline">\(n\)</span>. The sample autocorrelation function (ACF) is defined as</p>
-<span class="math display" id="eq:ACF">\[\begin{equation}
+<p><span class="math display" id="eq:ACF">\[\begin{equation}
 \tag{4.11}
 r_k = \frac{c_k}{c_0} = \text{Cor}(x_t,x_{t+k})
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>Recall also that an approximate 95% confidence interval on the ACF can be estimated by</p>
-<span class="math display" id="eq:ACF95CI">\[\begin{equation}
+<p><span class="math display" id="eq:ACF95CI">\[\begin{equation}
 \tag{4.12}
 -\frac{1}{n} \pm \frac{2}{\sqrt{n}}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>where <span class="math inline">\(n\)</span> is the number of data points used in the calculation of the ACF.</p>
 <p>It is important to remember two things here. First, although the confidence interval is commonly plotted and interpreted as a horizontal line over all time lags, the interval itself actually grows as the lag increases because the number of data points <span class="math inline">\(n\)</span> used to estimate the correlation decreases by 1 for every integer increase in lag. Second, care must be exercised when interpreting the “significance” of the correlation at various lags because we should expect, <em>a priori</em>, that approximately 1 out of every 20 correlations will be significant based on chance alone.</p>
-<p>We can use the <code>acf()</code> function in R to compute the sample ACF (note that adding the option <code>type=&quot;covariance&quot;</code> will return the sample auto-covariance (ACVF) instead of the ACF–type <code>?acf</code> for details). Calling the function by itself will will automatically produce a correlogram (<em>i.e.</em>, a plot of the autocorrelation versus time lag). The argument <code>lag.max</code> allows you to set the number of positive and negative lags. Let’s try it for the CO<span class="math inline">\(_2\)</span> data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## correlogram of the CO2 data
-<span class="kw">acf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</code></pre></div>
+<p>We can use the <code>acf()</code> function in R to compute the sample ACF (note that adding the option <code>type="covariance"</code> will return the sample auto-covariance (ACVF) instead of the ACF–type <code>?acf</code> for details). Calling the function by itself will will automatically produce a correlogram (<em>i.e.</em>, a plot of the autocorrelation versus time lag). The argument <code>lag.max</code> allows you to set the number of positive and negative lags. Let’s try it for the CO<span class="math inline">\(_2\)</span> data.</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb234-1" title="1"><span class="co">## correlogram of the CO2 data</span></a>
+<a class="sourceLine" id="cb234-2" title="2"><span class="kw">acf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotACFb"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotACFb-1.png" alt="Correlogram of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i obtained with the function acf()." width="80%" />
@@ -472,22 +498,22 @@ Figure 4.10: Correlogram of the observed atmospheric CO<span class="math inline"
 <li>there is very high autocorrelation even out to lags of 36 months.</li>
 </ol>
 <p>As an alternative to the default plots for <strong>acf</strong> objects, let’s define a new plot function for <strong>acf</strong> objects with some better features:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## better ACF plot
-plot.acf &lt;-<span class="st"> </span><span class="cf">function</span>(ACFobj) {
-  rr &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>acf[<span class="op">-</span><span class="dv">1</span>]
-  kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)
-  nn &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>n.used
-  <span class="kw">plot</span>(<span class="kw">seq</span>(kk),rr,<span class="dt">type=</span><span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">yaxs=</span><span class="st">&quot;i&quot;</span>,<span class="dt">xaxs=</span><span class="st">&quot;i&quot;</span>,
-       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)),<span class="dv">1</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,kk<span class="op">+</span><span class="dv">1</span>),
-       <span class="dt">xlab=</span><span class="st">&quot;Lag&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Correlation&quot;</span>,<span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">h=</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>nn<span class="op">+</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn),<span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)
-  <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)
-}</code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" title="1"><span class="co">## better ACF plot</span></a>
+<a class="sourceLine" id="cb235-2" title="2">plot.acf &lt;-<span class="st"> </span><span class="cf">function</span>(ACFobj) {</a>
+<a class="sourceLine" id="cb235-3" title="3">  rr &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>acf[<span class="op">-</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb235-4" title="4">  kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)</a>
+<a class="sourceLine" id="cb235-5" title="5">  nn &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>n.used</a>
+<a class="sourceLine" id="cb235-6" title="6">  <span class="kw">plot</span>(<span class="kw">seq</span>(kk),rr,<span class="dt">type=</span><span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">yaxs=</span><span class="st">&quot;i&quot;</span>,<span class="dt">xaxs=</span><span class="st">&quot;i&quot;</span>,</a>
+<a class="sourceLine" id="cb235-7" title="7">       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)),<span class="dv">1</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,kk<span class="op">+</span><span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb235-8" title="8">       <span class="dt">xlab=</span><span class="st">&quot;Lag&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Correlation&quot;</span>,<span class="dt">las=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb235-9" title="9">  <span class="kw">abline</span>(<span class="dt">h=</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>nn<span class="op">+</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn),<span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb235-10" title="10">  <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb235-11" title="11">}</a></code></pre></div>
 <p>Now we can assign the result of <code>acf()</code> to a variable and then use the information contained therein to plot the correlogram with our new plot function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## acf of the CO2 data
-co2.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)
-## correlogram of the CO2 data
-<span class="kw">plot.acf</span>(co2.acf)</code></pre></div>
+<div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb236-1" title="1"><span class="co">## acf of the CO2 data</span></a>
+<a class="sourceLine" id="cb236-2" title="2">co2.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</a>
+<a class="sourceLine" id="cb236-3" title="3"><span class="co">## correlogram of the CO2 data</span></a>
+<a class="sourceLine" id="cb236-4" title="4"><span class="kw">plot.acf</span>(co2.acf)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/tslab-DoOurACF-1.png" width="80%" style="display: block; margin: auto;" /></p>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotbetterACF"></span>
@@ -498,18 +524,18 @@ Figure 4.11: Correlogram of the observed atmospheric CO<span class="math inline"
 </div>
 <p>Notice that all of the relevant information is still there (Figure <a href="sec-tslab-correlation-within-and-among-time-series.html#fig:tslab-plotbetterACF">4.11</a>), but now <span class="math inline">\(r_0=1\)</span> is not plotted at lag-0 and the lags on the <span class="math inline">\(x\)</span>-axis are displayed correctly as integers.</p>
 <p>Before we move on to the PACF, let’s look at the ACF for some deterministic time series, which will help you identify interesting properties (<em>e.g.</em>, trends, seasonal effects) in a stochastic time series, and account for them in time series models–an important topic in this course. First, let’s look at a straight line.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## length of ts
-nn &lt;-<span class="st"> </span><span class="dv">100</span>
-## create straight line
-tt &lt;-<span class="st"> </span><span class="kw">seq</span>(nn)
-## set up plot area
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-## plot line
-<span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
-## get ACF
-line.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)
-## plot ACF
-<span class="kw">plot.acf</span>(line.acf)</code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" title="1"><span class="co">## length of ts</span></a>
+<a class="sourceLine" id="cb237-2" title="2">nn &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb237-3" title="3"><span class="co">## create straight line</span></a>
+<a class="sourceLine" id="cb237-4" title="4">tt &lt;-<span class="st"> </span><span class="kw">seq</span>(nn)</a>
+<a class="sourceLine" id="cb237-5" title="5"><span class="co">## set up plot area</span></a>
+<a class="sourceLine" id="cb237-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb237-7" title="7"><span class="co">## plot line</span></a>
+<a class="sourceLine" id="cb237-8" title="8"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
+<a class="sourceLine" id="cb237-9" title="9"><span class="co">## get ACF</span></a>
+<a class="sourceLine" id="cb237-10" title="10">line.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb237-11" title="11"><span class="co">## plot ACF</span></a>
+<a class="sourceLine" id="cb237-12" title="12"><span class="kw">plot.acf</span>(line.acf)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/tslab-LinearACF-1.png" width="80%" style="display: block; margin: auto;" /></p>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotLinearACF"></span>
@@ -520,16 +546,16 @@ Figure 4.12: Time series plot of a straight line (left) and the correlogram of i
 </div>
 <p>The correlogram for a straight line is itself a linearly decreasing function over time (Figure <a href="sec-tslab-correlation-within-and-among-time-series.html#fig:tslab-plotLinearACF">4.12</a>).</p>
 <p>Now let’s examine the ACF for a sine wave and see what sort of pattern arises.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## create sine wave
-tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>)
-## set up plot area
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-## plot line
-<span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
-## get ACF
-sine.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)
-## plot ACF
-<span class="kw">plot.acf</span>(sine.acf)</code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" title="1"><span class="co">## create sine wave</span></a>
+<a class="sourceLine" id="cb238-2" title="2">tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb238-3" title="3"><span class="co">## set up plot area</span></a>
+<a class="sourceLine" id="cb238-4" title="4"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb238-5" title="5"><span class="co">## plot line</span></a>
+<a class="sourceLine" id="cb238-6" title="6"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
+<a class="sourceLine" id="cb238-7" title="7"><span class="co">## get ACF</span></a>
+<a class="sourceLine" id="cb238-8" title="8">sine.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb238-9" title="9"><span class="co">## plot ACF</span></a>
+<a class="sourceLine" id="cb238-10" title="10"><span class="kw">plot.acf</span>(sine.acf)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotSineACF"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotSineACF-1.png" alt="Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right)." width="80%" />
@@ -539,16 +565,16 @@ Figure 4.13: Time series plot of a discrete sine wave (left) and the correlogram
 </div>
 <p>Perhaps not surprisingly, the correlogram for a sine wave is itself a sine wave whose amplitude decreases linearly over time (Figure <a href="sec-tslab-correlation-within-and-among-time-series.html#fig:tslab-plotSineACF">4.13</a>).</p>
 <p>Now let’s examine the ACF for a sine wave with a linear downward trend and see what sort of patterns arise.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## create sine wave with trend
-tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>) <span class="op">-</span><span class="st"> </span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">50</span>
-## set up plot area
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
-## plot line
-<span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))
-## get ACF
-sili.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)
-## plot ACF
-<span class="kw">plot.acf</span>(sili.acf)</code></pre></div>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb239-1" title="1"><span class="co">## create sine wave with trend</span></a>
+<a class="sourceLine" id="cb239-2" title="2">tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>) <span class="op">-</span><span class="st"> </span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">50</span></a>
+<a class="sourceLine" id="cb239-3" title="3"><span class="co">## set up plot area</span></a>
+<a class="sourceLine" id="cb239-4" title="4"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb239-5" title="5"><span class="co">## plot line</span></a>
+<a class="sourceLine" id="cb239-6" title="6"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
+<a class="sourceLine" id="cb239-7" title="7"><span class="co">## get ACF</span></a>
+<a class="sourceLine" id="cb239-8" title="8">sili.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb239-9" title="9"><span class="co">## plot ACF</span></a>
+<a class="sourceLine" id="cb239-10" title="10"><span class="kw">plot.acf</span>(sili.acf)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotSiLiACF"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotSiLiACF-1.png" alt="Time series plot of a discrete sine wave (left) and the correlogram of its ACF (right)." width="80%" />
@@ -562,30 +588,30 @@ Figure 4.14: Time series plot of a discrete sine wave (left) and the correlogram
 <div id="sec-tslab-partial-autocorrelation-function-pacf" class="section level3">
 <h3><span class="header-section-number">4.4.2</span> Partial autocorrelation function (PACF)</h3>
 <p>The partial autocorrelation function (PACF) measures the linear correlation of a series <span class="math inline">\(\{x_t\}\)</span> and a lagged version of itself <span class="math inline">\(\{x_{t+k}\}\)</span> with the linear dependence of <span class="math inline">\(\{x_{t-1},x_{t-2},\dots,x_{t-(k-1)}\}\)</span> removed. Recall from lecture that we define the PACF as</p>
-<span class="math display" id="eq:PACFdefn">\[\begin{equation}
+<p><span class="math display" id="eq:PACFdefn">\[\begin{equation}
 \tag{4.13}
 f_k = \begin{cases}
         \text{Cor}(x_1,x_0)=r_1 &amp; \text{if } k = 1;\\
         \text{Cor}(x_k-x_k^{k-1},x_0-x_0^{k-1}) &amp; \text{if } k \geq 2;
       \end{cases}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>with</p>
 
 <p>It’s easy to compute the PACF for a variable in R using the <code>pacf()</code> function, which will automatically plot a correlogram when called by itself (similar to <code>acf()</code>). Let’s look at the PACF for the CO<span class="math inline">\(_2\)</span> data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## PACF of the CO2 data
-<span class="kw">pacf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" title="1"><span class="co">## PACF of the CO2 data</span></a>
+<a class="sourceLine" id="cb240-2" title="2"><span class="kw">pacf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</a></code></pre></div>
 <p>The default plot for PACF is a bit better than for ACF, but here is another plotting function that might be useful.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## better PACF plot
-plot.pacf &lt;-<span class="st"> </span><span class="cf">function</span>(PACFobj) {
-  rr &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>acf
-  kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)
-  nn &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>n.used
-  <span class="kw">plot</span>(<span class="kw">seq</span>(kk),rr,<span class="dt">type=</span><span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">yaxs=</span><span class="st">&quot;i&quot;</span>,<span class="dt">xaxs=</span><span class="st">&quot;i&quot;</span>,
-       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)),<span class="dv">1</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,kk<span class="op">+</span><span class="dv">1</span>),
-       <span class="dt">xlab=</span><span class="st">&quot;Lag&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;PACF&quot;</span>,<span class="dt">las=</span><span class="dv">1</span>)
-  <span class="kw">abline</span>(<span class="dt">h=</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>nn<span class="op">+</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn),<span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)
-  <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)
-}</code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" title="1"><span class="co">## better PACF plot</span></a>
+<a class="sourceLine" id="cb241-2" title="2">plot.pacf &lt;-<span class="st"> </span><span class="cf">function</span>(PACFobj) {</a>
+<a class="sourceLine" id="cb241-3" title="3">  rr &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>acf</a>
+<a class="sourceLine" id="cb241-4" title="4">  kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)</a>
+<a class="sourceLine" id="cb241-5" title="5">  nn &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>n.used</a>
+<a class="sourceLine" id="cb241-6" title="6">  <span class="kw">plot</span>(<span class="kw">seq</span>(kk),rr,<span class="dt">type=</span><span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">yaxs=</span><span class="st">&quot;i&quot;</span>,<span class="dt">xaxs=</span><span class="st">&quot;i&quot;</span>,</a>
+<a class="sourceLine" id="cb241-7" title="7">       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)),<span class="dv">1</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,kk<span class="op">+</span><span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb241-8" title="8">       <span class="dt">xlab=</span><span class="st">&quot;Lag&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;PACF&quot;</span>,<span class="dt">las=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb241-9" title="9">  <span class="kw">abline</span>(<span class="dt">h=</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>nn<span class="op">+</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn),<span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb241-10" title="10">  <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb241-11" title="11">}</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotPACFb"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotPACFb-1.png" alt="Correlogram of the PACF for the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i obtained with the function pacf()." width="80%" />
@@ -595,41 +621,41 @@ Figure 4.15: Correlogram of the PACF for the observed atmospheric CO<span class=
 </div>
 <p>Notice in Figure <a href="sec-tslab-correlation-within-and-among-time-series.html#fig:tslab-plotPACFb">4.15</a> that the partial autocorrelation at lag-1 is very high (it equals the ACF at lag-1), but the other values at lags &gt; 1 are relatively small, unlike what we saw for the ACF. We will discuss this in more detail later on in this lab.</p>
 <p>Notice also that the PACF plot again has real-valued indices for the time lag, but it does not include any value for lag-0 because it is impossible to remove any intermediate autocorrelation between <span class="math inline">\(t\)</span> and <span class="math inline">\(t-k\)</span> when <span class="math inline">\(k=0\)</span>, and therefore the PACF does not exist at lag-0. If you would like, you can use the <code>plot.acf()</code> function we defined above to plot the PACF estimates because <code>acf()</code> and <code>pacf()</code> produce identical list structures (results not shown here).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## PACF of the CO2 data
-co2.pacf &lt;-<span class="st"> </span><span class="kw">pacf</span>(co2)
-## correlogram of the CO2 data
-<span class="kw">plot.acf</span>(co2.pacf)</code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1"><span class="co">## PACF of the CO2 data</span></a>
+<a class="sourceLine" id="cb242-2" title="2">co2.pacf &lt;-<span class="st"> </span><span class="kw">pacf</span>(co2)</a>
+<a class="sourceLine" id="cb242-3" title="3"><span class="co">## correlogram of the CO2 data</span></a>
+<a class="sourceLine" id="cb242-4" title="4"><span class="kw">plot.acf</span>(co2.pacf)</a></code></pre></div>
 <p>As with the ACF, we will see later on how the PACF can also be used to help identify the appropriate order of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> in ARMA(<span class="math inline">\(p\)</span>,<span class="math inline">\(q\)</span>) models.</p>
 </div>
 <div id="sec-tslab-cross-correlation-function-ccf" class="section level3">
 <h3><span class="header-section-number">4.4.3</span> Cross-correlation function (CCF)</h3>
 <p>Often we are interested in looking for relationships between 2 different time series. There are many ways to do this, but a simple method is via examination of their cross-covariance and cross-correlation.</p>
 <p>We begin by defining the sample cross-covariance function (CCVF) in a manner similar to the ACVF, in that</p>
-<span class="math display" id="eq:CCVF">\[\begin{equation}
+<p><span class="math display" id="eq:CCVF">\[\begin{equation}
 \tag{4.14}
 g_k^{xy} = \frac{1}{n}\sum_{t=1}^{n-k} \left(y_t-\bar{y}\right) \left(x_{t+k}-\bar{x}\right),
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>but now we are estimating the correlation between a variable <span class="math inline">\(y\)</span> and a <em>different</em> time-shifted variable <span class="math inline">\(x_{t+k}\)</span>. The sample cross-correlation function (CCF) is then defined analogously to the ACF, such that</p>
-<span class="math display" id="eq:CCF">\[\begin{equation}
+<p><span class="math display" id="eq:CCF">\[\begin{equation}
 \tag{4.15}
 r_k^{xy} = \frac{g_k^{xy}}{\sqrt{\text{SD}_x\text{SD}_y}};
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>SD<span class="math inline">\(_x\)</span> and SD<span class="math inline">\(_y\)</span> are the sample standard deviations of <span class="math inline">\(\{x_t\}\)</span> and <span class="math inline">\(\{y_t\}\)</span>, respectively. It is important to re-iterate here that <span class="math inline">\(r_k^{xy} \neq r_{-k}^{xy}\)</span>, but <span class="math inline">\(r_k^{xy} = r_{-k}^{yx}\)</span>. Therefore, it is very important to pay particular attention to which variable you call <span class="math inline">\(y\)</span> (<em>i.e.</em>, the “response”) and which you call <span class="math inline">\(x\)</span> (<em>i.e.</em>, the “predictor”).</p>
 <p>As with the ACF, an approximate 95% confidence interval on the CCF can be estimated by</p>
-<span class="math display" id="eq:CCF95CI">\[\begin{equation}
+<p><span class="math display" id="eq:CCF95CI">\[\begin{equation}
 \tag{4.16}
 -\frac{1}{n} \pm \frac{2}{\sqrt{n}}
-\end{equation}\]</span>
+\end{equation}\]</span></p>
 <p>where <span class="math inline">\(n\)</span> is the number of data points used in the calculation of the CCF, and the same assumptions apply to its interpretation.</p>
 <p>Computing the CCF in R is easy with the function <code>ccf()</code> and it works just like <code>acf()</code>. In fact, <code>ccf()</code> is just a “wrapper” function that calls <code>acf()</code>. As an example, let’s examine the CCF between sunspot activity and number of lynx trapped in Canada as in the classic paper by Moran.</p>
 <p>To begin, let’s get the data, which are conveniently included in the <strong>datasets</strong> package included as part of the base installation of R. Before calculating the CCF, however, we need to find the matching years of data. Again, we’ll use the <code>ts.intersect()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## get the matching years of sunspot data
-suns &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx,sunspot.year)[,<span class="st">&quot;sunspot.year&quot;</span>]
-## get the matching lynx data
-lynx &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx,sunspot.year)[,<span class="st">&quot;lynx&quot;</span>]</code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" title="1"><span class="co">## get the matching years of sunspot data</span></a>
+<a class="sourceLine" id="cb243-2" title="2">suns &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx,sunspot.year)[,<span class="st">&quot;sunspot.year&quot;</span>]</a>
+<a class="sourceLine" id="cb243-3" title="3"><span class="co">## get the matching lynx data</span></a>
+<a class="sourceLine" id="cb243-4" title="4">lynx &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx,sunspot.year)[,<span class="st">&quot;lynx&quot;</span>]</a></code></pre></div>
 <p>Here are plots of the time series.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## plot time series
-<span class="kw">plot</span>(<span class="kw">cbind</span>(suns,lynx), <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" title="1"><span class="co">## plot time series</span></a>
+<a class="sourceLine" id="cb244-2" title="2"><span class="kw">plot</span>(<span class="kw">cbind</span>(suns,lynx), <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotSunsLynx"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotSunsLynx-1.png" alt="Time series of sunspot activity (top) and lynx trappings in Canada (bottom) from 1821-1934." width="80%" />
@@ -638,8 +664,8 @@ Figure 4.16: Time series of sunspot activity (top) and lynx trappings in Canada 
 </p>
 </div>
 <p>It is important to remember which of the 2 variables you call <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> when calling <code>ccf(x, y, ...)</code>. In this case, it seems most relevant to treat lynx as the <span class="math inline">\(y\)</span> and sunspots as the <span class="math inline">\(x\)</span>, in which case we are mostly interested in the CCF at negative lags (<em>i.e.</em>, when sunspot activity predates inferred lynx abundance). Furthermore, we’ll use log-transformed lynx trappings.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## CCF of sunspots and lynx
-<span class="kw">ccf</span>(suns, <span class="kw">log</span>(lynx), <span class="dt">ylab=</span><span class="st">&quot;Cross-correlation&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" title="1"><span class="co">## CCF of sunspots and lynx</span></a>
+<a class="sourceLine" id="cb245-2" title="2"><span class="kw">ccf</span>(suns, <span class="kw">log</span>(lynx), <span class="dt">ylab=</span><span class="st">&quot;Cross-correlation&quot;</span>)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotCCFb"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotCCFb-1.png" alt="CCF for annual sunspot activity and the log of the number of lynx trappings in Canada from 1821-1934." width="80%" />
@@ -661,24 +687,24 @@ Figure 4.17: CCF for annual sunspot activity and the log of the number of lynx t
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -706,10 +732,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

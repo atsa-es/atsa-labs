@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>11.1 Covariates with missing values or observation error | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
-  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
+  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="11.1 Covariates with missing values or observation error | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
 
-<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
+<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-03-28">
+<meta name="date" content="2019-11-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="chap-mssmiss.html">
-<link rel="next" href="example-snotel-data.html">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="chap-mssmiss.html"/>
+<link rel="next" href="example-snotel-data.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -51,41 +53,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -109,7 +136,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="preface-1.html"><a href="preface-1.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
@@ -435,7 +461,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-mssmiss-overview" class="section level2">
 <h2><span class="header-section-number">11.1</span> Covariates with missing values or observation error</h2>
 <p>The specific formulation of Equation <a href="sec-msscov-overview.html#eq:msscov-covars">(8.1)</a> creates restrictions on the assumptions regarding the covariate data. You have to assume that your covariate data has no error, which is probably not true. You cannot have missing values in your covariate data, again unlikely. You cannot combine instrument time series; for example, if you have two temperature recorders with different error rates and biases. Also, what if you have one noisy temperature sensor in the first part of your time series and then you switch to a much better sensor in the second half of your time series? All these problems require pre-analysis massaging of the covariate data, leaving out noisy and gappy covariate data, and making what can feel like arbitrary choices about which covariate time series to include.</p>
-To circumvent these potential problems and allow more flexibility in how we incorporate covariate data, one can instead treat the covariates as components of an auto-regressive process by including them in both the process and observation models. Beginning with the process equation, we can write
+<p>To circumvent these potential problems and allow more flexibility in how we incorporate covariate data, one can instead treat the covariates as components of an auto-regressive process by including them in both the process and observation models. Beginning with the process equation, we can write
 <span class="math display" id="eq:mssmiss-marsscovarx">\[\begin{equation}
 \begin{gathered}
 \begin{bmatrix}\mathbf{x}^{(v)} \\ \mathbf{x}^{(c)}\end{bmatrix}_t
@@ -447,8 +473,8 @@ To circumvent these potential problems and allow more flexibility in how we inco
 \end{gathered}
 \tag{11.1}
 \end{equation}\]</span>
-<p>The elements with superscript <span class="math inline">\({(v)}\)</span> are for the <span class="math inline">\(k\)</span> variate states and those with superscript <span class="math inline">\({(c)}\)</span> are for the <span class="math inline">\(q\)</span> covariate states. The dimension of <span class="math inline">\(\mathbf{x}^{(c)}\)</span> is <span class="math inline">\(q \times 1\)</span> and <span class="math inline">\(q\)</span> is not necessarily equal to <span class="math inline">\(p\)</span>, the number of covariate observation time series in your dataset. Imagine, for example, that you have two temperature sensors and you are combining these data. Then you have two covariate observation time series (<span class="math inline">\(p=2\)</span>) but only one underlying covariate state time series (<span class="math inline">\(q=1\)</span>). The matrix <span class="math inline">\(\mathbf{C}\)</span> is dimension <span class="math inline">\(k \times q\)</span>, and <span class="math inline">\(\mathbf{B}^{(c)}\)</span> and <span class="math inline">\(\mathbf{Q}^{(c)}\)</span> are dimension <span class="math inline">\(q \times q\)</span>. The dimension of <span class="math inline">\(\mathbf{x}^{(v)}\)</span> is <span class="math inline">\(k \times 1\)</span>, and <span class="math inline">\(\mathbf{B}^{(v)}\)</span> and <span class="math inline">\(\mathbf{Q}^{(v)}\)</span> are dimension <span class="math inline">\(k \times k\)</span>. The dimension of <span class="math inline">\(\mathbf{x}\)</span> is always denoted <span class="math inline">\(m\)</span>. If your process model includes only variates, then <span class="math inline">\(k=m\)</span>, but now your process model includes <span class="math inline">\(k\)</span> variates and <span class="math inline">\(q\)</span> covariate states so <span class="math inline">\(m=k+q\)</span>.</p>
-Next, we can write the observation equation in an analogous manner, such that
+The elements with superscript <span class="math inline">\({(v)}\)</span> are for the <span class="math inline">\(k\)</span> variate states and those with superscript <span class="math inline">\({(c)}\)</span> are for the <span class="math inline">\(q\)</span> covariate states. The dimension of <span class="math inline">\(\mathbf{x}^{(c)}\)</span> is <span class="math inline">\(q \times 1\)</span> and <span class="math inline">\(q\)</span> is not necessarily equal to <span class="math inline">\(p\)</span>, the number of covariate observation time series in your dataset. Imagine, for example, that you have two temperature sensors and you are combining these data. Then you have two covariate observation time series (<span class="math inline">\(p=2\)</span>) but only one underlying covariate state time series (<span class="math inline">\(q=1\)</span>). The matrix <span class="math inline">\(\mathbf{C}\)</span> is dimension <span class="math inline">\(k \times q\)</span>, and <span class="math inline">\(\mathbf{B}^{(c)}\)</span> and <span class="math inline">\(\mathbf{Q}^{(c)}\)</span> are dimension <span class="math inline">\(q \times q\)</span>. The dimension of <span class="math inline">\(\mathbf{x}^{(v)}\)</span> is <span class="math inline">\(k \times 1\)</span>, and <span class="math inline">\(\mathbf{B}^{(v)}\)</span> and <span class="math inline">\(\mathbf{Q}^{(v)}\)</span> are dimension <span class="math inline">\(k \times k\)</span>. The dimension of <span class="math inline">\(\mathbf{x}\)</span> is always denoted <span class="math inline">\(m\)</span>. If your process model includes only variates, then <span class="math inline">\(k=m\)</span>, but now your process model includes <span class="math inline">\(k\)</span> variates and <span class="math inline">\(q\)</span> covariate states so <span class="math inline">\(m=k+q\)</span>.</p>
+<p>Next, we can write the observation equation in an analogous manner, such that
 <span class="math display" id="eq:mssmiss-marsscovary">\[\begin{equation}
 \begin{gathered}
 \begin{bmatrix} \mathbf{y}^{(v)} \\ \mathbf{y}^{(c)} \end{bmatrix}_t
@@ -460,9 +486,9 @@ Next, we can write the observation equation in an analogous manner, such that
 \end{gathered}
 \tag{11.2}
 \end{equation}\]</span>
-<p>The dimension of <span class="math inline">\(\mathbf{y}^{(c)}\)</span> is <span class="math inline">\(p \times 1\)</span>, where <span class="math inline">\(p\)</span> is the number of covariate observation time series in your dataset. The dimension of <span class="math inline">\(\mathbf{y}^{(v)}\)</span> is <span class="math inline">\(l \times 1\)</span>, where <span class="math inline">\(l\)</span> is the number of variate observation time series in your dataset. The total dimension of <span class="math inline">\(\mathbf{y}\)</span> is <span class="math inline">\(l+p\)</span>. The matrix <span class="math inline">\(\mathbf{D}\)</span> is dimension <span class="math inline">\(l \times q\)</span>, <span class="math inline">\(\mathbf{Z}^{(c)}\)</span> is dimension <span class="math inline">\(p \times q\)</span>, and <span class="math inline">\(\mathbf{R}^{(c)}\)</span> are dimension <span class="math inline">\(p \times p\)</span>. The dimension of <span class="math inline">\(\mathbf{Z}^{(v)}\)</span> is dimension <span class="math inline">\(l \times k\)</span>, and <span class="math inline">\(\mathbf{R}^{(v)}\)</span> are dimension <span class="math inline">\(l \times l\)</span>.</p>
+The dimension of <span class="math inline">\(\mathbf{y}^{(c)}\)</span> is <span class="math inline">\(p \times 1\)</span>, where <span class="math inline">\(p\)</span> is the number of covariate observation time series in your dataset. The dimension of <span class="math inline">\(\mathbf{y}^{(v)}\)</span> is <span class="math inline">\(l \times 1\)</span>, where <span class="math inline">\(l\)</span> is the number of variate observation time series in your dataset. The total dimension of <span class="math inline">\(\mathbf{y}\)</span> is <span class="math inline">\(l+p\)</span>. The matrix <span class="math inline">\(\mathbf{D}\)</span> is dimension <span class="math inline">\(l \times q\)</span>, <span class="math inline">\(\mathbf{Z}^{(c)}\)</span> is dimension <span class="math inline">\(p \times q\)</span>, and <span class="math inline">\(\mathbf{R}^{(c)}\)</span> are dimension <span class="math inline">\(p \times p\)</span>. The dimension of <span class="math inline">\(\mathbf{Z}^{(v)}\)</span> is dimension <span class="math inline">\(l \times k\)</span>, and <span class="math inline">\(\mathbf{R}^{(v)}\)</span> are dimension <span class="math inline">\(l \times l\)</span>.</p>
 <p>The <span class="math inline">\(\mathbf{D}\)</span> matrix would presumably have a number of all zero rows in it, as would the <span class="math inline">\(\mathbf{C}\)</span> matrix. The covariates that affect the states would often be different than the covariates that affect the observations. For example, mean annual temperature might affect population growth rates for many species while having little or no affect on observability, and turbidity might strongly affect observability in many types of aquatic surveys but have little affect on population growth rate.</p>
-Our MARSS model with covariates now looks on the surface like a regular MARSS model:
+<p>Our MARSS model with covariates now looks on the surface like a regular MARSS model:
 <span class="math display">\[\begin{equation}
 \begin{gathered}
 \mathbf{x}_t = \mathbf{B}\mathbf{x}_{t-1} + \mathbf{u} + \mathbf{w}_t, \text{ where } \mathbf{w}_t \sim \,\text{MVN}(0,\mathbf{Q}) \\
@@ -477,8 +503,8 @@ with the <span class="math inline">\(\mathbf{x}_t\)</span>, <span class="math in
 \end{gathered}
 \tag{11.3}
 \end{equation}\]</span>
-<p>Note <span class="math inline">\(\mathbf{Q}\)</span> and <span class="math inline">\(\mathbf{R}\)</span> are written as block diagonal matrices, but you could allow covariances if that made sense. <span class="math inline">\(\mathbf{u}\)</span> and <span class="math inline">\(\mathbf{a}\)</span> are column vectors here. We can fit the model (Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marss-covar">(11.3)</a>) as usual using the <code>MARSS()</code> function.</p>
-The log-likelihood that is returned by MARSS will include the log-likelihood of the covariates under the covariate state model. If you want only the the log-likelihood of the non-covariate data, you will need to subtract off the log-likelihood of the covariate model:
+Note <span class="math inline">\(\mathbf{Q}\)</span> and <span class="math inline">\(\mathbf{R}\)</span> are written as block diagonal matrices, but you could allow covariances if that made sense. <span class="math inline">\(\mathbf{u}\)</span> and <span class="math inline">\(\mathbf{a}\)</span> are column vectors here. We can fit the model (Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marss-covar">(11.3)</a>) as usual using the <code>MARSS()</code> function.</p>
+<p>The log-likelihood that is returned by MARSS will include the log-likelihood of the covariates under the covariate state model. If you want only the the log-likelihood of the non-covariate data, you will need to subtract off the log-likelihood of the covariate model:
 <span class="math display" id="eq:mssmiss-covar-dummy">\[\begin{equation}
 \begin{gathered}
 \mathbf{x}^{(c)}_t = \mathbf{B}^{(c)}\mathbf{x}_{t-1}^{(c)} + \mathbf{u}^{(c)} + \mathbf{w}_t, \text{ where } \mathbf{w}_t \sim \,\text{MVN}(0,\mathbf{Q}^{(c)}) \\
@@ -486,13 +512,16 @@ The log-likelihood that is returned by MARSS will include the log-likelihood of 
 \end{gathered}
 \tag{11.4}
 \end{equation}\]</span>
-<p>An easy way to get this log-likelihood for the covariate data only is use the augmented model (Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marsscovary">(11.2)</a> with terms defined as in Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marss-covar">(11.3)</a> but pass in missing values for the non-covariate data. The following code shows how to do this.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y.aug =<span class="st"> </span><span class="kw">rbind</span>(data,covariates)
-fit.aug =<span class="st"> </span><span class="kw">MARSS</span>(y.aug, <span class="dt">model=</span>model.aug)</code></pre></div>
+An easy way to get this log-likelihood for the covariate data only is use
+the augmented model (Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marsscovary">(11.2)</a> with terms defined as
+in Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marss-covar">(11.3)</a> but pass in missing values for the
+non-covariate data. The following code shows how to do this.</p>
+<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb575-1" title="1">y.aug =<span class="st"> </span><span class="kw">rbind</span>(data,covariates)</a>
+<a class="sourceLine" id="cb575-2" title="2">fit.aug =<span class="st"> </span><span class="kw">MARSS</span>(y.aug, <span class="dt">model=</span>model.aug)</a></code></pre></div>
 <p><code>fit.aug</code> is the MLE object that can be passed to <code>MARSSkf()</code>. You need to make a version of this MLE object with the non-covariate data filled with NAs so that you can compute the log-likelihood without the covariates. This needs to be done in the <code>marss</code> element since that is what is used by <code>MARSSkf()</code>. Below is code to do this.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit.cov =<span class="st"> </span>fit.aug
-fit.cov<span class="op">$</span>marss<span class="op">$</span>data[<span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(data)[<span class="dv">1</span>], ] =<span class="st"> </span><span class="ot">NA</span>
-extra.LL =<span class="st"> </span><span class="kw">MARSSkf</span>(fit.cov)<span class="op">$</span>logLik</code></pre></div>
+<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb576-1" title="1">fit.cov =<span class="st"> </span>fit.aug</a>
+<a class="sourceLine" id="cb576-2" title="2">fit.cov<span class="op">$</span>marss<span class="op">$</span>data[<span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(data)[<span class="dv">1</span>],] =<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb576-3" title="3">extra.LL =<span class="st"> </span><span class="kw">MARSSkf</span>(fit.cov)<span class="op">$</span>logLik</a></code></pre></div>
 <p>Note that when you fit the augmented model, the estimates of <span class="math inline">\(\mathbf{C}\)</span> and <span class="math inline">\(\mathbf{B}^{(c)}\)</span> are affected by the non-covariate data since the model for both the non-covariate and covariate data are estimated simultaneously and are not independent (since the covariate states affect the non-covariates states). If you want the covariate model to be unaffected by the non-covariate data, you can fit the covariate model separately and use the estimates for <span class="math inline">\(\mathbf{B}^{(c)}\)</span> and <span class="math inline">\(\mathbf{Q}^{(c)}\)</span> as fixed values in your augmented model.</p>
 </div>
             </section>
@@ -506,24 +535,24 @@ extra.LL =<span class="st"> </span><span class="kw">MARSSkf</span>(fit.cov)<span
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -551,10 +580,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

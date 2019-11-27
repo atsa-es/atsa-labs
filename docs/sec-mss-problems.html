@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>7.11 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
-  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
+  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="7.11 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
 
-<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
+<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-03-28">
+<meta name="date" content="2019-11-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-marss-fitting-with-stan.html">
-<link rel="next" href="chap-msscov.html">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="sec-marss-fitting-with-stan.html"/>
+<link rel="next" href="chap-msscov.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -51,41 +53,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -109,7 +136,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="preface-1.html"><a href="preface-1.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
@@ -435,30 +461,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-mss-problems" class="section level2">
 <h2><span class="header-section-number">7.11</span> Problems</h2>
 <p>For these questions, use the <code>harborSealWA</code> data set in <strong>MARSS</strong>. The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(MARSS)
-<span class="kw">data</span>(harborSealWA, <span class="dt">package=</span><span class="st">&quot;MARSS&quot;</span>)
-dat &lt;-<span class="st"> </span><span class="kw">t</span>(harborSealWA[,<span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</code></pre></div>
+<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb484-1" title="1"><span class="kw">require</span>(MARSS)</a>
+<a class="sourceLine" id="cb484-2" title="2"><span class="kw">data</span>(harborSealWA, <span class="dt">package=</span><span class="st">&quot;MARSS&quot;</span>)</a>
+<a class="sourceLine" id="cb484-3" title="3">dat &lt;-<span class="st"> </span><span class="kw">t</span>(harborSealWA[,<span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</a></code></pre></div>
 <p>The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).</p>
 <div class="figure">
 <img src="images/harborSealWA_regions.png" alt="Regions in the harbor seal surveys" />
 <p class="caption">Regions in the harbor seal surveys</p>
 </div>
 <ol style="list-style-type: decimal">
-<li><p>Plot the harbor seal data. Use whatever plotting functions you wish (e.g. <code>ggplot()</code>, <code>plot(); points(); lines()</code>, <code>matplot()</code>).</p></li>
+<li><p>Plot the harbor seal data. Use whatever plotting functions you wish (e.g. <code>ggplot()</code>, <code>plot(); points(); lines()</code>, <code>matplot()</code>).</p></li>
 <li><p>Fit a panmictic population model that assumes that each of the 5 sites is observing one “Inland WA” harbor seal population with trend <span class="math inline">\(u\)</span>. Assume the observation errors are independent and identical. This means 1 variance on diagonal and 0s on off-diagonal. This is the default assumption for <code>MARSS()</code>.</p>
 <ol style="list-style-type: lower-alpha">
-<li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> for this model. The code to use for making a matrix in Rmarkdown is</p>
-<pre><code>$$\begin{bmatrix}a &amp; b &amp; 0\\d &amp; e &amp; f\\0 &amp; h &amp; i\end{bmatrix}$$</code></pre></li>
+<li>Write the <span class="math inline">\(\mathbf{Z}\)</span> for this model.
+The code to use for making a matrix in Rmarkdown is</li>
+</ol>
+<pre><code>$$\begin{bmatrix}a &amp; b &amp; 0\\d &amp; e &amp; f\\0 &amp; h &amp; i\end{bmatrix}$$</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
 <li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> matrix in R using <code>Z=matrix(...)</code> and using the factor short-cut for specifying <span class="math inline">\(\mathbf{Z}\)</span>. <code>Z=factor(c(...)</code>.</p></li>
 <li><p>Fit the model using <code>MARSS()</code>. What is the estimated trend (<span class="math inline">\(u\)</span>)? How fast was the population increasing (percent per year) based on this estimated <span class="math inline">\(u\)</span>?</p></li>
-<li><p>Compute the confidence intervals for the parameter estimates. Compare the intervals using the Hessian approximation and using a parametric bootstrap. What differences do you see between the two approaches? Use this code:</p>
+<li><p>Compute the confidence intervals for the parameter estimates. Compare the intervals using the Hessian approximation and using a parametric bootstrap. What differences do you see between the two approaches? Use this code:</p></li>
+</ol>
 <pre><code>library(broom)
 tidy(fit)
 # set nboot low so it doesn&#39;t take forever
-tidy(fit, method=&quot;parametric&quot;,nboot=100)</code></pre></li>
-<li><p>What does an estimate of <span class="math inline">\(\mathbf{Q}=0\)</span> mean? What would the estimated state (<span class="math inline">\(x\)</span>) look like when <span class="math inline">\(\mathbf{Q}=0\)</span>?</p></li>
+tidy(fit, method=&quot;parametric&quot;,nboot=100)</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>What does an estimate of <span class="math inline">\(\mathbf{Q}=0\)</span> mean? What would the estimated state (<span class="math inline">\(x\)</span>) look like when <span class="math inline">\(\mathbf{Q}=0\)</span>?</li>
 </ol></li>
-<li>Using the same panmictic population model, compare 3 assumptions about the observation error structure.
+<li><p>Using the same panmictic population model, compare 3 assumptions about the observation error structure.</p>
 <ul>
 <li>The observation errors are independent with different variances.</li>
 <li>The observation errors are independent with the same variance.</li>
@@ -466,15 +497,17 @@ tidy(fit, method=&quot;parametric&quot;,nboot=100)</code></pre></li>
 </ul>
 <ol style="list-style-type: lower-alpha">
 <li><p>Write the <span class="math inline">\(\mathbf{R}\)</span> variance-covariance matrices for each assumption.</p></li>
-<li><p>Create each R matrix in R. To combine, numbers and characters in a matrix use a list matrix like so:</p>
+<li><p>Create each R matrix in R. To combine, numbers and characters in a matrix use a list matrix like so:</p></li>
+</ol>
 <pre><code>A &lt;- matrix(list(0),3,3)
-A[1,1] &lt;- &quot;sigma2&quot;</code></pre></li>
-<li><p>Fit each model using <code>MARSS()</code> and compare the estimated <span class="math inline">\(u\)</span> (the population long-term trend). Does the assumption about the errors change the <span class="math inline">\(u\)</span> estimate?</p></li>
-<li><p>Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit. Are there any issues that you see? Use this code to get your state residuals:</p>
+A[1,1] &lt;- &quot;sigma2&quot;</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>Fit each model using <code>MARSS()</code> and compute the confidence intervals (CIs) for the estimated parameters. Compare the estimated <span class="math inline">\(u\)</span> (the population long-term trend) along with their CIs. Does the assumption about the observation errors change the <span class="math inline">\(u\)</span> estimate?</p></li>
+<li><p>Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit. Are there any issues that you see? Use this code to get your state residuals:</p></li>
+</ol>
 <pre><code>residuals(fit)$state.residuals[1,]</code></pre>
 <p>You need the <code>[1,]</code> since the residuals are returned as a matrix.</p></li>
-</ol></li>
-<li><p>Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC. The <span class="math inline">\(x\)</span> part f the model is the population structure. Assume that the observation errors are identical and independent (<code>R=&quot;diagonal and equal&quot;</code>). Assume that the process errors are unique and independent (<code>Q=&quot;diagonal and unequal&quot;</code>).</p>
+<li><p>Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC. The <span class="math inline">\(x\)</span> part of the model is the population structure. Assume that the observation errors are identical and independent (<code>R="diagonal and equal"</code>). Assume that the process errors are unique and independent (<code>Q="diagonal and unequal"</code>). Assume that the <span class="math inline">\(u\)</span> are unique among the 3 subpopulation.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Write the <span class="math inline">\(\mathbf{x}\)</span> equation. Make sure each matrix in the equation has the right number of rows and columns.</p></li>
 <li><p>Write the <span class="math inline">\(\mathbf{Z}\)</span> matrix.</p></li>
@@ -482,28 +515,28 @@ A[1,1] &lt;- &quot;sigma2&quot;</code></pre></li>
 <li><p>Fit the model with <code>MARSS()</code>.</p></li>
 <li><p>What do the estimated <span class="math inline">\(u\)</span> and <span class="math inline">\(\mathbf{Q}\)</span> imply about the population dynamics in the 3 subpopulations?</p></li>
 </ol></li>
-<li><p>Repeat the fit from Question 4 but assume that the 3 subpopulations covary. Use <code>Q=&quot;unconstrained&quot;</code>.</p>
+<li><p>Repeat the fit from Question 4 but assume that the 3 subpopulations covary. Use <code>Q="unconstrained"</code>.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>What does the estimated <span class="math inline">\(\mathbf{Q}\)</span> matrix tell you about how the 3 subpopulation covary?</p></li>
-<li><p>Compare the AICc from the model in Question 4 and the one with <code>Q=&quot;unconstrained&quot;</code>. Which is more supported?</p></li>
-<li><p>Fit the model with <code>Q=&quot;equalvarcov&quot;</code>. Is this more supported based on AICc?</p></li>
+<li><p>Compare the AICc from the model in Question 4 and the one with <code>Q="unconstrained"</code>. Which is more supported?</p></li>
+<li><p>Fit the model with <code>Q="equalvarcov"</code>. Is this more supported based on AICc?</p></li>
 </ol></li>
-<li><p>Develop the following alternative models for the structure of the inland harbor seal population. For each model assume that the observation errors are identical and independent (<code>R=&quot;diagonal and equal&quot;</code>). Assume that the process errors covary with equal variance and covariances (<code>Q=&quot;equalvarcov&quot;</code>).</p>
+<li><p>Develop the following alternative models for the structure of the inland harbor seal population. For each model assume that the observation errors are identical and independent (<code>R="diagonal and equal"</code>). Assume that the process errors covary with equal variance and covariances (<code>Q="equalvarcov"</code>).</p>
 <ul>
-<li>5 independent subpopulations with unique trends <span class="math inline">\(u\)</span>.</li>
-<li>5 independent subpopulations with the same trend <span class="math inline">\(u\)</span>.</li>
-<li>5 independent subpopulations with the same trend in 3 regions: SJF+SJI, PS+EBays, HC.</li>
-<li>1 panmictic population (the model from question 2).</li>
-<li>3 subpopulations. 1=SJF,SJI, 2=PS,EBays, 3=HC (the model from question 4).</li>
-<li>2 subpopulations. 1=SJF,SJI,PS,EBays, 2=HC.</li>
+<li>5 subpopulations with unique <span class="math inline">\(u\)</span>.</li>
+<li>5 subpopulations with shared (equal) <span class="math inline">\(u\)</span>.</li>
+<li>5 subpopulations but with <span class="math inline">\(u\)</span> shared in some regions: SJF+SJI shared, PS+EBays shared, HC unique.</li>
+<li>1 panmictic population.</li>
+<li>3 subpopulations, 1=SJF,SJI, 2=PS,EBays, 3=HC, with unique <span class="math inline">\(u\)</span></li>
+<li>2 subpopulations, 1=SJF,SJI,PS,EBays, 2=HC, with unique <span class="math inline">\(u\)</span></li>
 </ul>
 <ol style="list-style-type: lower-alpha">
 <li><p>Fit each model using <code>MARSS()</code>.</p></li>
 <li><p>Prepare a table of each model with a column for the AICc values. And a column for <span class="math inline">\(\Delta AICc\)</span> (AICc minus the lowest AICc in the group). What is the most supported model?</p></li>
 </ol></li>
 <li><p>Do diagnostics on the model residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals. This will put NAs in the model residuals where there is missing data. Then do the tests on each row of <code>resids</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals
-resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span class="ot">NA</span></code></pre></div>
+<div class="sourceCode" id="cb489"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb489-1" title="1">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals</a>
+<a class="sourceLine" id="cb489-2" title="2">resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span class="ot">NA</span></a></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Plot the model residuals.</p></li>
 <li><p>Plot the ACF of the model residuals. Use <code>acf(..., na.action=na.pass)</code>.</p></li>
@@ -538,24 +571,24 @@ resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span c
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -583,10 +616,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>7.10 Fitting a MARSS model with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
-  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
+  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="7.10 Fitting a MARSS model with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
 
-<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
+<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-03-28">
+<meta name="date" content="2019-11-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-mss-multivariate-state-space-models-with-jags.html">
-<link rel="next" href="sec-mss-problems.html">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="sec-mss-multivariate-state-space-models-with-jags.html"/>
+<link rel="next" href="sec-mss-problems.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -51,41 +53,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -109,7 +136,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="preface-1.html"><a href="preface-1.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
@@ -436,69 +462,69 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">7.10</span> Fitting a MARSS model with Stan</h2>
 <p>Let’s fit the same model as in Section <a href="sec-mss-multivariate-state-space-models-with-jags.html#sec-mss-multivariate-state-space-models-with-jags">7.9</a> with Stan using the <strong>rstan</strong> package. If you have not already, you will need to install the <strong>rstan</strong> package. This package depends on a number of other packages which should install automatically when you install <strong>rstan</strong>.</p>
 <p>First we write the model. We could write this to a file (recommended), but for this example, we write as a character object. Though the syntax is different from the JAGS code, it has many similarities. Note that Stan does not allow missing values in the data, thus we need to pass in only the non-missing values along with the row and column indices of those values. The latter is so we can match them to the appropriate state (<span class="math inline">\(x\)</span>) values.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">scode &lt;-<span class="st"> &quot;</span>
-<span class="st">data {</span>
-<span class="st">  int&lt;lower=0&gt; TT; // length of ts</span>
-<span class="st">  int&lt;lower=0&gt; N; // num of ts; rows of y</span>
-<span class="st">  int&lt;lower=0&gt; n_pos; // number of non-NA values in y</span>
-<span class="st">  int&lt;lower=0&gt; col_indx_pos[n_pos]; // col index of non-NA vals</span>
-<span class="st">  int&lt;lower=0&gt; row_indx_pos[n_pos]; // row index of non-NA vals</span>
-<span class="st">  vector[n_pos] y;</span>
-<span class="st">}</span>
-<span class="st">parameters {</span>
-<span class="st">  vector[N] x0; // initial states</span>
-<span class="st">  real u;</span>
-<span class="st">  vector[N] pro_dev[TT]; // refed as pro_dev[TT,N]</span>
-<span class="st">  real&lt;lower=0&gt; sd_q;</span>
-<span class="st">  real&lt;lower=0&gt; sd_r[N]; // obs variances are different</span>
-<span class="st">}</span>
-<span class="st">transformed parameters {</span>
-<span class="st">  vector[N] x[TT]; // refed as x[TT,N]</span>
-<span class="st">  for(i in 1:N){</span>
-<span class="st">    x[1,i] = x0[i] + u + pro_dev[1,i];</span>
-<span class="st">    for(t in 2:TT) {</span>
-<span class="st">      x[t,i] = x[t-1,i] + u + pro_dev[t,i];</span>
-<span class="st">    }</span>
-<span class="st">  }</span>
-<span class="st">}</span>
-<span class="st">model {</span>
-<span class="st">  sd_q ~ cauchy(0,5);</span>
-<span class="st">  for(i in 1:N){</span>
-<span class="st">    x0[i] ~ normal(y[i],10); // assume no missing y[1]</span>
-<span class="st">    sd_r[i] ~ cauchy(0,5);</span>
-<span class="st">    for(t in 1:TT){</span>
-<span class="st">    pro_dev[t,i] ~ normal(0, sd_q);</span>
-<span class="st">    }</span>
-<span class="st">  }</span>
-<span class="st">  u ~ normal(0,2);</span>
-<span class="st">  for(i in 1:n_pos){</span>
-<span class="st">    y[i] ~ normal(x[col_indx_pos[i], row_indx_pos[i]], sd_r[row_indx_pos[i]]);</span>
-<span class="st">  }</span>
-<span class="st">}</span>
-<span class="st">generated quantities {</span>
-<span class="st">  vector[n_pos] log_lik;</span>
-<span class="st">  for (n in 1:n_pos) log_lik[n] = normal_lpdf(y[n] | x[col_indx_pos[n], row_indx_pos[n]], sd_r[row_indx_pos[n]]);</span>
-<span class="st">}</span>
-<span class="st">&quot;</span></code></pre></div>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb480-1" title="1">scode &lt;-<span class="st"> &quot;</span></a>
+<a class="sourceLine" id="cb480-2" title="2"><span class="st">data {</span></a>
+<a class="sourceLine" id="cb480-3" title="3"><span class="st">  int&lt;lower=0&gt; TT; // length of ts</span></a>
+<a class="sourceLine" id="cb480-4" title="4"><span class="st">  int&lt;lower=0&gt; N; // num of ts; rows of y</span></a>
+<a class="sourceLine" id="cb480-5" title="5"><span class="st">  int&lt;lower=0&gt; n_pos; // number of non-NA values in y</span></a>
+<a class="sourceLine" id="cb480-6" title="6"><span class="st">  int&lt;lower=0&gt; col_indx_pos[n_pos]; // col index of non-NA vals</span></a>
+<a class="sourceLine" id="cb480-7" title="7"><span class="st">  int&lt;lower=0&gt; row_indx_pos[n_pos]; // row index of non-NA vals</span></a>
+<a class="sourceLine" id="cb480-8" title="8"><span class="st">  vector[n_pos] y;</span></a>
+<a class="sourceLine" id="cb480-9" title="9"><span class="st">}</span></a>
+<a class="sourceLine" id="cb480-10" title="10"><span class="st">parameters {</span></a>
+<a class="sourceLine" id="cb480-11" title="11"><span class="st">  vector[N] x0; // initial states</span></a>
+<a class="sourceLine" id="cb480-12" title="12"><span class="st">  real u;</span></a>
+<a class="sourceLine" id="cb480-13" title="13"><span class="st">  vector[N] pro_dev[TT]; // refed as pro_dev[TT,N]</span></a>
+<a class="sourceLine" id="cb480-14" title="14"><span class="st">  real&lt;lower=0&gt; sd_q;</span></a>
+<a class="sourceLine" id="cb480-15" title="15"><span class="st">  real&lt;lower=0&gt; sd_r[N]; // obs variances are different</span></a>
+<a class="sourceLine" id="cb480-16" title="16"><span class="st">}</span></a>
+<a class="sourceLine" id="cb480-17" title="17"><span class="st">transformed parameters {</span></a>
+<a class="sourceLine" id="cb480-18" title="18"><span class="st">  vector[N] x[TT]; // refed as x[TT,N]</span></a>
+<a class="sourceLine" id="cb480-19" title="19"><span class="st">  for(i in 1:N){</span></a>
+<a class="sourceLine" id="cb480-20" title="20"><span class="st">    x[1,i] = x0[i] + u + pro_dev[1,i];</span></a>
+<a class="sourceLine" id="cb480-21" title="21"><span class="st">    for(t in 2:TT) {</span></a>
+<a class="sourceLine" id="cb480-22" title="22"><span class="st">      x[t,i] = x[t-1,i] + u + pro_dev[t,i];</span></a>
+<a class="sourceLine" id="cb480-23" title="23"><span class="st">    }</span></a>
+<a class="sourceLine" id="cb480-24" title="24"><span class="st">  }</span></a>
+<a class="sourceLine" id="cb480-25" title="25"><span class="st">}</span></a>
+<a class="sourceLine" id="cb480-26" title="26"><span class="st">model {</span></a>
+<a class="sourceLine" id="cb480-27" title="27"><span class="st">  sd_q ~ cauchy(0,5);</span></a>
+<a class="sourceLine" id="cb480-28" title="28"><span class="st">  for(i in 1:N){</span></a>
+<a class="sourceLine" id="cb480-29" title="29"><span class="st">    x0[i] ~ normal(y[i],10); // assume no missing y[1]</span></a>
+<a class="sourceLine" id="cb480-30" title="30"><span class="st">    sd_r[i] ~ cauchy(0,5);</span></a>
+<a class="sourceLine" id="cb480-31" title="31"><span class="st">    for(t in 1:TT){</span></a>
+<a class="sourceLine" id="cb480-32" title="32"><span class="st">    pro_dev[t,i] ~ normal(0, sd_q);</span></a>
+<a class="sourceLine" id="cb480-33" title="33"><span class="st">    }</span></a>
+<a class="sourceLine" id="cb480-34" title="34"><span class="st">  }</span></a>
+<a class="sourceLine" id="cb480-35" title="35"><span class="st">  u ~ normal(0,2);</span></a>
+<a class="sourceLine" id="cb480-36" title="36"><span class="st">  for(i in 1:n_pos){</span></a>
+<a class="sourceLine" id="cb480-37" title="37"><span class="st">    y[i] ~ normal(x[col_indx_pos[i], row_indx_pos[i]], sd_r[row_indx_pos[i]]);</span></a>
+<a class="sourceLine" id="cb480-38" title="38"><span class="st">  }</span></a>
+<a class="sourceLine" id="cb480-39" title="39"><span class="st">}</span></a>
+<a class="sourceLine" id="cb480-40" title="40"><span class="st">generated quantities {</span></a>
+<a class="sourceLine" id="cb480-41" title="41"><span class="st">  vector[n_pos] log_lik;</span></a>
+<a class="sourceLine" id="cb480-42" title="42"><span class="st">  for (n in 1:n_pos) log_lik[n] = normal_lpdf(y[n] | x[col_indx_pos[n], row_indx_pos[n]], sd_r[row_indx_pos[n]]);</span></a>
+<a class="sourceLine" id="cb480-43" title="43"><span class="st">}</span></a>
+<a class="sourceLine" id="cb480-44" title="44"><span class="st">&quot;</span></a></code></pre></div>
 <p>Then we call <code>stan()</code> and pass in the data, names of parameter we wish to have returned, and information on number of chains, samples (iter), and thinning. The output is verbose (hidden here) and may have some warnings.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ypos &lt;-<span class="st"> </span>Y[<span class="op">!</span><span class="kw">is.na</span>(Y)]
-n_pos &lt;-<span class="st"> </span><span class="kw">length</span>(ypos) <span class="co">#number on non-NA ys</span>
-indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(Y), <span class="dt">arr.ind=</span><span class="ot">TRUE</span>) <span class="co">#index on the non-NAs</span>
-col_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[,<span class="st">&quot;col&quot;</span>])
-row_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[,<span class="st">&quot;row&quot;</span>])
-mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, 
-                  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y=</span>ypos, <span class="dt">TT=</span><span class="kw">ncol</span>(Y), <span class="dt">N=</span><span class="kw">nrow</span>(Y), <span class="dt">n_pos=</span>n_pos, 
-<span class="dt">col_indx_pos=</span>col_indx_pos, <span class="dt">row_indx_pos=</span>row_indx_pos), 
-                  <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>,<span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>),
-                  <span class="dt">chains =</span> <span class="dv">3</span>, 
-                  <span class="dt">iter =</span> <span class="dv">1000</span>, 
-                  <span class="dt">thin =</span> <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb481-1" title="1">ypos &lt;-<span class="st"> </span>Y[<span class="op">!</span><span class="kw">is.na</span>(Y)]</a>
+<a class="sourceLine" id="cb481-2" title="2">n_pos &lt;-<span class="st"> </span><span class="kw">length</span>(ypos) <span class="co">#number on non-NA ys</span></a>
+<a class="sourceLine" id="cb481-3" title="3">indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(Y), <span class="dt">arr.ind=</span><span class="ot">TRUE</span>) <span class="co">#index on the non-NAs</span></a>
+<a class="sourceLine" id="cb481-4" title="4">col_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[,<span class="st">&quot;col&quot;</span>])</a>
+<a class="sourceLine" id="cb481-5" title="5">row_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[,<span class="st">&quot;row&quot;</span>])</a>
+<a class="sourceLine" id="cb481-6" title="6">mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, </a>
+<a class="sourceLine" id="cb481-7" title="7">                  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y=</span>ypos, <span class="dt">TT=</span><span class="kw">ncol</span>(Y), <span class="dt">N=</span><span class="kw">nrow</span>(Y), <span class="dt">n_pos=</span>n_pos, </a>
+<a class="sourceLine" id="cb481-8" title="8"><span class="dt">col_indx_pos=</span>col_indx_pos, <span class="dt">row_indx_pos=</span>row_indx_pos), </a>
+<a class="sourceLine" id="cb481-9" title="9">                  <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>,<span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>),</a>
+<a class="sourceLine" id="cb481-10" title="10">                  <span class="dt">chains =</span> <span class="dv">3</span>, </a>
+<a class="sourceLine" id="cb481-11" title="11">                  <span class="dt">iter =</span> <span class="dv">1000</span>, </a>
+<a class="sourceLine" id="cb481-12" title="12">                  <span class="dt">thin =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>We use <code>extract()</code> to extract the parameters from the fitted model and then the means and 95% credible intervals.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod)
-means &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), mean)
-upperCI &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), quantile, <span class="fl">0.975</span>)
-lowerCI &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), quantile, <span class="fl">0.025</span>)
-<span class="kw">colnames</span>(means) &lt;-<span class="st"> </span><span class="kw">colnames</span>(upperCI) &lt;-<span class="st"> </span><span class="kw">colnames</span>(lowerCI) &lt;-<span class="st"> </span><span class="kw">rownames</span>(Y)</code></pre></div>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb482-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod)</a>
+<a class="sourceLine" id="cb482-2" title="2">means &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), mean)</a>
+<a class="sourceLine" id="cb482-3" title="3">upperCI &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), quantile, <span class="fl">0.975</span>)</a>
+<a class="sourceLine" id="cb482-4" title="4">lowerCI &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), quantile, <span class="fl">0.025</span>)</a>
+<a class="sourceLine" id="cb482-5" title="5"><span class="kw">colnames</span>(means) &lt;-<span class="st"> </span><span class="kw">colnames</span>(upperCI) &lt;-<span class="st"> </span><span class="kw">colnames</span>(lowerCI) &lt;-<span class="st"> </span><span class="kw">rownames</span>(Y)</a></code></pre></div>
 <pre><code>No id variables; using all as measure variables
 No id variables; using all as measure variables
 No id variables; using all as measure variables</code></pre>
@@ -521,24 +547,24 @@ Figure 7.7: Estimated level and 95 percent credible intervals.
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -566,10 +592,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

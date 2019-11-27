@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5.3 Dickey-Fuller and Augmented Dickey-Fuller tests | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
-  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
+  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5.3 Dickey-Fuller and Augmented Dickey-Fuller tests | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
 
-<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
+<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-03-28">
+<meta name="date" content="2019-11-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-boxjenkins-stationarity.html">
-<link rel="next" href="sec-boxjenkins-kpss.html">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="sec-boxjenkins-stationarity.html"/>
+<link rel="next" href="sec-boxjenkins-kpss.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -51,41 +53,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -109,7 +136,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="preface-1.html"><a href="preface-1.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
@@ -436,11 +462,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">5.3</span> Dickey-Fuller and Augmented Dickey-Fuller tests</h2>
 <div id="dickey-fuller-test" class="section level3">
 <h3><span class="header-section-number">5.3.1</span> Dickey-Fuller test</h3>
-<p>The Dickey-Fuller test is testing if <span class="math inline">\(\phi=0\)</span> in this model of the data: <span class="math display">\[y_t = \alpha + \beta t + \phi y_{t-1} + e_t\]</span> which is written as <span class="math display">\[\Delta y_t = y_t-y_{t-1}= \alpha + \beta t + \gamma y_{t-1} + e_t\]</span> where <span class="math inline">\(y_t\)</span> is your data. It is written this way so we can do a linear regression of <span class="math inline">\(\Delta y_t\)</span> against <span class="math inline">\(t\)</span> and <span class="math inline">\(y_{t-1}\)</span> and test if <span class="math inline">\(\gamma\)</span> is different from 0. If <span class="math inline">\(\gamma=0\)</span>, then we have a random walk process. If not and <span class="math inline">\(-1&lt;1+\gamma&lt;1\)</span>, then we have a stationary process.</p>
+<p>The Dickey-Fuller test is testing if <span class="math inline">\(\phi=0\)</span> in this model of the data:
+<span class="math display">\[y_t = \alpha + \beta t + \phi y_{t-1} + e_t\]</span>
+which is written as
+<span class="math display">\[\Delta y_t = y_t-y_{t-1}= \alpha + \beta t + \gamma y_{t-1} + e_t\]</span>
+where <span class="math inline">\(y_t\)</span> is your data. It is written this way so we can do a linear regression of <span class="math inline">\(\Delta y_t\)</span> against <span class="math inline">\(t\)</span> and <span class="math inline">\(y_{t-1}\)</span> and test if <span class="math inline">\(\gamma\)</span> is different from 0. If <span class="math inline">\(\gamma=0\)</span>, then we have a random walk process. If not and <span class="math inline">\(-1&lt;1+\gamma&lt;1\)</span>, then we have a stationary process.</p>
 </div>
 <div id="augmented-dickey-fuller-test" class="section level3">
 <h3><span class="header-section-number">5.3.2</span> Augmented Dickey-Fuller test</h3>
-<p>The Augmented Dickey-Fuller test allows for higher-order autoregressive processes by including <span class="math inline">\(\Delta y_{t-p}\)</span> in the model. But our test is still if <span class="math inline">\(\gamma = 0\)</span>. <span class="math display">\[\Delta y_t = \alpha + \beta t + \gamma y_{t-1} + \delta_1 \Delta y_{t-1} + \delta_2 \Delta y_{t-2} + \dots\]</span></p>
+<p>The Augmented Dickey-Fuller test allows for higher-order autoregressive processes by including <span class="math inline">\(\Delta y_{t-p}\)</span> in the model. But our test is still if <span class="math inline">\(\gamma = 0\)</span>.
+<span class="math display">\[\Delta y_t = \alpha + \beta t + \gamma y_{t-1} + \delta_1 \Delta y_{t-1} + \delta_2 \Delta y_{t-2} + \dots\]</span></p>
 <p>The null hypothesis for both tests is that the data are non-stationary. We want to REJECT the null hypothesis for this test, so we want a p-value of less that 0.05 (or smaller).</p>
 </div>
 <div id="adf-test-using-adf.test" class="section level3">
@@ -448,13 +479,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The <code>adf.test()</code> from the <strong>tseries</strong> package will do a Augmented Dickey-Fuller test (Dickey-Fuller if we set lags equal to 0) with a trend and an intercept. Use <code>?adf.test</code> to read about this function. The function is</p>
 <pre><code>adf.test(x, alternative = c(&quot;stationary&quot;, &quot;explosive&quot;),
          k = trunc((length(x)-1)^(1/3)))</code></pre>
-<p><code>x</code> are your data. <code>alternative=&quot;stationary&quot;</code> means that <span class="math inline">\(-2&lt;\gamma&lt;0\)</span> (<span class="math inline">\(-1&lt;\phi&lt;1\)</span>) and <code>alternative=&quot;explosive&quot;</code> means that is outside these bounds. <code>k</code> is the number of <span class="math inline">\(\delta\)</span> lags. For a Dickey-Fuller test, so only up to AR(1) time dependency in our stationary process, we set <code>k=0</code> so we have no <span class="math inline">\(\delta\)</span>’s in our test. Being able to control the lags in our test, allows us to avoid a stationarity test that is too complex to be supported by our data.</p>
+<p><code>x</code> are your data. <code>alternative="stationary"</code> means that <span class="math inline">\(-2&lt;\gamma&lt;0\)</span> (<span class="math inline">\(-1&lt;\phi&lt;1\)</span>) and <code>alternative="explosive"</code> means that is outside these bounds. <code>k</code> is the number of <span class="math inline">\(\delta\)</span> lags. For a Dickey-Fuller test, so only up to AR(1) time dependency in our stationary process, we set <code>k=0</code> so we have no <span class="math inline">\(\delta\)</span>’s in our test. Being able to control the lags in our test, allows us to avoid a stationarity test that is too complex to be supported by our data.</p>
 <div id="test-on-white-noise" class="section level4">
 <h4><span class="header-section-number">5.3.3.1</span> Test on white noise</h4>
 <p>Let’s start by doing the test on data that we know are stationary, white noise. We will use an Augmented Dickey-Fuller test where we use the default number of lags (amount of time-dependency) in our test. For a time-series of 100, this is 4.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TT &lt;-<span class="st"> </span><span class="dv">100</span>
-wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT) <span class="co"># white noise</span>
-tseries<span class="op">::</span><span class="kw">adf.test</span>(wn)</code></pre></div>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb292-1" title="1">TT &lt;-<span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb292-2" title="2">wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT) <span class="co"># white noise</span></a>
+<a class="sourceLine" id="cb292-3" title="3">tseries<span class="op">::</span><span class="kw">adf.test</span>(wn)</a></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wn): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -464,9 +495,8 @@ Dickey-Fuller = -4.8309, Lag order = 4, p-value = 0.01
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis is rejected.</p>
 <p>Try a Dickey-Fuller test. This is testing with a null hypothesis of AR(1) stationarity versus a null hypothesis with AR(4) stationarity when we used the default <code>k</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tseries<span class="op">::</span><span class="kw">adf.test</span>(wn, <span class="dt">k=</span><span class="dv">0</span>)</code></pre></div>
-<pre><code>Warning in tseries::adf.test(wn, k = 0): p-value smaller than printed p-
-value</code></pre>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb295-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(wn, <span class="dt">k=</span><span class="dv">0</span>)</a></code></pre></div>
+<pre><code>Warning in tseries::adf.test(wn, k = 0): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -478,9 +508,9 @@ alternative hypothesis: stationary</code></pre>
 <div id="test-on-white-noise-with-trend" class="section level4">
 <h4><span class="header-section-number">5.3.3.2</span> Test on white noise with trend</h4>
 <p>Try the test on white noise with a trend and intercept.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">intercept &lt;-<span class="st"> </span><span class="dv">1</span>
-wnt &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT <span class="op">+</span><span class="st"> </span>intercept
-tseries<span class="op">::</span><span class="kw">adf.test</span>(wnt)</code></pre></div>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1">intercept &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb298-2" title="2">wnt &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT <span class="op">+</span><span class="st"> </span>intercept</a>
+<a class="sourceLine" id="cb298-3" title="3">tseries<span class="op">::</span><span class="kw">adf.test</span>(wnt)</a></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wnt): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -493,8 +523,8 @@ alternative hypothesis: stationary</code></pre>
 <div id="test-on-random-walk" class="section level4">
 <h4><span class="header-section-number">5.3.3.3</span> Test on random walk</h4>
 <p>Let’s try the test on a random walk (nonstationary).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rw &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(TT))
-tseries<span class="op">::</span><span class="kw">adf.test</span>(rw)</code></pre></div>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb301-1" title="1">rw &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(TT))</a>
+<a class="sourceLine" id="cb301-2" title="2">tseries<span class="op">::</span><span class="kw">adf.test</span>(rw)</a></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -503,7 +533,7 @@ Dickey-Fuller = -2.3038, Lag order = 4, p-value = 0.4508
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis is NOT rejected as the p-value is greater than 0.05.</p>
 <p>Try a Dickey-Fuller test.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tseries<span class="op">::</span><span class="kw">adf.test</span>(rw, <span class="dt">k=</span><span class="dv">0</span>)</code></pre></div>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb303-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(rw, <span class="dt">k=</span><span class="dv">0</span>)</a></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -514,7 +544,7 @@ alternative hypothesis: stationary</code></pre>
 </div>
 <div id="test-the-anchovy-data" class="section level4">
 <h4><span class="header-section-number">5.3.3.4</span> Test the anchovy data</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tseries<span class="op">::</span><span class="kw">adf.test</span>(anchovyts)</code></pre></div>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb305-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(anchovyts)</a></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -532,15 +562,16 @@ alternative hypothesis: stationary</code></pre>
 <p>The <code>ur.df()</code> function allows us to specify whether to test stationarity around a zero-mean with no trend, around a non-zero mean with no trend, or around a trend with an intercept. This can be useful when we know that our data have no trend, for example if you have removed the trend already. <code>ur.df()</code> allows us to specify the lags or select them using model selection.</p>
 <div id="test-on-white-noise-1" class="section level4">
 <h4><span class="header-section-number">5.3.4.1</span> Test on white noise</h4>
-<p>Let’s first do the test on data we know is stationary, white noise. We have to choose the <code>type</code> and <code>lags</code>. If you have no particular reason to not include an intercept and trend, then use <code>type=&quot;trend&quot;</code>. This allows both intercept and trend. When you might you have a particular reason not to use <code>&quot;trend&quot;</code>? When you have removed the trend and/or intercept.</p>
+<p>Let’s first do the test on data we know is stationary, white noise. We have to choose the <code>type</code> and <code>lags</code>. If you have no particular reason to not include an intercept and trend, then use <code>type="trend"</code>. This allows both intercept and trend. When you might you have a particular reason not to use <code>"trend"</code>? When you have removed the trend and/or intercept.</p>
 <p>Next you need to chose the <code>lags</code>. We will use <code>lags=0</code> to do the Dickey-Fuller test. Note the number of lags you can test will depend on the amount of data that you have. <code>adf.test()</code> used a default of <code>trunc((length(x)-1)^(1/3))</code> for the lags, but <code>ur.df()</code> requires that you pass in a value or use a fixed default of 1.</p>
 <p><code>lags=0</code> is fitting this model to the data. You are testing if the effect for <code>z.lag.1</code> is 0.</p>
-<p><code>z.diff = gamma * z.lag.1 + intercept + trend * tt</code> <code>z.diff</code> means <span class="math inline">\(\Delta y_t\)</span> and <code>z.lag.1</code> is <span class="math inline">\(y_{t-1}\)</span>.</p>
+<p><code>z.diff = gamma * z.lag.1 + intercept + trend * tt</code>
+<code>z.diff</code> means <span class="math inline">\(\Delta y_t\)</span> and <code>z.lag.1</code> is <span class="math inline">\(y_{t-1}\)</span>.</p>
 <p>When you use <code>summary()</code> for the output from <code>ur.df()</code>, you will see the estimated values for <span class="math inline">\(\gamma\)</span> (denoted <code>z.lag.1</code>), intercept and trend. If you see <code>***</code> or <code>**</code> on the coefficients list for <code>z.lag.1</code>, it indicates that the effect of <code>z.lag.1</code> is significantly different than 0 and this supports the assumption of stationarity.</p>
 <p>The <code>intercept</code> and <code>tt</code> estimates indicate where there is a non-zero level (intercept) or linear trend (tt).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)
-test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type=</span><span class="st">&quot;trend&quot;</span>, <span class="dt">lags=</span><span class="dv">0</span>)
-<span class="kw">summary</span>(test)</code></pre></div>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1">wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)</a>
+<a class="sourceLine" id="cb308-2" title="2">test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type=</span><span class="st">&quot;trend&quot;</span>, <span class="dt">lags=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb308-3" title="3"><span class="kw">summary</span>(test)</a></code></pre></div>
 <pre><code>
 ############################################### 
 # Augmented Dickey-Fuller Test Unit Root Test # 
@@ -596,24 +627,24 @@ phi3  8.73  6.49  5.47</code></pre>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -641,10 +672,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();

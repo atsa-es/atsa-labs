@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>10.5 Lake Washington phytoplankton data | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
-  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences.">
-  <meta name="generator" content="bookdown  and GitBook 2.6.7">
+  <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
+  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="10.5 Lake Washington phytoplankton data | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -22,18 +21,18 @@
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
 
-<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward">
+<meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-03-28">
+<meta name="date" content="2019-11-26" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-<link rel="prev" href="sec-dfa-different-error-structures.html">
-<link rel="next" href="sec-dfa-fitting-dfa-models-with-marss.html">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="prev" href="sec-dfa-different-error-structures.html"/>
+<link rel="next" href="sec-dfa-fitting-dfa-models-with-marss.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -41,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -51,41 +53,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -109,7 +136,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="" data-path="preface-1.html"><a href="preface-1.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
@@ -435,45 +461,44 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="sec-dfa-lake-wa-data" class="section level2">
 <h2><span class="header-section-number">10.5</span> Lake Washington phytoplankton data</h2>
 <p>For this exercise, we will use the Lake Washington phytoplankton data contained in the <strong>MARSS</strong> package. Let’s begin by reading in the monthly values for all of the data, including metabolism, chemistry, and climate.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## load the data (there are 3 datasets contained here)
-<span class="kw">data</span>(lakeWAplankton, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)
-## we want lakeWAplanktonTrans, which has been transformed so
-## the 0s are replaced with NAs and the data z-scored
-all_dat &lt;-<span class="st"> </span>lakeWAplanktonTrans
-## use only the 10 years from 1980-1989
-yr_frst &lt;-<span class="st"> </span><span class="dv">1980</span>
-yr_last &lt;-<span class="st"> </span><span class="dv">1989</span>
-plank_dat &lt;-<span class="st"> </span>all_dat[all_dat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span>yr_frst <span class="op">&amp;</span><span class="st"> </span>all_dat[, 
-    <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;=</span><span class="st"> </span>yr_last, ]
-## create vector of phytoplankton group names
-phytoplankton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cryptomonas&quot;</span>, <span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, 
-    <span class="st">&quot;Other.algae&quot;</span>)
-## get only the phytoplankton
-dat_<span class="dv">1980</span> &lt;-<span class="st"> </span>plank_dat[, phytoplankton]</code></pre></div>
+<div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb547-1" title="1"><span class="co">## load the data (there are 3 datasets contained here)</span></a>
+<a class="sourceLine" id="cb547-2" title="2"><span class="kw">data</span>(lakeWAplankton, <span class="dt">package=</span><span class="st">&quot;MARSS&quot;</span>)</a>
+<a class="sourceLine" id="cb547-3" title="3"><span class="co">## we want lakeWAplanktonTrans, which has been transformed</span></a>
+<a class="sourceLine" id="cb547-4" title="4"><span class="co">## so the 0s are replaced with NAs and the data z-scored</span></a>
+<a class="sourceLine" id="cb547-5" title="5">all_dat &lt;-<span class="st"> </span>lakeWAplanktonTrans</a>
+<a class="sourceLine" id="cb547-6" title="6"><span class="co">## use only the 10 years from 1980-1989</span></a>
+<a class="sourceLine" id="cb547-7" title="7">yr_frst &lt;-<span class="st"> </span><span class="dv">1980</span></a>
+<a class="sourceLine" id="cb547-8" title="8">yr_last &lt;-<span class="st"> </span><span class="dv">1989</span></a>
+<a class="sourceLine" id="cb547-9" title="9">plank_dat &lt;-<span class="st"> </span>all_dat[all_dat[,<span class="st">&quot;Year&quot;</span>]<span class="op">&gt;=</span>yr_frst <span class="op">&amp;</span><span class="st"> </span>all_dat[,<span class="st">&quot;Year&quot;</span>]<span class="op">&lt;=</span>yr_last,]</a>
+<a class="sourceLine" id="cb547-10" title="10"><span class="co">## create vector of phytoplankton group names</span></a>
+<a class="sourceLine" id="cb547-11" title="11">phytoplankton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cryptomonas&quot;</span>, <span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>,</a>
+<a class="sourceLine" id="cb547-12" title="12">                   <span class="st">&quot;Unicells&quot;</span>, <span class="st">&quot;Other.algae&quot;</span>)</a>
+<a class="sourceLine" id="cb547-13" title="13"><span class="co">## get only the phytoplankton</span></a>
+<a class="sourceLine" id="cb547-14" title="14">dat_<span class="dv">1980</span> &lt;-<span class="st"> </span>plank_dat[,phytoplankton]</a></code></pre></div>
 <p>Next, we transpose the data matrix and calculate the number of time series and their length.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## transpose data so time goes across columns
-dat_<span class="dv">1980</span> &lt;-<span class="st"> </span><span class="kw">t</span>(dat_<span class="dv">1980</span>)
-## get number of time series
-N_ts &lt;-<span class="st"> </span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">1</span>]
-## get length of time series
-TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>]</code></pre></div>
+<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb548-1" title="1"><span class="co">## transpose data so time goes across columns</span></a>
+<a class="sourceLine" id="cb548-2" title="2">dat_<span class="dv">1980</span> &lt;-<span class="st"> </span><span class="kw">t</span>(dat_<span class="dv">1980</span>)</a>
+<a class="sourceLine" id="cb548-3" title="3"><span class="co">## get number of time series</span></a>
+<a class="sourceLine" id="cb548-4" title="4">N_ts &lt;-<span class="st"> </span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb548-5" title="5"><span class="co">## get length of time series</span></a>
+<a class="sourceLine" id="cb548-6" title="6">TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>] </a></code></pre></div>
 <p>It will be easier to estimate the real parameters of interest if we de-mean the data, so let’s do that.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">y_bar &lt;-<span class="st"> </span><span class="kw">apply</span>(dat_<span class="dv">1980</span>, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
-dat &lt;-<span class="st"> </span>dat_<span class="dv">1980</span> <span class="op">-</span><span class="st"> </span>y_bar
-<span class="kw">rownames</span>(dat) &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat_<span class="dv">1980</span>)</code></pre></div>
+<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb549-1" title="1">y_bar &lt;-<span class="st"> </span><span class="kw">apply</span>(dat_<span class="dv">1980</span>, <span class="dv">1</span>, mean, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb549-2" title="2">dat &lt;-<span class="st"> </span>dat_<span class="dv">1980</span> <span class="op">-</span><span class="st"> </span>y_bar</a>
+<a class="sourceLine" id="cb549-3" title="3"><span class="kw">rownames</span>(dat) &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat_<span class="dv">1980</span>)</a></code></pre></div>
 <div id="sec-dfa-plot-lake-wa-data" class="section level3">
 <h3><span class="header-section-number">10.5.1</span> Plots of the data</h3>
 <p>Here are time series plots of all five phytoplankton functional groups.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">spp &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat_<span class="dv">1980</span>)
-clr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;brown&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;darkgreen&quot;</span>,<span class="st">&quot;darkred&quot;</span>,<span class="st">&quot;purple&quot;</span>)
-cnt &lt;-<span class="st"> </span><span class="dv">1</span>
-<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(N_ts,<span class="dv">1</span>), <span class="dt">mai=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>), <span class="dt">omi=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))
-<span class="cf">for</span>(i <span class="cf">in</span> spp){
-  <span class="kw">plot</span>(dat[i,],<span class="dt">xlab=</span><span class="st">&quot;&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Abundance index&quot;</span>, <span class="dt">bty=</span><span class="st">&quot;L&quot;</span>, <span class="dt">xaxt=</span><span class="st">&quot;n&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>clr[cnt], <span class="dt">type=</span><span class="st">&quot;b&quot;</span>)
-  <span class="kw">axis</span>(<span class="dv">1</span>,<span class="dv">12</span><span class="op">*</span>(<span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])<span class="op">+</span><span class="dv">1</span>,yr_frst<span class="op">+</span><span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])
-  <span class="kw">title</span>(i)
-  cnt &lt;-<span class="st"> </span>cnt <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-  }</code></pre></div>
+<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb550-1" title="1">spp &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat_<span class="dv">1980</span>)</a>
+<a class="sourceLine" id="cb550-2" title="2">clr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;brown&quot;</span>,<span class="st">&quot;blue&quot;</span>,<span class="st">&quot;darkgreen&quot;</span>,<span class="st">&quot;darkred&quot;</span>,<span class="st">&quot;purple&quot;</span>)</a>
+<a class="sourceLine" id="cb550-3" title="3">cnt &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb550-4" title="4"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(N_ts,<span class="dv">1</span>), <span class="dt">mai=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>), <span class="dt">omi=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb550-5" title="5"><span class="cf">for</span>(i <span class="cf">in</span> spp){</a>
+<a class="sourceLine" id="cb550-6" title="6">  <span class="kw">plot</span>(dat[i,],<span class="dt">xlab=</span><span class="st">&quot;&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Abundance index&quot;</span>, <span class="dt">bty=</span><span class="st">&quot;L&quot;</span>, <span class="dt">xaxt=</span><span class="st">&quot;n&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>clr[cnt], <span class="dt">type=</span><span class="st">&quot;b&quot;</span>)</a>
+<a class="sourceLine" id="cb550-7" title="7">  <span class="kw">axis</span>(<span class="dv">1</span>,<span class="dv">12</span><span class="op">*</span>(<span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])<span class="op">+</span><span class="dv">1</span>,yr_frst<span class="op">+</span><span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb550-8" title="8">  <span class="kw">title</span>(i)</a>
+<a class="sourceLine" id="cb550-9" title="9">  cnt &lt;-<span class="st"> </span>cnt <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb550-10" title="10">  }</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:dfa-plot-phytos"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/dfa-plot-phytos-1.png" alt="Demeaned time series of Lake Washington phytoplankton." width="80%" />
 <p class="caption">
@@ -493,24 +518,24 @@ Figure 10.1: Demeaned time series of Lake Washington phytoplankton.
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
-"github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -538,10 +563,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
+    var src = "true";
     if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
