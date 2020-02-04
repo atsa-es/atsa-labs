@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>9.7 Fitting with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="9.7 Fitting with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,21 +462,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-dlm-fitting-a-univariate-dlm-with-marss" class="section level2">
 <h2><span class="header-section-number">9.7</span> Fitting with <code>MARSS()</code></h2>
 <p>Now let’s go ahead and analyze the DLM specified in Equations <a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW1">(9.20)</a>–<a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW3">(9.22)</a>. We begin by loading the data set (which is in the <strong>MARSS</strong> package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean (<code>year</code>), 2) logit-transformed survival  (<code>logit.s</code>), and 3) the coastal upwelling index for April (<code>CUI.apr</code>). There are 42 years of data (1964–2005).</p>
-<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb528-1" title="1"><span class="co"># load the data</span></a>
-<a class="sourceLine" id="cb528-2" title="2"><span class="kw">data</span>(SalmonSurvCUI, <span class="dt">package=</span><span class="st">&quot;MARSS&quot;</span>)</a>
-<a class="sourceLine" id="cb528-3" title="3"><span class="co"># get time indices</span></a>
-<a class="sourceLine" id="cb528-4" title="4">years &lt;-<span class="st"> </span>SalmonSurvCUI[,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb528-5" title="5"><span class="co"># number of years of data</span></a>
-<a class="sourceLine" id="cb528-6" title="6">TT &lt;-<span class="st"> </span><span class="kw">length</span>(years)</a>
-<a class="sourceLine" id="cb528-7" title="7"><span class="co"># get response variable: logit(survival)</span></a>
-<a class="sourceLine" id="cb528-8" title="8">dat &lt;-<span class="st"> </span><span class="kw">matrix</span>(SalmonSurvCUI[,<span class="dv">2</span>],<span class="dt">nrow=</span><span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb559-1" title="1"><span class="co"># load the data</span></a>
+<a class="sourceLine" id="cb559-2" title="2"><span class="kw">data</span>(SalmonSurvCUI, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</a>
+<a class="sourceLine" id="cb559-3" title="3"><span class="co"># get time indices</span></a>
+<a class="sourceLine" id="cb559-4" title="4">years &lt;-<span class="st"> </span>SalmonSurvCUI[, <span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb559-5" title="5"><span class="co"># number of years of data</span></a>
+<a class="sourceLine" id="cb559-6" title="6">TT &lt;-<span class="st"> </span><span class="kw">length</span>(years)</a>
+<a class="sourceLine" id="cb559-7" title="7"><span class="co"># get response variable: logit(survival)</span></a>
+<a class="sourceLine" id="cb559-8" title="8">dat &lt;-<span class="st"> </span><span class="kw">matrix</span>(SalmonSurvCUI[, <span class="dv">2</span>], <span class="dt">nrow =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>As we have seen in other case studies, standardizing our covariate(s) to have zero-mean and unit-variance can be helpful in model fitting and interpretation. In this case, it’s a good idea because the variance of <code>CUI.apr</code> is orders of magnitude greater than <code>logit.s</code>.</p>
-<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb529-1" title="1"><span class="co"># get predictor variable</span></a>
-<a class="sourceLine" id="cb529-2" title="2">CUI &lt;-<span class="st"> </span>SalmonSurvCUI[,<span class="dv">3</span>]</a>
-<a class="sourceLine" id="cb529-3" title="3"><span class="co">## z-score the CUI</span></a>
-<a class="sourceLine" id="cb529-4" title="4">CUI.z &lt;-<span class="st"> </span><span class="kw">matrix</span>((CUI <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(CUI))<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(CUI)), <span class="dt">nrow=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb529-5" title="5"><span class="co"># number of regr params (slope + intercept)</span></a>
-<a class="sourceLine" id="cb529-6" title="6">m &lt;-<span class="st"> </span><span class="kw">dim</span>(CUI.z)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a></code></pre></div>
+<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb560-1" title="1"><span class="co"># get predictor variable</span></a>
+<a class="sourceLine" id="cb560-2" title="2">CUI &lt;-<span class="st"> </span>SalmonSurvCUI[, <span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb560-3" title="3"><span class="co">## z-score the CUI</span></a>
+<a class="sourceLine" id="cb560-4" title="4">CUI.z &lt;-<span class="st"> </span><span class="kw">matrix</span>((CUI <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(CUI))<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(CUI)), <span class="dt">nrow =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb560-5" title="5"><span class="co"># number of regr params (slope + intercept)</span></a>
+<a class="sourceLine" id="cb560-6" title="6">m &lt;-<span class="st"> </span><span class="kw">dim</span>(CUI.z)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a></code></pre></div>
 <p>Plots of logit-transformed survival and the <span class="math inline">\(z\)</span>-scored April upwelling index are shown in Figure <a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#fig:dlm-plotdata">9.1</a>.</p>
 
 <div class="figure" style="text-align: center"><span id="fig:dlm-plotdata"></span>
@@ -485,26 +486,26 @@ Figure 9.1: Time series of logit-transformed marine survival estimates for Snake
 </p>
 </div>
 <p>Next, we need to set up the appropriate matrices and vectors for MARSS. Let’s begin with those for the process equation because they are straightforward.</p>
-<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb530-1" title="1"><span class="co"># for process eqn</span></a>
-<a class="sourceLine" id="cb530-2" title="2">B &lt;-<span class="st"> </span><span class="kw">diag</span>(m)                     <span class="co">## 2x2; Identity</span></a>
-<a class="sourceLine" id="cb530-3" title="3">U &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dt">nrow=</span>m,<span class="dt">ncol=</span><span class="dv">1</span>)     <span class="co">## 2x1; both elements = 0</span></a>
-<a class="sourceLine" id="cb530-4" title="4">Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>),m,m)         <span class="co">## 2x2; all 0 for now</span></a>
-<a class="sourceLine" id="cb530-5" title="5"><span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q.alpha&quot;</span>,<span class="st">&quot;q.beta&quot;</span>) <span class="co">## 2x2; diag = (q1,q2)</span></a></code></pre></div>
+<div class="sourceCode" id="cb561"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb561-1" title="1"><span class="co"># for process eqn</span></a>
+<a class="sourceLine" id="cb561-2" title="2">B &lt;-<span class="st"> </span><span class="kw">diag</span>(m)  <span class="co">## 2x2; Identity</span></a>
+<a class="sourceLine" id="cb561-3" title="3">U &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow =</span> m, <span class="dt">ncol =</span> <span class="dv">1</span>)  <span class="co">## 2x1; both elements = 0</span></a>
+<a class="sourceLine" id="cb561-4" title="4">Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), m, m)  <span class="co">## 2x2; all 0 for now</span></a>
+<a class="sourceLine" id="cb561-5" title="5"><span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q.alpha&quot;</span>, <span class="st">&quot;q.beta&quot;</span>)  <span class="co">## 2x2; diag = (q1,q2)</span></a></code></pre></div>
 <p>Defining the correct form for the observation model is a little more tricky, however, because of how we model the effect(s) of predictor variables. In a DLM, we need to use <span class="math inline">\(\mathbf{Z}_t\)</span> (instead of <span class="math inline">\(\mathbf{d}_t\)</span>) as the matrix of predictor variables that affect <span class="math inline">\(\mathbf{y}_t\)</span>, and we use <span class="math inline">\(\mathbf{x}_t\)</span> (instead of <span class="math inline">\(\mathbf{D}_t\)</span>) as the regression parameters. Therefore, we need to set <span class="math inline">\(\mathbf{Z}_t\)</span> equal to an <span class="math inline">\(n\times m\times T\)</span> array, where <span class="math inline">\(n\)</span> is the number of response variables (= 1; <span class="math inline">\(y_t\)</span> is univariate), <span class="math inline">\(m\)</span> is the number of regression parameters (= intercept + slope = 2), and <span class="math inline">\(T\)</span> is the length of the time series (= 42).</p>
-<div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb531-1" title="1"><span class="co"># for observation eqn</span></a>
-<a class="sourceLine" id="cb531-2" title="2">Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="kw">c</span>(<span class="dv">1</span>,m,TT))   <span class="co">## NxMxT; empty for now</span></a>
-<a class="sourceLine" id="cb531-3" title="3">Z[<span class="dv">1</span>,<span class="dv">1</span>,] &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>,TT)        <span class="co">## Nx1; 1&#39;s for intercept</span></a>
-<a class="sourceLine" id="cb531-4" title="4">Z[<span class="dv">1</span>,<span class="dv">2</span>,] &lt;-<span class="st"> </span>CUI.z            <span class="co">## Nx1; predictor variable</span></a>
-<a class="sourceLine" id="cb531-5" title="5">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>)              <span class="co">## 1x1; scalar = 0</span></a>
-<a class="sourceLine" id="cb531-6" title="6">R &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>)            <span class="co">## 1x1; scalar = r</span></a></code></pre></div>
+<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb562-1" title="1"><span class="co"># for observation eqn</span></a>
+<a class="sourceLine" id="cb562-2" title="2">Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="kw">c</span>(<span class="dv">1</span>, m, TT))  <span class="co">## NxMxT; empty for now</span></a>
+<a class="sourceLine" id="cb562-3" title="3">Z[<span class="dv">1</span>, <span class="dv">1</span>, ] &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, TT)  <span class="co">## Nx1; 1&#39;s for intercept</span></a>
+<a class="sourceLine" id="cb562-4" title="4">Z[<span class="dv">1</span>, <span class="dv">2</span>, ] &lt;-<span class="st"> </span>CUI.z  <span class="co">## Nx1; predictor variable</span></a>
+<a class="sourceLine" id="cb562-5" title="5">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>)  <span class="co">## 1x1; scalar = 0</span></a>
+<a class="sourceLine" id="cb562-6" title="6">R &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>)  <span class="co">## 1x1; scalar = r</span></a></code></pre></div>
 <p>Lastly, we need to define our lists of initial starting values and model matrices/vectors.</p>
-<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" title="1"><span class="co"># only need starting values for regr parameters</span></a>
-<a class="sourceLine" id="cb532-2" title="2">inits.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0=</span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow=</span>m))</a>
-<a class="sourceLine" id="cb532-3" title="3"><span class="co"># list of model matrices &amp; vectors</span></a>
-<a class="sourceLine" id="cb532-4" title="4">mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>B, <span class="dt">U=</span>U, <span class="dt">Q=</span>Q, <span class="dt">Z=</span>Z, <span class="dt">A=</span>A, <span class="dt">R=</span>R)</a></code></pre></div>
+<div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb563-1" title="1"><span class="co"># only need starting values for regr parameters</span></a>
+<a class="sourceLine" id="cb563-2" title="2">inits.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow =</span> m))</a>
+<a class="sourceLine" id="cb563-3" title="3"><span class="co"># list of model matrices &amp; vectors</span></a>
+<a class="sourceLine" id="cb563-4" title="4">mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R)</a></code></pre></div>
 <p>And now we can fit our DLM with MARSS.</p>
-<div class="sourceCode" id="cb533"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb533-1" title="1"><span class="co"># fit univariate DLM</span></a>
-<a class="sourceLine" id="cb533-2" title="2">dlm1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">inits=</span>inits.list, <span class="dt">model=</span>mod.list)</a></code></pre></div>
+<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb564-1" title="1"><span class="co"># fit univariate DLM</span></a>
+<a class="sourceLine" id="cb564-2" title="2">dlm1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">inits =</span> inits.list, <span class="dt">model =</span> mod.list)</a></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 115 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -559,6 +560,7 @@ Figure 9.2: Time series of estimated mean states (thick lines) for the intercept
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -577,6 +579,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

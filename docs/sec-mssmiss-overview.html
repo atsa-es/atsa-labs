@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>11.1 Covariates with missing values or observation error | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="11.1 Covariates with missing values or observation error | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -516,12 +517,12 @@ An easy way to get this log-likelihood for the covariate data only is use
 the augmented model (Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marsscovary">(11.2)</a> with terms defined as
 in Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marss-covar">(11.3)</a> but pass in missing values for the
 non-covariate data. The following code shows how to do this.</p>
-<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb575-1" title="1">y.aug =<span class="st"> </span><span class="kw">rbind</span>(data,covariates)</a>
-<a class="sourceLine" id="cb575-2" title="2">fit.aug =<span class="st"> </span><span class="kw">MARSS</span>(y.aug, <span class="dt">model=</span>model.aug)</a></code></pre></div>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb606-1" title="1">y.aug =<span class="st"> </span><span class="kw">rbind</span>(data, covariates)</a>
+<a class="sourceLine" id="cb606-2" title="2">fit.aug =<span class="st"> </span><span class="kw">MARSS</span>(y.aug, <span class="dt">model =</span> model.aug)</a></code></pre></div>
 <p><code>fit.aug</code> is the MLE object that can be passed to <code>MARSSkf()</code>. You need to make a version of this MLE object with the non-covariate data filled with NAs so that you can compute the log-likelihood without the covariates. This needs to be done in the <code>marss</code> element since that is what is used by <code>MARSSkf()</code>. Below is code to do this.</p>
-<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb576-1" title="1">fit.cov =<span class="st"> </span>fit.aug</a>
-<a class="sourceLine" id="cb576-2" title="2">fit.cov<span class="op">$</span>marss<span class="op">$</span>data[<span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(data)[<span class="dv">1</span>],] =<span class="st"> </span><span class="ot">NA</span></a>
-<a class="sourceLine" id="cb576-3" title="3">extra.LL =<span class="st"> </span><span class="kw">MARSSkf</span>(fit.cov)<span class="op">$</span>logLik</a></code></pre></div>
+<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb607-1" title="1">fit.cov =<span class="st"> </span>fit.aug</a>
+<a class="sourceLine" id="cb607-2" title="2">fit.cov<span class="op">$</span>marss<span class="op">$</span>data[<span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(data)[<span class="dv">1</span>], ] =<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb607-3" title="3">extra.LL =<span class="st"> </span><span class="kw">MARSSkf</span>(fit.cov)<span class="op">$</span>logLik</a></code></pre></div>
 <p>Note that when you fit the augmented model, the estimates of <span class="math inline">\(\mathbf{C}\)</span> and <span class="math inline">\(\mathbf{B}^{(c)}\)</span> are affected by the non-covariate data since the model for both the non-covariate and covariate data are estimated simultaneously and are not independent (since the covariate states affect the non-covariates states). If you want the covariate model to be unaffected by the non-covariate data, you can fit the covariate model separately and use the estimates for <span class="math inline">\(\mathbf{B}^{(c)}\)</span> and <span class="math inline">\(\mathbf{Q}^{(c)}\)</span> as fixed values in your augmented model.</p>
 </div>
             </section>
@@ -546,6 +547,7 @@ non-covariate data. The following code shows how to do this.</p>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -564,6 +566,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

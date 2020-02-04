@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>13.7 Uncertainty intervals on states | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="13.7 Uncertainty intervals on states | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,21 +462,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-stan-state-uncertainty" class="section level2">
 <h2><span class="header-section-number">13.7</span> Uncertainty intervals on states</h2>
 <p>We will look at the effect of missing data on the uncertainty intervals on estimates states using a DFA on the harbor seal dataset.</p>
-<div class="sourceCode" id="cb670"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb670-1" title="1"><span class="kw">data</span>(harborSealWA, <span class="dt">package=</span><span class="st">&quot;MARSS&quot;</span>)</a>
-<a class="sourceLine" id="cb670-2" title="2"><span class="co">#the first column is year</span></a>
-<a class="sourceLine" id="cb670-3" title="3"><span class="kw">matplot</span>(harborSealWA[,<span class="dv">1</span>],harborSealWA[,<span class="op">-</span><span class="dv">1</span>],<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,</a>
-<a class="sourceLine" id="cb670-4" title="4">        <span class="dt">ylab=</span><span class="st">&quot;Log abundance&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb704"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb704-1" title="1"><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</a>
+<a class="sourceLine" id="cb704-2" title="2"><span class="co"># the first column is year</span></a>
+<a class="sourceLine" id="cb704-3" title="3"><span class="kw">matplot</span>(harborSealWA[, <span class="dv">1</span>], harborSealWA[, <span class="dv">-1</span>], <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Log abundance&quot;</span>, </a>
+<a class="sourceLine" id="cb704-4" title="4">    <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/stan-harborseal-data-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Assume they are all observing a single trend.</p>
-<div class="sourceCode" id="cb671"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb671-1" title="1">seal.mod &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> <span class="kw">t</span>(harborSealWA[,<span class="op">-</span><span class="dv">1</span>]), <span class="dt">num_trends =</span> <span class="dv">1</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb672"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb672-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(seal.mod)</a></code></pre></div>
-<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb673-1" title="1">pred_mean &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), mean))</a>
-<a class="sourceLine" id="cb673-2" title="2">pred_lo &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), quantile, <span class="fl">0.025</span>))</a>
-<a class="sourceLine" id="cb673-3" title="3">pred_hi &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), quantile, <span class="fl">0.975</span>))</a>
-<a class="sourceLine" id="cb673-4" title="4"></a>
-<a class="sourceLine" id="cb673-5" title="5"><span class="kw">plot</span>(pred_mean, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(pred_mean, pred_lo, pred_hi)), <span class="dt">main =</span> <span class="st">&quot;Trend&quot;</span>)</a>
-<a class="sourceLine" id="cb673-6" title="6"><span class="kw">lines</span>(pred_lo)</a>
-<a class="sourceLine" id="cb673-7" title="7"><span class="kw">lines</span>(pred_hi)</a></code></pre></div>
+<div class="sourceCode" id="cb705"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb705-1" title="1">seal.mod &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> <span class="kw">t</span>(harborSealWA[, <span class="dv">-1</span>]), <span class="dt">num_trends =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb706"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb706-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(seal.mod)</a></code></pre></div>
+<div class="sourceCode" id="cb707"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb707-1" title="1">pred_mean &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), mean))</a>
+<a class="sourceLine" id="cb707-2" title="2">pred_lo &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.025</span>))</a>
+<a class="sourceLine" id="cb707-3" title="3">pred_hi &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.975</span>))</a>
+<a class="sourceLine" id="cb707-4" title="4"></a>
+<a class="sourceLine" id="cb707-5" title="5"><span class="kw">plot</span>(pred_mean, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(pred_mean, </a>
+<a class="sourceLine" id="cb707-6" title="6">    pred_lo, pred_hi)), <span class="dt">main =</span> <span class="st">&quot;Trend&quot;</span>)</a>
+<a class="sourceLine" id="cb707-7" title="7"><span class="kw">lines</span>(pred_lo)</a>
+<a class="sourceLine" id="cb707-8" title="8"><span class="kw">lines</span>(pred_hi)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-plot-seal"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/stan-plot-seal-1.png" alt="Estimated states and 95 percent credible intervals." width="80%" />
 <p class="caption">
@@ -506,6 +508,7 @@ Figure 13.5: Estimated states and 95 percent credible intervals.
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -524,6 +527,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

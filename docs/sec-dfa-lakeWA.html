@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>10.12 Example from Lake Washington | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="10.12 Example from Lake Washington | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,20 +462,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-dfa-lakeWA" class="section level2">
 <h2><span class="header-section-number">10.12</span> Example from Lake Washington</h2>
 <p>The Lake Washington dataset has two environmental covariates that we might expect to have effects on phytoplankton growth, and hence, abundance: temperature (<code>Temp</code>) and total phosphorous (<code>TP</code>). We need the covariate inputs to have the same number of time steps as the variate data, and thus we limit the covariate data to the years 1980-1994 also.</p>
-<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb564-1" title="1">temp &lt;-<span class="st"> </span><span class="kw">t</span>(plank_dat[,<span class="st">&quot;Temp&quot;</span>,<span class="dt">drop=</span><span class="ot">FALSE</span>])</a>
-<a class="sourceLine" id="cb564-2" title="2">TP &lt;-<span class="st"> </span><span class="kw">t</span>(plank_dat[,<span class="st">&quot;TP&quot;</span>,<span class="dt">drop=</span><span class="ot">FALSE</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb595"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb595-1" title="1">temp &lt;-<span class="st"> </span><span class="kw">t</span>(plank_dat[, <span class="st">&quot;Temp&quot;</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>])</a>
+<a class="sourceLine" id="cb595-2" title="2">TP &lt;-<span class="st"> </span><span class="kw">t</span>(plank_dat[, <span class="st">&quot;TP&quot;</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>])</a></code></pre></div>
 <p>We will now fit three different models that each add covariate effects (i.e., <code>Temp</code>, <code>TP</code>, <code>Temp</code> and <code>TP</code>) to our existing model above where <span class="math inline">\(m\)</span> = 3 and <span class="math inline">\(\mathbf{R}\)</span> is <code>"diagonal and unequal"</code>.</p>
-<div class="sourceCode" id="cb565"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb565-1" title="1">mod_list=<span class="kw">list</span>(<span class="dt">m=</span><span class="dv">3</span>, <span class="dt">R=</span><span class="st">&quot;diagonal and unequal&quot;</span>)</a>
-<a class="sourceLine" id="cb565-2" title="2">dfa_temp &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb565-3" title="3">                  <span class="dt">control =</span> con_list, <span class="dt">covariates=</span>temp)</a>
-<a class="sourceLine" id="cb565-4" title="4">dfa_TP &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb565-5" title="5">                <span class="dt">control =</span> con_list, <span class="dt">covariates=</span>TP)</a>
-<a class="sourceLine" id="cb565-6" title="6">dfa_both &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb565-7" title="7">                  <span class="dt">control =</span> con_list, <span class="dt">covariates=</span><span class="kw">rbind</span>(temp,TP))</a></code></pre></div>
+<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb596-1" title="1">mod_list =<span class="st"> </span><span class="kw">list</span>(<span class="dt">m =</span> <span class="dv">3</span>, <span class="dt">R =</span> <span class="st">&quot;diagonal and unequal&quot;</span>)</a>
+<a class="sourceLine" id="cb596-2" title="2">dfa_temp &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">FALSE</span>, </a>
+<a class="sourceLine" id="cb596-3" title="3">    <span class="dt">control =</span> con_list, <span class="dt">covariates =</span> temp)</a>
+<a class="sourceLine" id="cb596-4" title="4">dfa_TP &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">FALSE</span>, </a>
+<a class="sourceLine" id="cb596-5" title="5">    <span class="dt">control =</span> con_list, <span class="dt">covariates =</span> TP)</a>
+<a class="sourceLine" id="cb596-6" title="6">dfa_both &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">FALSE</span>, </a>
+<a class="sourceLine" id="cb596-7" title="7">    <span class="dt">control =</span> con_list, <span class="dt">covariates =</span> <span class="kw">rbind</span>(temp, TP))</a></code></pre></div>
 <p>Next we can compare whether the addition of the covariates improves the model fit.</p>
-<div class="sourceCode" id="cb566"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb566-1" title="1"><span class="kw">print</span>(<span class="kw">cbind</span>(<span class="dt">model=</span><span class="kw">c</span>(<span class="st">&quot;no covars&quot;</span>, <span class="st">&quot;Temp&quot;</span>, <span class="st">&quot;TP&quot;</span>, <span class="st">&quot;Temp &amp; TP&quot;</span>),</a>
-<a class="sourceLine" id="cb566-2" title="2">      <span class="dt">AICc=</span><span class="kw">round</span>(<span class="kw">c</span>(dfa_<span class="dv">1</span><span class="op">$</span>AICc, dfa_temp<span class="op">$</span>AICc, dfa_TP<span class="op">$</span>AICc, dfa_both<span class="op">$</span>AICc))),</a>
-<a class="sourceLine" id="cb566-3" title="3">      <span class="dt">quote=</span><span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb597"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb597-1" title="1"><span class="kw">print</span>(<span class="kw">cbind</span>(<span class="dt">model =</span> <span class="kw">c</span>(<span class="st">&quot;no covars&quot;</span>, <span class="st">&quot;Temp&quot;</span>, <span class="st">&quot;TP&quot;</span>, <span class="st">&quot;Temp &amp; TP&quot;</span>), </a>
+<a class="sourceLine" id="cb597-2" title="2">    <span class="dt">AICc =</span> <span class="kw">round</span>(<span class="kw">c</span>(dfa_<span class="dv">1</span><span class="op">$</span>AICc, dfa_temp<span class="op">$</span>AICc, dfa_TP<span class="op">$</span>AICc, dfa_both<span class="op">$</span>AICc))), </a>
+<a class="sourceLine" id="cb597-3" title="3">    <span class="dt">quote =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>     model     AICc
 [1,] no covars 1427
 [2,] Temp      1356
@@ -482,11 +483,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 [4,] Temp &amp; TP 1362</code></pre>
 <p>This suggests that adding temperature or phosphorus to the model, either alone or in combination with one another, does seem to improve overall model fit. If we were truly interested in assessing the “best” model structure that includes covariates, however, we should examine all combinations of 1-4 trends and different structures for <span class="math inline">\(\mathbf{R}\)</span>.</p>
 <p>Now let’s try to fit a model with a dummy variable for season, and see how that does.</p>
-<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb568-1" title="1">cos_t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT) <span class="op">/</span><span class="st"> </span><span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb568-2" title="2">sin_t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT) <span class="op">/</span><span class="st"> </span><span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb568-3" title="3">dd &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos_t,sin_t)</a>
-<a class="sourceLine" id="cb568-4" title="4">dfa_seas &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat_<span class="dv">1980</span>, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score=</span><span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb568-5" title="5">                  <span class="dt">control =</span> con_list, <span class="dt">covariates=</span>dd)</a></code></pre></div>
+<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb599-1" title="1">cos_t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span><span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb599-2" title="2">sin_t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span><span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb599-3" title="3">dd &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos_t, sin_t)</a>
+<a class="sourceLine" id="cb599-4" title="4">dfa_seas &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat_<span class="dv">1980</span>, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb599-5" title="5">    <span class="dt">control =</span> con_list, <span class="dt">covariates =</span> dd)</a></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 384 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -530,26 +531,27 @@ Initial states (x0) defined at t=0
 
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
-<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb570-1" title="1">dfa_seas<span class="op">$</span>AICc</a></code></pre></div>
+<div class="sourceCode" id="cb601"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb601-1" title="1">dfa_seas<span class="op">$</span>AICc</a></code></pre></div>
 <pre><code>[1] 1484.355</code></pre>
 <p>The model with a dummy seasonal factor does much better than the covariate models, but still not as well as the model with only 3 trends. The model fits for the seasonal effects model are shown below.</p>
-<div class="sourceCode" id="cb572"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb572-1" title="1"><span class="co">## get model fits &amp; CI&#39;s</span></a>
-<a class="sourceLine" id="cb572-2" title="2">mod_fit &lt;-<span class="st"> </span><span class="kw">get_DFA_fits</span>(dfa_seas,<span class="dt">dd=</span>dd)</a>
-<a class="sourceLine" id="cb572-3" title="3"><span class="co">## plot the fits</span></a>
-<a class="sourceLine" id="cb572-4" title="4">ylbl &lt;-<span class="st"> </span>phytoplankton</a>
-<a class="sourceLine" id="cb572-5" title="5"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(N_ts,<span class="dv">1</span>), <span class="dt">mai=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>), <span class="dt">omi=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb572-6" title="6"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>N_ts) {</a>
-<a class="sourceLine" id="cb572-7" title="7">  up &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>up[i,]</a>
-<a class="sourceLine" id="cb572-8" title="8">  mn &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>ex[i,]</a>
-<a class="sourceLine" id="cb572-9" title="9">  lo &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>lo[i,]</a>
-<a class="sourceLine" id="cb572-10" title="10">  <span class="kw">plot</span>(w_ts,mn,<span class="dt">xlab=</span><span class="st">&quot;&quot;</span>,<span class="dt">ylab=</span>ylbl[i],<span class="dt">xaxt=</span><span class="st">&quot;n&quot;</span>,<span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>,</a>
-<a class="sourceLine" id="cb572-11" title="11">       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">min</span>(lo),<span class="kw">max</span>(up)))</a>
-<a class="sourceLine" id="cb572-12" title="12">  <span class="kw">axis</span>(<span class="dv">1</span>,<span class="dv">12</span><span class="op">*</span>(<span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])<span class="op">+</span><span class="dv">1</span>,yr_frst<span class="op">+</span><span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb572-13" title="13">  <span class="kw">points</span>(w_ts,dat[i,], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>clr[i])</a>
-<a class="sourceLine" id="cb572-14" title="14">  <span class="kw">lines</span>(w_ts, up, <span class="dt">col=</span><span class="st">&quot;darkgray&quot;</span>)</a>
-<a class="sourceLine" id="cb572-15" title="15">  <span class="kw">lines</span>(w_ts, mn, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb572-16" title="16">  <span class="kw">lines</span>(w_ts, lo, <span class="dt">col=</span><span class="st">&quot;darkgray&quot;</span>)</a>
-<a class="sourceLine" id="cb572-17" title="17">}</a></code></pre></div>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb603-1" title="1"><span class="co">## get model fits &amp; CI&#39;s</span></a>
+<a class="sourceLine" id="cb603-2" title="2">mod_fit &lt;-<span class="st"> </span><span class="kw">get_DFA_fits</span>(dfa_seas, <span class="dt">dd =</span> dd)</a>
+<a class="sourceLine" id="cb603-3" title="3"><span class="co">## plot the fits</span></a>
+<a class="sourceLine" id="cb603-4" title="4">ylbl &lt;-<span class="st"> </span>phytoplankton</a>
+<a class="sourceLine" id="cb603-5" title="5"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(N_ts, <span class="dv">1</span>), <span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), <span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>, </a>
+<a class="sourceLine" id="cb603-6" title="6">    <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb603-7" title="7"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>N_ts) {</a>
+<a class="sourceLine" id="cb603-8" title="8">    up &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>up[i, ]</a>
+<a class="sourceLine" id="cb603-9" title="9">    mn &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>ex[i, ]</a>
+<a class="sourceLine" id="cb603-10" title="10">    lo &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>lo[i, ]</a>
+<a class="sourceLine" id="cb603-11" title="11">    <span class="kw">plot</span>(w_ts, mn, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> ylbl[i], <span class="dt">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, </a>
+<a class="sourceLine" id="cb603-12" title="12">        <span class="dt">cex.lab =</span> <span class="fl">1.2</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(lo), <span class="kw">max</span>(up)))</a>
+<a class="sourceLine" id="cb603-13" title="13">    <span class="kw">axis</span>(<span class="dv">1</span>, <span class="dv">12</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>]) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, yr_frst <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb603-14" title="14">    <span class="kw">points</span>(w_ts, dat[i, ], <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> clr[i])</a>
+<a class="sourceLine" id="cb603-15" title="15">    <span class="kw">lines</span>(w_ts, up, <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span>)</a>
+<a class="sourceLine" id="cb603-16" title="16">    <span class="kw">lines</span>(w_ts, mn, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb603-17" title="17">    <span class="kw">lines</span>(w_ts, lo, <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span>)</a>
+<a class="sourceLine" id="cb603-18" title="18">}</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:dfa-plot-dfa-temp-fits"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/dfa-plot-dfa-temp-fits-1.png" alt="Data and model fits for the DFA with covariates." width="80%" />
 <p class="caption">
@@ -580,6 +582,7 @@ Figure 10.5: Data and model fits for the DFA with covariates.
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -598,6 +601,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

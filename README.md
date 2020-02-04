@@ -211,11 +211,13 @@ At the top of the Rmd files, add a hidden chunk that sets the tag if you forget 
 ## Required packages
 [back to top](#afts-labbook-info)
 
-* knitr, bookdown, formatR
+* knitr, bookdown, formatR, rmarkdown
 * rjags, r2jags, coda, and install JAGS
 * rstan
 * forecast
 * MARSS
+* RcppEigen
+* atsalibrary
 
 ## Build the book
 [back to top](#afts-labbook-info)

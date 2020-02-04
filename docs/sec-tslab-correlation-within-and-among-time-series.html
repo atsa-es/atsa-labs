@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4.4 Correlation within and among time series | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4.4 Correlation within and among time series | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -482,7 +483,7 @@ r_k = \frac{c_k}{c_0} = \text{Cor}(x_t,x_{t+k})
 <p>It is important to remember two things here. First, although the confidence interval is commonly plotted and interpreted as a horizontal line over all time lags, the interval itself actually grows as the lag increases because the number of data points <span class="math inline">\(n\)</span> used to estimate the correlation decreases by 1 for every integer increase in lag. Second, care must be exercised when interpreting the “significance” of the correlation at various lags because we should expect, <em>a priori</em>, that approximately 1 out of every 20 correlations will be significant based on chance alone.</p>
 <p>We can use the <code>acf()</code> function in R to compute the sample ACF (note that adding the option <code>type="covariance"</code> will return the sample auto-covariance (ACVF) instead of the ACF–type <code>?acf</code> for details). Calling the function by itself will will automatically produce a correlogram (<em>i.e.</em>, a plot of the autocorrelation versus time lag). The argument <code>lag.max</code> allows you to set the number of positive and negative lags. Let’s try it for the CO<span class="math inline">\(_2\)</span> data.</p>
 <div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb234-1" title="1"><span class="co">## correlogram of the CO2 data</span></a>
-<a class="sourceLine" id="cb234-2" title="2"><span class="kw">acf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb234-2" title="2"><span class="kw">acf</span>(co2, <span class="dt">lag.max =</span> <span class="dv">36</span>)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotACFb"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotACFb-1.png" alt="Correlogram of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i obtained with the function acf()." width="80%" />
@@ -500,18 +501,18 @@ Figure 4.10: Correlogram of the observed atmospheric CO<span class="math inline"
 <p>As an alternative to the default plots for <strong>acf</strong> objects, let’s define a new plot function for <strong>acf</strong> objects with some better features:</p>
 <div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" title="1"><span class="co">## better ACF plot</span></a>
 <a class="sourceLine" id="cb235-2" title="2">plot.acf &lt;-<span class="st"> </span><span class="cf">function</span>(ACFobj) {</a>
-<a class="sourceLine" id="cb235-3" title="3">  rr &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>acf[<span class="op">-</span><span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb235-4" title="4">  kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)</a>
-<a class="sourceLine" id="cb235-5" title="5">  nn &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>n.used</a>
-<a class="sourceLine" id="cb235-6" title="6">  <span class="kw">plot</span>(<span class="kw">seq</span>(kk),rr,<span class="dt">type=</span><span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">yaxs=</span><span class="st">&quot;i&quot;</span>,<span class="dt">xaxs=</span><span class="st">&quot;i&quot;</span>,</a>
-<a class="sourceLine" id="cb235-7" title="7">       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)),<span class="dv">1</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,kk<span class="op">+</span><span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb235-8" title="8">       <span class="dt">xlab=</span><span class="st">&quot;Lag&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;Correlation&quot;</span>,<span class="dt">las=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb235-9" title="9">  <span class="kw">abline</span>(<span class="dt">h=</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>nn<span class="op">+</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn),<span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb235-10" title="10">  <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb235-3" title="3">    rr &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>acf[<span class="op">-</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb235-4" title="4">    kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)</a>
+<a class="sourceLine" id="cb235-5" title="5">    nn &lt;-<span class="st"> </span>ACFobj<span class="op">$</span>n.used</a>
+<a class="sourceLine" id="cb235-6" title="6">    <span class="kw">plot</span>(<span class="kw">seq</span>(kk), rr, <span class="dt">type =</span> <span class="st">&quot;h&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">yaxs =</span> <span class="st">&quot;i&quot;</span>, <span class="dt">xaxs =</span> <span class="st">&quot;i&quot;</span>, </a>
+<a class="sourceLine" id="cb235-7" title="7">        <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)), <span class="dv">1</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, kk <span class="op">+</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">xlab =</span> <span class="st">&quot;Lag&quot;</span>, </a>
+<a class="sourceLine" id="cb235-8" title="8">        <span class="dt">ylab =</span> <span class="st">&quot;Correlation&quot;</span>, <span class="dt">las =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb235-9" title="9">    <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">-1</span><span class="op">/</span>nn <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn), <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb235-10" title="10">    <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</a>
 <a class="sourceLine" id="cb235-11" title="11">}</a></code></pre></div>
 <p>Now we can assign the result of <code>acf()</code> to a variable and then use the information contained therein to plot the correlogram with our new plot function.</p>
 <div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb236-1" title="1"><span class="co">## acf of the CO2 data</span></a>
-<a class="sourceLine" id="cb236-2" title="2">co2.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</a>
+<a class="sourceLine" id="cb236-2" title="2">co2.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(co2, <span class="dt">lag.max =</span> <span class="dv">36</span>)</a>
 <a class="sourceLine" id="cb236-3" title="3"><span class="co">## correlogram of the CO2 data</span></a>
 <a class="sourceLine" id="cb236-4" title="4"><span class="kw">plot.acf</span>(co2.acf)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/tslab-DoOurACF-1.png" width="80%" style="display: block; margin: auto;" /></p>
@@ -529,11 +530,11 @@ Figure 4.11: Correlogram of the observed atmospheric CO<span class="math inline"
 <a class="sourceLine" id="cb237-3" title="3"><span class="co">## create straight line</span></a>
 <a class="sourceLine" id="cb237-4" title="4">tt &lt;-<span class="st"> </span><span class="kw">seq</span>(nn)</a>
 <a class="sourceLine" id="cb237-5" title="5"><span class="co">## set up plot area</span></a>
-<a class="sourceLine" id="cb237-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb237-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</a>
 <a class="sourceLine" id="cb237-7" title="7"><span class="co">## plot line</span></a>
-<a class="sourceLine" id="cb237-8" title="8"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
+<a class="sourceLine" id="cb237-8" title="8"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
 <a class="sourceLine" id="cb237-9" title="9"><span class="co">## get ACF</span></a>
-<a class="sourceLine" id="cb237-10" title="10">line.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb237-10" title="10">line.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb237-11" title="11"><span class="co">## plot ACF</span></a>
 <a class="sourceLine" id="cb237-12" title="12"><span class="kw">plot.acf</span>(line.acf)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/tslab-LinearACF-1.png" width="80%" style="display: block; margin: auto;" /></p>
@@ -547,13 +548,13 @@ Figure 4.12: Time series plot of a straight line (left) and the correlogram of i
 <p>The correlogram for a straight line is itself a linearly decreasing function over time (Figure <a href="sec-tslab-correlation-within-and-among-time-series.html#fig:tslab-plotLinearACF">4.12</a>).</p>
 <p>Now let’s examine the ACF for a sine wave and see what sort of pattern arises.</p>
 <div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" title="1"><span class="co">## create sine wave</span></a>
-<a class="sourceLine" id="cb238-2" title="2">tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb238-2" title="2">tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>)</a>
 <a class="sourceLine" id="cb238-3" title="3"><span class="co">## set up plot area</span></a>
-<a class="sourceLine" id="cb238-4" title="4"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb238-4" title="4"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</a>
 <a class="sourceLine" id="cb238-5" title="5"><span class="co">## plot line</span></a>
-<a class="sourceLine" id="cb238-6" title="6"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
+<a class="sourceLine" id="cb238-6" title="6"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
 <a class="sourceLine" id="cb238-7" title="7"><span class="co">## get ACF</span></a>
-<a class="sourceLine" id="cb238-8" title="8">sine.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb238-8" title="8">sine.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb238-9" title="9"><span class="co">## plot ACF</span></a>
 <a class="sourceLine" id="cb238-10" title="10"><span class="kw">plot.acf</span>(sine.acf)</a></code></pre></div>
 
@@ -566,13 +567,13 @@ Figure 4.13: Time series plot of a discrete sine wave (left) and the correlogram
 <p>Perhaps not surprisingly, the correlogram for a sine wave is itself a sine wave whose amplitude decreases linearly over time (Figure <a href="sec-tslab-correlation-within-and-among-time-series.html#fig:tslab-plotSineACF">4.13</a>).</p>
 <p>Now let’s examine the ACF for a sine wave with a linear downward trend and see what sort of patterns arise.</p>
 <div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb239-1" title="1"><span class="co">## create sine wave with trend</span></a>
-<a class="sourceLine" id="cb239-2" title="2">tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span><span class="op">*</span>pi<span class="op">*</span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>) <span class="op">-</span><span class="st"> </span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">50</span></a>
+<a class="sourceLine" id="cb239-2" title="2">tt &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">12</span>) <span class="op">-</span><span class="st"> </span><span class="kw">seq</span>(nn)<span class="op">/</span><span class="dv">50</span></a>
 <a class="sourceLine" id="cb239-3" title="3"><span class="co">## set up plot area</span></a>
-<a class="sourceLine" id="cb239-4" title="4"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb239-4" title="4"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</a>
 <a class="sourceLine" id="cb239-5" title="5"><span class="co">## plot line</span></a>
-<a class="sourceLine" id="cb239-6" title="6"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
+<a class="sourceLine" id="cb239-6" title="6"><span class="kw">plot.ts</span>(tt, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</a>
 <a class="sourceLine" id="cb239-7" title="7"><span class="co">## get ACF</span></a>
-<a class="sourceLine" id="cb239-8" title="8">sili.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb239-8" title="8">sili.acf &lt;-<span class="st"> </span><span class="kw">acf</span>(tt, <span class="dt">plot =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb239-9" title="9"><span class="co">## plot ACF</span></a>
 <a class="sourceLine" id="cb239-10" title="10"><span class="kw">plot.acf</span>(sili.acf)</a></code></pre></div>
 
@@ -599,18 +600,18 @@ f_k = \begin{cases}
 
 <p>It’s easy to compute the PACF for a variable in R using the <code>pacf()</code> function, which will automatically plot a correlogram when called by itself (similar to <code>acf()</code>). Let’s look at the PACF for the CO<span class="math inline">\(_2\)</span> data.</p>
 <div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" title="1"><span class="co">## PACF of the CO2 data</span></a>
-<a class="sourceLine" id="cb240-2" title="2"><span class="kw">pacf</span>(co2, <span class="dt">lag.max=</span><span class="dv">36</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb240-2" title="2"><span class="kw">pacf</span>(co2, <span class="dt">lag.max =</span> <span class="dv">36</span>)</a></code></pre></div>
 <p>The default plot for PACF is a bit better than for ACF, but here is another plotting function that might be useful.</p>
 <div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" title="1"><span class="co">## better PACF plot</span></a>
 <a class="sourceLine" id="cb241-2" title="2">plot.pacf &lt;-<span class="st"> </span><span class="cf">function</span>(PACFobj) {</a>
-<a class="sourceLine" id="cb241-3" title="3">  rr &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>acf</a>
-<a class="sourceLine" id="cb241-4" title="4">  kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)</a>
-<a class="sourceLine" id="cb241-5" title="5">  nn &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>n.used</a>
-<a class="sourceLine" id="cb241-6" title="6">  <span class="kw">plot</span>(<span class="kw">seq</span>(kk),rr,<span class="dt">type=</span><span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">yaxs=</span><span class="st">&quot;i&quot;</span>,<span class="dt">xaxs=</span><span class="st">&quot;i&quot;</span>,</a>
-<a class="sourceLine" id="cb241-7" title="7">       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)),<span class="dv">1</span>),<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,kk<span class="op">+</span><span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb241-8" title="8">       <span class="dt">xlab=</span><span class="st">&quot;Lag&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;PACF&quot;</span>,<span class="dt">las=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb241-9" title="9">  <span class="kw">abline</span>(<span class="dt">h=</span><span class="op">-</span><span class="dv">1</span><span class="op">/</span>nn<span class="op">+</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>,<span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn),<span class="dt">lty=</span><span class="st">&quot;dashed&quot;</span>,<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb241-10" title="10">  <span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb241-3" title="3">    rr &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>acf</a>
+<a class="sourceLine" id="cb241-4" title="4">    kk &lt;-<span class="st"> </span><span class="kw">length</span>(rr)</a>
+<a class="sourceLine" id="cb241-5" title="5">    nn &lt;-<span class="st"> </span>PACFobj<span class="op">$</span>n.used</a>
+<a class="sourceLine" id="cb241-6" title="6">    <span class="kw">plot</span>(<span class="kw">seq</span>(kk), rr, <span class="dt">type =</span> <span class="st">&quot;h&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">yaxs =</span> <span class="st">&quot;i&quot;</span>, <span class="dt">xaxs =</span> <span class="st">&quot;i&quot;</span>, </a>
+<a class="sourceLine" id="cb241-7" title="7">        <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">floor</span>(<span class="kw">min</span>(rr)), <span class="dv">1</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, kk <span class="op">+</span><span class="st"> </span><span class="dv">1</span>), <span class="dt">xlab =</span> <span class="st">&quot;Lag&quot;</span>, </a>
+<a class="sourceLine" id="cb241-8" title="8">        <span class="dt">ylab =</span> <span class="st">&quot;PACF&quot;</span>, <span class="dt">las =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb241-9" title="9">    <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">-1</span><span class="op">/</span>nn <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">2</span>)<span class="op">/</span><span class="kw">sqrt</span>(nn), <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb241-10" title="10">    <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</a>
 <a class="sourceLine" id="cb241-11" title="11">}</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotPACFb"></span>
@@ -650,12 +651,12 @@ r_k^{xy} = \frac{g_k^{xy}}{\sqrt{\text{SD}_x\text{SD}_y}};
 <p>Computing the CCF in R is easy with the function <code>ccf()</code> and it works just like <code>acf()</code>. In fact, <code>ccf()</code> is just a “wrapper” function that calls <code>acf()</code>. As an example, let’s examine the CCF between sunspot activity and number of lynx trapped in Canada as in the classic paper by Moran.</p>
 <p>To begin, let’s get the data, which are conveniently included in the <strong>datasets</strong> package included as part of the base installation of R. Before calculating the CCF, however, we need to find the matching years of data. Again, we’ll use the <code>ts.intersect()</code> function.</p>
 <div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb243-1" title="1"><span class="co">## get the matching years of sunspot data</span></a>
-<a class="sourceLine" id="cb243-2" title="2">suns &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx,sunspot.year)[,<span class="st">&quot;sunspot.year&quot;</span>]</a>
+<a class="sourceLine" id="cb243-2" title="2">suns &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx, sunspot.year)[, <span class="st">&quot;sunspot.year&quot;</span>]</a>
 <a class="sourceLine" id="cb243-3" title="3"><span class="co">## get the matching lynx data</span></a>
-<a class="sourceLine" id="cb243-4" title="4">lynx &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx,sunspot.year)[,<span class="st">&quot;lynx&quot;</span>]</a></code></pre></div>
+<a class="sourceLine" id="cb243-4" title="4">lynx &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(lynx, sunspot.year)[, <span class="st">&quot;lynx&quot;</span>]</a></code></pre></div>
 <p>Here are plots of the time series.</p>
 <div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" title="1"><span class="co">## plot time series</span></a>
-<a class="sourceLine" id="cb244-2" title="2"><span class="kw">plot</span>(<span class="kw">cbind</span>(suns,lynx), <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb244-2" title="2"><span class="kw">plot</span>(<span class="kw">cbind</span>(suns, lynx), <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotSunsLynx"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotSunsLynx-1.png" alt="Time series of sunspot activity (top) and lynx trappings in Canada (bottom) from 1821-1934." width="80%" />
@@ -665,7 +666,7 @@ Figure 4.16: Time series of sunspot activity (top) and lynx trappings in Canada 
 </div>
 <p>It is important to remember which of the 2 variables you call <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> when calling <code>ccf(x, y, ...)</code>. In this case, it seems most relevant to treat lynx as the <span class="math inline">\(y\)</span> and sunspots as the <span class="math inline">\(x\)</span>, in which case we are mostly interested in the CCF at negative lags (<em>i.e.</em>, when sunspot activity predates inferred lynx abundance). Furthermore, we’ll use log-transformed lynx trappings.</p>
 <div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" title="1"><span class="co">## CCF of sunspots and lynx</span></a>
-<a class="sourceLine" id="cb245-2" title="2"><span class="kw">ccf</span>(suns, <span class="kw">log</span>(lynx), <span class="dt">ylab=</span><span class="st">&quot;Cross-correlation&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb245-2" title="2"><span class="kw">ccf</span>(suns, <span class="kw">log</span>(lynx), <span class="dt">ylab =</span> <span class="st">&quot;Cross-correlation&quot;</span>)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotCCFb"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotCCFb-1.png" alt="CCF for annual sunspot activity and the log of the number of lynx trappings in Canada from 1821-1934." width="80%" />
@@ -698,6 +699,7 @@ Figure 4.17: CCF for annual sunspot activity and the log of the number of lynx t
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -716,6 +718,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

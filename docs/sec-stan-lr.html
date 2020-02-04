@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>13.1 Linear regression | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="13.1 Linear regression | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -466,33 +467,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="math display">\[Y_t \sim N(E[Y_{t}],\sigma)\]</span>
 Remember that in linear regression models, the residual error is interpreted as independent and identically distributed observation error.</p>
 <p>To run this model using our package, we’ll need to specify the response and predictor variables. The covariate matrix with an intercept only is a matrix of 1s. To double check, you could always look at</p>
-<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb630-1" title="1">x &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(Temp<span class="op">~</span><span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb658-1" title="1">x &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(Temp <span class="op">~</span><span class="st"> </span><span class="dv">1</span>))</a></code></pre></div>
 <p>Fitting the model using our function is done with this code,</p>
-<div class="sourceCode" id="cb631"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb631-1" title="1">lm_intercept &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> <span class="kw">as.numeric</span>(Temp), <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)),</a>
-<a class="sourceLine" id="cb631-2" title="2">  <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb659"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb659-1" title="1">lm_intercept &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> <span class="kw">as.numeric</span>(Temp), <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb659-2" title="2">    <span class="kw">length</span>(Temp)), <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>)</a></code></pre></div>
 <p>Coarse summaries of <code>stanfit</code> objects can be examined by typing one of the following</p>
-<div class="sourceCode" id="cb632"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb632-1" title="1">lm_intercept</a>
-<a class="sourceLine" id="cb632-2" title="2"><span class="co"># this is huge</span></a>
-<a class="sourceLine" id="cb632-3" title="3"><span class="kw">summary</span>(lm_intercept)</a></code></pre></div>
+<div class="sourceCode" id="cb660"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb660-1" title="1">lm_intercept</a>
+<a class="sourceLine" id="cb660-2" title="2"><span class="co"># this is huge</span></a>
+<a class="sourceLine" id="cb660-3" title="3"><span class="kw">summary</span>(lm_intercept)</a></code></pre></div>
 <p>But to get more detailed output for each parameter, you have to use the <code>extract()</code> function,</p>
-<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb633-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(lm_intercept)</a>
-<a class="sourceLine" id="cb633-2" title="2"><span class="kw">names</span>(pars)</a></code></pre></div>
+<div class="sourceCode" id="cb661"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb661-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(lm_intercept)</a>
+<a class="sourceLine" id="cb661-2" title="2"><span class="kw">names</span>(pars)</a></code></pre></div>
 <pre><code>[1] &quot;beta&quot;    &quot;sigma&quot;   &quot;pred&quot;    &quot;log_lik&quot; &quot;lp__&quot;   </code></pre>
 <p><code>extract()</code> will return the draws from the posterior for your parameters and any derived variables specified in your stan code. In this case, our model is
 <span class="math display">\[y_t = \beta \times 1 + e_t, e_t \sim N(0,\sigma)\]</span>
 so our estimated parameters are <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>. Our stan code computed the derived variables: predicted <span class="math inline">\(y_t\)</span> which is <span class="math inline">\(\hat{y}_t = \beta \times 1\)</span> and the log-likelihood. lp__ is the log posterior which is automatically returned.</p>
 <p>We can then make basic plots or summaries of each of these parameters,</p>
-<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb635-1" title="1"><span class="kw">hist</span>(pars<span class="op">$</span>beta, <span class="dv">40</span>, <span class="dt">col=</span><span class="st">&quot;grey&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Intercept&quot;</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb663"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb663-1" title="1"><span class="kw">hist</span>(pars<span class="op">$</span>beta, <span class="dv">40</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Intercept&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/stan-hist-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb636-1" title="1"><span class="kw">quantile</span>(pars<span class="op">$</span>beta, <span class="kw">c</span>(<span class="fl">0.025</span>,<span class="fl">0.5</span>,<span class="fl">0.975</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb664"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb664-1" title="1"><span class="kw">quantile</span>(pars<span class="op">$</span>beta, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))</a></code></pre></div>
 <pre><code>     2.5%       50%     97.5% 
- 4.628010  8.704677 12.990291 </code></pre>
+ 4.336707  8.645982 13.010959 </code></pre>
 <p>One of the other useful things we can do is look at the predicted values of our model (<span class="math inline">\(\hat{y}_t=\beta \times 1\)</span>) and overlay the data. The predicted values are <em>pars$pred</em>.</p>
-<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb638-1" title="1"><span class="kw">plot</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, mean), <span class="dt">main=</span><span class="st">&quot;Predicted values&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>, </a>
-<a class="sourceLine" id="cb638-2" title="2">  <span class="dt">ylab=</span><span class="st">&quot;Wind&quot;</span>, <span class="dt">ylim=</span> <span class="kw">c</span>(<span class="kw">min</span>(pars<span class="op">$</span>pred), <span class="kw">max</span>(pars<span class="op">$</span>pred)), <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a>
-<a class="sourceLine" id="cb638-3" title="3"><span class="kw">lines</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, quantile,<span class="fl">0.025</span>))</a>
-<a class="sourceLine" id="cb638-4" title="4"><span class="kw">lines</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, quantile,<span class="fl">0.975</span>))</a>
-<a class="sourceLine" id="cb638-5" title="5"><span class="kw">points</span>(Wind, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb666"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb666-1" title="1"><span class="kw">plot</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, mean), <span class="dt">main =</span> <span class="st">&quot;Predicted values&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb666-2" title="2">    <span class="dt">ylab =</span> <span class="st">&quot;Wind&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(pars<span class="op">$</span>pred), <span class="kw">max</span>(pars<span class="op">$</span>pred)), </a>
+<a class="sourceLine" id="cb666-3" title="3">    <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</a>
+<a class="sourceLine" id="cb666-4" title="4"><span class="kw">lines</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>))</a>
+<a class="sourceLine" id="cb666-5" title="5"><span class="kw">lines</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</a>
+<a class="sourceLine" id="cb666-6" title="6"><span class="kw">points</span>(Wind, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-fig-lm"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/stan-fig-lm-1.png" alt="Data and predicted values for the linear regression model." width="80%" />
 <p class="caption">
@@ -502,12 +504,15 @@ Figure 13.1: Data and predicted values for the linear regression model.
 <div id="sec-stan-burn" class="section level3">
 <h3><span class="header-section-number">13.1.1</span> Burn-in and thinning</h3>
 <p>To illustrate the effects of the burn-in/warmup period and thinning, we can re-run the above model, but for just 1 MCMC chain (the default is 3).</p>
-<div class="sourceCode" id="cb639"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb639-1" title="1">lm_intercept &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)),</a>
-<a class="sourceLine" id="cb639-2" title="2">  <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>, </a>
-<a class="sourceLine" id="cb639-3" title="3">  <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb667"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb667-1" title="1">lm_intercept &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), </a>
+<a class="sourceLine" id="cb667-2" title="2">    <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>, <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, </a>
+<a class="sourceLine" id="cb667-3" title="3">        <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</a></code></pre></div>
+<pre><code>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
 <p>Here is a plot of the time series of <code>beta</code> with one chain and no burn-in. Based on visual inspection, when does the chain converge?</p>
-<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb640-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(lm_intercept)</a>
-<a class="sourceLine" id="cb640-2" title="2"><span class="kw">plot</span>(pars<span class="op">$</span>beta)</a></code></pre></div>
+<div class="sourceCode" id="cb669"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb669-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(lm_intercept)</a>
+<a class="sourceLine" id="cb669-2" title="2"><span class="kw">plot</span>(pars<span class="op">$</span>beta)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-fig-burnin"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/stan-fig-burnin-1.png" alt="A time series of our posterior draws using one chain and no burn-in." width="80%" />
 <p class="caption">
@@ -538,6 +543,7 @@ Figure 13.2: A time series of our posterior draws using one chain and no burn-in
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -556,6 +562,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

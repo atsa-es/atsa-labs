@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2.4 Groups of intercepts | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2.4 Groups of intercepts | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -471,7 +472,7 @@ If the plant is in the south, our model is
 stack.loss_i = \alpha_s + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}\]</span>
 We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p>
-<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">reg=</span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>,<span class="st">&quot;s&quot;</span>),n)[<span class="dv">1</span><span class="op">:</span>n])</a>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">reg =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;s&quot;</span>), n)[<span class="dv">1</span><span class="op">:</span>n])</a>
 <a class="sourceLine" id="cb145-2" title="2">dat</a></code></pre></div>
 <pre><code>  Air.Flow Water.Temp Acid.Conc. stack.loss reg
 1       80         27         89         42   n
@@ -479,7 +480,7 @@ We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p
 3       75         25         90         37   n
 4       62         24         87         28   s</code></pre>
 <p>And we can easily fit this model with <code>lm()</code>.</p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1">fit2 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data=</span>dat)</a>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1">fit2 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data =</span> dat)</a>
 <a class="sourceLine" id="cb147-2" title="2"><span class="kw">coef</span>(fit2)</a></code></pre></div>
 <pre><code>  Air.Flow       regn       regs 
  0.5358166 -2.0257880 -5.5429799 </code></pre>
@@ -497,27 +498,27 @@ We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
 \end{equation}\]</span>
 Notice that odd plants get <span class="math inline">\(\alpha_n\)</span> and even plants get <span class="math inline">\(\alpha_s\)</span>. Use <code>model.matrix()</code> to see that this is the <span class="math inline">\(\mathbf{Z}\)</span> matrix that <code>lm()</code> formed. Notice the matrix output by <code>model.matrix()</code> looks exactly like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>.</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1">Z=<span class="kw">model.matrix</span>(fit2)</a>
-<a class="sourceLine" id="cb149-2" title="2">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit2)</a>
+<a class="sourceLine" id="cb149-2" title="2">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</a></code></pre></div>
 <pre><code>  Air.Flow regn regs
 1       80    1    0
 2       80    0    1
 3       75    1    0
 4       62    0    1</code></pre>
 <p>We can solve for the parameters using <span class="math inline">\(\mathbf{x} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y}\)</span> as we did for Form 1 before by adding on the 1s and 0s columns we see in the <span class="math inline">\(\mathbf{Z}\)</span> matrix in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>. We could build this <span class="math inline">\(\mathbf{Z}\)</span> using the following R code:</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">Z=<span class="kw">cbind</span>(dat<span class="op">$</span>Air.Flow,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>),<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb151-2" title="2"><span class="kw">colnames</span>(Z)=<span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>,<span class="st">&quot;regn&quot;</span>,<span class="st">&quot;regs&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">Z =<span class="st"> </span><span class="kw">cbind</span>(dat<span class="op">$</span>Air.Flow, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb151-2" title="2"><span class="kw">colnames</span>(Z) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;regn&quot;</span>, <span class="st">&quot;regs&quot;</span>)</a></code></pre></div>
 <p>Or just use <code>model.matrix()</code>. This will save time when models are more complex.</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" title="1">Z=<span class="kw">model.matrix</span>(fit2)</a>
-<a class="sourceLine" id="cb152-2" title="2">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" title="1">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit2)</a>
+<a class="sourceLine" id="cb152-2" title="2">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</a></code></pre></div>
 <pre><code>  Air.Flow regn regs
 1       80    1    0
 2       80    0    1
 3       75    1    0
 4       62    0    1</code></pre>
 <p>Now we can solve for the parameters:</p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb154-1" title="1">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb154-2" title="2"><span class="kw">solve</span>(<span class="kw">t</span>(Z)<span class="op">%*%</span>Z)<span class="op">%*%</span><span class="kw">t</span>(Z)<span class="op">%*%</span>y</a></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb154-1" title="1">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb154-2" title="2"><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y</a></code></pre></div>
 <pre><code>               [,1]
 Air.Flow  0.5358166
 regn     -2.0257880
@@ -544,18 +545,19 @@ regs     -5.5429799</code></pre>
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}\]</span></p>
 <p>To estimate the parameters, we need to be able to write a list matrix that looks like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.16)</a>. We can use the same code we used in Section <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a> with <span class="math inline">\(\mathbf{Z}\)</span> changed to look like that in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.16)</a>.</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb158-2" title="2">x=<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,dat<span class="op">$</span>Air.Flow),<span class="dt">ncol=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb158-3" title="3">n=<span class="kw">nrow</span>(dat)</a>
-<a class="sourceLine" id="cb158-4" title="4">k=<span class="dv">1</span></a>
-<a class="sourceLine" id="cb158-5" title="5"><span class="co">#list matrix allows us to combine numbers and character strings</span></a>
-<a class="sourceLine" id="cb158-6" title="6">Z=<span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>),n,k<span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb158-7" title="7">Z[<span class="kw">seq</span>(<span class="dv">1</span>,n,<span class="dv">2</span>),<span class="dv">1</span>]=<span class="st">&quot;alphanorth&quot;</span></a>
-<a class="sourceLine" id="cb158-8" title="8">Z[<span class="kw">seq</span>(<span class="dv">2</span>,n,<span class="dv">2</span>),<span class="dv">1</span>]=<span class="st">&quot;alphasouth&quot;</span></a>
-<a class="sourceLine" id="cb158-9" title="9"><span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n,<span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">:</span>n])=<span class="st">&quot;beta&quot;</span></a>
-<a class="sourceLine" id="cb158-10" title="10">P=MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[,,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb158-11" title="11">M=<span class="kw">kronecker</span>(<span class="kw">t</span>(x),<span class="kw">diag</span>(n))<span class="op">%*%</span>P</a>
-<a class="sourceLine" id="cb158-12" title="12"><span class="kw">solve</span>(<span class="kw">t</span>(M)<span class="op">%*%</span>M)<span class="op">%*%</span><span class="kw">t</span>(M)<span class="op">%*%</span>y</a></code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb158-2" title="2">x =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, dat<span class="op">$</span>Air.Flow), <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb158-3" title="3">n =<span class="st"> </span><span class="kw">nrow</span>(dat)</a>
+<a class="sourceLine" id="cb158-4" title="4">k =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb158-5" title="5"><span class="co"># list matrix allows us to combine numbers and character</span></a>
+<a class="sourceLine" id="cb158-6" title="6"><span class="co"># strings</span></a>
+<a class="sourceLine" id="cb158-7" title="7">Z =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n, k <span class="op">*</span><span class="st"> </span>n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb158-8" title="8">Z[<span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphanorth&quot;</span></a>
+<a class="sourceLine" id="cb158-9" title="9">Z[<span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphasouth&quot;</span></a>
+<a class="sourceLine" id="cb158-10" title="10"><span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>n]) =<span class="st"> &quot;beta&quot;</span></a>
+<a class="sourceLine" id="cb158-11" title="11">P =<span class="st"> </span>MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[, , <span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb158-12" title="12">M =<span class="st"> </span><span class="kw">kronecker</span>(<span class="kw">t</span>(x), <span class="kw">diag</span>(n)) <span class="op">%*%</span><span class="st"> </span>P</a>
+<a class="sourceLine" id="cb158-13" title="13"><span class="kw">solve</span>(<span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>M) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>y</a></code></pre></div>
 <pre><code>                 [,1]
 alphanorth -2.0257880
 alphasouth -5.5429799
@@ -585,6 +587,7 @@ beta        0.5358166</code></pre>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -603,6 +606,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

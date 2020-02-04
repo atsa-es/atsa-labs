@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5.5 Dealing with non-stationarity | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5.5 Dealing with non-stationarity | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -506,8 +507,8 @@ Dickey-Fuller = -4.8234, Lag order = 2, p-value = 0.01
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis of a random walk is now rejected so you might think that a 2nd difference is needed for the anchovy data. However the actual problem is that the default for <code>adf.test()</code> includes a trend but we removed the trend with our first difference. Thus we included an unneeded trend parameter in our test. Our data are not that long and this affects the result.</p>
 <p>Let’s repeat without the trend and we’ll see that the null hypothesis is rejected. The number of lags is set to be what would be used by <code>adf.test()</code>. See <code>?adf.test</code>.</p>
-<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb331-1" title="1">k &lt;-<span class="st"> </span><span class="kw">trunc</span>((<span class="kw">length</span>(diff1dat)<span class="op">-</span><span class="dv">1</span>)<span class="op">^</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb331-2" title="2">test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(diff1dat, <span class="dt">type=</span><span class="st">&quot;drift&quot;</span>, <span class="dt">lags=</span>k)</a>
+<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb331-1" title="1">k &lt;-<span class="st"> </span><span class="kw">trunc</span>((<span class="kw">length</span>(diff1dat) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)<span class="op">^</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb331-2" title="2">test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(diff1dat, <span class="dt">type =</span> <span class="st">&quot;drift&quot;</span>, <span class="dt">lags =</span> k)</a>
 <a class="sourceLine" id="cb331-3" title="3"><span class="kw">summary</span>(test)</a></code></pre></div>
 <pre><code>
 ############################################### 
@@ -547,9 +548,9 @@ phi1  7.88  5.18  4.12</code></pre>
 <div id="ndiffs" class="section level3">
 <h3><span class="header-section-number">5.5.1</span> <code>ndiffs()</code></h3>
 <p>As an alternative to trying many different differences and remembering to include or not include the trend or level, you can use the <code>ndiffs()</code> function in the <strong>forecast</strong> package. This automates finding the number of differences needed.</p>
-<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb333-1" title="1">forecast<span class="op">::</span><span class="kw">ndiffs</span>(anchovyts, <span class="dt">test=</span><span class="st">&quot;kpss&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb333-1" title="1">forecast<span class="op">::</span><span class="kw">ndiffs</span>(anchovyts, <span class="dt">test =</span> <span class="st">&quot;kpss&quot;</span>)</a></code></pre></div>
 <pre><code>[1] 1</code></pre>
-<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb335-1" title="1">forecast<span class="op">::</span><span class="kw">ndiffs</span>(anchovyts, <span class="dt">test=</span><span class="st">&quot;adf&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb335-1" title="1">forecast<span class="op">::</span><span class="kw">ndiffs</span>(anchovyts, <span class="dt">test =</span> <span class="st">&quot;adf&quot;</span>)</a></code></pre></div>
 <pre><code>[1] 1</code></pre>
 <p>One difference is required to pass both the ADF and KPSS stationarity tests.</p>
 </div>
@@ -576,6 +577,7 @@ phi1  7.88  5.18  4.12</code></pre>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -594,6 +596,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

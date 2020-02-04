@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>8.4 Process-error only model | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="8.4 Process-error only model | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -466,11 +467,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \tag{8.4}
 \end{equation}\]</span>
 We can fit this as follows:</p>
-<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb495-1" title="1">R &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span>; B &lt;-<span class="st"> </span>Z &lt;-<span class="st"> &quot;identity&quot;</span></a>
-<a class="sourceLine" id="cb495-2" title="2">Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></a>
-<a class="sourceLine" id="cb495-3" title="3">C &lt;-<span class="st"> &quot;unconstrained&quot;</span></a>
-<a class="sourceLine" id="cb495-4" title="4">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>B,<span class="dt">U=</span>U,<span class="dt">Q=</span>Q,<span class="dt">Z=</span>Z,<span class="dt">A=</span>A,<span class="dt">R=</span>R,<span class="dt">C=</span>C,<span class="dt">c=</span>covariates)</a>
-<a class="sourceLine" id="cb495-5" title="5">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>model.list)</a></code></pre></div>
+<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb520-1" title="1">R &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></a>
+<a class="sourceLine" id="cb520-2" title="2">B &lt;-<span class="st"> </span>Z &lt;-<span class="st"> &quot;identity&quot;</span></a>
+<a class="sourceLine" id="cb520-3" title="3">Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></a>
+<a class="sourceLine" id="cb520-4" title="4">C &lt;-<span class="st"> &quot;unconstrained&quot;</span></a>
+<a class="sourceLine" id="cb520-5" title="5">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </a>
+<a class="sourceLine" id="cb520-6" title="6">    <span class="dt">C =</span> C, <span class="dt">c =</span> covariates)</a>
+<a class="sourceLine" id="cb520-7" title="7">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</a></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -496,8 +499,8 @@ Initial states (x0) defined at t=0
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>Now, it looks like temperature has a strong negative effect on algae? Also our log-likelihood dropped a lot. Well, the data do not look at all like a random walk model (where <span class="math inline">\(\mathbf{B}=1\)</span>), which we can see from the plot of the data (Figure <a href="sec-msscov-prepare-data.html#fig:msscov-plank-plot">8.1</a>). The data are fluctuating about some mean so let’s switch to a better autoregressive model—a mean-reverting model. To do this, we will allow the diagonal elements of <span class="math inline">\(\mathbf{B}\)</span> to be something other than 1.</p>
-<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb497-1" title="1">model.list<span class="op">$</span>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></a>
-<a class="sourceLine" id="cb497-2" title="2">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>model.list)</a></code></pre></div>
+<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb522-1" title="1">model.list<span class="op">$</span>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></a>
+<a class="sourceLine" id="cb522-2" title="2">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</a></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -526,10 +529,10 @@ Standard errors have not been calculated.
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>Notice that the log-likelihood goes up quite a bit, which means that the mean-reverting model fits the data much better.</p>
 <p>With this model, we are estimating <span class="math inline">\(\mathbf{x}_0\)</span>. If we set <code>model$tinitx=1</code>, we will get a error message that <span class="math inline">\(\mathbf{R}\)</span> diagonals are equal to 0 and we need to fix <code>x0</code>. Because <span class="math inline">\(\mathbf{R}=0\)</span>, if we set the initial states at <span class="math inline">\(t=1\)</span>, then they are fully determined by the data.</p>
-<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb499-1" title="1">x0 &lt;-<span class="st"> </span>dat[,<span class="dv">1</span>,drop=<span class="ot">FALSE</span>]</a>
-<a class="sourceLine" id="cb499-2" title="2">model.list<span class="op">$</span>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb499-3" title="3">model.list<span class="op">$</span>x0 &lt;-<span class="st"> </span>x0</a>
-<a class="sourceLine" id="cb499-4" title="4">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>model.list)</a></code></pre></div>
+<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb524-1" title="1">x0 &lt;-<span class="st"> </span>dat[, <span class="dv">1</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]</a>
+<a class="sourceLine" id="cb524-2" title="2">model.list<span class="op">$</span>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb524-3" title="3">model.list<span class="op">$</span>x0 &lt;-<span class="st"> </span>x0</a>
+<a class="sourceLine" id="cb524-4" title="4">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</a></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -577,6 +580,7 @@ Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -595,6 +599,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>6.6 Fitting with JAGS | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="6.6 Fitting with JAGS | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,82 +462,88 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-uss-fitting-with-jags" class="section level2">
 <h2><span class="header-section-number">6.6</span> Fitting with JAGS</h2>
 <p>Here we show how to fit the stochastic level model, model 3 Equation <a href="sec-uss-examples-using-the-nile-river-data.html#eq:uss-random-walk-w-noise-w-drift">(6.7)</a>, with JAGS. This is a model where the level is a random walk with drift and the Nile River flow is that level plus error.</p>
-<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb421-1" title="1"><span class="kw">library</span>(datasets)</a>
-<a class="sourceLine" id="cb421-2" title="2">y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(Nile)</a></code></pre></div>
+<div class="sourceCode" id="cb441"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb441-1" title="1"><span class="kw">library</span>(datasets)</a>
+<a class="sourceLine" id="cb441-2" title="2">y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(Nile)</a></code></pre></div>
 <p>This section requires that you have JAGS installed and the <strong>R2jags</strong>, <strong>rjags</strong> and <strong>coda</strong> R packages loaded.</p>
-<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb422-1" title="1"><span class="kw">library</span>(R2jags)</a>
-<a class="sourceLine" id="cb422-2" title="2"><span class="kw">library</span>(rjags)</a>
-<a class="sourceLine" id="cb422-3" title="3"><span class="kw">library</span>(coda)</a></code></pre></div>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb442-1" title="1"><span class="kw">library</span>(R2jags)</a>
+<a class="sourceLine" id="cb442-2" title="2"><span class="kw">library</span>(rjags)</a>
+<a class="sourceLine" id="cb442-3" title="3"><span class="kw">library</span>(coda)</a></code></pre></div>
 <p>The first step is to write the model for JAGS to a file (filename in <code>model.loc</code>):</p>
-<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb423-1" title="1">model.loc &lt;-<span class="st"> &quot;ss_model.txt&quot;</span></a>
-<a class="sourceLine" id="cb423-2" title="2">jagsscript &lt;-<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb423-3" title="3"><span class="st">   model {  </span></a>
-<a class="sourceLine" id="cb423-4" title="4"><span class="st">   # priors on parameters</span></a>
-<a class="sourceLine" id="cb423-5" title="5"><span class="st">   mu ~ dnorm(Y1, 1/(Y1*100)); # normal mean = 0, sd = 1/sqrt(0.01)</span></a>
-<a class="sourceLine" id="cb423-6" title="6"><span class="st">   tau.q ~ dgamma(0.001,0.001); # This is inverse gamma</span></a>
-<a class="sourceLine" id="cb423-7" title="7"><span class="st">   sd.q &lt;- 1/sqrt(tau.q); # sd is treated as derived parameter</span></a>
-<a class="sourceLine" id="cb423-8" title="8"><span class="st">   tau.r ~ dgamma(0.001,0.001); # This is inverse gamma</span></a>
-<a class="sourceLine" id="cb423-9" title="9"><span class="st">   sd.r &lt;- 1/sqrt(tau.r); # sd is treated as derived parameter</span></a>
-<a class="sourceLine" id="cb423-10" title="10"><span class="st">   u ~ dnorm(0, 0.01);</span></a>
-<a class="sourceLine" id="cb423-11" title="11"><span class="st">    </span></a>
-<a class="sourceLine" id="cb423-12" title="12"><span class="st">   # Because init X is specified at t=0</span></a>
-<a class="sourceLine" id="cb423-13" title="13"><span class="st">   X0 &lt;- mu</span></a>
-<a class="sourceLine" id="cb423-14" title="14"><span class="st">   X[1] ~ dnorm(X0+u,tau.q);</span></a>
-<a class="sourceLine" id="cb423-15" title="15"><span class="st">   Y[1] ~ dnorm(X[1], tau.r);</span></a>
-<a class="sourceLine" id="cb423-16" title="16"><span class="st"> </span></a>
-<a class="sourceLine" id="cb423-17" title="17"><span class="st">   for(i in 2:TT) {</span></a>
-<a class="sourceLine" id="cb423-18" title="18"><span class="st">   predX[i] &lt;- X[i-1]+u; </span></a>
-<a class="sourceLine" id="cb423-19" title="19"><span class="st">   X[i] ~ dnorm(predX[i],tau.q); # Process variation</span></a>
-<a class="sourceLine" id="cb423-20" title="20"><span class="st">   Y[i] ~ dnorm(X[i], tau.r); # Observation variation</span></a>
-<a class="sourceLine" id="cb423-21" title="21"><span class="st">   }</span></a>
-<a class="sourceLine" id="cb423-22" title="22"><span class="st">   }                  </span></a>
-<a class="sourceLine" id="cb423-23" title="23"><span class="st">   &quot;</span>,<span class="dt">file=</span>model.loc)</a></code></pre></div>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb443-1" title="1">model.loc &lt;-<span class="st"> &quot;ss_model.txt&quot;</span></a>
+<a class="sourceLine" id="cb443-2" title="2">jagsscript &lt;-<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb443-3" title="3"><span class="st">   model {  </span></a>
+<a class="sourceLine" id="cb443-4" title="4"><span class="st">   # priors on parameters</span></a>
+<a class="sourceLine" id="cb443-5" title="5"><span class="st">   mu ~ dnorm(Y1, 1/(Y1*100)); # normal mean = 0, sd = 1/sqrt(0.01)</span></a>
+<a class="sourceLine" id="cb443-6" title="6"><span class="st">   tau.q ~ dgamma(0.001,0.001); # This is inverse gamma</span></a>
+<a class="sourceLine" id="cb443-7" title="7"><span class="st">   sd.q &lt;- 1/sqrt(tau.q); # sd is treated as derived parameter</span></a>
+<a class="sourceLine" id="cb443-8" title="8"><span class="st">   tau.r ~ dgamma(0.001,0.001); # This is inverse gamma</span></a>
+<a class="sourceLine" id="cb443-9" title="9"><span class="st">   sd.r &lt;- 1/sqrt(tau.r); # sd is treated as derived parameter</span></a>
+<a class="sourceLine" id="cb443-10" title="10"><span class="st">   u ~ dnorm(0, 0.01);</span></a>
+<a class="sourceLine" id="cb443-11" title="11"><span class="st">    </span></a>
+<a class="sourceLine" id="cb443-12" title="12"><span class="st">   # Because init X is specified at t=0</span></a>
+<a class="sourceLine" id="cb443-13" title="13"><span class="st">   X0 &lt;- mu</span></a>
+<a class="sourceLine" id="cb443-14" title="14"><span class="st">   X[1] ~ dnorm(X0+u,tau.q);</span></a>
+<a class="sourceLine" id="cb443-15" title="15"><span class="st">   Y[1] ~ dnorm(X[1], tau.r);</span></a>
+<a class="sourceLine" id="cb443-16" title="16"><span class="st"> </span></a>
+<a class="sourceLine" id="cb443-17" title="17"><span class="st">   for(i in 2:TT) {</span></a>
+<a class="sourceLine" id="cb443-18" title="18"><span class="st">   predX[i] &lt;- X[i-1]+u; </span></a>
+<a class="sourceLine" id="cb443-19" title="19"><span class="st">   X[i] ~ dnorm(predX[i],tau.q); # Process variation</span></a>
+<a class="sourceLine" id="cb443-20" title="20"><span class="st">   Y[i] ~ dnorm(X[i], tau.r); # Observation variation</span></a>
+<a class="sourceLine" id="cb443-21" title="21"><span class="st">   }</span></a>
+<a class="sourceLine" id="cb443-22" title="22"><span class="st">   }                  </span></a>
+<a class="sourceLine" id="cb443-23" title="23"><span class="st">   &quot;</span>, </a>
+<a class="sourceLine" id="cb443-24" title="24">    <span class="dt">file =</span> model.loc)</a></code></pre></div>
 <p>Next we specify the data (and any other input) that the JAGS code needs. In this case, we need to pass in <code>dat</code> and the number of time steps since that is used in the for loop. We also specify the parameters that we want to monitor. We need to specify at least one, but we will monitor all of them so we can plot them after fitting. Note, that the hidden state is a parameter in the Bayesian context (but not in the maximum likelihood context).</p>
-<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb424-1" title="1">jags.data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=y, <span class="st">&quot;TT&quot;</span>=<span class="kw">length</span>(y), <span class="dt">Y1=</span>y[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb424-2" title="2">jags.params &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;X&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;u&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb444-1" title="1">jags.data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> y, <span class="dt">TT =</span> <span class="kw">length</span>(y), <span class="dt">Y1 =</span> y[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb444-2" title="2">jags.params &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;X&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;u&quot;</span>)</a></code></pre></div>
 <p>Now we can fit the model:</p>
-<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb425-1" title="1">mod_ss &lt;-<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, </a>
-<a class="sourceLine" id="cb425-2" title="2">     <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, </a>
-<a class="sourceLine" id="cb425-3" title="3">     <span class="dt">n.burnin=</span><span class="dv">5000</span>, <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb445-1" title="1">mod_ss &lt;-<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </a>
+<a class="sourceLine" id="cb445-2" title="2">    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </a>
+<a class="sourceLine" id="cb445-3" title="3">    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>We can then show the posteriors along with the MLEs from MARSS on top (Figure <a href="sec-uss-fitting-with-jags.html#fig:uss-fig-posteriors">6.5</a> ) using the code below.</p>
 
-<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb426-1" title="1"><span class="kw">attach.jags</span>(mod_ss)</a>
-<a class="sourceLine" id="cb426-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb426-3" title="3"><span class="kw">hist</span>(mu)</a>
-<a class="sourceLine" id="cb426-4" title="4"><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb426-5" title="5"><span class="kw">hist</span>(u)</a>
-<a class="sourceLine" id="cb426-6" title="6"><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb426-7" title="7"><span class="kw">hist</span>(<span class="kw">log</span>(sd.q<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb426-8" title="8"><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb426-9" title="9"><span class="kw">hist</span>(<span class="kw">log</span>(sd.r<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb426-10" title="10"><span class="kw">abline</span>(<span class="dt">v=</span><span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb446-1" title="1"><span class="kw">attach.jags</span>(mod_ss)</a>
+<a class="sourceLine" id="cb446-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb446-3" title="3"><span class="kw">hist</span>(mu)</a>
+<a class="sourceLine" id="cb446-4" title="4"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb446-5" title="5"><span class="kw">hist</span>(u)</a>
+<a class="sourceLine" id="cb446-6" title="6"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb446-7" title="7"><span class="kw">hist</span>(<span class="kw">log</span>(sd.q<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb446-8" title="8"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb446-9" title="9"><span class="kw">hist</span>(<span class="kw">log</span>(sd.r<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb446-10" title="10"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-fig-posteriors"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-fig-posteriors-1.png" alt="The posteriors for model 3 with MLE estimates from MARSS() shown in red." width="80%" />
 <p class="caption">
 Figure 6.5: The posteriors for model 3 with MLE estimates from <code>MARSS()</code> shown in red.
 </p>
 </div>
-<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb427-1" title="1"><span class="kw">detach.jags</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb447-1" title="1"><span class="kw">detach.jags</span>()</a></code></pre></div>
 <p>To plot the estimated states ( Figure <a href="sec-uss-fitting-with-jags.html#fig:uss-fig-bayesian-states">6.6</a> ), we write a helper function:</p>
-<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb428-1" title="1">plotModelOutput &lt;-<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {</a>
-<a class="sourceLine" id="cb428-2" title="2">  <span class="kw">attach.jags</span>(jagsmodel)</a>
-<a class="sourceLine" id="cb428-3" title="3">  x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="kw">length</span>(Y))</a>
-<a class="sourceLine" id="cb428-4" title="4">  XPred &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(X,<span class="dv">2</span>,quantile,<span class="fl">0.025</span>), <span class="kw">apply</span>(X,<span class="dv">2</span>,mean), <span class="kw">apply</span>(X,<span class="dv">2</span>,quantile,<span class="fl">0.975</span>))</a>
-<a class="sourceLine" id="cb428-5" title="5">  ylims &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y,XPred), <span class="dt">na.rm=</span><span class="ot">TRUE</span>), <span class="kw">max</span>(<span class="kw">c</span>(Y,XPred), <span class="dt">na.rm=</span><span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb428-6" title="6">  <span class="kw">plot</span>(Y, <span class="dt">col=</span><span class="st">&quot;white&quot;</span>,<span class="dt">ylim=</span>ylims, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>,<span class="dt">ylab=</span><span class="st">&quot;State predictions&quot;</span>)</a>
-<a class="sourceLine" id="cb428-7" title="7">  <span class="kw">polygon</span>(<span class="kw">c</span>(x,<span class="kw">rev</span>(x)), <span class="kw">c</span>(XPred[,<span class="dv">1</span>], <span class="kw">rev</span>(XPred[,<span class="dv">3</span>])), <span class="dt">col=</span><span class="st">&quot;grey70&quot;</span>,<span class="dt">border=</span><span class="ot">NA</span>)</a>
-<a class="sourceLine" id="cb428-8" title="8">  <span class="kw">lines</span>(XPred[,<span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb428-9" title="9">  <span class="kw">points</span>(Y)</a>
-<a class="sourceLine" id="cb428-10" title="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb448-1" title="1">plotModelOutput &lt;-<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {</a>
+<a class="sourceLine" id="cb448-2" title="2">    <span class="kw">attach.jags</span>(jagsmodel)</a>
+<a class="sourceLine" id="cb448-3" title="3">    x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))</a>
+<a class="sourceLine" id="cb448-4" title="4">    XPred &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(X, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), <span class="kw">apply</span>(X, <span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb448-5" title="5">        mean), <span class="kw">apply</span>(X, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</a>
+<a class="sourceLine" id="cb448-6" title="6">    ylims &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, XPred), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="kw">max</span>(<span class="kw">c</span>(Y, XPred), </a>
+<a class="sourceLine" id="cb448-7" title="7">        <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb448-8" title="8">    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> ylims, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;State predictions&quot;</span>)</a>
+<a class="sourceLine" id="cb448-9" title="9">    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(XPred[, <span class="dv">1</span>], <span class="kw">rev</span>(XPred[, <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, </a>
+<a class="sourceLine" id="cb448-10" title="10">        <span class="dt">border =</span> <span class="ot">NA</span>)</a>
+<a class="sourceLine" id="cb448-11" title="11">    <span class="kw">lines</span>(XPred[, <span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb448-12" title="12">    <span class="kw">points</span>(Y)</a>
+<a class="sourceLine" id="cb448-13" title="13">}</a></code></pre></div>
 
-<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb429-1" title="1"><span class="kw">plotModelOutput</span>(mod_ss, y)</a></code></pre></div>
+<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb449-1" title="1"><span class="kw">plotModelOutput</span>(mod_ss, y)</a></code></pre></div>
 <pre><code>The following object is masked _by_ .GlobalEnv:
 
     mu</code></pre>
-<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb431-1" title="1"><span class="kw">lines</span>(kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>,], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb431-2" title="2"><span class="kw">lines</span>(<span class="fl">1.96</span><span class="op">*</span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>,]<span class="op">+</span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>,], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lty=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb431-3" title="3"><span class="kw">lines</span>(<span class="op">-</span><span class="fl">1.96</span><span class="op">*</span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>,]<span class="op">+</span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>,], <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">lty=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb431-4" title="4"><span class="kw">title</span>(<span class="st">&quot;State estimate and data from</span><span class="ch">\n</span><span class="st">JAGS (black) versus MARSS (red)&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb451-1" title="1"><span class="kw">lines</span>(kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb451-2" title="2"><span class="kw">lines</span>(<span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>, ] <span class="op">+</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, </a>
+<a class="sourceLine" id="cb451-3" title="3">    <span class="dt">lty =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb451-4" title="4"><span class="kw">lines</span>(<span class="op">-</span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>, ] <span class="op">+</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, </a>
+<a class="sourceLine" id="cb451-5" title="5">    <span class="dt">lty =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb451-6" title="6"><span class="kw">title</span>(<span class="st">&quot;State estimate and data from</span><span class="ch">\n</span><span class="st">JAGS (black) versus MARSS (red)&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-fig-bayesian-states"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-fig-bayesian-states-1.png" alt="The estimated states from the Bayesian fit along with 95% credible intervals (black and grey) with the MLE states and 95% condidence intervals in red." width="80%" />
 <p class="caption">
@@ -566,6 +573,7 @@ Figure 6.6: The estimated states from the Bayesian fit along with 95% credible i
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -584,6 +592,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

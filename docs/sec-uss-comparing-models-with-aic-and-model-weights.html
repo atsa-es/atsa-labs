@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>6.4 Comparing models with AIC and model weights | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="6.4 Comparing models with AIC and model weights | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -462,20 +463,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">6.4</span> Comparing models with AIC and model weights</h2>
 <p>To get the AIC or AICc values for a model fit from a MARSS fit, use <code>fit$AIC</code> or <code>fit$AICc</code>. The log-likelihood is in <code>fit$logLik</code> and the number of estimated parameters in <code>fit$num.params</code>. For fits from other functions, try <code>AIC(fit)</code> or look at the function documentation.</p>
 <p>Let’s put the AICc values 3 Nile models together:</p>
-<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb414-1" title="1">nile.aic =<span class="st"> </span><span class="kw">c</span>(kem<span class="fl">.0</span><span class="op">$</span>AICc, kem<span class="fl">.1</span><span class="op">$</span>AICc, kem<span class="fl">.2</span><span class="op">$</span>AICc, kem<span class="fl">.3</span><span class="op">$</span>AICc)</a></code></pre></div>
+<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb420-1" title="1">nile.aic =<span class="st"> </span><span class="kw">c</span>(kem<span class="fl">.0</span><span class="op">$</span>AICc, kem<span class="fl">.1</span><span class="op">$</span>AICc, kem<span class="fl">.2</span><span class="op">$</span>AICc, kem<span class="fl">.3</span><span class="op">$</span>AICc)</a></code></pre></div>
 <p>Then we calculate the AICc minus the minus AICc in our model set and compute the model weights. <span class="math inline">\(\Delta\text{AIC}\)</span> is the AIC values minus the minimum AIC value in your model set.</p>
-<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb415-1" title="1">delAIC &lt;-<span class="st"> </span>nile.aic<span class="op">-</span><span class="kw">min</span>(nile.aic)</a>
-<a class="sourceLine" id="cb415-2" title="2">relLik &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="fl">0.5</span><span class="op">*</span>delAIC)</a>
-<a class="sourceLine" id="cb415-3" title="3">aicweight &lt;-<span class="st"> </span>relLik<span class="op">/</span><span class="kw">sum</span>(relLik)</a></code></pre></div>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb421-1" title="1">delAIC &lt;-<span class="st"> </span>nile.aic <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(nile.aic)</a>
+<a class="sourceLine" id="cb421-2" title="2">relLik &lt;-<span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>delAIC)</a>
+<a class="sourceLine" id="cb421-3" title="3">aicweight &lt;-<span class="st"> </span>relLik<span class="op">/</span><span class="kw">sum</span>(relLik)</a></code></pre></div>
 <p>And this leads to our model weights table:</p>
-<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb416-1" title="1">aic.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb416-2" title="2"><span class="dt">AICc=</span>nile.aic, </a>
-<a class="sourceLine" id="cb416-3" title="3"><span class="dt">delAIC=</span>delAIC, </a>
-<a class="sourceLine" id="cb416-4" title="4"><span class="dt">relLik=</span>relLik, </a>
-<a class="sourceLine" id="cb416-5" title="5"><span class="dt">weight=</span>aicweight)</a>
-<a class="sourceLine" id="cb416-6" title="6"><span class="kw">rownames</span>(aic.table) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;flat level&quot;</span>,<span class="st">&quot;linear trend&quot;</span>, <span class="st">&quot;stoc level&quot;</span>, <span class="st">&quot;stoc level w drift&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb422-1" title="1">aic.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">AICc =</span> nile.aic, <span class="dt">delAIC =</span> delAIC, <span class="dt">relLik =</span> relLik, </a>
+<a class="sourceLine" id="cb422-2" title="2">    <span class="dt">weight =</span> aicweight)</a>
+<a class="sourceLine" id="cb422-3" title="3"><span class="kw">rownames</span>(aic.table) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;flat level&quot;</span>, <span class="st">&quot;linear trend&quot;</span>, <span class="st">&quot;stoc level&quot;</span>, </a>
+<a class="sourceLine" id="cb422-4" title="4">    <span class="st">&quot;stoc level w drift&quot;</span>)</a></code></pre></div>
 <p>Here the table is printed using <code>round()</code> to limit the number of digits shown.</p>
-<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb417-1" title="1"><span class="kw">round</span>(aic.table, <span class="dt">digits=</span><span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb423-1" title="1"><span class="kw">round</span>(aic.table, <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
 <pre><code>                       AICc delAIC relLik weight
 flat level         1313.155 31.379  0.000  0.000
 linear trend       1290.882  9.106  0.011  0.007
@@ -505,6 +504,7 @@ stoc level w drift 1283.026  1.250  0.535  0.346</code></pre>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -523,6 +523,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

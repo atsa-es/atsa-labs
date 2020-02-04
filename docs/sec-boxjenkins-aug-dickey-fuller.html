@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5.3 Dickey-Fuller and Augmented Dickey-Fuller tests | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5.3 Dickey-Fuller and Augmented Dickey-Fuller tests | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -484,7 +485,7 @@ where <span class="math inline">\(y_t\)</span> is your data. It is written this 
 <h4><span class="header-section-number">5.3.3.1</span> Test on white noise</h4>
 <p>Let’s start by doing the test on data that we know are stationary, white noise. We will use an Augmented Dickey-Fuller test where we use the default number of lags (amount of time-dependency) in our test. For a time-series of 100, this is 4.</p>
 <div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb292-1" title="1">TT &lt;-<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb292-2" title="2">wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT) <span class="co"># white noise</span></a>
+<a class="sourceLine" id="cb292-2" title="2">wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)  <span class="co"># white noise</span></a>
 <a class="sourceLine" id="cb292-3" title="3">tseries<span class="op">::</span><span class="kw">adf.test</span>(wn)</a></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wn): p-value smaller than printed p-value</code></pre>
 <pre><code>
@@ -495,7 +496,7 @@ Dickey-Fuller = -4.8309, Lag order = 4, p-value = 0.01
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis is rejected.</p>
 <p>Try a Dickey-Fuller test. This is testing with a null hypothesis of AR(1) stationarity versus a null hypothesis with AR(4) stationarity when we used the default <code>k</code>.</p>
-<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb295-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(wn, <span class="dt">k=</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb295-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(wn, <span class="dt">k =</span> <span class="dv">0</span>)</a></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wn, k = 0): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -533,7 +534,7 @@ Dickey-Fuller = -2.3038, Lag order = 4, p-value = 0.4508
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis is NOT rejected as the p-value is greater than 0.05.</p>
 <p>Try a Dickey-Fuller test.</p>
-<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb303-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(rw, <span class="dt">k=</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb303-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(rw, <span class="dt">k =</span> <span class="dv">0</span>)</a></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -570,7 +571,7 @@ alternative hypothesis: stationary</code></pre>
 <p>When you use <code>summary()</code> for the output from <code>ur.df()</code>, you will see the estimated values for <span class="math inline">\(\gamma\)</span> (denoted <code>z.lag.1</code>), intercept and trend. If you see <code>***</code> or <code>**</code> on the coefficients list for <code>z.lag.1</code>, it indicates that the effect of <code>z.lag.1</code> is significantly different than 0 and this supports the assumption of stationarity.</p>
 <p>The <code>intercept</code> and <code>tt</code> estimates indicate where there is a non-zero level (intercept) or linear trend (tt).</p>
 <div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1">wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)</a>
-<a class="sourceLine" id="cb308-2" title="2">test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type=</span><span class="st">&quot;trend&quot;</span>, <span class="dt">lags=</span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb308-2" title="2">test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type =</span> <span class="st">&quot;trend&quot;</span>, <span class="dt">lags =</span> <span class="dv">0</span>)</a>
 <a class="sourceLine" id="cb308-3" title="3"><span class="kw">summary</span>(test)</a></code></pre></div>
 <pre><code>
 ############################################### 
@@ -638,6 +639,7 @@ phi3  8.73  6.49  5.47</code></pre>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -656,6 +658,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

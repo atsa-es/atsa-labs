@@ -390,11 +390,11 @@ The residuals should also not be autocorrelated in time.  We can check the autoc
 ```{r uss-acf0, fig.show='hide'}
 par(mfrow=c(2,2))
 resids <- residuals(kem.0)
-acf(resids$model.residuals[1,], main="flat level v(t)")
+acf(resids$model.residuals[1,], main="flat level v(t)", na.action=na.pass)
 resids <- residuals(kem.1)
-acf(resids$model.residuals[1,], main="linear trend v(t)")
+acf(resids$model.residuals[1,], main="linear trend v(t)", na.action=na.pass)
 resids <- residuals(kem.2)
-acf(resids$model.residuals[1,], main="stoc level v(t)")
+acf(resids$model.residuals[1,], main="stoc level v(t)", na.action=na.pass)
 acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
 ```
 
@@ -404,11 +404,11 @@ acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
 ```{r uss-acfs, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-acfs)'}
 par(mfrow=c(2,2))
 resids <- residuals(kem.0)
-acf(resids$model.residuals[1,], main="flat level v(t)")
+acf(resids$model.residuals[1,], main="flat level v(t)", na.action=na.pass)
 resids <- residuals(kem.1)
-acf(resids$model.residuals[1,], main="linear trend v(t)")
+acf(resids$model.residuals[1,], main="linear trend v(t)", na.action=na.pass)
 resids <- residuals(kem.2)
-acf(resids$model.residuals[1,], main="stoc level v(t)")
+acf(resids$model.residuals[1,], main="stoc level v(t)", na.action=na.pass)
 acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
 ```
  

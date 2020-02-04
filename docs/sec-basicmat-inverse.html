@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>1.6 Taking the inverse of a square matrix | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="1.6 Taking the inverse of a square matrix | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,27 +462,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-basicmat-inverse" class="section level2">
 <h2><span class="header-section-number">1.6</span> Taking the inverse of a square matrix</h2>
 <p>The inverse of a matrix is denoted <span class="math inline">\(\mathbf{A}^{-1}\)</span>. You can think of the inverse of a matrix like <span class="math inline">\(1/a\)</span>. <span class="math inline">\(1/a \times a = 1\)</span>. <span class="math inline">\(\mathbf{A}^{-1}\mathbf{A} = \mathbf{A}\mathbf{A}^{-1} = \mathbf{I}\)</span>. The inverse of a matrix does not always exist; for one it has to be square. We’ll be using inverses for variance-covariance matrices and by definition (of a variance-covariance matrix), the inverse of those exist. In R, there are a couple way common ways to take the inverse of a variance-covariance matrix (or something with the same properties). <code>solve()</code> is the most common probably:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1">A=<span class="kw">diag</span>(<span class="dv">3</span>,<span class="dv">3</span>)<span class="op">+</span><span class="kw">matrix</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb111-2" title="2">invA=<span class="kw">solve</span>(A)</a>
-<a class="sourceLine" id="cb111-3" title="3">invA<span class="op">%*%</span>A</a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1">A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb111-2" title="2">invA =<span class="st"> </span><span class="kw">solve</span>(A)</a>
+<a class="sourceLine" id="cb111-3" title="3">invA <span class="op">%*%</span><span class="st"> </span>A</a></code></pre></div>
 <pre><code>             [,1]          [,2] [,3]
 [1,] 1.000000e+00 -6.938894e-18    0
 [2,] 2.081668e-17  1.000000e+00    0
 [3,] 0.000000e+00  0.000000e+00    1</code></pre>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1">A<span class="op">%*%</span>invA</a></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1">A <span class="op">%*%</span><span class="st"> </span>invA</a></code></pre></div>
 <pre><code>             [,1]          [,2] [,3]
 [1,] 1.000000e+00 -6.938894e-18    0
 [2,] 2.081668e-17  1.000000e+00    0
 [3,] 0.000000e+00  0.000000e+00    1</code></pre>
 <p>Another option is to use <code>chol2inv()</code> which uses a Cholesky decomposition:</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">A=<span class="kw">diag</span>(<span class="dv">3</span>,<span class="dv">3</span>)<span class="op">+</span><span class="kw">matrix</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb115-2" title="2">invA=<span class="kw">chol2inv</span>(<span class="kw">chol</span>(A))</a>
-<a class="sourceLine" id="cb115-3" title="3">invA<span class="op">%*%</span>A</a></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb115-2" title="2">invA =<span class="st"> </span><span class="kw">chol2inv</span>(<span class="kw">chol</span>(A))</a>
+<a class="sourceLine" id="cb115-3" title="3">invA <span class="op">%*%</span><span class="st"> </span>A</a></code></pre></div>
 <pre><code>              [,1]         [,2]          [,3]
 [1,]  1.000000e+00 6.938894e-17  0.000000e+00
 [2,]  2.081668e-17 1.000000e+00 -2.775558e-17
 [3,] -5.551115e-17 0.000000e+00  1.000000e+00</code></pre>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1">A<span class="op">%*%</span>invA</a></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1">A <span class="op">%*%</span><span class="st"> </span>invA</a></code></pre></div>
 <pre><code>             [,1]          [,2]          [,3]
 [1,] 1.000000e+00  2.081668e-17 -5.551115e-17
 [2,] 6.938894e-17  1.000000e+00  0.000000e+00
@@ -511,6 +512,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -529,6 +531,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

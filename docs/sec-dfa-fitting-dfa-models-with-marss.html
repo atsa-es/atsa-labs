@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>10.6 Fitting DFA models with the MARSS package | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="10.6 Fitting DFA models with the MARSS package | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -465,42 +466,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-dfa-observation-model" class="section level3">
 <h3><span class="header-section-number">10.6.1</span> The observation model</h3>
 <p>Here we will fit the DFA model above where we have <code>R N_ts</code> observed time series and we want 3 hidden states. Now we need to set up the observation model for <code>MARSS</code>. Here are the vectors and matrices for our first model where each nutrient follows its own process. Recall that we will need to set the elements in the upper R corner of <span class="math inline">\(\mathbf{Z}\)</span> to 0. We will assume that the observation errors have different variances and they are independent of one another.</p>
-<div class="sourceCode" id="cb551"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb551-1" title="1"><span class="co">## &#39;ZZ&#39; is loadings matrix</span></a>
-<a class="sourceLine" id="cb551-2" title="2">Z_vals &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;z11&quot;</span>,  <span class="dv">0</span>  ,  <span class="dv">0</span>  ,</a>
-<a class="sourceLine" id="cb551-3" title="3">               <span class="st">&quot;z21&quot;</span>,<span class="st">&quot;z22&quot;</span>,  <span class="dv">0</span>  ,</a>
-<a class="sourceLine" id="cb551-4" title="4">               <span class="st">&quot;z31&quot;</span>,<span class="st">&quot;z32&quot;</span>,<span class="st">&quot;z33&quot;</span>,</a>
-<a class="sourceLine" id="cb551-5" title="5">               <span class="st">&quot;z41&quot;</span>,<span class="st">&quot;z42&quot;</span>,<span class="st">&quot;z43&quot;</span>,</a>
-<a class="sourceLine" id="cb551-6" title="6">               <span class="st">&quot;z51&quot;</span>,<span class="st">&quot;z52&quot;</span>,<span class="st">&quot;z53&quot;</span>)</a>
-<a class="sourceLine" id="cb551-7" title="7">ZZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z_vals, <span class="dt">nrow=</span>N_ts, <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">byrow=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb551-8" title="8">ZZ</a></code></pre></div>
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb582-1" title="1"><span class="co">## &#39;ZZ&#39; is loadings matrix</span></a>
+<a class="sourceLine" id="cb582-2" title="2">Z_vals &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;z11&quot;</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="st">&quot;z21&quot;</span>, <span class="st">&quot;z22&quot;</span>, <span class="dv">0</span>, <span class="st">&quot;z31&quot;</span>, <span class="st">&quot;z32&quot;</span>, <span class="st">&quot;z33&quot;</span>, </a>
+<a class="sourceLine" id="cb582-3" title="3">    <span class="st">&quot;z41&quot;</span>, <span class="st">&quot;z42&quot;</span>, <span class="st">&quot;z43&quot;</span>, <span class="st">&quot;z51&quot;</span>, <span class="st">&quot;z52&quot;</span>, <span class="st">&quot;z53&quot;</span>)</a>
+<a class="sourceLine" id="cb582-4" title="4">ZZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z_vals, <span class="dt">nrow =</span> N_ts, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb582-5" title="5">ZZ</a></code></pre></div>
 <pre><code>     [,1]  [,2]  [,3] 
 [1,] &quot;z11&quot; 0     0    
 [2,] &quot;z21&quot; &quot;z22&quot; 0    
 [3,] &quot;z31&quot; &quot;z32&quot; &quot;z33&quot;
 [4,] &quot;z41&quot; &quot;z42&quot; &quot;z43&quot;
 [5,] &quot;z51&quot; &quot;z52&quot; &quot;z53&quot;</code></pre>
-<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb553-1" title="1"><span class="co">## &#39;aa&#39; is the offset/scaling</span></a>
-<a class="sourceLine" id="cb553-2" title="2">aa &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb553-3" title="3"><span class="co">## &#39;DD&#39; and &#39;d&#39; are for covariates</span></a>
-<a class="sourceLine" id="cb553-4" title="4">DD &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></a>
-<a class="sourceLine" id="cb553-5" title="5">dd &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,1,wk_last)</span></a>
-<a class="sourceLine" id="cb553-6" title="6"><span class="co">## &#39;RR&#39; is var-cov matrix for obs errors</span></a>
-<a class="sourceLine" id="cb553-7" title="7">RR &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb584-1" title="1"><span class="co">## &#39;aa&#39; is the offset/scaling</span></a>
+<a class="sourceLine" id="cb584-2" title="2">aa &lt;-<span class="st"> &quot;zero&quot;</span></a>
+<a class="sourceLine" id="cb584-3" title="3"><span class="co">## &#39;DD&#39; and &#39;d&#39; are for covariates</span></a>
+<a class="sourceLine" id="cb584-4" title="4">DD &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></a>
+<a class="sourceLine" id="cb584-5" title="5">dd &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,1,wk_last)</span></a>
+<a class="sourceLine" id="cb584-6" title="6"><span class="co">## &#39;RR&#39; is var-cov matrix for obs errors</span></a>
+<a class="sourceLine" id="cb584-7" title="7">RR &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></a></code></pre></div>
 </div>
 <div id="sec-dfa-process-model" class="section level3">
 <h3><span class="header-section-number">10.6.2</span> The process model</h3>
 <p>We need to specify the explicit form for all of the vectors and matrices in the full form of the MARSS model we defined in Sec 3.1. Note that we do not have to specify anything for the states <span class="math inline">\((\mathbf{x})\)</span> – those are elements that <code>MARSS</code> will identify and estimate itself based on our definitions of the other vectors and matrices.</p>
-<div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb554-1" title="1"><span class="co">## number of processes</span></a>
-<a class="sourceLine" id="cb554-2" title="2">mm &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb554-3" title="3"><span class="co">## &#39;BB&#39; is identity: 1&#39;s along the diagonal &amp; 0&#39;s elsewhere</span></a>
-<a class="sourceLine" id="cb554-4" title="4">BB &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(mm)</span></a>
-<a class="sourceLine" id="cb554-5" title="5"><span class="co">## &#39;uu&#39; is a column vector of 0&#39;s</span></a>
-<a class="sourceLine" id="cb554-6" title="6">uu &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></a>
-<a class="sourceLine" id="cb554-7" title="7"><span class="co">## &#39;CC&#39; and &#39;cc&#39; are for covariates</span></a>
-<a class="sourceLine" id="cb554-8" title="8">CC &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></a>
-<a class="sourceLine" id="cb554-9" title="9">cc &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,1,wk_last)</span></a>
-<a class="sourceLine" id="cb554-10" title="10"><span class="co">## &#39;QQ&#39; is identity</span></a>
-<a class="sourceLine" id="cb554-11" title="11">QQ &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(mm)</span></a></code></pre></div>
+<div class="sourceCode" id="cb585"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb585-1" title="1"><span class="co">## number of processes</span></a>
+<a class="sourceLine" id="cb585-2" title="2">mm &lt;-<span class="st"> </span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb585-3" title="3"><span class="co">## &#39;BB&#39; is identity: 1&#39;s along the diagonal &amp; 0&#39;s elsewhere</span></a>
+<a class="sourceLine" id="cb585-4" title="4">BB &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(mm)</span></a>
+<a class="sourceLine" id="cb585-5" title="5"><span class="co">## &#39;uu&#39; is a column vector of 0&#39;s</span></a>
+<a class="sourceLine" id="cb585-6" title="6">uu &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></a>
+<a class="sourceLine" id="cb585-7" title="7"><span class="co">## &#39;CC&#39; and &#39;cc&#39; are for covariates</span></a>
+<a class="sourceLine" id="cb585-8" title="8">CC &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></a>
+<a class="sourceLine" id="cb585-9" title="9">cc &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,1,wk_last)</span></a>
+<a class="sourceLine" id="cb585-10" title="10"><span class="co">## &#39;QQ&#39; is identity</span></a>
+<a class="sourceLine" id="cb585-11" title="11">QQ &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(mm)</span></a></code></pre></div>
 </div>
 <div id="sec-dfa-fit-model-in-marss" class="section level3">
 <h3><span class="header-section-number">10.6.3</span> Fit the model in MARSS</h3>
@@ -510,16 +508,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>A list of any initial values – <code>MARSS</code> will pick its own otherwise;</li>
 <li>A list of control parameters for the <code>MARSS()</code> function.</li>
 </ol>
-<div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb555-1" title="1"><span class="co">## list with specifications for model vectors/matrices</span></a>
-<a class="sourceLine" id="cb555-2" title="2">mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Z=</span>ZZ, <span class="dt">A=</span>aa, <span class="dt">D=</span>DD, <span class="dt">d=</span>dd, <span class="dt">R=</span>RR,</a>
-<a class="sourceLine" id="cb555-3" title="3">                 <span class="dt">B=</span>BB, <span class="dt">U=</span>uu, <span class="dt">C=</span>CC, <span class="dt">c=</span>cc, <span class="dt">Q=</span>QQ)</a>
-<a class="sourceLine" id="cb555-4" title="4"><span class="co">## list with model inits</span></a>
-<a class="sourceLine" id="cb555-5" title="5">init_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>, mm), mm, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb555-6" title="6"><span class="co">## list with model control parameters</span></a>
-<a class="sourceLine" id="cb555-7" title="7">con_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">3000</span>, <span class="dt">allow.degen =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb586-1" title="1"><span class="co">## list with specifications for model vectors/matrices</span></a>
+<a class="sourceLine" id="cb586-2" title="2">mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Z =</span> ZZ, <span class="dt">A =</span> aa, <span class="dt">D =</span> DD, <span class="dt">d =</span> dd, <span class="dt">R =</span> RR, <span class="dt">B =</span> BB, </a>
+<a class="sourceLine" id="cb586-3" title="3">    <span class="dt">U =</span> uu, <span class="dt">C =</span> CC, <span class="dt">c =</span> cc, <span class="dt">Q =</span> QQ)</a>
+<a class="sourceLine" id="cb586-4" title="4"><span class="co">## list with model inits</span></a>
+<a class="sourceLine" id="cb586-5" title="5">init_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>, mm), mm, <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb586-6" title="6"><span class="co">## list with model control parameters</span></a>
+<a class="sourceLine" id="cb586-7" title="7">con_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">3000</span>, <span class="dt">allow.degen =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>Now we can fit the model.</p>
-<div class="sourceCode" id="cb556"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb556-1" title="1"><span class="co">## fit MARSS</span></a>
-<a class="sourceLine" id="cb556-2" title="2">dfa_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="dt">y =</span> dat, <span class="dt">model =</span> mod_list, <span class="dt">inits =</span> init_list, <span class="dt">control =</span> con_list)</a></code></pre></div>
+<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb587-1" title="1"><span class="co">## fit MARSS</span></a>
+<a class="sourceLine" id="cb587-2" title="2">dfa_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="dt">y =</span> dat, <span class="dt">model =</span> mod_list, <span class="dt">inits =</span> init_list, </a>
+<a class="sourceLine" id="cb587-3" title="3">    <span class="dt">control =</span> con_list)</a></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 246 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -580,6 +579,7 @@ Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -598,6 +598,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

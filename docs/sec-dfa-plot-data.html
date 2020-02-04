@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>10.10 Plotting the data and model fits | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="10.10 Plotting the data and model fits | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,60 +462,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-dfa-plot-data" class="section level2">
 <h2><span class="header-section-number">10.10</span> Plotting the data and model fits</h2>
 <p>We can plot the fits for our DFA model along with the data. The following function will return the fitted values ± (1-<span class="math inline">\(\alpha\)</span>)% confidence intervals.</p>
-<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb562-1" title="1">get_DFA_fits &lt;-<span class="st"> </span><span class="cf">function</span>(MLEobj,<span class="dt">dd=</span><span class="ot">NULL</span>,<span class="dt">alpha=</span><span class="fl">0.05</span>) {</a>
-<a class="sourceLine" id="cb562-2" title="2">  <span class="co">## empty list for results</span></a>
-<a class="sourceLine" id="cb562-3" title="3">  fits &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
-<a class="sourceLine" id="cb562-4" title="4">  <span class="co">## extra stuff for var() calcs</span></a>
-<a class="sourceLine" id="cb562-5" title="5">  Ey &lt;-<span class="st"> </span>MARSS<span class="op">:::</span><span class="kw">MARSShatyt</span>(MLEobj)</a>
-<a class="sourceLine" id="cb562-6" title="6">  <span class="co">## model params</span></a>
-<a class="sourceLine" id="cb562-7" title="7">    ZZ &lt;-<span class="st"> </span><span class="kw">coef</span>(MLEobj, <span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>Z</a>
-<a class="sourceLine" id="cb562-8" title="8">    <span class="co">## number of obs ts</span></a>
-<a class="sourceLine" id="cb562-9" title="9">    nn &lt;-<span class="st"> </span><span class="kw">dim</span>(Ey<span class="op">$</span>ytT)[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb562-10" title="10">    <span class="co">## number of time steps</span></a>
-<a class="sourceLine" id="cb562-11" title="11">    TT &lt;-<span class="st"> </span><span class="kw">dim</span>(Ey<span class="op">$</span>ytT)[<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb562-12" title="12">    <span class="co">## get the inverse of the rotation matrix</span></a>
-<a class="sourceLine" id="cb562-13" title="13">    H_inv &lt;-<span class="st"> </span><span class="kw">varimax</span>(ZZ)<span class="op">$</span>rotmat</a>
-<a class="sourceLine" id="cb562-14" title="14">    <span class="co">## check for covars</span></a>
-<a class="sourceLine" id="cb562-15" title="15">    <span class="cf">if</span>(<span class="op">!</span><span class="kw">is.null</span>(dd)) {</a>
-<a class="sourceLine" id="cb562-16" title="16">      DD &lt;-<span class="st"> </span><span class="kw">coef</span>(MLEobj, <span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>D</a>
-<a class="sourceLine" id="cb562-17" title="17">      <span class="co">## model expectation</span></a>
-<a class="sourceLine" id="cb562-18" title="18">      fits<span class="op">$</span>ex &lt;-<span class="st"> </span>ZZ <span class="op">%*%</span><span class="st"> </span>H_inv <span class="op">%*%</span><span class="st"> </span>MLEobj<span class="op">$</span>states <span class="op">+</span><span class="st"> </span>DD <span class="op">%*%</span><span class="st"> </span>dd</a>
-<a class="sourceLine" id="cb562-19" title="19">    } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb562-20" title="20">      <span class="co">## model expectation</span></a>
-<a class="sourceLine" id="cb562-21" title="21">      fits<span class="op">$</span>ex &lt;-<span class="st"> </span>ZZ <span class="op">%*%</span><span class="st"> </span>H_inv <span class="op">%*%</span><span class="st"> </span>MLEobj<span class="op">$</span>states</a>
-<a class="sourceLine" id="cb562-22" title="22">    }</a>
-<a class="sourceLine" id="cb562-23" title="23">    <span class="co">## Var in model fits</span></a>
-<a class="sourceLine" id="cb562-24" title="24">    VtT &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(MLEobj)<span class="op">$</span>VtT</a>
-<a class="sourceLine" id="cb562-25" title="25">    VV &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb562-26" title="26">    <span class="cf">for</span>(tt <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</a>
-<a class="sourceLine" id="cb562-27" title="27">      RZVZ &lt;-<span class="st"> </span><span class="kw">coef</span>(MLEobj, <span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R <span class="op">-</span><span class="st"> </span>ZZ<span class="op">%*%</span>VtT[,,tt]<span class="op">%*%</span><span class="kw">t</span>(ZZ)</a>
-<a class="sourceLine" id="cb562-28" title="28">      SS &lt;-<span class="st"> </span>Ey<span class="op">$</span>yxtT[,,tt] <span class="op">-</span><span class="st"> </span>Ey<span class="op">$</span>ytT[,tt,drop=<span class="ot">FALSE</span>] <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(MLEobj<span class="op">$</span>states[,tt,<span class="dt">drop=</span><span class="ot">FALSE</span>])</a>
-<a class="sourceLine" id="cb562-29" title="29">      VV &lt;-<span class="st"> </span><span class="kw">cbind</span>(VV,<span class="kw">diag</span>(RZVZ <span class="op">+</span><span class="st"> </span>SS<span class="op">%*%</span><span class="kw">t</span>(ZZ) <span class="op">+</span><span class="st"> </span>ZZ<span class="op">%*%</span><span class="kw">t</span>(SS)))</a>
-<a class="sourceLine" id="cb562-30" title="30">      }</a>
-<a class="sourceLine" id="cb562-31" title="31">    SE &lt;-<span class="st"> </span><span class="kw">sqrt</span>(VV)</a>
-<a class="sourceLine" id="cb562-32" title="32">    <span class="co">## upper &amp; lower (1-alpha)% CI</span></a>
-<a class="sourceLine" id="cb562-33" title="33">    fits<span class="op">$</span>up &lt;-<span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span><span class="op">-</span>alpha<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span>SE <span class="op">+</span><span class="st"> </span>fits<span class="op">$</span>ex</a>
-<a class="sourceLine" id="cb562-34" title="34">    fits<span class="op">$</span>lo &lt;-<span class="st"> </span><span class="kw">qnorm</span>(alpha<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span>SE <span class="op">+</span><span class="st"> </span>fits<span class="op">$</span>ex</a>
-<a class="sourceLine" id="cb562-35" title="35">    <span class="kw">return</span>(fits)</a>
-<a class="sourceLine" id="cb562-36" title="36">}</a></code></pre></div>
+<div class="sourceCode" id="cb593"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb593-1" title="1">get_DFA_fits &lt;-<span class="st"> </span><span class="cf">function</span>(MLEobj, <span class="dt">dd =</span> <span class="ot">NULL</span>, <span class="dt">alpha =</span> <span class="fl">0.05</span>) {</a>
+<a class="sourceLine" id="cb593-2" title="2">    <span class="co">## empty list for results</span></a>
+<a class="sourceLine" id="cb593-3" title="3">    fits &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
+<a class="sourceLine" id="cb593-4" title="4">    <span class="co">## extra stuff for var() calcs</span></a>
+<a class="sourceLine" id="cb593-5" title="5">    Ey &lt;-<span class="st"> </span>MARSS<span class="op">:::</span><span class="kw">MARSShatyt</span>(MLEobj)</a>
+<a class="sourceLine" id="cb593-6" title="6">    <span class="co">## model params</span></a>
+<a class="sourceLine" id="cb593-7" title="7">    ZZ &lt;-<span class="st"> </span><span class="kw">coef</span>(MLEobj, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>Z</a>
+<a class="sourceLine" id="cb593-8" title="8">    <span class="co">## number of obs ts</span></a>
+<a class="sourceLine" id="cb593-9" title="9">    nn &lt;-<span class="st"> </span><span class="kw">dim</span>(Ey<span class="op">$</span>ytT)[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb593-10" title="10">    <span class="co">## number of time steps</span></a>
+<a class="sourceLine" id="cb593-11" title="11">    TT &lt;-<span class="st"> </span><span class="kw">dim</span>(Ey<span class="op">$</span>ytT)[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb593-12" title="12">    <span class="co">## get the inverse of the rotation matrix</span></a>
+<a class="sourceLine" id="cb593-13" title="13">    H_inv &lt;-<span class="st"> </span><span class="kw">varimax</span>(ZZ)<span class="op">$</span>rotmat</a>
+<a class="sourceLine" id="cb593-14" title="14">    <span class="co">## check for covars</span></a>
+<a class="sourceLine" id="cb593-15" title="15">    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(dd)) {</a>
+<a class="sourceLine" id="cb593-16" title="16">        DD &lt;-<span class="st"> </span><span class="kw">coef</span>(MLEobj, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>D</a>
+<a class="sourceLine" id="cb593-17" title="17">        <span class="co">## model expectation</span></a>
+<a class="sourceLine" id="cb593-18" title="18">        fits<span class="op">$</span>ex &lt;-<span class="st"> </span>ZZ <span class="op">%*%</span><span class="st"> </span>H_inv <span class="op">%*%</span><span class="st"> </span>MLEobj<span class="op">$</span>states <span class="op">+</span><span class="st"> </span>DD <span class="op">%*%</span><span class="st"> </span>dd</a>
+<a class="sourceLine" id="cb593-19" title="19">    } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb593-20" title="20">        <span class="co">## model expectation</span></a>
+<a class="sourceLine" id="cb593-21" title="21">        fits<span class="op">$</span>ex &lt;-<span class="st"> </span>ZZ <span class="op">%*%</span><span class="st"> </span>H_inv <span class="op">%*%</span><span class="st"> </span>MLEobj<span class="op">$</span>states</a>
+<a class="sourceLine" id="cb593-22" title="22">    }</a>
+<a class="sourceLine" id="cb593-23" title="23">    <span class="co">## Var in model fits</span></a>
+<a class="sourceLine" id="cb593-24" title="24">    VtT &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(MLEobj)<span class="op">$</span>VtT</a>
+<a class="sourceLine" id="cb593-25" title="25">    VV &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb593-26" title="26">    <span class="cf">for</span> (tt <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</a>
+<a class="sourceLine" id="cb593-27" title="27">        RZVZ &lt;-<span class="st"> </span><span class="kw">coef</span>(MLEobj, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R <span class="op">-</span><span class="st"> </span>ZZ <span class="op">%*%</span><span class="st"> </span>VtT[, </a>
+<a class="sourceLine" id="cb593-28" title="28">            , tt] <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(ZZ)</a>
+<a class="sourceLine" id="cb593-29" title="29">        SS &lt;-<span class="st"> </span>Ey<span class="op">$</span>yxtT[, , tt] <span class="op">-</span><span class="st"> </span>Ey<span class="op">$</span>ytT[, tt, drop =<span class="st"> </span><span class="ot">FALSE</span>] <span class="op">%*%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb593-30" title="30"><span class="st">            </span><span class="kw">t</span>(MLEobj<span class="op">$</span>states[, tt, <span class="dt">drop =</span> <span class="ot">FALSE</span>])</a>
+<a class="sourceLine" id="cb593-31" title="31">        VV &lt;-<span class="st"> </span><span class="kw">cbind</span>(VV, <span class="kw">diag</span>(RZVZ <span class="op">+</span><span class="st"> </span>SS <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(ZZ) <span class="op">+</span><span class="st"> </span>ZZ <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(SS)))</a>
+<a class="sourceLine" id="cb593-32" title="32">    }</a>
+<a class="sourceLine" id="cb593-33" title="33">    SE &lt;-<span class="st"> </span><span class="kw">sqrt</span>(VV)</a>
+<a class="sourceLine" id="cb593-34" title="34">    <span class="co">## upper &amp; lower (1-alpha)% CI</span></a>
+<a class="sourceLine" id="cb593-35" title="35">    fits<span class="op">$</span>up &lt;-<span class="st"> </span><span class="kw">qnorm</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span>alpha<span class="op">/</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>SE <span class="op">+</span><span class="st"> </span>fits<span class="op">$</span>ex</a>
+<a class="sourceLine" id="cb593-36" title="36">    fits<span class="op">$</span>lo &lt;-<span class="st"> </span><span class="kw">qnorm</span>(alpha<span class="op">/</span><span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>SE <span class="op">+</span><span class="st"> </span>fits<span class="op">$</span>ex</a>
+<a class="sourceLine" id="cb593-37" title="37">    <span class="kw">return</span>(fits)</a>
+<a class="sourceLine" id="cb593-38" title="38">}</a></code></pre></div>
 <p>Here are time series of the five phytoplankton groups (points) with the mean of the DFA fits (black line) and the 95% confidence intervals (gray lines).</p>
-<div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb563-1" title="1"><span class="co">## get model fits &amp; CI&#39;s</span></a>
-<a class="sourceLine" id="cb563-2" title="2">mod_fit &lt;-<span class="st"> </span><span class="kw">get_DFA_fits</span>(dfa_<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb563-3" title="3"><span class="co">## plot the fits</span></a>
-<a class="sourceLine" id="cb563-4" title="4">ylbl &lt;-<span class="st"> </span>phytoplankton</a>
-<a class="sourceLine" id="cb563-5" title="5"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(N_ts,<span class="dv">1</span>), <span class="dt">mai=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.7</span>,<span class="fl">0.1</span>,<span class="fl">0.1</span>), <span class="dt">omi=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb563-6" title="6"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>N_ts) {</a>
-<a class="sourceLine" id="cb563-7" title="7">  up &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>up[i,]</a>
-<a class="sourceLine" id="cb563-8" title="8">  mn &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>ex[i,]</a>
-<a class="sourceLine" id="cb563-9" title="9">  lo &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>lo[i,]</a>
-<a class="sourceLine" id="cb563-10" title="10">  <span class="kw">plot</span>(w_ts,mn,<span class="dt">xlab=</span><span class="st">&quot;&quot;</span>,<span class="dt">ylab=</span>ylbl[i],<span class="dt">xaxt=</span><span class="st">&quot;n&quot;</span>,<span class="dt">type=</span><span class="st">&quot;n&quot;</span>, <span class="dt">cex.lab=</span><span class="fl">1.2</span>,</a>
-<a class="sourceLine" id="cb563-11" title="11">       <span class="dt">ylim=</span><span class="kw">c</span>(<span class="kw">min</span>(lo),<span class="kw">max</span>(up)))</a>
-<a class="sourceLine" id="cb563-12" title="12">  <span class="kw">axis</span>(<span class="dv">1</span>,<span class="dv">12</span><span class="op">*</span>(<span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])<span class="op">+</span><span class="dv">1</span>,yr_frst<span class="op">+</span><span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb563-13" title="13">  <span class="kw">points</span>(w_ts,dat[i,], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>clr[i])</a>
-<a class="sourceLine" id="cb563-14" title="14">  <span class="kw">lines</span>(w_ts, up, <span class="dt">col=</span><span class="st">&quot;darkgray&quot;</span>)</a>
-<a class="sourceLine" id="cb563-15" title="15">  <span class="kw">lines</span>(w_ts, mn, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb563-16" title="16">  <span class="kw">lines</span>(w_ts, lo, <span class="dt">col=</span><span class="st">&quot;darkgray&quot;</span>)</a>
-<a class="sourceLine" id="cb563-17" title="17">}</a></code></pre></div>
+<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb594-1" title="1"><span class="co">## get model fits &amp; CI&#39;s</span></a>
+<a class="sourceLine" id="cb594-2" title="2">mod_fit &lt;-<span class="st"> </span><span class="kw">get_DFA_fits</span>(dfa_<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb594-3" title="3"><span class="co">## plot the fits</span></a>
+<a class="sourceLine" id="cb594-4" title="4">ylbl &lt;-<span class="st"> </span>phytoplankton</a>
+<a class="sourceLine" id="cb594-5" title="5"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(N_ts, <span class="dv">1</span>), <span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), <span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>, </a>
+<a class="sourceLine" id="cb594-6" title="6">    <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb594-7" title="7"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>N_ts) {</a>
+<a class="sourceLine" id="cb594-8" title="8">    up &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>up[i, ]</a>
+<a class="sourceLine" id="cb594-9" title="9">    mn &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>ex[i, ]</a>
+<a class="sourceLine" id="cb594-10" title="10">    lo &lt;-<span class="st"> </span>mod_fit<span class="op">$</span>lo[i, ]</a>
+<a class="sourceLine" id="cb594-11" title="11">    <span class="kw">plot</span>(w_ts, mn, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> ylbl[i], <span class="dt">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, </a>
+<a class="sourceLine" id="cb594-12" title="12">        <span class="dt">cex.lab =</span> <span class="fl">1.2</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(lo), <span class="kw">max</span>(up)))</a>
+<a class="sourceLine" id="cb594-13" title="13">    <span class="kw">axis</span>(<span class="dv">1</span>, <span class="dv">12</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>]) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, yr_frst <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])</a>
+<a class="sourceLine" id="cb594-14" title="14">    <span class="kw">points</span>(w_ts, dat[i, ], <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> clr[i])</a>
+<a class="sourceLine" id="cb594-15" title="15">    <span class="kw">lines</span>(w_ts, up, <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span>)</a>
+<a class="sourceLine" id="cb594-16" title="16">    <span class="kw">lines</span>(w_ts, mn, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb594-17" title="17">    <span class="kw">lines</span>(w_ts, lo, <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span>)</a>
+<a class="sourceLine" id="cb594-18" title="18">}</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:dfa-plot-dfa-fits"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/dfa-plot-dfa-fits-1.png" alt="Data and fits from the DFA model." width="80%" />
 <p class="caption">
@@ -544,6 +548,7 @@ Figure 10.4: Data and fits from the DFA model.
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -562,6 +567,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

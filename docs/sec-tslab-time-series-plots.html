@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4.1 Time series plots | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4.1 Time series plots | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -468,11 +469,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The second, <code>start</code>, specifies the first sample in terms of (<span class="math inline">\(day\)</span>, <span class="math inline">\(hour\)</span>), (<span class="math inline">\(year\)</span>, <span class="math inline">\(month\)</span>), etc. So, for example, if the data were collected monthly beginning in November of 1969, then <code>frequency=12</code> and <code>start=c(1969,11)</code>. If the data were collected annually, then you simply specify <code>start</code> as a scalar (<em>e.g.</em>, <code>start=1991</code>) and omit <code>frequency</code> (<em>i.e.</em>, R will set <code>frequency=1</code> by default).</p>
 <p>The Mauna Loa time series is collected monthly and begins in March of 1958, which we can get from the data themselves, and then pass to <code>ts()</code>.</p>
 <div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" title="1"><span class="co">## create a time series (ts) object from the CO2 data</span></a>
-<a class="sourceLine" id="cb207-2" title="2">co2 &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data=</span>CO2<span class="op">$</span>ppm, <span class="dt">frequency=</span><span class="dv">12</span>,</a>
-<a class="sourceLine" id="cb207-3" title="3">          <span class="dt">start=</span><span class="kw">c</span>(CO2[<span class="dv">1</span>,<span class="st">&quot;year&quot;</span>],CO2[<span class="dv">1</span>,<span class="st">&quot;month&quot;</span>]))</a></code></pre></div>
+<a class="sourceLine" id="cb207-2" title="2">co2 &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> CO2<span class="op">$</span>ppm, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(CO2[<span class="dv">1</span>, <span class="st">&quot;year&quot;</span>], </a>
+<a class="sourceLine" id="cb207-3" title="3">    CO2[<span class="dv">1</span>, <span class="st">&quot;month&quot;</span>]))</a></code></pre></div>
 <p>Now let’s plot the data using <code>plot.ts()</code>, which is designed specifically for <strong>ts</strong> objects like the one we just created above. It’s nice because we don’t need to specify any <span class="math inline">\(x\)</span>-values as they are taken directly from the <strong>ts</strong> object.</p>
 <div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" title="1"><span class="co">## plot the ts</span></a>
-<a class="sourceLine" id="cb208-2" title="2"><span class="kw">plot.ts</span>(co2, <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>],<span class="st">&quot; (ppm)&quot;</span>)))</a></code></pre></div>
+<a class="sourceLine" id="cb208-2" title="2"><span class="kw">plot.ts</span>(co2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>], <span class="st">&quot; (ppm)&quot;</span>)))</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotdata1"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotdata1-1.png" alt="Time series of the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i measured monthly from March 1958 to present." width="80%" />
@@ -485,22 +486,23 @@ Figure 4.1: Time series of the atmospheric CO<span class="math inline">\(_2\)</s
 <div id="sec-tslab-combining-and-plotting-multiple-textbfts-objects" class="section level3">
 <h3><span class="header-section-number">4.1.2</span> Combining and plotting multiple <strong>ts</strong> objects</h3>
 <p>Before we examine the CO<span class="math inline">\(_2\)</span> data further, however, let’s see a quick example of how you can combine and plot multiple time series together. We’ll use the <a href="#sec-tslab-data">data</a> on monthly mean temperature anomolies for the Northern Hemisphere (<code>Temp</code>). First convert <code>Temp</code> to a <code>ts</code> object.</p>
-<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1">temp.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data=</span>Temp<span class="op">$</span>Value, <span class="dt">frequency=</span><span class="dv">12</span>, <span class="dt">start=</span><span class="kw">c</span>(<span class="dv">1880</span>,<span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1">temp.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> Temp<span class="op">$</span>Value, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1880</span>, </a>
+<a class="sourceLine" id="cb209-2" title="2">    <span class="dv">1</span>))</a></code></pre></div>
 <p>Before we can plot the two time series together, however, we need to line up their time indices because the temperature data start in January of 1880, but the CO<span class="math inline">\(_2\)</span> data start in March of 1958. Fortunately, the <code>ts.intersect()</code> function makes this really easy once the data have been transformed to <strong>ts</strong> objects by trimming the data to a common time frame. Also, <code>ts.union()</code> works in a similar fashion, but it pads one or both series with the appropriate number of NA’s. Let’s try both.</p>
 <div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" title="1"><span class="co">## intersection (only overlapping times)</span></a>
-<a class="sourceLine" id="cb210-2" title="2">datI &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(co2,temp.ts)</a>
+<a class="sourceLine" id="cb210-2" title="2">datI &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(co2, temp.ts)</a>
 <a class="sourceLine" id="cb210-3" title="3"><span class="co">## dimensions of common-time data</span></a>
 <a class="sourceLine" id="cb210-4" title="4"><span class="kw">dim</span>(datI)</a></code></pre></div>
 <pre><code>[1] 682   2</code></pre>
 <div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb212-1" title="1"><span class="co">## union (all times)</span></a>
-<a class="sourceLine" id="cb212-2" title="2">datU &lt;-<span class="st"> </span><span class="kw">ts.union</span>(co2,temp.ts)</a>
+<a class="sourceLine" id="cb212-2" title="2">datU &lt;-<span class="st"> </span><span class="kw">ts.union</span>(co2, temp.ts)</a>
 <a class="sourceLine" id="cb212-3" title="3"><span class="co">## dimensions of all-time data</span></a>
 <a class="sourceLine" id="cb212-4" title="4"><span class="kw">dim</span>(datU)</a></code></pre></div>
 <pre><code>[1] 1647    2</code></pre>
 <p>As you can see, the intersection of the two data sets is much smaller than the union. If you compare them, you will see that the first 938 rows of <code>datU</code> contains <code>NA</code> in the <code>co2</code> column.</p>
 <p>It turns out that the regular <code>plot()</code> function in R is smart enough to recognize a <strong>ts</strong> object and use the information contained therein appropriately. Here’s how to plot the intersection of the two time series together with the y-axes on alternate sides (results are shown in Figure <a href="sec-tslab-time-series-plots.html#fig:tslab-plotdata2">4.2</a>):</p>
 <div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" title="1"><span class="co">## plot the ts</span></a>
-<a class="sourceLine" id="cb214-2" title="2"><span class="kw">plot</span>(datI, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">yax.flip=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb214-2" title="2"><span class="kw">plot</span>(datI, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotdata2"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotdata2-1.png" alt="Time series of the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) and the mean temperature index for the Northern Hemisphere (bottom) measured monthly from March 1958 to present." width="80%" />
@@ -532,6 +534,7 @@ Figure 4.2: Time series of the atmospheric CO<span class="math inline">\(_2\)</s
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -550,6 +553,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

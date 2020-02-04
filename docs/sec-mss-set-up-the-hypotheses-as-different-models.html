@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>7.8 Set up the hypotheses as different models | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="7.8 Set up the hypotheses as different models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,56 +462,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-mss-set-up-the-hypotheses-as-different-models" class="section level2">
 <h2><span class="header-section-number">7.8</span> Set up the hypotheses as different models</h2>
 <p>Only the <span class="math inline">\(\mathbf{Z}\)</span> matrices change for our model. We will set up a base model list used for all models.</p>
-<div class="sourceCode" id="cb467"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb467-1" title="1">mod.list =<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb467-2" title="2"><span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>,</a>
-<a class="sourceLine" id="cb467-3" title="3"><span class="dt">U =</span> <span class="st">&quot;unequal&quot;</span>,</a>
-<a class="sourceLine" id="cb467-4" title="4"><span class="dt">Q =</span> <span class="st">&quot;equalvarcov&quot;</span>,</a>
-<a class="sourceLine" id="cb467-5" title="5"><span class="dt">Z =</span> <span class="st">&quot;placeholder&quot;</span>,</a>
-<a class="sourceLine" id="cb467-6" title="6"><span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>,</a>
-<a class="sourceLine" id="cb467-7" title="7"><span class="dt">R =</span> <span class="st">&quot;diagonal and equal&quot;</span>,</a>
-<a class="sourceLine" id="cb467-8" title="8"><span class="dt">x0 =</span> <span class="st">&quot;unequal&quot;</span>,</a>
-<a class="sourceLine" id="cb467-9" title="9"><span class="dt">tinitx =</span> <span class="dv">0</span> )</a></code></pre></div>
+<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb491-1" title="1">mod.list =<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb491-2" title="2"><span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>,</a>
+<a class="sourceLine" id="cb491-3" title="3"><span class="dt">U =</span> <span class="st">&quot;unequal&quot;</span>,</a>
+<a class="sourceLine" id="cb491-4" title="4"><span class="dt">Q =</span> <span class="st">&quot;equalvarcov&quot;</span>,</a>
+<a class="sourceLine" id="cb491-5" title="5"><span class="dt">Z =</span> <span class="st">&quot;placeholder&quot;</span>,</a>
+<a class="sourceLine" id="cb491-6" title="6"><span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>,</a>
+<a class="sourceLine" id="cb491-7" title="7"><span class="dt">R =</span> <span class="st">&quot;diagonal and equal&quot;</span>,</a>
+<a class="sourceLine" id="cb491-8" title="8"><span class="dt">x0 =</span> <span class="st">&quot;unequal&quot;</span>,</a>
+<a class="sourceLine" id="cb491-9" title="9"><span class="dt">tinitx =</span> <span class="dv">0</span> )</a></code></pre></div>
 <p>Then we set up the <span class="math inline">\(\mathbf{Z}\)</span> matrices using the factor short-cut.</p>
-<div class="sourceCode" id="cb468"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb468-1" title="1">Z.models &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb468-2" title="2"><span class="dt">H1 =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="kw">rep</span>(<span class="st">&quot;ps&quot;</span>,<span class="dv">4</span>),<span class="st">&quot;ca&quot;</span>,<span class="st">&quot;ca&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;ps&quot;</span>)), </a>
-<a class="sourceLine" id="cb468-3" title="3"><span class="dt">H2 =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;coast&quot;</span>,<span class="dv">2</span>),<span class="kw">rep</span>(<span class="st">&quot;ps&quot;</span>,<span class="dv">4</span>),<span class="kw">rep</span>(<span class="st">&quot;coast&quot;</span>,<span class="dv">4</span>),<span class="st">&quot;ps&quot;</span>)), </a>
-<a class="sourceLine" id="cb468-4" title="4"><span class="dt">H3 =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;N&quot;</span>,<span class="dv">6</span>),<span class="st">&quot;S&quot;</span>,<span class="st">&quot;S&quot;</span>,<span class="st">&quot;N&quot;</span>,<span class="st">&quot;S&quot;</span>,<span class="st">&quot;N&quot;</span>)),</a>
-<a class="sourceLine" id="cb468-5" title="5"><span class="dt">H4 =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;nc&quot;</span>,<span class="st">&quot;nc&quot;</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;ps&quot;</span>,<span class="st">&quot;ps&quot;</span>,<span class="st">&quot;sc&quot;</span>,<span class="st">&quot;sc&quot;</span>,<span class="st">&quot;nc&quot;</span>,<span class="st">&quot;sc&quot;</span>,<span class="st">&quot;is&quot;</span>)),</a>
-<a class="sourceLine" id="cb468-6" title="6"><span class="dt">H5 =</span> <span class="kw">factor</span>(<span class="kw">rep</span>(<span class="st">&quot;pan&quot;</span>,<span class="dv">11</span>)),</a>
-<a class="sourceLine" id="cb468-7" title="7"><span class="dt">H6 =</span> <span class="kw">factor</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">11</span>) <span class="co">#site</span></a>
-<a class="sourceLine" id="cb468-8" title="8">)</a>
-<a class="sourceLine" id="cb468-9" title="9"><span class="kw">names</span>(Z.models) &lt;-<span class="st"> </span></a>
-<a class="sourceLine" id="cb468-10" title="10"><span class="st">     </span><span class="kw">c</span>(<span class="st">&quot;stock&quot;</span>,<span class="st">&quot;coast+PS&quot;</span>,<span class="st">&quot;N+S&quot;</span>,<span class="st">&quot;NC+strait+PS+SC&quot;</span>,<span class="st">&quot;panmictic&quot;</span>,<span class="st">&quot;site&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb492-1" title="1">Z.models &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb492-2" title="2"><span class="dt">H1 =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="kw">rep</span>(<span class="st">&quot;ps&quot;</span>,<span class="dv">4</span>),<span class="st">&quot;ca&quot;</span>,<span class="st">&quot;ca&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;pnw&quot;</span>,<span class="st">&quot;ps&quot;</span>)), </a>
+<a class="sourceLine" id="cb492-3" title="3"><span class="dt">H2 =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;coast&quot;</span>,<span class="dv">2</span>),<span class="kw">rep</span>(<span class="st">&quot;ps&quot;</span>,<span class="dv">4</span>),<span class="kw">rep</span>(<span class="st">&quot;coast&quot;</span>,<span class="dv">4</span>),<span class="st">&quot;ps&quot;</span>)), </a>
+<a class="sourceLine" id="cb492-4" title="4"><span class="dt">H3 =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="kw">rep</span>(<span class="st">&quot;N&quot;</span>,<span class="dv">6</span>),<span class="st">&quot;S&quot;</span>,<span class="st">&quot;S&quot;</span>,<span class="st">&quot;N&quot;</span>,<span class="st">&quot;S&quot;</span>,<span class="st">&quot;N&quot;</span>)),</a>
+<a class="sourceLine" id="cb492-5" title="5"><span class="dt">H4 =</span> <span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;nc&quot;</span>,<span class="st">&quot;nc&quot;</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;is&quot;</span>,<span class="st">&quot;ps&quot;</span>,<span class="st">&quot;ps&quot;</span>,<span class="st">&quot;sc&quot;</span>,<span class="st">&quot;sc&quot;</span>,<span class="st">&quot;nc&quot;</span>,<span class="st">&quot;sc&quot;</span>,<span class="st">&quot;is&quot;</span>)),</a>
+<a class="sourceLine" id="cb492-6" title="6"><span class="dt">H5 =</span> <span class="kw">factor</span>(<span class="kw">rep</span>(<span class="st">&quot;pan&quot;</span>,<span class="dv">11</span>)),</a>
+<a class="sourceLine" id="cb492-7" title="7"><span class="dt">H6 =</span> <span class="kw">factor</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">11</span>) <span class="co">#site</span></a>
+<a class="sourceLine" id="cb492-8" title="8">)</a>
+<a class="sourceLine" id="cb492-9" title="9"><span class="kw">names</span>(Z.models) &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb492-10" title="10"><span class="st">     </span><span class="kw">c</span>(<span class="st">&quot;stock&quot;</span>,<span class="st">&quot;coast+PS&quot;</span>,<span class="st">&quot;N+S&quot;</span>,<span class="st">&quot;NC+strait+PS+SC&quot;</span>,<span class="st">&quot;panmictic&quot;</span>,<span class="st">&quot;site&quot;</span>)</a></code></pre></div>
 <div id="sec-fit-models-hyp" class="section level3">
 <h3><span class="header-section-number">7.8.1</span> Fit the models</h3>
 <p>We loop through the models, fit and store the results:</p>
-<div class="sourceCode" id="cb469"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb469-1" title="1">out.tab &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
-<a class="sourceLine" id="cb469-2" title="2">fits &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
-<a class="sourceLine" id="cb469-3" title="3"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(Z.models)){</a>
-<a class="sourceLine" id="cb469-4" title="4">     mod.list<span class="op">$</span>Z &lt;-<span class="st"> </span>Z.models[[i]] </a>
-<a class="sourceLine" id="cb469-5" title="5">     fit &lt;-<span class="st"> </span>MARSS<span class="op">::</span><span class="kw">MARSS</span>(sealData, <span class="dt">model=</span>mod.list,</a>
-<a class="sourceLine" id="cb469-6" title="6">            <span class="dt">silent=</span><span class="ot">TRUE</span>, <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">maxit=</span><span class="dv">1000</span>))</a>
-<a class="sourceLine" id="cb469-7" title="7">     out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">H=</span><span class="kw">names</span>(Z.models)[i], </a>
-<a class="sourceLine" id="cb469-8" title="8">            <span class="dt">logLik=</span>fit<span class="op">$</span>logLik, <span class="dt">AICc=</span>fit<span class="op">$</span>AICc, </a>
-<a class="sourceLine" id="cb469-9" title="9">            <span class="dt">num.param=</span>fit<span class="op">$</span>num.params,</a>
-<a class="sourceLine" id="cb469-10" title="10">            <span class="dt">m=</span><span class="kw">length</span>(<span class="kw">unique</span>(Z.models[[i]])),</a>
-<a class="sourceLine" id="cb469-11" title="11">            <span class="dt">num.iter=</span>fit<span class="op">$</span>numIter, </a>
-<a class="sourceLine" id="cb469-12" title="12">            <span class="dt">converged=</span><span class="op">!</span>fit<span class="op">$</span>convergence)</a>
-<a class="sourceLine" id="cb469-13" title="13">     out.tab &lt;-<span class="st"> </span><span class="kw">rbind</span>(out.tab,out)</a>
-<a class="sourceLine" id="cb469-14" title="14">     fits &lt;-<span class="st"> </span><span class="kw">c</span>(fits,<span class="kw">list</span>(fit))</a>
-<a class="sourceLine" id="cb469-15" title="15">}</a></code></pre></div>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb493-1" title="1">out.tab &lt;-<span class="st"> </span><span class="ot">NULL</span></a>
+<a class="sourceLine" id="cb493-2" title="2">fits &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
+<a class="sourceLine" id="cb493-3" title="3"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(Z.models)) {</a>
+<a class="sourceLine" id="cb493-4" title="4">    mod.list<span class="op">$</span>Z &lt;-<span class="st"> </span>Z.models[[i]]</a>
+<a class="sourceLine" id="cb493-5" title="5">    fit &lt;-<span class="st"> </span>MARSS<span class="op">::</span><span class="kw">MARSS</span>(sealData, <span class="dt">model =</span> mod.list, <span class="dt">silent =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb493-6" title="6">        <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1000</span>))</a>
+<a class="sourceLine" id="cb493-7" title="7">    out &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">H =</span> <span class="kw">names</span>(Z.models)[i], <span class="dt">logLik =</span> fit<span class="op">$</span>logLik, </a>
+<a class="sourceLine" id="cb493-8" title="8">        <span class="dt">AICc =</span> fit<span class="op">$</span>AICc, <span class="dt">num.param =</span> fit<span class="op">$</span>num.params, <span class="dt">m =</span> <span class="kw">length</span>(<span class="kw">unique</span>(Z.models[[i]])), </a>
+<a class="sourceLine" id="cb493-9" title="9">        <span class="dt">num.iter =</span> fit<span class="op">$</span>numIter, <span class="dt">converged =</span> <span class="op">!</span>fit<span class="op">$</span>convergence)</a>
+<a class="sourceLine" id="cb493-10" title="10">    out.tab &lt;-<span class="st"> </span><span class="kw">rbind</span>(out.tab, out)</a>
+<a class="sourceLine" id="cb493-11" title="11">    fits &lt;-<span class="st"> </span><span class="kw">c</span>(fits, <span class="kw">list</span>(fit))</a>
+<a class="sourceLine" id="cb493-12" title="12">}</a></code></pre></div>
 <p>We will use AICc and AIC weights to summarize the data support for the different hypotheses. First we will sort the fits based on AICc:</p>
-<div class="sourceCode" id="cb470"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb470-1" title="1">min.AICc &lt;-<span class="st"> </span><span class="kw">order</span>(out.tab<span class="op">$</span>AICc)</a>
-<a class="sourceLine" id="cb470-2" title="2">out.tab<span class="fl">.1</span> &lt;-<span class="st"> </span>out.tab[min.AICc,]</a></code></pre></div>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb494-1" title="1">min.AICc &lt;-<span class="st"> </span><span class="kw">order</span>(out.tab<span class="op">$</span>AICc)</a>
+<a class="sourceLine" id="cb494-2" title="2">out.tab<span class="fl">.1</span> &lt;-<span class="st"> </span>out.tab[min.AICc, ]</a></code></pre></div>
 <p>Next we add the <span class="math inline">\(\Delta\)</span>AICc values by subtracting the lowest AICc:</p>
-<div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb471-1" title="1">out.tab<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>,</a>
-<a class="sourceLine" id="cb471-2" title="2">           <span class="dt">delta.AICc=</span>out.tab<span class="fl">.1</span><span class="op">$</span>AICc<span class="op">-</span>out.tab<span class="fl">.1</span><span class="op">$</span>AICc[<span class="dv">1</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb495-1" title="1">out.tab<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>, <span class="dt">delta.AICc =</span> out.tab<span class="fl">.1</span><span class="op">$</span>AICc <span class="op">-</span><span class="st"> </span>out.tab<span class="fl">.1</span><span class="op">$</span>AICc[<span class="dv">1</span>])</a></code></pre></div>
 <p>Relative likelihood is defined as <span class="math inline">\(\,\text{exp}(-\Delta \mathrm{AICc}/2)\)</span>.</p>
-<div class="sourceCode" id="cb472"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb472-1" title="1">out.tab<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>, </a>
-<a class="sourceLine" id="cb472-2" title="2">           <span class="dt">rel.like=</span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span><span class="op">*</span>out.tab<span class="fl">.1</span><span class="op">$</span>delta.AICc<span class="op">/</span><span class="dv">2</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb496-1" title="1">out.tab<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>, <span class="dt">rel.like =</span> <span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span> <span class="op">*</span><span class="st"> </span>out.tab<span class="fl">.1</span><span class="op">$</span>delta.AICc<span class="op">/</span><span class="dv">2</span>))</a></code></pre></div>
 <p>The AIC weight for a model is its relative likelihood divided by the sum of all the relative likelihoods.</p>
-<div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb473-1" title="1">out.tab<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>,</a>
-<a class="sourceLine" id="cb473-2" title="2">          <span class="dt">AIC.weight =</span> out.tab<span class="fl">.1</span><span class="op">$</span>rel.like<span class="op">/</span><span class="kw">sum</span>(out.tab<span class="fl">.1</span><span class="op">$</span>rel.like))</a></code></pre></div>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb497-1" title="1">out.tab<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">cbind</span>(out.tab<span class="fl">.1</span>, <span class="dt">AIC.weight =</span> out.tab<span class="fl">.1</span><span class="op">$</span>rel.like<span class="op">/</span><span class="kw">sum</span>(out.tab<span class="fl">.1</span><span class="op">$</span>rel.like))</a></code></pre></div>
 <p>Let’s look at the model weights (<code>out.tab.1</code>):</p>
 <pre><code>               H delta.AICc AIC.weight converged
  NC+strait+PS+SC       0.00      0.979      TRUE
@@ -543,6 +538,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -561,6 +557,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

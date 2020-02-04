@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>6.7 Fitting with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="6.7 Fitting with Stan | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,65 +462,64 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-uss-fitting-with-stan" class="section level2">
 <h2><span class="header-section-number">6.7</span> Fitting with Stan</h2>
 <p>Let’s fit the same model with Stan using the <strong>rstan</strong> package. If you have not already, you will need to install the <strong>rstan</strong> package. This package depends on a number of other packages which should install automatically when you install <strong>rstan</strong>.</p>
-<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb432-1" title="1"><span class="kw">library</span>(datasets)</a>
-<a class="sourceLine" id="cb432-2" title="2"><span class="kw">library</span>(rstan)</a>
-<a class="sourceLine" id="cb432-3" title="3">y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(Nile)</a></code></pre></div>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb452-1" title="1"><span class="kw">library</span>(datasets)</a>
+<a class="sourceLine" id="cb452-2" title="2"><span class="kw">library</span>(rstan)</a>
+<a class="sourceLine" id="cb452-3" title="3">y &lt;-<span class="st"> </span><span class="kw">as.vector</span>(Nile)</a></code></pre></div>
 <p>First we write the model. We could write this to a file (recommended), but for this example, we write as a character object. Though the syntax is different from the JAGS code, it has many similarities. Note, unlike the JAGS, the Stan does <strong>not allow</strong> any NAs in your data. Thus we have to specify the location of the NAs in our data. The Nile data does not have NAs, but we want to write the code so it would work even if there were NAs.</p>
-<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb433-1" title="1">scode &lt;-<span class="st"> &quot;</span></a>
-<a class="sourceLine" id="cb433-2" title="2"><span class="st">data {</span></a>
-<a class="sourceLine" id="cb433-3" title="3"><span class="st">  int&lt;lower=0&gt; TT;</span></a>
-<a class="sourceLine" id="cb433-4" title="4"><span class="st">  int&lt;lower=0&gt; n_pos; // number of non-NA values</span></a>
-<a class="sourceLine" id="cb433-5" title="5"><span class="st">  int&lt;lower=0&gt; indx_pos[n_pos]; // index of the non-NA values</span></a>
-<a class="sourceLine" id="cb433-6" title="6"><span class="st">  vector[n_pos] y;</span></a>
-<a class="sourceLine" id="cb433-7" title="7"><span class="st">}</span></a>
-<a class="sourceLine" id="cb433-8" title="8"><span class="st">parameters {</span></a>
-<a class="sourceLine" id="cb433-9" title="9"><span class="st">  real x0;</span></a>
-<a class="sourceLine" id="cb433-10" title="10"><span class="st">  real u;</span></a>
-<a class="sourceLine" id="cb433-11" title="11"><span class="st">  vector[TT] pro_dev;</span></a>
-<a class="sourceLine" id="cb433-12" title="12"><span class="st">  real&lt;lower=0&gt; sd_q;</span></a>
-<a class="sourceLine" id="cb433-13" title="13"><span class="st">  real&lt;lower=0&gt; sd_r;</span></a>
-<a class="sourceLine" id="cb433-14" title="14"><span class="st">}</span></a>
-<a class="sourceLine" id="cb433-15" title="15"><span class="st">transformed parameters {</span></a>
-<a class="sourceLine" id="cb433-16" title="16"><span class="st">  vector[TT] x;</span></a>
-<a class="sourceLine" id="cb433-17" title="17"><span class="st">  x[1] = x0 + u + pro_dev[1];</span></a>
-<a class="sourceLine" id="cb433-18" title="18"><span class="st">  for(i in 2:TT) {</span></a>
-<a class="sourceLine" id="cb433-19" title="19"><span class="st">    x[i] = x[i-1] + u + pro_dev[i];</span></a>
-<a class="sourceLine" id="cb433-20" title="20"><span class="st">  }</span></a>
-<a class="sourceLine" id="cb433-21" title="21"><span class="st">}</span></a>
-<a class="sourceLine" id="cb433-22" title="22"><span class="st">model {</span></a>
-<a class="sourceLine" id="cb433-23" title="23"><span class="st">  x0 ~ normal(y[1],10);</span></a>
-<a class="sourceLine" id="cb433-24" title="24"><span class="st">  u ~ normal(0,2);</span></a>
-<a class="sourceLine" id="cb433-25" title="25"><span class="st">  sd_q ~ cauchy(0,5);</span></a>
-<a class="sourceLine" id="cb433-26" title="26"><span class="st">  sd_r ~ cauchy(0,5);</span></a>
-<a class="sourceLine" id="cb433-27" title="27"><span class="st">  pro_dev ~ normal(0, sd_q);</span></a>
-<a class="sourceLine" id="cb433-28" title="28"><span class="st">  for(i in 1:n_pos){</span></a>
-<a class="sourceLine" id="cb433-29" title="29"><span class="st">    y[i] ~ normal(x[indx_pos[i]], sd_r);</span></a>
-<a class="sourceLine" id="cb433-30" title="30"><span class="st">  }</span></a>
-<a class="sourceLine" id="cb433-31" title="31"><span class="st">}</span></a>
-<a class="sourceLine" id="cb433-32" title="32"><span class="st">generated quantities {</span></a>
-<a class="sourceLine" id="cb433-33" title="33"><span class="st">  vector[n_pos] log_lik;</span></a>
-<a class="sourceLine" id="cb433-34" title="34"><span class="st">  for (i in 1:n_pos) log_lik[i] = normal_lpdf(y[i] | x[indx_pos[i]], sd_r);</span></a>
-<a class="sourceLine" id="cb433-35" title="35"><span class="st">}</span></a>
-<a class="sourceLine" id="cb433-36" title="36"><span class="st">&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb453-1" title="1">scode &lt;-<span class="st"> &quot;</span></a>
+<a class="sourceLine" id="cb453-2" title="2"><span class="st">data {</span></a>
+<a class="sourceLine" id="cb453-3" title="3"><span class="st">  int&lt;lower=0&gt; TT;</span></a>
+<a class="sourceLine" id="cb453-4" title="4"><span class="st">  int&lt;lower=0&gt; n_pos; // number of non-NA values</span></a>
+<a class="sourceLine" id="cb453-5" title="5"><span class="st">  int&lt;lower=0&gt; indx_pos[n_pos]; // index of the non-NA values</span></a>
+<a class="sourceLine" id="cb453-6" title="6"><span class="st">  vector[n_pos] y;</span></a>
+<a class="sourceLine" id="cb453-7" title="7"><span class="st">}</span></a>
+<a class="sourceLine" id="cb453-8" title="8"><span class="st">parameters {</span></a>
+<a class="sourceLine" id="cb453-9" title="9"><span class="st">  real x0;</span></a>
+<a class="sourceLine" id="cb453-10" title="10"><span class="st">  real u;</span></a>
+<a class="sourceLine" id="cb453-11" title="11"><span class="st">  vector[TT] pro_dev;</span></a>
+<a class="sourceLine" id="cb453-12" title="12"><span class="st">  real&lt;lower=0&gt; sd_q;</span></a>
+<a class="sourceLine" id="cb453-13" title="13"><span class="st">  real&lt;lower=0&gt; sd_r;</span></a>
+<a class="sourceLine" id="cb453-14" title="14"><span class="st">}</span></a>
+<a class="sourceLine" id="cb453-15" title="15"><span class="st">transformed parameters {</span></a>
+<a class="sourceLine" id="cb453-16" title="16"><span class="st">  vector[TT] x;</span></a>
+<a class="sourceLine" id="cb453-17" title="17"><span class="st">  x[1] = x0 + u + pro_dev[1];</span></a>
+<a class="sourceLine" id="cb453-18" title="18"><span class="st">  for(i in 2:TT) {</span></a>
+<a class="sourceLine" id="cb453-19" title="19"><span class="st">    x[i] = x[i-1] + u + pro_dev[i];</span></a>
+<a class="sourceLine" id="cb453-20" title="20"><span class="st">  }</span></a>
+<a class="sourceLine" id="cb453-21" title="21"><span class="st">}</span></a>
+<a class="sourceLine" id="cb453-22" title="22"><span class="st">model {</span></a>
+<a class="sourceLine" id="cb453-23" title="23"><span class="st">  x0 ~ normal(y[1],10);</span></a>
+<a class="sourceLine" id="cb453-24" title="24"><span class="st">  u ~ normal(0,2);</span></a>
+<a class="sourceLine" id="cb453-25" title="25"><span class="st">  sd_q ~ cauchy(0,5);</span></a>
+<a class="sourceLine" id="cb453-26" title="26"><span class="st">  sd_r ~ cauchy(0,5);</span></a>
+<a class="sourceLine" id="cb453-27" title="27"><span class="st">  pro_dev ~ normal(0, sd_q);</span></a>
+<a class="sourceLine" id="cb453-28" title="28"><span class="st">  for(i in 1:n_pos){</span></a>
+<a class="sourceLine" id="cb453-29" title="29"><span class="st">    y[i] ~ normal(x[indx_pos[i]], sd_r);</span></a>
+<a class="sourceLine" id="cb453-30" title="30"><span class="st">  }</span></a>
+<a class="sourceLine" id="cb453-31" title="31"><span class="st">}</span></a>
+<a class="sourceLine" id="cb453-32" title="32"><span class="st">generated quantities {</span></a>
+<a class="sourceLine" id="cb453-33" title="33"><span class="st">  vector[n_pos] log_lik;</span></a>
+<a class="sourceLine" id="cb453-34" title="34"><span class="st">  for (i in 1:n_pos) log_lik[i] = normal_lpdf(y[i] | x[indx_pos[i]], sd_r);</span></a>
+<a class="sourceLine" id="cb453-35" title="35"><span class="st">}</span></a>
+<a class="sourceLine" id="cb453-36" title="36"><span class="st">&quot;</span></a></code></pre></div>
 <p>Then we call <code>stan()</code> and pass in the data, names of parameter we wish to have returned, and information on number of chains, samples (iter), and thinning. The output is verbose (hidden here) and may have some warnings.</p>
-<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb434-1" title="1"><span class="co"># We pass in the non-NA ys as vector</span></a>
-<a class="sourceLine" id="cb434-2" title="2">ypos &lt;-<span class="st"> </span>y[<span class="op">!</span><span class="kw">is.na</span>(y)]</a>
-<a class="sourceLine" id="cb434-3" title="3">n_pos &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="op">!</span><span class="kw">is.na</span>(y)) <span class="co">#number on non-NA ys</span></a>
-<a class="sourceLine" id="cb434-4" title="4">indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(y)) <span class="co">#index on the non-NAs</span></a>
-<a class="sourceLine" id="cb434-5" title="5">mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, </a>
-<a class="sourceLine" id="cb434-6" title="6">  <span class="dt">data =</span> <span class="kw">list</span>(<span class="st">&quot;y&quot;</span>=ypos, <span class="st">&quot;TT&quot;</span>=<span class="kw">length</span>(y), <span class="st">&quot;n_pos&quot;</span>=n_pos, <span class="st">&quot;indx_pos&quot;</span>=indx_pos), </a>
-<a class="sourceLine" id="cb434-7" title="7">  <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>,<span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>),</a>
-<a class="sourceLine" id="cb434-8" title="8">  <span class="dt">chains =</span> <span class="dv">3</span>, <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">thin =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb454-1" title="1"><span class="co"># We pass in the non-NA ys as vector</span></a>
+<a class="sourceLine" id="cb454-2" title="2">ypos &lt;-<span class="st"> </span>y[<span class="op">!</span><span class="kw">is.na</span>(y)]</a>
+<a class="sourceLine" id="cb454-3" title="3">n_pos &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="op">!</span><span class="kw">is.na</span>(y))  <span class="co">#number on non-NA ys</span></a>
+<a class="sourceLine" id="cb454-4" title="4">indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(y))  <span class="co">#index on the non-NAs</span></a>
+<a class="sourceLine" id="cb454-5" title="5">mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> ypos, </a>
+<a class="sourceLine" id="cb454-6" title="6">    <span class="dt">TT =</span> <span class="kw">length</span>(y), <span class="dt">n_pos =</span> n_pos, <span class="dt">indx_pos =</span> indx_pos), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>, </a>
+<a class="sourceLine" id="cb454-7" title="7">    <span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">chains =</span> <span class="dv">3</span>, <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">thin =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p>We use <code>extract()</code> to extract the parameters from the fitted model and we can plot. The estimated level is <code>x</code> and we will plot that with the 95% credible intervals.</p>
-<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb435-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod)</a>
-<a class="sourceLine" id="cb435-2" title="2">pred_mean &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, mean)</a>
-<a class="sourceLine" id="cb435-3" title="3">pred_lo &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>)</a>
-<a class="sourceLine" id="cb435-4" title="4">pred_hi &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>)</a>
-<a class="sourceLine" id="cb435-5" title="5"><span class="kw">plot</span>(pred_mean, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, </a>
-<a class="sourceLine" id="cb435-6" title="6">     <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(pred_mean, pred_lo, pred_hi)), <span class="dt">ylab =</span> <span class="st">&quot;Nile River Level&quot;</span>)</a>
-<a class="sourceLine" id="cb435-7" title="7"><span class="kw">lines</span>(pred_lo)</a>
-<a class="sourceLine" id="cb435-8" title="8"><span class="kw">lines</span>(pred_hi)</a>
-<a class="sourceLine" id="cb435-9" title="9"><span class="kw">points</span>(y, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb455-1" title="1">pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod)</a>
+<a class="sourceLine" id="cb455-2" title="2">pred_mean &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, mean)</a>
+<a class="sourceLine" id="cb455-3" title="3">pred_lo &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>)</a>
+<a class="sourceLine" id="cb455-4" title="4">pred_hi &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>)</a>
+<a class="sourceLine" id="cb455-5" title="5"><span class="kw">plot</span>(pred_mean, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(pred_mean, </a>
+<a class="sourceLine" id="cb455-6" title="6">    pred_lo, pred_hi)), <span class="dt">ylab =</span> <span class="st">&quot;Nile River Level&quot;</span>)</a>
+<a class="sourceLine" id="cb455-7" title="7"><span class="kw">lines</span>(pred_lo)</a>
+<a class="sourceLine" id="cb455-8" title="8"><span class="kw">lines</span>(pred_hi)</a>
+<a class="sourceLine" id="cb455-9" title="9"><span class="kw">points</span>(y, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-stan-ar-level"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-stan-ar-level-1.png" alt="Estimated level and 95 percent credible intervals.  Blue dots are the actual Nile River levels." width="80%" />
 <p class="caption">
@@ -527,13 +527,12 @@ Figure 6.7: Estimated level and 95 percent credible intervals. Blue dots are the
 </p>
 </div>
 <p>Here is a <code>ggplot()</code> version of the plot.</p>
-<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb436-1" title="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb436-2" title="2">nile &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y=</span>y, <span class="dt">year=</span><span class="dv">1871</span><span class="op">:</span><span class="dv">1970</span>)</a>
-<a class="sourceLine" id="cb436-3" title="3">h &lt;-<span class="st"> </span><span class="kw">ggplot</span>(nile, <span class="kw">aes</span>(year))</a>
-<a class="sourceLine" id="cb436-4" title="4">h <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> pred_lo, <span class="dt">ymax =</span> pred_hi), <span class="dt">fill =</span> <span class="st">&quot;grey70&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb436-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_mean), <span class="dt">size=</span><span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb436-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> y), <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb436-7" title="7"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Nile River level&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb456-1" title="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb456-2" title="2">nile &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">y =</span> y, <span class="dt">year =</span> <span class="dv">1871</span><span class="op">:</span><span class="dv">1970</span>)</a>
+<a class="sourceLine" id="cb456-3" title="3">h &lt;-<span class="st"> </span><span class="kw">ggplot</span>(nile, <span class="kw">aes</span>(year))</a>
+<a class="sourceLine" id="cb456-4" title="4">h <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> pred_lo, <span class="dt">ymax =</span> pred_hi), <span class="dt">fill =</span> <span class="st">&quot;grey70&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb456-5" title="5"><span class="st">    </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_mean), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> y), </a>
+<a class="sourceLine" id="cb456-6" title="6">    <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Nile River level&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-stan-ar-level-ggplot"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-stan-ar-level-ggplot-1.png" alt="Estimated level and 95 percent credible intervals" width="80%" />
 <p class="caption">
@@ -541,15 +540,15 @@ Figure 6.8: Estimated level and 95 percent credible intervals
 </p>
 </div>
 <p>We can plot the histogram of the samples against the values estimated via maximum likelihood.</p>
-<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb437-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb437-2" title="2"><span class="kw">hist</span>(pars<span class="op">$</span>x0)</a>
-<a class="sourceLine" id="cb437-3" title="3"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb437-4" title="4"><span class="kw">hist</span>(pars<span class="op">$</span>u)</a>
-<a class="sourceLine" id="cb437-5" title="5"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb437-6" title="6"><span class="kw">hist</span>(<span class="kw">log</span>(pars<span class="op">$</span>sd_q<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb437-7" title="7"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb437-8" title="8"><span class="kw">hist</span>(<span class="kw">log</span>(pars<span class="op">$</span>sd_r<span class="op">^</span><span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb437-9" title="9"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb457-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb457-2" title="2"><span class="kw">hist</span>(pars<span class="op">$</span>x0)</a>
+<a class="sourceLine" id="cb457-3" title="3"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb457-4" title="4"><span class="kw">hist</span>(pars<span class="op">$</span>u)</a>
+<a class="sourceLine" id="cb457-5" title="5"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb457-6" title="6"><span class="kw">hist</span>(<span class="kw">log</span>(pars<span class="op">$</span>sd_q<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb457-7" title="7"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb457-8" title="8"><span class="kw">hist</span>(<span class="kw">log</span>(pars<span class="op">$</span>sd_r<span class="op">^</span><span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb457-9" title="9"><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-stan-hist-pars"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-stan-hist-pars-1.png" alt="Histogram of the parameter samples versus the estimate (red line) from maximum likelihood." width="80%" />
 <p class="caption">
@@ -579,6 +578,7 @@ Figure 6.9: Histogram of the parameter samples versus the estimate (red line) fr
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -597,6 +597,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

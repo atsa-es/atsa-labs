@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2.6 Seasonal effect as a factor | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2.6 Seasonal effect as a factor | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -473,7 +474,7 @@ stack.loss_i = \alpha_2 + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2)
 \end{equation}\]</span>
 etc.</p>
 <p>We add a column to our dataframe to account for season:</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">qtr=</span><span class="kw">paste</span>(<span class="kw">rep</span>(<span class="st">&quot;qtr&quot;</span>,n),<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">qtr =</span> <span class="kw">paste</span>(<span class="kw">rep</span>(<span class="st">&quot;qtr&quot;</span>, n), <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</a>
 <a class="sourceLine" id="cb170-2" title="2">dat</a></code></pre></div>
 <pre><code>  Air.Flow Water.Temp Acid.Conc. stack.loss reg owner  qtr
 1       80         27         89         42   n     s qtr1
@@ -481,21 +482,21 @@ etc.</p>
 3       75         25         90         37   n     s qtr3
 4       62         24         87         28   s     a qtr4</code></pre>
 <p>And we can easily fit this model with <code>lm()</code>.</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" title="1"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data=</span>dat))</a></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" title="1"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data =</span> dat))</a></code></pre></div>
 <pre><code>qtrqtr1 qtrqtr2 qtrqtr3 qtrqtr4 
      42      37      37      28 </code></pre>
 <p>The -1 is added to the <code>lm()</code> call to get rid of <span class="math inline">\(\alpha\)</span>. We just want the <span class="math inline">\(\alpha_1\)</span>, <span class="math inline">\(\alpha_2\)</span>, etc. intercepts coming from our quarters.</p>
 <p>For comparison look at</p>
-<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" title="1"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>qtr, <span class="dt">data=</span>dat))</a></code></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" title="1"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>qtr, <span class="dt">data =</span> dat))</a></code></pre></div>
 <pre><code>(Intercept)     qtrqtr2     qtrqtr3     qtrqtr4 
          42          -5          -5         -14 </code></pre>
 <p>Why does it look like that when -1 is missing from the <code>lm()</code> call? Where did the intercept for quarter 1 go and why are the other intercepts so much smaller?</p>
 <div id="sec-mlr-season-form1" class="section level3">
 <h3><span class="header-section-number">2.6.1</span> Seasonal intercepts written in Form 1</h3>
 <p>Remembering that <code>lm()</code> puts models in Form 1, look at the <span class="math inline">\(\mathbf{Z}\)</span> matrix for Form 1:</p>
-<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" title="1">fit4=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data=</span>dat)</a>
-<a class="sourceLine" id="cb176-2" title="2">Z=<span class="kw">model.matrix</span>(fit4)</a>
-<a class="sourceLine" id="cb176-3" title="3">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" title="1">fit4 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data =</span> dat)</a>
+<a class="sourceLine" id="cb176-2" title="2">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit4)</a>
+<a class="sourceLine" id="cb176-3" title="3">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</a></code></pre></div>
 <pre><code>  qtrqtr1 qtrqtr2 qtrqtr3 qtrqtr4
 1       1       0       0       0
 2       0       1       0       0
@@ -512,9 +513,9 @@ etc.</p>
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}\]</span></p>
 <p>Compare to the model that <code>lm()</code> is using when the intercept included. What does this model look like written in matrix form?</p>
-<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" title="1">fit5=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>qtr, <span class="dt">data=</span>dat)</a>
-<a class="sourceLine" id="cb178-2" title="2">Z=<span class="kw">model.matrix</span>(fit5)</a>
-<a class="sourceLine" id="cb178-3" title="3">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" title="1">fit5 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>qtr, <span class="dt">data =</span> dat)</a>
+<a class="sourceLine" id="cb178-2" title="2">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit5)</a>
+<a class="sourceLine" id="cb178-3" title="3">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</a></code></pre></div>
 <pre><code>  (Intercept) qtrqtr2 qtrqtr3 qtrqtr4
 1           1       0       0       0
 2           1       1       0       0
@@ -561,6 +562,7 @@ etc.</p>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -579,6 +581,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

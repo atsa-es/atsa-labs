@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2.2 Matrix Form 1 | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2.2 Matrix Form 1 | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -477,9 +478,9 @@ You should work through the matrix algebra to make sure you understand why Equat
 \mathbf{y} = \mathbf{Z}\mathbf{x} + \mathbf{e}
 \end{equation}\]</span>
 where <span class="math inline">\(\mathbf{x}\)</span> are our parameters, <span class="math inline">\(\mathbf{y}\)</span> are our response variables, and <span class="math inline">\(\mathbf{Z}\)</span> are our explanatory variables (with a 1 column for the intercept). The <code>lm()</code> function uses Form 1, and we can recover the <span class="math inline">\(\mathbf{Z}\)</span> matrix for Form 1 by using the <code>model.matrix()</code> function on the output from a <code>lm()</code> call:</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1">fit=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>Air.Flow, <span class="dt">data=</span>dat)</a>
-<a class="sourceLine" id="cb123-2" title="2">Z=<span class="kw">model.matrix</span>(fit)</a>
-<a class="sourceLine" id="cb123-3" title="3">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1">fit =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>Air.Flow, <span class="dt">data =</span> dat)</a>
+<a class="sourceLine" id="cb123-2" title="2">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit)</a>
+<a class="sourceLine" id="cb123-3" title="3">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</a></code></pre></div>
 <pre><code>  (Intercept) Air.Flow
 1           1       80
 2           1       80
@@ -519,13 +520,13 @@ Under that assumption, the expected value of <span class="math inline">\((\mathb
 \mathbf{x} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y}
 \end{equation*}\]</span></p>
 <p>Let’s try that with R and compare to what you get with <code>lm()</code>:</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb125-2" title="2">Z=<span class="kw">cbind</span>(<span class="dv">1</span>,dat<span class="op">$</span>Air.Flow) <span class="co">#or use model.matrix() to get Z</span></a>
-<a class="sourceLine" id="cb125-3" title="3"><span class="kw">solve</span>(<span class="kw">t</span>(Z)<span class="op">%*%</span>Z)<span class="op">%*%</span><span class="kw">t</span>(Z)<span class="op">%*%</span>y</a></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb125-2" title="2">Z =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, dat<span class="op">$</span>Air.Flow)  <span class="co">#or use model.matrix() to get Z</span></a>
+<a class="sourceLine" id="cb125-3" title="3"><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y</a></code></pre></div>
 <pre><code>            [,1]
 [1,] -11.6159170
 [2,]   0.6412918</code></pre>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>Air.Flow, <span class="dt">data=</span>dat))</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>Air.Flow, <span class="dt">data =</span> dat))</a></code></pre></div>
 <pre><code>(Intercept)    Air.Flow 
 -11.6159170   0.6412918 </code></pre>
 <p>As you see, you get the same values.</p>
@@ -538,7 +539,8 @@ Under that assumption, the expected value of <span class="math inline">\((\mathb
 stack.loss_i = \alpha + \beta_1 air_i + \beta_2 water_i + \beta_3 acid_i + e_i 
 \end{equation}\]</span>
 With <code>lm()</code>, we can fit this with</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1">fit1.mult=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>Water.Temp <span class="op">+</span><span class="st"> </span>Acid.Conc., <span class="dt">data=</span>dat)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1">fit1.mult =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>Water.Temp <span class="op">+</span><span class="st"> </span>Acid.Conc., </a>
+<a class="sourceLine" id="cb129-2" title="2">    <span class="dt">data =</span> dat)</a></code></pre></div>
 <p>Written in matrix form (Form 1), this is
 <span class="math display" id="eq:stackloss-form1-mult">\[\begin{equation}
 \tag{2.5}
@@ -550,7 +552,7 @@ With <code>lm()</code>, we can fit this with</p>
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
 \end{equation}\]</span>
 Now <span class="math inline">\(\mathbf{Z}\)</span> is a matrix with 4 columns and <span class="math inline">\(\mathbf{x}\)</span> is a column vector with 4 rows. We can show the <span class="math inline">\(\mathbf{Z}\)</span> matrix again directly from our <code>lm()</code> fit:</p>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1">Z=<span class="kw">model.matrix</span>(fit1.mult)</a>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit1.mult)</a>
 <a class="sourceLine" id="cb130-2" title="2">Z</a></code></pre></div>
 <pre><code>  (Intercept) Air.Flow Water.Temp Acid.Conc.
 1           1       80         27         89
@@ -560,10 +562,10 @@ Now <span class="math inline">\(\mathbf{Z}\)</span> is a matrix with 4 columns a
 attr(,&quot;assign&quot;)
 [1] 0 1 2 3</code></pre>
 <p>We can solve for <span class="math inline">\(\mathbf{x}\)</span> just like before and compare to what we get with <code>lm()</code>:</p>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" title="1">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb132-2" title="2">Z=<span class="kw">cbind</span>(<span class="dv">1</span>,dat<span class="op">$</span>Air.Flow, dat<span class="op">$</span>Water.Temp, dat<span class="op">$</span>Acid.Conc)</a>
-<a class="sourceLine" id="cb132-3" title="3"><span class="co">#or Z=model.matrix(fit2)</span></a>
-<a class="sourceLine" id="cb132-4" title="4"><span class="kw">solve</span>(<span class="kw">t</span>(Z)<span class="op">%*%</span>Z)<span class="op">%*%</span><span class="kw">t</span>(Z)<span class="op">%*%</span>y</a></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" title="1">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb132-2" title="2">Z =<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, dat<span class="op">$</span>Air.Flow, dat<span class="op">$</span>Water.Temp, dat<span class="op">$</span>Acid.Conc)</a>
+<a class="sourceLine" id="cb132-3" title="3"><span class="co"># or Z=model.matrix(fit2)</span></a>
+<a class="sourceLine" id="cb132-4" title="4"><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y</a></code></pre></div>
 <pre><code>            [,1]
 [1,] -524.904762
 [2,]   -1.047619
@@ -595,9 +597,9 @@ attr(,&quot;assign&quot;)
 This is just the transpose of Form 1. Work through the matrix algebra to make sure you understand why Equation <a href="sec-mlr-form1.html#eq:stackloss-form1b">(2.6)</a> is Equation <a href="sec-mlr-lr1.html#eq:stacklossi">(2.1)</a> for all the <span class="math inline">\(i\)</span> data points together and why it is equal to the transpose of Equation <a href="sec-mlr-form1.html#eq:stackloss-form1">(2.2)</a>. You’ll need the relationship <span class="math inline">\((\mathbf{A}\mathbf{B})^\top=\mathbf{B}^\top \mathbf{A}^\top\)</span>.</p>
 <p>Let’s write Equation <a href="sec-mlr-form1.html#eq:stackloss-form1b">(2.6)</a> as <span class="math inline">\(\mathbf{y} = \mathbf{D}\mathbf{d}\)</span>, where <span class="math inline">\(\mathbf{D}\)</span> contains our parameters. Then we can solve for <span class="math inline">\(\mathbf{D}\)</span> following the steps in Section <a href="sec-mlr-form1.html#sec-mlr-solveform1">2.2.1</a> but multiplying from the right instead of from the left. Work through the steps to show that
 <span class="math inline">\(\mathbf{d} = \mathbf{y}\mathbf{d}^\top(\mathbf{d}\mathbf{d}^\top)^{-1}\)</span>.</p>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" title="1">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">nrow=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb136-2" title="2">d=<span class="kw">rbind</span>(<span class="dv">1</span>, dat<span class="op">$</span>Air.Flow, dat<span class="op">$</span>Water.Temp, dat<span class="op">$</span>Acid.Conc)</a>
-<a class="sourceLine" id="cb136-3" title="3">y<span class="op">%*%</span><span class="kw">t</span>(d)<span class="op">%*%</span><span class="kw">solve</span>(d<span class="op">%*%</span><span class="kw">t</span>(d))</a></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" title="1">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">nrow =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb136-2" title="2">d =<span class="st"> </span><span class="kw">rbind</span>(<span class="dv">1</span>, dat<span class="op">$</span>Air.Flow, dat<span class="op">$</span>Water.Temp, dat<span class="op">$</span>Acid.Conc)</a>
+<a class="sourceLine" id="cb136-3" title="3">y <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(d) <span class="op">%*%</span><span class="st"> </span><span class="kw">solve</span>(d <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(d))</a></code></pre></div>
 <pre><code>          [,1]      [,2]     [,3] [,4]
 [1,] -524.9048 -1.047619 7.619048    5</code></pre>
 <div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" title="1"><span class="kw">coef</span>(fit1.mult)</a></code></pre></div>
@@ -627,6 +629,7 @@ This is just the transpose of Form 1. Work through the matrix algebra to make su
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -645,6 +648,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

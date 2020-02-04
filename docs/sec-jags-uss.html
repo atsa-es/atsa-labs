@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12.6 Univariate state space model | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12.6 Univariate state space model | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -471,63 +472,66 @@ y_t \sim \,\text{N}(x_t, r)
 \tag{12.8}
 \end{equation}\]</span>
 In the two above models, <span class="math inline">\(q\)</span> is the process variance and <span class="math inline">\(r\)</span> is the observation error variance. The JAGS code will use the standard deviation (square root) of these. The code to produce and fit this model is below:</p>
-<div class="sourceCode" id="cb622"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb622-1" title="1"><span class="co"># 5. MAKE THE SS MODEL a univariate random walk</span></a>
-<a class="sourceLine" id="cb622-2" title="2"><span class="co"># no covariates. </span></a>
-<a class="sourceLine" id="cb622-3" title="3"></a>
-<a class="sourceLine" id="cb622-4" title="4">model.loc=(<span class="st">&quot;ss_model.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb622-5" title="5">jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb622-6" title="6"><span class="st">model {  </span></a>
-<a class="sourceLine" id="cb622-7" title="7"><span class="st">   # priors on parameters</span></a>
-<a class="sourceLine" id="cb622-8" title="8"><span class="st">   mu ~ dnorm(0, 0.01); </span></a>
-<a class="sourceLine" id="cb622-9" title="9"><span class="st">   tau.pro ~ dgamma(0.001,0.001); </span></a>
-<a class="sourceLine" id="cb622-10" title="10"><span class="st">   sd.q &lt;- 1/sqrt(tau.pro);</span></a>
-<a class="sourceLine" id="cb622-11" title="11"><span class="st">   tau.obs ~ dgamma(0.001,0.001);</span></a>
-<a class="sourceLine" id="cb622-12" title="12"><span class="st">   sd.r &lt;- 1/sqrt(tau.obs); </span></a>
-<a class="sourceLine" id="cb622-13" title="13"><span class="st">   phi ~ dnorm(0,1);</span></a>
-<a class="sourceLine" id="cb622-14" title="14"><span class="st">   </span></a>
-<a class="sourceLine" id="cb622-15" title="15"><span class="st">   X[1] &lt;- mu;</span></a>
-<a class="sourceLine" id="cb622-16" title="16"><span class="st">   predY[1] &lt;- X[1];</span></a>
-<a class="sourceLine" id="cb622-17" title="17"><span class="st">   Y[1] ~ dnorm(X[1], tau.obs);</span></a>
-<a class="sourceLine" id="cb622-18" title="18"></a>
-<a class="sourceLine" id="cb622-19" title="19"><span class="st">   for(i in 2:N) {</span></a>
-<a class="sourceLine" id="cb622-20" title="20"><span class="st">      predX[i] &lt;- phi*X[i-1]; </span></a>
-<a class="sourceLine" id="cb622-21" title="21"><span class="st">      X[i] ~ dnorm(predX[i],tau.pro); # Process variation</span></a>
-<a class="sourceLine" id="cb622-22" title="22"><span class="st">      predY[i] &lt;- X[i];</span></a>
-<a class="sourceLine" id="cb622-23" title="23"><span class="st">      Y[i] ~ dnorm(X[i], tau.obs); # Observation variation</span></a>
-<a class="sourceLine" id="cb622-24" title="24"><span class="st">   }</span></a>
-<a class="sourceLine" id="cb622-25" title="25"><span class="st">}  </span></a>
-<a class="sourceLine" id="cb622-26" title="26"><span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)</a>
-<a class="sourceLine" id="cb622-27" title="27"></a>
-<a class="sourceLine" id="cb622-28" title="28">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N)</a>
-<a class="sourceLine" id="cb622-29" title="29">jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>,<span class="st">&quot;sd.r&quot;</span>,<span class="st">&quot;predY&quot;</span>,<span class="st">&quot;mu&quot;</span>)</a>
-<a class="sourceLine" id="cb622-30" title="30">mod_ss =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, </a>
-<a class="sourceLine" id="cb622-31" title="31"><span class="dt">n.burnin=</span><span class="dv">5000</span>, <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb650"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb650-1" title="1"><span class="co"># 5. MAKE THE SS MODEL a univariate random walk no</span></a>
+<a class="sourceLine" id="cb650-2" title="2"><span class="co"># covariates.</span></a>
+<a class="sourceLine" id="cb650-3" title="3"></a>
+<a class="sourceLine" id="cb650-4" title="4">model.loc =<span class="st"> </span>(<span class="st">&quot;ss_model.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb650-5" title="5">jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb650-6" title="6"><span class="st">model {  </span></a>
+<a class="sourceLine" id="cb650-7" title="7"><span class="st">   # priors on parameters</span></a>
+<a class="sourceLine" id="cb650-8" title="8"><span class="st">   mu ~ dnorm(0, 0.01); </span></a>
+<a class="sourceLine" id="cb650-9" title="9"><span class="st">   tau.pro ~ dgamma(0.001,0.001); </span></a>
+<a class="sourceLine" id="cb650-10" title="10"><span class="st">   sd.q &lt;- 1/sqrt(tau.pro);</span></a>
+<a class="sourceLine" id="cb650-11" title="11"><span class="st">   tau.obs ~ dgamma(0.001,0.001);</span></a>
+<a class="sourceLine" id="cb650-12" title="12"><span class="st">   sd.r &lt;- 1/sqrt(tau.obs); </span></a>
+<a class="sourceLine" id="cb650-13" title="13"><span class="st">   phi ~ dnorm(0,1);</span></a>
+<a class="sourceLine" id="cb650-14" title="14"><span class="st">   </span></a>
+<a class="sourceLine" id="cb650-15" title="15"><span class="st">   X[1] &lt;- mu;</span></a>
+<a class="sourceLine" id="cb650-16" title="16"><span class="st">   predY[1] &lt;- X[1];</span></a>
+<a class="sourceLine" id="cb650-17" title="17"><span class="st">   Y[1] ~ dnorm(X[1], tau.obs);</span></a>
+<a class="sourceLine" id="cb650-18" title="18"></a>
+<a class="sourceLine" id="cb650-19" title="19"><span class="st">   for(i in 2:N) {</span></a>
+<a class="sourceLine" id="cb650-20" title="20"><span class="st">      predX[i] &lt;- phi*X[i-1]; </span></a>
+<a class="sourceLine" id="cb650-21" title="21"><span class="st">      X[i] ~ dnorm(predX[i],tau.pro); # Process variation</span></a>
+<a class="sourceLine" id="cb650-22" title="22"><span class="st">      predY[i] &lt;- X[i];</span></a>
+<a class="sourceLine" id="cb650-23" title="23"><span class="st">      Y[i] ~ dnorm(X[i], tau.obs); # Observation variation</span></a>
+<a class="sourceLine" id="cb650-24" title="24"><span class="st">   }</span></a>
+<a class="sourceLine" id="cb650-25" title="25"><span class="st">}  </span></a>
+<a class="sourceLine" id="cb650-26" title="26"><span class="st">&quot;</span>, </a>
+<a class="sourceLine" id="cb650-27" title="27">    <span class="dt">file =</span> model.loc)</a>
+<a class="sourceLine" id="cb650-28" title="28"></a>
+<a class="sourceLine" id="cb650-29" title="29">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</a>
+<a class="sourceLine" id="cb650-30" title="30">jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>)</a>
+<a class="sourceLine" id="cb650-31" title="31">mod_ss =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </a>
+<a class="sourceLine" id="cb650-32" title="32">    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </a>
+<a class="sourceLine" id="cb650-33" title="33">    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <div id="sec-jags-covariates" class="section level3">
 <h3><span class="header-section-number">12.6.1</span> Including covariates</h3>
 <p>Returning to the first example of regression with the intercept only, we will introduce <code>Temp</code> as the covariate explaining our response variable <code>Wind</code>. Note that to include the covariate, we (1) modify the JAGS script to include a new coefficient—in this case <code>beta</code>, (2) update the predictive equation to include the effects of the new covariate, and (3) we include the new covariate in our named data list.</p>
-<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb623-1" title="1"><span class="co"># 6. Include some covariates in a linear regression</span></a>
-<a class="sourceLine" id="cb623-2" title="2"><span class="co"># Use temperature as a predictor of wind</span></a>
-<a class="sourceLine" id="cb623-3" title="3"></a>
-<a class="sourceLine" id="cb623-4" title="4">model.loc=(<span class="st">&quot;lm.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb623-5" title="5">jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb623-6" title="6"><span class="st">model {  </span></a>
-<a class="sourceLine" id="cb623-7" title="7"><span class="st">   mu ~ dnorm(0, 0.01); </span></a>
-<a class="sourceLine" id="cb623-8" title="8"><span class="st">   beta ~ dnorm(0,0.01);</span></a>
-<a class="sourceLine" id="cb623-9" title="9"><span class="st">   tau.obs ~ dgamma(0.001,0.001); </span></a>
-<a class="sourceLine" id="cb623-10" title="10"><span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span></a>
-<a class="sourceLine" id="cb623-11" title="11"><span class="st">   </span></a>
-<a class="sourceLine" id="cb623-12" title="12"><span class="st">   for(i in 1:N) {</span></a>
-<a class="sourceLine" id="cb623-13" title="13"><span class="st">      predY[i] &lt;- mu + C[i]*beta; </span></a>
-<a class="sourceLine" id="cb623-14" title="14"><span class="st">      Y[i] ~ dnorm(predY[i], tau.obs);</span></a>
-<a class="sourceLine" id="cb623-15" title="15"><span class="st">   }</span></a>
-<a class="sourceLine" id="cb623-16" title="16"><span class="st">}  </span></a>
-<a class="sourceLine" id="cb623-17" title="17"><span class="st">&quot;</span>,<span class="dt">file=</span>model.loc)</a>
-<a class="sourceLine" id="cb623-18" title="18"></a>
-<a class="sourceLine" id="cb623-19" title="19">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;Y&quot;</span>=Wind,<span class="st">&quot;N&quot;</span>=N,<span class="st">&quot;C&quot;</span>=Temp)</a>
-<a class="sourceLine" id="cb623-20" title="20">jags.params=<span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>,<span class="st">&quot;predY&quot;</span>,<span class="st">&quot;mu&quot;</span>,<span class="st">&quot;beta&quot;</span>)</a>
-<a class="sourceLine" id="cb623-21" title="21">mod_lm =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save=</span>jags.params, </a>
-<a class="sourceLine" id="cb623-22" title="22">        <span class="dt">model.file=</span>model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin=</span><span class="dv">5000</span>, </a>
-<a class="sourceLine" id="cb623-23" title="23">        <span class="dt">n.thin=</span><span class="dv">1</span>, <span class="dt">n.iter=</span><span class="dv">10000</span>, <span class="dt">DIC=</span><span class="ot">TRUE</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb651"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb651-1" title="1"><span class="co"># 6. Include some covariates in a linear regression Use</span></a>
+<a class="sourceLine" id="cb651-2" title="2"><span class="co"># temperature as a predictor of wind</span></a>
+<a class="sourceLine" id="cb651-3" title="3"></a>
+<a class="sourceLine" id="cb651-4" title="4">model.loc =<span class="st"> </span>(<span class="st">&quot;lm.txt&quot;</span>)</a>
+<a class="sourceLine" id="cb651-5" title="5">jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></a>
+<a class="sourceLine" id="cb651-6" title="6"><span class="st">model {  </span></a>
+<a class="sourceLine" id="cb651-7" title="7"><span class="st">   mu ~ dnorm(0, 0.01); </span></a>
+<a class="sourceLine" id="cb651-8" title="8"><span class="st">   beta ~ dnorm(0,0.01);</span></a>
+<a class="sourceLine" id="cb651-9" title="9"><span class="st">   tau.obs ~ dgamma(0.001,0.001); </span></a>
+<a class="sourceLine" id="cb651-10" title="10"><span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span></a>
+<a class="sourceLine" id="cb651-11" title="11"><span class="st">   </span></a>
+<a class="sourceLine" id="cb651-12" title="12"><span class="st">   for(i in 1:N) {</span></a>
+<a class="sourceLine" id="cb651-13" title="13"><span class="st">      predY[i] &lt;- mu + C[i]*beta; </span></a>
+<a class="sourceLine" id="cb651-14" title="14"><span class="st">      Y[i] ~ dnorm(predY[i], tau.obs);</span></a>
+<a class="sourceLine" id="cb651-15" title="15"><span class="st">   }</span></a>
+<a class="sourceLine" id="cb651-16" title="16"><span class="st">}  </span></a>
+<a class="sourceLine" id="cb651-17" title="17"><span class="st">&quot;</span>, </a>
+<a class="sourceLine" id="cb651-18" title="18">    <span class="dt">file =</span> model.loc)</a>
+<a class="sourceLine" id="cb651-19" title="19"></a>
+<a class="sourceLine" id="cb651-20" title="20">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N, <span class="dt">C =</span> Temp)</a>
+<a class="sourceLine" id="cb651-21" title="21">jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;beta&quot;</span>)</a>
+<a class="sourceLine" id="cb651-22" title="22">mod_lm =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </a>
+<a class="sourceLine" id="cb651-23" title="23">    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </a>
+<a class="sourceLine" id="cb651-24" title="24">    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 </div>
             </section>
@@ -552,6 +556,7 @@ In the two above models, <span class="math inline">\(q\)</span> is the process v
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -570,6 +575,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

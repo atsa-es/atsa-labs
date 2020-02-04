@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>9.8 Forecasting | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="9.8 Forecasting | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -537,28 +538,28 @@ and <span class="math inline">\(f_{t}\)</span> is the upwelling index at <span c
 <p>Working from Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-dlmFore3">(9.31)</a>, we can compute the expected value of the forecast at time <span class="math inline">\(t\)</span> and its variance using the Kalman filter. For the expectation, we need <span class="math inline">\(\mathbf{F}_{t}^\top\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>.
 <span class="math inline">\(\mathbf{F}_t^\top\)</span> is called <span class="math inline">\(\mathbf{Z}_t\)</span> in MARSS notation. The one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, the <span class="math inline">\(\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>, are calculated as part of the Kalman filter algorithm—they are termed <span class="math inline">\(\tilde{x}_t^{t-1}\)</span> in MARSS notation and stored as <code>xtt1</code> in the list produced by the <code>MARSSkfss()</code> Kalman filter function.</p>
 <p>Using the <code>Z</code> defined in <a href="sec-dlm-salmon-example.html#sec-dlm-salmon-example">9.6</a>, we compute the mean forecast as follows:</p>
-<div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb535-1" title="1"><span class="co"># get list of Kalman filter output</span></a>
-<a class="sourceLine" id="cb535-2" title="2">kf.out &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)</a>
-<a class="sourceLine" id="cb535-3" title="3"><span class="co">## forecasts of regr parameters; 2xT matrix</span></a>
-<a class="sourceLine" id="cb535-4" title="4">eta &lt;-<span class="st"> </span>kf.out<span class="op">$</span>xtt1</a>
-<a class="sourceLine" id="cb535-5" title="5"><span class="co">## ts of E(forecasts)</span></a>
-<a class="sourceLine" id="cb535-6" title="6">fore.mean &lt;-<span class="st"> </span><span class="kw">vector</span>()</a>
-<a class="sourceLine" id="cb535-7" title="7"><span class="cf">for</span>(t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</a>
-<a class="sourceLine" id="cb535-8" title="8">  fore.mean[t] &lt;-<span class="st"> </span>Z[,,t] <span class="op">%*%</span><span class="st"> </span>eta[,t,drop=<span class="ot">FALSE</span>]</a>
-<a class="sourceLine" id="cb535-9" title="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb566"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb566-1" title="1"><span class="co"># get list of Kalman filter output</span></a>
+<a class="sourceLine" id="cb566-2" title="2">kf.out &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)</a>
+<a class="sourceLine" id="cb566-3" title="3"><span class="co">## forecasts of regr parameters; 2xT matrix</span></a>
+<a class="sourceLine" id="cb566-4" title="4">eta &lt;-<span class="st"> </span>kf.out<span class="op">$</span>xtt1</a>
+<a class="sourceLine" id="cb566-5" title="5"><span class="co">## ts of E(forecasts)</span></a>
+<a class="sourceLine" id="cb566-6" title="6">fore.mean &lt;-<span class="st"> </span><span class="kw">vector</span>()</a>
+<a class="sourceLine" id="cb566-7" title="7"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</a>
+<a class="sourceLine" id="cb566-8" title="8">    fore.mean[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span><span class="ot">FALSE</span>]</a>
+<a class="sourceLine" id="cb566-9" title="9">}</a></code></pre></div>
 <p>For the variance of the forecasts, we need
 <span class="math inline">\(\mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}\)</span>. As with the mean, <span class="math inline">\(\mathbf{F}^\top_t \equiv \mathbf{Z}_t\)</span>. The variances of the one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\text{Var}(\boldsymbol{\theta}_{t|t-1})\)</span>, are also calculated as part of the Kalman filter algorithm—they are stored as <code>Vtt1</code> in the list produced by the <code>MARSSkfss()</code> function. Lastly, the observation variance <span class="math inline">\(\hat{r}\)</span> was estimated when we fit the DLM to the data using <code>MARSS()</code> and can be extracted from the <code>dlm1</code> fit.</p>
 <p>Putting this together, we can compute the forecast variance:</p>
-<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb536-1" title="1"><span class="co"># variance of regr parameters; 1x2xT array</span></a>
-<a class="sourceLine" id="cb536-2" title="2">Phi &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Vtt1</a>
-<a class="sourceLine" id="cb536-3" title="3"><span class="co">## obs variance; 1x1 matrix</span></a>
-<a class="sourceLine" id="cb536-4" title="4">R.est &lt;-<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R</a>
-<a class="sourceLine" id="cb536-5" title="5"><span class="co">## ts of Var(forecasts)</span></a>
-<a class="sourceLine" id="cb536-6" title="6">fore.var &lt;-<span class="st"> </span><span class="kw">vector</span>()</a>
-<a class="sourceLine" id="cb536-7" title="7"><span class="cf">for</span>(t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</a>
-<a class="sourceLine" id="cb536-8" title="8">  tZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z[,,t],m,<span class="dv">1</span>) <span class="co">## transpose of Z</span></a>
-<a class="sourceLine" id="cb536-9" title="9">  fore.var[t] &lt;-<span class="st"> </span>Z[,,t] <span class="op">%*%</span><span class="st"> </span>Phi[,,t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est</a>
-<a class="sourceLine" id="cb536-10" title="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb567"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb567-1" title="1"><span class="co"># variance of regr parameters; 1x2xT array</span></a>
+<a class="sourceLine" id="cb567-2" title="2">Phi &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Vtt1</a>
+<a class="sourceLine" id="cb567-3" title="3"><span class="co">## obs variance; 1x1 matrix</span></a>
+<a class="sourceLine" id="cb567-4" title="4">R.est &lt;-<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R</a>
+<a class="sourceLine" id="cb567-5" title="5"><span class="co">## ts of Var(forecasts)</span></a>
+<a class="sourceLine" id="cb567-6" title="6">fore.var &lt;-<span class="st"> </span><span class="kw">vector</span>()</a>
+<a class="sourceLine" id="cb567-7" title="7"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</a>
+<a class="sourceLine" id="cb567-8" title="8">    tZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span></a>
+<a class="sourceLine" id="cb567-9" title="9">    fore.var[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est</a>
+<a class="sourceLine" id="cb567-10" title="10">}</a></code></pre></div>
 <p>Plots of the model mean forecasts with their estimated uncertainty are shown in Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:dlm-plotdlmForeLogit">9.3</a>. Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time <span class="math inline">\(t\)</span> based on data available only through time <span class="math inline">\(t-1\)</span>. In this case, however, MARSS is actually estimating the states at <span class="math inline">\(t=0\)</span> (<span class="math inline">\(\boldsymbol{\theta}_0\)</span>), which allows us to compute a forecast for the first time point.
 <!-- % forecast plot - logit space --></p>
 
@@ -602,6 +603,7 @@ Figure 9.4: Time series of survival data (blue dots) and model mean forecasts (t
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -620,6 +622,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

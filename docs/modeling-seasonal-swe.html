@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>11.3 Modeling Seasonal SWE | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="11.3 Modeling Seasonal SWE | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,9 +462,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="modeling-seasonal-swe" class="section level2">
 <h2><span class="header-section-number">11.3</span> Modeling Seasonal SWE</h2>
 <p>When we look at all months, we see that SWE is highly seasonal. Note October and November are missing for all years.</p>
-<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb594-1" title="1">swe.yr &lt;-<span class="st"> </span>snotel</a>
-<a class="sourceLine" id="cb594-2" title="2">swe.yr &lt;-<span class="st"> </span>swe.yr[swe.yr<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id,]</a>
-<a class="sourceLine" id="cb594-3" title="3">swe.yr<span class="op">$</span>Station &lt;-<span class="st"> </span><span class="kw">droplevels</span>(swe.yr<span class="op">$</span>Station)</a></code></pre></div>
+<div class="sourceCode" id="cb624"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb624-1" title="1">swe.yr &lt;-<span class="st"> </span>snotel</a>
+<a class="sourceLine" id="cb624-2" title="2">swe.yr &lt;-<span class="st"> </span>swe.yr[swe.yr<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id, ]</a>
+<a class="sourceLine" id="cb624-3" title="3">swe.yr<span class="op">$</span>Station &lt;-<span class="st"> </span><span class="kw">droplevels</span>(swe.yr<span class="op">$</span>Station)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-seasonal-swe-plot-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <!--
 An AR(2) or AR(1) model for the seasonal differences fits well for most of the time series.  The table shows the $\Delta AICc$ for different ARMA models for the seasonally differenced data in different locations.  AR(1) is within 2 of the AR(2) model in most cases and the AR(2) or AR(1) is best in all but 2 locations.
@@ -488,56 +489,42 @@ Sawmill Ridge         0.0821689    2.0908048    0.000000   1.3681235
 Tinkham Creek         5.4833530    1.5342261    0.000000   1.1318307
 -->
 <p>Set up the data matrix of monthly SNOTEL data:</p>
-<div class="sourceCode" id="cb595"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb595-1" title="1">dat.yr &lt;-<span class="st"> </span>snotel</a>
-<a class="sourceLine" id="cb595-2" title="2">dat.yr &lt;-<span class="st"> </span>dat.yr[dat.yr<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id,]</a>
-<a class="sourceLine" id="cb595-3" title="3">dat.yr<span class="op">$</span>Station &lt;-<span class="st"> </span><span class="kw">droplevels</span>(dat.yr<span class="op">$</span>Station)</a>
-<a class="sourceLine" id="cb595-4" title="4">dat.yr<span class="op">$</span>Month &lt;-<span class="st"> </span><span class="kw">factor</span>(dat.yr<span class="op">$</span>Month, <span class="dt">level=</span>month.abb)</a>
-<a class="sourceLine" id="cb595-5" title="5">dat.yr &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">acast</span>(dat.yr, Station <span class="op">~</span><span class="st"> </span>Year<span class="op">+</span>Month, <span class="dt">value.var=</span><span class="st">&quot;SWE&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb625-1" title="1">dat.yr &lt;-<span class="st"> </span>snotel</a>
+<a class="sourceLine" id="cb625-2" title="2">dat.yr &lt;-<span class="st"> </span>dat.yr[dat.yr<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id, ]</a>
+<a class="sourceLine" id="cb625-3" title="3">dat.yr<span class="op">$</span>Station &lt;-<span class="st"> </span><span class="kw">droplevels</span>(dat.yr<span class="op">$</span>Station)</a>
+<a class="sourceLine" id="cb625-4" title="4">dat.yr<span class="op">$</span>Month &lt;-<span class="st"> </span><span class="kw">factor</span>(dat.yr<span class="op">$</span>Month, <span class="dt">level =</span> month.abb)</a>
+<a class="sourceLine" id="cb625-5" title="5">dat.yr &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">acast</span>(dat.yr, Station <span class="op">~</span><span class="st"> </span>Year <span class="op">+</span><span class="st"> </span>Month, <span class="dt">value.var =</span> <span class="st">&quot;SWE&quot;</span>)</a></code></pre></div>
 <p>We will model the seasonal differences using a periodic model. The covariates are</p>
-<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb596-1" title="1">period &lt;-<span class="st"> </span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb596-2" title="2">TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.yr)[<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb596-3" title="3">cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT) <span class="op">/</span><span class="st"> </span>period)</a>
-<a class="sourceLine" id="cb596-4" title="4">sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT) <span class="op">/</span><span class="st"> </span>period)</a>
-<a class="sourceLine" id="cb596-5" title="5">c.seas &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t,sin.t)</a></code></pre></div>
+<div class="sourceCode" id="cb626"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb626-1" title="1">period &lt;-<span class="st"> </span><span class="dv">12</span></a>
+<a class="sourceLine" id="cb626-2" title="2">TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.yr)[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb626-3" title="3">cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</a>
+<a class="sourceLine" id="cb626-4" title="4">sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</a>
+<a class="sourceLine" id="cb626-5" title="5">c.seas &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t, sin.t)</a></code></pre></div>
 <div id="modeling-season-across-sites" class="section level3">
 <h3><span class="header-section-number">11.3.1</span> Modeling season across sites</h3>
 <p>We will create a state for the seasonal cycle and each station will have a scaled effect of that seasonal cycle. The observations will have the seasonal effect plus a mean and residuals (observation - season - mean) will be allowed to correlate across stations.</p>
-<div class="sourceCode" id="cb597"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb597-1" title="1">ns &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.yr)[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb597-2" title="2">B &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb597-3" title="3">Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb597-4" title="4">R &lt;-<span class="st"> &quot;unconstrained&quot;</span></a>
-<a class="sourceLine" id="cb597-5" title="5">U &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb597-6" title="6">x0 &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb597-7" title="7">Z &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">paste0</span>(<span class="st">&quot;z&quot;</span>,<span class="dv">1</span><span class="op">:</span>ns),ns,<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb597-8" title="8">A &lt;-<span class="st"> &quot;unequal&quot;</span></a>
-<a class="sourceLine" id="cb597-9" title="9">mod.list.dfa =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>B, <span class="dt">Z=</span>Z, <span class="dt">Q=</span>Q, <span class="dt">R=</span>R, <span class="dt">U=</span>U, <span class="dt">A=</span>A, <span class="dt">x0=</span>x0)</a>
-<a class="sourceLine" id="cb597-10" title="10">C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="st">&quot;c1&quot;</span>,<span class="st">&quot;c2&quot;</span>),<span class="dv">1</span>,<span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb597-11" title="11">c &lt;-<span class="st"> </span>c.seas</a>
-<a class="sourceLine" id="cb597-12" title="12">mod.list.seas &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B=</span>B, <span class="dt">U=</span>U, <span class="dt">Q=</span>Q, <span class="dt">A=</span>A, <span class="dt">R=</span>R, <span class="dt">Z=</span>Z, <span class="dt">C=</span>C, <span class="dt">c=</span>c, <span class="dt">x0=</span>x0, <span class="dt">tinitx=</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb627"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb627-1" title="1">ns &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.yr)[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb627-2" title="2">B &lt;-<span class="st"> &quot;zero&quot;</span></a>
+<a class="sourceLine" id="cb627-3" title="3">Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb627-4" title="4">R &lt;-<span class="st"> &quot;unconstrained&quot;</span></a>
+<a class="sourceLine" id="cb627-5" title="5">U &lt;-<span class="st"> &quot;zero&quot;</span></a>
+<a class="sourceLine" id="cb627-6" title="6">x0 &lt;-<span class="st"> &quot;zero&quot;</span></a>
+<a class="sourceLine" id="cb627-7" title="7">Z &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">paste0</span>(<span class="st">&quot;z&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns), ns, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb627-8" title="8">A &lt;-<span class="st"> &quot;unequal&quot;</span></a>
+<a class="sourceLine" id="cb627-9" title="9">mod.list.dfa =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Z =</span> Z, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">A =</span> A, </a>
+<a class="sourceLine" id="cb627-10" title="10">    <span class="dt">x0 =</span> x0)</a>
+<a class="sourceLine" id="cb627-11" title="11">C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="st">&quot;c1&quot;</span>, <span class="st">&quot;c2&quot;</span>), <span class="dv">1</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb627-12" title="12">c &lt;-<span class="st"> </span>c.seas</a>
+<a class="sourceLine" id="cb627-13" title="13">mod.list.seas &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">A =</span> A, <span class="dt">R =</span> R, <span class="dt">Z =</span> Z, </a>
+<a class="sourceLine" id="cb627-14" title="14">    <span class="dt">C =</span> C, <span class="dt">c =</span> c, <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> <span class="dv">0</span>)</a></code></pre></div>
 <p>Now we can fit the model:</p>
-<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb598-1" title="1">m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.yr, <span class="dv">1</span>, mean, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb598-2" title="2">fit.seas &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.yr, <span class="dt">model=</span>mod.list.seas, <span class="dt">control=</span><span class="kw">list</span>(<span class="dt">maxit=</span><span class="dv">500</span>), <span class="dt">inits=</span><span class="kw">list</span>(<span class="dt">A=</span><span class="kw">matrix</span>(m,ns,<span class="dv">1</span>)))</a></code></pre></div>
-<p>Figure () shows the seasonal estimate plus mean for each station. This is <span class="math inline">\(z_i x_i + a_i\)</span>.</p>
+<div class="sourceCode" id="cb628"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb628-1" title="1">m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.yr, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb628-2" title="2">fit.seas &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.yr, <span class="dt">model =</span> mod.list.seas, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">500</span>), </a>
+<a class="sourceLine" id="cb628-3" title="3">    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</a></code></pre></div>
+<p>Figure @ref{fig:mssmiss-seas} shows the seasonal estimate plus prediction intervals for each station. This is <span class="math inline">\(z_i x_i + a_i\)</span>. The prediction interval shows our estimate of the range of the data we would see around the seasonal estimate.</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-seas-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>The estimated SWE at each station is <span class="math inline">\(E(y_i|y_{1:T})\)</span>. This is the estimate conditioned on all the data and includes the seasonal component plus the information from the data from other stations. Because we estimated a <span class="math inline">\(\mathbf{R}\)</span> matrix with covariance, stations with data at time <span class="math inline">\(t\)</span> help inform the value of stations without data at time <span class="math inline">\(t\)</span>. Only years up to 1990 are shown, but the model is fit to all years.</p>
-<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb599-1" title="1"><span class="co">#this is the estimate of y conditioned on all the data</span></a>
-<a class="sourceLine" id="cb599-2" title="2">dd &lt;-<span class="st"> </span><span class="kw">MARSShatyt</span>(fit.seas)<span class="op">$</span>ytT</a>
-<a class="sourceLine" id="cb599-3" title="3"><span class="kw">rownames</span>(dd) &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat.yr)</a>
-<a class="sourceLine" id="cb599-4" title="4"><span class="kw">colnames</span>(dd) &lt;-<span class="st"> </span><span class="kw">colnames</span>(dat.yr)</a>
-<a class="sourceLine" id="cb599-5" title="5">ddd &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">melt</span>(dd)</a>
-<a class="sourceLine" id="cb599-6" title="6">ddd<span class="op">$</span>Var2 &lt;-<span class="st"> </span><span class="kw">factor</span>(ddd<span class="op">$</span>Var2, <span class="dt">levels=</span><span class="kw">paste0</span>(<span class="kw">rep</span>(<span class="dv">1981</span><span class="op">:</span><span class="dv">2013</span>,<span class="dt">each=</span><span class="dv">12</span>),<span class="st">&quot;_&quot;</span>, month.abb))</a>
-<a class="sourceLine" id="cb599-7" title="7"><span class="kw">colnames</span>(ddd) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Station&quot;</span>, <span class="st">&quot;Year_Month&quot;</span>, <span class="st">&quot;SWE&quot;</span>)</a>
-<a class="sourceLine" id="cb599-8" title="8">ddd &lt;-<span class="st"> </span>ddd[<span class="kw">order</span>(ddd<span class="op">$</span>Station, ddd<span class="op">$</span>Year_Month),]</a>
-<a class="sourceLine" id="cb599-9" title="9">ddd<span class="op">$</span>Date &lt;-<span class="st"> </span>swe.yr<span class="op">$</span>Date</a>
-<a class="sourceLine" id="cb599-10" title="10">ddd<span class="op">$</span>Year &lt;-<span class="st"> </span>swe.yr<span class="op">$</span>Year</a>
-<a class="sourceLine" id="cb599-11" title="11">ddd &lt;-<span class="st"> </span><span class="kw">subset</span>(ddd, Year<span class="op">&lt;</span><span class="dv">1990</span>)</a>
-<a class="sourceLine" id="cb599-12" title="12">p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> ddd) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb599-13" title="13"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x=</span>Date, <span class="dt">y=</span>SWE))</a>
-<a class="sourceLine" id="cb599-14" title="14">p &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data=</span><span class="kw">subset</span>(swe.yr, Year<span class="op">&lt;</span><span class="dv">1990</span>), </a>
-<a class="sourceLine" id="cb599-15" title="15">                    <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x=</span>Date, <span class="dt">y=</span>SWE))</a>
-<a class="sourceLine" id="cb599-16" title="16">p <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;SWE&quot;</span>)</a></code></pre></div>
-<pre><code>Warning: Removed 1250 rows containing missing values (geom_point).</code></pre>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-plotfit-seas-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>The estimated mean SWE at each station is <span class="math inline">\(E(y_i|y_{1:T})\)</span>. This is the estimate conditioned on all the data and includes the seasonal component plus the information from the data from other stations. Because we estimated a <span class="math inline">\(\mathbf{R}\)</span> matrix with covariance, stations with data at time <span class="math inline">\(t\)</span> help inform the value of stations without data at time <span class="math inline">\(t\)</span>. Only years up to 1990 are shown, but the model is fit to all years. The stations with no data before 1990 are being estimated based on the information in the later years when they do have data. We did not constrain the SWE to be positive, so negative estimates are possible and occurs in the months in which we have no SWE data (because there is no snow).</p>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-snotelplotstates-seas-1.png" width="80%" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -564,6 +551,7 @@ Tinkham Creek         5.4833530    1.5342261    0.000000   1.1318307
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -582,6 +570,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

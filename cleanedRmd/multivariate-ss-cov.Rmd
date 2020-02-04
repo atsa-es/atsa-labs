@@ -22,6 +22,12 @@ dat = t(fulldat[years,c("Greens", "Bluegreens")])
 covariates = t(fulldat[years,c("Temp", "TP")])
 ```
 
+Packages:
+```{r msscov-packages}
+library(MARSS)
+library(ggplot2)
+```
+
 ## Overview {#sec-msscov-overview}
 
 A multivariate autoregressive state-space (MARSS) model with covariate effects in both the process and observation components is written as:
@@ -394,7 +400,7 @@ for(i in 1:3) {
     plot.ts(residuals(get(modn))$model.residuals[j,], 
       ylab="Residual", main=phytos[j])
     abline(h=0, lty="dashed")
-    acf(residuals(get(modn))$model.residuals[j,])
+    acf(residuals(get(modn))$model.residuals[j,], na.action=na.pass)
     }
   }
 ```
@@ -409,46 +415,54 @@ for(i in 1:3) {
   plot.ts(residuals(get(modn))$model.residuals[j,], 
       ylab="Residual", main=phytos[j])
   abline(h=0, lty="dashed")
-  acf(residuals(get(modn))$model.residuals[j,])
+  acf(residuals(get(modn))$model.residuals[j,], na.action=na.pass)
 ```
 
 ## Homework data and discussion {#sec-msscov-hw-discussion}
 
-For these problems, use the following code to load in phytoplankton data, covariates, and z-score all the data.  Then use `dat` and `covars` directly in your code.
-```{r msscov-problems-dat}
-phytos <- c("Cryptomonas", "Diatoms", "Greens",
-            "Unicells", "Other.algae")
-yrs <- lakeWAplanktonTrans[,"Year"]%in%1985:1994
-dat <- t(lakeWAplanktonTrans[yrs,phytos])
+For these problems, use the following code to load in 1980-1994 phytoplankton data, covariates, and z-score all the data.  Run the code below and use `dat` and `covars` directly in your code.
+```{r msscov-problems-dat, results="hide"}
+library(MARSS)
+spp <- c("Cryptomonas", "Diatoms", "Greens",
+            "Unicells", "Other.algae","Daphnia")
+yrs <- lakeWAplanktonTrans[,"Year"]%in%1980:1994
+dat <- t(lakeWAplanktonTrans[yrs,spp])
 #z-score the data
 avg <- apply(dat, 1, mean, na.rm=TRUE)
 sd <- sqrt(apply(dat, 1, var, na.rm=TRUE))
 dat <- (dat-avg)/sd
-rownames(dat)=phytos
-#z-score the covariates
+rownames(dat)=spp
+#always check that the mean and variance are 1 after z-scoring
+apply(dat,1,mean, na.rm=TRUE) #this should be 0
+apply(dat,1,var, na.rm=TRUE) #this should be 1
+```
+
+For the covariates, you'll use temperature and TP.
+
+```{r msscov-problems-covar, results="hide"}
 covars <- rbind(Temp=lakeWAplanktonTrans[yrs,"Temp"],
                TP=lakeWAplanktonTrans[yrs,"TP"])
 avg <- apply(covars, 1, mean)
 sd <- sqrt(apply(covars, 1, var, na.rm=TRUE))
 covars <- (covars-avg)/sd
 rownames(covars) <- c("Temp","TP")
-
 #always check that the mean and variance are 1 after z-scoring
-apply(dat,1,mean, na.rm=TRUE) #this should be 0
-apply(dat,1,var, na.rm=TRUE) #this should be 1
+apply(covars,1,mean, na.rm=TRUE) #this should be 0
+apply(covars,1,var, na.rm=TRUE) #this should be 1
 ```
 
 Here are some guidelines to help you answer the questions:
 
 * Use a MARSS model that allows for both observation and process error.
-* Assume that the observation errors are independent and identically distributed. You can further assume that any process errors are independent from one another, but the variances differ by taxon.
+* Assume that the observation errors are independent and identically distributed with known variance of 0.10. 
+* Assume that the process errors are independent from one another, but the variances differ by taxon.
 * Assume that each group is an observation of its own process. This means `Z="identity"`.
-* Use `B="diagonal and unequal"`.  This implies that each of the taxa are operating under varying degrees of density-dependence, and that they do not interact with any of the other taxa.
-* All the data have been de-meaned and $\mathbf{Z}$ identity, therefore use `U="zero"` and `A="zero"`.  Make sure to check that the means of the data are 0 and the variance is 1.
-* Use `tinitx=0` (the default).  Do not change to `tinitx=1`.  You can try it to see what happens but answer the questions with `tinitx=0`.  Normally, `tinitx=1` will make your models fit more easily when you are estimating $\mathbf{B}$, but in this case it causes a problem.  Why does the $\mathbf{R}$ tend to go to zero when `tinitx=1` for the models we are fitting?
+* Use `B="diagonal and unequal"`.  This implies that each of the taxa are operating under varying degrees of density-dependence, and they are not allowed to interact.
+* All the data have been de-meaned and $\mathbf{Z}$ is identity, therefore use `U="zero"` and `A="zero"`.  Make sure to check that the means of the data are 0 and the variance is 1.
+* Use `tinitx=1`. It makes $\mathbf{B}$ estimation more stable. It goes in your model list.
 * Include a plot of residuals versus time and acf of residuals for each question. You only need to show these for the top (best) model if the question involves comparing multiple models.
 * Use AICc to compare models.
-* Some of the models do not converge, however use for the purpose of the homework, use the unconverged models.  Thus use the output from `MARSS()` without any additional arguments.  If you want, you can try using `control=list(maxit=1000)` to increase the number of iterations.  Or you can try `method="BFGS"` in your `MARSS()` call. This will use the BFGS optimization method, however it may throw an error for these data.
+* Some of the models may not converge, however use for the purpose of the homework, use the unconverged models.  Thus use the output from `MARSS()` without any additional arguments.  If you want, you can try using `control=list(maxit=1000)` to increase the number of iterations.  Or you can try `method="BFGS"` in your `MARSS()` call. This will use the BFGS optimization method, however it may throw an error for these data.
 
 \clearpage
 
@@ -458,10 +472,78 @@ Read Section \@ref(sec-msscov-hw-discussion) for the data and tips on answering 
 $$\mathbf{x}_t=\mathbf{B}\mathbf{x}_{t-1}+\mathbf{C}\mathbf{c}_t+\mathbf{w}_t$$
 The $\mathbf{C}\mathbf{c}_t+\mathbf{w}_t$ are the process errors and represent the growth rates (growth above or below what you would expect given $\mathbf{x}_{t-1}$).  Use your raw data in the MARSS model.  You do not need to difference the data to get at the growth rates since the process model is modeling that.
 
-1. How does month affect the mean phytoplankton population growth rates? Show a plot of mean growth rate versus month. Estimate seasonal effects without any covariate (Temp, TP) effects.
-2. It is likely that both temperature and total phosphorus (TP) affect phytoplankton population growth rates. Using MARSS models, evaluate which is the more important driver or if both are important. Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates.
-3. Evaluate whether the effect of temperature on phytoplankton manifests itself via their underlying physiology (by affecting algal growth rates and thus abundance) or because physical changes in the water stratification makes them easier/harder to sample in some months. Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates.
-4. Is there support for temperature or TP  affecting all functional groups' growth rates the same, or are the effects on one taxon different from another?
-5. Compare your results for questions 2-4 using an observation error only model, by using the `lm()` function.
-6. Then compare to a observation error only model with autocorrelated residuals using the `Arima()` function with the `xreg` argument.
-7. Compute a time-series cross-validation metric for the models and compare the results that you got using AICc for model comparison.
+1. How does month affect the mean phytoplankton population growth rates? Show a plot of the estimated mean growth rate versus month for each taxon using three approaches to estimate the month effect (factor, polynomial, Fourier series). Estimate seasonal effects without any covariate (Temp, TP) effects.
+
+2. It is likely that both temperature and total phosphorus (TP) affect phytoplankton population growth rates. Using MARSS models, estimate the effect of Temp and TP on growth rates of each taxon. 
+Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates. Make a plot of the point estimates of the Temp and TP effects with the 95% CIs added to the plot. `tidy()` is an easy way to get the parameters CIs.
+
+3. Estimate the Temp and TP effects using `B="unconstrained"`.  
+    a. Compare the $\mathbf{B}$ matrix for the fit from question 2 and from question 3.  Describe the species interactions modeled by the $\mathbf{B}$ matrix when `B="unconstrained"`.  How is it different than the $\mathbf{B}$ matrix from question 2? Note, you can retrieve the matrix using `coef(fit, type="matrix")$B`.
+    b. Do the Temp and TP effects change when you use `B="unconstrained"`? Make sure to look at the CIs also.
+
+4. Using MARSS models, evaluate which (Temp or TP) is the more important driver or if both are important. Again, leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates. Compare two approaches: comparison of effect sizes in a model with both Temp and TP and model selection using a set of models.
+
+5. Evaluate whether the effect of temperature (Temp) on the taxa manifests itself via their underlying physiology (by affecting growth rates and thus abundance) or because physical changes in the water stratification makes them easier/harder to sample in some months. Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as the covariates. For TP, assume it always affects growth rates, never the observation errors.
+
+6. Is there support for temperature or TP  affecting all functional groups' growth rates the same, or are the effects on one taxon different from another? Make sure to test all possibilities: the Temp and TP effects are the same for all taxa, and one covariate effect is the same across taxa  while the other's effects are unique across taxa.
+
+7. Compare your results for question 2 using linear regression, by using the `lm()` function. You'll need to look at the response of each taxon separately, i.e. one response variable.  You can have a multivariate response variable with `lm()` but the functions will be doing 6 independent linear regressions. In your `lm()` model, use only Temp and TP (and intercept) as covariates.  Compare the estimated effects to those from question 2.  How are they different? How is this model different from the model you fit in question 2?
+
+<!--
+
+8. Using Greens only, fit a linear regression with autocorrelated residuals using the `Arima()` function with the `xreg` argument. Use Temp and TP as your covariates.  Compare your results to  the results from questions 7. How is this model different from the models you fit in questions 7?
+
+-->
+
+8. Temp and TP are negatively correlated (cor = `r format(cor(covars[1,],covars[2,]), digits=2)`). A common threshold for collinearity in regression models is 0.7. Temp and TP fall below that but are close. One approach to collinearity is sequential regression [@Dormannetal2013]. The first (most influential) covariate is included 'as is' and the second covariate appears as the residuals of a regression of the second against the first. The covariates are now orthogonal however the second covariate is conditioned on the first. If we see an effect of the residuals covariate, it is the effect of TP additional  to  the  contribution  it  already  made  through  its  relationship  with  temperature. Rerun question 2 using sequential regression (see code below).  
+
+Make your Temp and TP covariates orthogonal using sequential regression. Do your conclusions about the effects of Temperature and TP change?
+
+Below is code to construct your orthogonal covariates for sequential regression.
+```{r msscov-problems-orthocov}
+fit <- lm(covars[1,]~covars[2,])
+seqcovs <- rbind(covars[1,], residuals(fit))
+avg <- apply(seqcovs, 1, mean)
+sd <- sqrt(apply(seqcovs, 1, var, na.rm=TRUE))
+seqcovs <- (seqcovs-avg)/sd
+rownames(seqcovs) <- c("Temp","TPresids")
+```
+
+9. Compare the AICc's of the 3 seasonal models from question 1 and the 4 Temp/TP models from question 5. What does this tell you about the Temp and TP only models?
+
+10. We cannot just fit a model with season and Temp plus TP since Temp and TP are highly seasonal.  That will cause problems if we have something that explain season (a polynomial) and a covariate that has seasonality.  Instead, use sequential regression to fit a model with seasonality, Temp and TP. Use a 3rd order polynomial with the `poly()` function to create orthogonal season covariates and then use sequential regression (code in problem 8) to create Temp and TP covariates that are orthogonal to your season covariates.  Fit the model and compare a model with only season to a model with season and Temp plus TP.
+
+11. Another approach to looking at effects of covariates which have season cycles is to examine if the seasonal anomalies of the independent variable can be explained by the seasonal anomalies of the dependent variables.  In other words, can an unusually high February abundance (higher than expected) be explained by an unusually high or low February temperature? In this approach, you remove season so you do not need to model it (with factor, polynomial, etc). The `stl()` function can be used to decompose a time series using LOESS. We'll use `stl()` since it can handle missing values. 
+
+    a. Decompose the Diatom time series using `stl()` and plot. Use `na.action=zoo::na.approx` to deal with the NAs. Use `s.window="periodic"`. Other than that you can use the defaults.
+```{r, eval=FALSE}
+i <- "Diatoms"
+dati <- ts(dat[i,], frequency=12)
+a <- stl(dati, "periodic", na.action=zoo::na.approx)
+```
+
+    b. Create dependent variables and covariates that are anomolies by modifying the following code. For the anomaly, you will use the remainder plus the trend. You will need to adapt this code to create the anomalies for Temp and TP and for `dat` (your data).
+```{r}
+i <- "Diatoms"
+a <- stl(ts(dat[i,],frequency=12), "periodic", na.action=zoo::na.approx)
+anom <- a$time.series[,"remainder"]+a$time.series[,"trend"]
+```
+
+    c. Notice that you have simply removed the seasonal cycle from the data. Using the seasonal anomalies (from part b), estimate the effect of Temp and TP on each taxon's growth rate. You will use the same model as in question 2, but use the seasonal anomalies as data and covariates.
+
+
+
+```{r}
+anoms <- matrix(NA,dim(dat)[1]+dim(covars)[1],dim(dat)[2])
+rownames(anoms) <- c(rownames(dat), rownames(covars))
+for(i in 1:dim(dat)[1]){
+   a <- stl(ts(dat[i,],frequency=12), "periodic", na.action=zoo::na.approx)
+   anoms[i,] <- a$time.series[,"remainder"]+a$time.series[,"trend"]
+}
+for(i in 1:dim(covars)[1]){
+   a <- stl(ts(covars[i,],frequency=12), "periodic", na.action=zoo::na.approx)
+   anoms[i+dim(dat)[1],] <- a$time.series[,"remainder"]+a$time.series[,"trend"]
+}
+```
+
+

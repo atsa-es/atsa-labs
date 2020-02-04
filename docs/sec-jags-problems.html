@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12.8 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12.8 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -478,9 +479,19 @@ where <span class="math inline">\(\mu\)</span> is interpreted as the average dai
 <li><p>Add the effect of temperature to the AR(1) model in section <a href="sec-jags-ar1.html#sec-jags-ar1">12.5</a>. Plot the posterior for <code>beta</code> and compare to the posterior for <code>beta</code> from the model in section <a href="sec-jags-uss.html#sec-jags-covariates">12.6.1</a>.</p></li>
 <li><p>Plot the fitted values from the model in section <a href="sec-jags-forecast.html#sec-jags-forecast">12.7</a>, including the forecasts, with the 95% credible intervals for each data point.</p></li>
 <li><p>The following is a dataset from the Upper Skagit River (Puget Sound, 1952-2005) on salmon spawners and recruits:</p>
-<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb625-1" title="1">Spawners =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2662</span>,<span class="dv">1806</span>,<span class="dv">1707</span>,<span class="dv">1339</span>,<span class="dv">1686</span>,<span class="dv">2220</span>,<span class="dv">3121</span>,<span class="dv">5028</span>,<span class="dv">9263</span>,<span class="dv">4567</span>,<span class="dv">1850</span>,<span class="dv">3353</span>,<span class="dv">2836</span>,<span class="dv">3961</span>,<span class="dv">4624</span>,<span class="dv">3262</span>,<span class="dv">3898</span>,<span class="dv">3039</span>,<span class="dv">5966</span>,<span class="dv">5931</span>,<span class="dv">7346</span>,<span class="dv">4911</span>,<span class="dv">3116</span>,<span class="dv">3185</span>,<span class="dv">5590</span>,<span class="dv">2485</span>,<span class="dv">2987</span>,<span class="dv">3829</span>,<span class="dv">4921</span>,<span class="dv">2348</span>,<span class="dv">1932</span>,<span class="dv">3151</span>,<span class="dv">2306</span>,<span class="dv">1686</span>,<span class="dv">4584</span>,<span class="dv">2635</span>,<span class="dv">2339</span>,<span class="dv">1454</span>,<span class="dv">3705</span>,<span class="dv">1510</span>,<span class="dv">1331</span>,<span class="dv">942</span>,<span class="dv">884</span>,<span class="dv">666</span>,<span class="dv">1521</span>,<span class="dv">409</span>,<span class="dv">2388</span>,<span class="dv">1043</span>,<span class="dv">3262</span>,<span class="dv">2606</span>,<span class="dv">4866</span>,<span class="dv">1161</span>,<span class="dv">3070</span>,<span class="dv">3320</span>)</a>
-<a class="sourceLine" id="cb625-2" title="2">Recruits =<span class="st"> </span><span class="kw">c</span>(<span class="dv">12741</span>,<span class="dv">15618</span>,<span class="dv">23675</span>,<span class="dv">37710</span>,<span class="dv">62260</span>,<span class="dv">32725</span>,<span class="dv">8659</span>,<span class="dv">28101</span>,<span class="dv">17054</span>,<span class="dv">29885</span>,<span class="dv">33047</span>,<span class="dv">20059</span>,<span class="dv">35192</span>,<span class="dv">11006</span>,<span class="dv">48154</span>,<span class="dv">35829</span>,<span class="dv">46231</span>,<span class="dv">32405</span>,<span class="dv">20782</span>,<span class="dv">21340</span>,<span class="dv">58392</span>,<span class="dv">21553</span>,<span class="dv">27528</span>,<span class="dv">28246</span>,<span class="dv">35163</span>,<span class="dv">15419</span>,<span class="dv">16276</span>,<span class="dv">32946</span>,<span class="dv">11075</span>,<span class="dv">16909</span>,<span class="dv">22359</span>,<span class="dv">8022</span>,<span class="dv">16445</span>,<span class="dv">2912</span>,<span class="dv">17642</span>,<span class="dv">2929</span>,<span class="dv">7554</span>,<span class="dv">3047</span>,<span class="dv">3488</span>,<span class="dv">577</span>,<span class="dv">4511</span>,<span class="dv">1478</span>,<span class="dv">3283</span>,<span class="dv">1633</span>,<span class="dv">8536</span>,<span class="dv">7019</span>,<span class="dv">3947</span>,<span class="dv">2789</span>,<span class="dv">4606</span>,<span class="dv">3545</span>,<span class="dv">4421</span>,<span class="dv">1289</span>,<span class="dv">6416</span>,<span class="dv">3647</span>)</a>
-<a class="sourceLine" id="cb625-3" title="3">logRS =<span class="st"> </span><span class="kw">log</span>(Recruits<span class="op">/</span>Spawners)</a></code></pre></div>
+<div class="sourceCode" id="cb653"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb653-1" title="1">Spawners =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2662</span>, <span class="dv">1806</span>, <span class="dv">1707</span>, <span class="dv">1339</span>, <span class="dv">1686</span>, <span class="dv">2220</span>, <span class="dv">3121</span>, <span class="dv">5028</span>, </a>
+<a class="sourceLine" id="cb653-2" title="2">    <span class="dv">9263</span>, <span class="dv">4567</span>, <span class="dv">1850</span>, <span class="dv">3353</span>, <span class="dv">2836</span>, <span class="dv">3961</span>, <span class="dv">4624</span>, <span class="dv">3262</span>, <span class="dv">3898</span>, <span class="dv">3039</span>, </a>
+<a class="sourceLine" id="cb653-3" title="3">    <span class="dv">5966</span>, <span class="dv">5931</span>, <span class="dv">7346</span>, <span class="dv">4911</span>, <span class="dv">3116</span>, <span class="dv">3185</span>, <span class="dv">5590</span>, <span class="dv">2485</span>, <span class="dv">2987</span>, <span class="dv">3829</span>, </a>
+<a class="sourceLine" id="cb653-4" title="4">    <span class="dv">4921</span>, <span class="dv">2348</span>, <span class="dv">1932</span>, <span class="dv">3151</span>, <span class="dv">2306</span>, <span class="dv">1686</span>, <span class="dv">4584</span>, <span class="dv">2635</span>, <span class="dv">2339</span>, <span class="dv">1454</span>, </a>
+<a class="sourceLine" id="cb653-5" title="5">    <span class="dv">3705</span>, <span class="dv">1510</span>, <span class="dv">1331</span>, <span class="dv">942</span>, <span class="dv">884</span>, <span class="dv">666</span>, <span class="dv">1521</span>, <span class="dv">409</span>, <span class="dv">2388</span>, <span class="dv">1043</span>, <span class="dv">3262</span>, </a>
+<a class="sourceLine" id="cb653-6" title="6">    <span class="dv">2606</span>, <span class="dv">4866</span>, <span class="dv">1161</span>, <span class="dv">3070</span>, <span class="dv">3320</span>)</a>
+<a class="sourceLine" id="cb653-7" title="7">Recruits =<span class="st"> </span><span class="kw">c</span>(<span class="dv">12741</span>, <span class="dv">15618</span>, <span class="dv">23675</span>, <span class="dv">37710</span>, <span class="dv">62260</span>, <span class="dv">32725</span>, <span class="dv">8659</span>, </a>
+<a class="sourceLine" id="cb653-8" title="8">    <span class="dv">28101</span>, <span class="dv">17054</span>, <span class="dv">29885</span>, <span class="dv">33047</span>, <span class="dv">20059</span>, <span class="dv">35192</span>, <span class="dv">11006</span>, <span class="dv">48154</span>, <span class="dv">35829</span>, </a>
+<a class="sourceLine" id="cb653-9" title="9">    <span class="dv">46231</span>, <span class="dv">32405</span>, <span class="dv">20782</span>, <span class="dv">21340</span>, <span class="dv">58392</span>, <span class="dv">21553</span>, <span class="dv">27528</span>, <span class="dv">28246</span>, <span class="dv">35163</span>, </a>
+<a class="sourceLine" id="cb653-10" title="10">    <span class="dv">15419</span>, <span class="dv">16276</span>, <span class="dv">32946</span>, <span class="dv">11075</span>, <span class="dv">16909</span>, <span class="dv">22359</span>, <span class="dv">8022</span>, <span class="dv">16445</span>, <span class="dv">2912</span>, </a>
+<a class="sourceLine" id="cb653-11" title="11">    <span class="dv">17642</span>, <span class="dv">2929</span>, <span class="dv">7554</span>, <span class="dv">3047</span>, <span class="dv">3488</span>, <span class="dv">577</span>, <span class="dv">4511</span>, <span class="dv">1478</span>, <span class="dv">3283</span>, <span class="dv">1633</span>, </a>
+<a class="sourceLine" id="cb653-12" title="12">    <span class="dv">8536</span>, <span class="dv">7019</span>, <span class="dv">3947</span>, <span class="dv">2789</span>, <span class="dv">4606</span>, <span class="dv">3545</span>, <span class="dv">4421</span>, <span class="dv">1289</span>, <span class="dv">6416</span>, <span class="dv">3647</span>)</a>
+<a class="sourceLine" id="cb653-13" title="13">logRS =<span class="st"> </span><span class="kw">log</span>(Recruits<span class="op">/</span>Spawners)</a></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Fit the following Ricker model to these data using the following linear form of this model with normally distributed errors:<br />
 <span class="math display">\[\begin{equation*}
@@ -521,6 +532,7 @@ You will recognize that this form is exactly the same as linear regression, with
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -539,6 +551,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

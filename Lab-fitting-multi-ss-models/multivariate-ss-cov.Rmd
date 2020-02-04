@@ -400,7 +400,7 @@ for(i in 1:3) {
     plot.ts(residuals(get(modn))$model.residuals[j,], 
       ylab="Residual", main=phytos[j])
     abline(h=0, lty="dashed")
-    acf(residuals(get(modn))$model.residuals[j,])
+    acf(residuals(get(modn))$model.residuals[j,], na.action=na.pass)
     }
   }
 ```
@@ -415,7 +415,7 @@ for(i in 1:3) {
   plot.ts(residuals(get(modn))$model.residuals[j,], 
       ylab="Residual", main=phytos[j])
   abline(h=0, lty="dashed")
-  acf(residuals(get(modn))$model.residuals[j,])
+  acf(residuals(get(modn))$model.residuals[j,], na.action=na.pass)
 ```
 
 ## Homework data and discussion {#sec-msscov-hw-discussion}

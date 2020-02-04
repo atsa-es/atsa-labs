@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>10.8 Rotating trends and loadings | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="10.8 Rotating trends and loadings | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -478,15 +479,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \end{equation}\]</span></p>
 <p>There are many ways of doing factor rotations, but a common method is the “varimax”" rotation, which seeks a rotation matrix <span class="math inline">\(\mathbf{H}\)</span> that creates the largest difference between the loadings in <span class="math inline">\(\mathbf{Z}\)</span>. For example, imagine that row 3 in our estimated <span class="math inline">\(\mathbf{Z}\)</span> matrix was (0.2, 0.2, 0.2). That would mean that green algae were a mixture of equal parts of processes 1, 2, and 3. If instead row 3 was (0.8, 0.1, 0.05), this would make our interpretation of the model fits easier because we could say that green algae followed the first process most closely. The varimax rotation would find the <span class="math inline">\(\mathbf{H}\)</span> matrix that makes the rows in <span class="math inline">\(\mathbf{Z}\)</span> more like (0.8, 0.1, 0.05) and less like (0.2, 0.2, 0.2).</p>
 <p>The varimax rotation is easy to compute because R has a built in function for this: <code>varimax()</code>. Interestingly, the function returns the inverse of <span class="math inline">\(\mathbf{H}\)</span>, which we need anyway.</p>
-<div class="sourceCode" id="cb558"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb558-1" title="1"><span class="co">## get the estimated ZZ</span></a>
-<a class="sourceLine" id="cb558-2" title="2">Z_est &lt;-<span class="st"> </span><span class="kw">coef</span>(dfa_<span class="dv">1</span>, <span class="dt">type=</span><span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>Z</a>
-<a class="sourceLine" id="cb558-3" title="3"><span class="co">## get the inverse of the rotation matrix</span></a>
-<a class="sourceLine" id="cb558-4" title="4">H_inv &lt;-<span class="st"> </span><span class="kw">varimax</span>(Z_est)<span class="op">$</span>rotmat</a></code></pre></div>
+<div class="sourceCode" id="cb589"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb589-1" title="1"><span class="co">## get the estimated ZZ</span></a>
+<a class="sourceLine" id="cb589-2" title="2">Z_est &lt;-<span class="st"> </span><span class="kw">coef</span>(dfa_<span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>Z</a>
+<a class="sourceLine" id="cb589-3" title="3"><span class="co">## get the inverse of the rotation matrix</span></a>
+<a class="sourceLine" id="cb589-4" title="4">H_inv &lt;-<span class="st"> </span><span class="kw">varimax</span>(Z_est)<span class="op">$</span>rotmat</a></code></pre></div>
 <p>We can now rotate both <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{x}\)</span>.</p>
-<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb559-1" title="1"><span class="co">## rotate factor loadings</span></a>
-<a class="sourceLine" id="cb559-2" title="2">Z_rot =<span class="st"> </span>Z_est <span class="op">%*%</span><span class="st"> </span>H_inv   </a>
-<a class="sourceLine" id="cb559-3" title="3"><span class="co">## rotate processes</span></a>
-<a class="sourceLine" id="cb559-4" title="4">proc_rot =<span class="st"> </span><span class="kw">solve</span>(H_inv) <span class="op">%*%</span><span class="st"> </span>dfa_<span class="dv">1</span><span class="op">$</span>states</a></code></pre></div>
+<div class="sourceCode" id="cb590"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb590-1" title="1"><span class="co">## rotate factor loadings</span></a>
+<a class="sourceLine" id="cb590-2" title="2">Z_rot =<span class="st"> </span>Z_est <span class="op">%*%</span><span class="st"> </span>H_inv</a>
+<a class="sourceLine" id="cb590-3" title="3"><span class="co">## rotate processes</span></a>
+<a class="sourceLine" id="cb590-4" title="4">proc_rot =<span class="st"> </span><span class="kw">solve</span>(H_inv) <span class="op">%*%</span><span class="st"> </span>dfa_<span class="dv">1</span><span class="op">$</span>states</a></code></pre></div>
 </div>
             </section>
 
@@ -510,6 +511,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -528,6 +530,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

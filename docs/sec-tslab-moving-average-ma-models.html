@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4.8 Moving-average (MA) models | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4.8 Moving-average (MA) models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -484,28 +485,25 @@ w_t &amp;= x_t + \theta x_{t-1} + \theta^2 x_{t-2} + \theta^3 x_{t-3} + \dots
 <p>We can simulate MA(<span class="math inline">\(q\)</span>) processes just as we did for AR(<span class="math inline">\(p\)</span>) processes using <code>arima.sim()</code>. Here are 3 different ones with contrasting <span class="math inline">\(\theta\)</span>’s:</p>
 <div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
 <a class="sourceLine" id="cb260-2" title="2"><span class="co">## list description for MA(1) model with small coef</span></a>
-<a class="sourceLine" id="cb260-3" title="3">MA.sm &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">ma=</span><span class="fl">0.2</span>, <span class="dt">sd=</span><span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb260-3" title="3">MA.sm &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">0.2</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</a>
 <a class="sourceLine" id="cb260-4" title="4"><span class="co">## list description for MA(1) model with large coef</span></a>
-<a class="sourceLine" id="cb260-5" title="5">MA.lg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">ma=</span><span class="fl">0.8</span>, <span class="dt">sd=</span><span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb260-5" title="5">MA.lg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">0.8</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</a>
 <a class="sourceLine" id="cb260-6" title="6"><span class="co">## list description for MA(1) model with large coef</span></a>
-<a class="sourceLine" id="cb260-7" title="7">MA.neg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">ma=</span><span class="op">-</span><span class="fl">0.5</span>, <span class="dt">sd=</span><span class="fl">0.1</span>)</a>
+<a class="sourceLine" id="cb260-7" title="7">MA.neg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">-0.5</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</a>
 <a class="sourceLine" id="cb260-8" title="8"><span class="co">## simulate MA(1)</span></a>
-<a class="sourceLine" id="cb260-9" title="9">MA1.sm &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">50</span>, <span class="dt">model=</span>MA.sm)</a>
-<a class="sourceLine" id="cb260-10" title="10">MA1.lg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">50</span>, <span class="dt">model=</span>MA.lg)</a>
-<a class="sourceLine" id="cb260-11" title="11">MA1.neg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">50</span>, <span class="dt">model=</span>MA.neg)</a></code></pre></div>
+<a class="sourceLine" id="cb260-9" title="9">MA1.sm &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.sm)</a>
+<a class="sourceLine" id="cb260-10" title="10">MA1.lg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.lg)</a>
+<a class="sourceLine" id="cb260-11" title="11">MA1.neg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.neg)</a></code></pre></div>
 <p>with their associated plots.</p>
 <div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="co">## setup plot region</span></a>
-<a class="sourceLine" id="cb261-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb261-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</a>
 <a class="sourceLine" id="cb261-3" title="3"><span class="co">## plot the ts</span></a>
-<a class="sourceLine" id="cb261-4" title="4"><span class="kw">plot.ts</span>(MA1.sm,</a>
-<a class="sourceLine" id="cb261-5" title="5">        <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]),</a>
-<a class="sourceLine" id="cb261-6" title="6">        <span class="dt">main=</span><span class="kw">expression</span>(<span class="kw">paste</span>(theta,<span class="st">&quot; = 0.2&quot;</span>)))</a>
-<a class="sourceLine" id="cb261-7" title="7"><span class="kw">plot.ts</span>(MA1.lg,</a>
-<a class="sourceLine" id="cb261-8" title="8">        <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]),</a>
-<a class="sourceLine" id="cb261-9" title="9">        <span class="dt">main=</span><span class="kw">expression</span>(<span class="kw">paste</span>(theta,<span class="st">&quot; = 0.8&quot;</span>)))</a>
-<a class="sourceLine" id="cb261-10" title="10"><span class="kw">plot.ts</span>(MA1.neg,</a>
-<a class="sourceLine" id="cb261-11" title="11">        <span class="dt">ylab=</span><span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]),</a>
-<a class="sourceLine" id="cb261-12" title="12">        <span class="dt">main=</span><span class="kw">expression</span>(<span class="kw">paste</span>(theta,<span class="st">&quot; = -0.5&quot;</span>)))</a></code></pre></div>
+<a class="sourceLine" id="cb261-4" title="4"><span class="kw">plot.ts</span>(MA1.sm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </a>
+<a class="sourceLine" id="cb261-5" title="5">    <span class="st">&quot; = 0.2&quot;</span>)))</a>
+<a class="sourceLine" id="cb261-6" title="6"><span class="kw">plot.ts</span>(MA1.lg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </a>
+<a class="sourceLine" id="cb261-7" title="7">    <span class="st">&quot; = 0.8&quot;</span>)))</a>
+<a class="sourceLine" id="cb261-8" title="8"><span class="kw">plot.ts</span>(MA1.neg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </a>
+<a class="sourceLine" id="cb261-9" title="9">    <span class="st">&quot; = -0.5&quot;</span>)))</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotMA1opps"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotMA1opps-1.png" alt="Time series of simulated MA(1) processes with \(\theta=0.2\) (left), \(\theta=0.8\) (middle), and \(\theta=-0.5\) (right)." width="80%" />
@@ -524,20 +522,19 @@ Figure 4.25: Time series of simulated MA(1) processes with <span class="math inl
 <a class="sourceLine" id="cb262-4" title="4"><span class="co">## empty list for storing models</span></a>
 <a class="sourceLine" id="cb262-5" title="5">MA.mods &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
 <a class="sourceLine" id="cb262-6" title="6"><span class="co">## loop over orders of q</span></a>
-<a class="sourceLine" id="cb262-7" title="7"><span class="cf">for</span>(q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
-<a class="sourceLine" id="cb262-8" title="8">  <span class="co">## assume SD=1, so not specified</span></a>
-<a class="sourceLine" id="cb262-9" title="9">  MA.mods[[q]] &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">1000</span>, <span class="kw">list</span>(<span class="dt">ma=</span>MAq[<span class="dv">1</span><span class="op">:</span>q]))</a>
+<a class="sourceLine" id="cb262-7" title="7"><span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb262-8" title="8">    <span class="co">## assume SD=1, so not specified</span></a>
+<a class="sourceLine" id="cb262-9" title="9">    MA.mods[[q]] &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="kw">list</span>(<span class="dt">ma =</span> MAq[<span class="dv">1</span><span class="op">:</span>q]))</a>
 <a class="sourceLine" id="cb262-10" title="10">}</a></code></pre></div>
 <p>Now that we have our four MA(<span class="math inline">\(q\)</span>) models, lets look at plots of the time series, ACF’s, and PACF’s.</p>
 <div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1"><span class="co">## set up plot region</span></a>
-<a class="sourceLine" id="cb263-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb263-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">3</span>))</a>
 <a class="sourceLine" id="cb263-3" title="3"><span class="co">## loop over orders of q</span></a>
-<a class="sourceLine" id="cb263-4" title="4"><span class="cf">for</span>(q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
-<a class="sourceLine" id="cb263-5" title="5">  <span class="kw">plot.ts</span>(MA.mods[[q]][<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>],</a>
-<a class="sourceLine" id="cb263-6" title="6">          <span class="dt">ylab=</span><span class="kw">paste</span>(<span class="st">&quot;MA(&quot;</span>,q,<span class="st">&quot;)&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb263-7" title="7">  <span class="kw">acf</span>(MA.mods[[q]], <span class="dt">lag.max=</span><span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb263-8" title="8">  <span class="kw">pacf</span>(MA.mods[[q]], <span class="dt">lag.max=</span><span class="dv">12</span>, <span class="dt">ylab=</span><span class="st">&quot;PACF&quot;</span>)</a>
-<a class="sourceLine" id="cb263-9" title="9">}</a></code></pre></div>
+<a class="sourceLine" id="cb263-4" title="4"><span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb263-5" title="5">    <span class="kw">plot.ts</span>(MA.mods[[q]][<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>], <span class="dt">ylab =</span> <span class="kw">paste</span>(<span class="st">&quot;MA(&quot;</span>, q, <span class="st">&quot;)&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</a>
+<a class="sourceLine" id="cb263-6" title="6">    <span class="kw">acf</span>(MA.mods[[q]], <span class="dt">lag.max =</span> <span class="dv">12</span>)</a>
+<a class="sourceLine" id="cb263-7" title="7">    <span class="kw">pacf</span>(MA.mods[[q]], <span class="dt">lag.max =</span> <span class="dv">12</span>, <span class="dt">ylab =</span> <span class="st">&quot;PACF&quot;</span>)</a>
+<a class="sourceLine" id="cb263-8" title="8">}</a></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotMApComps"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotMApComps-1.png" alt="Time series of simulated MA(\(q\)) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF’s (center column) and PACF’s (right column). Note that only the first 50 values of \(x_t\) are plotted." width="80%" />
@@ -570,6 +567,7 @@ Figure 4.26: Time series of simulated MA(<span class="math inline">\(q\)</span>)
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -588,6 +586,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

@@ -1,8 +1,8 @@
-## ----mssmiss-load-data---------------------------------------------------
+## ----mssmiss-load-data--------------------------------------------------------------------------------------------
 data(snotel, package="atsalibrary")
 
 
-## ----mssmiss-loadpackages, message=FALSE---------------------------------
+## ----mssmiss-loadpackages, message=FALSE--------------------------------------------------------------------------
 library(MARSS)
 library(forecast)
 library(ggplot2)
@@ -10,34 +10,18 @@ library(ggmap)
 library(broom)
 
 
-## ----get-LL-aug, eval=FALSE----------------------------------------------
+## ----get-LL-aug, eval=FALSE---------------------------------------------------------------------------------------
 ## y.aug = rbind(data,covariates)
 ## fit.aug = MARSS(y.aug, model=model.aug)
 
 
-## ----mssmiss-get-LL-aug-2, eval=FALSE------------------------------------
+## ----mssmiss-get-LL-aug-2, eval=FALSE-----------------------------------------------------------------------------
 ## fit.cov = fit.aug
 ## fit.cov$marss$data[1:dim(data)[1],] = NA
 ## extra.LL = MARSSkf(fit.cov)$logLik
 
 
-## ----mssmiss-loaddata, include=FALSE-------------------------------------
-#If bookdown is being run, then we are at the top level
-#If "gitbook" is not in the output
-#then user is running Rmd in the folder for debugging
-if("bookdown::gitbook" %in% rmarkdown::all_output_formats('index.Rmd')){ 
-  #load the data
-  a <- load("docs/data/snotel.RData")
-}else{
-  load("snotel.RData")
-}
-
-
-## ----mssmiss-loadsno, eval=FALSE-----------------------------------------
-## load("snotel.RData")
-
-
-## ----mssmiss-setupsnoteldata---------------------------------------------
+## ----mssmiss-setupsnoteldata--------------------------------------------------------------------------------------
 y <- snotelmeta
 # Just use a subset
 y = y[which(y$Longitude < -121.4),]
@@ -46,7 +30,7 @@ y = y[which(y$Latitude < 47.5),]
 y = y[which(y$Latitude > 46.5),]
 
 
-## ----mssmiss-plotsnotel, echo=FALSE, warning=FALSE, message=FALSE, fig.cap='(ref:snotelsites)'----
+## ----mssmiss-plotsnotel, echo=FALSE, warning=FALSE, message=FALSE, fig.cap='(ref:snotelsites)'--------------------
 ylims=c(min(snotelmeta$Latitude)-1,max(snotelmeta$Latitude)+1)
 xlims=c(min(snotelmeta$Longitude)-1,max(snotelmeta$Longitude)+1)
 base = ggmap::get_map(location=c(xlims[1],ylims[1],xlims[2],ylims[2]), zoom=7, maptype="terrain-background")
@@ -56,18 +40,18 @@ map1 + geom_point(data=y, aes(x=Longitude, y=Latitude), color="blue", cex=2.5) +
   theme_bw()
 
 
-## ----mssmiss-plotsnotelts, warning=FALSE, fig.cap='(ref:snotelsites-plot)'----
+## ----mssmiss-plotsnotelts, warning=FALSE, fig.cap='(ref:snotelsites-plot)'----------------------------------------
 swe.feb <- snotel
 swe.feb <- swe.feb[swe.feb$Station.Id %in% y$Station.Id & swe.feb$Month=="Feb",]
 p <- ggplot(swe.feb, aes(x=Date, y=SWE)) + geom_line()
 p + facet_wrap(~Station)
 
 
-## ----mssmiss-snotel-acast------------------------------------------------
+## ----mssmiss-snotel-acast-----------------------------------------------------------------------------------------
 dat.feb <- reshape2::acast(swe.feb, Station ~ Year, value.var="SWE")
 
 
-## ----mssmiss-snotel-marss-model------------------------------------------
+## ----mssmiss-snotel-marss-model-----------------------------------------------------------------------------------
 ns <- length(unique(swe.feb$Station))
 B <- "diagonal and equal"
 Q <- "unconstrained"
@@ -78,43 +62,33 @@ x0 <- "unequal"
 mod.list.ar1 = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=1)
 
 
-## ----mssmiss-snotelfit, results="hide"-----------------------------------
+## ----mssmiss-snotelfit, results="hide"----------------------------------------------------------------------------
 library(MARSS)
 m <- apply(dat.feb, 1, mean, na.rm=TRUE)
-fit.ar1 <- MARSS(dat.feb, model=mod.list.ar1, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
+fit.ar1 <- MARSS(dat.feb, model=mod.list.ar1, control=list(maxit=5000), 
+                 inits=list(A=matrix(m,ns,1)))
 
 
-## ----mssmiss-snotelplotstates, include=FALSE-----------------------------
+## ----mssmiss-snotelplotfits-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-snotelplotfits-ar1)'--------
 fit <- fit.ar1
-d <- tidy(fit, type="states")
-d$Year <- d$t + 1980
-d$Station <- stringr::str_replace(d$term,"X.","")
-p <- ggplot(data = d) + 
-  geom_line(aes(Year, estimate)) +
-  geom_ribbon(aes(x=Year, ymin=conf.low, ymax=conf.high), linetype=2, alpha=0.5)
-p <- p + geom_point(data=swe.feb, mapping = aes(x=Year, y=SWE))
-p + facet_wrap(~Station) + xlab("") + ylab("SWE")
-
-
-## ----mssmiss-snotelplotfits-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-snotelplotfits-ar1)'----
-fit <- fit.ar1
-d <- augment(fit, interval="confidence")
+d <- broom::tidy(fit, type="ytT", conf.int=TRUE)
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Year, .fitted)) +
-  geom_ribbon(aes(x=Year, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
-p <- p + geom_point(data=swe.feb, mapping = aes(x=Year, y=SWE))
-p + facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+  geom_line(aes(Year, estimate)) +
+  geom_point(aes(Year, y)) +
+  geom_ribbon(aes(x=Year, ymin=pred.low, ymax=pred.high), linetype=2, alpha=0.2, fill="blue") +
+  facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+p
 
 
-## ----mssmiss-stateresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-stateresids-ar1)'----
+## ----mssmiss-stateresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-stateresids-ar1)'--------------
 fit <- fit.ar1
 par(mfrow=c(4,4),mar=c(2,2,1,1))
 apply(residuals(fit)$state.residuals[,1:30], 1, acf)
 
 
-## ----mssmiss-snotel-marss-model-corr-------------------------------------
+## ----mssmiss-snotel-marss-model-corr------------------------------------------------------------------------------
 ns <- length(unique(swe.feb$Station))
 B <- "zero"
 Q <- "unconstrained"
@@ -125,50 +99,40 @@ x0 <- "zero"
 mod.list.corr = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=0)
 
 
-## ----mssmiss-snotelfit-corr, results="hide"------------------------------
+## ----mssmiss-snotelfit-corr, results="hide"-----------------------------------------------------------------------
 m <- apply(dat.feb, 1, mean, na.rm=TRUE)
-fit.corr <- MARSS(dat.feb, model=mod.list.corr, control=list(maxit=5000), inits=list(A=matrix(m,ns,1)))
+fit.corr <- MARSS(dat.feb, model=mod.list.corr, control=list(maxit=5000), 
+                  inits=list(A=matrix(m,ns,1)))
 
 
-## ----mssmiss-snotelplotstates-noincl, include=FALSE----------------------
+## ----mssmiss-snotelplotfits-corr, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-snotelplotfits-corr)'------
 fit <- fit.corr
-d <- tidy(fit, type="states")
-d$Year <- d$t + 1980
-d$Station <- stringr::str_replace(d$term,"X.","")
-p <- ggplot(data = d) + 
-  geom_line(aes(Year, estimate)) +
-  geom_ribbon(aes(x=Year, ymin=conf.low, ymax=conf.high), linetype=2, alpha=0.5)
-p <- p + geom_point(data=swe.feb, mapping = aes(x=Year, y=SWE))
-p + facet_wrap(~Station) + xlab("") + ylab("SWE")
-
-
-## ----mssmiss-snotelplotfits-corr, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-snotelplotfits-corr)'----
-fit <- fit.corr
-d <- broom::augment(fit, interval="confidence")
+d <- broom::tidy(fit, type="ytT", conf.int=TRUE)
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Year, .fitted)) +
-  geom_ribbon(aes(x=Year, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
-p <- p + geom_point(data=swe.feb, mapping = aes(x=Year, y=SWE))
-p + facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+  geom_line(aes(Year, estimate)) +
+  geom_point(aes(Year, y)) +
+  geom_ribbon(aes(x=Year, ymin=pred.low, ymax=pred.high), linetype=2, alpha=0.2, fill="blue") +
+  facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+p
 
 
-## ----mssmiss-stateresids-fit-corr-states, warning=FALSE, results='hide'----
+## ----mssmiss-stateresids-fit-corr-states, warning=FALSE, results='hide'-------------------------------------------
 fit <- fit.corr
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(residuals(fit)$state.residuals[,1:30], 1, acf)
+apply(residuals(fit)$state.residuals, 1, acf, na.action=na.pass)
 mtext("State Residuals ACF", outer=TRUE, side=3)
 
 
-## ----mssmiss-stateresids-fit-corr-model, warning=FALSE, results='hide'----
+## ----mssmiss-stateresids-fit-corr-model, warning=FALSE, results='hide'--------------------------------------------
 fit <- fit.corr
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(residuals(fit)$model.residuals[,1:30], 1, acf)
+apply(residuals(fit)$model.residuals[,1:30], 1, acf, na.action=na.pass)
 mtext("Model Residuals ACF", outer=TRUE, side=3)
 
 
-## ----mssmiss-snotel-dfa--------------------------------------------------
+## ----mssmiss-snotel-dfa-------------------------------------------------------------------------------------------
 ns <- dim(dat.feb)[1]
 B <- matrix(list(0),2,2)
 B[1,1] <- "b1"; B[2,2] <- "b2"
@@ -183,13 +147,14 @@ A <- "unequal"
 mod.list.dfa = list(B=B, Z=Z, Q=Q, R=R, U=U, A=A, x0=x0)
 
 
-## ----mssmiss-snotelfit-dfa, results="hide"-------------------------------
+## ----mssmiss-snotelfit-dfa, results="hide"------------------------------------------------------------------------
 library(MARSS)
 m <- apply(dat.feb, 1, mean, na.rm=TRUE)
-fit.dfa <- MARSS(dat.feb, model=mod.list.dfa, control=list(maxit=1000), inits=list(A=matrix(m,ns,1)))
+fit.dfa <- MARSS(dat.feb, model=mod.list.dfa, control=list(maxit=1000), 
+                 inits=list(A=matrix(m,ns,1)))
 
 
-## ----mssmiss-ifwewantedloadings-dfa, include=FALSE-----------------------
+## ----mssmiss-ifwewantedloadings-dfa, include=FALSE----------------------------------------------------------------
 # if you want factor loadings
 fit <- fit.dfa
 # get the inverse of the rotation matrix
@@ -218,45 +183,57 @@ mtext(paste("Factor loadings on trend",i,sep=" "),side=3,line=.5)
 } # end i loop
 
 
-## ----mssmiss-snotelplotstates-dfa, warning=FALSE, echo=FALSE-------------
+## ----mssmiss-snotelplotstates-dfa, warning=FALSE, echo=FALSE------------------------------------------------------
 fit <- fit.dfa
-d <- augment(fit, interval="confidence")
+d <- broom::tidy(fit, type="ytT", conf.int=TRUE)
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Year, .fitted)) +
-  geom_ribbon(aes(x=Year, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
-yy2 <- reshape2::melt(dat.feb-apply(dat.feb,1,mean,na.rm=TRUE))
-colnames(yy2) <- c("Station","Year","SWE")
-p <- p + geom_point(data=swe.feb, mapping = aes(x=Year, y=SWE))
-p + facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+  geom_line(aes(Year, estimate)) +
+  geom_point(aes(Year, y)) +
+  geom_ribbon(aes(x=Year, ymin=pred.low, ymax=pred.high), linetype=2, alpha=0.2, fill="blue") +
+  facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+p
 
 
-## ----mssmiss-stateresit-fit-dfa, results='hide'--------------------------
+## ----mssmiss-stateresit-fit-dfa, results='hide'-------------------------------------------------------------------
 fit <- fit.dfa
 par(mfrow=c(1,2),mar=c(2,2,1,1))
 apply(residuals(fit)$state.residuals[,1:30,drop=FALSE], 1, acf)
 
 
-## ----mssmiss-modelresids-fit-dfa-model, results='hide'-------------------
+## ----mssmiss-modelresids-fit-dfa-model, results='hide'------------------------------------------------------------
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(residuals(fit)$model.residual, 1, function(x){acf(na.omit(x))})
+apply(residuals(fit)$model.residual, 1, function(x){acf(x, na.action=na.pass)})
 
 
-## ----mssmiss-swe-all-months----------------------------------------------
+## ----mssfitted-snotelplotstates-dfa, warning=FALSE, echo=FALSE----------------------------------------------------
+fit <- fit.dfa
+d <- broom::tidy(fit, type="fitted.ytT", conf.int=TRUE)
+d$Year <- d$t + 1980
+d$Station <- d$.rownames
+p <- ggplot(data = d) + 
+  geom_line(aes(Year, estimate)) +
+  geom_point(aes(Year, y)) +
+  geom_ribbon(aes(x=Year, ymin=conf.low, ymax=conf.high), linetype=2, alpha=0.7) +
+  facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+p
+
+
+## ----mssmiss-swe-all-months---------------------------------------------------------------------------------------
 swe.yr <- snotel
 swe.yr <- swe.yr[swe.yr$Station.Id %in% y$Station.Id,]
 swe.yr$Station <- droplevels(swe.yr$Station)
 
 
-## ----mssmiss-seasonal-swe-plot, echo=FALSE, warning=FALSE----------------
+## ----mssmiss-seasonal-swe-plot, echo=FALSE, warning=FALSE---------------------------------------------------------
 y3 <- swe.yr[swe.yr$Year>2010,]
 p <- ggplot(y3, aes(x=Date, y=SWE)) + geom_line()
 p + facet_wrap(~Station) + 
   scale_x_date(breaks=as.Date(paste0(2011:2013,"-01-01")), labels=2011:2013)
 
 
-## ----echo=FALSE----------------------------------------------------------
+## ----echo=FALSE---------------------------------------------------------------------------------------------------
 fitb <- function(x){
   a <- ts(x, start=1981, frequency=12)
   fit1 <- Arima(a, order=c(1,0,2), seasonal=c(0,1,0))
@@ -275,7 +252,7 @@ ta2 <- reshape2::dcast(ta, L1 ~ model)
 knitr::kable(ta2)
 
 
-## ----mssmiss-snotel-monthly-dat------------------------------------------
+## ----mssmiss-snotel-monthly-dat-----------------------------------------------------------------------------------
 dat.yr <- snotel
 dat.yr <- dat.yr[dat.yr$Station.Id %in% y$Station.Id,]
 dat.yr$Station <- droplevels(dat.yr$Station)
@@ -283,7 +260,7 @@ dat.yr$Month <- factor(dat.yr$Month, level=month.abb)
 dat.yr <- reshape2::acast(dat.yr, Station ~ Year+Month, value.var="SWE")
 
 
-## ----mssmis-seasonal-fourier---------------------------------------------
+## ----mssmis-seasonal-fourier--------------------------------------------------------------------------------------
 period <- 12
 TT <- dim(dat.yr)[2]
 cos.t <- cos(2 * pi * seq(TT) / period)
@@ -291,7 +268,7 @@ sin.t <- sin(2 * pi * seq(TT) / period)
 c.seas <- rbind(cos.t,sin.t)
 
 
-## ----mssmiss-month-dfa---------------------------------------------------
+## ----mssmiss-month-dfa--------------------------------------------------------------------------------------------
 ns <- dim(dat.yr)[1]
 B <- "zero"
 Q <- matrix(1)
@@ -306,40 +283,36 @@ c <- c.seas
 mod.list.seas <- list(B=B, U=U, Q=Q, A=A, R=R, Z=Z, C=C, c=c, x0=x0, tinitx=0)
 
 
-## ----mssmiss-seas-fit, results="hide"------------------------------------
+## ----mssmiss-seas-fit, results="hide"-----------------------------------------------------------------------------
 m <- apply(dat.yr, 1, mean, na.rm=TRUE)
 fit.seas <- MARSS(dat.yr, model=mod.list.seas, control=list(maxit=500), inits=list(A=matrix(m,ns,1)))
 
 
-## ----mssmiss-seas, warning=FALSE, echo=FALSE-----------------------------
+## ----mssmiss-seas, warning=FALSE, echo=FALSE----------------------------------------------------------------------
 #this is the estimate using only the season
 fit <- fit.seas
-d <- augment(fit, interval="confidence")
+d <- tidy(fit, type="fitted.ytT", conf.int=TRUE)
 d$Year <- swe.yr$Year
 d$Date <- swe.yr$Date
 d <- subset(d, Year<1990)
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(t, .fitted)) +
-  geom_ribbon(aes(x=t, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.5)
-p + facet_wrap(~Station) + xlab("") + ylab("SWE seasonal component")
+  geom_line(aes(Date, estimate)) +
+  geom_ribbon(aes(x=Date, ymin=pred.low, ymax=pred.high), linetype=2, alpha=0.2, fill="blue") +
+  facet_wrap(~Station) + xlab("") + ylab("SWE seasonal component")
+p
 
 
-## ----mssmiss-plotfit-seas------------------------------------------------
-#this is the estimate of y conditioned on all the data
-dd <- MARSShatyt(fit.seas)$ytT
-rownames(dd) <- rownames(dat.yr)
-colnames(dd) <- colnames(dat.yr)
-ddd <- reshape2::melt(dd)
-ddd$Var2 <- factor(ddd$Var2, levels=paste0(rep(1981:2013,each=12),"_", month.abb))
-colnames(ddd) <- c("Station", "Year_Month", "SWE")
-ddd <- ddd[order(ddd$Station, ddd$Year_Month),]
-ddd$Date <- swe.yr$Date
-ddd$Year <- swe.yr$Year
-ddd <- subset(ddd, Year<1990)
-p <- ggplot(data = ddd) + 
-  geom_line(aes(x=Date, y=SWE))
-p <- p + geom_point(data=subset(swe.yr, Year<1990), 
-                    mapping = aes(x=Date, y=SWE))
-p + facet_wrap(~Station) + xlab("") + ylab("SWE")
+## ----mssmiss-snotelplotstates-seas, warning=FALSE, echo=FALSE-----------------------------------------------------
+fit <- fit.seas
+d <- broom::tidy(fit, type="ytT", conf.int=TRUE)
+d$Year <- swe.yr$Year
+d$Date <- swe.yr$Date
+d <- subset(d, Year<1990)
+d$Station <- d$.rownames
+p <- ggplot(data = d) + 
+  geom_line(aes(Date, estimate)) +
+  geom_point(aes(Date, y)) +
+  facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
+p
 

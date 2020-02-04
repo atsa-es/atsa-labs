@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>9.9 Forecast diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="9.9 Forecast diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -462,13 +463,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">9.9</span> Forecast diagnostics</h2>
 
 <p>In the literature on state-space models, the set of <span class="math inline">\(e_t\)</span> are commonly referred to as “innovations”. <code>MARSS()</code> calculates the innovations as part of the Kalman filter algorithm—they are stored as <code>Innov</code> in the list produced by the <code>MARSSkfss()</code> function.</p>
-<div class="sourceCode" id="cb537"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb537-1" title="1"><span class="co"># forecast errors</span></a>
-<a class="sourceLine" id="cb537-2" title="2">innov &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Innov</a></code></pre></div>
+<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb568-1" title="1"><span class="co"># forecast errors</span></a>
+<a class="sourceLine" id="cb568-2" title="2">innov &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Innov</a></code></pre></div>
 <p>Let’s see if our innovations meet the model assumptions. Beginning with (1), we can use a Q-Q plot to see whether the innovations are normally distributed with a mean of zero. We’ll use the <code>qqnorm()</code> function to plot the quantiles of the innovations on the <span class="math inline">\(y\)</span>-axis versus the theoretical quantiles from a Normal distribution on the <span class="math inline">\(x\)</span>-axis. If the 2 distributions are similar, the points should fall on the line defined by <span class="math inline">\(y = x\)</span>.</p>
-<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb538-1" title="1"><span class="co"># Q-Q plot of innovations</span></a>
-<a class="sourceLine" id="cb538-2" title="2"><span class="kw">qqnorm</span>(<span class="kw">t</span>(innov), <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a>
-<a class="sourceLine" id="cb538-3" title="3"><span class="co"># add y=x line for easier interpretation</span></a>
-<a class="sourceLine" id="cb538-4" title="4"><span class="kw">qqline</span>(<span class="kw">t</span>(innov))</a></code></pre></div>
+<div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb569-1" title="1"><span class="co"># Q-Q plot of innovations</span></a>
+<a class="sourceLine" id="cb569-2" title="2"><span class="kw">qqnorm</span>(<span class="kw">t</span>(innov), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb569-3" title="3"><span class="co"># add y=x line for easier interpretation</span></a>
+<a class="sourceLine" id="cb569-4" title="4"><span class="kw">qqline</span>(<span class="kw">t</span>(innov))</a></code></pre></div>
 <!-- % diagnostics plot: QQ -->
 
 <div class="figure" style="text-align: center"><span id="fig:dlm-plotdlmQQ"></span>
@@ -478,13 +479,13 @@ Figure 9.5: Q-Q plot of the forecast errors (innovations) for the DLM specified 
 </p>
 </div>
 <p>The Q-Q plot (Figure <a href="sec-dlm-dlm-forecast-diagnostics.html#fig:dlm-plotdlmQQ">9.5</a>) indicates that the innovations appear to be more-or-less normally distributed (i.e., most points fall on the line). Furthermore, it looks like the mean of the innovations is about 0, but we should use a more reliable test than simple visual inspection. We can formally test whether the mean of the innovations is significantly different from 0 by using a one-sample <span class="math inline">\(t\)</span>-test. based on a null hypothesis of <span class="math inline">\(\,\text{E}(e_t)=0\)</span>. To do so, we will use the function <code>t.test()</code> and base our inference on a significance value of <span class="math inline">\(\alpha = 0.05\)</span>.</p>
-<div class="sourceCode" id="cb539"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb539-1" title="1"><span class="co"># p-value for t-test of H0: E(innov) = 0</span></a>
-<a class="sourceLine" id="cb539-2" title="2"><span class="kw">t.test</span>(<span class="kw">t</span>(innov), <span class="dt">mu=</span><span class="dv">0</span>)<span class="op">$</span>p.value</a></code></pre></div>
+<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb570-1" title="1"><span class="co"># p-value for t-test of H0: E(innov) = 0</span></a>
+<a class="sourceLine" id="cb570-2" title="2"><span class="kw">t.test</span>(<span class="kw">t</span>(innov), <span class="dt">mu =</span> <span class="dv">0</span>)<span class="op">$</span>p.value</a></code></pre></div>
 <pre><code>[1] 0.4840901</code></pre>
 <p>The <span class="math inline">\(p\)</span>-value <span class="math inline">\(&gt;&gt;\)</span> 0.05 so we cannot reject the null hypothesis that <span class="math inline">\(\,\text{E}(e_t)=0\)</span>.</p>
 <p>Moving on to assumption (2), we can use the sample autocorrelation function (ACF) to examine whether the innovations covary with a time-lagged version of themselves. Using the <code>acf()</code> function, we can compute and plot the correlations of <span class="math inline">\(e_t\)</span> and <span class="math inline">\(e_{t-k}\)</span> for various values of <span class="math inline">\(k\)</span>. Assumption (2) will be met if none of the correlation coefficients exceed the 95% confidence intervals defined by <span class="math inline">\(\pm \, z_{0.975} / \sqrt{n}\)</span>.</p>
-<div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb541-1" title="1"><span class="co"># plot ACF of innovations</span></a>
-<a class="sourceLine" id="cb541-2" title="2"><span class="kw">acf</span>(<span class="kw">t</span>(innov), <span class="dt">lag.max=</span><span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb572"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb572-1" title="1"><span class="co"># plot ACF of innovations</span></a>
+<a class="sourceLine" id="cb572-2" title="2"><span class="kw">acf</span>(<span class="kw">t</span>(innov), <span class="dt">lag.max =</span> <span class="dv">10</span>)</a></code></pre></div>
 <!-- % diagnostics plot: ACF -->
 
 <div class="figure" style="text-align: center"><span id="fig:dlm-plotdlmACF"></span>
@@ -518,6 +519,7 @@ Figure 9.6: Autocorrelation plot of the forecast errors (innovations) for the DL
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -536,6 +538,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

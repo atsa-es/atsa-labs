@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>7.3 A single well-mixed population | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="7.3 A single well-mixed population | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -520,17 +521,11 @@ This is a diagonal matrix with unequal variances. The shortcut for this structur
 \end{equation}\]</span>
 It is very simple since all terms are <span class="math inline">\(1 \times 1\)</span> matrices.</p>
 <p>To fit our model with <code>MARSS()</code>, we set up a list which precisely describes the size and structure of each parameter matrix. Fixed values in a matrix are designated with their numeric value and estimated values are given a character name and put in quotes. Our model list for a single well-mixed population is:</p>
-<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb453-1" title="1">mod.list<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb453-2" title="2"><span class="dt">B=</span><span class="kw">matrix</span>(<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb453-3" title="3"><span class="dt">U=</span><span class="kw">matrix</span>(<span class="st">&quot;u&quot;</span>),</a>
-<a class="sourceLine" id="cb453-4" title="4"><span class="dt">Q=</span><span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>),</a>
-<a class="sourceLine" id="cb453-5" title="5"><span class="dt">Z=</span><span class="kw">matrix</span>(<span class="dv">1</span>,<span class="dv">4</span>,<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb453-6" title="6"><span class="dt">A=</span><span class="st">&quot;scaling&quot;</span>,</a>
-<a class="sourceLine" id="cb453-7" title="7"><span class="dt">R=</span><span class="st">&quot;diagonal and unequal&quot;</span>,</a>
-<a class="sourceLine" id="cb453-8" title="8"><span class="dt">x0=</span><span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>),</a>
-<a class="sourceLine" id="cb453-9" title="9"><span class="dt">tinitx=</span><span class="dv">0</span> )</a></code></pre></div>
+<div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb473-1" title="1">mod.list<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="st">&quot;u&quot;</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </a>
+<a class="sourceLine" id="cb473-2" title="2">    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>, <span class="dt">R =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, </a>
+<a class="sourceLine" id="cb473-3" title="3">    <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), <span class="dt">tinitx =</span> <span class="dv">0</span>)</a></code></pre></div>
 <p>and fit:</p>
-<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb454-1" title="1">fit<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model=</span>mod.list<span class="fl">.0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb474-1" title="1">fit<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.list<span class="fl">.0</span>)</a></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 32 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -562,14 +557,17 @@ Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <div id="sec-mss-model-residuals" class="section level3">
 <h3><span class="header-section-number">7.3.3</span> Model residuals</h3>
 <p>The model fits fine but look at the model residuals (Figure <a href="sec-mss-a-single-well-mixed-population.html#fig:mss-model-resids-plot">7.2</a>). They have problems.</p>
-<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb456-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb456-2" title="2">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit<span class="fl">.0</span>)</a>
-<a class="sourceLine" id="cb456-3" title="3"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>){</a>
-<a class="sourceLine" id="cb456-4" title="4"><span class="kw">plot</span>(resids<span class="op">$</span>model.residuals[i,],<span class="dt">ylab=</span><span class="st">&quot;model residuals&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb456-5" title="5"><span class="kw">abline</span>(<span class="dt">h=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb456-6" title="6"><span class="kw">title</span>(<span class="kw">rownames</span>(dat)[i])</a>
-<a class="sourceLine" id="cb456-7" title="7">}</a></code></pre></div>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb476-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb476-2" title="2">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit<span class="fl">.0</span>)</a></code></pre></div>
+<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
+<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb478-1" title="1"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
+<a class="sourceLine" id="cb478-2" title="2">    <span class="kw">plot</span>(resids<span class="op">$</span>model.residuals[i, ], <span class="dt">ylab =</span> <span class="st">&quot;model residuals&quot;</span>, </a>
+<a class="sourceLine" id="cb478-3" title="3">        <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb478-4" title="4">    <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb478-5" title="5">    <span class="kw">title</span>(<span class="kw">rownames</span>(dat)[i])</a>
+<a class="sourceLine" id="cb478-6" title="6">}</a></code></pre></div>
 
+<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:mss-model-resids-plot"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/mss-model-resids-plot-1.png" alt="The model residuals for the first model. SJI and EBays do not look good." width="80%" />
 <p class="caption">
@@ -601,6 +599,7 @@ Figure 7.2: The model residuals for the first model. SJI and EBays do not look g
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -619,6 +618,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

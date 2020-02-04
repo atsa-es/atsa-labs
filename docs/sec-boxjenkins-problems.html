@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5.13 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5.13 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -461,9 +462,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-boxjenkins-problems" class="section level2">
 <h2><span class="header-section-number">5.13</span> Problems</h2>
 <p>For these problems, use the catch landings from Greek waters (<code>greeklandings</code>) and the Chinook landings (<code>chinook</code>) in Washington data. Load the data as follows:</p>
-<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb375-1" title="1"><span class="kw">data</span>(greeklandings, <span class="dt">package=</span><span class="st">&quot;atsalibrary&quot;</span>)</a>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb375-1" title="1"><span class="kw">data</span>(greeklandings, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</a>
 <a class="sourceLine" id="cb375-2" title="2">landings &lt;-<span class="st"> </span>greeklandings</a>
-<a class="sourceLine" id="cb375-3" title="3"><span class="kw">data</span>(chinook, <span class="dt">package=</span><span class="st">&quot;atsalibrary&quot;</span>)</a>
+<a class="sourceLine" id="cb375-3" title="3"><span class="kw">data</span>(chinook, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</a>
 <a class="sourceLine" id="cb375-4" title="4">chinook &lt;-<span class="st"> </span>chinook.month</a></code></pre></div>
 <ol style="list-style-type: decimal">
 <li>Augmented Dickey-Fuller tests in R.
@@ -482,24 +483,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol></li>
 <li>Repeat the stationarity tests for sardine 1964-1987 in the landings data set. Here is how to set up the data for another species.</li>
 </ol>
-<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb376-1" title="1">datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species<span class="op">==</span><span class="st">&quot;Sardine&quot;</span>)</a>
-<a class="sourceLine" id="cb376-2" title="2">dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start=</span><span class="dv">1964</span>)</a>
-<a class="sourceLine" id="cb376-3" title="3">dat &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start=</span><span class="dv">1964</span>, <span class="dt">end=</span><span class="dv">1987</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb376-1" title="1">datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Sardine&quot;</span>)</a>
+<a class="sourceLine" id="cb376-2" title="2">dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</a>
+<a class="sourceLine" id="cb376-3" title="3">dat &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</a></code></pre></div>
 <pre><code>a. Do a Dickey-Fuller (DF) test using `ur.df()` and `adf.test()`. You have to set the lags. What does the result tell you?
 a. Do an Augmented Dickey-Fuller (ADF) test using `ur.df()`. How did you choose to set the lags? How is the ADF test different than the DF test?
 b. Do a KPSS test using `kpss.test()`. What does the result tell you?</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Using the anchovy 1964-1987 data, fit using <code>auto.arima()</code> with <code>trace=TRUE</code>.</li>
 </ol>
-<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb378-1" title="1">forecast<span class="op">::</span><span class="kw">auto.arima</span>(anchovy, <span class="dt">trace=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb378-1" title="1">forecast<span class="op">::</span><span class="kw">auto.arima</span>(anchovy, <span class="dt">trace =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>a. Fit each of the models listed using `Arima()` and show that you can produce the same AICc value that is shown in the trace table.
 b. What models are within $\Delta$AIC of 2? What is different about these models?</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Repeat the stationarity tests and differencing tests for anchovy using the following two time ranges: 1964-1987 and 1988-2007. The following shows you how to subset the data:</li>
 </ol>
-<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb380-1" title="1">datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species<span class="op">==</span><span class="st">&quot;Anchovy&quot;</span>)</a>
-<a class="sourceLine" id="cb380-2" title="2">dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start=</span><span class="dv">1964</span>)</a>
-<a class="sourceLine" id="cb380-3" title="3">dat64<span class="fl">.87</span> &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start=</span><span class="dv">1964</span>, <span class="dt">end=</span><span class="dv">1987</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb380-1" title="1">datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Anchovy&quot;</span>)</a>
+<a class="sourceLine" id="cb380-2" title="2">dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</a>
+<a class="sourceLine" id="cb380-3" title="3">dat64<span class="fl">.87</span> &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</a></code></pre></div>
 <pre><code>a. Plot the time series for the two time periods. For the `kpss.test()`, which null is appropriate, &quot;Level&quot; or &quot;Trend&quot;?
 a. Do the conclusions regarding stationarity and the amount of differencing needed change depending on which time period you analyze? For both time periods, use `adf.test()` with default values and `kpss.test()` with null=&quot;Trend&quot;.
 c. Fit each time period using `auto.arima()`.  Do the selected models change? What do the coefficients mean? Coefficients means the mean and drifts terms and the AR and MA terms.
@@ -549,6 +550,7 @@ e. You cannot compare the AIC values for an Arima(0,1,0) and Arima(0,0,1). Why d
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -567,6 +569,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },

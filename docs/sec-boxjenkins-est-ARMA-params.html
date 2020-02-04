@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5.7 Estimating ARMA parameters | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.15 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5.7 Estimating ARMA parameters | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2019-11-26" />
+<meta name="date" content="2020-02-03" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -401,10 +401,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
 <li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
-<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate Feb SWE using AR(1) with spatial correlation</a></li>
-<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate Feb SWE using only correlation</a></li>
-<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate Feb SWE using DFA</a></li>
+<li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
+<li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
+<li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
+<li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
 <li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
@@ -466,13 +467,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Simulate AR(2) data and add a mean level so that the data are not mean 0.</p>
 <p><span class="math display">\[x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\y_t = x_t + m\]</span></p>
 <div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb337-1" title="1">m &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb337-2" title="2">ar2 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">1000</span>, <span class="dt">model=</span><span class="kw">list</span>(<span class="dt">ar=</span><span class="kw">c</span>(.<span class="dv">8</span>,.<span class="dv">1</span>))) <span class="op">+</span><span class="st"> </span>m</a></code></pre></div>
+<a class="sourceLine" id="cb337-2" title="2">ar2 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="dt">model =</span> <span class="kw">list</span>(<span class="dt">ar =</span> <span class="kw">c</span>(<span class="fl">0.8</span>, <span class="fl">0.1</span>))) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb337-3" title="3"><span class="st">    </span>m</a></code></pre></div>
 <p>To see info on <code>arima.sim()</code>, type <code>?arima.sim</code>.</p>
 </div>
 <div id="fit-with-arima" class="section level3">
 <h3><span class="header-section-number">5.7.2</span> Fit with <code>Arima()</code></h3>
 <p>Fit an ARMA(2) with level to the data.</p>
-<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb338-1" title="1">forecast<span class="op">::</span><span class="kw">Arima</span>(ar2, <span class="dt">order=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">include.constant=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb338-1" title="1">forecast<span class="op">::</span><span class="kw">Arima</span>(ar2, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">include.constant =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>Series: ar2 
 ARIMA(2,0,0) with non-zero mean 
 
@@ -490,7 +492,7 @@ It is this model:</p>
 or as written above:
 <span class="math display">\[x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\y_t = x_t + m\]</span></p>
 <p>We could also use <code>arima()</code> to fit to the data.</p>
-<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb340-1" title="1"><span class="kw">arima</span>(ar2, <span class="dt">order=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">include.mean=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb340-1" title="1"><span class="kw">arima</span>(ar2, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">include.mean =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>Warning in arima(ar2, order = c(2, 0, 0), include.mean = TRUE): possible
 convergence problem: optim gave code = 1</code></pre>
 <pre><code>
@@ -508,8 +510,8 @@ sigma^2 estimated as 0.9802:  log likelihood = -1409.77,  aic = 2827.54</code></
 </div>
 <div id="ar1-simulated-data" class="section level3">
 <h3><span class="header-section-number">5.7.3</span> AR(1) simulated data</h3>
-<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb343-1" title="1">ar1 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">100</span>, <span class="dt">model=</span><span class="kw">list</span>(<span class="dt">ar=</span><span class="kw">c</span>(.<span class="dv">8</span>)))<span class="op">+</span>m</a>
-<a class="sourceLine" id="cb343-2" title="2">forecast<span class="op">::</span><span class="kw">Arima</span>(ar1, <span class="dt">order=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">include.constant=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb343-1" title="1">ar1 &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">model =</span> <span class="kw">list</span>(<span class="dt">ar =</span> <span class="kw">c</span>(<span class="fl">0.8</span>))) <span class="op">+</span><span class="st"> </span>m</a>
+<a class="sourceLine" id="cb343-2" title="2">forecast<span class="op">::</span><span class="kw">Arima</span>(ar1, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">include.constant =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>Series: ar1 
 ARIMA(1,0,0) with non-zero mean 
 
@@ -525,8 +527,9 @@ AIC=317.7   AICc=317.95   BIC=325.51</code></pre>
 <h3><span class="header-section-number">5.7.4</span> ARMA(1,2) simulated data</h3>
 <p>Simulate ARMA(1,2)
 <span class="math display">\[x_t = 0.8 x_{t-1} + e_t + 0.8 e_{t-1} + 0.2 e_{t-2}\]</span></p>
-<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1">arma12 =<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">100</span>, <span class="dt">model=</span><span class="kw">list</span>(<span class="dt">ar=</span><span class="kw">c</span>(<span class="fl">0.8</span>), <span class="dt">ma=</span><span class="kw">c</span>(<span class="fl">0.8</span>, <span class="fl">0.2</span>)))<span class="op">+</span>m</a>
-<a class="sourceLine" id="cb345-2" title="2">forecast<span class="op">::</span><span class="kw">Arima</span>(arma12, <span class="dt">order=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">2</span>), <span class="dt">include.constant=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1">arma12 =<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">model =</span> <span class="kw">list</span>(<span class="dt">ar =</span> <span class="kw">c</span>(<span class="fl">0.8</span>), <span class="dt">ma =</span> <span class="kw">c</span>(<span class="fl">0.8</span>, </a>
+<a class="sourceLine" id="cb345-2" title="2">    <span class="fl">0.2</span>))) <span class="op">+</span><span class="st"> </span>m</a>
+<a class="sourceLine" id="cb345-3" title="3">forecast<span class="op">::</span><span class="kw">Arima</span>(arma12, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="dt">include.constant =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>Series: arma12 
 ARIMA(1,0,2) with non-zero mean 
 
@@ -542,13 +545,13 @@ AIC=246.03   AICc=246.67   BIC=259.06</code></pre>
 <div id="these-functions-work-for-data-with-missing-values" class="section level3">
 <h3><span class="header-section-number">5.7.5</span> These functions work for data with missing values</h3>
 <p>Create some AR(2) data and then add missing values (NA).</p>
-<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb347-1" title="1">ar2miss &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n=</span><span class="dv">100</span>, <span class="dt">model=</span><span class="kw">list</span>(<span class="dt">ar=</span><span class="kw">c</span>(.<span class="dv">8</span>,.<span class="dv">1</span>)))</a>
-<a class="sourceLine" id="cb347-2" title="2">ar2miss[<span class="kw">sample</span>(<span class="dv">100</span>,<span class="dv">50</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
-<a class="sourceLine" id="cb347-3" title="3"><span class="kw">plot</span>(ar2miss, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb347-1" title="1">ar2miss &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">model =</span> <span class="kw">list</span>(<span class="dt">ar =</span> <span class="kw">c</span>(<span class="fl">0.8</span>, <span class="fl">0.1</span>)))</a>
+<a class="sourceLine" id="cb347-2" title="2">ar2miss[<span class="kw">sample</span>(<span class="dv">100</span>, <span class="dv">50</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb347-3" title="3"><span class="kw">plot</span>(ar2miss, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</a>
 <a class="sourceLine" id="cb347-4" title="4"><span class="kw">title</span>(<span class="st">&quot;many missing values&quot;</span>)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-arima-sim-miss-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Fit</p>
-<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb348-1" title="1">fit &lt;-<span class="st"> </span>forecast<span class="op">::</span><span class="kw">Arima</span>(ar2miss, <span class="dt">order=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb348-1" title="1">fit &lt;-<span class="st"> </span>forecast<span class="op">::</span><span class="kw">Arima</span>(ar2miss, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>))</a>
 <a class="sourceLine" id="cb348-2" title="2">fit</a></code></pre></div>
 <pre><code>Series: ar2miss 
 ARIMA(2,0,0) with non-zero mean 
@@ -561,9 +564,9 @@ s.e.  0.1555   0.1618   0.6061
 sigma^2 estimated as 0.9679:  log likelihood=-79.86
 AIC=167.72   AICc=168.15   BIC=178.06</code></pre>
 <p>Note <code>fitted()</code> does not return the expected value at time <span class="math inline">\(t\)</span>. It is the expected value of <span class="math inline">\(y_t\)</span> given the data up to time <span class="math inline">\(t-1\)</span>.</p>
-<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb350-1" title="1"><span class="kw">plot</span>(ar2miss, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb350-1" title="1"><span class="kw">plot</span>(ar2miss, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</a>
 <a class="sourceLine" id="cb350-2" title="2"><span class="kw">title</span>(<span class="st">&quot;many missing values&quot;</span>)</a>
-<a class="sourceLine" id="cb350-3" title="3"><span class="kw">lines</span>(<span class="kw">fitted</span>(fit), <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb350-3" title="3"><span class="kw">lines</span>(<span class="kw">fitted</span>(fit), <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-plot-Arima-fit-miss-1.png" width="80%" style="display: block; margin: auto;" />
 It is easy enough to get the expected value of <span class="math inline">\(y_t\)</span> for all the missing values but we’ll learn to do that when we learn the <strong>MARSS</strong> package and can apply the Kalman Smoother in that package.</p>
 </div>
@@ -590,6 +593,7 @@ It is easy enough to get the expected value of <span class="math inline">\(y_t\)
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "linkedin": false,
@@ -608,6 +612,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },
