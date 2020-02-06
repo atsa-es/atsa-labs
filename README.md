@@ -18,12 +18,13 @@
     bookdown::render_book("index.Rmd", "bookdown::pdf_book")
 -->
 
-## Installing bookdown
+## Installing bookdown and atsalibrary
 [back to top](#installing-bookdown)
 
     ```
     library(devtools)
     install_github("rstudio/bookdown")
+    install_github("nwfsc-timeseries/atsalibrary")
     ```
 
 To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
