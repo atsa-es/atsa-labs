@@ -1038,7 +1038,8 @@ Although we could simulate an AR($p$) process in R using a for loop just as we d
 *   ```order```   a vector of length 3 containing the ARIMA($p,d,q$) order
 *   ```ar```   a vector of length $p$ containing the AR($p$) coefficients
 *   ```ma```   a vector of length $q$ containing the MA($q$) coefficients
-*   ```sd```   a scalar indicating the std dev of the Gaussian errors
+
+In addition, one can specify sd as an argument of the ```arima()``` function. ```sd``` is a scalar indicating the std dev of the Gaussian errors.
 
 
 \noindent Note that you can omit the ```ma``` element entirely if you have an AR($p$) model, or omit the ```ar``` element if you have an MA($q$) model.  If you omit the ```sd``` element, ```arima.sim()``` will assume you want normally distributed errors with SD = 1.  Also note that you can pass ```arima.sim()``` your own time series of random errors or the name of a function that will generate the errors (*e.g.*, you could use ```rpois()``` if you wanted a model with Poisson errors).  Type ```?arima.sim``` for more details. 
@@ -1048,12 +1049,12 @@ Let's begin by simulating some AR(1) models and comparing their behavior.  First
 ```{r tslab-simAR1, echo=TRUE, eval=TRUE}
 set.seed(456)
 ## list description for AR(1) model with small coef
-AR.sm <- list(order=c(1,0,0), ar=0.1, sd=0.1)
+AR.sm <- list(order=c(1,0,0), ar=0.1)
 ## list description for AR(1) model with large coef
-AR.lg <- list(order=c(1,0,0), ar=0.9, sd=0.1)
+AR.lg <- list(order=c(1,0,0), ar=0.9)
 ## simulate AR(1)
-AR1.sm <- arima.sim(n=50, model=AR.sm)
-AR1.lg <- arima.sim(n=50, model=AR.lg)
+AR1.sm <- arima.sim(n=50, model=AR.sm, sd=0.1)
+AR1.lg <- arima.sim(n=50, model=AR.lg, sd=0.1)
 ```
 
 \noindent Now let's plot the 2 simulated series.
@@ -1100,12 +1101,12 @@ Next, let's generate two AR(1) models that have the same magnitude coeficient, b
 ```{r tslab-simAR1opps, echo=TRUE, eval=TRUE}
 set.seed(123)
 ## list description for AR(1) model with small coef
-AR.pos <- list(order=c(1,0,0), ar=0.5, sd=0.1)
+AR.pos <- list(order=c(1,0,0), ar=0.5)
 ## list description for AR(1) model with large coef
-AR.neg <- list(order=c(1,0,0), ar=-0.5, sd=0.1)
+AR.neg <- list(order=c(1,0,0), ar=-0.5)
 ## simulate AR(1)
-AR1.pos <- arima.sim(n=50, model=AR.pos)
-AR1.neg <- arima.sim(n=50, model=AR.neg)
+AR1.pos <- arima.sim(n=50, model=AR.pos, sd=0.1)
+AR1.neg <- arima.sim(n=50, model=AR.neg, sd=0.1)
 ```
 
 \noindent OK, let's plot the 2 simulated series.
@@ -1239,15 +1240,15 @@ We can simulate MA($q$) processes just as we did for AR($p$) processes using ```
 ```{r tslab-simMA1opps, echo=TRUE, eval=TRUE}
 set.seed(123)
 ## list description for MA(1) model with small coef
-MA.sm <- list(order=c(0,0,1), ma=0.2, sd=0.1)
+MA.sm <- list(order=c(0,0,1), ma=0.2)
 ## list description for MA(1) model with large coef
-MA.lg <- list(order=c(0,0,1), ma=0.8, sd=0.1)
+MA.lg <- list(order=c(0,0,1), ma=0.8)
 ## list description for MA(1) model with large coef
-MA.neg <- list(order=c(0,0,1), ma=-0.5, sd=0.1)
+MA.neg <- list(order=c(0,0,1), ma=-0.5)
 ## simulate MA(1)
-MA1.sm <- arima.sim(n=50, model=MA.sm)
-MA1.lg <- arima.sim(n=50, model=MA.lg)
-MA1.neg <- arima.sim(n=50, model=MA.neg)
+MA1.sm <- arima.sim(n=50, model=MA.sm, sd=0.1)
+MA1.lg <- arima.sim(n=50, model=MA.lg, sd=0.1)
+MA1.neg <- arima.sim(n=50, model=MA.neg, sd=0.1)
 ```
 
 \noindent with their associated plots.
