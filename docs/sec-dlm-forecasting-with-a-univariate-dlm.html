@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>9.8 Forecasting | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="9.8 Forecasting | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -538,28 +542,28 @@ and <span class="math inline">\(f_{t}\)</span> is the upwelling index at <span c
 <p>Working from Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-dlmFore3">(9.31)</a>, we can compute the expected value of the forecast at time <span class="math inline">\(t\)</span> and its variance using the Kalman filter. For the expectation, we need <span class="math inline">\(\mathbf{F}_{t}^\top\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>.
 <span class="math inline">\(\mathbf{F}_t^\top\)</span> is called <span class="math inline">\(\mathbf{Z}_t\)</span> in MARSS notation. The one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, the <span class="math inline">\(\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>, are calculated as part of the Kalman filter algorithm—they are termed <span class="math inline">\(\tilde{x}_t^{t-1}\)</span> in MARSS notation and stored as <code>xtt1</code> in the list produced by the <code>MARSSkfss()</code> Kalman filter function.</p>
 <p>Using the <code>Z</code> defined in <a href="sec-dlm-salmon-example.html#sec-dlm-salmon-example">9.6</a>, we compute the mean forecast as follows:</p>
-<div class="sourceCode" id="cb566"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb566-1" title="1"><span class="co"># get list of Kalman filter output</span></a>
-<a class="sourceLine" id="cb566-2" title="2">kf.out &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)</a>
-<a class="sourceLine" id="cb566-3" title="3"><span class="co">## forecasts of regr parameters; 2xT matrix</span></a>
-<a class="sourceLine" id="cb566-4" title="4">eta &lt;-<span class="st"> </span>kf.out<span class="op">$</span>xtt1</a>
-<a class="sourceLine" id="cb566-5" title="5"><span class="co">## ts of E(forecasts)</span></a>
-<a class="sourceLine" id="cb566-6" title="6">fore.mean &lt;-<span class="st"> </span><span class="kw">vector</span>()</a>
-<a class="sourceLine" id="cb566-7" title="7"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</a>
-<a class="sourceLine" id="cb566-8" title="8">    fore.mean[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span><span class="ot">FALSE</span>]</a>
-<a class="sourceLine" id="cb566-9" title="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-1"></a><span class="co"># get list of Kalman filter output</span></span>
+<span id="cb550-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-2"></a>kf.out &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)</span>
+<span id="cb550-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-3"></a><span class="co">## forecasts of regr parameters; 2xT matrix</span></span>
+<span id="cb550-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-4"></a>eta &lt;-<span class="st"> </span>kf.out<span class="op">$</span>xtt1</span>
+<span id="cb550-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-5"></a><span class="co">## ts of E(forecasts)</span></span>
+<span id="cb550-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-6"></a>fore.mean &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
+<span id="cb550-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-7"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
+<span id="cb550-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-8"></a>    fore.mean[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb550-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb550-9"></a>}</span></code></pre></div>
 <p>For the variance of the forecasts, we need
 <span class="math inline">\(\mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}\)</span>. As with the mean, <span class="math inline">\(\mathbf{F}^\top_t \equiv \mathbf{Z}_t\)</span>. The variances of the one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\text{Var}(\boldsymbol{\theta}_{t|t-1})\)</span>, are also calculated as part of the Kalman filter algorithm—they are stored as <code>Vtt1</code> in the list produced by the <code>MARSSkfss()</code> function. Lastly, the observation variance <span class="math inline">\(\hat{r}\)</span> was estimated when we fit the DLM to the data using <code>MARSS()</code> and can be extracted from the <code>dlm1</code> fit.</p>
 <p>Putting this together, we can compute the forecast variance:</p>
-<div class="sourceCode" id="cb567"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb567-1" title="1"><span class="co"># variance of regr parameters; 1x2xT array</span></a>
-<a class="sourceLine" id="cb567-2" title="2">Phi &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Vtt1</a>
-<a class="sourceLine" id="cb567-3" title="3"><span class="co">## obs variance; 1x1 matrix</span></a>
-<a class="sourceLine" id="cb567-4" title="4">R.est &lt;-<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R</a>
-<a class="sourceLine" id="cb567-5" title="5"><span class="co">## ts of Var(forecasts)</span></a>
-<a class="sourceLine" id="cb567-6" title="6">fore.var &lt;-<span class="st"> </span><span class="kw">vector</span>()</a>
-<a class="sourceLine" id="cb567-7" title="7"><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</a>
-<a class="sourceLine" id="cb567-8" title="8">    tZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span></a>
-<a class="sourceLine" id="cb567-9" title="9">    fore.var[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est</a>
-<a class="sourceLine" id="cb567-10" title="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb551"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb551-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-1"></a><span class="co"># variance of regr parameters; 1x2xT array</span></span>
+<span id="cb551-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-2"></a>Phi &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Vtt1</span>
+<span id="cb551-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-3"></a><span class="co">## obs variance; 1x1 matrix</span></span>
+<span id="cb551-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-4"></a>R.est &lt;-<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R</span>
+<span id="cb551-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-5"></a><span class="co">## ts of Var(forecasts)</span></span>
+<span id="cb551-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-6"></a>fore.var &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
+<span id="cb551-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-7"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
+<span id="cb551-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-8"></a>    tZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span></span>
+<span id="cb551-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-9"></a>    fore.var[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est</span>
+<span id="cb551-10"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb551-10"></a>}</span></code></pre></div>
 <p>Plots of the model mean forecasts with their estimated uncertainty are shown in Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:dlm-plotdlmForeLogit">9.3</a>. Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time <span class="math inline">\(t\)</span> based on data available only through time <span class="math inline">\(t-1\)</span>. In this case, however, MARSS is actually estimating the states at <span class="math inline">\(t=0\)</span> (<span class="math inline">\(\boldsymbol{\theta}_0\)</span>), which allows us to compute a forecast for the first time point.
 <!-- % forecast plot - logit space --></p>
 

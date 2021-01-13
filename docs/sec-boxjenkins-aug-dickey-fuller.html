@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>5.3 Dickey-Fuller and Augmented Dickey-Fuller tests | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="5.3 Dickey-Fuller and Augmented Dickey-Fuller tests | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -484,9 +488,9 @@ where <span class="math inline">\(y_t\)</span> is your data. It is written this 
 <div id="test-on-white-noise" class="section level4">
 <h4><span class="header-section-number">5.3.3.1</span> Test on white noise</h4>
 <p>Let’s start by doing the test on data that we know are stationary, white noise. We will use an Augmented Dickey-Fuller test where we use the default number of lags (amount of time-dependency) in our test. For a time-series of 100, this is 4.</p>
-<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb292-1" title="1">TT &lt;-<span class="st"> </span><span class="dv">100</span></a>
-<a class="sourceLine" id="cb292-2" title="2">wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)  <span class="co"># white noise</span></a>
-<a class="sourceLine" id="cb292-3" title="3">tseries<span class="op">::</span><span class="kw">adf.test</span>(wn)</a></code></pre></div>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb291-1"></a>TT &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb291-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb291-2"></a>wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)  <span class="co"># white noise</span></span>
+<span id="cb291-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb291-3"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wn)</span></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wn): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -496,7 +500,7 @@ Dickey-Fuller = -4.8309, Lag order = 4, p-value = 0.01
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis is rejected.</p>
 <p>Try a Dickey-Fuller test. This is testing with a null hypothesis of AR(1) stationarity versus a null hypothesis with AR(4) stationarity when we used the default <code>k</code>.</p>
-<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb295-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(wn, <span class="dt">k =</span> <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb294-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wn, <span class="dt">k =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wn, k = 0): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -509,9 +513,9 @@ alternative hypothesis: stationary</code></pre>
 <div id="test-on-white-noise-with-trend" class="section level4">
 <h4><span class="header-section-number">5.3.3.2</span> Test on white noise with trend</h4>
 <p>Try the test on white noise with a trend and intercept.</p>
-<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1">intercept &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb298-2" title="2">wnt &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT <span class="op">+</span><span class="st"> </span>intercept</a>
-<a class="sourceLine" id="cb298-3" title="3">tseries<span class="op">::</span><span class="kw">adf.test</span>(wnt)</a></code></pre></div>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb297-1"></a>intercept &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb297-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb297-2"></a>wnt &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT <span class="op">+</span><span class="st"> </span>intercept</span>
+<span id="cb297-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb297-3"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wnt)</span></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wnt): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -524,8 +528,8 @@ alternative hypothesis: stationary</code></pre>
 <div id="test-on-random-walk" class="section level4">
 <h4><span class="header-section-number">5.3.3.3</span> Test on random walk</h4>
 <p>Let’s try the test on a random walk (nonstationary).</p>
-<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb301-1" title="1">rw &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(TT))</a>
-<a class="sourceLine" id="cb301-2" title="2">tseries<span class="op">::</span><span class="kw">adf.test</span>(rw)</a></code></pre></div>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb300-1"></a>rw &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(TT))</span>
+<span id="cb300-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb300-2"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(rw)</span></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -534,7 +538,7 @@ Dickey-Fuller = -2.3038, Lag order = 4, p-value = 0.4508
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis is NOT rejected as the p-value is greater than 0.05.</p>
 <p>Try a Dickey-Fuller test.</p>
-<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb303-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(rw, <span class="dt">k =</span> <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(rw, <span class="dt">k =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -545,7 +549,7 @@ alternative hypothesis: stationary</code></pre>
 </div>
 <div id="test-the-anchovy-data" class="section level4">
 <h4><span class="header-section-number">5.3.3.4</span> Test the anchovy data</h4>
-<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb305-1" title="1">tseries<span class="op">::</span><span class="kw">adf.test</span>(anchovyts)</a></code></pre></div>
+<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb304-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(anchovyts)</span></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -570,9 +574,9 @@ alternative hypothesis: stationary</code></pre>
 <code>z.diff</code> means <span class="math inline">\(\Delta y_t\)</span> and <code>z.lag.1</code> is <span class="math inline">\(y_{t-1}\)</span>.</p>
 <p>When you use <code>summary()</code> for the output from <code>ur.df()</code>, you will see the estimated values for <span class="math inline">\(\gamma\)</span> (denoted <code>z.lag.1</code>), intercept and trend. If you see <code>***</code> or <code>**</code> on the coefficients list for <code>z.lag.1</code>, it indicates that the effect of <code>z.lag.1</code> is significantly different than 0 and this supports the assumption of stationarity.</p>
 <p>The <code>intercept</code> and <code>tt</code> estimates indicate where there is a non-zero level (intercept) or linear trend (tt).</p>
-<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1">wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)</a>
-<a class="sourceLine" id="cb308-2" title="2">test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type =</span> <span class="st">&quot;trend&quot;</span>, <span class="dt">lags =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb308-3" title="3"><span class="kw">summary</span>(test)</a></code></pre></div>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb307-1"></a>wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)</span>
+<span id="cb307-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb307-2"></a>test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type =</span> <span class="st">&quot;trend&quot;</span>, <span class="dt">lags =</span> <span class="dv">0</span>)</span>
+<span id="cb307-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb307-3"></a><span class="kw">summary</span>(test)</span></code></pre></div>
 <pre><code>
 ############################################### 
 # Augmented Dickey-Fuller Test Unit Root Test # 

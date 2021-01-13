@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12.3 Regression with autocorrelated errors | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12.3 Regression with autocorrelated errors | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -472,52 +476,52 @@ E[y_t] = \mu + \phi * e_{t-1}
 \tag{12.4}
 \end{equation}\]</span></p>
 <p>Like in our first model, we assume that the data follow a normal likelihood (or equivalently that the residuals are normally distributed), <span class="math inline">\({y_t} = E[{y_t}] + {e}_{t}\)</span>, or <span class="math inline">\({y_t} \sim \,\text{N}(E[y_t], \sigma^2)\)</span>. Thus, it is possible to express the subsequent deviations as <span class="math inline">\(e_t = y_t - E[y_t]\)</span>, or equivalently as <span class="math inline">\(e_t = y_t - \mu -\phi \times e_{t-1}\)</span>. The JAGS script for this model is:</p>
-<div class="sourceCode" id="cb643"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb643-1" title="1"><span class="co"># 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS no</span></a>
-<a class="sourceLine" id="cb643-2" title="2"><span class="co"># covariates, so intercept only.</span></a>
-<a class="sourceLine" id="cb643-3" title="3"></a>
-<a class="sourceLine" id="cb643-4" title="4">model.loc =<span class="st"> </span>(<span class="st">&quot;lmcor_intercept.txt&quot;</span>)</a>
-<a class="sourceLine" id="cb643-5" title="5">jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb643-6" title="6"><span class="st">model {  </span></a>
-<a class="sourceLine" id="cb643-7" title="7"><span class="st">   # priors on parameters</span></a>
-<a class="sourceLine" id="cb643-8" title="8"><span class="st">   mu ~ dnorm(0, 0.01); </span></a>
-<a class="sourceLine" id="cb643-9" title="9"><span class="st">   tau.obs ~ dgamma(0.001,0.001); </span></a>
-<a class="sourceLine" id="cb643-10" title="10"><span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span></a>
-<a class="sourceLine" id="cb643-11" title="11"><span class="st">   phi ~ dunif(-1,1);</span></a>
-<a class="sourceLine" id="cb643-12" title="12"><span class="st">   tau.cor &lt;- tau.obs / (1-phi*phi); # Var = sigma2 * (1-rho^2)</span></a>
-<a class="sourceLine" id="cb643-13" title="13"><span class="st">   </span></a>
-<a class="sourceLine" id="cb643-14" title="14"><span class="st">   epsilon[1] &lt;- Y[1] - mu;</span></a>
-<a class="sourceLine" id="cb643-15" title="15"><span class="st">   predY[1] &lt;- mu; # initial value</span></a>
-<a class="sourceLine" id="cb643-16" title="16"><span class="st">   for(i in 2:N) {</span></a>
-<a class="sourceLine" id="cb643-17" title="17"><span class="st">      predY[i] &lt;- mu + phi * epsilon[i-1]; </span></a>
-<a class="sourceLine" id="cb643-18" title="18"><span class="st">      Y[i] ~ dnorm(predY[i], tau.cor);</span></a>
-<a class="sourceLine" id="cb643-19" title="19"><span class="st">      epsilon[i] &lt;- (Y[i] - mu) - phi*epsilon[i-1];</span></a>
-<a class="sourceLine" id="cb643-20" title="20"><span class="st">   }</span></a>
-<a class="sourceLine" id="cb643-21" title="21"><span class="st">}</span></a>
-<a class="sourceLine" id="cb643-22" title="22"><span class="st">&quot;</span>, </a>
-<a class="sourceLine" id="cb643-23" title="23">    <span class="dt">file =</span> model.loc)</a></code></pre></div>
+<div class="sourceCode" id="cb628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb628-1"><a href="sec-jags-regression-with-corr-errors.html#cb628-1"></a><span class="co"># 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS no</span></span>
+<span id="cb628-2"><a href="sec-jags-regression-with-corr-errors.html#cb628-2"></a><span class="co"># covariates, so intercept only.</span></span>
+<span id="cb628-3"><a href="sec-jags-regression-with-corr-errors.html#cb628-3"></a></span>
+<span id="cb628-4"><a href="sec-jags-regression-with-corr-errors.html#cb628-4"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;lmcor_intercept.txt&quot;</span>)</span>
+<span id="cb628-5"><a href="sec-jags-regression-with-corr-errors.html#cb628-5"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb628-6"><a href="sec-jags-regression-with-corr-errors.html#cb628-6"></a><span class="st">model {  </span></span>
+<span id="cb628-7"><a href="sec-jags-regression-with-corr-errors.html#cb628-7"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb628-8"><a href="sec-jags-regression-with-corr-errors.html#cb628-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
+<span id="cb628-9"><a href="sec-jags-regression-with-corr-errors.html#cb628-9"></a><span class="st">   tau.obs ~ dgamma(0.001,0.001); </span></span>
+<span id="cb628-10"><a href="sec-jags-regression-with-corr-errors.html#cb628-10"></a><span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span></span>
+<span id="cb628-11"><a href="sec-jags-regression-with-corr-errors.html#cb628-11"></a><span class="st">   phi ~ dunif(-1,1);</span></span>
+<span id="cb628-12"><a href="sec-jags-regression-with-corr-errors.html#cb628-12"></a><span class="st">   tau.cor &lt;- tau.obs / (1-phi*phi); # Var = sigma2 * (1-rho^2)</span></span>
+<span id="cb628-13"><a href="sec-jags-regression-with-corr-errors.html#cb628-13"></a><span class="st">   </span></span>
+<span id="cb628-14"><a href="sec-jags-regression-with-corr-errors.html#cb628-14"></a><span class="st">   epsilon[1] &lt;- Y[1] - mu;</span></span>
+<span id="cb628-15"><a href="sec-jags-regression-with-corr-errors.html#cb628-15"></a><span class="st">   predY[1] &lt;- mu; # initial value</span></span>
+<span id="cb628-16"><a href="sec-jags-regression-with-corr-errors.html#cb628-16"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb628-17"><a href="sec-jags-regression-with-corr-errors.html#cb628-17"></a><span class="st">      predY[i] &lt;- mu + phi * epsilon[i-1]; </span></span>
+<span id="cb628-18"><a href="sec-jags-regression-with-corr-errors.html#cb628-18"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.cor);</span></span>
+<span id="cb628-19"><a href="sec-jags-regression-with-corr-errors.html#cb628-19"></a><span class="st">      epsilon[i] &lt;- (Y[i] - mu) - phi*epsilon[i-1];</span></span>
+<span id="cb628-20"><a href="sec-jags-regression-with-corr-errors.html#cb628-20"></a><span class="st">   }</span></span>
+<span id="cb628-21"><a href="sec-jags-regression-with-corr-errors.html#cb628-21"></a><span class="st">}</span></span>
+<span id="cb628-22"><a href="sec-jags-regression-with-corr-errors.html#cb628-22"></a><span class="st">&quot;</span>, </span>
+<span id="cb628-23"><a href="sec-jags-regression-with-corr-errors.html#cb628-23"></a>    <span class="dt">file =</span> model.loc)</span></code></pre></div>
 <p>Notice several subtle changes from the simpler first model: (1) we are estimating the autocorrelation parameter <span class="math inline">\(\phi\)</span>, which is assigned a Uniform(-1, 1) prior, (2) we model the residual variance as a function of the autocorrelation, and (3) we allow the autocorrelation to affect the predicted values <code>predY</code>. One other change we can make is to add <code>predY</code> to the list of parameters we want returned to R.</p>
-<div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb644-1" title="1">jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</a>
-<a class="sourceLine" id="cb644-2" title="2">jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)</a>
-<a class="sourceLine" id="cb644-3" title="3">mod_lmcor_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, </a>
-<a class="sourceLine" id="cb644-4" title="4">    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb644-5" title="5">    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="sec-jags-regression-with-corr-errors.html#cb629-1"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
+<span id="cb629-2"><a href="sec-jags-regression-with-corr-errors.html#cb629-2"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
+<span id="cb629-3"><a href="sec-jags-regression-with-corr-errors.html#cb629-3"></a>mod_lmcor_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, </span>
+<span id="cb629-4"><a href="sec-jags-regression-with-corr-errors.html#cb629-4"></a>    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb629-5"><a href="sec-jags-regression-with-corr-errors.html#cb629-5"></a>    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>For some models, we may be interested in examining the posterior fits to data. You can make this plot yourself, but we have also put together a simple function whose arguments are one of our fitted models and the raw data. The function is:</p>
-<div class="sourceCode" id="cb645"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb645-1" title="1">plotModelOutput =<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {</a>
-<a class="sourceLine" id="cb645-2" title="2">    <span class="co"># attach the model</span></a>
-<a class="sourceLine" id="cb645-3" title="3">    <span class="kw">attach.jags</span>(jagsmodel)</a>
-<a class="sourceLine" id="cb645-4" title="4">    x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))</a>
-<a class="sourceLine" id="cb645-5" title="5">    summaryPredictions =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), </a>
-<a class="sourceLine" id="cb645-6" title="6">        <span class="kw">apply</span>(predY, <span class="dv">2</span>, mean), <span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</a>
-<a class="sourceLine" id="cb645-7" title="7">    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, summaryPredictions)), </a>
-<a class="sourceLine" id="cb645-8" title="8">        <span class="kw">max</span>(<span class="kw">c</span>(Y, summaryPredictions))), <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, </a>
-<a class="sourceLine" id="cb645-9" title="9">        <span class="dt">main =</span> <span class="kw">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="op">$</span>model.file))</a>
-<a class="sourceLine" id="cb645-10" title="10">    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="kw">rev</span>(summaryPredictions[, </a>
-<a class="sourceLine" id="cb645-11" title="11">        <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</a>
-<a class="sourceLine" id="cb645-12" title="12">    <span class="kw">lines</span>(summaryPredictions[, <span class="dv">2</span>])</a>
-<a class="sourceLine" id="cb645-13" title="13">    <span class="kw">points</span>(Y)</a>
-<a class="sourceLine" id="cb645-14" title="14">}</a></code></pre></div>
+<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="sec-jags-regression-with-corr-errors.html#cb630-1"></a>plotModelOutput =<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {</span>
+<span id="cb630-2"><a href="sec-jags-regression-with-corr-errors.html#cb630-2"></a>    <span class="co"># attach the model</span></span>
+<span id="cb630-3"><a href="sec-jags-regression-with-corr-errors.html#cb630-3"></a>    <span class="kw">attach.jags</span>(jagsmodel)</span>
+<span id="cb630-4"><a href="sec-jags-regression-with-corr-errors.html#cb630-4"></a>    x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))</span>
+<span id="cb630-5"><a href="sec-jags-regression-with-corr-errors.html#cb630-5"></a>    summaryPredictions =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), </span>
+<span id="cb630-6"><a href="sec-jags-regression-with-corr-errors.html#cb630-6"></a>        <span class="kw">apply</span>(predY, <span class="dv">2</span>, mean), <span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
+<span id="cb630-7"><a href="sec-jags-regression-with-corr-errors.html#cb630-7"></a>    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, summaryPredictions)), </span>
+<span id="cb630-8"><a href="sec-jags-regression-with-corr-errors.html#cb630-8"></a>        <span class="kw">max</span>(<span class="kw">c</span>(Y, summaryPredictions))), <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, </span>
+<span id="cb630-9"><a href="sec-jags-regression-with-corr-errors.html#cb630-9"></a>        <span class="dt">main =</span> <span class="kw">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="op">$</span>model.file))</span>
+<span id="cb630-10"><a href="sec-jags-regression-with-corr-errors.html#cb630-10"></a>    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="kw">rev</span>(summaryPredictions[, </span>
+<span id="cb630-11"><a href="sec-jags-regression-with-corr-errors.html#cb630-11"></a>        <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb630-12"><a href="sec-jags-regression-with-corr-errors.html#cb630-12"></a>    <span class="kw">lines</span>(summaryPredictions[, <span class="dv">2</span>])</span>
+<span id="cb630-13"><a href="sec-jags-regression-with-corr-errors.html#cb630-13"></a>    <span class="kw">points</span>(Y)</span>
+<span id="cb630-14"><a href="sec-jags-regression-with-corr-errors.html#cb630-14"></a>}</span></code></pre></div>
 <p>We can use the function to plot the predicted posterior mean with 95% CIs, as well as the raw data. For example, try</p>
-<div class="sourceCode" id="cb646"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb646-1" title="1"><span class="kw">plotModelOutput</span>(mod_lmcor_intercept, Wind)</a></code></pre></div>
+<div class="sourceCode" id="cb631"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb631-1"><a href="sec-jags-regression-with-corr-errors.html#cb631-1"></a><span class="kw">plotModelOutput</span>(mod_lmcor_intercept, Wind)</span></code></pre></div>
 
 <pre><code>The following object is masked _by_ .GlobalEnv:
 

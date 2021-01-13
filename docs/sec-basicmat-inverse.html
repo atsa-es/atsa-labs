@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>1.6 Taking the inverse of a square matrix | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="1.6 Taking the inverse of a square matrix | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -462,27 +466,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-basicmat-inverse" class="section level2">
 <h2><span class="header-section-number">1.6</span> Taking the inverse of a square matrix</h2>
 <p>The inverse of a matrix is denoted <span class="math inline">\(\mathbf{A}^{-1}\)</span>. You can think of the inverse of a matrix like <span class="math inline">\(1/a\)</span>. <span class="math inline">\(1/a \times a = 1\)</span>. <span class="math inline">\(\mathbf{A}^{-1}\mathbf{A} = \mathbf{A}\mathbf{A}^{-1} = \mathbf{I}\)</span>. The inverse of a matrix does not always exist; for one it has to be square. We’ll be using inverses for variance-covariance matrices and by definition (of a variance-covariance matrix), the inverse of those exist. In R, there are a couple way common ways to take the inverse of a variance-covariance matrix (or something with the same properties). <code>solve()</code> is the most common probably:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1">A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb111-2" title="2">invA =<span class="st"> </span><span class="kw">solve</span>(A)</a>
-<a class="sourceLine" id="cb111-3" title="3">invA <span class="op">%*%</span><span class="st"> </span>A</a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="sec-basicmat-inverse.html#cb111-1"></a>A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb111-2"><a href="sec-basicmat-inverse.html#cb111-2"></a>invA =<span class="st"> </span><span class="kw">solve</span>(A)</span>
+<span id="cb111-3"><a href="sec-basicmat-inverse.html#cb111-3"></a>invA <span class="op">%*%</span><span class="st"> </span>A</span></code></pre></div>
 <pre><code>             [,1]          [,2] [,3]
 [1,] 1.000000e+00 -6.938894e-18    0
 [2,] 2.081668e-17  1.000000e+00    0
 [3,] 0.000000e+00  0.000000e+00    1</code></pre>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1">A <span class="op">%*%</span><span class="st"> </span>invA</a></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="sec-basicmat-inverse.html#cb113-1"></a>A <span class="op">%*%</span><span class="st"> </span>invA</span></code></pre></div>
 <pre><code>             [,1]          [,2] [,3]
 [1,] 1.000000e+00 -6.938894e-18    0
 [2,] 2.081668e-17  1.000000e+00    0
 [3,] 0.000000e+00  0.000000e+00    1</code></pre>
 <p>Another option is to use <code>chol2inv()</code> which uses a Cholesky decomposition:</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb115-2" title="2">invA =<span class="st"> </span><span class="kw">chol2inv</span>(<span class="kw">chol</span>(A))</a>
-<a class="sourceLine" id="cb115-3" title="3">invA <span class="op">%*%</span><span class="st"> </span>A</a></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="sec-basicmat-inverse.html#cb115-1"></a>A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb115-2"><a href="sec-basicmat-inverse.html#cb115-2"></a>invA =<span class="st"> </span><span class="kw">chol2inv</span>(<span class="kw">chol</span>(A))</span>
+<span id="cb115-3"><a href="sec-basicmat-inverse.html#cb115-3"></a>invA <span class="op">%*%</span><span class="st"> </span>A</span></code></pre></div>
 <pre><code>              [,1]         [,2]          [,3]
 [1,]  1.000000e+00 6.938894e-17  0.000000e+00
 [2,]  2.081668e-17 1.000000e+00 -2.775558e-17
 [3,] -5.551115e-17 0.000000e+00  1.000000e+00</code></pre>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1">A <span class="op">%*%</span><span class="st"> </span>invA</a></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="sec-basicmat-inverse.html#cb117-1"></a>A <span class="op">%*%</span><span class="st"> </span>invA</span></code></pre></div>
 <pre><code>             [,1]          [,2]          [,3]
 [1,] 1.000000e+00  2.081668e-17 -5.551115e-17
 [2,] 6.938894e-17  1.000000e+00  0.000000e+00

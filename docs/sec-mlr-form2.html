@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2.3 Matrix Form 2 | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2.3 Matrix Form 2 | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -467,38 +471,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \begin{bmatrix}stack.loss_1\\stack.loss_2\\stack.loss_3\\stack.loss_4\end{bmatrix}
 = 
 \begin{bmatrix}
-\alpha&amp;\beta&amp;0&amp;0&amp;0\\
-\alpha&amp;0&amp;\beta&amp;0&amp;0\\
-\alpha&amp;0&amp;0&amp;\beta&amp;0\\
-\alpha&amp;0&amp;0&amp;0&amp;\beta
+\beta&amp;0&amp;0&amp;0\\
+0&amp;\beta&amp;0&amp;0\\
+0&amp;0&amp;\beta&amp;0\\
+0&amp;0&amp;0&amp;\beta
 \end{bmatrix}
-\begin{bmatrix}1\\air_1\\air_2\\air_3\\air_4\end{bmatrix}
+\begin{bmatrix}air_1\\air_2\\air_3\\air_4\end{bmatrix}
 +
+\begin{bmatrix}
+\alpha\\
+\alpha\\
+\alpha\\
+\alpha
+\end{bmatrix} + 
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
 \end{equation}\]</span>
 Work through the matrix algebra to make sure you understand why Equation <a href="sec-mlr-form2.html#eq:stackloss-form2">(2.7)</a> is the same as Equation <a href="sec-mlr-lr1.html#eq:stacklossi">(2.1)</a> for all the <span class="math inline">\(i\)</span> data points together.</p>
 <p>We will write Form 2 succinctly as
 <span class="math display" id="eq:form2-succinct">\[\begin{equation}
 \tag{2.8}
-\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e}
+\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{a}+\mathbf{e}
 \end{equation}\]</span></p>
 <div id="sec-mlr-form2m" class="section level3">
 <h3><span class="header-section-number">2.3.1</span> Form 2 with multiple explanatory variables</h3>
 <p>The <span class="math inline">\(\mathbf{x}\)</span> is a column vector of the explanatory variables. If we have more explanatory variables, we add them to the column vector at the bottom. So if we had air flow, water temperature and acid concentration as explanatory variables, <span class="math inline">\(\mathbf{x}\)</span> looks like
 <span class="math display" id="eq:ss2-form2">\[\begin{equation}
 \tag{2.9}
-\begin{bmatrix}1 \\ air_1 \\ air_2 \\ air_3 \\ air_4 \\ water_1 \\ water_2 \\ water_3 \\ water_4 \\ acid_1 \\ acid_2 \\ acid_3 \\ acid_4 \end{bmatrix}
+\begin{bmatrix}air_1 \\ air_2 \\ air_3 \\ air_4 \\ water_1 \\ water_2 \\ water_3 \\ water_4 \\ acid_1 \\ acid_2 \\ acid_3 \\ acid_4 \end{bmatrix}
 \end{equation}\]</span>
 Add columns to the <span class="math inline">\(\mathbf{Z}\)</span> matrix for each new variable.
 <span class="math display">\[\begin{equation}
 \begin{bmatrix}
-\alpha &amp; \beta_1 &amp; 0 &amp; 0 &amp; 0 &amp; \beta_2 &amp; 0 &amp; 0 &amp; 0 &amp; \beta_3 &amp; 0 &amp; 0 &amp; 0\\
-\alpha &amp; 0 &amp; \beta_1 &amp; 0 &amp; 0 &amp; 0 &amp; \beta_2 &amp; 0 &amp; 0 &amp; 0 &amp; \beta_3 &amp; 0 &amp; 0\\
-\alpha&amp;0&amp;0&amp;\beta_1&amp;0&amp;0&amp;0&amp;\beta_2&amp;0&amp;0&amp;0&amp;\beta_3&amp;0\\
-\alpha&amp;0&amp;0&amp;0&amp;\beta_1&amp;0&amp;0&amp;0&amp;\beta_2&amp;0&amp;0&amp;0&amp;\beta_3
+\beta_1 &amp; 0 &amp; 0 &amp; 0 &amp; \beta_2 &amp; 0 &amp; 0 &amp; 0 &amp; \beta_3 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; \beta_1 &amp; 0 &amp; 0 &amp; 0 &amp; \beta_2 &amp; 0 &amp; 0 &amp; 0 &amp; \beta_3 &amp; 0 &amp; 0\\
+0&amp;0&amp;\beta_1&amp;0&amp;0&amp;0&amp;\beta_2&amp;0&amp;0&amp;0&amp;\beta_3&amp;0\\
+0&amp;0&amp;0&amp;\beta_1&amp;0&amp;0&amp;0&amp;\beta_2&amp;0&amp;0&amp;0&amp;\beta_3
 \end{bmatrix}
 \end{equation}\]</span>
-The number of rows of <span class="math inline">\(\mathbf{Z}\)</span> is always <span class="math inline">\(n\)</span>, the number of rows of <span class="math inline">\(\mathbf{y}\)</span>, because the number of rows on the left and right of the equal sign must match. The number of columns in <span class="math inline">\(\mathbf{Z}\)</span> is determined by the size of <span class="math inline">\(\mathbf{x}\)</span>. If there is an intercept, there is a 1 in <span class="math inline">\(\mathbf{x}\)</span>. Then each explanatory variable (like air flow and wind) appears <span class="math inline">\(n\)</span> times. So if the number of explanatory variables is <span class="math inline">\(k\)</span>, the number of columns in <span class="math inline">\(\mathbf{Z}\)</span> is <span class="math inline">\(1+k \times n\)</span> if there is an intercept term and <span class="math inline">\(k \times n\)</span> if there is not.</p>
+The number of rows of <span class="math inline">\(\mathbf{Z}\)</span> is always <span class="math inline">\(n\)</span>, the number of rows of <span class="math inline">\(\mathbf{y}\)</span>, because the number of rows on the left and right of the equal sign must match. The number of columns in <span class="math inline">\(\mathbf{Z}\)</span> is determined by the size of <span class="math inline">\(\mathbf{x}\)</span>. Each explanatory variable (like air flow and wind) appears <span class="math inline">\(n\)</span> times (<span class="math inline">\(air_1\)</span>, <span class="math inline">\(air_2\)</span>, <span class="math inline">\(\dots\)</span>, <span class="math inline">\(air_n\)</span>, etc). So if the number of explanatory variables is <span class="math inline">\(k\)</span>, the number of columns in <span class="math inline">\(\mathbf{Z}\)</span> is <span class="math inline">\(k \times n\)</span>. The <span class="math inline">\(\mathbf{a}\)</span> column matrix holds the intercept terms.</p>
 </div>
 <div id="sec-mlr-form2when" class="section level3">
 <h3><span class="header-section-number">2.3.2</span> When does Form 2 arise?</h3>
@@ -515,137 +525,15 @@ The number of rows of <span class="math inline">\(\mathbf{Z}\)</span> is always 
 \end{bmatrix}
 \begin{bmatrix}x_1 \\ x_2 \end{bmatrix}_t
 +
+\begin{bmatrix}
+a\\
+a\\
+a\\
+a
+\end{bmatrix} +
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}_t
 \end{equation}\]</span>
-In this case, <span class="math inline">\(\mathbf{y}_t\)</span> is the set of 4 observations at time <span class="math inline">\(t\)</span> and <span class="math inline">\(\mathbf{x}_t\)</span> is the set of 2 explanatory variables at time <span class="math inline">\(t\)</span>. The <span class="math inline">\(\mathbf{Z}\)</span> is showing how we are modeling the effects of <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> on the <span class="math inline">\(y\)</span>s. Notice that the effects are not consistent across the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. This model would not be possible to fit with <code>lm()</code> but will be easy to fit with <code>MARSS()</code>.</p>
-</div>
-<div id="sec-mlr-solveform2" class="section level3">
-<h3><span class="header-section-number">2.3.3</span> Solving for the parameters for Form 2</h3>
-<p></p>
-<p>To solve for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, we need our parameters in a column matrix like so <span class="math inline">\(\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]\)</span>. We do this by rewritting <span class="math inline">\(\mathbf{Z}\mathbf{x}\)</span> in Equation <a href="sec-mlr-form2.html#eq:form2-succinct">(2.8)</a> in `vec’ form: if <span class="math inline">\(\mathbf{Z}\)</span> is a <span class="math inline">\(n \times m\)</span> matrix and <span class="math inline">\(\mathbf{x}\)</span> is a matrix with 1 column and <span class="math inline">\(m\)</span> rows, then <span class="math inline">\(\mathbf{Z}\mathbf{x} = (\mathbf{x}^\top \otimes \mathbf{I}_n)\,\text{vec}(\mathbf{Z})\)</span>. The symbol <span class="math inline">\(\otimes\)</span> means Kronecker product and just ignore it since you’ll never see it again in our course (or google ‘kronecker product’ if you are curious). The “vec” of a matrix is that matrix rearranged as a single column:
-<span class="math display">\[\begin{equation*}
-\,\text{vec} \begin{bmatrix}
-1&amp;2\\
-3&amp;4
-\end{bmatrix} = \begin{bmatrix}
-1\\3\\2\\4
-\end{bmatrix} 
-\end{equation*}\]</span>
-Notice how you just take each column one by one and stack them under each other. In R, the vec is</p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" title="1">A =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb140-2" title="2">vecA =<span class="st"> </span><span class="kw">matrix</span>(A, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><span class="math inline">\(\mathbf{I}_n\)</span> is a <span class="math inline">\(n \times n\)</span> identity matrix, a diagonal matrix with all 0s on the off-diagonals and all 1s on the diagonal. In R, this is simply <code>diag(n)</code>.</p>
-<p>To show how we solve for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, let’s use an example with only 3 data points so Equation <a href="sec-mlr-form2.html#eq:stackloss-form2">(2.7)</a> becomes:
-<span class="math display" id="eq:stackloss-form2-small">\[\begin{equation}
-\tag{2.11}
-\begin{bmatrix}stack.loss_1\\stack.loss_2\\stack.loss_3\end{bmatrix}
-= 
-\begin{bmatrix}
-\alpha&amp;\beta&amp;0&amp;0\\
-\alpha&amp;0&amp;\beta&amp;0\\
-\alpha&amp;0&amp;0&amp;\beta
-\end{bmatrix}
-\begin{bmatrix}1\\air_1\\air_2\\air_3\end{bmatrix}
-+
-\begin{bmatrix}e_1\\e_2\\e_3\end{bmatrix}
-\end{equation}\]</span>
-Using <span class="math inline">\(\mathbf{Z}\mathbf{x} = (\mathbf{x}^\top \otimes \mathbf{I}_n)\,\text{vec}(\mathbf{Z})\)</span>, this means
-<span class="math display">\[\begin{equation}
-\begin{bmatrix}
-\alpha&amp;\beta&amp;0&amp;0\\
-\alpha&amp;0&amp;\beta&amp;0\\
-\alpha&amp;0&amp;0&amp;\beta
-\end{bmatrix}
-\begin{bmatrix}1\\air_1\\air_2\\air_3\end{bmatrix}
-=\big(\begin{bmatrix}1&amp;air_1&amp;air_2&amp; air_3\end{bmatrix} \otimes \begin{bmatrix}1&amp;0&amp;0\\ 0&amp;1&amp;0 \\ 0&amp;0&amp;1 \end{bmatrix} \bigr)
-\begin{bmatrix}
-\alpha\\
-\alpha\\
-\alpha\\
-\beta\\
-0\\
-0\\
-0\\
-\beta\\
-0\\
-0\\
-0\\
-\beta
-\end{bmatrix}
-\end{equation}\]</span>
-We need to rewrite the <span class="math inline">\(\,\text{vec}(\mathbf{Z})\)</span> as a `permutation’ matrix times <span class="math inline">\(\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]\)</span>:
-<span class="math display">\[\begin{equation}
-\begin{bmatrix}
-\alpha\\
-\alpha\\
-\alpha\\
-\beta\\
-0\\
-0\\
-0\\
-\beta\\
-0\\
-0\\
-0\\
-\beta
-\end{bmatrix}
-=
-\begin{bmatrix}
-1&amp;0\\
-1&amp;0\\
-1&amp;0\\
-0&amp;1\\
-0&amp;0\\
-0&amp;0\\
-0&amp;0\\
-0&amp;1\\
-0&amp;0\\
-0&amp;0\\
-0&amp;0\\
-0&amp;1\\
-\end{bmatrix}
-\begin{bmatrix}
-\alpha\\
-\beta
-\end{bmatrix} = \mathbf{P}\mathbf{p}
-\end{equation}\]</span>
-where <span class="math inline">\(\mathbf{P}\)</span> is the permutation matrix and <span class="math inline">\(\mathbf{p}=\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]\)</span>.
-Thus,
-<span class="math display" id="eq:stackloss-form2-small2">\[\begin{equation}
-\tag{2.12}
-\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e} = (\mathbf{x}^\top \otimes \mathbf{I}_n)\mathbf{P}\begin{bmatrix}\alpha\\ \beta\end{bmatrix} = \mathbf{M}\mathbf{p} + \mathbf{e}
-\end{equation}\]</span>
-where <span class="math inline">\(\mathbf{M}=(\mathbf{x}^\top \otimes \mathbf{I}_n)\mathbf{P}\)</span>.
-We can solve for <span class="math inline">\(\mathbf{p}\)</span>, the parameters, using
-<span class="math display">\[(\mathbf{M}^\top\mathbf{M})^{-1}\mathbf{M}^\top\mathbf{y}\]</span>
-as before.</p>
-</div>
-<div id="sec-mlr-solveform2code" class="section level3">
-<h3><span class="header-section-number">2.3.4</span> Code to solve for parameters in Form 2</h3>
-<p>In the homework, you will use the R code in this section to solve for the parameters in Form 2. Later when you are fitting multivariate time series models, you will not solve for parameters this way but you will need to both construct <span class="math inline">\(\mathbf{Z}\)</span> matrices in R and read <span class="math inline">\(\mathbf{Z}\)</span> matrices. The homework will give you practice creating <span class="math inline">\(\mathbf{Z}\)</span> matrices in R.</p>
-<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" title="1"><span class="co">#make your y and x matrices</span></a>
-<a class="sourceLine" id="cb141-2" title="2">y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb141-3" title="3">x=<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,dat<span class="op">$</span>Air.Flow),<span class="dt">ncol=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb141-4" title="4"><span class="co">#make the Z matrix</span></a>
-<a class="sourceLine" id="cb141-5" title="5">n=<span class="kw">nrow</span>(dat) <span class="co">#number of rows in our data file</span></a>
-<a class="sourceLine" id="cb141-6" title="6">k=<span class="dv">1</span></a>
-<a class="sourceLine" id="cb141-7" title="7"><span class="co">#Z has n rows and 1 col for intercept, and n cols for the n air data points</span></a>
-<a class="sourceLine" id="cb141-8" title="8"><span class="co">#a list matrix allows us to combine &quot;characters&quot; and numbers</span></a>
-<a class="sourceLine" id="cb141-9" title="9">Z=<span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>),n,k<span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>) </a>
-<a class="sourceLine" id="cb141-10" title="10">Z[,<span class="dv">1</span>]=<span class="st">&quot;alpha&quot;</span></a>
-<a class="sourceLine" id="cb141-11" title="11"><span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n,<span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">:</span>n])=<span class="st">&quot;beta&quot;</span> </a>
-<a class="sourceLine" id="cb141-12" title="12"><span class="co">#this function creates that permutation matrix for you</span></a>
-<a class="sourceLine" id="cb141-13" title="13">P=MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[,,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb141-14" title="14">M=<span class="kw">kronecker</span>(<span class="kw">t</span>(x),<span class="kw">diag</span>(n))<span class="op">%*%</span>P</a>
-<a class="sourceLine" id="cb141-15" title="15"><span class="kw">solve</span>(<span class="kw">t</span>(M)<span class="op">%*%</span>M)<span class="op">%*%</span><span class="kw">t</span>(M)<span class="op">%*%</span>y</a></code></pre></div>
-<pre><code>             [,1]
-alpha -11.6159170
-beta    0.6412918</code></pre>
-<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb143-1" title="1"><span class="kw">coef</span>(<span class="kw">lm</span>(dat<span class="op">$</span>stack.loss <span class="op">~</span><span class="st"> </span>dat<span class="op">$</span>Air.Flow))</a></code></pre></div>
-<pre><code> (Intercept) dat$Air.Flow 
- -11.6159170    0.6412918 </code></pre>
-<p>Go through this code line by line at the R command line. Look at <code>Z</code>. It is a list matrix that allows you to combine numbers (the 0s) with character string (names of parameters). Look at the permutation matrix <code>P</code>. Try <code>MARSS:::convert.model.mat(Z)$free</code> and see that it returns a 3D matrix, which is why the <code>[,,1]</code> appears (to get us a 2D matrix). To use more data points, you can redefine
-<code>dat</code> to say <code>dat=stackloss</code> to use all 21 data points.</p>
+In this case, <span class="math inline">\(\mathbf{y}_t\)</span> is the set of four observations at time <span class="math inline">\(t\)</span> and <span class="math inline">\(\mathbf{x}_t\)</span> is the set of two explanatory variables at time <span class="math inline">\(t\)</span>. The <span class="math inline">\(\mathbf{Z}\)</span> is showing how we are modeling the effects of <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> on the <span class="math inline">\(y\)</span>s. Notice that the effects are not consistent across the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. This model would not be possible to fit with <code>lm()</code> but will be easy to fit with <code>MARSS()</code>.</p>
 </div>
 </div>
             </section>

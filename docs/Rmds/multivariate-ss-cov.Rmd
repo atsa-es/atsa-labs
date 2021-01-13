@@ -397,10 +397,11 @@ for(i in 1:3) {
   dev.new()
   modn <- paste("seas.mod",i,sep=".")
   for(j in 1:5) {
-    plot.ts(residuals(get(modn))$model.residuals[j,], 
+    resid.j <- MARSSresiduals(get(modn), type="tt1")$model.residuals[j,]
+    plot.ts(resid.j, 
       ylab="Residual", main=phytos[j])
     abline(h=0, lty="dashed")
-    acf(residuals(get(modn))$model.residuals[j,], na.action=na.pass)
+    acf(resid.j, na.action=na.pass)
     }
   }
 ```
@@ -412,10 +413,11 @@ for(i in 1:3) {
   j <- 1; #First state
   par(mfrow=c(2,1))
   modn <- paste("seas.mod",i,sep=".")
-  plot.ts(residuals(get(modn))$model.residuals[j,], 
+  resid.j <- MARSSresiduals(get(modn), type="tt1")$model.residuals[j,]
+  plot.ts(resid.j, 
       ylab="Residual", main=phytos[j])
   abline(h=0, lty="dashed")
-  acf(residuals(get(modn))$model.residuals[j,], na.action=na.pass)
+  acf(resid.j, na.action=na.pass)
 ```
 
 ## Homework data and discussion {#sec-msscov-hw-discussion}

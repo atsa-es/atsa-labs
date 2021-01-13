@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12.8 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12.8 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -479,19 +483,19 @@ where <span class="math inline">\(\mu\)</span> is interpreted as the average dai
 <li><p>Add the effect of temperature to the AR(1) model in section <a href="sec-jags-ar1.html#sec-jags-ar1">12.5</a>. Plot the posterior for <code>beta</code> and compare to the posterior for <code>beta</code> from the model in section <a href="sec-jags-uss.html#sec-jags-covariates">12.6.1</a>.</p></li>
 <li><p>Plot the fitted values from the model in section <a href="sec-jags-forecast.html#sec-jags-forecast">12.7</a>, including the forecasts, with the 95% credible intervals for each data point.</p></li>
 <li><p>The following is a dataset from the Upper Skagit River (Puget Sound, 1952-2005) on salmon spawners and recruits:</p>
-<div class="sourceCode" id="cb653"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb653-1" title="1">Spawners =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2662</span>, <span class="dv">1806</span>, <span class="dv">1707</span>, <span class="dv">1339</span>, <span class="dv">1686</span>, <span class="dv">2220</span>, <span class="dv">3121</span>, <span class="dv">5028</span>, </a>
-<a class="sourceLine" id="cb653-2" title="2">    <span class="dv">9263</span>, <span class="dv">4567</span>, <span class="dv">1850</span>, <span class="dv">3353</span>, <span class="dv">2836</span>, <span class="dv">3961</span>, <span class="dv">4624</span>, <span class="dv">3262</span>, <span class="dv">3898</span>, <span class="dv">3039</span>, </a>
-<a class="sourceLine" id="cb653-3" title="3">    <span class="dv">5966</span>, <span class="dv">5931</span>, <span class="dv">7346</span>, <span class="dv">4911</span>, <span class="dv">3116</span>, <span class="dv">3185</span>, <span class="dv">5590</span>, <span class="dv">2485</span>, <span class="dv">2987</span>, <span class="dv">3829</span>, </a>
-<a class="sourceLine" id="cb653-4" title="4">    <span class="dv">4921</span>, <span class="dv">2348</span>, <span class="dv">1932</span>, <span class="dv">3151</span>, <span class="dv">2306</span>, <span class="dv">1686</span>, <span class="dv">4584</span>, <span class="dv">2635</span>, <span class="dv">2339</span>, <span class="dv">1454</span>, </a>
-<a class="sourceLine" id="cb653-5" title="5">    <span class="dv">3705</span>, <span class="dv">1510</span>, <span class="dv">1331</span>, <span class="dv">942</span>, <span class="dv">884</span>, <span class="dv">666</span>, <span class="dv">1521</span>, <span class="dv">409</span>, <span class="dv">2388</span>, <span class="dv">1043</span>, <span class="dv">3262</span>, </a>
-<a class="sourceLine" id="cb653-6" title="6">    <span class="dv">2606</span>, <span class="dv">4866</span>, <span class="dv">1161</span>, <span class="dv">3070</span>, <span class="dv">3320</span>)</a>
-<a class="sourceLine" id="cb653-7" title="7">Recruits =<span class="st"> </span><span class="kw">c</span>(<span class="dv">12741</span>, <span class="dv">15618</span>, <span class="dv">23675</span>, <span class="dv">37710</span>, <span class="dv">62260</span>, <span class="dv">32725</span>, <span class="dv">8659</span>, </a>
-<a class="sourceLine" id="cb653-8" title="8">    <span class="dv">28101</span>, <span class="dv">17054</span>, <span class="dv">29885</span>, <span class="dv">33047</span>, <span class="dv">20059</span>, <span class="dv">35192</span>, <span class="dv">11006</span>, <span class="dv">48154</span>, <span class="dv">35829</span>, </a>
-<a class="sourceLine" id="cb653-9" title="9">    <span class="dv">46231</span>, <span class="dv">32405</span>, <span class="dv">20782</span>, <span class="dv">21340</span>, <span class="dv">58392</span>, <span class="dv">21553</span>, <span class="dv">27528</span>, <span class="dv">28246</span>, <span class="dv">35163</span>, </a>
-<a class="sourceLine" id="cb653-10" title="10">    <span class="dv">15419</span>, <span class="dv">16276</span>, <span class="dv">32946</span>, <span class="dv">11075</span>, <span class="dv">16909</span>, <span class="dv">22359</span>, <span class="dv">8022</span>, <span class="dv">16445</span>, <span class="dv">2912</span>, </a>
-<a class="sourceLine" id="cb653-11" title="11">    <span class="dv">17642</span>, <span class="dv">2929</span>, <span class="dv">7554</span>, <span class="dv">3047</span>, <span class="dv">3488</span>, <span class="dv">577</span>, <span class="dv">4511</span>, <span class="dv">1478</span>, <span class="dv">3283</span>, <span class="dv">1633</span>, </a>
-<a class="sourceLine" id="cb653-12" title="12">    <span class="dv">8536</span>, <span class="dv">7019</span>, <span class="dv">3947</span>, <span class="dv">2789</span>, <span class="dv">4606</span>, <span class="dv">3545</span>, <span class="dv">4421</span>, <span class="dv">1289</span>, <span class="dv">6416</span>, <span class="dv">3647</span>)</a>
-<a class="sourceLine" id="cb653-13" title="13">logRS =<span class="st"> </span><span class="kw">log</span>(Recruits<span class="op">/</span>Spawners)</a></code></pre></div>
+<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="sec-jags-problems.html#cb638-1"></a>Spawners =<span class="st"> </span><span class="kw">c</span>(<span class="dv">2662</span>, <span class="dv">1806</span>, <span class="dv">1707</span>, <span class="dv">1339</span>, <span class="dv">1686</span>, <span class="dv">2220</span>, <span class="dv">3121</span>, <span class="dv">5028</span>, </span>
+<span id="cb638-2"><a href="sec-jags-problems.html#cb638-2"></a>    <span class="dv">9263</span>, <span class="dv">4567</span>, <span class="dv">1850</span>, <span class="dv">3353</span>, <span class="dv">2836</span>, <span class="dv">3961</span>, <span class="dv">4624</span>, <span class="dv">3262</span>, <span class="dv">3898</span>, <span class="dv">3039</span>, </span>
+<span id="cb638-3"><a href="sec-jags-problems.html#cb638-3"></a>    <span class="dv">5966</span>, <span class="dv">5931</span>, <span class="dv">7346</span>, <span class="dv">4911</span>, <span class="dv">3116</span>, <span class="dv">3185</span>, <span class="dv">5590</span>, <span class="dv">2485</span>, <span class="dv">2987</span>, <span class="dv">3829</span>, </span>
+<span id="cb638-4"><a href="sec-jags-problems.html#cb638-4"></a>    <span class="dv">4921</span>, <span class="dv">2348</span>, <span class="dv">1932</span>, <span class="dv">3151</span>, <span class="dv">2306</span>, <span class="dv">1686</span>, <span class="dv">4584</span>, <span class="dv">2635</span>, <span class="dv">2339</span>, <span class="dv">1454</span>, </span>
+<span id="cb638-5"><a href="sec-jags-problems.html#cb638-5"></a>    <span class="dv">3705</span>, <span class="dv">1510</span>, <span class="dv">1331</span>, <span class="dv">942</span>, <span class="dv">884</span>, <span class="dv">666</span>, <span class="dv">1521</span>, <span class="dv">409</span>, <span class="dv">2388</span>, <span class="dv">1043</span>, <span class="dv">3262</span>, </span>
+<span id="cb638-6"><a href="sec-jags-problems.html#cb638-6"></a>    <span class="dv">2606</span>, <span class="dv">4866</span>, <span class="dv">1161</span>, <span class="dv">3070</span>, <span class="dv">3320</span>)</span>
+<span id="cb638-7"><a href="sec-jags-problems.html#cb638-7"></a>Recruits =<span class="st"> </span><span class="kw">c</span>(<span class="dv">12741</span>, <span class="dv">15618</span>, <span class="dv">23675</span>, <span class="dv">37710</span>, <span class="dv">62260</span>, <span class="dv">32725</span>, <span class="dv">8659</span>, </span>
+<span id="cb638-8"><a href="sec-jags-problems.html#cb638-8"></a>    <span class="dv">28101</span>, <span class="dv">17054</span>, <span class="dv">29885</span>, <span class="dv">33047</span>, <span class="dv">20059</span>, <span class="dv">35192</span>, <span class="dv">11006</span>, <span class="dv">48154</span>, <span class="dv">35829</span>, </span>
+<span id="cb638-9"><a href="sec-jags-problems.html#cb638-9"></a>    <span class="dv">46231</span>, <span class="dv">32405</span>, <span class="dv">20782</span>, <span class="dv">21340</span>, <span class="dv">58392</span>, <span class="dv">21553</span>, <span class="dv">27528</span>, <span class="dv">28246</span>, <span class="dv">35163</span>, </span>
+<span id="cb638-10"><a href="sec-jags-problems.html#cb638-10"></a>    <span class="dv">15419</span>, <span class="dv">16276</span>, <span class="dv">32946</span>, <span class="dv">11075</span>, <span class="dv">16909</span>, <span class="dv">22359</span>, <span class="dv">8022</span>, <span class="dv">16445</span>, <span class="dv">2912</span>, </span>
+<span id="cb638-11"><a href="sec-jags-problems.html#cb638-11"></a>    <span class="dv">17642</span>, <span class="dv">2929</span>, <span class="dv">7554</span>, <span class="dv">3047</span>, <span class="dv">3488</span>, <span class="dv">577</span>, <span class="dv">4511</span>, <span class="dv">1478</span>, <span class="dv">3283</span>, <span class="dv">1633</span>, </span>
+<span id="cb638-12"><a href="sec-jags-problems.html#cb638-12"></a>    <span class="dv">8536</span>, <span class="dv">7019</span>, <span class="dv">3947</span>, <span class="dv">2789</span>, <span class="dv">4606</span>, <span class="dv">3545</span>, <span class="dv">4421</span>, <span class="dv">1289</span>, <span class="dv">6416</span>, <span class="dv">3647</span>)</span>
+<span id="cb638-13"><a href="sec-jags-problems.html#cb638-13"></a>logRS =<span class="st"> </span><span class="kw">log</span>(Recruits<span class="op">/</span>Spawners)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Fit the following Ricker model to these data using the following linear form of this model with normally distributed errors:<br />
 <span class="math display">\[\begin{equation*}

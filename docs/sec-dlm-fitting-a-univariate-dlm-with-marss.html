@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>9.7 Fitting with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="9.7 Fitting with MARSS() | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -462,21 +466,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-dlm-fitting-a-univariate-dlm-with-marss" class="section level2">
 <h2><span class="header-section-number">9.7</span> Fitting with <code>MARSS()</code></h2>
 <p>Now let’s go ahead and analyze the DLM specified in Equations <a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW1">(9.20)</a>–<a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW3">(9.22)</a>. We begin by loading the data set (which is in the <strong>MARSS</strong> package). The data set has 3 columns for 1) the year the salmon smolts migrated to the ocean (<code>year</code>), 2) logit-transformed survival  (<code>logit.s</code>), and 3) the coastal upwelling index for April (<code>CUI.apr</code>). There are 42 years of data (1964–2005).</p>
-<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb559-1" title="1"><span class="co"># load the data</span></a>
-<a class="sourceLine" id="cb559-2" title="2"><span class="kw">data</span>(SalmonSurvCUI, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</a>
-<a class="sourceLine" id="cb559-3" title="3"><span class="co"># get time indices</span></a>
-<a class="sourceLine" id="cb559-4" title="4">years &lt;-<span class="st"> </span>SalmonSurvCUI[, <span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb559-5" title="5"><span class="co"># number of years of data</span></a>
-<a class="sourceLine" id="cb559-6" title="6">TT &lt;-<span class="st"> </span><span class="kw">length</span>(years)</a>
-<a class="sourceLine" id="cb559-7" title="7"><span class="co"># get response variable: logit(survival)</span></a>
-<a class="sourceLine" id="cb559-8" title="8">dat &lt;-<span class="st"> </span><span class="kw">matrix</span>(SalmonSurvCUI[, <span class="dv">2</span>], <span class="dt">nrow =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb543"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb543-1"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb543-1"></a><span class="co"># load the data</span></span>
+<span id="cb543-2"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb543-2"></a><span class="kw">data</span>(SalmonSurvCUI, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb543-3"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb543-3"></a><span class="co"># get time indices</span></span>
+<span id="cb543-4"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb543-4"></a>years &lt;-<span class="st"> </span>SalmonSurvCUI[, <span class="dv">1</span>]</span>
+<span id="cb543-5"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb543-5"></a><span class="co"># number of years of data</span></span>
+<span id="cb543-6"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb543-6"></a>TT &lt;-<span class="st"> </span><span class="kw">length</span>(years)</span>
+<span id="cb543-7"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb543-7"></a><span class="co"># get response variable: logit(survival)</span></span>
+<span id="cb543-8"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb543-8"></a>dat &lt;-<span class="st"> </span><span class="kw">matrix</span>(SalmonSurvCUI[, <span class="dv">2</span>], <span class="dt">nrow =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>As we have seen in other case studies, standardizing our covariate(s) to have zero-mean and unit-variance can be helpful in model fitting and interpretation. In this case, it’s a good idea because the variance of <code>CUI.apr</code> is orders of magnitude greater than <code>logit.s</code>.</p>
-<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb560-1" title="1"><span class="co"># get predictor variable</span></a>
-<a class="sourceLine" id="cb560-2" title="2">CUI &lt;-<span class="st"> </span>SalmonSurvCUI[, <span class="dv">3</span>]</a>
-<a class="sourceLine" id="cb560-3" title="3"><span class="co">## z-score the CUI</span></a>
-<a class="sourceLine" id="cb560-4" title="4">CUI.z &lt;-<span class="st"> </span><span class="kw">matrix</span>((CUI <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(CUI))<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(CUI)), <span class="dt">nrow =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb560-5" title="5"><span class="co"># number of regr params (slope + intercept)</span></a>
-<a class="sourceLine" id="cb560-6" title="6">m &lt;-<span class="st"> </span><span class="kw">dim</span>(CUI.z)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a></code></pre></div>
+<div class="sourceCode" id="cb544"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb544-1"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb544-1"></a><span class="co"># get predictor variable</span></span>
+<span id="cb544-2"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb544-2"></a>CUI &lt;-<span class="st"> </span>SalmonSurvCUI[, <span class="dv">3</span>]</span>
+<span id="cb544-3"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb544-3"></a><span class="co">## z-score the CUI</span></span>
+<span id="cb544-4"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb544-4"></a>CUI.z &lt;-<span class="st"> </span><span class="kw">matrix</span>((CUI <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(CUI))<span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">var</span>(CUI)), <span class="dt">nrow =</span> <span class="dv">1</span>)</span>
+<span id="cb544-5"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb544-5"></a><span class="co"># number of regr params (slope + intercept)</span></span>
+<span id="cb544-6"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb544-6"></a>m &lt;-<span class="st"> </span><span class="kw">dim</span>(CUI.z)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span></code></pre></div>
 <p>Plots of logit-transformed survival and the <span class="math inline">\(z\)</span>-scored April upwelling index are shown in Figure <a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#fig:dlm-plotdata">9.1</a>.</p>
 
 <div class="figure" style="text-align: center"><span id="fig:dlm-plotdata"></span>
@@ -486,26 +490,26 @@ Figure 9.1: Time series of logit-transformed marine survival estimates for Snake
 </p>
 </div>
 <p>Next, we need to set up the appropriate matrices and vectors for MARSS. Let’s begin with those for the process equation because they are straightforward.</p>
-<div class="sourceCode" id="cb561"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb561-1" title="1"><span class="co"># for process eqn</span></a>
-<a class="sourceLine" id="cb561-2" title="2">B &lt;-<span class="st"> </span><span class="kw">diag</span>(m)  <span class="co">## 2x2; Identity</span></a>
-<a class="sourceLine" id="cb561-3" title="3">U &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow =</span> m, <span class="dt">ncol =</span> <span class="dv">1</span>)  <span class="co">## 2x1; both elements = 0</span></a>
-<a class="sourceLine" id="cb561-4" title="4">Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), m, m)  <span class="co">## 2x2; all 0 for now</span></a>
-<a class="sourceLine" id="cb561-5" title="5"><span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q.alpha&quot;</span>, <span class="st">&quot;q.beta&quot;</span>)  <span class="co">## 2x2; diag = (q1,q2)</span></a></code></pre></div>
+<div class="sourceCode" id="cb545"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb545-1"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb545-1"></a><span class="co"># for process eqn</span></span>
+<span id="cb545-2"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb545-2"></a>B &lt;-<span class="st"> </span><span class="kw">diag</span>(m)  <span class="co">## 2x2; Identity</span></span>
+<span id="cb545-3"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb545-3"></a>U &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow =</span> m, <span class="dt">ncol =</span> <span class="dv">1</span>)  <span class="co">## 2x1; both elements = 0</span></span>
+<span id="cb545-4"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb545-4"></a>Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), m, m)  <span class="co">## 2x2; all 0 for now</span></span>
+<span id="cb545-5"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb545-5"></a><span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;q.alpha&quot;</span>, <span class="st">&quot;q.beta&quot;</span>)  <span class="co">## 2x2; diag = (q1,q2)</span></span></code></pre></div>
 <p>Defining the correct form for the observation model is a little more tricky, however, because of how we model the effect(s) of predictor variables. In a DLM, we need to use <span class="math inline">\(\mathbf{Z}_t\)</span> (instead of <span class="math inline">\(\mathbf{d}_t\)</span>) as the matrix of predictor variables that affect <span class="math inline">\(\mathbf{y}_t\)</span>, and we use <span class="math inline">\(\mathbf{x}_t\)</span> (instead of <span class="math inline">\(\mathbf{D}_t\)</span>) as the regression parameters. Therefore, we need to set <span class="math inline">\(\mathbf{Z}_t\)</span> equal to an <span class="math inline">\(n\times m\times T\)</span> array, where <span class="math inline">\(n\)</span> is the number of response variables (= 1; <span class="math inline">\(y_t\)</span> is univariate), <span class="math inline">\(m\)</span> is the number of regression parameters (= intercept + slope = 2), and <span class="math inline">\(T\)</span> is the length of the time series (= 42).</p>
-<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb562-1" title="1"><span class="co"># for observation eqn</span></a>
-<a class="sourceLine" id="cb562-2" title="2">Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="kw">c</span>(<span class="dv">1</span>, m, TT))  <span class="co">## NxMxT; empty for now</span></a>
-<a class="sourceLine" id="cb562-3" title="3">Z[<span class="dv">1</span>, <span class="dv">1</span>, ] &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, TT)  <span class="co">## Nx1; 1&#39;s for intercept</span></a>
-<a class="sourceLine" id="cb562-4" title="4">Z[<span class="dv">1</span>, <span class="dv">2</span>, ] &lt;-<span class="st"> </span>CUI.z  <span class="co">## Nx1; predictor variable</span></a>
-<a class="sourceLine" id="cb562-5" title="5">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>)  <span class="co">## 1x1; scalar = 0</span></a>
-<a class="sourceLine" id="cb562-6" title="6">R &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>)  <span class="co">## 1x1; scalar = r</span></a></code></pre></div>
+<div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb546-1"></a><span class="co"># for observation eqn</span></span>
+<span id="cb546-2"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb546-2"></a>Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="kw">c</span>(<span class="dv">1</span>, m, TT))  <span class="co">## NxMxT; empty for now</span></span>
+<span id="cb546-3"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb546-3"></a>Z[<span class="dv">1</span>, <span class="dv">1</span>, ] &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, TT)  <span class="co">## Nx1; 1&#39;s for intercept</span></span>
+<span id="cb546-4"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb546-4"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>, ] &lt;-<span class="st"> </span>CUI.z  <span class="co">## Nx1; predictor variable</span></span>
+<span id="cb546-5"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb546-5"></a>A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>)  <span class="co">## 1x1; scalar = 0</span></span>
+<span id="cb546-6"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb546-6"></a>R &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>)  <span class="co">## 1x1; scalar = r</span></span></code></pre></div>
 <p>Lastly, we need to define our lists of initial starting values and model matrices/vectors.</p>
-<div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb563-1" title="1"><span class="co"># only need starting values for regr parameters</span></a>
-<a class="sourceLine" id="cb563-2" title="2">inits.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow =</span> m))</a>
-<a class="sourceLine" id="cb563-3" title="3"><span class="co"># list of model matrices &amp; vectors</span></a>
-<a class="sourceLine" id="cb563-4" title="4">mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R)</a></code></pre></div>
+<div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb547-1"></a><span class="co"># only need starting values for regr parameters</span></span>
+<span id="cb547-2"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb547-2"></a>inits.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">nrow =</span> m))</span>
+<span id="cb547-3"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb547-3"></a><span class="co"># list of model matrices &amp; vectors</span></span>
+<span id="cb547-4"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb547-4"></a>mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R)</span></code></pre></div>
 <p>And now we can fit our DLM with MARSS.</p>
-<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb564-1" title="1"><span class="co"># fit univariate DLM</span></a>
-<a class="sourceLine" id="cb564-2" title="2">dlm1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">inits =</span> inits.list, <span class="dt">model =</span> mod.list)</a></code></pre></div>
+<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb548-1"></a><span class="co"># fit univariate DLM</span></span>
+<span id="cb548-2"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html#cb548-2"></a>dlm1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">inits =</span> inits.list, <span class="dt">model =</span> mod.list)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 115 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.

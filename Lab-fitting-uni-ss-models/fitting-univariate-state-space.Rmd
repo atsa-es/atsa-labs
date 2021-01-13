@@ -62,9 +62,10 @@ If you need a 1 (or 0) in your model, you need to pass in the parameter as a $1 
 With that mind, our model list for Equation \@ref(eq:uss-ar1witherror) is:
 ```{r uss-mod.list}
 mod.list <- list(
-B=matrix(1), U=matrix(0), Q=matrix("q"),
-Z=matrix(1), A=matrix(0), R=matrix("r"),
-x0=matrix("mu"), tinitx=0 )
+  B = matrix(1), U = matrix(0), Q = matrix("q"),
+  Z = matrix(1), A = matrix(0), R = matrix("r"),
+  x0 = matrix("mu"), tinitx = 0
+)
 ```
 
 We can simulate some AR(1) plus error data like so
@@ -73,18 +74,20 @@ set.seed(123)
 ```
 
 ```{r uss-ar1-w-error}
-q <- 0.1; r <- 0.1; n <- 100
-y <- cumsum(rnorm(n,0,sqrt(q)))+rnorm(n,0,sqrt(r))
+q <- 0.1
+r <- 0.1
+n <- 100
+y <- cumsum(rnorm(n, 0, sqrt(q))) + rnorm(n, 0, sqrt(r))
 ```
 And then fit with ``MARSS()`` using ``mod.list`` above:
 ```{r uss-ar1-fit}
-fit <- MARSS(y, model=mod.list)
+fit <- MARSS(y, model = mod.list)
 ```
 
 If we wanted to fix $q=0.1$, then $\QQ=[0.1]$ (a $1 \times 1$ matrix with 0.1). We just change ``mod.list$Q`` and re-fit:
 ```{r uss-mod.list.1, results='hide'}
 mod.list$Q <- matrix(0.1)
-fit <- MARSS(y,model=mod.list)
+fit <- MARSS(y, model = mod.list)
 ```
 
 
@@ -96,14 +99,14 @@ We will use the data from the Nile River (Figure \@ref(fig:uss-plotdata)). We wi
 
 ```{r uss-data}
 library(datasets)
-dat <- as.vector(Nile)
+dat <- Nile
 ```
 
 
 (ref:uss-plotdata) The Nile River flow volume 1871 to 1970 (```Nile``` dataset in R).
 
 ```{r uss-plotdata, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-plotdata)'}
-plot(Nile,ylab="Flow volume",xlab="Year")
+plot(Nile, ylab = "Flow volume", xlab = "Year")
 ```
  
 
@@ -127,19 +130,20 @@ x_0 = \mu
 \end{equation}
 The model is specified as a list as follows:
 ```{r uss-mod.nile.0, eval=TRUE}
-mod.nile.0 <- list( 
-B=matrix(1), U=matrix(0), Q=matrix(0),
-Z=matrix(1), A=matrix(0), R=matrix("r"),
-x0=matrix("mu"), tinitx=0 )
+mod.nile.0 <- list(
+  B = matrix(1), U = matrix(0), Q = matrix(0),
+  Z = matrix(1), A = matrix(0), R = matrix("r"),
+  x0 = matrix("mu"), tinitx = 0
+)
 ```
 
 We then fit the model:  
 ```{r uss-fit.data.0, eval=TRUE, results='hide'}
-kem.0 <- MARSS(dat, model=mod.nile.0)
+kem.0 <- MARSS(dat, model = mod.nile.0)
 ```
 Output not shown, but here are the estimates and AICc.
 ```{r uss-coef-mod0}
-c(coef(kem.0, type="vector"), LL=kem.0$logLik, AICc=kem.0$AICc)
+c(coef(kem.0, type = "vector"), LL = kem.0$logLik, AICc = kem.0$AICc)
 ```
 
 ### Linear trend in flow model {#sec-uss-linear-trend-in-flow-model}
@@ -155,18 +159,19 @@ x_0 = \mu
 where $u$ is now the average per-year decline in river flow volume.  The model is specified  as follows:
 ```{r uss-mod.nile.1, eval=TRUE}
 mod.nile.1 <- list(
-B=matrix(1), U=matrix("u"), Q=matrix(0),
-Z=matrix(1), A=matrix(0), R=matrix("r"),
-x0=matrix("mu"), tinitx=0 )
+  B = matrix(1), U = matrix("u"), Q = matrix(0),
+  Z = matrix(1), A = matrix(0), R = matrix("r"),
+  x0 = matrix("mu"), tinitx = 0
+)
 ```
 
 We then fit the model:
 ```{r uss-fit.data.1, eval=TRUE, results='hide'}
-kem.1 <- MARSS(dat, model=mod.nile.1)
+kem.1 <- MARSS(dat, model = mod.nile.1)
 ```
 Here are the estimates, log-likelihood and AICc:
 ```{r uss-fit.data.1.coef, eval=TRUE}
-c(coef(kem.1, type="vector"), LL=kem.1$logLik, AICc=kem.1$AICc)
+c(coef(kem.1, type = "vector"), LL = kem.1$logLik, AICc = kem.1$AICc)
 ```
 Figure \@ref(fig:uss-plotfit) shows the fits for the two models with deterministic models (flat and declining) for mean river flow along with their AICc values (smaller AICc is better).  The AICc for the model with a declining river flow is lower by over 20 (which is a lot).
 
@@ -185,23 +190,25 @@ x_0 = \mu
 As before, $y_t$ is the river flow volume at year $t$. $x_t$ is the mean level.
 The model is specified as:
 ```{r uss-mod.nile.2, eval=TRUE}
-mod.nile.2 = list(
-B=matrix(1), U=matrix(0), Q=matrix("q"),
-Z=matrix(1), A=matrix(0), R=matrix("r"),
-x0=matrix("mu"), tinitx=0 )
+mod.nile.2 <- list(
+  B = matrix(1), U = matrix(0), Q = matrix("q"),
+  Z = matrix(1), A = matrix(0), R = matrix("r"),
+  x0 = matrix("mu"), tinitx = 0
+)
 ```
 We could also use the text shortcuts to specify the model.  Because $\RR$ and $\QQ$ are $1 \times 1$ matrices, "unconstrained", "diagonal and unequal", "diagonal and equal" and "equalvarcov" will all lead to a $1 \times 1$ matrix with one estimated element.  For $\aa$ and $\uu$, the following shortcut could be used:
 ```{r uss-mod.nile.not.used, eval=FALSE}
-A <- "zero"; U <- "zero"
+A <- "zero"
+U <- "zero"
 ```
 Because $\xx_0$ is $1 \times 1$, it could be specified as "unequal", "equal" or "unconstrained".
 
 ```{r uss-fit.data.2, eval=TRUE, results='hide'}
-kem.2 <- MARSS(dat, model=mod.nile.2)
+kem.2 <- MARSS(dat, model = mod.nile.2)
 ```
 Here are the estimates, log-likelihood and AICc:
 ```{r uss-fit.data.2.coef, eval=TRUE}
-c(coef(kem.2, type="vector"), LL=kem.2$logLik, AICc=kem.2$AICc)
+c(coef(kem.2, type = "vector"), LL = kem.2$logLik, AICc = kem.2$AICc)
 ```
 
 
@@ -218,17 +225,18 @@ x_0 = \mu
 \end{equation}
 The model is then specified by changing ``U`` to indicate that a $u$ is estimated:
 ```{r uss-mod.nile.3, eval=TRUE}
-mod.nile.3 = list(
-B=matrix(1), U=matrix("u"), Q=matrix("q"),
-Z=matrix(1), A=matrix(0), R=matrix("r"),
-x0=matrix("mu"), tinitx=0)
+mod.nile.3 <- list(
+  B = matrix(1), U = matrix("u"), Q = matrix("q"),
+  Z = matrix(1), A = matrix(0), R = matrix("r"),
+  x0 = matrix("mu"), tinitx = 0
+)
 ```
 ```{r uss-fit.data.3, eval=TRUE, results='hide'}
-kem.3 <- MARSS(dat, model=mod.nile.3)
+kem.3 <- MARSS(dat, model = mod.nile.3)
 ```
 Here are the estimates, log-likelihood and AICc:
 ```{r uss-fit.data.3.coef, eval=TRUE}
-c(coef(kem.3, type="vector"), LL=kem.3$logLik, AICc=kem.3$AICc)
+c(coef(kem.3, type = "vector"), LL = kem.3$logLik, AICc = kem.3$AICc)
 ```
 
 Figure \@ref(fig:uss-plotfit) shows all the models along with their AICc values. 
@@ -237,7 +245,7 @@ Figure \@ref(fig:uss-plotfit) shows all the models along with their AICc values.
 ## The StructTS function {#sec-uss-the-structts-function}
 The ``StructTS`` function in the **stats** package in R will also fit the stochastic level model:
 ```{r uss-fit.data.2.structTS, eval=TRUE}
-fit.sts <- StructTS(dat, type="level")
+fit.sts <- StructTS(dat, type = "level")
 fit.sts
 ```
 The estimates from ``StructTS()`` will be different (though similar) from ``MARSS()`` because ``StructTS()`` uses $x_1 = y_1$, that is the hidden state at $t=1$ is fixed to be the data at $t=1$.  That is fine if you have a long data set, but would be disastrous for the short data sets typical in fisheries and ecology.  
@@ -246,66 +254,68 @@ The estimates from ``StructTS()`` will be different (though similar) from ``MARS
 ```{r uss-fit.data.2.comp, eval=FALSE}
 trees <- window(treering, start = 0)
 fitts <- StructTS(trees, type = "level")
-fitem <- MARSS(as.vector(trees),mod.nile.2)
-fitbf <- MARSS(as.vector(trees),mod.nile.2, method="BFGS")
+fitem <- MARSS(trees, mod.nile.2)
+fitbf <- MARSS(trees, mod.nile.2, method = "BFGS")
 ```
 Note that ``mod.nile.2`` specifies a univariate stochastic level model so we can use it just fine with other univariate data sets.
 
 In addition, ``fitted(fit.sts)`` where ``fit.sts`` is a fit from ``StructTS()`` is very different than ``fit.marss$states`` from ``MARSS()``. 
 ```{r uss-fit.data.2.fitted.structTS, eval=TRUE}
-t=10
+t <- 10
 fitted(fit.sts)[t]
 ```
 is the expected value of $y_{t+1}$ (in this case $y_{11}$ since we set $t=10$) given the data up to $y_t$ (in this case, up to $y_{10}$).  It is called the one-step ahead prediction.  
 We are not going to use the one-step ahead predictions unless we are forecasting or doing cross-validation.  
 
-Typically, when we analyze fisheries and ecological data, we want to know the estimate of the state, the $x_t$, given ALL the data.  For example, we might need an estimate of the population size in year 1990 given a time series of counts from 1930 to 2015.  We don't want to use only the data up to 1989; we want to use all the information.  ``fit.marss$states`` from ``MARSS()`` is the expected value of $x_t$ given all the data.  For the stochastic level model, that is equal to the expected value of $y_t$ given all the data except $y_t$.
-
-If you needed the one-step predictions from ``MARSS()``, you can get them from the Kalman filter output:
-```{r uss-fit-data-2-onestepahead, eval=TRUE, results='hide'}
-kf=print(kem.2, what="kfs")
-kf$xtt1[1,t]
+Typically, when we analyze fisheries and ecological data, we want to know the estimate of the state, the $x_t$, given ALL the data (sometimes we might want the estimate of the $y_t$ process given all the data).  For example, we might need an estimate of the population size in year 1990 given a time series of counts from 1930 to 2015.  We don't want to use only the data up to 1989; we want to use all the information.  ``fit.marss$states`` from ``MARSS()`` is the expected value of $x_t$ given all the data. In the MARSS package, this is denoted "xtT".
+```{r uss-fit-data-2-xtT, eval=TRUE, results='hide'}
+fitted(kem.2, type="xtT") %>% subset(t==11)
 ```
-Passing in ``what="kfs"`` returns the Kalman filter/smoother output.  The expected value of $x_t$ conditioned on $y_1$ to $y_{t-1}$ is in ``kf$xtt1``.  The expected value of $x_t$ conditioned on all the data is in ``kf$xtT``.
+
+If you needed the one-step predictions from ``MARSS()``, you can get that using "xtt1".
+```{r uss-fit-data-2-xtt1, eval=TRUE, results='hide'}
+fitted(kem.2, type="xtt1") %>% subset(t==11)
+```
+This is the expected value of $x_t$ conditioned on $y_1$ to $y_{t-1}$.
 
 
 (ref:uss-plotfit) The Nile River flow volume with the model estimated flow rates (solid lines).  The bottom model is a stochastic level model, meaning there isn't one level line.  Rather the level line is a distribution that has a mean and standard deviation.  The solid state line in the bottom plots is the mean of the stochastic level and the 2 standard deviations are shown.  The other two models are deterministic level models so the state is not stochastic and does not have a standard deviation.
 
 ```{r uss-plotfit, eval=TRUE, echo=FALSE, fig=TRUE, fig.width=5, fig.height=6, fig.cap='(ref:uss-plotfit)'}
 library(Hmisc)
-par(mfrow=c(4,1), mar=c(4,4,0.5,0.5), oma=c(1,1,1,1))
-x=seq(tsp(Nile)[1],tsp(Nile)[2],tsp(Nile)[3])
-#model 0
-plot(Nile,ylab="Flow volume",xlab="",xaxp=c(1870,1970,10),bty="L")
-minor.tick(nx=10,ny=0,tick.ratio=.3)
-kem <- kem.0 #model 0 results
-lines(x,kem$states[1,],col="red",lwd=2)
-legend("topright", paste("model 0, AICc=",format(kem.0$AICc,digits=1)), bty="n")
+par(mfrow = c(4, 1), mar = c(4, 4, 0.5, 0.5), oma = c(1, 1, 1, 1))
+x <- seq(tsp(Nile)[1], tsp(Nile)[2], tsp(Nile)[3])
+# model 0
+plot(Nile, ylab = "Flow volume", xlab = "", xaxp = c(1870, 1970, 10), bty = "L")
+minor.tick(nx = 10, ny = 0, tick.ratio = .3)
+kem <- kem.0 # model 0 results
+lines(x, kem$states[1, ], col = "red", lwd = 2)
+legend("topright", paste("model 0, AICc=", format(kem.0$AICc, digits = 1)), bty = "n")
 
-#model 1
-plot(Nile,ylab="Flow volume",xlab="",xaxp=c(1870,1970,10),bty="n")
-minor.tick(nx=10,ny=0,tick.ratio=.3)
-kem <- kem.1 #model 1 results
-lines(x,kem$states[1,],col="red",lwd=2)
-legend("topright", paste("model 1, AICc=",format(kem.1$AICc,digits=1)),bty="n")
+# model 1
+plot(Nile, ylab = "Flow volume", xlab = "", xaxp = c(1870, 1970, 10), bty = "n")
+minor.tick(nx = 10, ny = 0, tick.ratio = .3)
+kem <- kem.1 # model 1 results
+lines(x, kem$states[1, ], col = "red", lwd = 2)
+legend("topright", paste("model 1, AICc=", format(kem.1$AICc, digits = 1)), bty = "n")
 
-#model 2
-plot(Nile,ylab="Flow volume",xlab="",xaxp=c(1870,1970,10),bty="L")
-minor.tick(nx=10,ny=0,tick.ratio=.3)
-kem <- kem.2 #model 2 results
-lines(x,kem$states[1,],col="red",lwd=2)
-lines(1871:1970,kem$states[1,]-1.96*kem$states.se[1,],col="red",lty=2)
-lines(1871:1970,kem$states[1,]+1.96*kem$states.se[1,],col="red",lty=2)
-legend("topright", paste("model 2, AICc=",format(kem$AICc,digits=1)),bty="n")
+# model 2
+plot(Nile, ylab = "Flow volume", xlab = "", xaxp = c(1870, 1970, 10), bty = "L")
+minor.tick(nx = 10, ny = 0, tick.ratio = .3)
+kem <- kem.2 # model 2 results
+lines(x, kem$states[1, ], col = "red", lwd = 2)
+lines(1871:1970, kem$states[1, ] - 1.96 * kem$states.se[1, ], col = "red", lty = 2)
+lines(1871:1970, kem$states[1, ] + 1.96 * kem$states.se[1, ], col = "red", lty = 2)
+legend("topright", paste("model 2, AICc=", format(kem$AICc, digits = 1)), bty = "n")
 
-#model 3
-plot(Nile,ylab="Flow volume",xlab="",xaxp=c(1870,1970,10),bty="L")
-minor.tick(nx=10,ny=0,tick.ratio=.3)
-kem <- kem.3 #model 2 results
-lines(x,kem$states[1,],col="red",lwd=2)
-lines(1871:1970,kem$states[1,]-1.96*kem$states.se[1,],col="red",lty=2)
-lines(1871:1970,kem$states[1,]+1.96*kem$states.se[1,],col="red",lty=2)
-legend("topright", paste("model 3, AICc=",format(kem$AICc,digits=1)),bty="n")
+# model 3
+plot(Nile, ylab = "Flow volume", xlab = "", xaxp = c(1870, 1970, 10), bty = "L")
+minor.tick(nx = 10, ny = 0, tick.ratio = .3)
+kem <- kem.3 # model 2 results
+lines(x, kem$states[1, ], col = "red", lwd = 2)
+lines(1871:1970, kem$states[1, ] - 1.96 * kem$states.se[1, ], col = "red", lty = 2)
+lines(1871:1970, kem$states[1, ] + 1.96 * kem$states.se[1, ], col = "red", lty = 2)
+legend("topright", paste("model 3, AICc=", format(kem$AICc, digits = 1)), bty = "n")
 ```
  
 
@@ -317,27 +327,28 @@ To get the AIC or AICc values for a model fit from a MARSS fit, use ``fit$AIC`` 
 
 Let's put the AICc values 3 Nile models together:
 ```{r uss-nile-aics}
-nile.aic = c(kem.0$AICc, kem.1$AICc, kem.2$AICc, kem.3$AICc)
+nile.aic <- c(kem.0$AICc, kem.1$AICc, kem.2$AICc, kem.3$AICc)
 ```
 Then we calculate the AICc minus the minus AICc in our model set and compute the model weights.  $\Delta\text{AIC}$ is the AIC values minus the minimum AIC value in your model set.
 
 ```{r uss-nile-delaic}
-delAIC <- nile.aic-min(nile.aic)
-relLik <- exp(-0.5*delAIC)
-aicweight <- relLik/sum(relLik)
+delAIC <- nile.aic - min(nile.aic)
+relLik <- exp(-0.5 * delAIC)
+aicweight <- relLik / sum(relLik)
 ```
 And this leads to our model weights table:
 ```{r uss-aic-table}
 aic.table <- data.frame(
-AICc=nile.aic, 
-delAIC=delAIC, 
-relLik=relLik, 
-weight=aicweight)
-rownames(aic.table) <- c("flat level","linear trend", "stoc level", "stoc level w drift")
+  AICc = nile.aic,
+  delAIC = delAIC,
+  relLik = relLik,
+  weight = aicweight
+)
+rownames(aic.table) <- c("flat level", "linear trend", "stoc level", "stoc level w drift")
 ```
 Here the table is printed using ``round()`` to limit the number of digits shown.
 ```{r uss-aic-table-round}
-round(aic.table, digits=3)
+round(aic.table, digits = 3)
 ```
 
 One thing to keep in mind when comparing models within a set of models is that the model set needs to include at least one model that can fit the data reasonably well.  `Reasonably well' means the model can put a fitted line through the data.  Can't all models do that?  Definitely, not.  For example, the flat-level model cannot put a fitted line through the Nile River data.  It is simply impossible.  The straight trend model also cannot put a fitted line through the flow data.  So if our model set only included flat-level and straight trend, then we might have said that the straight trend model is `best' even though it is just the better of two bad models.
@@ -345,74 +356,104 @@ One thing to keep in mind when comparing models within a set of models is that t
 
 ## Basic diagnostics {#sec-uss-basic-diagnostics}
 
-The first diagnostic that you do with any statistical analysis is check that your residuals correspond to your assumed error structure.  We have two types of errors in a univariate state-space model: process errors, the $w_t$, and observation errors, the $v_t$.  
-They should not have a temporal trend.  To get the residuals from most types of fits in R, you can use ``residuals(fit)``.  ``MARSS()`` calls the $v_t$, "model residuals", and the $w_t$ "state residuals".  We can plot these using the following code (Figure \@ref(fig:uss-resids)).
-```{r uss-resids0, fig.show='hide'}
-par(mfrow=c(1,2))
-resids <- residuals(kem.0)
-plot(resids$model.residuals[1,], 
-   ylab="model residual", xlab="", main="flat level")
-abline(h=0)
-plot(resids$state.residuals[1,], 
-   ylab="state residual", xlab="", main="flat level")
-abline(h=0)
+The first diagnostic that you do with any statistical analysis is check that your residuals correspond to your assumed error structure.  For a basic residuals diagnostic check for a state-space model, we want to use the 'innovations residuals'. This is the observed data at time $t$ minus the value predicted using the model plus the data up to time $t-1$. Innovations residuals should be Gaussian and temporally independent (no autocorrelation).
+`residuals(fit)` will return the innovations residuals as a data frame.
+
+```{r uss-innov-resids0}
+head(residuals(kem.0))
 ```
 
-
-(ref:uss-resids) The model and state residuals for the first 3 models.
-
-```{r uss-resids, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-resids)'}
-par(mfrow=c(3,2))
-resids <- residuals(kem.0)
-plot(resids$model.residuals[1,], 
-   ylab="model residual", xlab="", main="flat level")
-abline(h=0)
-plot(resids$state.residuals[1,], 
-   ylab="state residual", xlab="", main="flat level")
-abline(h=0)
-
-resids <- residuals(kem.1)
-plot(resids$model.residuals[1,], ylab="model residual", xlab="", main="linear trend")
-abline(h=0)
-plot(resids$state.residuals[1,], ylab="state residual", xlab="", main="linear trend", ylim=c(-1,1))
-abline(h=0)
-
-resids <- residuals(kem.2)
-plot(resids$model.residuals[1,], ylab="model residual", xlab="", main="stoc level")
-abline(h=0)
-plot(resids$state.residuals[1,], ylab="state residual", xlab="", main="stoc level")
-abline(h=0)
-```
- 
-
-The residuals should also not be autocorrelated in time.  We can check the autocorrelation with the function ``acf()``.  We won't do this for the state residuals for the flat level or linear trends since for those models $w_t=0$.  The autocorrelation plots are shown in Figure \@ref(fig:uss-acfs).  The stochastic level model looks the best in that its model residuals (the $v_t$) are fine but the state model still has problems.  Clearly the state is not a simple random walk.  This is not surprising.  The Aswan Low Dam was completed in 1902 and changed the mean flow.  The Aswan High Dam was completed in 1970 and also affected the flow.  You can see these perturbations in Figure \@ref(fig:uss-plotdata).
+The innovations residuals should also not be autocorrelated in time.  We can check the autocorrelation with the function ``acf()``.  The autocorrelation plots are shown in Figure \@ref(fig:uss-acfs).  The stochastic level model looks the best in that its innovations residuals are fine. 
 
 ```{r uss-acf0, fig.show='hide'}
-par(mfrow=c(2,2))
+par(mfrow = c(2, 2), mar=c(2,2,4,2))
 resids <- residuals(kem.0)
-acf(resids$model.residuals[1,], main="flat level v(t)", na.action=na.pass)
+acf(resids$.resids, main = "flat level v(t)", na.action = na.pass)
 resids <- residuals(kem.1)
-acf(resids$model.residuals[1,], main="linear trend v(t)", na.action=na.pass)
+acf(resids$.resids, main = "linear trend v(t)", na.action = na.pass)
 resids <- residuals(kem.2)
-acf(resids$model.residuals[1,], main="stoc level v(t)", na.action=na.pass)
-acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
+acf(resids$.resids, main = "stoc level v(t)", na.action = na.pass)
 ```
 
 
-(ref:uss-acfs) The model and state residual acfs for the 3 models.
+(ref:uss-acfs) The model innovations residual acfs for the 3 models.
 
 ```{r uss-acfs, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-acfs)'}
-par(mfrow=c(2,2))
+par(mfrow = c(2, 2), mar=c(2,2,4,2))
 resids <- residuals(kem.0)
-acf(resids$model.residuals[1,], main="flat level v(t)", na.action=na.pass)
+acf(resids$.resids, main = "flat level v(t)", na.action = na.pass)
 resids <- residuals(kem.1)
-acf(resids$model.residuals[1,], main="linear trend v(t)", na.action=na.pass)
+acf(resids$.resids, main = "linear trend v(t)", na.action = na.pass)
 resids <- residuals(kem.2)
-acf(resids$model.residuals[1,], main="stoc level v(t)", na.action=na.pass)
-acf(resids$state.residuals[1,], main="stoc level w(t)", na.action=na.pass)
+acf(resids$.resids, main = "stoc level v(t)", na.action = na.pass)
+
 ```
  
 
+### Outlier diagnostics {#sec-uss-more-diagnostics}
+
+Another type of residual used in state-space models is smoothation residuals. This residual at time $t$ is conditioned on all the data. Smoothation residuals are used for outlier detection and can help detect anomalous shocks in the data. Smoothation residuals can be autocorrelated but should fluctuate around 0. The should not have a trend. Looking at your smoothation residuals can help you determine if there are fundamental problems with the structure of your model. 
+
+We can get the smoothation residuals by passing in `type="tT"` to the `residuals()` call.  Figure \@ref(fig:uss-resids) shows the model and state smoothation residuals. The flat level and linear trend models do not have a stochastic state so their state residuals are all 0. 
+
+(ref:uss-resids) The model and state smoothations residuals for the first 3 models.
+
+```{r uss-resids, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-resids)'}
+par(mfrow = c(3, 2))
+resids <- MARSSresiduals(kem.0)
+plot(resids$model.residuals[1, ],
+  ylab = "model residual", xlab = "", main = "flat level"
+)
+abline(h = 0)
+plot(resids$state.residuals[1, ],
+  ylab = "state residual", xlab = "", main = "flat level"
+)
+abline(h = 0)
+
+resids <- MARSSresiduals(kem.1)
+plot(resids$model.residuals[1, ], ylab = "model residual", xlab = "", main = "linear trend")
+abline(h = 0)
+plot(resids$state.residuals[1, ], ylab = "state residual", xlab = "", main = "linear trend", ylim = c(-1, 1))
+abline(h = 0)
+
+resids <- MARSSresiduals(kem.2)
+plot(resids$model.residuals[1, ], ylab = "model residual", xlab = "", main = "stoc level")
+abline(h = 0)
+plot(resids$state.residuals[1, ], ylab = "state residual", xlab = "", main = "stoc level")
+abline(h = 0)
+```
+
+The flat and linear trend models show problems. The model smoothation residuals are positive early and then are slightly negative. They should fluctuate around 0 the whole time series. The stochastic level model looks fine. The residuals fluctuate around 0.
+
+The smoothation residuals can also help us look for outliers in the data or outlier shifts in the level (sudden anolmalous changes). If we standardize by the variance of the residuals (divide by the square root of the variance), then the standardized residuals should have an approximate standard normal distribution.
+
+We will look just at the stochastic level model since the other models do not have a stochastic state ($x$).  Figure \@ref(fig:uss-resids2) (right panel) shows us that there was a sudden level change around 1902. The Aswan Low Dam was completed in 1902 and changed the mean flow.  The Aswan High Dam was completed in 1970 and also affected the flow though not as much.  You can see these perturbations in Figure \@ref(fig:uss-plotdata).
+
+
+(ref:uss-resids2) Standardized smoothation residuals.
+
+```{r uss-resids2, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-resids)'}
+par(mfrow = c(1, 2))
+resids <- residuals(kem.2, type="tT", standardization="marginal")
+mresids <- subset(resids, name == "model")
+plot(mresids$t, mresids$.std.resids,
+  ylab = "model std smoothationl", xlab = "", main = "data outliers"
+)
+abline(h = 0)
+abline(h = c(2,-2), lty=2)
+sresids <- subset(resids, name == "state")
+plot(sresids$t, sresids$.std.resids, type="l",
+  ylab = "state std smoothation", xlab = "", main = "sudden level changes"
+)
+abline(h = 0)
+abline(h = c(2,-2), lty=2)
+```
+
+
+
+
+
+ 
 \clearpage
 
 
@@ -422,7 +463,7 @@ Here we show how to fit the stochastic level model, model 3 Equation \@ref(eq:us
 
 ```{r uss-jags-data}
 library(datasets)
-y <- as.vector(Nile)
+y <- Nile
 ```
 
 This section requires that you have JAGS installed and the **R2jags**, **rjags** and **coda** R packages loaded.
@@ -456,18 +497,20 @@ jagsscript <- cat("
    Y[i] ~ dnorm(X[i], tau.r); # Observation variation
    }
    }                  
-   ",file=model.loc)
+   ", file = model.loc)
 ```
 Next we specify the data (and any other input) that the JAGS code needs.  In this case, we need to pass in ``dat`` and the number of time steps since that is used in the for loop.  We also specify the parameters that we want to monitor.  We need to specify at least one, but we will monitor all of them so we can plot them after fitting.  Note, that the hidden state is a parameter in the Bayesian context (but not in the maximum likelihood context).  
 ```{r uss-jags-set}
-jags.data <- list("Y"=y, "TT"=length(y), Y1=y[1])
+jags.data <- list("Y" = y, "TT" = length(y), Y1 = y[1])
 jags.params <- c("sd.q", "sd.r", "X", "mu", "u")
 ```
 Now we can fit the model:
 ```{r uss-jags-fit, results='hide', message=FALSE, cache=TRUE}
-mod_ss <- jags(jags.data, parameters.to.save=jags.params, 
-     model.file=model.loc, n.chains = 3, 
-     n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)
+mod_ss <- jags(jags.data,
+  parameters.to.save = jags.params,
+  model.file = model.loc, n.chains = 3,
+  n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
+)
 ```
 
 We can then show the posteriors along with the MLEs from MARSS on top (Figure \@ref(fig:uss-fig-posteriors) ) using the code below.
@@ -476,15 +519,15 @@ We can then show the posteriors along with the MLEs from MARSS on top (Figure \@
 
 ```{r uss-fig-posteriors, fig=TRUE, fig.cap='(ref:uss-fig-posteriors)', message=FALSE, cache=TRUE}
 attach.jags(mod_ss)
-par(mfrow=c(2,2))
+par(mfrow = c(2, 2))
 hist(mu)
-abline(v=coef(kem.3)$x0, col="red")
+abline(v = coef(kem.3)$x0, col = "red")
 hist(u)
-abline(v=coef(kem.3)$U, col="red")
+abline(v = coef(kem.3)$U, col = "red")
 hist(log(sd.q^2))
-abline(v=log(coef(kem.3)$Q), col="red")
+abline(v = log(coef(kem.3)$Q), col = "red")
 hist(log(sd.r^2))
-abline(v=log(coef(kem.3)$R), col="red")
+abline(v = log(coef(kem.3)$R), col = "red")
 detach.jags()
 ```
  
@@ -493,12 +536,12 @@ To plot the estimated states ( Figure \@ref(fig:uss-fig-bayesian-states) ), we w
 ```{r uss-jags-plot-states-fun, message=FALSE, warning=FALSE}
 plotModelOutput <- function(jagsmodel, Y) {
   attach.jags(jagsmodel)
-  x <- seq(1,length(Y))
-  XPred <- cbind(apply(X,2,quantile,0.025), apply(X,2,mean), apply(X,2,quantile,0.975))
-  ylims <- c(min(c(Y,XPred), na.rm=TRUE), max(c(Y,XPred), na.rm=TRUE))
-  plot(Y, col="white",ylim=ylims, xlab="",ylab="State predictions")
-  polygon(c(x,rev(x)), c(XPred[,1], rev(XPred[,3])), col="grey70",border=NA)
-  lines(XPred[,2])
+  x <- seq(1, length(Y))
+  XPred <- cbind(apply(X, 2, quantile, 0.025), apply(X, 2, mean), apply(X, 2, quantile, 0.975))
+  ylims <- c(min(c(Y, XPred), na.rm = TRUE), max(c(Y, XPred), na.rm = TRUE))
+  plot(Y, col = "white", ylim = ylims, xlab = "", ylab = "State predictions")
+  polygon(c(x, rev(x)), c(XPred[, 1], rev(XPred[, 3])), col = "grey70", border = NA)
+  lines(XPred[, 2])
   points(Y)
 }
 ```
@@ -507,9 +550,9 @@ plotModelOutput <- function(jagsmodel, Y) {
 
 ```{r uss-fig-bayesian-states, echo=TRUE, fig=TRUE, fig.cap='(ref:uss-fig-bayesian-states)', cache=TRUE}
 plotModelOutput(mod_ss, y)
-lines(kem.3$states[1,], col="red")
-lines(1.96*kem.3$states.se[1,]+kem.3$states[1,], col="red", lty=2)
-lines(-1.96*kem.3$states.se[1,]+kem.3$states[1,], col="red", lty=2)
+lines(kem.3$states[1, ], col = "red")
+lines(1.96 * kem.3$states.se[1, ] + kem.3$states[1, ], col = "red", lty = 2)
+lines(-1.96 * kem.3$states.se[1, ] + kem.3$states[1, ], col = "red", lty = 2)
 title("State estimate and data from\nJAGS (black) versus MARSS (red)")
 ```
 
@@ -573,12 +616,14 @@ Then we call `stan()` and pass in the data, names of parameter we wish to have r
 ```{r uss-stan-fit-model, message=FALSE, warning=FALSE, results='hide', cache=TRUE}
 # We pass in the non-NA ys as vector
 ypos <- y[!is.na(y)]
-n_pos <- sum(!is.na(y)) #number on non-NA ys
-indx_pos <- which(!is.na(y)) #index on the non-NAs
-mod <- rstan::stan(model_code = scode, 
-  data = list("y"=ypos, "TT"=length(y), "n_pos"=n_pos, "indx_pos"=indx_pos), 
-  pars = c("sd_q","x", "sd_r", "u", "x0"),
-  chains = 3, iter = 1000, thin = 1)
+n_pos <- sum(!is.na(y)) # number on non-NA ys
+indx_pos <- which(!is.na(y)) # index on the non-NAs
+mod <- rstan::stan(
+  model_code = scode,
+  data = list("y" = ypos, "TT" = length(y), "n_pos" = n_pos, "indx_pos" = indx_pos),
+  pars = c("sd_q", "x", "sd_r", "u", "x0"),
+  chains = 3, iter = 1000, thin = 1
+)
 ```
 
 We use `extract()` to extract the parameters from the fitted model and we can plot.  The estimated level is `x` and we will plot that with the 95\% credible intervals.
@@ -587,22 +632,24 @@ pars <- rstan::extract(mod)
 pred_mean <- apply(pars$x, 2, mean)
 pred_lo <- apply(pars$x, 2, quantile, 0.025)
 pred_hi <- apply(pars$x, 2, quantile, 0.975)
-plot(pred_mean, type = "l", lwd = 3, 
-     ylim = range(c(pred_mean, pred_lo, pred_hi)), ylab = "Nile River Level")
+plot(pred_mean,
+  type = "l", lwd = 3,
+  ylim = range(c(pred_mean, pred_lo, pred_hi)), ylab = "Nile River Level"
+)
 lines(pred_lo)
 lines(pred_hi)
-points(y, col="blue")
+points(y, col = "blue")
 ```
 
 Here is a `ggplot()` version of the plot.
 
 ```{r uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95 percent credible intervals"}
 library(ggplot2)
-nile <- data.frame(y=y, year=1871:1970)
+nile <- data.frame(y = y, year = 1871:1970)
 h <- ggplot(nile, aes(year))
 h + geom_ribbon(aes(ymin = pred_lo, ymax = pred_hi), fill = "grey70") +
-  geom_line(aes(y = pred_mean), size=1) +
-  geom_point(aes(y = y), color="blue") +
+  geom_line(aes(y = pred_mean), size = 1) +
+  geom_point(aes(y = y), color = "blue") +
   labs(y = "Nile River level")
 ```
 
@@ -663,8 +710,8 @@ The variance-covariance matrix for $\ww_t$ is a diagonal matrix with unequal var
 
 2. The **MARSS** package includes a data set of sharp-tailed grouse in Washington.  Load the data to use as follows:
     ```{r uss-hw1, results='hide'}
-    library(MARSS)
-    dat=log(grouse[,2])
+library(MARSS)
+dat <- log(grouse[, 2])
     ```
     Consider these two models for the data:
 
@@ -705,7 +752,7 @@ y_t = x_t
 
 3. Create a random walk with drift time series using ``cumsum()`` and ``rnorm()``.  Look at the ``rnorm()`` help file (``?rnorm``) to make sure you know what the arguments to the ``rnorm()`` are.
     ```{r uss-hw3data}
-    dat <- cumsum(rnorm(100,0.1,1))
+dat <- cumsum(rnorm(100, 0.1, 1))
     ```
 
     a.  What is the order of this random walk written as ARIMA(p, d, q)? "what is the order" means "what is $p$, $d$, and $q$. Model "order" is how ``arima()`` and ``Arima()`` specify arima models.
@@ -721,7 +768,7 @@ y_t = x_t
 
 4. The first-difference of ``dat`` used in the previous problem is:
     ```{r uss-hw3data.diff}
-    diff.dat=diff(dat)
+diff.dat <- diff(dat)
     ```
     Use ``?diff`` to check what the ``diff()`` function does.
 
@@ -757,8 +804,8 @@ x_t = b x_{t-1}+u+w_t \text{ where } w_t \sim \N(0,q)
 6. The **MARSS** package includes a data set of gray whales.  Load the data to use as follows:
 
     ```{r uss-hw4, results='hide'}
-    library(MARSS)
-    dat <- log(graywhales[,2])
+library(MARSS)
+dat <- log(graywhales[, 2])
     ```
 
     Fit a random walk with drift model observed with error to the data:
@@ -799,8 +846,8 @@ x_0 = a
 
     a.  Show the acf of the model and state residuals for the best model. You will need a vector of the residuals to do this. If ``fit`` is the fit from a fit call like ``fit = MARSS(dat)``, you get the residuals using this code:
         ```{r uss-hw-greywhales, eval=FALSE}
-        residuals(fit)$state.residuals[1,]
-        residuals(fit)$model.residuals[1,]
+residuals(fit)$state.residuals[1, ]
+residuals(fit)$model.residuals[1, ]
         ```
         Do the acf's suggest any problems?
 
@@ -809,11 +856,11 @@ x_0 = a
 Load the data to use as follows:
 
     ```{r uss-hw6, results='hide'}
-    library(forecast)
-    dat <- log(airmiles)
-    n <- length(dat)
-    training.dat <- dat[1:(n-3)]
-    test.dat <- dat[(n-2):n]
+library(forecast)
+dat <- log(airmiles)
+n <- length(dat)
+training.dat <- dat[1:(n - 3)]
+test.dat <- dat[(n - 2):n]
     ```
     This will prepare the training data and set aside the last 3 data points for validation. 
 
@@ -831,16 +878,16 @@ Load the data to use as follows:
 
 9. The WhaleNet Archive of STOP Data has movement data on loggerhead turtles on the east coast of the US from ARGOS tags.  The **MARSS** package ``loggerheadNoisy`` dataset is lat/lot data on eight individuals, however we have corrupted this data severely by adding random errors in order to create a "bad tag" problem (very noisy).  Use ``head(loggerheadNoisy)`` to get an idea of the data.  Then load the data on one turtle, MaryLee.  MARSS needs time across the columns to you need to use transpose the data (as shown).
     ```{r uss-hw-marylee}
-    turtlename <- "MaryLee"
-    dat <- loggerheadNoisy[which(loggerheadNoisy$turtle==turtlename),5:6]
-    dat <- t(dat) 
+turtlename <- "MaryLee"
+dat <- loggerheadNoisy[which(loggerheadNoisy$turtle == turtlename), 5:6]
+dat <- t(dat)
     ```
 
     a.  Plot MaryLee's locations (as a line not dots).  Put the latitude locations on the y-axis and the longitude on the y-axis. You can use ``rownames(dat)`` to see which is in which row. You can just use ``plot()`` for the homework. But if you want, you can look at the MARSS Manual chapter on animal movement to see how to plot the turtle locations on a map using the **maps** package.
 
     a.  Analyze the data with a state-space model (movement observed with error) using
         ```{r uss-hw-movement-fit1, results='hide'}
-        fit0 <- MARSS(dat)
+fit0 <- MARSS(dat)
         ```
         Look at the output from the above MARSS call.  What is the meaning of the parameters output from MARSS in terms of turtle movement? What exactly is the $u$ estimate for example?  Look at the data and think about the model you fit.
     
@@ -860,11 +907,10 @@ Load the data to use as follows:
 
         You only need to change ``Q`` specification.  Your MARSS call will now look like the following with ``...`` replaced with your ``Q`` specification.
         ```{r uss-hw-movement-model-compare, eval=FALSE}
-        fit1 <- MARSS(dat, list(Q=...))
+fit1 <- MARSS(dat, list(Q = ...))
         ```
     a.  Plot your state residuals (true location residuals).  What are the problems? Discuss in reference to your plot of the location data.  Here is how to get state residuals from ``MARSS()`` output:
         ```{r uss-hw-movement-resids, eval=FALSE}
-        resids <- residuals(fit0)$state.residuals
+resids <- residuals(fit0)$state.residuals
         ```
        The lon residuals are in row 1 and lat residuals are in row 2 (same order as the data).
-

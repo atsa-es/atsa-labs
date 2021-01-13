@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>8.6 Including seasonal effects in MARSS models | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="8.6 Including seasonal effects in MARSS models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -463,37 +467,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">8.6</span> Including seasonal effects in MARSS models</h2>
 <p>Time-series data are often collected at intervals with some implicit ``seasonality.’’ For example, quarterly earnings for a business, monthly rainfall totals, or hourly air temperatures. In those cases, it is often helpful to extract any recurring seasonal patterns that might otherwise mask some of the other temporal dynamics we are interested in examining.</p>
 <p>Here we show a few approaches for including seasonal effects using the Lake Washington plankton data, which were collected monthly. The following examples will use all five phytoplankton species from Lake Washington. First, let’s set up the data.</p>
-<div class="sourceCode" id="cb530"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb530-1" title="1">years &lt;-<span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1965</span> <span class="op">&amp;</span><span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;</span><span class="st"> </span><span class="dv">1975</span></a>
-<a class="sourceLine" id="cb530-2" title="2">phytos &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Bluegreens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, <span class="st">&quot;Other.algae&quot;</span>)</a>
-<a class="sourceLine" id="cb530-3" title="3">dat &lt;-<span class="st"> </span><span class="kw">t</span>(fulldat[years, phytos])</a>
-<a class="sourceLine" id="cb530-4" title="4"></a>
-<a class="sourceLine" id="cb530-5" title="5"><span class="co"># z.score data because we changed the mean when we subsampled</span></a>
-<a class="sourceLine" id="cb530-6" title="6">the.mean &lt;-<span class="st"> </span><span class="kw">apply</span>(dat, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb530-7" title="7">the.sigma &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb530-8" title="8">dat &lt;-<span class="st"> </span>(dat <span class="op">-</span><span class="st"> </span>the.mean) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>the.sigma)</a>
-<a class="sourceLine" id="cb530-9" title="9"><span class="co"># number of time periods/samples</span></a>
-<a class="sourceLine" id="cb530-10" title="10">TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat)[<span class="dv">2</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="sec-msscov-season.html#cb516-1"></a>years &lt;-<span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1965</span> <span class="op">&amp;</span><span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;</span><span class="st"> </span><span class="dv">1975</span></span>
+<span id="cb516-2"><a href="sec-msscov-season.html#cb516-2"></a>phytos &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Bluegreens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, <span class="st">&quot;Other.algae&quot;</span>)</span>
+<span id="cb516-3"><a href="sec-msscov-season.html#cb516-3"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(fulldat[years, phytos])</span>
+<span id="cb516-4"><a href="sec-msscov-season.html#cb516-4"></a></span>
+<span id="cb516-5"><a href="sec-msscov-season.html#cb516-5"></a><span class="co"># z.score data because we changed the mean when we subsampled</span></span>
+<span id="cb516-6"><a href="sec-msscov-season.html#cb516-6"></a>the.mean &lt;-<span class="st"> </span><span class="kw">apply</span>(dat, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb516-7"><a href="sec-msscov-season.html#cb516-7"></a>the.sigma &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb516-8"><a href="sec-msscov-season.html#cb516-8"></a>dat &lt;-<span class="st"> </span>(dat <span class="op">-</span><span class="st"> </span>the.mean) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>the.sigma)</span>
+<span id="cb516-9"><a href="sec-msscov-season.html#cb516-9"></a><span class="co"># number of time periods/samples</span></span>
+<span id="cb516-10"><a href="sec-msscov-season.html#cb516-10"></a>TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat)[<span class="dv">2</span>]</span></code></pre></div>
 <div id="sec-msscov-season-factors" class="section level3">
 <h3><span class="header-section-number">8.6.1</span> Seasonal effects as fixed factors</h3>
 <p>One common approach for estimating seasonal effects is to treat each one as a fixed factor, such that the number of parameters equals the number of ``seasons’’ (e.g., 24 hours per day, 4 quarters per year). The plankton data are collected monthly, so we will treat each month as a fixed factor. To fit a model with fixed month effects, we create a <span class="math inline">\(12 \times T\)</span> covariate matrix <span class="math inline">\(\mathbf{c}\)</span> with one row for each month (Jan, Feb, …) and one column for each time point. We put a 1 in the January row for each column corresponding to a January time point, a 1 in the February row for each column corresponding to a February time point, and so on. All other values of <span class="math inline">\(\mathbf{c}\)</span> equal 0. The following code will create such a <span class="math inline">\(\mathbf{c}\)</span> matrix.</p>
-<div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb531-1" title="1"><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span></a>
-<a class="sourceLine" id="cb531-2" title="2">period &lt;-<span class="st"> </span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb531-3" title="3"><span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span></a>
-<a class="sourceLine" id="cb531-4" title="4">per<span class="fl">.1</span>st &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb531-5" title="5"><span class="co"># create factors for seasons</span></a>
-<a class="sourceLine" id="cb531-6" title="6">c.in &lt;-<span class="st"> </span><span class="kw">diag</span>(period)</a>
-<a class="sourceLine" id="cb531-7" title="7"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>(<span class="kw">ceiling</span>(TT<span class="op">/</span>period))) {</a>
-<a class="sourceLine" id="cb531-8" title="8">    c.in &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.in, <span class="kw">diag</span>(period))</a>
-<a class="sourceLine" id="cb531-9" title="9">}</a>
-<a class="sourceLine" id="cb531-10" title="10"><span class="co"># trim c.in to correct start &amp; length</span></a>
-<a class="sourceLine" id="cb531-11" title="11">c.in &lt;-<span class="st"> </span>c.in[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</a>
-<a class="sourceLine" id="cb531-12" title="12"><span class="co"># better row names</span></a>
-<a class="sourceLine" id="cb531-13" title="13"><span class="kw">rownames</span>(c.in) &lt;-<span class="st"> </span>month.abb</a></code></pre></div>
+<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb517-1"><a href="sec-msscov-season.html#cb517-1"></a><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span></span>
+<span id="cb517-2"><a href="sec-msscov-season.html#cb517-2"></a>period &lt;-<span class="st"> </span><span class="dv">12</span></span>
+<span id="cb517-3"><a href="sec-msscov-season.html#cb517-3"></a><span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span></span>
+<span id="cb517-4"><a href="sec-msscov-season.html#cb517-4"></a>per<span class="fl">.1</span>st &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb517-5"><a href="sec-msscov-season.html#cb517-5"></a><span class="co"># create factors for seasons</span></span>
+<span id="cb517-6"><a href="sec-msscov-season.html#cb517-6"></a>c.in &lt;-<span class="st"> </span><span class="kw">diag</span>(period)</span>
+<span id="cb517-7"><a href="sec-msscov-season.html#cb517-7"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>(<span class="kw">ceiling</span>(TT<span class="op">/</span>period))) {</span>
+<span id="cb517-8"><a href="sec-msscov-season.html#cb517-8"></a>    c.in &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.in, <span class="kw">diag</span>(period))</span>
+<span id="cb517-9"><a href="sec-msscov-season.html#cb517-9"></a>}</span>
+<span id="cb517-10"><a href="sec-msscov-season.html#cb517-10"></a><span class="co"># trim c.in to correct start &amp; length</span></span>
+<span id="cb517-11"><a href="sec-msscov-season.html#cb517-11"></a>c.in &lt;-<span class="st"> </span>c.in[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</span>
+<span id="cb517-12"><a href="sec-msscov-season.html#cb517-12"></a><span class="co"># better row names</span></span>
+<span id="cb517-13"><a href="sec-msscov-season.html#cb517-13"></a><span class="kw">rownames</span>(c.in) &lt;-<span class="st"> </span>month.abb</span></code></pre></div>
 <p>Next we need to set up the form of the <span class="math inline">\(\mathbf{C}\)</span> matrix which defines any constraints we want to set on the month effects. <span class="math inline">\(\mathbf{C}\)</span> is a <span class="math inline">\(5 \times 12\)</span> matrix. Five taxon and 12 month effects.
 If we wanted each taxon to have the same month effect, i.e. there is a common month effect across all taxon, then
 we have the same value in each <span class="math inline">\(\mathbf{C}\)</span> column:</p>
-<div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" title="1">C &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.abb, <span class="dv">5</span>, <span class="dv">12</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb532-2" title="2">C</a></code></pre></div>
+<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb518-1"><a href="sec-msscov-season.html#cb518-1"></a>C &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.abb, <span class="dv">5</span>, <span class="dv">12</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb518-2"><a href="sec-msscov-season.html#cb518-2"></a>C</span></code></pre></div>
 <pre><code>     [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9]  [,10] [,11] [,12]
 [1,] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;
 [2,] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;
@@ -502,90 +506,90 @@ we have the same value in each <span class="math inline">\(\mathbf{C}\)</span> c
 [5,] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;</code></pre>
 <p>Notice, that <span class="math inline">\(\mathbf{C}\)</span> only has 12 values in it, the 12 common month effects.
 However, for this example, we will let each taxon have a different month effect thus allowing different seasonality for each taxon. For this model, we want each value in <span class="math inline">\(\mathbf{C}\)</span> to be unique:</p>
-<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb534-1" title="1">C &lt;-<span class="st"> &quot;unconstrained&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb520-1"><a href="sec-msscov-season.html#cb520-1"></a>C &lt;-<span class="st"> &quot;unconstrained&quot;</span></span></code></pre></div>
 <p>Now <span class="math inline">\(\mathbf{C}\)</span> has 5 <span class="math inline">\(\times\)</span> 12 = 60 separate effects.</p>
 <p>Then we set up the form for the rest of the model parameters. We make the following assumptions:</p>
-<div class="sourceCode" id="cb535"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb535-1" title="1"><span class="co"># Each taxon has unique density-dependence</span></a>
-<a class="sourceLine" id="cb535-2" title="2">B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></a>
-<a class="sourceLine" id="cb535-3" title="3"><span class="co"># Assume independent process errors</span></a>
-<a class="sourceLine" id="cb535-4" title="4">Q &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></a>
-<a class="sourceLine" id="cb535-5" title="5"><span class="co"># We have demeaned the data &amp; are fitting a mean-reverting</span></a>
-<a class="sourceLine" id="cb535-6" title="6"><span class="co"># model by estimating a diagonal B, thus</span></a>
-<a class="sourceLine" id="cb535-7" title="7">U &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb535-8" title="8"><span class="co"># Each obs time series is associated with only one process</span></a>
-<a class="sourceLine" id="cb535-9" title="9">Z &lt;-<span class="st"> &quot;identity&quot;</span></a>
-<a class="sourceLine" id="cb535-10" title="10"><span class="co"># The data are demeaned &amp; fluctuate around a mean</span></a>
-<a class="sourceLine" id="cb535-11" title="11">A &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb535-12" title="12"><span class="co"># We assume observation errors are independent, but they have</span></a>
-<a class="sourceLine" id="cb535-13" title="13"><span class="co"># similar variance due to similar collection methods</span></a>
-<a class="sourceLine" id="cb535-14" title="14">R &lt;-<span class="st"> &quot;diagonal and equal&quot;</span></a>
-<a class="sourceLine" id="cb535-15" title="15"><span class="co"># We are not including covariate effects in the obs equation</span></a>
-<a class="sourceLine" id="cb535-16" title="16">D &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb535-17" title="17">d &lt;-<span class="st"> &quot;zero&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb521"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb521-1"><a href="sec-msscov-season.html#cb521-1"></a><span class="co"># Each taxon has unique density-dependence</span></span>
+<span id="cb521-2"><a href="sec-msscov-season.html#cb521-2"></a>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
+<span id="cb521-3"><a href="sec-msscov-season.html#cb521-3"></a><span class="co"># Assume independent process errors</span></span>
+<span id="cb521-4"><a href="sec-msscov-season.html#cb521-4"></a>Q &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
+<span id="cb521-5"><a href="sec-msscov-season.html#cb521-5"></a><span class="co"># We have demeaned the data &amp; are fitting a mean-reverting</span></span>
+<span id="cb521-6"><a href="sec-msscov-season.html#cb521-6"></a><span class="co"># model by estimating a diagonal B, thus</span></span>
+<span id="cb521-7"><a href="sec-msscov-season.html#cb521-7"></a>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb521-8"><a href="sec-msscov-season.html#cb521-8"></a><span class="co"># Each obs time series is associated with only one process</span></span>
+<span id="cb521-9"><a href="sec-msscov-season.html#cb521-9"></a>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
+<span id="cb521-10"><a href="sec-msscov-season.html#cb521-10"></a><span class="co"># The data are demeaned &amp; fluctuate around a mean</span></span>
+<span id="cb521-11"><a href="sec-msscov-season.html#cb521-11"></a>A &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb521-12"><a href="sec-msscov-season.html#cb521-12"></a><span class="co"># We assume observation errors are independent, but they have</span></span>
+<span id="cb521-13"><a href="sec-msscov-season.html#cb521-13"></a><span class="co"># similar variance due to similar collection methods</span></span>
+<span id="cb521-14"><a href="sec-msscov-season.html#cb521-14"></a>R &lt;-<span class="st"> &quot;diagonal and equal&quot;</span></span>
+<span id="cb521-15"><a href="sec-msscov-season.html#cb521-15"></a><span class="co"># We are not including covariate effects in the obs equation</span></span>
+<span id="cb521-16"><a href="sec-msscov-season.html#cb521-16"></a>D &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb521-17"><a href="sec-msscov-season.html#cb521-17"></a>d &lt;-<span class="st"> &quot;zero&quot;</span></span></code></pre></div>
 <p>Now we can set up the model list for MARSS and fit the model (results are not shown since they are verbose with 60 different month effects).</p>
-<div class="sourceCode" id="cb536"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb536-1" title="1">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </a>
-<a class="sourceLine" id="cb536-2" title="2">    <span class="dt">C =</span> C, <span class="dt">c =</span> c.in, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</a>
-<a class="sourceLine" id="cb536-3" title="3">seas.mod<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</a>
-<a class="sourceLine" id="cb536-4" title="4"></a>
-<a class="sourceLine" id="cb536-5" title="5"><span class="co"># Get the estimated seasonal effects rows are taxa, cols are</span></a>
-<a class="sourceLine" id="cb536-6" title="6"><span class="co"># seasonal effects</span></a>
-<a class="sourceLine" id="cb536-7" title="7">seas<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.1</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</a>
-<a class="sourceLine" id="cb536-8" title="8"><span class="kw">rownames</span>(seas<span class="fl">.1</span>) &lt;-<span class="st"> </span>phytos</a>
-<a class="sourceLine" id="cb536-9" title="9"><span class="kw">colnames</span>(seas<span class="fl">.1</span>) &lt;-<span class="st"> </span>month.abb</a></code></pre></div>
+<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb522-1"><a href="sec-msscov-season.html#cb522-1"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
+<span id="cb522-2"><a href="sec-msscov-season.html#cb522-2"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> c.in, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</span>
+<span id="cb522-3"><a href="sec-msscov-season.html#cb522-3"></a>seas.mod<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</span>
+<span id="cb522-4"><a href="sec-msscov-season.html#cb522-4"></a></span>
+<span id="cb522-5"><a href="sec-msscov-season.html#cb522-5"></a><span class="co"># Get the estimated seasonal effects rows are taxa, cols are</span></span>
+<span id="cb522-6"><a href="sec-msscov-season.html#cb522-6"></a><span class="co"># seasonal effects</span></span>
+<span id="cb522-7"><a href="sec-msscov-season.html#cb522-7"></a>seas<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.1</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</span>
+<span id="cb522-8"><a href="sec-msscov-season.html#cb522-8"></a><span class="kw">rownames</span>(seas<span class="fl">.1</span>) &lt;-<span class="st"> </span>phytos</span>
+<span id="cb522-9"><a href="sec-msscov-season.html#cb522-9"></a><span class="kw">colnames</span>(seas<span class="fl">.1</span>) &lt;-<span class="st"> </span>month.abb</span></code></pre></div>
 <p>The top panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this model. Note that if we had set U=“unequal”, we would need to set one of the columns of <span class="math inline">\(\mathbf{C}\)</span> to zero because the model would be under-determined (infinite number of solutions). If we substracted the mean January abundance off each time series, we could set the January column in <span class="math inline">\(\mathbf{C}\)</span> to 0 and get rid of 5 estimated effects.</p>
 </div>
 <div id="sec-msscov-season-polynomial" class="section level3">
 <h3><span class="header-section-number">8.6.2</span> Seasonal effects as a polynomial</h3>
 <p>The fixed factor approach required estimating 60 effects. Another approach is to model the month effect as a 3rd-order (or higher) polynomial: <span class="math inline">\(a+b\times m + c\times m^2 + d \times m^3\)</span> where <span class="math inline">\(m\)</span> is the month number. This approach has less flexibility but requires only 20 estimated parameters (i.e., 4 regression parameters times 5 taxa). To do so, we create a <span class="math inline">\(4 \times T\)</span> covariate matrix <span class="math inline">\(\mathbf{c}\)</span> with the rows corresponding to 1, <span class="math inline">\(m\)</span>, <span class="math inline">\(m^2\)</span>, and <span class="math inline">\(m^3\)</span>, and the columns again corresponding to the time points. Here is how to set up this matrix:</p>
-<div class="sourceCode" id="cb537"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb537-1" title="1"><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span></a>
-<a class="sourceLine" id="cb537-2" title="2">period &lt;-<span class="st"> </span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb537-3" title="3"><span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span></a>
-<a class="sourceLine" id="cb537-4" title="4">per<span class="fl">.1</span>st &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb537-5" title="5"><span class="co"># order of polynomial</span></a>
-<a class="sourceLine" id="cb537-6" title="6">poly.order &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb537-7" title="7"><span class="co"># create polynomials of months</span></a>
-<a class="sourceLine" id="cb537-8" title="8">month.cov &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, period)</a>
-<a class="sourceLine" id="cb537-9" title="9"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>poly.order) {</a>
-<a class="sourceLine" id="cb537-10" title="10">    month.cov =<span class="st"> </span><span class="kw">rbind</span>(month.cov, (<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>)<span class="op">^</span>i)</a>
-<a class="sourceLine" id="cb537-11" title="11">}</a>
-<a class="sourceLine" id="cb537-12" title="12"><span class="co"># our c matrix is month.cov replicated once for each year</span></a>
-<a class="sourceLine" id="cb537-13" title="13">c.m.poly &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.cov, poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, <span class="dt">byrow =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb537-14" title="14"><span class="co"># trim c.in to correct start &amp; length</span></a>
-<a class="sourceLine" id="cb537-15" title="15">c.m.poly &lt;-<span class="st"> </span>c.m.poly[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</a>
-<a class="sourceLine" id="cb537-16" title="16"></a>
-<a class="sourceLine" id="cb537-17" title="17"><span class="co"># Everything else remains the same as in the previous example</span></a>
-<a class="sourceLine" id="cb537-18" title="18">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </a>
-<a class="sourceLine" id="cb537-19" title="19">    <span class="dt">C =</span> C, <span class="dt">c =</span> c.m.poly, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</a>
-<a class="sourceLine" id="cb537-20" title="20">seas.mod<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb523"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb523-1"><a href="sec-msscov-season.html#cb523-1"></a><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span></span>
+<span id="cb523-2"><a href="sec-msscov-season.html#cb523-2"></a>period &lt;-<span class="st"> </span><span class="dv">12</span></span>
+<span id="cb523-3"><a href="sec-msscov-season.html#cb523-3"></a><span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span></span>
+<span id="cb523-4"><a href="sec-msscov-season.html#cb523-4"></a>per<span class="fl">.1</span>st &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb523-5"><a href="sec-msscov-season.html#cb523-5"></a><span class="co"># order of polynomial</span></span>
+<span id="cb523-6"><a href="sec-msscov-season.html#cb523-6"></a>poly.order &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb523-7"><a href="sec-msscov-season.html#cb523-7"></a><span class="co"># create polynomials of months</span></span>
+<span id="cb523-8"><a href="sec-msscov-season.html#cb523-8"></a>month.cov &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, period)</span>
+<span id="cb523-9"><a href="sec-msscov-season.html#cb523-9"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>poly.order) {</span>
+<span id="cb523-10"><a href="sec-msscov-season.html#cb523-10"></a>    month.cov =<span class="st"> </span><span class="kw">rbind</span>(month.cov, (<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>)<span class="op">^</span>i)</span>
+<span id="cb523-11"><a href="sec-msscov-season.html#cb523-11"></a>}</span>
+<span id="cb523-12"><a href="sec-msscov-season.html#cb523-12"></a><span class="co"># our c matrix is month.cov replicated once for each year</span></span>
+<span id="cb523-13"><a href="sec-msscov-season.html#cb523-13"></a>c.m.poly &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.cov, poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, <span class="dt">byrow =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb523-14"><a href="sec-msscov-season.html#cb523-14"></a><span class="co"># trim c.in to correct start &amp; length</span></span>
+<span id="cb523-15"><a href="sec-msscov-season.html#cb523-15"></a>c.m.poly &lt;-<span class="st"> </span>c.m.poly[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</span>
+<span id="cb523-16"><a href="sec-msscov-season.html#cb523-16"></a></span>
+<span id="cb523-17"><a href="sec-msscov-season.html#cb523-17"></a><span class="co"># Everything else remains the same as in the previous example</span></span>
+<span id="cb523-18"><a href="sec-msscov-season.html#cb523-18"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
+<span id="cb523-19"><a href="sec-msscov-season.html#cb523-19"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> c.m.poly, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</span>
+<span id="cb523-20"><a href="sec-msscov-season.html#cb523-20"></a>seas.mod<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</span></code></pre></div>
 <p>The effect of month <span class="math inline">\(m\)</span> for taxon <span class="math inline">\(i\)</span> is <span class="math inline">\(a_i + b_i \times m + c_i \times m^2 + d_i \times m^3\)</span>, where <span class="math inline">\(a_i\)</span>, <span class="math inline">\(b_i\)</span>, <span class="math inline">\(c_i\)</span> and <span class="math inline">\(d_i\)</span> are in the <span class="math inline">\(i\)</span>-th row of <span class="math inline">\(\mathbf{C}\)</span>. We can now calculate the matrix of seasonal effects as follows, where each row is a taxon and each column is a month:</p>
-<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb538-1" title="1">C<span class="fl">.2</span> =<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</a>
-<a class="sourceLine" id="cb538-2" title="2">seas<span class="fl">.2</span> =<span class="st"> </span>C<span class="fl">.2</span> <span class="op">%*%</span><span class="st"> </span>month.cov</a>
-<a class="sourceLine" id="cb538-3" title="3"><span class="kw">rownames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>phytos</a>
-<a class="sourceLine" id="cb538-4" title="4"><span class="kw">colnames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>month.abb</a></code></pre></div>
+<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb524-1"><a href="sec-msscov-season.html#cb524-1"></a>C<span class="fl">.2</span> =<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</span>
+<span id="cb524-2"><a href="sec-msscov-season.html#cb524-2"></a>seas<span class="fl">.2</span> =<span class="st"> </span>C<span class="fl">.2</span> <span class="op">%*%</span><span class="st"> </span>month.cov</span>
+<span id="cb524-3"><a href="sec-msscov-season.html#cb524-3"></a><span class="kw">rownames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>phytos</span>
+<span id="cb524-4"><a href="sec-msscov-season.html#cb524-4"></a><span class="kw">colnames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>month.abb</span></code></pre></div>
 <p>The middle panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this polynomial model.</p>
 <p>Note: Setting the covariates up like this means that our covariates are collinear since <span class="math inline">\(m\)</span>, <span class="math inline">\(m^2\)</span> and <span class="math inline">\(m^3\)</span> are correlated, obviously. A better approach is to use the <code>poly()</code> function to create an orthogonal polynomial covariate matrix <code>c.m.poly.o</code>:</p>
-<div class="sourceCode" id="cb539"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb539-1" title="1">month.cov.o &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">poly</span>(<span class="dv">1</span><span class="op">:</span>period, poly.order))</a>
-<a class="sourceLine" id="cb539-2" title="2">c.m.poly.o &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">t</span>(month.cov.o), poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, </a>
-<a class="sourceLine" id="cb539-3" title="3">    <span class="dt">byrow =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb539-4" title="4">c.m.poly.o &lt;-<span class="st"> </span>c.m.poly.o[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb525-1"><a href="sec-msscov-season.html#cb525-1"></a>month.cov.o &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">poly</span>(<span class="dv">1</span><span class="op">:</span>period, poly.order))</span>
+<span id="cb525-2"><a href="sec-msscov-season.html#cb525-2"></a>c.m.poly.o &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">t</span>(month.cov.o), poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, </span>
+<span id="cb525-3"><a href="sec-msscov-season.html#cb525-3"></a>    <span class="dt">byrow =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb525-4"><a href="sec-msscov-season.html#cb525-4"></a>c.m.poly.o &lt;-<span class="st"> </span>c.m.poly.o[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</span></code></pre></div>
 </div>
 <div id="sec-msscov-season-fourier" class="section level3">
 <h3><span class="header-section-number">8.6.3</span> Seasonal effects as a Fourier series</h3>
 <p>The factor approach required estimating 60 effects, and the 3rd order polynomial model was an improvement at only 20 parameters. A third option is to use a discrete Fourier series, which is combination of sine and cosine waves; it would require only 10 parameters. Specifically, the effect of month <span class="math inline">\(m\)</span> on taxon <span class="math inline">\(i\)</span> is <span class="math inline">\(a_i \times \cos(2 \pi m/p) + b_i \times \sin(2 \pi m/p)\)</span>, where <span class="math inline">\(p\)</span> is the period (e.g., 12 months, 4 quarters), and <span class="math inline">\(a_i\)</span> and <span class="math inline">\(b_i\)</span> are contained in the <span class="math inline">\(i\)</span>-th row of <span class="math inline">\(\mathbf{C}\)</span>.</p>
 <p>We begin by defining the <span class="math inline">\(2 \times T\)</span> seasonal covariate matrix <span class="math inline">\(\mathbf{c}\)</span> as a combination of 1 cosine and 1 sine wave:</p>
-<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb540-1" title="1">cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</a>
-<a class="sourceLine" id="cb540-2" title="2">sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</a>
-<a class="sourceLine" id="cb540-3" title="3">c.Four &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t, sin.t)</a></code></pre></div>
+<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb526-1"><a href="sec-msscov-season.html#cb526-1"></a>cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</span>
+<span id="cb526-2"><a href="sec-msscov-season.html#cb526-2"></a>sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</span>
+<span id="cb526-3"><a href="sec-msscov-season.html#cb526-3"></a>c.Four &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t, sin.t)</span></code></pre></div>
 <p>Everything else remains the same and we can fit this model as follows:</p>
-<div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb541-1" title="1">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </a>
-<a class="sourceLine" id="cb541-2" title="2">    <span class="dt">C =</span> C, <span class="dt">c =</span> c.Four, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</a>
-<a class="sourceLine" id="cb541-3" title="3">seas.mod<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb527-1"><a href="sec-msscov-season.html#cb527-1"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
+<span id="cb527-2"><a href="sec-msscov-season.html#cb527-2"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> c.Four, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</span>
+<span id="cb527-3"><a href="sec-msscov-season.html#cb527-3"></a>seas.mod<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</span></code></pre></div>
 <p>We make our seasonal effect matrix as follows:</p>
-<div class="sourceCode" id="cb542"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb542-1" title="1">C<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.3</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</a>
-<a class="sourceLine" id="cb542-2" title="2"><span class="co"># The time series of net seasonal effects</span></a>
-<a class="sourceLine" id="cb542-3" title="3">seas<span class="fl">.3</span> &lt;-<span class="st"> </span>C<span class="fl">.3</span> <span class="op">%*%</span><span class="st"> </span>c.Four[, <span class="dv">1</span><span class="op">:</span>period]</a>
-<a class="sourceLine" id="cb542-4" title="4"><span class="kw">rownames</span>(seas<span class="fl">.3</span>) &lt;-<span class="st"> </span>phytos</a>
-<a class="sourceLine" id="cb542-5" title="5"><span class="kw">colnames</span>(seas<span class="fl">.3</span>) &lt;-<span class="st"> </span>month.abb</a></code></pre></div>
+<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb528-1"><a href="sec-msscov-season.html#cb528-1"></a>C<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.3</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</span>
+<span id="cb528-2"><a href="sec-msscov-season.html#cb528-2"></a><span class="co"># The time series of net seasonal effects</span></span>
+<span id="cb528-3"><a href="sec-msscov-season.html#cb528-3"></a>seas<span class="fl">.3</span> &lt;-<span class="st"> </span>C<span class="fl">.3</span> <span class="op">%*%</span><span class="st"> </span>c.Four[, <span class="dv">1</span><span class="op">:</span>period]</span>
+<span id="cb528-4"><a href="sec-msscov-season.html#cb528-4"></a><span class="kw">rownames</span>(seas<span class="fl">.3</span>) &lt;-<span class="st"> </span>phytos</span>
+<span id="cb528-5"><a href="sec-msscov-season.html#cb528-5"></a><span class="kw">colnames</span>(seas<span class="fl">.3</span>) &lt;-<span class="st"> </span>month.abb</span></code></pre></div>
 <p>The bottom panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this seasonal-effects model based on a discrete Fourier series.</p>
 
 <div class="figure" style="text-align: center"><span id="fig:msscov-mon-effects"></span>
@@ -595,8 +599,8 @@ Figure 8.2: Estimated monthly effects for the three approaches to estimating sea
 </p>
 </div>
 <p>Rather than rely on our eyes to judge model fits, we should formally assess which of the 3 approaches offers the most parsimonious fit to the data. Here is a table of AICc values for the 3 models:</p>
-<div class="sourceCode" id="cb543"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb543-1" title="1"><span class="kw">data.frame</span>(<span class="dt">Model =</span> <span class="kw">c</span>(<span class="st">&quot;Fixed&quot;</span>, <span class="st">&quot;Cubic&quot;</span>, <span class="st">&quot;Fourier&quot;</span>), <span class="dt">AICc =</span> <span class="kw">round</span>(<span class="kw">c</span>(seas.mod<span class="fl">.1</span><span class="op">$</span>AICc, </a>
-<a class="sourceLine" id="cb543-2" title="2">    seas.mod<span class="fl">.2</span><span class="op">$</span>AICc, seas.mod<span class="fl">.3</span><span class="op">$</span>AICc), <span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb529-1"><a href="sec-msscov-season.html#cb529-1"></a><span class="kw">data.frame</span>(<span class="dt">Model =</span> <span class="kw">c</span>(<span class="st">&quot;Fixed&quot;</span>, <span class="st">&quot;Cubic&quot;</span>, <span class="st">&quot;Fourier&quot;</span>), <span class="dt">AICc =</span> <span class="kw">round</span>(<span class="kw">c</span>(seas.mod<span class="fl">.1</span><span class="op">$</span>AICc, </span>
+<span id="cb529-2"><a href="sec-msscov-season.html#cb529-2"></a>    seas.mod<span class="fl">.2</span><span class="op">$</span>AICc, seas.mod<span class="fl">.3</span><span class="op">$</span>AICc), <span class="dv">1</span>))</span></code></pre></div>
 <pre><code>    Model   AICc
 1   Fixed 1188.4
 2   Cubic 1144.9

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4.8 Moving-average (MA) models | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4.8 Moving-average (MA) models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -483,27 +487,27 @@ w_t &amp;= x_t + \theta x_{t-1} + \theta^2 x_{t-2} + \theta^3 x_{t-3} + \dots
 <div id="sec-tslab-simulating-an-maq-process" class="section level3">
 <h3><span class="header-section-number">4.8.1</span> Simulating an MA(<span class="math inline">\(q\)</span>) process</h3>
 <p>We can simulate MA(<span class="math inline">\(q\)</span>) processes just as we did for AR(<span class="math inline">\(p\)</span>) processes using <code>arima.sim()</code>. Here are 3 different ones with contrasting <span class="math inline">\(\theta\)</span>’s:</p>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb260-2" title="2"><span class="co">## list description for MA(1) model with small coef</span></a>
-<a class="sourceLine" id="cb260-3" title="3">MA.sm &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">0.2</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb260-4" title="4"><span class="co">## list description for MA(1) model with large coef</span></a>
-<a class="sourceLine" id="cb260-5" title="5">MA.lg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">0.8</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb260-6" title="6"><span class="co">## list description for MA(1) model with large coef</span></a>
-<a class="sourceLine" id="cb260-7" title="7">MA.neg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">-0.5</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb260-8" title="8"><span class="co">## simulate MA(1)</span></a>
-<a class="sourceLine" id="cb260-9" title="9">MA1.sm &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.sm)</a>
-<a class="sourceLine" id="cb260-10" title="10">MA1.lg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.lg)</a>
-<a class="sourceLine" id="cb260-11" title="11">MA1.neg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.neg)</a></code></pre></div>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="sec-tslab-moving-average-ma-models.html#cb259-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb259-2"><a href="sec-tslab-moving-average-ma-models.html#cb259-2"></a><span class="co">## list description for MA(1) model with small coef</span></span>
+<span id="cb259-3"><a href="sec-tslab-moving-average-ma-models.html#cb259-3"></a>MA.sm &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">0.2</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb259-4"><a href="sec-tslab-moving-average-ma-models.html#cb259-4"></a><span class="co">## list description for MA(1) model with large coef</span></span>
+<span id="cb259-5"><a href="sec-tslab-moving-average-ma-models.html#cb259-5"></a>MA.lg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">0.8</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb259-6"><a href="sec-tslab-moving-average-ma-models.html#cb259-6"></a><span class="co">## list description for MA(1) model with large coef</span></span>
+<span id="cb259-7"><a href="sec-tslab-moving-average-ma-models.html#cb259-7"></a>MA.neg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">ma =</span> <span class="fl">-0.5</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb259-8"><a href="sec-tslab-moving-average-ma-models.html#cb259-8"></a><span class="co">## simulate MA(1)</span></span>
+<span id="cb259-9"><a href="sec-tslab-moving-average-ma-models.html#cb259-9"></a>MA1.sm &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.sm)</span>
+<span id="cb259-10"><a href="sec-tslab-moving-average-ma-models.html#cb259-10"></a>MA1.lg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.lg)</span>
+<span id="cb259-11"><a href="sec-tslab-moving-average-ma-models.html#cb259-11"></a>MA1.neg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> MA.neg)</span></code></pre></div>
 <p>with their associated plots.</p>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="co">## setup plot region</span></a>
-<a class="sourceLine" id="cb261-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb261-3" title="3"><span class="co">## plot the ts</span></a>
-<a class="sourceLine" id="cb261-4" title="4"><span class="kw">plot.ts</span>(MA1.sm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </a>
-<a class="sourceLine" id="cb261-5" title="5">    <span class="st">&quot; = 0.2&quot;</span>)))</a>
-<a class="sourceLine" id="cb261-6" title="6"><span class="kw">plot.ts</span>(MA1.lg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </a>
-<a class="sourceLine" id="cb261-7" title="7">    <span class="st">&quot; = 0.8&quot;</span>)))</a>
-<a class="sourceLine" id="cb261-8" title="8"><span class="kw">plot.ts</span>(MA1.neg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </a>
-<a class="sourceLine" id="cb261-9" title="9">    <span class="st">&quot; = -0.5&quot;</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="sec-tslab-moving-average-ma-models.html#cb260-1"></a><span class="co">## setup plot region</span></span>
+<span id="cb260-2"><a href="sec-tslab-moving-average-ma-models.html#cb260-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb260-3"><a href="sec-tslab-moving-average-ma-models.html#cb260-3"></a><span class="co">## plot the ts</span></span>
+<span id="cb260-4"><a href="sec-tslab-moving-average-ma-models.html#cb260-4"></a><span class="kw">plot.ts</span>(MA1.sm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </span>
+<span id="cb260-5"><a href="sec-tslab-moving-average-ma-models.html#cb260-5"></a>    <span class="st">&quot; = 0.2&quot;</span>)))</span>
+<span id="cb260-6"><a href="sec-tslab-moving-average-ma-models.html#cb260-6"></a><span class="kw">plot.ts</span>(MA1.lg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </span>
+<span id="cb260-7"><a href="sec-tslab-moving-average-ma-models.html#cb260-7"></a>    <span class="st">&quot; = 0.8&quot;</span>)))</span>
+<span id="cb260-8"><a href="sec-tslab-moving-average-ma-models.html#cb260-8"></a><span class="kw">plot.ts</span>(MA1.neg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(theta, </span>
+<span id="cb260-9"><a href="sec-tslab-moving-average-ma-models.html#cb260-9"></a>    <span class="st">&quot; = -0.5&quot;</span>)))</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotMA1opps"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotMA1opps-1.png" alt="Time series of simulated MA(1) processes with \(\theta=0.2\) (left), \(\theta=0.8\) (middle), and \(\theta=-0.5\) (right)." width="80%" />
@@ -516,25 +520,25 @@ Figure 4.25: Time series of simulated MA(1) processes with <span class="math inl
 <div id="sec-tslab-correlation-structure-of-maq-processes" class="section level3">
 <h3><span class="header-section-number">4.8.2</span> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</h3>
 <p>We saw in lecture and above how the ACF and PACF have distinctive features for AR(<span class="math inline">\(p\)</span>) models, and they do for MA(<span class="math inline">\(q\)</span>) models as well. Here are examples of four MA(<span class="math inline">\(q\)</span>) processes. As before, we’ll use a really big <span class="math inline">\(n\)</span> so as to make them “pure”, which will provide a much better estimate of the correlation structure.</p>
-<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb262-1" title="1"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
-<a class="sourceLine" id="cb262-2" title="2"><span class="co">## the 4 MA coefficients</span></a>
-<a class="sourceLine" id="cb262-3" title="3">MAq &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">-0.1</span>, <span class="fl">-0.3</span>)</a>
-<a class="sourceLine" id="cb262-4" title="4"><span class="co">## empty list for storing models</span></a>
-<a class="sourceLine" id="cb262-5" title="5">MA.mods &lt;-<span class="st"> </span><span class="kw">list</span>()</a>
-<a class="sourceLine" id="cb262-6" title="6"><span class="co">## loop over orders of q</span></a>
-<a class="sourceLine" id="cb262-7" title="7"><span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
-<a class="sourceLine" id="cb262-8" title="8">    <span class="co">## assume SD=1, so not specified</span></a>
-<a class="sourceLine" id="cb262-9" title="9">    MA.mods[[q]] &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="kw">list</span>(<span class="dt">ma =</span> MAq[<span class="dv">1</span><span class="op">:</span>q]))</a>
-<a class="sourceLine" id="cb262-10" title="10">}</a></code></pre></div>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="sec-tslab-moving-average-ma-models.html#cb261-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb261-2"><a href="sec-tslab-moving-average-ma-models.html#cb261-2"></a><span class="co">## the 4 MA coefficients</span></span>
+<span id="cb261-3"><a href="sec-tslab-moving-average-ma-models.html#cb261-3"></a>MAq &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">-0.1</span>, <span class="fl">-0.3</span>)</span>
+<span id="cb261-4"><a href="sec-tslab-moving-average-ma-models.html#cb261-4"></a><span class="co">## empty list for storing models</span></span>
+<span id="cb261-5"><a href="sec-tslab-moving-average-ma-models.html#cb261-5"></a>MA.mods &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
+<span id="cb261-6"><a href="sec-tslab-moving-average-ma-models.html#cb261-6"></a><span class="co">## loop over orders of q</span></span>
+<span id="cb261-7"><a href="sec-tslab-moving-average-ma-models.html#cb261-7"></a><span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
+<span id="cb261-8"><a href="sec-tslab-moving-average-ma-models.html#cb261-8"></a>    <span class="co">## assume SD=1, so not specified</span></span>
+<span id="cb261-9"><a href="sec-tslab-moving-average-ma-models.html#cb261-9"></a>    MA.mods[[q]] &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">1000</span>, <span class="kw">list</span>(<span class="dt">ma =</span> MAq[<span class="dv">1</span><span class="op">:</span>q]))</span>
+<span id="cb261-10"><a href="sec-tslab-moving-average-ma-models.html#cb261-10"></a>}</span></code></pre></div>
 <p>Now that we have our four MA(<span class="math inline">\(q\)</span>) models, lets look at plots of the time series, ACF’s, and PACF’s.</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1"><span class="co">## set up plot region</span></a>
-<a class="sourceLine" id="cb263-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb263-3" title="3"><span class="co">## loop over orders of q</span></a>
-<a class="sourceLine" id="cb263-4" title="4"><span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</a>
-<a class="sourceLine" id="cb263-5" title="5">    <span class="kw">plot.ts</span>(MA.mods[[q]][<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>], <span class="dt">ylab =</span> <span class="kw">paste</span>(<span class="st">&quot;MA(&quot;</span>, q, <span class="st">&quot;)&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb263-6" title="6">    <span class="kw">acf</span>(MA.mods[[q]], <span class="dt">lag.max =</span> <span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb263-7" title="7">    <span class="kw">pacf</span>(MA.mods[[q]], <span class="dt">lag.max =</span> <span class="dv">12</span>, <span class="dt">ylab =</span> <span class="st">&quot;PACF&quot;</span>)</a>
-<a class="sourceLine" id="cb263-8" title="8">}</a></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="sec-tslab-moving-average-ma-models.html#cb262-1"></a><span class="co">## set up plot region</span></span>
+<span id="cb262-2"><a href="sec-tslab-moving-average-ma-models.html#cb262-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">3</span>))</span>
+<span id="cb262-3"><a href="sec-tslab-moving-average-ma-models.html#cb262-3"></a><span class="co">## loop over orders of q</span></span>
+<span id="cb262-4"><a href="sec-tslab-moving-average-ma-models.html#cb262-4"></a><span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
+<span id="cb262-5"><a href="sec-tslab-moving-average-ma-models.html#cb262-5"></a>    <span class="kw">plot.ts</span>(MA.mods[[q]][<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>], <span class="dt">ylab =</span> <span class="kw">paste</span>(<span class="st">&quot;MA(&quot;</span>, q, <span class="st">&quot;)&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span>
+<span id="cb262-6"><a href="sec-tslab-moving-average-ma-models.html#cb262-6"></a>    <span class="kw">acf</span>(MA.mods[[q]], <span class="dt">lag.max =</span> <span class="dv">12</span>)</span>
+<span id="cb262-7"><a href="sec-tslab-moving-average-ma-models.html#cb262-7"></a>    <span class="kw">pacf</span>(MA.mods[[q]], <span class="dt">lag.max =</span> <span class="dv">12</span>, <span class="dt">ylab =</span> <span class="st">&quot;PACF&quot;</span>)</span>
+<span id="cb262-8"><a href="sec-tslab-moving-average-ma-models.html#cb262-8"></a>}</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotMApComps"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotMApComps-1.png" alt="Time series of simulated MA(\(q\)) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF’s (center column) and PACF’s (right column). Note that only the first 50 values of \(x_t\) are plotted." width="80%" />

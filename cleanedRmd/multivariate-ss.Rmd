@@ -47,15 +47,17 @@ The survey methodologies were consistent throughout the 20 years of the data but
 ```{r mss-noshowlegend, echo=FALSE, results='hide'}
 d <- MARSS::harborSealWA
 legendnames <- (unlist(dimnames(d)[2]))[2:ncol(d)]
-for(i in 1:length(legendnames)) cat(paste(i,legendnames[i],"\n",sep=" "))
+for (i in 1:length(legendnames)) cat(paste(i, legendnames[i], "\n", sep = " "))
 ```
 
 (ref:mss-fig1) Plot of the of the count data from the five harbor seal regions (Jeffries et al. 2003). The numbers on each line denote the different regions: 1) Strait of Juan de Fuca (SJF), 2) San Juan Islands (SJI), 2) Eastern Bays (EBays), 4) Puget Sound (PSnd), and 5) Hood Canal (HC).  Each region is an index of the total harbor seal population in each region. 
 
 ```{r mss-fig1, fig=TRUE, echo=FALSE, fig.width=5, fig.height=5, fig.cap='(ref:mss-fig1)', warning=FALSE}
 temp <- as.data.frame(MARSS::harborSealWA)
-pdat <- reshape2::melt(temp, id.vars="Year", variable.name = "region")
-p <- ggplot(pdat, aes(x=Year, y=value, col=region)) + geom_point() + geom_line()
+pdat <- reshape2::melt(temp, id.vars = "Year", variable.name = "region")
+p <- ggplot(pdat, aes(x = Year, y = value, col = region)) +
+  geom_point() +
+  geom_line()
 p + ggtitle("Puget Sound Harbor Seal Surveys")
 ```
  
@@ -65,18 +67,18 @@ p + ggtitle("Puget Sound Harbor Seal Surveys")
 
 The harbor seal data are included in the **MARSS** package as matrix with years in column 1 and the logged counts in the other columns. Let's look at the first few years of data:
 ```{r mss-Cs2-showdata}
-data(harborSealWA, package="MARSS")
-print(harborSealWA[1:8,], digits=3)
+data(harborSealWA, package = "MARSS")
+print(harborSealWA[1:8, ], digits = 3)
 ```
 We are going to leave out Hood Canal (HC) since that region is somewhat isolated from the others and experiencing very different conditions due to hypoxic events and periodic intense killer whale predation.  We will set up the data as follows:
 
 ```{r mss-Cs2-readindata}
 dat <- MARSS::harborSealWA
-years = dat[,"Year"]
-dat= dat[,!(colnames(dat) %in% c("Year", "HC"))]
-dat=t(dat) #transpose to have years across columns
-colnames(dat) = years
-n = nrow(dat)-1
+years <- dat[, "Year"]
+dat <- dat[, !(colnames(dat) %in% c("Year", "HC"))]
+dat <- t(dat) # transpose to have years across columns
+colnames(dat) <- years
+n <- nrow(dat) - 1
 ```
 
 
@@ -151,18 +153,19 @@ It is very simple since all terms are $1 \times 1$ matrices.
 To fit our model with ```MARSS()```, we set up a list which precisely describes the size and structure of each parameter matrix.  Fixed values in a matrix are designated with their numeric value and estimated values are given a character name and put in quotes.  Our model list for a single well-mixed population is:
 ```{r mss-fit.0.model}
 mod.list.0 <- list(
-B=matrix(1),
-U=matrix("u"),
-Q=matrix("q"),
-Z=matrix(1,4,1),
-A="scaling",
-R="diagonal and unequal",
-x0=matrix("mu"),
-tinitx=0 )
+  B = matrix(1),
+  U = matrix("u"),
+  Q = matrix("q"),
+  Z = matrix(1, 4, 1),
+  A = "scaling",
+  R = "diagonal and unequal",
+  x0 = matrix("mu"),
+  tinitx = 0
+)
 ```
 and fit:
 ```{r mss-fit.0.fit}
-fit.0 <- MARSS(dat, model=mod.list.0)
+fit.0 <- MARSS(dat, model = mod.list.0)
 ```
 We already discussed that the short-cut ```"diagonal and unequal"``` means a diagonal matrix with each diagonal element having a different value.  The short-cut ```"scaling"``` means the form of $\mathbf{a}$ in Equation \@ref(eq:mss-meas) with one value set to 0 and the rest estimated.  You should run the code in the list to make sure you see that each parameter in the list has the same form as in our mathematical equation for the model.
 
@@ -171,12 +174,12 @@ We already discussed that the short-cut ```"diagonal and unequal"``` means a dia
 
 The model fits fine but look at the model residuals (Figure \@ref(fig:mss-model-resids-plot)).  They have problems.
 ```{r mss-model-resids, fig.show='hide'}
-par(mfrow=c(2,2))
-resids <- residuals(fit.0)
-for(i in 1:4){
-plot(resids$model.residuals[i,],ylab="model residuals", xlab="")
-abline(h=0)
-title(rownames(dat)[i])
+par(mfrow = c(2, 2))
+resids <- MARSSresiduals(fit.0, type="tt1")
+for (i in 1:4) {
+  plot(resids$model.residuals[i, ], ylab = "model residuals", xlab = "")
+  abline(h = 0)
+  title(rownames(dat)[i])
 }
 ```
 
@@ -184,12 +187,12 @@ title(rownames(dat)[i])
 (ref:mss-model-resids-plot) The model residuals for the first model.  SJI and EBays do not look good.
 
 ```{r mss-model-resids-plot, echo=FALSE, fig=TRUE, fig.cap='(ref:mss-model-resids-plot)'}
-par(mfrow=c(2,2))
-resids <- residuals(fit.0)
-for(i in 1:4){
-plot(resids$model.residuals[i,],ylab="model residuals", xlab="")
-abline(h=0)
-title(rownames(dat)[i])
+par(mfrow = c(2, 2))
+resids <- MARSSresiduals(fit.0, type="tt1")
+for (i in 1:4) {
+  plot(resids$model.residuals[i, ], ylab = "model residuals", xlab = "")
+  abline(h = 0)
+  title(rownames(dat)[i])
 }
 ```
  
@@ -273,20 +276,21 @@ This would mean that $y_1$ observes $x_2$, $y_2$ observes $x_1$, $y_3$ observes 
 We set up the model list for `MARSS()` as:
 ```{r mss-fit-1-model}
 mod.list.1 <- list(
-B="identity",
-U="equal",
-Q="diagonal and equal",
-Z="identity",
-A="scaling",
-R="diagonal and unequal",
-x0="unequal",
-tinitx=0 )
+  B = "identity",
+  U = "equal",
+  Q = "diagonal and equal",
+  Z = "identity",
+  A = "scaling",
+  R = "diagonal and unequal",
+  x0 = "unequal",
+  tinitx = 0
+)
 ```
 We introduced a few more short-cuts.  ```"equal"``` means all the values in the matrix are the same.   ```"diagonal and equal"``` means that the matrix is diagonal with one value on the diagonal.  ```"unequal"``` means that all values in the matrix are different.
 
 We can then fit our model for 4 subpopulations as:
 ```{r mss-fit.1.fit, results='hide'}
-fit.1 <- MARSS::MARSS(dat, model=mod.list.1)
+fit.1 <- MARSS::MARSS(dat, model = mod.list.1)
 ```
 
 
@@ -315,7 +319,7 @@ mod.list.2$Q <- "equalvarcov"
 
 Fit the model with:
 ```{r mss-fit-1-fit, results='hide'}
-fit.2 <- MARSS::MARSS(dat, model=mod.list.2)
+fit.2 <- MARSS::MARSS(dat, model = mod.list.2)
 ```
 Results are not shown, but here are the AICc.  This last model is much better:
 ```{r mss-fits-aicc}
@@ -330,24 +334,24 @@ Look at the model residuals (Figure \@ref(fig:mss-model-resids-2)).  They are al
 (ref:mss-model-resids-2) The model residuals for the model with four temporally correlated subpopulations.
 
 ```{r mss-model-resids-2, echo=FALSE, fig=TRUE, fig.cap='(ref:mss-model-resids-2)'}
-par(mfrow=c(2,2))
-resids <- residuals(fit.2)
-for(i in 1:4){
-plot(resids$model.residuals[i,],ylab="model residuals", xlab="")
-abline(h=0)
-title(rownames(dat)[i])
+par(mfrow = c(2, 2))
+resids <- MARSSresiduals(fit.2, type="tt1")
+for (i in 1:4) {
+  plot(resids$model.residuals[i, ], ylab = "model residuals", xlab = "")
+  abline(h = 0)
+  title(rownames(dat)[i])
 }
 ```
  
 
 Figure \@ref(fig:mss-fig2-plot) shows the estimated states for each region using this code:
 ```{r mss-fig2, fig.show='hide'}
-par(mfrow=c(2,2))
-for(i in 1:4){
-plot(years,fit.2$states[i,],ylab="log subpopulation estimate", xlab="", type="l")
-lines(years,fit.2$states[i,]-1.96*fit.2$states.se[i,],type="l",lwd=1,lty=2,col="red")
-lines(years,fit.2$states[i,]+1.96*fit.2$states.se[i,],type="l",lwd=1,lty=2,col="red")
-title(rownames(dat)[i])
+par(mfrow = c(2, 2))
+for (i in 1:4) {
+  plot(years, fit.2$states[i, ], ylab = "log subpopulation estimate", xlab = "", type = "l")
+  lines(years, fit.2$states[i, ] - 1.96 * fit.2$states.se[i, ], type = "l", lwd = 1, lty = 2, col = "red")
+  lines(years, fit.2$states[i, ] + 1.96 * fit.2$states.se[i, ], type = "l", lwd = 1, lty = 2, col = "red")
+  title(rownames(dat)[i])
 }
 ```
 
@@ -355,12 +359,12 @@ title(rownames(dat)[i])
 (ref:mss-fig2-plot) Plot of the estimate of log harbor seals in each region. The 95\% confidence intervals on the population estimates are the dashed lines.  These are not the confidence intervals on the observations, and the observations (the numbers) will not fall between the confidence interval lines.
 
 ```{r mss-fig2-plot, fig=TRUE, echo=FALSE, fig.width=6, fig.height=6, fig.cap='(ref:mss-fig2-plot)'}
-par(mfrow=c(2,2))
-for(i in 1:4){
-plot(years,fit.2$states[i,],ylab="log subpopulation estimate", xlab="", type="l")
-lines(years,fit.2$states[i,]-1.96*fit.2$states.se[i,],type="l",lwd=1,lty=2,col="red")
-lines(years,fit.2$states[i,]+1.96*fit.2$states.se[i,],type="l",lwd=1,lty=2,col="red")
-title(rownames(dat)[i])
+par(mfrow = c(2, 2))
+for (i in 1:4) {
+  plot(years, fit.2$states[i, ], ylab = "log subpopulation estimate", xlab = "", type = "l")
+  lines(years, fit.2$states[i, ] - 1.96 * fit.2$states.se[i, ], type = "l", lwd = 1, lty = 2, col = "red")
+  lines(years, fit.2$states[i, ] + 1.96 * fit.2$states.se[i, ], type = "l", lwd = 1, lty = 2, col = "red")
+  title(rownames(dat)[i])
 }
 ```
  
@@ -375,9 +379,9 @@ The dataset we will use is ```harborSeal```, a 29-year dataset of abundance indi
 We start by setting up our data matrix.  We will leave off Hood Canal.
 ```{r mss-Cs01-setup-data}
 dat <- MARSS::harborSeal
-years <- dat[,"Year"]
-good <- !(colnames(dat)%in%c("Year","HoodCanal"))
-sealData <- t(dat[,good])
+years <- dat[, "Year"]
+good <- !(colnames(dat) %in% c("Year", "HoodCanal"))
+sealData <- t(dat[, good])
 ```
 
 
@@ -391,8 +395,9 @@ sealData <- t(dat[,good])
 # }
 
 temp <- as.data.frame(MARSS::harborSeal)
-pdat <- reshape2::melt(temp, id.vars="Year", variable.name = "region")
-p <- ggplot(pdat, aes(Year, value)) + geom_point()
+pdat <- reshape2::melt(temp, id.vars = "Year", variable.name = "region")
+p <- ggplot(pdat, aes(Year, value)) +
+  geom_point()
 p + facet_wrap(~region)
 ```
  
@@ -478,15 +483,15 @@ These hypotheses translate to these $\mathbf{Z}$ matrices (H6 not shown; it is a
 
 To tell ```MARSS()``` the form of $\mathbf{Z}$, we construct the same matrix in R.  For example, for hypotheses 1, we can write:
 ```{r mss-Zmodel, tidy=FALSE}
-Z.model <- matrix(0,11,3)
-Z.model[c(1,2,9,10),1] <- 1  #which elements in col 1 are 1
-Z.model[c(3:6,11),2] <- 1  #which elements in col 2 are 1
-Z.model[7:8,3] <- 1  #which elements in col 3 are 1
+Z.model <- matrix(0, 11, 3)
+Z.model[c(1, 2, 9, 10), 1] <- 1 # which elements in col 1 are 1
+Z.model[c(3:6, 11), 2] <- 1 # which elements in col 2 are 1
+Z.model[7:8, 3] <- 1 # which elements in col 3 are 1
 ```
 
 Or we can use a short-cut by specifying $\mathbf{Z}$ as a factor that has the name of the subpopulation associated with each row in $\mathbf{y}$.  For hypothesis 1, this is
 ```{r mss-Zmodel1}
-Z1 <- factor(c("pnw","pnw",rep("ps",4),"ca","ca","pnw","pnw","ps")) 
+Z1 <- factor(c("pnw", "pnw", rep("ps", 4), "ca", "ca", "pnw", "pnw", "ps"))
 ```
 Notice it is 11 elements in length; one element for each row of data. 
 
@@ -495,29 +500,30 @@ Notice it is 11 elements in length; one element for each row of data.
 
 Only the $\mathbf{Z}$ matrices change for our model.  We will set up a base model list used for all models.
 ```{r mss-model-list, tidy=FALSE}
-mod.list = list(
-B = "identity",
-U = "unequal",
-Q = "equalvarcov",
-Z = "placeholder",
-A = "scaling",
-R = "diagonal and equal",
-x0 = "unequal",
-tinitx = 0 )
+mod.list <- list(
+  B = "identity",
+  U = "unequal",
+  Q = "equalvarcov",
+  Z = "placeholder",
+  A = "scaling",
+  R = "diagonal and equal",
+  x0 = "unequal",
+  tinitx = 0
+)
 ```
 
 Then we set up the $\mathbf{Z}$ matrices using the factor short-cut.
 ```{r mss-set-up-Zs, tidy=FALSE}
 Z.models <- list(
-H1 = factor(c("pnw","pnw",rep("ps",4),"ca","ca","pnw","pnw","ps")), 
-H2 = factor(c(rep("coast",2),rep("ps",4),rep("coast",4),"ps")), 
-H3 = factor(c(rep("N",6),"S","S","N","S","N")),
-H4 = factor(c("nc","nc","is","is","ps","ps","sc","sc","nc","sc","is")),
-H5 = factor(rep("pan",11)),
-H6 = factor(1:11) #site
+  H1 = factor(c("pnw", "pnw", rep("ps", 4), "ca", "ca", "pnw", "pnw", "ps")),
+  H2 = factor(c(rep("coast", 2), rep("ps", 4), rep("coast", 4), "ps")),
+  H3 = factor(c(rep("N", 6), "S", "S", "N", "S", "N")),
+  H4 = factor(c("nc", "nc", "is", "is", "ps", "ps", "sc", "sc", "nc", "sc", "is")),
+  H5 = factor(rep("pan", 11)),
+  H6 = factor(1:11) # site
 )
-names(Z.models) <- 
-     c("stock","coast+PS","N+S","NC+strait+PS+SC","panmictic","site")
+names(Z.models) <-
+  c("stock", "coast+PS", "N+S", "NC+strait+PS+SC", "panmictic", "site")
 ```
 
 
@@ -527,18 +533,22 @@ We loop through the models, fit and store the results:
 ```{r mss-Cs05-run-models, cache=TRUE}
 out.tab <- NULL
 fits <- list()
-for(i in 1:length(Z.models)){
-     mod.list$Z <- Z.models[[i]] 
-     fit <- MARSS::MARSS(sealData, model=mod.list,
-            silent=TRUE, control=list(maxit=1000))
-     out <- data.frame(H=names(Z.models)[i], 
-            logLik=fit$logLik, AICc=fit$AICc, 
-            num.param=fit$num.params,
-            m=length(unique(Z.models[[i]])),
-            num.iter=fit$numIter, 
-            converged=!fit$convergence)
-     out.tab <- rbind(out.tab,out)
-     fits <- c(fits,list(fit))
+for (i in 1:length(Z.models)) {
+  mod.list$Z <- Z.models[[i]]
+  fit <- MARSS::MARSS(sealData,
+    model = mod.list,
+    silent = TRUE, control = list(maxit = 1000)
+  )
+  out <- data.frame(
+    H = names(Z.models)[i],
+    logLik = fit$logLik, AICc = fit$AICc,
+    num.param = fit$num.params,
+    m = length(unique(Z.models[[i]])),
+    num.iter = fit$numIter,
+    converged = !fit$convergence
+  )
+  out.tab <- rbind(out.tab, out)
+  fits <- c(fits, list(fit))
 }
 ```
 
@@ -551,24 +561,27 @@ out.tab.1 <- out.tab[min.AICc,]
 Next we add the $\Delta$AICc values by subtracting the lowest AICc:
 ```{r mss-Cs07-add-delta-aicc}
 out.tab.1 <- cbind(out.tab.1,
-           delta.AICc=out.tab.1$AICc-out.tab.1$AICc[1])
+  delta.AICc = out.tab.1$AICc - out.tab.1$AICc[1]
+)
 ```
 Relative likelihood is defined as $\,\text{exp}(-\Delta \mathrm{AICc}/2)$.
 ```{r mss-Cs08-add-delta-aicc}
-out.tab.1 <- cbind(out.tab.1, 
-           rel.like=exp(-1*out.tab.1$delta.AICc/2))
+out.tab.1 <- cbind(out.tab.1,
+  rel.like = exp(-1 * out.tab.1$delta.AICc / 2)
+)
 ```
 The AIC weight for a model is its relative likelihood divided by the sum of all the relative likelihoods.  
 ```{r mss-Cs09-aic-weight}
 out.tab.1 <- cbind(out.tab.1,
-          AIC.weight = out.tab.1$rel.like/sum(out.tab.1$rel.like))
+  AIC.weight = out.tab.1$rel.like / sum(out.tab.1$rel.like)
+)
 ```
 
 Let's look at the model weights (```out.tab.1```):
 ```{r mss-Cs10-print-table, echo=FALSE}
-out.tab.1$delta.AICc <- round(out.tab.1$delta.AICc, digits=2)
-out.tab.1$AIC.weight <- round(out.tab.1$AIC.weight, digits=3)
-print(out.tab.1[,c("H","delta.AICc","AIC.weight", "converged")], row.names=FALSE)
+out.tab.1$delta.AICc <- round(out.tab.1$delta.AICc, digits = 2)
+out.tab.1$AIC.weight <- round(out.tab.1$AIC.weight, digits = 3)
+print(out.tab.1[, c("H", "delta.AICc", "AIC.weight", "converged")], row.names = FALSE)
 ```
 
 
@@ -577,9 +590,9 @@ print(out.tab.1[,c("H","delta.AICc","AIC.weight", "converged")], row.names=FALSE
 Here we show you how to fit a MARSS model for the harbor seal data using JAGS. We will focus on four time series from inland Washington and set up the data as follows:
 
 ```{r mss-set-up-seal-data-jags}
-data(harborSealWA, package="MARSS")
-sites <- c("SJF","SJI","EBays","PSnd")
-Y <- harborSealWA[,sites]
+data(harborSealWA, package = "MARSS")
+sites <- c("SJF", "SJI", "EBays", "PSnd")
+Y <- harborSealWA[, sites]
 Y <- t(Y) # time across columns
 ```
 
@@ -632,12 +645,14 @@ model {
 Then we write the data list, parameter list, and pass the model to the `jags()` function:
 
 ```{r mss-marss-jags, results='hide', message=FALSE, cache=TRUE}
-jags.data <- list("Y"=Y, nSites=nrow(Y), nYears = ncol(Y)) # named list
-jags.params <- c("X","U","Q","R") 
+jags.data <- list("Y" = Y, nSites = nrow(Y), nYears = ncol(Y)) # named list
+jags.params <- c("X", "U", "Q", "R")
 model.loc <- "marss-jags.txt" # name of the txt file
-mod_1 <- jags(jags.data, parameters.to.save=jags.params, 
-             model.file=model.loc, n.chains = 3, 
-             n.burnin=5000, n.thin=1, n.iter=10000, DIC=TRUE)  
+mod_1 <- jags(jags.data,
+  parameters.to.save = jags.params,
+  model.file = model.loc, n.chains = 3,
+  n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
+)
 ```
 
 
@@ -651,17 +666,21 @@ We can plot any of the variables we chose to return to R in the `jags.params` li
 ```{r mss-plot-jags-states, fig.cap='(ref:NA)'}
 #attach.jags attaches the jags.params to our workspace
 attach.jags(mod_1)
-means <- apply(X,c(2,3),mean)
-upperCI <- apply(X,c(2,3),quantile,0.975)
-lowerCI <- apply(X,c(2,3),quantile,0.025)
-par(mfrow = c(2,2))
+means <- apply(X, c(2, 3), mean)
+upperCI <- apply(X, c(2, 3), quantile, 0.975)
+lowerCI <- apply(X, c(2, 3), quantile, 0.025)
+par(mfrow = c(2, 2))
 nYears <- ncol(Y)
-for(i in 1:nrow(means)) {
-  plot(means[i,],lwd=3,ylim=range(c(lowerCI[i,],upperCI[i,])),
-       type="n",main=colnames(Y)[i],ylab="log abundance", xlab="time step")
-  polygon(c(1:nYears,nYears:1,1),
-          c(upperCI[i,],rev(lowerCI[i,]),upperCI[i,1]),col="skyblue",lty=0)
-  lines(means[i,],lwd=3)
+for (i in 1:nrow(means)) {
+  plot(means[i, ],
+    lwd = 3, ylim = range(c(lowerCI[i, ], upperCI[i, ])),
+    type = "n", main = colnames(Y)[i], ylab = "log abundance", xlab = "time step"
+  )
+  polygon(c(1:nYears, nYears:1, 1),
+    c(upperCI[i, ], rev(lowerCI[i, ]), upperCI[i, 1]),
+    col = "skyblue", lty = 0
+  )
+  lines(means[i, ], lwd = 3)
   title(rownames(Y)[i])
 }
 detach.jags()
@@ -728,17 +747,21 @@ Then we call `stan()` and pass in the data, names of parameter we wish to have r
 
 ```{r marss-stan-fit-model, message=FALSE, warning=FALSE, results='hide', cache=TRUE}
 ypos <- Y[!is.na(Y)]
-n_pos <- length(ypos) #number on non-NA ys
-indx_pos <- which(!is.na(Y), arr.ind=TRUE) #index on the non-NAs
-col_indx_pos <- as.vector(indx_pos[,"col"])
-row_indx_pos <- as.vector(indx_pos[,"row"])
-mod <- rstan::stan(model_code = scode, 
-                  data = list(y=ypos, TT=ncol(Y), N=nrow(Y), n_pos=n_pos, 
-col_indx_pos=col_indx_pos, row_indx_pos=row_indx_pos), 
-                  pars = c("sd_q","x", "sd_r", "u", "x0"),
-                  chains = 3, 
-                  iter = 1000, 
-                  thin = 1)
+n_pos <- length(ypos) # number on non-NA ys
+indx_pos <- which(!is.na(Y), arr.ind = TRUE) # index on the non-NAs
+col_indx_pos <- as.vector(indx_pos[, "col"])
+row_indx_pos <- as.vector(indx_pos[, "row"])
+mod <- rstan::stan(
+  model_code = scode,
+  data = list(
+    y = ypos, TT = ncol(Y), N = nrow(Y), n_pos = n_pos,
+    col_indx_pos = col_indx_pos, row_indx_pos = row_indx_pos
+  ),
+  pars = c("sd_q", "x", "sd_r", "u", "x0"),
+  chains = 3,
+  iter = 1000,
+  thin = 1
+)
 ```
 
 We use `extract()` to extract the parameters from the fitted model and then the means and 95\% credible intervals.
@@ -820,7 +843,7 @@ A[1,1] <- "sigma2"
     
     d. Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit.  Are there any issues that you see?  Use this code to get your state residuals:
 ```
-residuals(fit)$state.residuals[1,]
+MARSSresiduals(fit)$state.residuals[1,]
 ```
 You need the `[1,]` since the residuals are returned as a matrix.
 
@@ -857,9 +880,9 @@ You need the `[1,]` since the residuals are returned as a matrix.
     
     b. Prepare a table of each model with a column for the AICc values. And a column for $\Delta AICc$ (AICc minus the lowest AICc in the group).  What is the most supported model?
 
-7. Do diagnostics on the model residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals.  This will put NAs in the model residuals where there is missing data. Then do the tests on each row of `resids`.
+7. Do diagnostics on the model innovations residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals.  This will put NAs in the model residuals where there is missing data. Then do the tests on each row of `resids`.
     ```{r mss-resids, eval=FALSE}
-    resids <- residuals(fit)$model.residuals
+    resids <- MARSSresiduals(fit, type="tt1")$model.residuals
     resids[is.na(dat)] <- NA
     ```
 

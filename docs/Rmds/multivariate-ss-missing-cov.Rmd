@@ -213,18 +213,18 @@ Let's plot the estimated SWEs for the missing years (Figure \@ref(fig:mssmiss-sn
 
 ```{r mssmiss-snotelplotfits-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-snotelplotfits-ar1)'}
 fit <- fit.ar1
-d <- broom::tidy(fit, type="ytT", conf.int=TRUE)
+d <- fitted(fit, interval="prediction", type="ytT")
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Year, estimate)) +
+  geom_line(aes(Year, .fitted)) +
   geom_point(aes(Year, y)) +
-  geom_ribbon(aes(x=Year, ymin=pred.low, ymax=pred.high), linetype=2, alpha=0.2, fill="blue") +
+  geom_ribbon(aes(x=Year, ymin=.lwr, ymax=.upr), linetype=2, alpha=0.2, fill="blue") +
   facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
 p
 ```
 
-If we were using these SWE as covariates in a site specific model, we could then use the estimates as our covariates, however this would not incorporate uncertainty.  Alternatively we could use Equation \@ref(eq:mssmiss-marsscovarx) and set the parameters for the covariate process to those estimated for our covariate-only model. This approach will incorporate the uncertainty in the SWE estimates in the early years for the sites with no data.
+If we were using these SWE as covariates in a site specific model, we could then use the estimates as our covariates, however this would not incorporate parameter uncertainty.  Alternatively we could use Equation \@ref(eq:mssmiss-marsscovarx) and set the parameters for the covariate process to those estimated for our covariate-only model. This approach will incorporate the uncertainty in the SWE estimates in the early years for the sites with no data.
 
 Note, we should do some cross-validation (fitting with data left out) to ensure that the estimated SWEs are well-matched to actual measurements.  It would probably be best to do 'leave-three' out instead of 'leave-one' out since the estimates for time $t$ uses information from $t-1$ and $t+1$ (if present).
 
@@ -232,12 +232,24 @@ Note, we should do some cross-validation (fitting with data left out) to ensure 
 
 The state residuals have a tendency for negative autocorrelation at lag-1 (Figure \@ref(fig:mssmiss-stateresids-ar1)).  
 
-(ref:mssmiss-stateresids-ar1) State residuals for the AR(1) model.  Many stations for autocorrelation at lag-1.
+(ref:mssmiss-stateresids-ar1) State residuals for the AR(1) model.  Many stations have autocorrelation at lag-1.
 
 ```{r mssmiss-stateresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-stateresids-ar1)'}
 fit <- fit.ar1
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(residuals(fit)$state.residuals[,1:30], 1, acf)
+apply(MARSSresiduals(fit, type="tT")$state.residuals[,1:30], 1, acf,
+      na.action=na.pass)
+```
+
+The model residuals also have a tendency for negative autocorrelation at lag-1 (Figure \@ref(fig:mssmiss-modelresids-ar1)).  
+
+(ref:mssmiss-modelresids-ar1) Model residuals for the AR(1) model.
+
+```{r mssmiss-modelresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-modelresids-ar1)'}
+fit <- fit.ar1
+par(mfrow=c(4,4),mar=c(2,2,1,1))
+apply(MARSSresiduals(fit, type="tt1")$model.residuals[,1:30], 1, acf,
+      na.action=na.pass)
 ```
 
 ### Estimate missing Feb SWE using only correlation
@@ -329,13 +341,13 @@ The estimated SWEs for the missing years uses the information about the correlat
 
 ```{r mssmiss-snotelplotfits-corr, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-snotelplotfits-corr)'}
 fit <- fit.corr
-d <- broom::tidy(fit, type="ytT", conf.int=TRUE)
+d <- fitted(fit, type="ytT", interval="prediction")
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Year, estimate)) +
+  geom_line(aes(Year, .fitted)) +
   geom_point(aes(Year, y)) +
-  geom_ribbon(aes(x=Year, ymin=pred.low, ymax=pred.high), linetype=2, alpha=0.2, fill="blue") +
+  geom_ribbon(aes(x=Year, ymin=.lwr, ymax=.upr), linetype=2, alpha=0.2, fill="blue") +
   facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
 p
 ```
@@ -347,14 +359,14 @@ The state and model residuals have no tendency towards negative autocorrelation 
 ```{r mssmiss-stateresids-fit-corr-states, warning=FALSE, results='hide'}
 fit <- fit.corr
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(residuals(fit)$state.residuals, 1, acf, na.action=na.pass)
+apply(MARSSresiduals(fit)$state.residuals, 1, acf, na.action=na.pass)
 mtext("State Residuals ACF", outer=TRUE, side=3)
 ```
 
 ```{r mssmiss-stateresids-fit-corr-model, warning=FALSE, results='hide'}
 fit <- fit.corr
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(residuals(fit)$model.residuals[,1:30], 1, acf, na.action=na.pass)
+apply(MARSSresiduals(fit)$model.residuals, 1, acf, na.action=na.pass)
 mtext("Model Residuals ACF", outer=TRUE, side=3)
 ```
 
@@ -447,13 +459,13 @@ mtext(paste("Factor loadings on trend",i,sep=" "),side=3,line=.5)
 
 ```{r mssmiss-snotelplotstates-dfa, warning=FALSE, echo=FALSE}
 fit <- fit.dfa
-d <- broom::tidy(fit, type="ytT", conf.int=TRUE)
+d <- fitted(fit, type="ytT", interval="prediction")
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Year, estimate)) +
+  geom_line(aes(Year, .fitted)) +
   geom_point(aes(Year, y)) +
-  geom_ribbon(aes(x=Year, ymin=pred.low, ymax=pred.high), linetype=2, alpha=0.2, fill="blue") +
+  geom_ribbon(aes(x=Year, ymin=.lwr, ymax=.upr), linetype=2, alpha=0.2, fill="blue") +
   facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
 p
 ```
@@ -465,31 +477,31 @@ The state residuals are uncorrelated.
 ```{r mssmiss-stateresit-fit-dfa, results='hide'}
 fit <- fit.dfa
 par(mfrow=c(1,2),mar=c(2,2,1,1))
-apply(residuals(fit)$state.residuals[,1:30,drop=FALSE], 1, acf)
+apply(MARSSresiduals(fit)$state.residuals[,1:30,drop=FALSE], 1, acf)
 ```
 
 As are the model residuals: 
 
 ```{r mssmiss-modelresids-fit-dfa-model, results='hide'}
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(residuals(fit)$model.residual, 1, function(x){acf(x, na.action=na.pass)})
+apply(MARSSresiduals(fit)$model.residual, 1, function(x){acf(x, na.action=na.pass)})
 ```
 
 ### Plot the fitted or mean Feb SWE using DFA
 
 The plots showed the estimate of the missing Feb SWE values, which is the expected value of $\mathbf{y}$ conditioned on all the data. For the non-missing SWE, this expected value is just the observation. Many times we want the model fit for the covariate. If the measurements have observation error, the fitted value is the estimate without this observation error.
 
-We can use `tidy()` again but this time we want `type="fitted.ytT"`. We will not show the prediction intervals which would be for new data. We will just show the confidence intervals on the fitted estimate. It is hard to see but there are intervals for all years now.
+For the estimated states conditioned on all the data we want `tsSmooth()`. We will not show the prediction intervals which would be for new data. We will just show the confidence intervals on the fitted estimate for the missing values. The confidence intervals are small so they are a bit hard to see.
 
 ```{r mssfitted-snotelplotstates-dfa, warning=FALSE, echo=FALSE}
 fit <- fit.dfa
-d <- broom::tidy(fit, type="fitted.ytT", conf.int=TRUE)
+d <- tsSmooth(fit, type="ytT", interval="confidence")
 d$Year <- d$t + 1980
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Year, estimate)) +
+  geom_line(aes(Year, .estimate)) +
   geom_point(aes(Year, y)) +
-  geom_ribbon(aes(x=Year, ymin=conf.low, ymax=conf.high), linetype=2, alpha=0.7) +
+  geom_ribbon(aes(x=Year, ymin=.conf.low, ymax=.conf.up), linetype=2, alpha=0.7) +
   facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
 p
 ```
@@ -584,36 +596,40 @@ m <- apply(dat.yr, 1, mean, na.rm=TRUE)
 fit.seas <- MARSS(dat.yr, model=mod.list.seas, control=list(maxit=500), inits=list(A=matrix(m,ns,1)))
 ```
 
+**The seasonal patterns**
+
 Figure \@ref{fig:mssmiss-seas} shows the seasonal estimate plus prediction intervals for each station. This is $z_i x_i + a_i$. The prediction interval shows our estimate of the range of the data we would see around the seasonal estimate.
 
 ```{r mssmiss-seas, warning=FALSE, echo=FALSE}
 #this is the estimate using only the season
 fit <- fit.seas
-d <- tidy(fit, type="fitted.ytT", conf.int=TRUE)
+d <- tsSmooth(fit, type="ytT", interval="prediction")
 d$Year <- swe.yr$Year
 d$Date <- swe.yr$Date
 d <- subset(d, Year<1990)
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Date, estimate)) +
-  geom_ribbon(aes(x=Date, ymin=pred.low, ymax=pred.high), linetype=2, alpha=0.2, fill="blue") +
+  geom_line(aes(Date, .estimate)) +
+  geom_ribbon(aes(x=Date, ymin=.lwr, ymax=.upr), linetype=2, alpha=0.2, fill="blue") +
   facet_wrap(~Station) + xlab("") + ylab("SWE seasonal component")
 p
 ```
 
-The estimated mean SWE at each station is $E(y_i|y_{1:T})$.  This is the estimate conditioned on all the data and includes the seasonal component plus the information from the data from other stations.  Because we estimated a $\mathbf{R}$ matrix with covariance, stations with data at time $t$ help inform the value of stations without data at time $t$. Only years up to 1990 are shown, but the model is fit to all years. The stations with no data before 1990 are being estimated based on the information in the later years when they do have data. We did not constrain the SWE to be positive, so negative estimates are possible and occurs in the months in which we have no SWE data (because there is no snow).
+**Estimates for the missing years**
 
+The estimated mean SWE at each station is $E(y_{t,i}|y_{1:T})$.  This is the estimate of $y_{t,i}$ conditioned on all the data and includes the seasonal component plus the information from the data from other stations.  If $y_{t,i}$ is observed, $E(y_{t,i}|y_{1:T}) = y_{t,i}$, i.e. just the observed value. But if $y_{t,i}$ is unobserved, the stations with data at time $t$ help inform $y_{t,i}$, the value of the station without data at time $t$. Note this is not the case when we computed the fitted value for $y_{t,i}$. In that case, the data inform $\mathbf{R}$ but we do not treat the observed data at $t=i$ as 'observed' and influencing the missing the missing $y_{t,i}$ through $\mathbf{R}$.
 
+Only years up to 1990 are shown, but the model is fit to all years. The stations with no data before 1990 are being estimated based on the information in the later years when they do have data. We did not constrain the SWE to be positive, so negative estimates are possible and occurs in the months in which we have no SWE data (because there is no snow).
 
 ```{r mssmiss-snotelplotstates-seas, warning=FALSE, echo=FALSE}
 fit <- fit.seas
-d <- broom::tidy(fit, type="ytT", conf.int=TRUE)
+d <- tsSmooth(fit, type="ytT", interval="none")
 d$Year <- swe.yr$Year
 d$Date <- swe.yr$Date
 d <- subset(d, Year<1990)
 d$Station <- d$.rownames
 p <- ggplot(data = d) + 
-  geom_line(aes(Date, estimate)) +
+  geom_line(aes(Date, .estimate)) +
   geom_point(aes(Date, y)) +
   facet_wrap(~Station) + xlab("") + ylab("SWE (demeaned)")
 p

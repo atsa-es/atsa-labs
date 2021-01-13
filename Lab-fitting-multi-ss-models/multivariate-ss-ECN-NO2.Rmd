@@ -113,14 +113,13 @@ data(ECNNO2, package="atsalibrary")
 (ref:ECNsites) ECN sites in the UK.
 
 ```{r mssNO2-sites, echo=FALSE, warning=FALSE, message=FALSE, fig.cap='(ref:ECNsites)'}
-library(ggmap)
 ylims=c(min(ECNmeta$Latitude)-1,max(ECNmeta$Latitude)+1)
 xlims=c(min(ECNmeta$Longitude)-2,max(ECNmeta$Longitude)+2.2)
 base = ggmap::get_map(location=c(xlims[1],ylims[1],xlims[2],ylims[2]), zoom=7, maptype="terrain-background")
 map1 = ggmap::ggmap(base)
-map1 + geom_point(data=ECNmeta, aes(x=Longitude, y=Latitude), color="blue", cex=2.5) + 
-  labs(x="Latitude", y="Longitude", title="ECN sites") + 
-  theme_bw()
+map1 + ggplot2::geom_point(data=ECNmeta, ggplot2::aes(x=Longitude, y=Latitude), color="blue", cex=2.5) + 
+  ggplot2::labs(x="Latitude", y="Longitude", title="ECN sites") + 
+  ggplot2::theme_bw()
 ```
 
 The data are from 1993 to 2015 (Figure \@ref(fig:mssNO2-plot)). There are some missing years.  There is also a strong seasonal pattern that we can see if we zoom in to the data only after 2010 (Figure \@ref(fig:mssNO2-plot-2010)).  We also see that that there is some variability in the tubes and that sometimes one or more tubes are missing data.
@@ -238,14 +237,14 @@ Note, we should do some cross-validation (fitting with data left out) to ensure 
 
 #### Diagnostics
 
-The state residuals have a tendency for negative autocorrelation at lag-1 (Figure \@ref(fig:mssmiss-stateresids-ar1)).  
+The model residuals have a tendency for negative autocorrelation at lag-1 (Figure \@ref(fig:mssmiss-modelresids-ar1)).  
 
-(ref:mssmiss-stateresids-ar1) State residuals for the AR(1) model.  Many stations for autocorrelation at lag-1.
+(ref:mssmiss-modelresids-ar1) State residuals for the AR(1) model.  Many stations for autocorrelation at lag-1.
 
-```{r mssmiss-stateresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-stateresids-ar1)'}
+```{r mssmiss-modelresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-modelresids-ar1)'}
 fit <- fit.ar1
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(residuals(fit)$state.residuals[,1:30], 1, acf)
+apply(MARSSresiduals(fit, type="tt1")$model.residuals[,1:30], 1, acf)
 ```
 
 ### Estimate missing Feb SWE using only correlation

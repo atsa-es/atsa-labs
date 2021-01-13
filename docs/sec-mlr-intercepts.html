@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>2.4 Groups of intercepts | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="2.4 Groups of intercepts | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -463,25 +467,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">2.4</span> Groups of intercepts</h2>
 <p>Let’s say that the odd numbered plants are in the north and the even numbered are in the south. We want to include this as a factor in our model that affects the intercept. Let’s go back to just having air flow be our explanatory variable. Now if the plant is in the north our model is
 <span class="math display" id="eq:groups-intercepts1">\[\begin{equation}
-\tag{2.13}
+\tag{2.11}
 stack.loss_i = \alpha_n + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}\]</span>
 If the plant is in the south, our model is
 <span class="math display" id="eq:groups-intercepts2">\[\begin{equation}
-\tag{2.14}
+\tag{2.12}
 stack.loss_i = \alpha_s + \beta air_i + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2) 
 \end{equation}\]</span>
 We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p>
-<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1">dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">reg =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;s&quot;</span>), n)[<span class="dv">1</span><span class="op">:</span>n])</a>
-<a class="sourceLine" id="cb145-2" title="2">dat</a></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="sec-mlr-intercepts.html#cb140-1"></a>dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">reg =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;s&quot;</span>), <span class="dv">4</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>])</span>
+<span id="cb140-2"><a href="sec-mlr-intercepts.html#cb140-2"></a>dat</span></code></pre></div>
 <pre><code>  Air.Flow Water.Temp Acid.Conc. stack.loss reg
 1       80         27         89         42   n
 2       80         27         88         37   s
 3       75         25         90         37   n
 4       62         24         87         28   s</code></pre>
 <p>And we can easily fit this model with <code>lm()</code>.</p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1">fit2 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data =</span> dat)</a>
-<a class="sourceLine" id="cb147-2" title="2"><span class="kw">coef</span>(fit2)</a></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="sec-mlr-intercepts.html#cb142-1"></a>fit2 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data =</span> dat)</span>
+<span id="cb142-2"><a href="sec-mlr-intercepts.html#cb142-2"></a><span class="kw">coef</span>(fit2)</span></code></pre></div>
 <pre><code>  Air.Flow       regn       regs 
  0.5358166 -2.0257880 -5.5429799 </code></pre>
 <p>The -1 is added to the <code>lm()</code> call to get rid of <span class="math inline">\(\alpha\)</span>. We just want the <span class="math inline">\(\alpha_n\)</span> and <span class="math inline">\(\alpha_s\)</span> intercepts coming from our regions.</p>
@@ -489,7 +493,7 @@ We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p
 <h3><span class="header-section-number">2.4.1</span> North/South intercepts in Form 1</h3>
 <p>Written in matrix form, Form 1 for this model is
 <span class="math display" id="eq:stackloss-form1-ns">\[\begin{equation}
-\tag{2.15}
+\tag{2.13}
 \begin{bmatrix}stack.loss_1\\ stack.loss_2\\ stack.loss_3\\ stack.loss_4\end{bmatrix}
 = 
 \begin{bmatrix}air_1&amp;1&amp;0\\ air_2&amp;0&amp;1 \\air_3&amp;1&amp;0\\air_4&amp;0&amp;1\end{bmatrix}
@@ -497,34 +501,34 @@ We’ll add north/south as a factor called `reg’ (region) to our dataframe:</p
 +
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
 \end{equation}\]</span>
-Notice that odd plants get <span class="math inline">\(\alpha_n\)</span> and even plants get <span class="math inline">\(\alpha_s\)</span>. Use <code>model.matrix()</code> to see that this is the <span class="math inline">\(\mathbf{Z}\)</span> matrix that <code>lm()</code> formed. Notice the matrix output by <code>model.matrix()</code> looks exactly like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>.</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit2)</a>
-<a class="sourceLine" id="cb149-2" title="2">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</a></code></pre></div>
+Notice that odd plants get <span class="math inline">\(\alpha_n\)</span> and even plants get <span class="math inline">\(\alpha_s\)</span>. Use <code>model.matrix()</code> to see that this is the <span class="math inline">\(\mathbf{Z}\)</span> matrix that <code>lm()</code> formed. Notice the matrix output by <code>model.matrix()</code> looks exactly like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.13)</a>.</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="sec-mlr-intercepts.html#cb144-1"></a>Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit2)</span>
+<span id="cb144-2"><a href="sec-mlr-intercepts.html#cb144-2"></a>Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</span></code></pre></div>
 <pre><code>  Air.Flow regn regs
 1       80    1    0
 2       80    0    1
 3       75    1    0
 4       62    0    1</code></pre>
-<p>We can solve for the parameters using <span class="math inline">\(\mathbf{x} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y}\)</span> as we did for Form 1 before by adding on the 1s and 0s columns we see in the <span class="math inline">\(\mathbf{Z}\)</span> matrix in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.15)</a>. We could build this <span class="math inline">\(\mathbf{Z}\)</span> using the following R code:</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">Z =<span class="st"> </span><span class="kw">cbind</span>(dat<span class="op">$</span>Air.Flow, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb151-2" title="2"><span class="kw">colnames</span>(Z) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;regn&quot;</span>, <span class="st">&quot;regs&quot;</span>)</a></code></pre></div>
+<p>We can solve for the parameters using <span class="math inline">\(\mathbf{x} = (\mathbf{Z}^\top\mathbf{Z})^{-1}\mathbf{Z}^\top\mathbf{y}\)</span> as we did for Form 1 before by adding on the 1s and 0s columns we see in the <span class="math inline">\(\mathbf{Z}\)</span> matrix in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form1-ns">(2.13)</a>. We could build this <span class="math inline">\(\mathbf{Z}\)</span> using the following R code:</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="sec-mlr-intercepts.html#cb146-1"></a>Z =<span class="st"> </span><span class="kw">cbind</span>(dat<span class="op">$</span>Air.Flow, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb146-2"><a href="sec-mlr-intercepts.html#cb146-2"></a><span class="kw">colnames</span>(Z) =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;beta&quot;</span>, <span class="st">&quot;regn&quot;</span>, <span class="st">&quot;regs&quot;</span>)</span></code></pre></div>
 <p>Or just use <code>model.matrix()</code>. This will save time when models are more complex.</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" title="1">Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit2)</a>
-<a class="sourceLine" id="cb152-2" title="2">Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</a></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="sec-mlr-intercepts.html#cb147-1"></a>Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit2)</span>
+<span id="cb147-2"><a href="sec-mlr-intercepts.html#cb147-2"></a>Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</span></code></pre></div>
 <pre><code>  Air.Flow regn regs
 1       80    1    0
 2       80    0    1
 3       75    1    0
 4       62    0    1</code></pre>
 <p>Now we can solve for the parameters:</p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb154-1" title="1">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb154-2" title="2"><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y</a></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="sec-mlr-intercepts.html#cb149-1"></a>y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb149-2"><a href="sec-mlr-intercepts.html#cb149-2"></a><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y</span></code></pre></div>
 <pre><code>               [,1]
 Air.Flow  0.5358166
 regn     -2.0257880
 regs     -5.5429799</code></pre>
 <p>Compare to the output from <code>lm()</code> and you will see it is the same.</p>
-<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb156-1" title="1"><span class="kw">coef</span>(fit2)</a></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="sec-mlr-intercepts.html#cb151-1"></a><span class="kw">coef</span>(fit2)</span></code></pre></div>
 <pre><code>  Air.Flow       regn       regs 
  0.5358166 -2.0257880 -5.5429799 </code></pre>
 </div>
@@ -532,37 +536,25 @@ regs     -5.5429799</code></pre>
 <h3><span class="header-section-number">2.4.2</span> North/South intercepts in Form 2</h3>
 <p>We would write this model in Form 2 as
 <span class="math display" id="eq:stackloss-form2-ns">\[\begin{equation}
-\tag{2.16}
+\tag{2.14}
 \begin{bmatrix}stack.loss_1\\ stack.loss_2\\ stack.loss_3\\ stack.loss_4\end{bmatrix}
 = 
 \begin{bmatrix}
-\alpha_n&amp;\beta&amp;0&amp;0&amp;0\\
-\alpha_s&amp;0&amp;\beta&amp;0&amp;0\\
-\alpha_n&amp;0&amp;0&amp;\beta&amp;0\\
-\alpha_s&amp;0&amp;0&amp;0&amp;\beta
-\end{bmatrix}\begin{bmatrix}1\\air_1\\air_2\\air_3\\air_4\end{bmatrix}
+\beta&amp;0&amp;0&amp;0\\
+0&amp;\beta&amp;0&amp;0\\
+0&amp;0&amp;\beta&amp;0\\
+0&amp;0&amp;0&amp;\beta
+\end{bmatrix}\begin{bmatrix}air_1\\air_2\\air_3\\air_4\end{bmatrix}
 +
-\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
+\begin{bmatrix}
+\alpha_n\\
+\alpha_s\\
+\alpha_n\\
+\alpha_s
+\end{bmatrix}
++
+\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{a}+\mathbf{e}
 \end{equation}\]</span></p>
-<p>To estimate the parameters, we need to be able to write a list matrix that looks like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.16)</a>. We can use the same code we used in Section <a href="sec-mlr-form2.html#sec-mlr-solveform2code">2.3.4</a> with <span class="math inline">\(\mathbf{Z}\)</span> changed to look like that in Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.16)</a>.</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1">y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb158-2" title="2">x =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, dat<span class="op">$</span>Air.Flow), <span class="dt">ncol =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb158-3" title="3">n =<span class="st"> </span><span class="kw">nrow</span>(dat)</a>
-<a class="sourceLine" id="cb158-4" title="4">k =<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb158-5" title="5"><span class="co"># list matrix allows us to combine numbers and character</span></a>
-<a class="sourceLine" id="cb158-6" title="6"><span class="co"># strings</span></a>
-<a class="sourceLine" id="cb158-7" title="7">Z =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n, k <span class="op">*</span><span class="st"> </span>n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb158-8" title="8">Z[<span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphanorth&quot;</span></a>
-<a class="sourceLine" id="cb158-9" title="9">Z[<span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphasouth&quot;</span></a>
-<a class="sourceLine" id="cb158-10" title="10"><span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>n]) =<span class="st"> &quot;beta&quot;</span></a>
-<a class="sourceLine" id="cb158-11" title="11">P =<span class="st"> </span>MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[, , <span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb158-12" title="12">M =<span class="st"> </span><span class="kw">kronecker</span>(<span class="kw">t</span>(x), <span class="kw">diag</span>(n)) <span class="op">%*%</span><span class="st"> </span>P</a>
-<a class="sourceLine" id="cb158-13" title="13"><span class="kw">solve</span>(<span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>M) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>y</a></code></pre></div>
-<pre><code>                 [,1]
-alphanorth -2.0257880
-alphasouth -5.5429799
-beta        0.5358166</code></pre>
-<p>Make sure you understand the code used to form the <span class="math inline">\(\mathbf{Z}\)</span> matrix. Also notice that <code>class(Z[1,3])="numeric"</code> while <code>class(Z[1,2])="character"</code>. This is important. <code>0</code> in R is a number while <code>"0"</code> would be a character (the name of a parameter).</p>
 </div>
 </div>
             </section>

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>4.1 Time series plots | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="4.1 Time series plots | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -468,12 +472,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The first, <code>frequency</code>, is a bit of a misnomer because it does not really refer to the number of cycles per unit time, but rather the number of observations/samples per cycle. So, for example, if the data were collected each hour of a day then <code>frequency=24</code>.</p>
 <p>The second, <code>start</code>, specifies the first sample in terms of (<span class="math inline">\(day\)</span>, <span class="math inline">\(hour\)</span>), (<span class="math inline">\(year\)</span>, <span class="math inline">\(month\)</span>), etc. So, for example, if the data were collected monthly beginning in November of 1969, then <code>frequency=12</code> and <code>start=c(1969,11)</code>. If the data were collected annually, then you simply specify <code>start</code> as a scalar (<em>e.g.</em>, <code>start=1991</code>) and omit <code>frequency</code> (<em>i.e.</em>, R will set <code>frequency=1</code> by default).</p>
 <p>The Mauna Loa time series is collected monthly and begins in March of 1958, which we can get from the data themselves, and then pass to <code>ts()</code>.</p>
-<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" title="1"><span class="co">## create a time series (ts) object from the CO2 data</span></a>
-<a class="sourceLine" id="cb207-2" title="2">co2 &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> CO2<span class="op">$</span>ppm, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(CO2[<span class="dv">1</span>, <span class="st">&quot;year&quot;</span>], </a>
-<a class="sourceLine" id="cb207-3" title="3">    CO2[<span class="dv">1</span>, <span class="st">&quot;month&quot;</span>]))</a></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="sec-tslab-time-series-plots.html#cb206-1"></a><span class="co">## create a time series (ts) object from the CO2 data</span></span>
+<span id="cb206-2"><a href="sec-tslab-time-series-plots.html#cb206-2"></a>co2 &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> CO2<span class="op">$</span>ppm, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(CO2[<span class="dv">1</span>, <span class="st">&quot;year&quot;</span>], </span>
+<span id="cb206-3"><a href="sec-tslab-time-series-plots.html#cb206-3"></a>    CO2[<span class="dv">1</span>, <span class="st">&quot;month&quot;</span>]))</span></code></pre></div>
 <p>Now let’s plot the data using <code>plot.ts()</code>, which is designed specifically for <strong>ts</strong> objects like the one we just created above. It’s nice because we don’t need to specify any <span class="math inline">\(x\)</span>-values as they are taken directly from the <strong>ts</strong> object.</p>
-<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" title="1"><span class="co">## plot the ts</span></a>
-<a class="sourceLine" id="cb208-2" title="2"><span class="kw">plot.ts</span>(co2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>], <span class="st">&quot; (ppm)&quot;</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb207-1"><a href="sec-tslab-time-series-plots.html#cb207-1"></a><span class="co">## plot the ts</span></span>
+<span id="cb207-2"><a href="sec-tslab-time-series-plots.html#cb207-2"></a><span class="kw">plot.ts</span>(co2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(<span class="st">&quot;CO&quot;</span>[<span class="dv">2</span>], <span class="st">&quot; (ppm)&quot;</span>)))</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotdata1"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotdata1-1.png" alt="Time series of the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i measured monthly from March 1958 to present." width="80%" />
@@ -486,23 +490,23 @@ Figure 4.1: Time series of the atmospheric CO<span class="math inline">\(_2\)</s
 <div id="sec-tslab-combining-and-plotting-multiple-textbfts-objects" class="section level3">
 <h3><span class="header-section-number">4.1.2</span> Combining and plotting multiple <strong>ts</strong> objects</h3>
 <p>Before we examine the CO<span class="math inline">\(_2\)</span> data further, however, let’s see a quick example of how you can combine and plot multiple time series together. We’ll use the <a href="#sec-tslab-data">data</a> on monthly mean temperature anomolies for the Northern Hemisphere (<code>Temp</code>). First convert <code>Temp</code> to a <code>ts</code> object.</p>
-<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1">temp.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> Temp<span class="op">$</span>Value, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1880</span>, </a>
-<a class="sourceLine" id="cb209-2" title="2">    <span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="sec-tslab-time-series-plots.html#cb208-1"></a>temp.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="dt">data =</span> Temp<span class="op">$</span>Value, <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1880</span>, </span>
+<span id="cb208-2"><a href="sec-tslab-time-series-plots.html#cb208-2"></a>    <span class="dv">1</span>))</span></code></pre></div>
 <p>Before we can plot the two time series together, however, we need to line up their time indices because the temperature data start in January of 1880, but the CO<span class="math inline">\(_2\)</span> data start in March of 1958. Fortunately, the <code>ts.intersect()</code> function makes this really easy once the data have been transformed to <strong>ts</strong> objects by trimming the data to a common time frame. Also, <code>ts.union()</code> works in a similar fashion, but it pads one or both series with the appropriate number of NA’s. Let’s try both.</p>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" title="1"><span class="co">## intersection (only overlapping times)</span></a>
-<a class="sourceLine" id="cb210-2" title="2">datI &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(co2, temp.ts)</a>
-<a class="sourceLine" id="cb210-3" title="3"><span class="co">## dimensions of common-time data</span></a>
-<a class="sourceLine" id="cb210-4" title="4"><span class="kw">dim</span>(datI)</a></code></pre></div>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="sec-tslab-time-series-plots.html#cb209-1"></a><span class="co">## intersection (only overlapping times)</span></span>
+<span id="cb209-2"><a href="sec-tslab-time-series-plots.html#cb209-2"></a>datI &lt;-<span class="st"> </span><span class="kw">ts.intersect</span>(co2, temp.ts)</span>
+<span id="cb209-3"><a href="sec-tslab-time-series-plots.html#cb209-3"></a><span class="co">## dimensions of common-time data</span></span>
+<span id="cb209-4"><a href="sec-tslab-time-series-plots.html#cb209-4"></a><span class="kw">dim</span>(datI)</span></code></pre></div>
 <pre><code>[1] 682   2</code></pre>
-<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb212-1" title="1"><span class="co">## union (all times)</span></a>
-<a class="sourceLine" id="cb212-2" title="2">datU &lt;-<span class="st"> </span><span class="kw">ts.union</span>(co2, temp.ts)</a>
-<a class="sourceLine" id="cb212-3" title="3"><span class="co">## dimensions of all-time data</span></a>
-<a class="sourceLine" id="cb212-4" title="4"><span class="kw">dim</span>(datU)</a></code></pre></div>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="sec-tslab-time-series-plots.html#cb211-1"></a><span class="co">## union (all times)</span></span>
+<span id="cb211-2"><a href="sec-tslab-time-series-plots.html#cb211-2"></a>datU &lt;-<span class="st"> </span><span class="kw">ts.union</span>(co2, temp.ts)</span>
+<span id="cb211-3"><a href="sec-tslab-time-series-plots.html#cb211-3"></a><span class="co">## dimensions of all-time data</span></span>
+<span id="cb211-4"><a href="sec-tslab-time-series-plots.html#cb211-4"></a><span class="kw">dim</span>(datU)</span></code></pre></div>
 <pre><code>[1] 1647    2</code></pre>
 <p>As you can see, the intersection of the two data sets is much smaller than the union. If you compare them, you will see that the first 938 rows of <code>datU</code> contains <code>NA</code> in the <code>co2</code> column.</p>
 <p>It turns out that the regular <code>plot()</code> function in R is smart enough to recognize a <strong>ts</strong> object and use the information contained therein appropriately. Here’s how to plot the intersection of the two time series together with the y-axes on alternate sides (results are shown in Figure <a href="sec-tslab-time-series-plots.html#fig:tslab-plotdata2">4.2</a>):</p>
-<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" title="1"><span class="co">## plot the ts</span></a>
-<a class="sourceLine" id="cb214-2" title="2"><span class="kw">plot</span>(datI, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="sec-tslab-time-series-plots.html#cb213-1"></a><span class="co">## plot the ts</span></span>
+<span id="cb213-2"><a href="sec-tslab-time-series-plots.html#cb213-2"></a><span class="kw">plot</span>(datI, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotdata2"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotdata2-1.png" alt="Time series of the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) and the mean temperature index for the Northern Hemisphere (bottom) measured monthly from March 1958 to present." width="80%" />

@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>11.2 Example: Snotel Data | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="11.2 Example: Snotel Data | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -462,12 +466,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="example-snotel-data" class="section level2">
 <h2><span class="header-section-number">11.2</span> Example: Snotel Data</h2>
 <p>Let’s see an example using the Washington SNOTEL data. The data we will use is the snow water equivalent percent of normal. This represents the snow water equivalent compared to the average value for that site on the same day. We will look at a subset of sites in the Central Cascades in our <code>snotel</code> dataset (Figure <a href="example-snotel-data.html#fig:mssmiss-plotsnotel">11.1</a>).</p>
-<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb608-1" title="1">y &lt;-<span class="st"> </span>snotelmeta</a>
-<a class="sourceLine" id="cb608-2" title="2"><span class="co"># Just use a subset</span></a>
-<a class="sourceLine" id="cb608-3" title="3">y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Longitude <span class="op">&lt;</span><span class="st"> </span><span class="fl">-121.4</span>), ]</a>
-<a class="sourceLine" id="cb608-4" title="4">y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Longitude <span class="op">&gt;</span><span class="st"> </span><span class="fl">-122.5</span>), ]</a>
-<a class="sourceLine" id="cb608-5" title="5">y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Latitude <span class="op">&lt;</span><span class="st"> </span><span class="fl">47.5</span>), ]</a>
-<a class="sourceLine" id="cb608-6" title="6">y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Latitude <span class="op">&gt;</span><span class="st"> </span><span class="fl">46.5</span>), ]</a></code></pre></div>
+<div class="sourceCode" id="cb592"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb592-1"><a href="example-snotel-data.html#cb592-1"></a>y &lt;-<span class="st"> </span>snotelmeta</span>
+<span id="cb592-2"><a href="example-snotel-data.html#cb592-2"></a><span class="co"># Just use a subset</span></span>
+<span id="cb592-3"><a href="example-snotel-data.html#cb592-3"></a>y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Longitude <span class="op">&lt;</span><span class="st"> </span><span class="fl">-121.4</span>), ]</span>
+<span id="cb592-4"><a href="example-snotel-data.html#cb592-4"></a>y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Longitude <span class="op">&gt;</span><span class="st"> </span><span class="fl">-122.5</span>), ]</span>
+<span id="cb592-5"><a href="example-snotel-data.html#cb592-5"></a>y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Latitude <span class="op">&lt;</span><span class="st"> </span><span class="fl">47.5</span>), ]</span>
+<span id="cb592-6"><a href="example-snotel-data.html#cb592-6"></a>y =<span class="st"> </span>y[<span class="kw">which</span>(y<span class="op">$</span>Latitude <span class="op">&gt;</span><span class="st"> </span><span class="fl">46.5</span>), ]</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:mssmiss-plotsnotel"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-plotsnotel-1.png" alt="Subset of SNOTEL sties used in this chapter." width="80%" />
@@ -477,11 +481,11 @@ Figure 11.1: Subset of SNOTEL sties used in this chapter.
 </div>
 <p>For the first analysis, we are just going to look at February Snow Water Equivalent (SWE). Our subset of stations is <code>y$Station.Id</code>. There are many missing years among some of our stations (Figure <a href="example-snotel-data.html#fig:mssmiss-plotsnotelts">11.2</a>).</p>
 
-<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb609-1" title="1">swe.feb &lt;-<span class="st"> </span>snotel</a>
-<a class="sourceLine" id="cb609-2" title="2">swe.feb &lt;-<span class="st"> </span>swe.feb[swe.feb<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id <span class="op">&amp;</span><span class="st"> </span>swe.feb<span class="op">$</span>Month <span class="op">==</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb609-3" title="3"><span class="st">    &quot;Feb&quot;</span>, ]</a>
-<a class="sourceLine" id="cb609-4" title="4">p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(swe.feb, <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> SWE)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a>
-<a class="sourceLine" id="cb609-5" title="5">p <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station)</a></code></pre></div>
+<div class="sourceCode" id="cb593"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb593-1"><a href="example-snotel-data.html#cb593-1"></a>swe.feb &lt;-<span class="st"> </span>snotel</span>
+<span id="cb593-2"><a href="example-snotel-data.html#cb593-2"></a>swe.feb &lt;-<span class="st"> </span>swe.feb[swe.feb<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id <span class="op">&amp;</span><span class="st"> </span>swe.feb<span class="op">$</span>Month <span class="op">==</span><span class="st"> </span></span>
+<span id="cb593-3"><a href="example-snotel-data.html#cb593-3"></a><span class="st">    &quot;Feb&quot;</span>, ]</span>
+<span id="cb593-4"><a href="example-snotel-data.html#cb593-4"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(swe.feb, <span class="kw">aes</span>(<span class="dt">x =</span> Date, <span class="dt">y =</span> SWE)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span>
+<span id="cb593-5"><a href="example-snotel-data.html#cb593-5"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:mssmiss-plotsnotelts"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-plotsnotelts-1.png" alt="Snow water equivalent time series from each SNOTEL station." width="80%" />
 <p class="caption">
@@ -523,53 +527,66 @@ v_1 \\ v_2 \\ \dots \\ v_{15}
 \end{equation}\]</span></p>
 <p>We will use an unconstrained variance-covariance structure for <span class="math inline">\(\mathbf{w}\)</span> and assume that <span class="math inline">\(\mathbf{v}\)</span> is identical and independent and very low (SNOTEL instrument variability). The <span class="math inline">\(a_i\)</span> determine the level of the <span class="math inline">\(x_i\)</span>.</p>
 <p>We need our data to be in rows. We will use <code>reshape2::acast()</code>.</p>
-<div class="sourceCode" id="cb610"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb610-1" title="1">dat.feb &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">acast</span>(swe.feb, Station <span class="op">~</span><span class="st"> </span>Year, <span class="dt">value.var =</span> <span class="st">&quot;SWE&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb594-1"><a href="example-snotel-data.html#cb594-1"></a>dat.feb &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">acast</span>(swe.feb, Station <span class="op">~</span><span class="st"> </span>Year, <span class="dt">value.var =</span> <span class="st">&quot;SWE&quot;</span>)</span></code></pre></div>
 <p>We set up the model for MARSS so that it is the same as <a href="example-snotel-data.html#eq:mssmiss-ar1">(11.5)</a>. We will fix the measurement error to be small; we could use 0 but the fitting is more stable if we use a small variance instead. When estimating <span class="math inline">\(\mathbf{B}\)</span>, setting the initial value to be at <span class="math inline">\(t=1\)</span> instead of <span class="math inline">\(t=0\)</span> works better.</p>
-<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb611-1" title="1">ns &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(swe.feb<span class="op">$</span>Station))</a>
-<a class="sourceLine" id="cb611-2" title="2">B &lt;-<span class="st"> &quot;diagonal and equal&quot;</span></a>
-<a class="sourceLine" id="cb611-3" title="3">Q &lt;-<span class="st"> &quot;unconstrained&quot;</span></a>
-<a class="sourceLine" id="cb611-4" title="4">R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.01</span>, ns)</a>
-<a class="sourceLine" id="cb611-5" title="5">U &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb611-6" title="6">A &lt;-<span class="st"> &quot;unequal&quot;</span></a>
-<a class="sourceLine" id="cb611-7" title="7">x0 &lt;-<span class="st"> &quot;unequal&quot;</span></a>
-<a class="sourceLine" id="cb611-8" title="8">mod.list.ar1 =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">x0 =</span> x0, <span class="dt">A =</span> A, </a>
-<a class="sourceLine" id="cb611-9" title="9">    <span class="dt">tinitx =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb595"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb595-1"><a href="example-snotel-data.html#cb595-1"></a>ns &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(swe.feb<span class="op">$</span>Station))</span>
+<span id="cb595-2"><a href="example-snotel-data.html#cb595-2"></a>B &lt;-<span class="st"> &quot;diagonal and equal&quot;</span></span>
+<span id="cb595-3"><a href="example-snotel-data.html#cb595-3"></a>Q &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
+<span id="cb595-4"><a href="example-snotel-data.html#cb595-4"></a>R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.01</span>, ns)</span>
+<span id="cb595-5"><a href="example-snotel-data.html#cb595-5"></a>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb595-6"><a href="example-snotel-data.html#cb595-6"></a>A &lt;-<span class="st"> &quot;unequal&quot;</span></span>
+<span id="cb595-7"><a href="example-snotel-data.html#cb595-7"></a>x0 &lt;-<span class="st"> &quot;unequal&quot;</span></span>
+<span id="cb595-8"><a href="example-snotel-data.html#cb595-8"></a>mod.list.ar1 =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">x0 =</span> x0, <span class="dt">A =</span> A, </span>
+<span id="cb595-9"><a href="example-snotel-data.html#cb595-9"></a>    <span class="dt">tinitx =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>Now we can fit a MARSS model and get estimates of the missing SWEs. Convergence is slow. We set <span class="math inline">\(\mathbf{a}\)</span> equal to the mean of the time series to speed convergence.</p>
-<div class="sourceCode" id="cb612"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb612-1" title="1"><span class="kw">library</span>(MARSS)</a>
-<a class="sourceLine" id="cb612-2" title="2">m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb612-3" title="3">fit.ar1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.ar1, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">5000</span>), </a>
-<a class="sourceLine" id="cb612-4" title="4">    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb596"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb596-1"><a href="example-snotel-data.html#cb596-1"></a><span class="kw">library</span>(MARSS)</span>
+<span id="cb596-2"><a href="example-snotel-data.html#cb596-2"></a>m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb596-3"><a href="example-snotel-data.html#cb596-3"></a>fit.ar1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.ar1, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">5000</span>), </span>
+<span id="cb596-4"><a href="example-snotel-data.html#cb596-4"></a>    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</span></code></pre></div>
 <p>The <span class="math inline">\(b\)</span> estimate is <code>0.4494841</code>.</p>
 <p>Let’s plot the estimated SWEs for the missing years (Figure <a href="example-snotel-data.html#fig:mssmiss-snotelplotfits-ar1">11.3</a>). These estimates use all the information about the correlation with other sites and uses information about correlation with the prior and subsequent years. We will use the <code>tidy()</code> function to get the estimates and the 95% prediction intervals. The prediction interval is for the range of SWE values we might observe for that site. Notice that for some sites, intervals are low in early years as these sites are highly correlated with site for which there are data. In other sites, the uncertainty is high in early years because the sites with data in those years are not highly correlated. There are no intervals for sites with data. We have data for those sites, so we are not uncertain about the observed SWE for those.</p>
 
-<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb613-1" title="1">fit &lt;-<span class="st"> </span>fit.ar1</a>
-<a class="sourceLine" id="cb613-2" title="2">d &lt;-<span class="st"> </span>broom<span class="op">::</span><span class="kw">tidy</span>(fit, <span class="dt">type =</span> <span class="st">&quot;ytT&quot;</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb613-3" title="3">d<span class="op">$</span>Year &lt;-<span class="st"> </span>d<span class="op">$</span>t <span class="op">+</span><span class="st"> </span><span class="dv">1980</span></a>
-<a class="sourceLine" id="cb613-4" title="4">d<span class="op">$</span>Station &lt;-<span class="st"> </span>d<span class="op">$</span>.rownames</a>
-<a class="sourceLine" id="cb613-5" title="5">p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(Year, estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(Year, </a>
-<a class="sourceLine" id="cb613-6" title="6">    y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">ymin =</span> pred.low, <span class="dt">ymax =</span> pred.high), </a>
-<a class="sourceLine" id="cb613-7" title="7">    <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb613-8" title="8"><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;SWE (demeaned)&quot;</span>)</a>
-<a class="sourceLine" id="cb613-9" title="9">p</a></code></pre></div>
+<div class="sourceCode" id="cb597"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb597-1"><a href="example-snotel-data.html#cb597-1"></a>fit &lt;-<span class="st"> </span>fit.ar1</span>
+<span id="cb597-2"><a href="example-snotel-data.html#cb597-2"></a>d &lt;-<span class="st"> </span><span class="kw">fitted</span>(fit, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>, <span class="dt">type =</span> <span class="st">&quot;ytT&quot;</span>)</span>
+<span id="cb597-3"><a href="example-snotel-data.html#cb597-3"></a>d<span class="op">$</span>Year &lt;-<span class="st"> </span>d<span class="op">$</span>t <span class="op">+</span><span class="st"> </span><span class="dv">1980</span></span>
+<span id="cb597-4"><a href="example-snotel-data.html#cb597-4"></a>d<span class="op">$</span>Station &lt;-<span class="st"> </span>d<span class="op">$</span>.rownames</span>
+<span id="cb597-5"><a href="example-snotel-data.html#cb597-5"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(Year, .fitted)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(Year, </span>
+<span id="cb597-6"><a href="example-snotel-data.html#cb597-6"></a>    y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">ymin =</span> .lwr, <span class="dt">ymax =</span> .upr), </span>
+<span id="cb597-7"><a href="example-snotel-data.html#cb597-7"></a>    <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb597-8"><a href="example-snotel-data.html#cb597-8"></a><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;SWE (demeaned)&quot;</span>)</span>
+<span id="cb597-9"><a href="example-snotel-data.html#cb597-9"></a>p</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:mssmiss-snotelplotfits-ar1"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-snotelplotfits-ar1-1.png" alt="Estimated SWEs for the missing sites with prediction intervals." width="80%" />
 <p class="caption">
 Figure 11.3: Estimated SWEs for the missing sites with prediction intervals.
 </p>
 </div>
-<p>If we were using these SWE as covariates in a site specific model, we could then use the estimates as our covariates, however this would not incorporate uncertainty. Alternatively we could use Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marsscovarx">(11.1)</a> and set the parameters for the covariate process to those estimated for our covariate-only model. This approach will incorporate the uncertainty in the SWE estimates in the early years for the sites with no data.</p>
+<p>If we were using these SWE as covariates in a site specific model, we could then use the estimates as our covariates, however this would not incorporate parameter uncertainty. Alternatively we could use Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marsscovarx">(11.1)</a> and set the parameters for the covariate process to those estimated for our covariate-only model. This approach will incorporate the uncertainty in the SWE estimates in the early years for the sites with no data.</p>
 <p>Note, we should do some cross-validation (fitting with data left out) to ensure that the estimated SWEs are well-matched to actual measurements. It would probably be best to do ‘leave-three’ out instead of ‘leave-one’ out since the estimates for time <span class="math inline">\(t\)</span> uses information from <span class="math inline">\(t-1\)</span> and <span class="math inline">\(t+1\)</span> (if present).</p>
 <div id="diagnostics" class="section level4">
 <h4><span class="header-section-number">11.2.1.1</span> Diagnostics</h4>
 <p>The state residuals have a tendency for negative autocorrelation at lag-1 (Figure <a href="example-snotel-data.html#fig:mssmiss-stateresids-ar1">11.4</a>).</p>
 
-<div class="sourceCode" id="cb614"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb614-1" title="1">fit &lt;-<span class="st"> </span>fit.ar1</a>
-<a class="sourceLine" id="cb614-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb614-3" title="3"><span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>], <span class="dv">1</span>, acf)</a></code></pre></div>
+<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb598-1"><a href="example-snotel-data.html#cb598-1"></a>fit &lt;-<span class="st"> </span>fit.ar1</span>
+<span id="cb598-2"><a href="example-snotel-data.html#cb598-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb598-3"><a href="example-snotel-data.html#cb598-3"></a><span class="kw">apply</span>(<span class="kw">MARSSresiduals</span>(fit, <span class="dt">type =</span> <span class="st">&quot;tT&quot;</span>)<span class="op">$</span>state.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>], </span>
+<span id="cb598-4"><a href="example-snotel-data.html#cb598-4"></a>    <span class="dv">1</span>, acf, <span class="dt">na.action =</span> na.pass)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:mssmiss-stateresids-ar1"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresids-ar1-1.png" alt="State residuals for the AR(1) model. Many stations for autocorrelation at lag-1." width="80%" />
+<img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresids-ar1-1.png" alt="State residuals for the AR(1) model. Many stations have autocorrelation at lag-1." width="80%" />
 <p class="caption">
-Figure 11.4: State residuals for the AR(1) model. Many stations for autocorrelation at lag-1.
+Figure 11.4: State residuals for the AR(1) model. Many stations have autocorrelation at lag-1.
+</p>
+</div>
+<p>The model residuals also have a tendency for negative autocorrelation at lag-1 (Figure <a href="example-snotel-data.html#fig:mssmiss-modelresids-ar1">11.5</a>).</p>
+
+<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb599-1"><a href="example-snotel-data.html#cb599-1"></a>fit &lt;-<span class="st"> </span>fit.ar1</span>
+<span id="cb599-2"><a href="example-snotel-data.html#cb599-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb599-3"><a href="example-snotel-data.html#cb599-3"></a><span class="kw">apply</span>(<span class="kw">MARSSresiduals</span>(fit, <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)<span class="op">$</span>model.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>], </span>
+<span id="cb599-4"><a href="example-snotel-data.html#cb599-4"></a>    <span class="dv">1</span>, acf, <span class="dt">na.action =</span> na.pass)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:mssmiss-modelresids-ar1"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-modelresids-ar1-1.png" alt="Model residuals for the AR(1) model." width="80%" />
+<p class="caption">
+Figure 11.5: Model residuals for the AR(1) model.
 </p>
 </div>
 </div>
@@ -633,48 +650,48 @@ v_1 \\ v_2 \\ \dots \\ v_{15}
 \tag{11.7}
 \end{equation}\]</span>
 Again <span class="math inline">\(\mathbf{a}\)</span> is the mean level in the time series. Note that the expected value of <span class="math inline">\(\mathbf{x}\)</span> is zero if there are no data, so <span class="math inline">\(E(\mathbf{x}_0)=0\)</span>.</p>
-<div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb615-1" title="1">ns &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(swe.feb<span class="op">$</span>Station))</a>
-<a class="sourceLine" id="cb615-2" title="2">B &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb615-3" title="3">Q &lt;-<span class="st"> &quot;unconstrained&quot;</span></a>
-<a class="sourceLine" id="cb615-4" title="4">R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.01</span>, ns)</a>
-<a class="sourceLine" id="cb615-5" title="5">U &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb615-6" title="6">A &lt;-<span class="st"> &quot;unequal&quot;</span></a>
-<a class="sourceLine" id="cb615-7" title="7">x0 &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb615-8" title="8">mod.list.corr =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">x0 =</span> x0, <span class="dt">A =</span> A, </a>
-<a class="sourceLine" id="cb615-9" title="9">    <span class="dt">tinitx =</span> <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb600-1"><a href="example-snotel-data.html#cb600-1"></a>ns &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(swe.feb<span class="op">$</span>Station))</span>
+<span id="cb600-2"><a href="example-snotel-data.html#cb600-2"></a>B &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb600-3"><a href="example-snotel-data.html#cb600-3"></a>Q &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
+<span id="cb600-4"><a href="example-snotel-data.html#cb600-4"></a>R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.01</span>, ns)</span>
+<span id="cb600-5"><a href="example-snotel-data.html#cb600-5"></a>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb600-6"><a href="example-snotel-data.html#cb600-6"></a>A &lt;-<span class="st"> &quot;unequal&quot;</span></span>
+<span id="cb600-7"><a href="example-snotel-data.html#cb600-7"></a>x0 &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb600-8"><a href="example-snotel-data.html#cb600-8"></a>mod.list.corr =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">x0 =</span> x0, <span class="dt">A =</span> A, </span>
+<span id="cb600-9"><a href="example-snotel-data.html#cb600-9"></a>    <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p>Now we can fit a MARSS model and get estimates of the missing SWEs. Convergence is slow. We set <span class="math inline">\(\mathbf{a}\)</span> equal to the mean of the time series to speed convergence.</p>
-<div class="sourceCode" id="cb616"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb616-1" title="1">m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb616-2" title="2">fit.corr &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.corr, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">5000</span>), </a>
-<a class="sourceLine" id="cb616-3" title="3">    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb601"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb601-1"><a href="example-snotel-data.html#cb601-1"></a>m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb601-2"><a href="example-snotel-data.html#cb601-2"></a>fit.corr &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.corr, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">5000</span>), </span>
+<span id="cb601-3"><a href="example-snotel-data.html#cb601-3"></a>    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</span></code></pre></div>
 <p>The estimated SWEs for the missing years uses the information about the correlation with other sites only.</p>
 
-<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb617-1" title="1">fit &lt;-<span class="st"> </span>fit.corr</a>
-<a class="sourceLine" id="cb617-2" title="2">d &lt;-<span class="st"> </span>broom<span class="op">::</span><span class="kw">tidy</span>(fit, <span class="dt">type =</span> <span class="st">&quot;ytT&quot;</span>, <span class="dt">conf.int =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb617-3" title="3">d<span class="op">$</span>Year &lt;-<span class="st"> </span>d<span class="op">$</span>t <span class="op">+</span><span class="st"> </span><span class="dv">1980</span></a>
-<a class="sourceLine" id="cb617-4" title="4">d<span class="op">$</span>Station &lt;-<span class="st"> </span>d<span class="op">$</span>.rownames</a>
-<a class="sourceLine" id="cb617-5" title="5">p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(Year, estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(Year, </a>
-<a class="sourceLine" id="cb617-6" title="6">    y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">ymin =</span> pred.low, <span class="dt">ymax =</span> pred.high), </a>
-<a class="sourceLine" id="cb617-7" title="7">    <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb617-8" title="8"><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;SWE (demeaned)&quot;</span>)</a>
-<a class="sourceLine" id="cb617-9" title="9">p</a></code></pre></div>
+<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb602-1"><a href="example-snotel-data.html#cb602-1"></a>fit &lt;-<span class="st"> </span>fit.corr</span>
+<span id="cb602-2"><a href="example-snotel-data.html#cb602-2"></a>d &lt;-<span class="st"> </span><span class="kw">fitted</span>(fit, <span class="dt">type =</span> <span class="st">&quot;ytT&quot;</span>, <span class="dt">interval =</span> <span class="st">&quot;prediction&quot;</span>)</span>
+<span id="cb602-3"><a href="example-snotel-data.html#cb602-3"></a>d<span class="op">$</span>Year &lt;-<span class="st"> </span>d<span class="op">$</span>t <span class="op">+</span><span class="st"> </span><span class="dv">1980</span></span>
+<span id="cb602-4"><a href="example-snotel-data.html#cb602-4"></a>d<span class="op">$</span>Station &lt;-<span class="st"> </span>d<span class="op">$</span>.rownames</span>
+<span id="cb602-5"><a href="example-snotel-data.html#cb602-5"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="dt">data =</span> d) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(Year, .fitted)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(Year, </span>
+<span id="cb602-6"><a href="example-snotel-data.html#cb602-6"></a>    y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">ymin =</span> .lwr, <span class="dt">ymax =</span> .upr), </span>
+<span id="cb602-7"><a href="example-snotel-data.html#cb602-7"></a>    <span class="dt">linetype =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Station) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb602-8"><a href="example-snotel-data.html#cb602-8"></a><span class="st">    </span><span class="kw">xlab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;SWE (demeaned)&quot;</span>)</span>
+<span id="cb602-9"><a href="example-snotel-data.html#cb602-9"></a>p</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:mssmiss-snotelplotfits-corr"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-snotelplotfits-corr-1.png" alt="Estimated SWEs from the expected value of the states \(\hat{x}\) conditioned on all the data for the model with only correlation across stations at time \(t\)." width="80%" />
 <p class="caption">
-Figure 11.5: Estimated SWEs from the expected value of the states <span class="math inline">\(\hat{x}\)</span> conditioned on all the data for the model with only correlation across stations at time <span class="math inline">\(t\)</span>.
+Figure 11.6: Estimated SWEs from the expected value of the states <span class="math inline">\(\hat{x}\)</span> conditioned on all the data for the model with only correlation across stations at time <span class="math inline">\(t\)</span>.
 </p>
 </div>
 <div id="diagnostics-1" class="section level4">
 <h4><span class="header-section-number">11.2.2.1</span> Diagnostics</h4>
 <p>The state and model residuals have no tendency towards negative autocorrelation now that we removed the autoregressive component from the process (<span class="math inline">\(x\)</span>) model.</p>
-<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb618-1" title="1">fit &lt;-<span class="st"> </span>fit.corr</a>
-<a class="sourceLine" id="cb618-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb618-3" title="3"><span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals, <span class="dv">1</span>, acf, <span class="dt">na.action =</span> na.pass)</a>
-<a class="sourceLine" id="cb618-4" title="4"><span class="kw">mtext</span>(<span class="st">&quot;State Residuals ACF&quot;</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">side =</span> <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="example-snotel-data.html#cb603-1"></a>fit &lt;-<span class="st"> </span>fit.corr</span>
+<span id="cb603-2"><a href="example-snotel-data.html#cb603-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb603-3"><a href="example-snotel-data.html#cb603-3"></a><span class="kw">apply</span>(<span class="kw">MARSSresiduals</span>(fit)<span class="op">$</span>state.residuals, <span class="dv">1</span>, acf, <span class="dt">na.action =</span> na.pass)</span>
+<span id="cb603-4"><a href="example-snotel-data.html#cb603-4"></a><span class="kw">mtext</span>(<span class="st">&quot;State Residuals ACF&quot;</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">side =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresids-fit-corr-states-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb619-1" title="1">fit &lt;-<span class="st"> </span>fit.corr</a>
-<a class="sourceLine" id="cb619-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb619-3" title="3"><span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>], <span class="dv">1</span>, acf, <span class="dt">na.action =</span> na.pass)</a>
-<a class="sourceLine" id="cb619-4" title="4"><span class="kw">mtext</span>(<span class="st">&quot;Model Residuals ACF&quot;</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">side =</span> <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb604-1"><a href="example-snotel-data.html#cb604-1"></a>fit &lt;-<span class="st"> </span>fit.corr</span>
+<span id="cb604-2"><a href="example-snotel-data.html#cb604-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb604-3"><a href="example-snotel-data.html#cb604-3"></a><span class="kw">apply</span>(<span class="kw">MARSSresiduals</span>(fit)<span class="op">$</span>model.residuals, <span class="dv">1</span>, acf, <span class="dt">na.action =</span> na.pass)</span>
+<span id="cb604-4"><a href="example-snotel-data.html#cb604-4"></a><span class="kw">mtext</span>(<span class="st">&quot;Model Residuals ACF&quot;</span>, <span class="dt">outer =</span> <span class="ot">TRUE</span>, <span class="dt">side =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresids-fit-corr-model-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
@@ -709,46 +726,46 @@ v_1 \\ v_2 \\ \dots \\ v_{15}
 \end{bmatrix}_t
 \]</span></p>
 <p>The model is set up as follows:</p>
-<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb620-1" title="1">ns &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.feb)[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb620-2" title="2">B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), <span class="dv">2</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb620-3" title="3">B[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> &quot;b1&quot;</span></a>
-<a class="sourceLine" id="cb620-4" title="4">B[<span class="dv">2</span>, <span class="dv">2</span>] &lt;-<span class="st"> &quot;b2&quot;</span></a>
-<a class="sourceLine" id="cb620-5" title="5">Q &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb620-6" title="6">R &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></a>
-<a class="sourceLine" id="cb620-7" title="7">U &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb620-8" title="8">x0 &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb620-9" title="9">Z &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), ns, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb620-10" title="10">Z[<span class="dv">1</span><span class="op">:</span>(ns <span class="op">*</span><span class="st"> </span><span class="dv">2</span>)] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;z1&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns), <span class="kw">paste0</span>(<span class="st">&quot;z2&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns))</a>
-<a class="sourceLine" id="cb620-11" title="11">Z[<span class="dv">1</span>, <span class="dv">2</span>] &lt;-<span class="st"> </span><span class="dv">0</span></a>
-<a class="sourceLine" id="cb620-12" title="12">A &lt;-<span class="st"> &quot;unequal&quot;</span></a>
-<a class="sourceLine" id="cb620-13" title="13">mod.list.dfa =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Z =</span> Z, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">A =</span> A, </a>
-<a class="sourceLine" id="cb620-14" title="14">    <span class="dt">x0 =</span> x0)</a></code></pre></div>
+<div class="sourceCode" id="cb605"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb605-1"><a href="example-snotel-data.html#cb605-1"></a>ns &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.feb)[<span class="dv">1</span>]</span>
+<span id="cb605-2"><a href="example-snotel-data.html#cb605-2"></a>B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb605-3"><a href="example-snotel-data.html#cb605-3"></a>B[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> &quot;b1&quot;</span></span>
+<span id="cb605-4"><a href="example-snotel-data.html#cb605-4"></a>B[<span class="dv">2</span>, <span class="dv">2</span>] &lt;-<span class="st"> &quot;b2&quot;</span></span>
+<span id="cb605-5"><a href="example-snotel-data.html#cb605-5"></a>Q &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb605-6"><a href="example-snotel-data.html#cb605-6"></a>R &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
+<span id="cb605-7"><a href="example-snotel-data.html#cb605-7"></a>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb605-8"><a href="example-snotel-data.html#cb605-8"></a>x0 &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb605-9"><a href="example-snotel-data.html#cb605-9"></a>Z &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), ns, <span class="dv">2</span>)</span>
+<span id="cb605-10"><a href="example-snotel-data.html#cb605-10"></a>Z[<span class="dv">1</span><span class="op">:</span>(ns <span class="op">*</span><span class="st"> </span><span class="dv">2</span>)] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;z1&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns), <span class="kw">paste0</span>(<span class="st">&quot;z2&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns))</span>
+<span id="cb605-11"><a href="example-snotel-data.html#cb605-11"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>] &lt;-<span class="st"> </span><span class="dv">0</span></span>
+<span id="cb605-12"><a href="example-snotel-data.html#cb605-12"></a>A &lt;-<span class="st"> &quot;unequal&quot;</span></span>
+<span id="cb605-13"><a href="example-snotel-data.html#cb605-13"></a>mod.list.dfa =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Z =</span> Z, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">A =</span> A, </span>
+<span id="cb605-14"><a href="example-snotel-data.html#cb605-14"></a>    <span class="dt">x0 =</span> x0)</span></code></pre></div>
 <p>Now we can fit a MARSS model and get estimates of the missing SWEs. We pass in the initial value for <span class="math inline">\(\mathbf{a}\)</span> as the mean level so it fits easier.</p>
-<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb621-1" title="1"><span class="kw">library</span>(MARSS)</a>
-<a class="sourceLine" id="cb621-2" title="2">m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb621-3" title="3">fit.dfa &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.dfa, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1000</span>), </a>
-<a class="sourceLine" id="cb621-4" title="4">    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb606-1"><a href="example-snotel-data.html#cb606-1"></a><span class="kw">library</span>(MARSS)</span>
+<span id="cb606-2"><a href="example-snotel-data.html#cb606-2"></a>m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb606-3"><a href="example-snotel-data.html#cb606-3"></a>fit.dfa &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.dfa, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1000</span>), </span>
+<span id="cb606-4"><a href="example-snotel-data.html#cb606-4"></a>    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-snotelplotstates-dfa-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="diagnostics-2" class="section level3">
 <h3><span class="header-section-number">11.2.4</span> Diagnostics</h3>
 <p>The state residuals are uncorrelated.</p>
-<div class="sourceCode" id="cb622"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb622-1" title="1">fit &lt;-<span class="st"> </span>fit.dfa</a>
-<a class="sourceLine" id="cb622-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb622-3" title="3"><span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>], <span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb622-4" title="4">    acf)</a></code></pre></div>
+<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb607-1"><a href="example-snotel-data.html#cb607-1"></a>fit &lt;-<span class="st"> </span>fit.dfa</span>
+<span id="cb607-2"><a href="example-snotel-data.html#cb607-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb607-3"><a href="example-snotel-data.html#cb607-3"></a><span class="kw">apply</span>(<span class="kw">MARSSresiduals</span>(fit)<span class="op">$</span>state.residuals[, <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">drop =</span> <span class="ot">FALSE</span>], </span>
+<span id="cb607-4"><a href="example-snotel-data.html#cb607-4"></a>    <span class="dv">1</span>, acf)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-stateresit-fit-dfa-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>As are the model residuals:</p>
-<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb623-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb623-2" title="2"><span class="kw">apply</span>(<span class="kw">residuals</span>(fit)<span class="op">$</span>model.residual, <span class="dv">1</span>, <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb623-3" title="3">    <span class="kw">acf</span>(x, <span class="dt">na.action =</span> na.pass)</a>
-<a class="sourceLine" id="cb623-4" title="4">})</a></code></pre></div>
+<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb608-1"><a href="example-snotel-data.html#cb608-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">4</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb608-2"><a href="example-snotel-data.html#cb608-2"></a><span class="kw">apply</span>(<span class="kw">MARSSresiduals</span>(fit)<span class="op">$</span>model.residual, <span class="dv">1</span>, <span class="cf">function</span>(x) {</span>
+<span id="cb608-3"><a href="example-snotel-data.html#cb608-3"></a>    <span class="kw">acf</span>(x, <span class="dt">na.action =</span> na.pass)</span>
+<span id="cb608-4"><a href="example-snotel-data.html#cb608-4"></a>})</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-modelresids-fit-dfa-model-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="plot-the-fitted-or-mean-feb-swe-using-dfa" class="section level3">
 <h3><span class="header-section-number">11.2.5</span> Plot the fitted or mean Feb SWE using DFA</h3>
 <p>The plots showed the estimate of the missing Feb SWE values, which is the expected value of <span class="math inline">\(\mathbf{y}\)</span> conditioned on all the data. For the non-missing SWE, this expected value is just the observation. Many times we want the model fit for the covariate. If the measurements have observation error, the fitted value is the estimate without this observation error.</p>
-<p>We can use <code>tidy()</code> again but this time we want <code>type="fitted.ytT"</code>. We will not show the prediction intervals which would be for new data. We will just show the confidence intervals on the fitted estimate. It is hard to see but there are intervals for all years now.</p>
+<p>For the estimated states conditioned on all the data we want <code>tsSmooth()</code>. We will not show the prediction intervals which would be for new data. We will just show the confidence intervals on the fitted estimate for the missing values. The confidence intervals are small so they are a bit hard to see.</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssfitted-snotelplotstates-dfa-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 </div>

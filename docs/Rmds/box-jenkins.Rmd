@@ -654,7 +654,6 @@ datdf <- subset(landings, Species=="Sardine")
 dat <- ts(datdf$log.metric.tons, start=1964)
 dat <- window(dat, start=1964, end=1987)
 ```
-
     a. Do a Dickey-Fuller (DF) test using `ur.df()` and `adf.test()`. You have to set the lags. What does the result tell you?
     a. Do an Augmented Dickey-Fuller (ADF) test using `ur.df()`. How did you choose to set the lags? How is the ADF test different than the DF test?
     b. Do a KPSS test using `kpss.test()`. What does the result tell you?
@@ -665,7 +664,6 @@ dat <- window(dat, start=1964, end=1987)
 ```{r results='hide'}
 forecast::auto.arima(anchovy, trace=TRUE)
 ```
-
     a. Fit each of the models listed using `Arima()` and show that you can produce the same AICc value that is shown in the trace table.
     b. What models are within $\Delta$AIC of 2? What is different about these models?
 

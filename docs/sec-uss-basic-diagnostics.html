@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>6.5 Basic diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="6.5 Basic diagnostics | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -461,51 +465,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="sec-uss-basic-diagnostics" class="section level2">
 <h2><span class="header-section-number">6.5</span> Basic diagnostics</h2>
-<p>The first diagnostic that you do with any statistical analysis is check that your residuals correspond to your assumed error structure. We have two types of errors in a univariate state-space model: process errors, the <span class="math inline">\(w_t\)</span>, and observation errors, the <span class="math inline">\(v_t\)</span>.<br />
-They should not have a temporal trend. To get the residuals from most types of fits in R, you can use <code>residuals(fit)</code>. <code>MARSS()</code> calls the <span class="math inline">\(v_t\)</span>, “model residuals”, and the <span class="math inline">\(w_t\)</span> “state residuals”. We can plot these using the following code (Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-resids">6.3</a>).</p>
-<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb425-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb425-2" title="2">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.0</span>)</a></code></pre></div>
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb427-1" title="1"><span class="kw">plot</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">ylab =</span> <span class="st">&quot;model residual&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, </a>
-<a class="sourceLine" id="cb427-2" title="2">    <span class="dt">main =</span> <span class="st">&quot;flat level&quot;</span>)</a>
-<a class="sourceLine" id="cb427-3" title="3"><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb427-4" title="4"><span class="kw">plot</span>(resids<span class="op">$</span>state.residuals[<span class="dv">1</span>, ], <span class="dt">ylab =</span> <span class="st">&quot;state residual&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, </a>
-<a class="sourceLine" id="cb427-5" title="5">    <span class="dt">main =</span> <span class="st">&quot;flat level&quot;</span>)</a>
-<a class="sourceLine" id="cb427-6" title="6"><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</a></code></pre></div>
+<p>The first diagnostic that you do with any statistical analysis is check that your residuals correspond to your assumed error structure. For a basic residuals diagnostic check for a state-space model, we want to use the ‘innovations residuals’. This is the observed data at time <span class="math inline">\(t\)</span> minus the value predicted using the model plus the data up to time <span class="math inline">\(t-1\)</span>. Innovations residuals should be Gaussian and temporally independent (no autocorrelation).
+<code>residuals(fit)</code> will return the innovations residuals as a data frame.</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="sec-uss-basic-diagnostics.html#cb425-1"></a><span class="kw">head</span>(<span class="kw">residuals</span>(kem<span class="fl">.0</span>))</span></code></pre></div>
+<pre><code>  type .rownames  name    t value .fitted .resids   .sigma .std.resids
+1 ytt1        Y1 model 1871  1120  919.35  200.65 168.3792   1.1916552
+2 ytt1        Y1 model 1872  1160  919.35  240.65 168.3792   1.4292142
+3 ytt1        Y1 model 1873   963  919.35   43.65 168.3792   0.2592362
+4 ytt1        Y1 model 1874  1210  919.35  290.65 168.3792   1.7261629
+5 ytt1        Y1 model 1875  1160  919.35  240.65 168.3792   1.4292142
+6 ytt1        Y1 model 1876  1160  919.35  240.65 168.3792   1.4292142</code></pre>
+<p>The innovations residuals should also not be autocorrelated in time. We can check the autocorrelation with the function <code>acf()</code>. The autocorrelation plots are shown in Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-acfs">6.3</a>. The stochastic level model looks the best in that its innovations residuals are fine.</p>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="sec-uss-basic-diagnostics.html#cb427-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">2</span>))</span>
+<span id="cb427-2"><a href="sec-uss-basic-diagnostics.html#cb427-2"></a>resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.0</span>)</span>
+<span id="cb427-3"><a href="sec-uss-basic-diagnostics.html#cb427-3"></a><span class="kw">acf</span>(resids<span class="op">$</span>.resids, <span class="dt">main =</span> <span class="st">&quot;flat level v(t)&quot;</span>, <span class="dt">na.action =</span> na.pass)</span>
+<span id="cb427-4"><a href="sec-uss-basic-diagnostics.html#cb427-4"></a>resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.1</span>)</span>
+<span id="cb427-5"><a href="sec-uss-basic-diagnostics.html#cb427-5"></a><span class="kw">acf</span>(resids<span class="op">$</span>.resids, <span class="dt">main =</span> <span class="st">&quot;linear trend v(t)&quot;</span>, <span class="dt">na.action =</span> na.pass)</span>
+<span id="cb427-6"><a href="sec-uss-basic-diagnostics.html#cb427-6"></a>resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.2</span>)</span>
+<span id="cb427-7"><a href="sec-uss-basic-diagnostics.html#cb427-7"></a><span class="kw">acf</span>(resids<span class="op">$</span>.resids, <span class="dt">main =</span> <span class="st">&quot;stoc level v(t)&quot;</span>, <span class="dt">na.action =</span> na.pass)</span></code></pre></div>
 
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<div class="figure" style="text-align: center"><span id="fig:uss-resids"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/uss-resids-1.png" alt="The model and state residuals for the first 3 models." width="80%" />
-<p class="caption">
-Figure 6.3: The model and state residuals for the first 3 models.
-</p>
-</div>
-<p>The residuals should also not be autocorrelated in time. We can check the autocorrelation with the function <code>acf()</code>. We won’t do this for the state residuals for the flat level or linear trends since for those models <span class="math inline">\(w_t=0\)</span>. The autocorrelation plots are shown in Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-acfs">6.4</a>. The stochastic level model looks the best in that its model residuals (the <span class="math inline">\(v_t\)</span>) are fine but the state model still has problems. Clearly the state is not a simple random walk. This is not surprising. The Aswan Low Dam was completed in 1902 and changed the mean flow. The Aswan High Dam was completed in 1970 and also affected the flow. You can see these perturbations in Figure <a href="sec-uss-examples-using-the-nile-river-data.html#fig:uss-plotdata">6.1</a>.</p>
-<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb431-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb431-2" title="2">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.0</span>)</a></code></pre></div>
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb433-1" title="1"><span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;flat level v(t)&quot;</span>, <span class="dt">na.action =</span> na.pass)</a>
-<a class="sourceLine" id="cb433-2" title="2">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.1</span>)</a></code></pre></div>
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb435-1" title="1"><span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;linear trend v(t)&quot;</span>, </a>
-<a class="sourceLine" id="cb435-2" title="2">    <span class="dt">na.action =</span> na.pass)</a>
-<a class="sourceLine" id="cb435-3" title="3">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(kem<span class="fl">.2</span>)</a></code></pre></div>
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb437-1" title="1"><span class="kw">acf</span>(resids<span class="op">$</span>model.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;stoc level v(t)&quot;</span>, <span class="dt">na.action =</span> na.pass)</a>
-<a class="sourceLine" id="cb437-2" title="2"><span class="kw">acf</span>(resids<span class="op">$</span>state.residuals[<span class="dv">1</span>, ], <span class="dt">main =</span> <span class="st">&quot;stoc level w(t)&quot;</span>, <span class="dt">na.action =</span> na.pass)</a></code></pre></div>
-
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
-<pre><code>MARSSresiduals.tT reported warnings. See msg element of returned residuals object.</code></pre>
 <div class="figure" style="text-align: center"><span id="fig:uss-acfs"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/uss-acfs-1.png" alt="The model and state residual acfs for the 3 models." width="80%" />
+<img src="Applied_Time_Series_Analysis_files/figure-html/uss-acfs-1.png" alt="The model innovations residual acfs for the 3 models." width="80%" />
 <p class="caption">
-Figure 6.4: The model and state residual acfs for the 3 models.
+Figure 6.3: The model innovations residual acfs for the 3 models.
+</p>
+</div>
+<div id="sec-uss-more-diagnostics" class="section level3">
+<h3><span class="header-section-number">6.5.1</span> Outlier diagnostics</h3>
+<p>Another type of residual used in state-space models is smoothation residuals. This residual at time <span class="math inline">\(t\)</span> is conditioned on all the data. Smoothation residuals are used for outlier detection and can help detect anomalous shocks in the data. Smoothation residuals can be autocorrelated but should fluctuate around 0. The should not have a trend. Looking at your smoothation residuals can help you determine if there are fundamental problems with the structure of your model.</p>
+<p>We can get the smoothation residuals by passing in <code>type="tT"</code> to the <code>residuals()</code> call. Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-resids">6.4</a> shows the model and state smoothation residuals. The flat level and linear trend models do not have a stochastic state so their state residuals are all 0.</p>
+
+<div class="figure" style="text-align: center"><span id="fig:uss-resids"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/uss-resids-1.png" alt="The model and state smoothations residuals for the first 3 models." width="80%" />
+<p class="caption">
+Figure 6.4: The model and state smoothations residuals for the first 3 models.
+</p>
+</div>
+<p>The flat and linear trend models show problems. The model smoothation residuals are positive early and then are slightly negative. They should fluctuate around 0 the whole time series. The stochastic level model looks fine. The residuals fluctuate around 0.</p>
+<p>The smoothation residuals can also help us look for outliers in the data or outlier shifts in the level (sudden anolmalous changes). If we standardize by the variance of the residuals (divide by the square root of the variance), then the standardized residuals should have an approximate standard normal distribution.</p>
+<p>We will look just at the stochastic level model since the other models do not have a stochastic state (<span class="math inline">\(x\)</span>). Figure <a href="sec-uss-basic-diagnostics.html#fig:uss-resids2">6.5</a> (right panel) shows us that there was a sudden level change around 1902. The Aswan Low Dam was completed in 1902 and changed the mean flow. The Aswan High Dam was completed in 1970 and also affected the flow though not as much. You can see these perturbations in Figure <a href="sec-uss-examples-using-the-nile-river-data.html#fig:uss-plotdata">6.1</a>.</p>
+
+<div class="figure" style="text-align: center"><span id="fig:uss-resids2"></span>
+<img src="Applied_Time_Series_Analysis_files/figure-html/uss-resids2-1.png" alt="The model and state smoothations residuals for the first 3 models." width="80%" />
+<p class="caption">
+Figure 6.5: The model and state smoothations residuals for the first 3 models.
 </p>
 </div>
 
+</div>
 </div>
             </section>
 

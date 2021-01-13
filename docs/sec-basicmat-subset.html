@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>1.3 Subsetting a matrix | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="1.3 Subsetting a matrix | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -462,75 +466,75 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-basicmat-subset" class="section level2">
 <h2><span class="header-section-number">1.3</span> Subsetting a matrix</h2>
 <p>To subset a matrix, we use <code>[ ]</code>:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1">A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>) <span class="co">#3 rows, 3 columns</span></a>
-<a class="sourceLine" id="cb54-2" title="2"><span class="co">#get the first and second rows of A</span></a>
-<a class="sourceLine" id="cb54-3" title="3"><span class="co">#it&#39;s a 2x3 matrix</span></a>
-<a class="sourceLine" id="cb54-4" title="4">A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="sec-basicmat-subset.html#cb54-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>) <span class="co">#3 rows, 3 columns</span></span>
+<span id="cb54-2"><a href="sec-basicmat-subset.html#cb54-2"></a><span class="co">#get the first and second rows of A</span></span>
+<span id="cb54-3"><a href="sec-basicmat-subset.html#cb54-3"></a><span class="co">#it&#39;s a 2x3 matrix</span></span>
+<span id="cb54-4"><a href="sec-basicmat-subset.html#cb54-4"></a>A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]</span></code></pre></div>
 <pre><code>     [,1] [,2] [,3]
 [1,]    1    4    7
 [2,]    2    5    8</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co">#get the top 2 rows and left 2 columns</span></a>
-<a class="sourceLine" id="cb56-2" title="2">A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="sec-basicmat-subset.html#cb56-1"></a><span class="co">#get the top 2 rows and left 2 columns</span></span>
+<span id="cb56-2"><a href="sec-basicmat-subset.html#cb56-2"></a>A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]    1    4
 [2,]    2    5</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="co">#What does this do?</span></a>
-<a class="sourceLine" id="cb58-2" title="2">A[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="sec-basicmat-subset.html#cb58-1"></a><span class="co">#What does this do?</span></span>
+<span id="cb58-2"><a href="sec-basicmat-subset.html#cb58-2"></a>A[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]    1    7
 [2,]    3    9</code></pre>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="co">#This?</span></a>
-<a class="sourceLine" id="cb60-2" title="2">A[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)]</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="sec-basicmat-subset.html#cb60-1"></a><span class="co">#This?</span></span>
+<span id="cb60-2"><a href="sec-basicmat-subset.html#cb60-2"></a>A[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)]</span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]    4    7
 [2,]    5    8
 [3,]    4    7</code></pre>
 <p>If you have used matlab, you know you can say something like <code>A[1,end]</code> to denote the element of a matrix in row 1 and the last column. R does not have `end’. To do, the same in R you do something like:</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1">A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb62-2" title="2">A[<span class="dv">1</span>,<span class="kw">ncol</span>(A)]</a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="sec-basicmat-subset.html#cb62-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb62-2"><a href="sec-basicmat-subset.html#cb62-2"></a>A[<span class="dv">1</span>,<span class="kw">ncol</span>(A)]</span></code></pre></div>
 <pre><code>[1] 7</code></pre>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co">#or</span></a>
-<a class="sourceLine" id="cb64-2" title="2">A[<span class="dv">1</span>,<span class="kw">dim</span>(A)[<span class="dv">2</span>]]</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="sec-basicmat-subset.html#cb64-1"></a><span class="co">#or</span></span>
+<span id="cb64-2"><a href="sec-basicmat-subset.html#cb64-2"></a>A[<span class="dv">1</span>,<span class="kw">dim</span>(A)[<span class="dv">2</span>]]</span></code></pre></div>
 <pre><code>[1] 7</code></pre>
 <p><strong>Warning R will create vectors from subsetting matrices!</strong></p>
 <p>One of the really bad things that R does with matrices is create a vector if you happen to subset a matrix to create a matrix with 1 row or 1 column. Look at this:</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1">A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb66-2" title="2"><span class="co">#take the first 2 rows</span></a>
-<a class="sourceLine" id="cb66-3" title="3">B=A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]</a>
-<a class="sourceLine" id="cb66-4" title="4"><span class="co">#everything is ok</span></a>
-<a class="sourceLine" id="cb66-5" title="5"><span class="kw">dim</span>(B)</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="sec-basicmat-subset.html#cb66-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb66-2"><a href="sec-basicmat-subset.html#cb66-2"></a><span class="co">#take the first 2 rows</span></span>
+<span id="cb66-3"><a href="sec-basicmat-subset.html#cb66-3"></a>B=A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]</span>
+<span id="cb66-4"><a href="sec-basicmat-subset.html#cb66-4"></a><span class="co">#everything is ok</span></span>
+<span id="cb66-5"><a href="sec-basicmat-subset.html#cb66-5"></a><span class="kw">dim</span>(B)</span></code></pre></div>
 <pre><code>[1] 2 3</code></pre>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="kw">class</span>(B)</a></code></pre></div>
-<pre><code>[1] &quot;matrix&quot;</code></pre>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co">#take the first row</span></a>
-<a class="sourceLine" id="cb70-2" title="2">B=A[<span class="dv">1</span>,]</a>
-<a class="sourceLine" id="cb70-3" title="3"><span class="co">#oh no! It should be a 1x3 matrix but it is not.</span></a>
-<a class="sourceLine" id="cb70-4" title="4"><span class="kw">dim</span>(B)</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="sec-basicmat-subset.html#cb68-1"></a><span class="kw">class</span>(B)</span></code></pre></div>
+<pre><code>[1] &quot;matrix&quot; &quot;array&quot; </code></pre>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="sec-basicmat-subset.html#cb70-1"></a><span class="co">#take the first row</span></span>
+<span id="cb70-2"><a href="sec-basicmat-subset.html#cb70-2"></a>B=A[<span class="dv">1</span>,]</span>
+<span id="cb70-3"><a href="sec-basicmat-subset.html#cb70-3"></a><span class="co">#oh no! It should be a 1x3 matrix but it is not.</span></span>
+<span id="cb70-4"><a href="sec-basicmat-subset.html#cb70-4"></a><span class="kw">dim</span>(B)</span></code></pre></div>
 <pre><code>NULL</code></pre>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co">#It is not even a matrix any more</span></a>
-<a class="sourceLine" id="cb72-2" title="2"><span class="kw">class</span>(B)</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="sec-basicmat-subset.html#cb72-1"></a><span class="co">#It is not even a matrix any more</span></span>
+<span id="cb72-2"><a href="sec-basicmat-subset.html#cb72-2"></a><span class="kw">class</span>(B)</span></code></pre></div>
 <pre><code>[1] &quot;integer&quot;</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="co">#and what happens if we take the transpose?</span></a>
-<a class="sourceLine" id="cb74-2" title="2"><span class="co">#Oh no, it&#39;s a 1x3 matrix not a 3x1 (transpose of 1x3)</span></a>
-<a class="sourceLine" id="cb74-3" title="3"><span class="kw">t</span>(B)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="sec-basicmat-subset.html#cb74-1"></a><span class="co">#and what happens if we take the transpose?</span></span>
+<span id="cb74-2"><a href="sec-basicmat-subset.html#cb74-2"></a><span class="co">#Oh no, it&#39;s a 1x3 matrix not a 3x1 (transpose of 1x3)</span></span>
+<span id="cb74-3"><a href="sec-basicmat-subset.html#cb74-3"></a><span class="kw">t</span>(B)</span></code></pre></div>
 <pre><code>     [,1] [,2] [,3]
 [1,]    1    4    7</code></pre>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="co">#A%*%B should fail because A is (3x3) and B is (1x3)</span></a>
-<a class="sourceLine" id="cb76-2" title="2">A<span class="op">%*%</span>B</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="sec-basicmat-subset.html#cb76-1"></a><span class="co">#A%*%B should fail because A is (3x3) and B is (1x3)</span></span>
+<span id="cb76-2"><a href="sec-basicmat-subset.html#cb76-2"></a>A<span class="op">%*%</span>B</span></code></pre></div>
 <pre><code>     [,1]
 [1,]   66
 [2,]   78
 [3,]   90</code></pre>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="co">#It works? That is horrible!</span></a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="sec-basicmat-subset.html#cb78-1"></a><span class="co">#It works? That is horrible!</span></span></code></pre></div>
 <p>This will create hard to find bugs in your code because you will look at <code>B=A[1,]</code> and everything looks fine. Why is R saying it is not a matrix! To stop R from doing this use <code>drop=FALSE</code>.</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1">B=A[<span class="dv">1</span>,,drop=<span class="ot">FALSE</span>]</a>
-<a class="sourceLine" id="cb79-2" title="2"><span class="co">#Now it is a matrix as it should be</span></a>
-<a class="sourceLine" id="cb79-3" title="3"><span class="kw">dim</span>(B)</a></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="sec-basicmat-subset.html#cb79-1"></a>B=A[<span class="dv">1</span>,,drop=<span class="ot">FALSE</span>]</span>
+<span id="cb79-2"><a href="sec-basicmat-subset.html#cb79-2"></a><span class="co">#Now it is a matrix as it should be</span></span>
+<span id="cb79-3"><a href="sec-basicmat-subset.html#cb79-3"></a><span class="kw">dim</span>(B)</span></code></pre></div>
 <pre><code>[1] 1 3</code></pre>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="kw">class</span>(B)</a></code></pre></div>
-<pre><code>[1] &quot;matrix&quot;</code></pre>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1"><span class="co">#this fails as it should (alerting you to a problem!)</span></a>
-<a class="sourceLine" id="cb83-2" title="2"><span class="kw">try</span>(A<span class="op">%*%</span>B)</a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="sec-basicmat-subset.html#cb81-1"></a><span class="kw">class</span>(B)</span></code></pre></div>
+<pre><code>[1] &quot;matrix&quot; &quot;array&quot; </code></pre>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="sec-basicmat-subset.html#cb83-1"></a><span class="co">#this fails as it should (alerting you to a problem!)</span></span>
+<span id="cb83-2"><a href="sec-basicmat-subset.html#cb83-2"></a><span class="kw">try</span>(A<span class="op">%*%</span>B)</span></code></pre></div>
 <pre><code>Error in A %*% B : non-conformable arguments</code></pre>
 </div>
             </section>

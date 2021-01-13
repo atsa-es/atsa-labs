@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>7.11 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="7.11 Problems | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -462,12 +466,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-mss-problems" class="section level2">
 <h2><span class="header-section-number">7.11</span> Problems</h2>
 <p>For these questions, use the <code>harborSealWA</code> data set in <strong>MARSS</strong>. The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.</p>
-<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb508-1" title="1"><span class="kw">require</span>(MARSS)</a>
-<a class="sourceLine" id="cb508-2" title="2"><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</a>
-<a class="sourceLine" id="cb508-3" title="3">dat &lt;-<span class="st"> </span><span class="kw">t</span>(harborSealWA[, <span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="sec-mss-problems.html#cb494-1"></a><span class="kw">require</span>(MARSS)</span>
+<span id="cb494-2"><a href="sec-mss-problems.html#cb494-2"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb494-3"><a href="sec-mss-problems.html#cb494-3"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(harborSealWA[, <span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</span></code></pre></div>
 <p>The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).</p>
 <div class="figure">
-<img src="images/harborSealWA_regions.png" alt="Regions in the harbor seal surveys" />
+<img src="images/harborSealWA_regions.png" alt="" />
 <p class="caption">Regions in the harbor seal surveys</p>
 </div>
 <ol style="list-style-type: decimal">
@@ -506,7 +510,7 @@ A[1,1] &lt;- &quot;sigma2&quot;</code></pre>
 <li><p>Fit each model using <code>MARSS()</code> and compute the confidence intervals (CIs) for the estimated parameters. Compare the estimated <span class="math inline">\(u\)</span> (the population long-term trend) along with their CIs. Does the assumption about the observation errors change the <span class="math inline">\(u\)</span> estimate?</p></li>
 <li><p>Plot the state residuals, the ACF of the state residuals, and the histogram of the state residuals for each fit. Are there any issues that you see? Use this code to get your state residuals:</p></li>
 </ol>
-<pre><code>residuals(fit)$state.residuals[1,]</code></pre>
+<pre><code>MARSSresiduals(fit)$state.residuals[1,]</code></pre>
 <p>You need the <code>[1,]</code> since the residuals are returned as a matrix.</p></li>
 <li><p>Fit a model with 3 subpopulations. 1=SJF,SJI; 2=PS,EBays; 3=HC. The <span class="math inline">\(x\)</span> part of the model is the population structure. Assume that the observation errors are identical and independent (<code>R="diagonal and equal"</code>). Assume that the process errors are unique and independent (<code>Q="diagonal and unequal"</code>). Assume that the <span class="math inline">\(u\)</span> are unique among the 3 subpopulation.</p>
 <ol style="list-style-type: lower-alpha">
@@ -535,9 +539,9 @@ A[1,1] &lt;- &quot;sigma2&quot;</code></pre>
 <li><p>Fit each model using <code>MARSS()</code>.</p></li>
 <li><p>Prepare a table of each model with a column for the AICc values. And a column for <span class="math inline">\(\Delta AICc\)</span> (AICc minus the lowest AICc in the group). What is the most supported model?</p></li>
 </ol></li>
-<li><p>Do diagnostics on the model residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals. This will put NAs in the model residuals where there is missing data. Then do the tests on each row of <code>resids</code>.</p>
-<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb513-1" title="1">resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals</a>
-<a class="sourceLine" id="cb513-2" title="2">resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span class="ot">NA</span></a></code></pre></div>
+<li><p>Do diagnostics on the model innovations residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals. This will put NAs in the model residuals where there is missing data. Then do the tests on each row of <code>resids</code>.</p>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="sec-mss-problems.html#cb499-1"></a>resids &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(fit, <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)<span class="op">$</span>model.residuals</span>
+<span id="cb499-2"><a href="sec-mss-problems.html#cb499-2"></a>resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Plot the model residuals.</p></li>
 <li><p>Plot the ACF of the model residuals. Use <code>acf(..., na.action=na.pass)</code>.</p></li>

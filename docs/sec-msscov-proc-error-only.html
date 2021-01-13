@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>8.4 Process-error only model | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
   <meta property="og:title" content="8.4 Process-error only model | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2020-02-03" />
+<meta name="date" content="2021-01-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -50,12 +50,13 @@
 
 
 
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +65,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -157,8 +160,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
-<li class="chapter" data-level="2.3.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2"><i class="fa fa-check"></i><b>2.3.3</b> Solving for the parameters for Form 2</a></li>
-<li class="chapter" data-level="2.3.4" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-solveform2code"><i class="fa fa-check"></i><b>2.3.4</b> Code to solve for parameters in Form 2</a></li>
 </ul></li>
 <li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
@@ -174,7 +175,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="2.7" data-path="sec-mlr-season-w-var.html"><a href="sec-mlr-season-w-var.html"><i class="fa fa-check"></i><b>2.7</b> Seasonal effect plus other explanatory variables*</a></li>
 <li class="chapter" data-level="2.8" data-path="sec-mlr-confound.html"><a href="sec-mlr-confound.html"><i class="fa fa-check"></i><b>2.8</b> Models with confounded parameters*</a></li>
-<li class="chapter" data-level="2.9" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.9</b> Problems</a></li>
+<li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
+<li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
@@ -297,7 +299,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a></li>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
+</ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
 <li class="chapter" data-level="6.7" data-path="sec-uss-fitting-with-stan.html"><a href="sec-uss-fitting-with-stan.html"><i class="fa fa-check"></i><b>6.7</b> Fitting with Stan</a></li>
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
@@ -467,13 +471,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \tag{8.4}
 \end{equation}\]</span>
 We can fit this as follows:</p>
-<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb520-1" title="1">R &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></a>
-<a class="sourceLine" id="cb520-2" title="2">B &lt;-<span class="st"> </span>Z &lt;-<span class="st"> &quot;identity&quot;</span></a>
-<a class="sourceLine" id="cb520-3" title="3">Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></a>
-<a class="sourceLine" id="cb520-4" title="4">C &lt;-<span class="st"> &quot;unconstrained&quot;</span></a>
-<a class="sourceLine" id="cb520-5" title="5">model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </a>
-<a class="sourceLine" id="cb520-6" title="6">    <span class="dt">C =</span> C, <span class="dt">c =</span> covariates)</a>
-<a class="sourceLine" id="cb520-7" title="7">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</a></code></pre></div>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="sec-msscov-proc-error-only.html#cb506-1"></a>R &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb506-2"><a href="sec-msscov-proc-error-only.html#cb506-2"></a>B &lt;-<span class="st"> </span>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
+<span id="cb506-3"><a href="sec-msscov-proc-error-only.html#cb506-3"></a>Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></span>
+<span id="cb506-4"><a href="sec-msscov-proc-error-only.html#cb506-4"></a>C &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
+<span id="cb506-5"><a href="sec-msscov-proc-error-only.html#cb506-5"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
+<span id="cb506-6"><a href="sec-msscov-proc-error-only.html#cb506-6"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> covariates)</span>
+<span id="cb506-7"><a href="sec-msscov-proc-error-only.html#cb506-7"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -499,8 +503,8 @@ Initial states (x0) defined at t=0
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>Now, it looks like temperature has a strong negative effect on algae? Also our log-likelihood dropped a lot. Well, the data do not look at all like a random walk model (where <span class="math inline">\(\mathbf{B}=1\)</span>), which we can see from the plot of the data (Figure <a href="sec-msscov-prepare-data.html#fig:msscov-plank-plot">8.1</a>). The data are fluctuating about some mean so let’s switch to a better autoregressive model—a mean-reverting model. To do this, we will allow the diagonal elements of <span class="math inline">\(\mathbf{B}\)</span> to be something other than 1.</p>
-<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb522-1" title="1">model.list<span class="op">$</span>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></a>
-<a class="sourceLine" id="cb522-2" title="2">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</a></code></pre></div>
+<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="sec-msscov-proc-error-only.html#cb508-1"></a>model.list<span class="op">$</span>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
+<span id="cb508-2"><a href="sec-msscov-proc-error-only.html#cb508-2"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -529,10 +533,10 @@ Standard errors have not been calculated.
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>Notice that the log-likelihood goes up quite a bit, which means that the mean-reverting model fits the data much better.</p>
 <p>With this model, we are estimating <span class="math inline">\(\mathbf{x}_0\)</span>. If we set <code>model$tinitx=1</code>, we will get a error message that <span class="math inline">\(\mathbf{R}\)</span> diagonals are equal to 0 and we need to fix <code>x0</code>. Because <span class="math inline">\(\mathbf{R}=0\)</span>, if we set the initial states at <span class="math inline">\(t=1\)</span>, then they are fully determined by the data.</p>
-<div class="sourceCode" id="cb524"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb524-1" title="1">x0 &lt;-<span class="st"> </span>dat[, <span class="dv">1</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]</a>
-<a class="sourceLine" id="cb524-2" title="2">model.list<span class="op">$</span>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb524-3" title="3">model.list<span class="op">$</span>x0 &lt;-<span class="st"> </span>x0</a>
-<a class="sourceLine" id="cb524-4" title="4">kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</a></code></pre></div>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="sec-msscov-proc-error-only.html#cb510-1"></a>x0 &lt;-<span class="st"> </span>dat[, <span class="dv">1</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb510-2"><a href="sec-msscov-proc-error-only.html#cb510-2"></a>model.list<span class="op">$</span>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb510-3"><a href="sec-msscov-proc-error-only.html#cb510-3"></a>model.list<span class="op">$</span>x0 &lt;-<span class="st"> </span>x0</span>
+<span id="cb510-4"><a href="sec-msscov-proc-error-only.html#cb510-4"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
