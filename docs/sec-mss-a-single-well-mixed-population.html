@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -525,11 +525,11 @@ This is a diagonal matrix with unequal variances. The shortcut for this structur
 \end{equation}\]</span>
 It is very simple since all terms are <span class="math inline">\(1 \times 1\)</span> matrices.</p>
 <p>To fit our model with <code>MARSS()</code>, we set up a list which precisely describes the size and structure of each parameter matrix. Fixed values in a matrix are designated with their numeric value and estimated values are given a character name and put in quotes. Our model list for a single well-mixed population is:</p>
-<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="sec-mss-a-single-well-mixed-population.html#cb456-1"></a>mod.list<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="st">&quot;u&quot;</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </span>
-<span id="cb456-2"><a href="sec-mss-a-single-well-mixed-population.html#cb456-2"></a>    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>, <span class="dt">R =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, </span>
-<span id="cb456-3"><a href="sec-mss-a-single-well-mixed-population.html#cb456-3"></a>    <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="sec-mss-a-single-well-mixed-population.html#cb451-1"></a>mod.list<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="st">&quot;u&quot;</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </span>
+<span id="cb451-2"><a href="sec-mss-a-single-well-mixed-population.html#cb451-2"></a>    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>), <span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>, <span class="dt">R =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, </span>
+<span id="cb451-3"><a href="sec-mss-a-single-well-mixed-population.html#cb451-3"></a>    <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p>and fit:</p>
-<div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb457-1"><a href="sec-mss-a-single-well-mixed-population.html#cb457-1"></a>fit<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.list<span class="fl">.0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="sec-mss-a-single-well-mixed-population.html#cb452-1"></a>fit<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.list<span class="fl">.0</span>)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 32 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -561,14 +561,14 @@ Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <div id="sec-mss-model-residuals" class="section level3">
 <h3><span class="header-section-number">7.3.3</span> Model residuals</h3>
 <p>The model fits fine but look at the model residuals (Figure <a href="sec-mss-a-single-well-mixed-population.html#fig:mss-model-resids-plot">7.2</a>). They have problems.</p>
-<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb459-1"><a href="sec-mss-a-single-well-mixed-population.html#cb459-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb459-2"><a href="sec-mss-a-single-well-mixed-population.html#cb459-2"></a>resids &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(fit<span class="fl">.0</span>, <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)</span>
-<span id="cb459-3"><a href="sec-mss-a-single-well-mixed-population.html#cb459-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
-<span id="cb459-4"><a href="sec-mss-a-single-well-mixed-population.html#cb459-4"></a>    <span class="kw">plot</span>(resids<span class="op">$</span>model.residuals[i, ], <span class="dt">ylab =</span> <span class="st">&quot;model residuals&quot;</span>, </span>
-<span id="cb459-5"><a href="sec-mss-a-single-well-mixed-population.html#cb459-5"></a>        <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb459-6"><a href="sec-mss-a-single-well-mixed-population.html#cb459-6"></a>    <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span>
-<span id="cb459-7"><a href="sec-mss-a-single-well-mixed-population.html#cb459-7"></a>    <span class="kw">title</span>(<span class="kw">rownames</span>(dat)[i])</span>
-<span id="cb459-8"><a href="sec-mss-a-single-well-mixed-population.html#cb459-8"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb454-1"><a href="sec-mss-a-single-well-mixed-population.html#cb454-1"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb454-2"><a href="sec-mss-a-single-well-mixed-population.html#cb454-2"></a>resids &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(fit<span class="fl">.0</span>, <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)</span>
+<span id="cb454-3"><a href="sec-mss-a-single-well-mixed-population.html#cb454-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
+<span id="cb454-4"><a href="sec-mss-a-single-well-mixed-population.html#cb454-4"></a>    <span class="kw">plot</span>(resids<span class="op">$</span>model.residuals[i, ], <span class="dt">ylab =</span> <span class="st">&quot;model residuals&quot;</span>, </span>
+<span id="cb454-5"><a href="sec-mss-a-single-well-mixed-population.html#cb454-5"></a>        <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb454-6"><a href="sec-mss-a-single-well-mixed-population.html#cb454-6"></a>    <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>)</span>
+<span id="cb454-7"><a href="sec-mss-a-single-well-mixed-population.html#cb454-7"></a>    <span class="kw">title</span>(<span class="kw">rownames</span>(dat)[i])</span>
+<span id="cb454-8"><a href="sec-mss-a-single-well-mixed-population.html#cb454-8"></a>}</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:mss-model-resids-plot"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/mss-model-resids-plot-1.png" alt="The model residuals for the first model. SJI and EBays do not look good." width="80%" />

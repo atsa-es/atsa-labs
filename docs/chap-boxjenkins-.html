@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -470,21 +470,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="data-and-packages-2" class="section level3 unnumbered">
 <h3>Data and packages</h3>
 <p>We will use the catch landings from Greek waters (<code>greeklandings</code>) and the Chinook landings (<code>chinook</code>) in Washington data sets for this chapter. These datasets are in the <strong>atsalibrary</strong> package on GitHub. Install using the <strong>devtools</strong> package.</p>
-<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="chap-boxjenkins-.html#cb273-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb273-2"><a href="chap-boxjenkins-.html#cb273-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="chap-boxjenkins-.html#cb268-1"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb268-2"><a href="chap-boxjenkins-.html#cb268-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
 <p>Load the data.</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="chap-boxjenkins-.html#cb274-1"></a><span class="kw">data</span>(greeklandings, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb274-2"><a href="chap-boxjenkins-.html#cb274-2"></a>landings &lt;-<span class="st"> </span>greeklandings</span>
-<span id="cb274-3"><a href="chap-boxjenkins-.html#cb274-3"></a><span class="co"># Use the monthly data</span></span>
-<span id="cb274-4"><a href="chap-boxjenkins-.html#cb274-4"></a><span class="kw">data</span>(chinook, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb274-5"><a href="chap-boxjenkins-.html#cb274-5"></a>chinook &lt;-<span class="st"> </span>chinook.month</span></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="chap-boxjenkins-.html#cb269-1"></a><span class="kw">data</span>(greeklandings, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
+<span id="cb269-2"><a href="chap-boxjenkins-.html#cb269-2"></a>landings &lt;-<span class="st"> </span>greeklandings</span>
+<span id="cb269-3"><a href="chap-boxjenkins-.html#cb269-3"></a><span class="co"># Use the monthly data</span></span>
+<span id="cb269-4"><a href="chap-boxjenkins-.html#cb269-4"></a><span class="kw">data</span>(chinook, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
+<span id="cb269-5"><a href="chap-boxjenkins-.html#cb269-5"></a>chinook &lt;-<span class="st"> </span>chinook.month</span></code></pre></div>
 <p>Ensure you have the necessary packages.</p>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="chap-boxjenkins-.html#cb275-1"></a><span class="kw">library</span>(ggplot2)</span>
-<span id="cb275-2"><a href="chap-boxjenkins-.html#cb275-2"></a><span class="kw">library</span>(gridExtra)</span>
-<span id="cb275-3"><a href="chap-boxjenkins-.html#cb275-3"></a><span class="kw">library</span>(reshape2)</span>
-<span id="cb275-4"><a href="chap-boxjenkins-.html#cb275-4"></a><span class="kw">library</span>(tseries)</span>
-<span id="cb275-5"><a href="chap-boxjenkins-.html#cb275-5"></a><span class="kw">library</span>(urca)</span>
-<span id="cb275-6"><a href="chap-boxjenkins-.html#cb275-6"></a><span class="kw">library</span>(forecast)</span></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="chap-boxjenkins-.html#cb270-1"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb270-2"><a href="chap-boxjenkins-.html#cb270-2"></a><span class="kw">library</span>(gridExtra)</span>
+<span id="cb270-3"><a href="chap-boxjenkins-.html#cb270-3"></a><span class="kw">library</span>(reshape2)</span>
+<span id="cb270-4"><a href="chap-boxjenkins-.html#cb270-4"></a><span class="kw">library</span>(tseries)</span>
+<span id="cb270-5"><a href="chap-boxjenkins-.html#cb270-5"></a><span class="kw">library</span>(urca)</span>
+<span id="cb270-6"><a href="chap-boxjenkins-.html#cb270-6"></a><span class="kw">library</span>(forecast)</span></code></pre></div>
 </div>
 </div>
             </section>

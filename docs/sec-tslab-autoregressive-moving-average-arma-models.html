@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>ARMA(<span class="math inline">\(p,q\)</span>) models have a rich history in the time series literature, but they are not nearly as common in ecology as plain AR(<span class="math inline">\(p\)</span>) models. As we discussed in lecture, both the ACF and PACF are important tools when trying to identify the appropriate order of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. Here we will see how to simulate time series from AR(<span class="math inline">\(p\)</span>), MA(<span class="math inline">\(q\)</span>), and ARMA(<span class="math inline">\(p,q\)</span>) processes, as well as fit time series models to data based on insights gathered from the ACF and PACF.</p>
 <p>We can write an ARMA(<span class="math inline">\(p,q\)</span>) as a mixture of AR(<span class="math inline">\(p\)</span>) and MA(<span class="math inline">\(q\)</span>) models, such that</p>
 <p><span class="math display" id="eq:ARMAdefn">\[\begin{equation}
-\tag{4.25}
+\tag{4.24}
 x_t = \phi_1x_{t-1} + \phi_2x_{t-2} + \dots + \phi_p x_{t-p} + w_t + \theta w_{t-1} + \theta_2 w_{t-2} + \dots + \theta_q x_{t-q},
 \end{equation}\]</span></p>
 <p>and the <span class="math inline">\(w_t\)</span> are white noise.</p>
@@ -477,29 +477,29 @@ x_t = \phi_1x_{t-1} + \phi_2x_{t-2} + \dots + \phi_p x_{t-p} + w_t + \theta w_{t
 <p>We have already seen how to simulate AR(<span class="math inline">\(p\)</span>) and MA(<span class="math inline">\(q\)</span>) models with <code>arima.sim()</code>; the same concepts apply to ARMA(<span class="math inline">\(p,q\)</span>) models and therefore we will not do that here. Instead, we will move on to fitting ARMA(<span class="math inline">\(p,q\)</span>) models when we only have a realization of the process (<em>i.e.</em>, data) and do not know the underlying parameters that generated it.</p>
 <p>The function <code>arima()</code> accepts a number of arguments, but two of them are most important:</p>
 <ul>
-<li><code>x</code> a univariate time series</li>
-<li><code>order</code> a vector of length 3 specifying the order of ARIMA(p,d,q) model</li>
+<li><code>x</code>: a univariate time series</li>
+<li><code>order</code>: a vector of length 3 specifying the order of ARIMA(p,d,q) model</li>
 </ul>
 <p>In addition, note that by default <code>arima()</code> will estimate an underlying mean of the time series unless <span class="math inline">\(d&gt;0\)</span>. For example, an AR(1) process with mean <span class="math inline">\(\mu\)</span> would be written</p>
 <p><span class="math display" id="eq:AR1mean">\[\begin{equation}
-\tag{4.26}
+\tag{4.25}
 x_t = \mu + \phi (x_{t-1} - \mu) + w_t.
 \end{equation}\]</span></p>
-<p>If you know for a fact that the time series data have a mean of zero (<em>e.g.</em>, you already subtracted the mean from them), you should include the argument <code>include.mean=FALSE</code>, which is set to <code>TRUE</code> by default. Note that ignoring and not estimating a mean in ARMA(<span class="math inline">\(p,q\)</span>) models when one exists will bias the estimates of all other parameters.</p>
+<p>If you know for a fact that the time series data have a mean of zero (<em>e.g.</em>, you already subtracted the mean from them), you should include the argument <code>include.mean = FALSE</code>, which is set to <code>TRUE</code> by default. Note that ignoring and not estimating a mean in ARMA(<span class="math inline">\(p,q\)</span>) models when one exists will bias the estimates of all other parameters.</p>
 <p>Let’s see an example of how <code>arima()</code> works. First we’ll simulate an ARMA(2,2) model and then estimate the parameters to see how well we can recover them. In addition, we’ll add in a constant to create a non-zero mean, which <code>arima()</code> reports as <code>intercept</code> in its output.</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb263-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-2"></a><span class="co">## ARMA(2,2) description for arim.sim()</span></span>
-<span id="cb263-3"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-3"></a>ARMA22 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="dt">ar =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.7</span>, <span class="fl">0.2</span>), <span class="dt">ma =</span> <span class="kw">c</span>(<span class="fl">0.7</span>, </span>
-<span id="cb263-4"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-4"></a>    <span class="fl">0.2</span>))</span>
-<span id="cb263-5"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-5"></a><span class="co">## mean of process</span></span>
-<span id="cb263-6"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-6"></a>mu &lt;-<span class="st"> </span><span class="dv">5</span></span>
-<span id="cb263-7"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-7"></a><span class="co">## simulated process (+ mean)</span></span>
-<span id="cb263-8"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-8"></a>ARMA.sim &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">10000</span>, <span class="dt">model =</span> ARMA22) <span class="op">+</span><span class="st"> </span>mu</span>
-<span id="cb263-9"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-9"></a><span class="co">## estimate parameters</span></span>
-<span id="cb263-10"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb263-10"></a><span class="kw">arima</span>(<span class="dt">x =</span> ARMA.sim, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb258-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-2"></a><span class="co">## ARMA(2,2) description for arim.sim()</span></span>
+<span id="cb258-3"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-3"></a>ARMA22 &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="dt">ar =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.7</span>, <span class="fl">0.2</span>), <span class="dt">ma =</span> <span class="kw">c</span>(<span class="fl">0.7</span>, </span>
+<span id="cb258-4"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-4"></a>    <span class="fl">0.2</span>))</span>
+<span id="cb258-5"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-5"></a><span class="co">## mean of process</span></span>
+<span id="cb258-6"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-6"></a>mu &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb258-7"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-7"></a><span class="co">## simulated process (+ mean)</span></span>
+<span id="cb258-8"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-8"></a>ARMA_sim &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">10000</span>, <span class="dt">model =</span> ARMA22) <span class="op">+</span><span class="st"> </span>mu</span>
+<span id="cb258-9"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-9"></a><span class="co">## estimate parameters</span></span>
+<span id="cb258-10"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb258-10"></a><span class="kw">arima</span>(<span class="dt">x =</span> ARMA_sim, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>))</span></code></pre></div>
 <pre><code>
 Call:
-arima(x = ARMA.sim, order = c(2, 0, 2))
+arima(x = ARMA_sim, order = c(2, 0, 2))
 
 Coefficients:
           ar1     ar2     ma1     ma2  intercept
@@ -512,28 +512,28 @@ sigma^2 estimated as 0.9972:  log likelihood = -14175.92,  aic = 28363.84</code>
 <div id="sec-tslab-searching-over-model-orders" class="section level3">
 <h3><span class="header-section-number">4.9.2</span> Searching over model orders</h3>
 <p>In an ideal situation, you could examine the ACF and PACF of the time series of interest and immediately decipher what orders of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> must have generated the data, but that doesn’t always work in practice. Instead, we are often left with the task of searching over several possible model forms and seeing which of them provides the most parsimonious fit to the data. There are two easy ways to do this for ARIMA models in R. The first is to write a little script that loops ove the possible dimensions of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>. Let’s try that for the process we simulated above and search over orders of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> from 0-3 (it will take a few moments to run and will likely report an error about a “<code>possible convergence problem</code>”, which you can ignore).</p>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-1"></a><span class="co">## empty list to store model fits</span></span>
-<span id="cb265-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-2"></a>ARMA.res &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
-<span id="cb265-3"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-3"></a><span class="co">## set counter</span></span>
-<span id="cb265-4"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-4"></a>cc &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb265-5"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-5"></a><span class="co">## loop over AR</span></span>
-<span id="cb265-6"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-6"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>) {</span>
-<span id="cb265-7"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-7"></a>    <span class="co">## loop over MA</span></span>
-<span id="cb265-8"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-8"></a>    <span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>) {</span>
-<span id="cb265-9"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-9"></a>        ARMA.res[[cc]] &lt;-<span class="st"> </span><span class="kw">arima</span>(<span class="dt">x =</span> ARMA.sim, <span class="dt">order =</span> <span class="kw">c</span>(p, <span class="dv">0</span>, </span>
-<span id="cb265-10"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-10"></a>            q))</span>
-<span id="cb265-11"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-11"></a>        cc &lt;-<span class="st"> </span>cc <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb265-12"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-12"></a>    }</span>
-<span id="cb265-13"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb265-13"></a>}</span></code></pre></div>
-<pre><code>Warning in arima(x = ARMA.sim, order = c(p, 0, q)): possible convergence
-problem: optim gave code = 1</code></pre>
-<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb267-1"></a><span class="co">## get AIC values for model evaluation</span></span>
-<span id="cb267-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb267-2"></a>ARMA.AIC &lt;-<span class="st"> </span><span class="kw">sapply</span>(ARMA.res, <span class="cf">function</span>(x) x<span class="op">$</span>aic)</span>
-<span id="cb267-3"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb267-3"></a><span class="co">## model with lowest AIC is the best</span></span>
-<span id="cb267-4"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb267-4"></a>ARMA.res[[<span class="kw">which</span>(ARMA.AIC <span class="op">==</span><span class="st"> </span><span class="kw">min</span>(ARMA.AIC))]]</span></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-1"></a><span class="co">## empty list to store model fits</span></span>
+<span id="cb260-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-2"></a>ARMA_res &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
+<span id="cb260-3"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-3"></a><span class="co">## set counter</span></span>
+<span id="cb260-4"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-4"></a>cc &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb260-5"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-5"></a><span class="co">## loop over AR</span></span>
+<span id="cb260-6"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-6"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>) {</span>
+<span id="cb260-7"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-7"></a>    <span class="co">## loop over MA</span></span>
+<span id="cb260-8"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-8"></a>    <span class="cf">for</span> (q <span class="cf">in</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>) {</span>
+<span id="cb260-9"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-9"></a>        ARMA_res[[cc]] &lt;-<span class="st"> </span><span class="kw">arima</span>(<span class="dt">x =</span> ARMA_sim, <span class="dt">order =</span> <span class="kw">c</span>(p, <span class="dv">0</span>, </span>
+<span id="cb260-10"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-10"></a>            q))</span>
+<span id="cb260-11"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-11"></a>        cc &lt;-<span class="st"> </span>cc <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb260-12"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-12"></a>    }</span>
+<span id="cb260-13"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-13"></a>}</span></code></pre></div>
+<pre><code>Warning in arima(x = ARMA_sim, order = c(p, 0, q)): possible convergence problem:
+optim gave code = 1</code></pre>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb262-1"></a><span class="co">## get AIC values for model evaluation</span></span>
+<span id="cb262-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb262-2"></a>ARMA_AIC &lt;-<span class="st"> </span><span class="kw">sapply</span>(ARMA_res, <span class="cf">function</span>(x) x<span class="op">$</span>aic)</span>
+<span id="cb262-3"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb262-3"></a><span class="co">## model with lowest AIC is the best</span></span>
+<span id="cb262-4"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb262-4"></a>ARMA_res[[<span class="kw">which</span>(ARMA_AIC <span class="op">==</span><span class="st"> </span><span class="kw">min</span>(ARMA_AIC))]]</span></code></pre></div>
 <pre><code>
 Call:
-arima(x = ARMA.sim, order = c(p, 0, q))
+arima(x = ARMA_sim, order = c(p, 0, q))
 
 Coefficients:
           ar1     ar2     ma1     ma2  intercept
@@ -542,9 +542,9 @@ s.e.   0.0291  0.0284  0.0289  0.0236     0.0125
 
 sigma^2 estimated as 0.9972:  log likelihood = -14175.92,  aic = 28363.84</code></pre>
 <p>It looks like our search worked, so let’s look at the other method for fitting ARIMA models. The <code>auto.arima()</code> function in the <strong>forecast</strong> package will conduct an automatic search over all possible orders of ARIMA models that you specify. For details, type <code>?auto.arima</code> after loading the package. Let’s repeat our search using the same criteria.</p>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb269-1"></a><span class="co">## find best ARMA(p,q) model</span></span>
-<span id="cb269-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb269-2"></a><span class="kw">auto.arima</span>(ARMA.sim, <span class="dt">start.p =</span> <span class="dv">0</span>, <span class="dt">max.p =</span> <span class="dv">3</span>, <span class="dt">start.q =</span> <span class="dv">0</span>, <span class="dt">max.q =</span> <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>Series: ARMA.sim 
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb264-1"></a><span class="co">## find best ARMA(p,q) model</span></span>
+<span id="cb264-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb264-2"></a><span class="kw">auto.arima</span>(ARMA_sim, <span class="dt">start.p =</span> <span class="dv">0</span>, <span class="dt">max.p =</span> <span class="dv">3</span>, <span class="dt">start.q =</span> <span class="dv">0</span>, <span class="dt">max.q =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>Series: ARMA_sim 
 ARIMA(2,0,2) with non-zero mean 
 
 Coefficients:
@@ -554,8 +554,8 @@ s.e.   0.0291  0.0284  0.0289  0.0236  0.0125
 
 sigma^2 estimated as 0.9977:  log likelihood=-14175.92
 AIC=28363.84   AICc=28363.84   BIC=28407.1</code></pre>
-<p>We get the same results with an increase in speed and less coding, which is nice. If you want to see the form for each of the models checked by <code>auto.arima()</code> and their associated AIC values, include the argument <code>trace=1</code>.</p>
-
+<p>We get the same results with an increase in speed and less coding, which is nice. If you want to see the form for each of the models checked by <code>auto.arima()</code> and their associated AIC values, include the argument <code>trace = 1</code>.</p>
+<p>_p_coefage</p>
 </div>
 </div>
             </section>

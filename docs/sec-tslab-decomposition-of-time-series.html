@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -486,13 +486,13 @@ x_t = m_t + s_t + e_t,
 \end{equation}\]</span></p>
 <p>It is important to note here that our time series of the estimated trend <span class="math inline">\(\{\hat{m}_t\}\)</span> is actually shorter than the observed time series by <span class="math inline">\(2a\)</span> units.</p>
 <p>Conveniently, R has the built-in function <code>filter()</code> for estimating moving-average (and other) linear filters. In addition to specifying the time series to be filtered, we need to pass in the filter weights (and 2 other arguments we won’t worry about here–type <code>?filter</code> to get more information). The easiest way to create the filter is with the <code>rep()</code> function:</p>
-<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="sec-tslab-decomposition-of-time-series.html#cb214-1"></a><span class="co">## weights for moving avg</span></span>
-<span id="cb214-2"><a href="sec-tslab-decomposition-of-time-series.html#cb214-2"></a>fltr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dt">times =</span> <span class="dv">11</span>), <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">12</span></span></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="sec-tslab-decomposition-of-time-series.html#cb215-1"></a><span class="co">## weights for moving avg</span></span>
+<span id="cb215-2"><a href="sec-tslab-decomposition-of-time-series.html#cb215-2"></a>fltr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span>, <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dt">times =</span> <span class="dv">11</span>), <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">12</span></span></code></pre></div>
 <p>Now let’s get our estimate of the trend <span class="math inline">\(\{\hat{m}\}\)</span> with <code>filter()</code>} and plot it:</p>
-<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="sec-tslab-decomposition-of-time-series.html#cb215-1"></a><span class="co">## estimate of trend</span></span>
-<span id="cb215-2"><a href="sec-tslab-decomposition-of-time-series.html#cb215-2"></a>co2.trend &lt;-<span class="st"> </span><span class="kw">filter</span>(co2, <span class="dt">filter =</span> fltr, <span class="dt">method =</span> <span class="st">&quot;convo&quot;</span>, <span class="dt">sides =</span> <span class="dv">2</span>)</span>
-<span id="cb215-3"><a href="sec-tslab-decomposition-of-time-series.html#cb215-3"></a><span class="co">## plot the trend</span></span>
-<span id="cb215-4"><a href="sec-tslab-decomposition-of-time-series.html#cb215-4"></a><span class="kw">plot.ts</span>(co2.trend, <span class="dt">ylab =</span> <span class="st">&quot;Trend&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="sec-tslab-decomposition-of-time-series.html#cb216-1"></a><span class="co">## estimate of trend</span></span>
+<span id="cb216-2"><a href="sec-tslab-decomposition-of-time-series.html#cb216-2"></a>co2_trend &lt;-<span class="st"> </span><span class="kw">filter</span>(co2, <span class="dt">filter =</span> fltr, <span class="dt">method =</span> <span class="st">&quot;convo&quot;</span>, <span class="dt">sides =</span> <span class="dv">2</span>)</span>
+<span id="cb216-3"><a href="sec-tslab-decomposition-of-time-series.html#cb216-3"></a><span class="co">## plot the trend</span></span>
+<span id="cb216-4"><a href="sec-tslab-decomposition-of-time-series.html#cb216-4"></a><span class="kw">plot.ts</span>(co2_trend, <span class="dt">ylab =</span> <span class="st">&quot;Trend&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>The trend is a more-or-less smoothly increasing function over time, the average slope of which does indeed appear to be increasing over time as well (Figure <a href="sec-tslab-decomposition-of-time-series.html#fig:tslab-plotTrendTSb">4.3</a>).</p>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotTrendTSb"></span>
@@ -510,11 +510,11 @@ Figure 4.3: Time series of the estimated trend <span class="math inline">\(\{\ha
 \hat{s}_t = x_t - \hat{m}_t,
 \end{equation}\]</span></p>
 <p>which is really easy to do in R:</p>
-<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="sec-tslab-decomposition-of-time-series.html#cb216-1"></a><span class="co">## seasonal effect over time</span></span>
-<span id="cb216-2"><a href="sec-tslab-decomposition-of-time-series.html#cb216-2"></a>co2<span class="fl">.1</span>T &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2.trend</span></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="sec-tslab-decomposition-of-time-series.html#cb217-1"></a><span class="co">## seasonal effect over time</span></span>
+<span id="cb217-2"><a href="sec-tslab-decomposition-of-time-series.html#cb217-2"></a>co2_seas &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2_trend</span></code></pre></div>
 <p>This estimate of the seasonal effect for each time <span class="math inline">\(t\)</span> also contains the random error <span class="math inline">\(e_t\)</span>, however, which can be seen by plotting the time series and careful comparison of Equations <a href="sec-tslab-decomposition-of-time-series.html#eq:classDecomp">(4.1)</a> and <a href="sec-tslab-decomposition-of-time-series.html#eq:seasEst">(4.4)</a>.</p>
-<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="sec-tslab-decomposition-of-time-series.html#cb217-1"></a><span class="co">## plot the monthly seasonal effects</span></span>
-<span id="cb217-2"><a href="sec-tslab-decomposition-of-time-series.html#cb217-2"></a><span class="kw">plot.ts</span>(co2<span class="fl">.1</span>T, <span class="dt">ylab =</span> <span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="sec-tslab-decomposition-of-time-series.html#cb218-1"></a><span class="co">## plot the monthly seasonal effects</span></span>
+<span id="cb218-2"><a href="sec-tslab-decomposition-of-time-series.html#cb218-2"></a><span class="kw">plot.ts</span>(co2_seas, <span class="dt">ylab =</span> <span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotSeasTSb"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotSeasTSb-1.png" alt="Time series of seasonal effects plus random errors for the atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i, measured monthly from March 1958 to present." width="80%" />
@@ -523,24 +523,24 @@ Figure 4.4: Time series of seasonal effects plus random errors for the atmospher
 </p>
 </div>
 <p>We can obtain the overall seasonal effect by averaging the estimates of <span class="math inline">\(\{\hat{s}_t\}\)</span> for each month and repeating this sequence over all years.</p>
-<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="sec-tslab-decomposition-of-time-series.html#cb218-1"></a><span class="co">## length of ts</span></span>
-<span id="cb218-2"><a href="sec-tslab-decomposition-of-time-series.html#cb218-2"></a>ll &lt;-<span class="st"> </span><span class="kw">length</span>(co2<span class="fl">.1</span>T)</span>
-<span id="cb218-3"><a href="sec-tslab-decomposition-of-time-series.html#cb218-3"></a><span class="co">## frequency (ie, 12)</span></span>
-<span id="cb218-4"><a href="sec-tslab-decomposition-of-time-series.html#cb218-4"></a>ff &lt;-<span class="st"> </span><span class="kw">frequency</span>(co2<span class="fl">.1</span>T)</span>
-<span id="cb218-5"><a href="sec-tslab-decomposition-of-time-series.html#cb218-5"></a><span class="co">## number of periods (years); %/% is integer division</span></span>
-<span id="cb218-6"><a href="sec-tslab-decomposition-of-time-series.html#cb218-6"></a>periods &lt;-<span class="st"> </span>ll<span class="op">%/%</span>ff</span>
-<span id="cb218-7"><a href="sec-tslab-decomposition-of-time-series.html#cb218-7"></a><span class="co">## index of cumulative month</span></span>
-<span id="cb218-8"><a href="sec-tslab-decomposition-of-time-series.html#cb218-8"></a>index &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, ll, <span class="dt">by =</span> ff) <span class="op">-</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb218-9"><a href="sec-tslab-decomposition-of-time-series.html#cb218-9"></a><span class="co">## get mean by month</span></span>
-<span id="cb218-10"><a href="sec-tslab-decomposition-of-time-series.html#cb218-10"></a>mm &lt;-<span class="st"> </span><span class="kw">numeric</span>(ff)</span>
-<span id="cb218-11"><a href="sec-tslab-decomposition-of-time-series.html#cb218-11"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ff) {</span>
-<span id="cb218-12"><a href="sec-tslab-decomposition-of-time-series.html#cb218-12"></a>    mm[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(co2<span class="fl">.1</span>T[index <span class="op">+</span><span class="st"> </span>i], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb218-13"><a href="sec-tslab-decomposition-of-time-series.html#cb218-13"></a>}</span>
-<span id="cb218-14"><a href="sec-tslab-decomposition-of-time-series.html#cb218-14"></a><span class="co">## subtract mean to make overall mean=0</span></span>
-<span id="cb218-15"><a href="sec-tslab-decomposition-of-time-series.html#cb218-15"></a>mm &lt;-<span class="st"> </span>mm <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(mm)</span></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="sec-tslab-decomposition-of-time-series.html#cb219-1"></a><span class="co">## length of ts</span></span>
+<span id="cb219-2"><a href="sec-tslab-decomposition-of-time-series.html#cb219-2"></a>ll &lt;-<span class="st"> </span><span class="kw">length</span>(co2_seas)</span>
+<span id="cb219-3"><a href="sec-tslab-decomposition-of-time-series.html#cb219-3"></a><span class="co">## frequency (ie, 12)</span></span>
+<span id="cb219-4"><a href="sec-tslab-decomposition-of-time-series.html#cb219-4"></a>ff &lt;-<span class="st"> </span><span class="kw">frequency</span>(co2_seas)</span>
+<span id="cb219-5"><a href="sec-tslab-decomposition-of-time-series.html#cb219-5"></a><span class="co">## number of periods (years); %/% is integer division</span></span>
+<span id="cb219-6"><a href="sec-tslab-decomposition-of-time-series.html#cb219-6"></a>periods &lt;-<span class="st"> </span>ll<span class="op">%/%</span>ff</span>
+<span id="cb219-7"><a href="sec-tslab-decomposition-of-time-series.html#cb219-7"></a><span class="co">## index of cumulative month</span></span>
+<span id="cb219-8"><a href="sec-tslab-decomposition-of-time-series.html#cb219-8"></a>index &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, ll, <span class="dt">by =</span> ff) <span class="op">-</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb219-9"><a href="sec-tslab-decomposition-of-time-series.html#cb219-9"></a><span class="co">## get mean by month</span></span>
+<span id="cb219-10"><a href="sec-tslab-decomposition-of-time-series.html#cb219-10"></a>mm &lt;-<span class="st"> </span><span class="kw">numeric</span>(ff)</span>
+<span id="cb219-11"><a href="sec-tslab-decomposition-of-time-series.html#cb219-11"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>ff) {</span>
+<span id="cb219-12"><a href="sec-tslab-decomposition-of-time-series.html#cb219-12"></a>    mm[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(co2_seas[index <span class="op">+</span><span class="st"> </span>i], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb219-13"><a href="sec-tslab-decomposition-of-time-series.html#cb219-13"></a>}</span>
+<span id="cb219-14"><a href="sec-tslab-decomposition-of-time-series.html#cb219-14"></a><span class="co">## subtract mean to make overall mean = 0</span></span>
+<span id="cb219-15"><a href="sec-tslab-decomposition-of-time-series.html#cb219-15"></a>mm &lt;-<span class="st"> </span>mm <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(mm)</span></code></pre></div>
 <p>Before we create the entire time series of seasonal effects, let’s plot them for each month to see what is happening within a year:</p>
-<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="sec-tslab-decomposition-of-time-series.html#cb219-1"></a><span class="co">## plot the monthly seasonal effects</span></span>
-<span id="cb219-2"><a href="sec-tslab-decomposition-of-time-series.html#cb219-2"></a><span class="kw">plot.ts</span>(mm, <span class="dt">ylab =</span> <span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="sec-tslab-decomposition-of-time-series.html#cb220-1"></a><span class="co">## plot the monthly seasonal effects</span></span>
+<span id="cb220-2"><a href="sec-tslab-decomposition-of-time-series.html#cb220-2"></a><span class="kw">plot.ts</span>(mm, <span class="dt">ylab =</span> <span class="st">&quot;Seasonal effect&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>It looks like, on average, that the CO<span class="math inline">\(_2\)</span> concentration is highest in spring (March) and lowest in summer (August) (Figure <a href="sec-tslab-decomposition-of-time-series.html#fig:tslab-plotSeasMean">4.5</a>). (<em>Aside</em>: Do you know why this is?)</p>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotSeasMean"></span>
@@ -550,9 +550,9 @@ Figure 4.5: Estimated monthly seasonal effects for the atmospheric CO<span class
 </p>
 </div>
 <p>Finally, let’s create the entire time series of seasonal effects <span class="math inline">\(\{\hat{s}_t\}\)</span>:</p>
-<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="sec-tslab-decomposition-of-time-series.html#cb220-1"></a><span class="co">## create ts object for season</span></span>
-<span id="cb220-2"><a href="sec-tslab-decomposition-of-time-series.html#cb220-2"></a>co2.seas &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">rep</span>(mm, periods <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)[<span class="kw">seq</span>(ll)], <span class="dt">start =</span> <span class="kw">start</span>(co2<span class="fl">.1</span>T), </span>
-<span id="cb220-3"><a href="sec-tslab-decomposition-of-time-series.html#cb220-3"></a>    <span class="dt">frequency =</span> ff)</span></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="sec-tslab-decomposition-of-time-series.html#cb221-1"></a><span class="co">## create ts object for season</span></span>
+<span id="cb221-2"><a href="sec-tslab-decomposition-of-time-series.html#cb221-2"></a>co2_seas_ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">rep</span>(mm, periods <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)[<span class="kw">seq</span>(ll)], <span class="dt">start =</span> <span class="kw">start</span>(co2_seas), </span>
+<span id="cb221-3"><a href="sec-tslab-decomposition-of-time-series.html#cb221-3"></a>    <span class="dt">frequency =</span> ff)</span></code></pre></div>
 </div>
 <div id="sec-tslab-completing-the-model" class="section level3">
 <h3><span class="header-section-number">4.2.3</span> Completing the model</h3>
@@ -562,11 +562,12 @@ Figure 4.5: Estimated monthly seasonal effects for the atmospheric CO<span class
 \hat{e}_t = x_t - \hat{m}_t - \hat{s}_t.
 \end{equation}\]</span></p>
 <p>Again, this is really easy in R:</p>
-<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="sec-tslab-decomposition-of-time-series.html#cb221-1"></a><span class="co">## random errors over time</span></span>
-<span id="cb221-2"><a href="sec-tslab-decomposition-of-time-series.html#cb221-2"></a>co2.err &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2.trend <span class="op">-</span><span class="st"> </span>co2.seas</span></code></pre></div>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="sec-tslab-decomposition-of-time-series.html#cb222-1"></a><span class="co">## random errors over time</span></span>
+<span id="cb222-2"><a href="sec-tslab-decomposition-of-time-series.html#cb222-2"></a>co2_err &lt;-<span class="st"> </span>co2 <span class="op">-</span><span class="st"> </span>co2_trend <span class="op">-</span><span class="st"> </span>co2_seas_ts</span></code></pre></div>
 <p>Now that we have all 3 of our model components, let’s plot them together with the observed data <span class="math inline">\(\{x_t\}\)</span>. The results are shown in Figure <a href="sec-tslab-decomposition-of-time-series.html#fig:tslab-plotTrSeas">4.6</a>.</p>
-<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="sec-tslab-decomposition-of-time-series.html#cb222-1"></a><span class="co">## plot the obs ts, trend &amp; seasonal effect</span></span>
-<span id="cb222-2"><a href="sec-tslab-decomposition-of-time-series.html#cb222-2"></a><span class="kw">plot</span>(<span class="kw">cbind</span>(co2, co2.trend, co2.seas, co2.err), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="sec-tslab-decomposition-of-time-series.html#cb223-1"></a><span class="co">## plot the obs ts, trend &amp; seasonal effect</span></span>
+<span id="cb223-2"><a href="sec-tslab-decomposition-of-time-series.html#cb223-2"></a><span class="kw">plot</span>(<span class="kw">cbind</span>(co2, co2_trend, co2_seas_ts, co2_err), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, </span>
+<span id="cb223-3"><a href="sec-tslab-decomposition-of-time-series.html#cb223-3"></a>    <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotTrSeas"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotTrSeas-1.png" alt="Time series of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) along with the estimated trend, seasonal effects, and random errors." width="80%" />
@@ -578,20 +579,20 @@ Figure 4.6: Time series of the observed atmospheric CO<span class="math inline">
 <div id="sec-tslab-using-verbdecompose-for-decomposition" class="section level3">
 <h3><span class="header-section-number">4.2.4</span> Using <code>decompose()</code> for decomposition</h3>
 <p>Now that we have seen how to estimate and plot the various components of a classical decomposition model in a piecewise manner, let’s see how to do this in one step in R with the function <code>decompose()</code>, which accepts a <strong>ts</strong> object as input and returns an object of class <strong>decomposed.ts</strong>.</p>
-<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="sec-tslab-decomposition-of-time-series.html#cb223-1"></a><span class="co">## decomposition of CO2 data</span></span>
-<span id="cb223-2"><a href="sec-tslab-decomposition-of-time-series.html#cb223-2"></a>co2.decomp &lt;-<span class="st"> </span><span class="kw">decompose</span>(co2)</span></code></pre></div>
-<p><code>co2.decomp</code> is a list with the following elements, which should be familiar by now:</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb224-1"><a href="sec-tslab-decomposition-of-time-series.html#cb224-1"></a><span class="co">## decomposition of CO2 data</span></span>
+<span id="cb224-2"><a href="sec-tslab-decomposition-of-time-series.html#cb224-2"></a>co2_decomp &lt;-<span class="st"> </span><span class="kw">decompose</span>(co2)</span></code></pre></div>
+<p><code>co2_decomp</code> is a list with the following elements, which should be familiar by now:</p>
 <ul>
-<li><pre><code>```x```   the observed time series $\{x_t\}$</code></pre></li>
-<li><pre><code>```seasonal```   time series of estimated seasonal component $\{\hat{s}_t\}$</code></pre></li>
-<li><pre><code>```figure```   mean seasonal effect (```length(figure) == frequency(x)```)</code></pre></li>
-<li><pre><code>```trend```   time series of estimated trend $\{\hat{m}_t\}$</code></pre></li>
-<li><pre><code>```random```   time series of random errors $\{\hat{e}_t\}$</code></pre></li>
-<li><pre><code>```type```   type of error (```&quot;additive&quot;``` or ```&quot;multiplicative&quot;```)</code></pre></li>
+<li><code>x</code>: the observed time series <span class="math inline">\(\{x_t\}\)</span></li>
+<li><code>seasonal</code>: time series of estimated seasonal component <span class="math inline">\(\{\hat{s}_t\}\)</span></li>
+<li><code>figure</code>: mean seasonal effect (<code>length(figure) == frequency(x)</code>)</li>
+<li><code>trend</code>: time series of estimated trend <span class="math inline">\(\{\hat{m}_t\}\)</span></li>
+<li><code>random</code>: time series of random errors <span class="math inline">\(\{\hat{e}_t\}\)</span></li>
+<li><code>type</code>: type of error (<code>"additive"</code> or <code>"multiplicative"</code>)</li>
 </ul>
 <p>We can easily make plots of the output and compare them to those in Figure <a href="sec-tslab-decomposition-of-time-series.html#fig:tslab-plotTrSeas">4.6</a>:</p>
-<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="sec-tslab-decomposition-of-time-series.html#cb230-1"></a><span class="co">## plot the obs ts, trend &amp; seasonal effect</span></span>
-<span id="cb230-2"><a href="sec-tslab-decomposition-of-time-series.html#cb230-2"></a><span class="kw">plot</span>(co2.decomp, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="sec-tslab-decomposition-of-time-series.html#cb225-1"></a><span class="co">## plot the obs ts, trend &amp; seasonal effect</span></span>
+<span id="cb225-2"><a href="sec-tslab-decomposition-of-time-series.html#cb225-2"></a><span class="kw">plot</span>(co2_decomp, <span class="dt">yax.flip =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotDecompB"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotDecompB-1.png" alt="Time series of the observed atmospheric CO\(_2\) concentration at Mauna Loa, Hawai’i (top) along with the estimated trend, seasonal effects, and random errors obtained with the function decompose()." width="80%" />
@@ -600,7 +601,7 @@ Figure 4.7: Time series of the observed atmospheric CO<span class="math inline">
 </p>
 </div>
 <p>The results obtained with <code>decompose()</code> (Figure <a href="sec-tslab-decomposition-of-time-series.html#fig:tslab-plotDecompB">4.7</a>) are identical to those we estimated previously.</p>
-<p>Another nice feature of the <code>decompose()</code> function is that it can be used for decomposition models with multiplicative (<em>i.e.</em>, non-additive) errors (<em>e.g.</em>, if the original time series had a seasonal amplitude that increased with time). To do, so pass in the argument <code>type="multiplicative"</code>, which is set to <code>type="additive"</code> by default.</p>
+<p>Another nice feature of the <code>decompose()</code> function is that it can be used for decomposition models with multiplicative (<em>i.e.</em>, non-additive) errors (<em>e.g.</em>, if the original time series had a seasonal amplitude that increased with time). To do, so pass in the argument <code>type = "multiplicative"</code>, which is set to <code>type = "additive"</code> by default.</p>
 </div>
 </div>
             </section>

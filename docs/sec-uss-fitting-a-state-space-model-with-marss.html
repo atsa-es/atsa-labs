@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -489,20 +489,20 @@ x_0 = \mu
 \tag{6.2}
 \end{equation}\]</span></p>
 <p>To fit this with <code>MARSS()</code>, we need to write Equation <a href="sec-uss-fitting-a-state-space-model-with-marss.html#eq:uss-ar1witherror">(6.2)</a> as Equation <a href="sec-uss-fitting-a-state-space-model-with-marss.html#eq:uss-marss">(6.1)</a>. Equation <a href="sec-uss-fitting-a-state-space-model-with-marss.html#eq:uss-marss">(6.1)</a> is in MATRIX form. In the model list, the parameters must be written EXACTLY like they would be written for Equation <a href="sec-uss-fitting-a-state-space-model-with-marss.html#eq:uss-marss">(6.1)</a>. For example, <code>1</code> is the number 1 in R. It is not a matrix:</p>
-<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb379-1"></a><span class="kw">class</span>(<span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb374-1"></a><span class="kw">class</span>(<span class="dv">1</span>)</span></code></pre></div>
 <pre><code>[1] &quot;numeric&quot;</code></pre>
 <p>If you need a 1 (or 0) in your model, you need to pass in the parameter as a <span class="math inline">\(1 \times 1\)</span> matrix: <code>matrix(1)</code>.</p>
 <p>With that mind, our model list for Equation <a href="sec-uss-fitting-a-state-space-model-with-marss.html#eq:uss-ar1witherror">(6.2)</a> is:</p>
-<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb381-1"></a>mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </span>
-<span id="cb381-2"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb381-2"></a>    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>), <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), </span>
-<span id="cb381-3"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb381-3"></a>    <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb376-1"></a>mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">U =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </span>
+<span id="cb376-2"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb376-2"></a>    <span class="dt">Z =</span> <span class="kw">matrix</span>(<span class="dv">1</span>), <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="dv">0</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>), <span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="st">&quot;mu&quot;</span>), </span>
+<span id="cb376-3"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb376-3"></a>    <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p>We can simulate some AR(1) plus error data like so</p>
-<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb382-1"></a>q &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
-<span id="cb382-2"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb382-2"></a>r &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
-<span id="cb382-3"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb382-3"></a>n &lt;-<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb382-4"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb382-4"></a>y &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(q))) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(r))</span></code></pre></div>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb377-1"></a>q &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
+<span id="cb377-2"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb377-2"></a>r &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
+<span id="cb377-3"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb377-3"></a>n &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb377-4"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb377-4"></a>y &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(q))) <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">0</span>, <span class="kw">sqrt</span>(r))</span></code></pre></div>
 <p>And then fit with <code>MARSS()</code> using <code>mod.list</code> above:</p>
-<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb383-1"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(y, <span class="dt">model =</span> mod.list)</span></code></pre></div>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb378-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb378-1"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(y, <span class="dt">model =</span> mod.list)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 16 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -523,8 +523,8 @@ Initial states (x0) defined at t=0
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>If we wanted to fix <span class="math inline">\(q=0.1\)</span>, then <span class="math inline">\(\mathbf{Q}=[0.1]\)</span> (a <span class="math inline">\(1 \times 1\)</span> matrix with 0.1). We just change <code>mod.list$Q</code> and re-fit:</p>
-<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb385-1"></a>mod.list<span class="op">$</span>Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="fl">0.1</span>)</span>
-<span id="cb385-2"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb385-2"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(y, <span class="dt">model =</span> mod.list)</span></code></pre></div>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb380-1"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb380-1"></a>mod.list<span class="op">$</span>Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="fl">0.1</span>)</span>
+<span id="cb380-2"><a href="sec-uss-fitting-a-state-space-model-with-marss.html#cb380-2"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(y, <span class="dt">model =</span> mod.list)</span></code></pre></div>
 </div>
             </section>
 

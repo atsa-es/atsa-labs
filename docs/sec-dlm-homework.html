@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -498,14 +498,14 @@ R_t = a S_t e^{-b S + v_t}.
 <a href="https://www.ramlegacy.org/" class="uri">https://www.ramlegacy.org/</a></p>
 <p>For this exercise, we will use spawner-recruit data for sockeye salmon (<em>Oncorhynchus nerka</em>) from the Kvichak River in SW Alaska that span the years 1952-1989. In addition, we’ll examine the potential effects of the Pacific Decadal Oscillation (PDO) during the salmon’s first year in the ocean, which is widely believed to be a “bottleneck” to survival.</p>
 <p>These data are in the <strong>atsalibrary</strong> package on GitHub. If needed, install using the <strong>devtools</strong> package.</p>
-<div class="sourceCode" id="cb551"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb551-1"><a href="sec-dlm-homework.html#cb551-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb551-2"><a href="sec-dlm-homework.html#cb551-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="sec-dlm-homework.html#cb546-1"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb546-2"><a href="sec-dlm-homework.html#cb546-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
 <p>Load the data.</p>
-<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="sec-dlm-homework.html#cb552-1"></a><span class="kw">data</span>(KvichakSockeye, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb552-2"><a href="sec-dlm-homework.html#cb552-2"></a>SRdata &lt;-<span class="st"> </span>KvichakSockeye</span></code></pre></div>
+<div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="sec-dlm-homework.html#cb547-1"></a><span class="kw">data</span>(KvichakSockeye, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
+<span id="cb547-2"><a href="sec-dlm-homework.html#cb547-2"></a>SRdata &lt;-<span class="st"> </span>KvichakSockeye</span></code></pre></div>
 <p>The data are a dataframe with columns for brood year (<code>brood.yr</code>), number of spawners (<code>Sp</code>), number of recruits (<code>Rec</code>) and PDO at year <span class="math inline">\(t-2\)</span> (<code>PDO.t2</code>) and <span class="math inline">\(t-3\)</span> (<code>PDO.t3</code>).</p>
-<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb553-1"><a href="sec-dlm-homework.html#cb553-1"></a><span class="co"># head of data file</span></span>
-<span id="cb553-2"><a href="sec-dlm-homework.html#cb553-2"></a><span class="kw">head</span>(SRdata)</span></code></pre></div>
+<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="sec-dlm-homework.html#cb548-1"></a><span class="co"># head of data file</span></span>
+<span id="cb548-2"><a href="sec-dlm-homework.html#cb548-2"></a><span class="kw">head</span>(SRdata)</span></code></pre></div>
 <pre><code>  brood.yr   Sp   Rec PDO.t2 PDO.t3
 1     1952 5970 17310  -0.61  -0.61
 2     1953  320   520  -1.48  -2.66

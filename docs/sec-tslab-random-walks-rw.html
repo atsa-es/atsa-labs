@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -474,23 +474,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-tslab-simulating-a-random-walk" class="section level3">
 <h3><span class="header-section-number">4.6.1</span> Simulating a random walk</h3>
 <p>Simulating a RW model in R is straightforward with a for loop and the use of <code>rnorm()</code> to generate Gaussian errors (type <code>?rnorm</code> to see details on the function and its useful relatives <code>dnorm()</code> and <code>pnorm()</code>). Let’s create 100 obs (we’ll also set the random number seed so everyone gets the same results).</p>
-<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="sec-tslab-random-walks-rw.html#cb248-1"></a><span class="co">## set random number seed</span></span>
-<span id="cb248-2"><a href="sec-tslab-random-walks-rw.html#cb248-2"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb248-3"><a href="sec-tslab-random-walks-rw.html#cb248-3"></a><span class="co">## length of time series</span></span>
-<span id="cb248-4"><a href="sec-tslab-random-walks-rw.html#cb248-4"></a>TT &lt;-<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb248-5"><a href="sec-tslab-random-walks-rw.html#cb248-5"></a><span class="co">## initialize {x_t} and {w_t}</span></span>
-<span id="cb248-6"><a href="sec-tslab-random-walks-rw.html#cb248-6"></a>xx &lt;-<span class="st"> </span>ww &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> TT, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)</span>
-<span id="cb248-7"><a href="sec-tslab-random-walks-rw.html#cb248-7"></a><span class="co">## compute values 2 thru TT</span></span>
-<span id="cb248-8"><a href="sec-tslab-random-walks-rw.html#cb248-8"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>TT) {</span>
-<span id="cb248-9"><a href="sec-tslab-random-walks-rw.html#cb248-9"></a>    xx[t] &lt;-<span class="st"> </span>xx[t <span class="op">-</span><span class="st"> </span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>ww[t]</span>
-<span id="cb248-10"><a href="sec-tslab-random-walks-rw.html#cb248-10"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="sec-tslab-random-walks-rw.html#cb243-1"></a><span class="co">## set random number seed</span></span>
+<span id="cb243-2"><a href="sec-tslab-random-walks-rw.html#cb243-2"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb243-3"><a href="sec-tslab-random-walks-rw.html#cb243-3"></a><span class="co">## length of time series</span></span>
+<span id="cb243-4"><a href="sec-tslab-random-walks-rw.html#cb243-4"></a>TT &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb243-5"><a href="sec-tslab-random-walks-rw.html#cb243-5"></a><span class="co">## initialize {x_t} and {w_t}</span></span>
+<span id="cb243-6"><a href="sec-tslab-random-walks-rw.html#cb243-6"></a>xx &lt;-<span class="st"> </span>ww &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> TT, <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb243-7"><a href="sec-tslab-random-walks-rw.html#cb243-7"></a><span class="co">## compute values 2 thru TT</span></span>
+<span id="cb243-8"><a href="sec-tslab-random-walks-rw.html#cb243-8"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>TT) {</span>
+<span id="cb243-9"><a href="sec-tslab-random-walks-rw.html#cb243-9"></a>    xx[t] &lt;-<span class="st"> </span>xx[t <span class="op">-</span><span class="st"> </span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>ww[t]</span>
+<span id="cb243-10"><a href="sec-tslab-random-walks-rw.html#cb243-10"></a>}</span></code></pre></div>
 <p>Now let’s plot the simulated time series and its ACF.</p>
-<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="sec-tslab-random-walks-rw.html#cb249-1"></a><span class="co">## setup plot area</span></span>
-<span id="cb249-2"><a href="sec-tslab-random-walks-rw.html#cb249-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb249-3"><a href="sec-tslab-random-walks-rw.html#cb249-3"></a><span class="co">## plot line</span></span>
-<span id="cb249-4"><a href="sec-tslab-random-walks-rw.html#cb249-4"></a><span class="kw">plot.ts</span>(xx, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</span>
-<span id="cb249-5"><a href="sec-tslab-random-walks-rw.html#cb249-5"></a><span class="co">## plot ACF</span></span>
-<span id="cb249-6"><a href="sec-tslab-random-walks-rw.html#cb249-6"></a><span class="kw">plot.acf</span>(<span class="kw">acf</span>(xx, <span class="dt">plot =</span> <span class="ot">FALSE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="sec-tslab-random-walks-rw.html#cb244-1"></a><span class="co">## setup plot area</span></span>
+<span id="cb244-2"><a href="sec-tslab-random-walks-rw.html#cb244-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb244-3"><a href="sec-tslab-random-walks-rw.html#cb244-3"></a><span class="co">## plot line</span></span>
+<span id="cb244-4"><a href="sec-tslab-random-walks-rw.html#cb244-4"></a><span class="kw">plot.ts</span>(xx, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</span>
+<span id="cb244-5"><a href="sec-tslab-random-walks-rw.html#cb244-5"></a><span class="co">## plot ACF</span></span>
+<span id="cb244-6"><a href="sec-tslab-random-walks-rw.html#cb244-6"></a><span class="kw">plot.acf</span>(<span class="kw">acf</span>(xx, <span class="dt">plot =</span> <span class="ot">FALSE</span>))</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotRW"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotRW-1.png" alt="Simulated time series of a random walk model (left) and its associated ACF (right)." width="80%" />
@@ -526,15 +526,15 @@ Figure 4.20: Simulated time series of a random walk model (left) and its associa
   \end{aligned}
 \end{equation}\]</span></p>
 <p>From Equation <a href="sec-tslab-random-walks-rw.html#eq:defnRWalt3">(4.21)</a> it is easy to see that the value of an RW process at time step <span class="math inline">\(t\)</span> is the sum of all the random errors up through time <span class="math inline">\(t\)</span>. Therefore, in R we can easily simulate a realization from an RW process using the <code>cumsum(x)</code> function, which does cumulative summation of the vector <code>x</code> over its entire length. If we use the same errors as before, we should get the same results.</p>
-<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="sec-tslab-random-walks-rw.html#cb250-1"></a><span class="co">## simulate RW</span></span>
-<span id="cb250-2"><a href="sec-tslab-random-walks-rw.html#cb250-2"></a>x2 &lt;-<span class="st"> </span><span class="kw">cumsum</span>(ww)</span></code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="sec-tslab-random-walks-rw.html#cb245-1"></a><span class="co">## simulate RW</span></span>
+<span id="cb245-2"><a href="sec-tslab-random-walks-rw.html#cb245-2"></a>x2 &lt;-<span class="st"> </span><span class="kw">cumsum</span>(ww)</span></code></pre></div>
 <p>Let’s plot both time series to see if it worked.</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="sec-tslab-random-walks-rw.html#cb251-1"></a><span class="co">## setup plot area</span></span>
-<span id="cb251-2"><a href="sec-tslab-random-walks-rw.html#cb251-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb251-3"><a href="sec-tslab-random-walks-rw.html#cb251-3"></a><span class="co">## plot 1st RW</span></span>
-<span id="cb251-4"><a href="sec-tslab-random-walks-rw.html#cb251-4"></a><span class="kw">plot.ts</span>(xx, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</span>
-<span id="cb251-5"><a href="sec-tslab-random-walks-rw.html#cb251-5"></a><span class="co">## plot 2nd RW</span></span>
-<span id="cb251-6"><a href="sec-tslab-random-walks-rw.html#cb251-6"></a><span class="kw">plot.ts</span>(x2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</span></code></pre></div>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="sec-tslab-random-walks-rw.html#cb246-1"></a><span class="co">## setup plot area</span></span>
+<span id="cb246-2"><a href="sec-tslab-random-walks-rw.html#cb246-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb246-3"><a href="sec-tslab-random-walks-rw.html#cb246-3"></a><span class="co">## plot 1st RW</span></span>
+<span id="cb246-4"><a href="sec-tslab-random-walks-rw.html#cb246-4"></a><span class="kw">plot.ts</span>(xx, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</span>
+<span id="cb246-5"><a href="sec-tslab-random-walks-rw.html#cb246-5"></a><span class="co">## plot 2nd RW</span></span>
+<span id="cb246-6"><a href="sec-tslab-random-walks-rw.html#cb246-6"></a><span class="kw">plot.ts</span>(x2, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x[t])))</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotRWalt"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotRWalt-1.png" alt="Time series of the same random walk model formulated as Equation (4.18) and simulated via a for loop (left), and as Equation (4.21) and simulated via cumsum() (right)." width="80%" />

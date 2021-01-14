@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -466,37 +466,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-stan-dfa" class="section level2">
 <h2><span class="header-section-number">13.6</span> Dynamic factor analysis</h2>
 <p>First load the plankton dataset from the <strong>MARSS</strong> package.</p>
-<div class="sourceCode" id="cb652"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb652-1"><a href="sec-stan-dfa.html#cb652-1"></a><span class="kw">library</span>(MARSS)</span>
-<span id="cb652-2"><a href="sec-stan-dfa.html#cb652-2"></a><span class="kw">data</span>(lakeWAplankton, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb652-3"><a href="sec-stan-dfa.html#cb652-3"></a><span class="co"># we want lakeWAplanktonTrans, which has been transformed so</span></span>
-<span id="cb652-4"><a href="sec-stan-dfa.html#cb652-4"></a><span class="co"># the 0s are replaced with NAs and the data z-scored</span></span>
-<span id="cb652-5"><a href="sec-stan-dfa.html#cb652-5"></a>dat &lt;-<span class="st"> </span>lakeWAplanktonTrans</span>
-<span id="cb652-6"><a href="sec-stan-dfa.html#cb652-6"></a><span class="co"># use only the 10 years from 1980-1989</span></span>
-<span id="cb652-7"><a href="sec-stan-dfa.html#cb652-7"></a>plankdat &lt;-<span class="st"> </span>dat[dat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1980</span> <span class="op">&amp;</span><span class="st"> </span>dat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;</span><span class="st"> </span><span class="dv">1990</span>, </span>
-<span id="cb652-8"><a href="sec-stan-dfa.html#cb652-8"></a>    ]</span>
-<span id="cb652-9"><a href="sec-stan-dfa.html#cb652-9"></a><span class="co"># create vector of phytoplankton group names</span></span>
-<span id="cb652-10"><a href="sec-stan-dfa.html#cb652-10"></a>phytoplankton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cryptomonas&quot;</span>, <span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, </span>
-<span id="cb652-11"><a href="sec-stan-dfa.html#cb652-11"></a>    <span class="st">&quot;Other.algae&quot;</span>)</span>
-<span id="cb652-12"><a href="sec-stan-dfa.html#cb652-12"></a><span class="co"># get only the phytoplankton</span></span>
-<span id="cb652-13"><a href="sec-stan-dfa.html#cb652-13"></a>dat.spp<span class="fl">.1980</span> &lt;-<span class="st"> </span><span class="kw">t</span>(plankdat[, phytoplankton])</span>
-<span id="cb652-14"><a href="sec-stan-dfa.html#cb652-14"></a><span class="co"># z-score the data since we subsetted time</span></span>
-<span id="cb652-15"><a href="sec-stan-dfa.html#cb652-15"></a>dat.spp<span class="fl">.1980</span> &lt;-<span class="st"> </span>dat.spp<span class="fl">.1980</span> <span class="op">-</span><span class="st"> </span><span class="kw">apply</span>(dat.spp<span class="fl">.1980</span>, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb652-16"><a href="sec-stan-dfa.html#cb652-16"></a>dat.spp<span class="fl">.1980</span> &lt;-<span class="st"> </span>dat.spp<span class="fl">.1980</span><span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat.spp<span class="fl">.1980</span>, <span class="dv">1</span>, var, </span>
-<span id="cb652-17"><a href="sec-stan-dfa.html#cb652-17"></a>    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb652-18"><a href="sec-stan-dfa.html#cb652-18"></a><span class="co"># check our z-score</span></span>
-<span id="cb652-19"><a href="sec-stan-dfa.html#cb652-19"></a><span class="kw">apply</span>(dat.spp<span class="fl">.1980</span>, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb647"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb647-1"><a href="sec-stan-dfa.html#cb647-1"></a><span class="kw">library</span>(MARSS)</span>
+<span id="cb647-2"><a href="sec-stan-dfa.html#cb647-2"></a><span class="kw">data</span>(lakeWAplankton, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb647-3"><a href="sec-stan-dfa.html#cb647-3"></a><span class="co"># we want lakeWAplanktonTrans, which has been transformed so</span></span>
+<span id="cb647-4"><a href="sec-stan-dfa.html#cb647-4"></a><span class="co"># the 0s are replaced with NAs and the data z-scored</span></span>
+<span id="cb647-5"><a href="sec-stan-dfa.html#cb647-5"></a>dat &lt;-<span class="st"> </span>lakeWAplanktonTrans</span>
+<span id="cb647-6"><a href="sec-stan-dfa.html#cb647-6"></a><span class="co"># use only the 10 years from 1980-1989</span></span>
+<span id="cb647-7"><a href="sec-stan-dfa.html#cb647-7"></a>plankdat &lt;-<span class="st"> </span>dat[dat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1980</span> <span class="op">&amp;</span><span class="st"> </span>dat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;</span><span class="st"> </span><span class="dv">1990</span>, </span>
+<span id="cb647-8"><a href="sec-stan-dfa.html#cb647-8"></a>    ]</span>
+<span id="cb647-9"><a href="sec-stan-dfa.html#cb647-9"></a><span class="co"># create vector of phytoplankton group names</span></span>
+<span id="cb647-10"><a href="sec-stan-dfa.html#cb647-10"></a>phytoplankton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cryptomonas&quot;</span>, <span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, </span>
+<span id="cb647-11"><a href="sec-stan-dfa.html#cb647-11"></a>    <span class="st">&quot;Other.algae&quot;</span>)</span>
+<span id="cb647-12"><a href="sec-stan-dfa.html#cb647-12"></a><span class="co"># get only the phytoplankton</span></span>
+<span id="cb647-13"><a href="sec-stan-dfa.html#cb647-13"></a>dat.spp<span class="fl">.1980</span> &lt;-<span class="st"> </span><span class="kw">t</span>(plankdat[, phytoplankton])</span>
+<span id="cb647-14"><a href="sec-stan-dfa.html#cb647-14"></a><span class="co"># z-score the data since we subsetted time</span></span>
+<span id="cb647-15"><a href="sec-stan-dfa.html#cb647-15"></a>dat.spp<span class="fl">.1980</span> &lt;-<span class="st"> </span>dat.spp<span class="fl">.1980</span> <span class="op">-</span><span class="st"> </span><span class="kw">apply</span>(dat.spp<span class="fl">.1980</span>, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb647-16"><a href="sec-stan-dfa.html#cb647-16"></a>dat.spp<span class="fl">.1980</span> &lt;-<span class="st"> </span>dat.spp<span class="fl">.1980</span><span class="op">/</span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat.spp<span class="fl">.1980</span>, <span class="dv">1</span>, var, </span>
+<span id="cb647-17"><a href="sec-stan-dfa.html#cb647-17"></a>    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb647-18"><a href="sec-stan-dfa.html#cb647-18"></a><span class="co"># check our z-score</span></span>
+<span id="cb647-19"><a href="sec-stan-dfa.html#cb647-19"></a><span class="kw">apply</span>(dat.spp<span class="fl">.1980</span>, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>  Cryptomonas       Diatoms        Greens      Unicells   Other.algae 
  4.951913e-17 -1.337183e-17  3.737694e-18 -5.276451e-18  4.365269e-18 </code></pre>
-<div class="sourceCode" id="cb654"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb654-1"><a href="sec-stan-dfa.html#cb654-1"></a><span class="kw">apply</span>(dat.spp<span class="fl">.1980</span>, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb649"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb649-1"><a href="sec-stan-dfa.html#cb649-1"></a><span class="kw">apply</span>(dat.spp<span class="fl">.1980</span>, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>Cryptomonas     Diatoms      Greens    Unicells Other.algae 
           1           1           1           1           1 </code></pre>
 <p>Plot the data.</p>
-<div class="sourceCode" id="cb656"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb656-1"><a href="sec-stan-dfa.html#cb656-1"></a><span class="co"># make into ts since easier to plot</span></span>
-<span id="cb656-2"><a href="sec-stan-dfa.html#cb656-2"></a>dat.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">t</span>(dat.spp<span class="fl">.1980</span>), <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1980</span>, </span>
-<span id="cb656-3"><a href="sec-stan-dfa.html#cb656-3"></a>    <span class="dv">1</span>))</span>
-<span id="cb656-4"><a href="sec-stan-dfa.html#cb656-4"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb656-5"><a href="sec-stan-dfa.html#cb656-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) <span class="kw">plot</span>(dat.ts[, i], <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>, <span class="dt">main =</span> <span class="kw">colnames</span>(dat.ts)[i], </span>
-<span id="cb656-6"><a href="sec-stan-dfa.html#cb656-6"></a>    <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb651"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb651-1"><a href="sec-stan-dfa.html#cb651-1"></a><span class="co"># make into ts since easier to plot</span></span>
+<span id="cb651-2"><a href="sec-stan-dfa.html#cb651-2"></a>dat.ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">t</span>(dat.spp<span class="fl">.1980</span>), <span class="dt">frequency =</span> <span class="dv">12</span>, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1980</span>, </span>
+<span id="cb651-3"><a href="sec-stan-dfa.html#cb651-3"></a>    <span class="dv">1</span>))</span>
+<span id="cb651-4"><a href="sec-stan-dfa.html#cb651-4"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">2</span>), <span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb651-5"><a href="sec-stan-dfa.html#cb651-5"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) <span class="kw">plot</span>(dat.ts[, i], <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>, <span class="dt">main =</span> <span class="kw">colnames</span>(dat.ts)[i], </span>
+<span id="cb651-6"><a href="sec-stan-dfa.html#cb651-6"></a>    <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-plot-dfa"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/stan-plot-dfa-1.png" alt="Phytoplankton data." width="80%" />
 <p class="caption">
@@ -504,14 +504,14 @@ Figure 13.3: Phytoplankton data.
 </p>
 </div>
 <p>Run a 3 trend model on these data.</p>
-<div class="sourceCode" id="cb657"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb657-1"><a href="sec-stan-dfa.html#cb657-1"></a>mod_<span class="dv">3</span> &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb652"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb652-1"><a href="sec-stan-dfa.html#cb652-1"></a>mod_<span class="dv">3</span> &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p>Rotate the estimated trends and look at what it produces.</p>
-<div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb658-1"><a href="sec-stan-dfa.html#cb658-1"></a>rot &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">rotate_trends</span>(mod_<span class="dv">3</span>)</span>
-<span id="cb658-2"><a href="sec-stan-dfa.html#cb658-2"></a><span class="kw">names</span>(rot)</span></code></pre></div>
+<div class="sourceCode" id="cb653"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb653-1"><a href="sec-stan-dfa.html#cb653-1"></a>rot &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">rotate_trends</span>(mod_<span class="dv">3</span>)</span>
+<span id="cb653-2"><a href="sec-stan-dfa.html#cb653-2"></a><span class="kw">names</span>(rot)</span></code></pre></div>
 <pre><code>[1] &quot;Z_rot&quot;        &quot;trends&quot;       &quot;Z_rot_mean&quot;   &quot;trends_mean&quot;  &quot;trends_lower&quot;
 [6] &quot;trends_upper&quot;</code></pre>
 <p>Plot the estimate of the trends.</p>
-<div class="sourceCode" id="cb660"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb660-1"><a href="sec-stan-dfa.html#cb660-1"></a><span class="kw">matplot</span>(<span class="kw">t</span>(rot<span class="op">$</span>trends_mean), <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">ylab =</span> <span class="st">&quot;mean trend&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb655"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb655-1"><a href="sec-stan-dfa.html#cb655-1"></a><span class="kw">matplot</span>(<span class="kw">t</span>(rot<span class="op">$</span>trends_mean), <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">ylab =</span> <span class="st">&quot;mean trend&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-dfa-plot-trends"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/stan-dfa-plot-trends-1.png" alt="Trends." width="80%" />
 <p class="caption">
@@ -521,13 +521,13 @@ Figure 13.4: Trends.
 <div id="sec-stan-loo" class="section level3">
 <h3><span class="header-section-number">13.6.1</span> Using leave one out cross-validation to select models</h3>
 <p>We will fit multiple DFA with different numbers of trends and use leave one out (LOO) cross-validation to choose the best model.</p>
-<div class="sourceCode" id="cb661"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb661-1"><a href="sec-stan-dfa.html#cb661-1"></a>mod_<span class="dv">1</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">1</span>)</span>
-<span id="cb661-2"><a href="sec-stan-dfa.html#cb661-2"></a>mod_<span class="dv">2</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb656"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb656-1"><a href="sec-stan-dfa.html#cb656-1"></a>mod_<span class="dv">1</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">1</span>)</span>
+<span id="cb656-2"><a href="sec-stan-dfa.html#cb656-2"></a>mod_<span class="dv">2</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 Running the chains for more iterations may help. See
 http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
-<div class="sourceCode" id="cb663"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb663-1"><a href="sec-stan-dfa.html#cb663-1"></a>mod_<span class="dv">3</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">3</span>)</span>
-<span id="cb663-2"><a href="sec-stan-dfa.html#cb663-2"></a>mod_<span class="dv">4</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb658-1"><a href="sec-stan-dfa.html#cb658-1"></a>mod_<span class="dv">3</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">3</span>)</span>
+<span id="cb658-2"><a href="sec-stan-dfa.html#cb658-2"></a>mod_<span class="dv">4</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">4</span>)</span></code></pre></div>
 <pre><code>Warning: There were 9 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 <pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
@@ -537,7 +537,7 @@ http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
 <pre><code>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
 http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
-<div class="sourceCode" id="cb668"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb668-1"><a href="sec-stan-dfa.html#cb668-1"></a>mod_<span class="dv">5</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb663"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb663-1"><a href="sec-stan-dfa.html#cb663-1"></a>mod_<span class="dv">5</span> =<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>Warning: There were 23 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See
 http://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded</code></pre>
 <pre><code>Warning: Examine the pairs() plot to diagnose sampling problems</code></pre>
@@ -551,17 +551,17 @@ http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
 Running the chains for more iterations may help. See
 http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
 <p>We will compute the Leave One Out Information Criterion (LOOIC) using the <strong>loo</strong> package. Like AIC, lower is better.</p>
-<div class="sourceCode" id="cb674"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb674-1"><a href="sec-stan-dfa.html#cb674-1"></a>loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">1</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb669"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb669-1"><a href="sec-stan-dfa.html#cb669-1"></a>loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">1</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span></code></pre></div>
 <pre><code>[1] 1636.62</code></pre>
 <p>Table of the LOOIC values:</p>
-<div class="sourceCode" id="cb676"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb676-1"><a href="sec-stan-dfa.html#cb676-1"></a>looics =<span class="st"> </span><span class="kw">c</span>(loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">1</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
-<span id="cb676-2"><a href="sec-stan-dfa.html#cb676-2"></a>    <span class="st">&quot;Estimate&quot;</span>], loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">2</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
-<span id="cb676-3"><a href="sec-stan-dfa.html#cb676-3"></a>    <span class="st">&quot;Estimate&quot;</span>], loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">3</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
-<span id="cb676-4"><a href="sec-stan-dfa.html#cb676-4"></a>    <span class="st">&quot;Estimate&quot;</span>], loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">4</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
-<span id="cb676-5"><a href="sec-stan-dfa.html#cb676-5"></a>    <span class="st">&quot;Estimate&quot;</span>], loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">5</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
-<span id="cb676-6"><a href="sec-stan-dfa.html#cb676-6"></a>    <span class="st">&quot;Estimate&quot;</span>])</span>
-<span id="cb676-7"><a href="sec-stan-dfa.html#cb676-7"></a>looic.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trends =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">LOOIC =</span> looics)</span>
-<span id="cb676-8"><a href="sec-stan-dfa.html#cb676-8"></a>looic.table</span></code></pre></div>
+<div class="sourceCode" id="cb671"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb671-1"><a href="sec-stan-dfa.html#cb671-1"></a>looics =<span class="st"> </span><span class="kw">c</span>(loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">1</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
+<span id="cb671-2"><a href="sec-stan-dfa.html#cb671-2"></a>    <span class="st">&quot;Estimate&quot;</span>], loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">2</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
+<span id="cb671-3"><a href="sec-stan-dfa.html#cb671-3"></a>    <span class="st">&quot;Estimate&quot;</span>], loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">3</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
+<span id="cb671-4"><a href="sec-stan-dfa.html#cb671-4"></a>    <span class="st">&quot;Estimate&quot;</span>], loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">4</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
+<span id="cb671-5"><a href="sec-stan-dfa.html#cb671-5"></a>    <span class="st">&quot;Estimate&quot;</span>], loo<span class="op">::</span><span class="kw">loo</span>(loo<span class="op">::</span><span class="kw">extract_log_lik</span>(mod_<span class="dv">5</span>))<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
+<span id="cb671-6"><a href="sec-stan-dfa.html#cb671-6"></a>    <span class="st">&quot;Estimate&quot;</span>])</span>
+<span id="cb671-7"><a href="sec-stan-dfa.html#cb671-7"></a>looic.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trends =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">LOOIC =</span> looics)</span>
+<span id="cb671-8"><a href="sec-stan-dfa.html#cb671-8"></a>looic.table</span></code></pre></div>
 <pre><code>  trends    LOOIC
 1      1 1636.620
 2      2 1575.051

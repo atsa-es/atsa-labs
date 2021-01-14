@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -471,9 +471,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="math display">\[{ \sigma  }^{ 2 }={ \psi  }^{ 2 }\left( 1-{ \phi  }^{ 2 } \right)\]</span>
 Like in our first model, we assume that the data follows a normal likelihood (or equivalently that the residuals are normally distributed), <span class="math inline">\(y_t = E[Y_t] + e_t\)</span>, or <span class="math inline">\(Y_t \sim N(E[{Y_t}], \sigma)\)</span>. Thus, it is possible to express the subsequent deviations as <span class="math inline">\({e}_{t} = {y}_{t} - E[{Y_t}]\)</span>, or equivalently as <span class="math inline">\({e}_{t} = {y}_{t} - \beta -\phi {e}_{t-1}\)</span>.</p>
 <p>We can fit this regression with autocorrelated errors by changing the model name to ‘regression_cor’</p>
-<div class="sourceCode" id="cb648"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb648-1"><a href="sec-stan-lr-ar.html#cb648-1"></a>lm_intercept_cor &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), </span>
-<span id="cb648-2"><a href="sec-stan-lr-ar.html#cb648-2"></a>    <span class="dt">model_name =</span> <span class="st">&quot;regression_cor&quot;</span>, <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, </span>
-<span id="cb648-3"><a href="sec-stan-lr-ar.html#cb648-3"></a>        <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb643"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb643-1"><a href="sec-stan-lr-ar.html#cb643-1"></a>lm_intercept_cor &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), </span>
+<span id="cb643-2"><a href="sec-stan-lr-ar.html#cb643-2"></a>    <span class="dt">model_name =</span> <span class="st">&quot;regression_cor&quot;</span>, <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, </span>
+<span id="cb643-3"><a href="sec-stan-lr-ar.html#cb643-3"></a>        <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</span></code></pre></div>
 </div>
             </section>
 

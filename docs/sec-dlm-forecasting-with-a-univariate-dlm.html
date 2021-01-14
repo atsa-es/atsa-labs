@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -542,28 +542,28 @@ and <span class="math inline">\(f_{t}\)</span> is the upwelling index at <span c
 <p>Working from Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-dlmFore3">(9.31)</a>, we can compute the expected value of the forecast at time <span class="math inline">\(t\)</span> and its variance using the Kalman filter. For the expectation, we need <span class="math inline">\(\mathbf{F}_{t}^\top\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>.
 <span class="math inline">\(\mathbf{F}_t^\top\)</span> is called <span class="math inline">\(\mathbf{Z}_t\)</span> in MARSS notation. The one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, the <span class="math inline">\(\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>, are calculated as part of the Kalman filter algorithm—they are termed <span class="math inline">\(\tilde{x}_t^{t-1}\)</span> in MARSS notation and stored as <code>xtt1</code> in the list produced by the <code>MARSSkfss()</code> Kalman filter function.</p>
 <p>Using the <code>Z</code> defined in <a href="sec-dlm-salmon-example.html#sec-dlm-salmon-example">9.6</a>, we compute the mean forecast as follows:</p>
-<div class="sourceCode" id="cb544"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb544-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-1"></a><span class="co"># get list of Kalman filter output</span></span>
-<span id="cb544-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-2"></a>kf.out &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)</span>
-<span id="cb544-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-3"></a><span class="co">## forecasts of regr parameters; 2xT matrix</span></span>
-<span id="cb544-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-4"></a>eta &lt;-<span class="st"> </span>kf.out<span class="op">$</span>xtt1</span>
-<span id="cb544-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-5"></a><span class="co">## ts of E(forecasts)</span></span>
-<span id="cb544-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-6"></a>fore.mean &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
-<span id="cb544-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-7"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
-<span id="cb544-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-8"></a>    fore.mean[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
-<span id="cb544-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb544-9"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb539"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb539-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-1"></a><span class="co"># get list of Kalman filter output</span></span>
+<span id="cb539-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-2"></a>kf.out &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)</span>
+<span id="cb539-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-3"></a><span class="co">## forecasts of regr parameters; 2xT matrix</span></span>
+<span id="cb539-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-4"></a>eta &lt;-<span class="st"> </span>kf.out<span class="op">$</span>xtt1</span>
+<span id="cb539-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-5"></a><span class="co">## ts of E(forecasts)</span></span>
+<span id="cb539-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-6"></a>fore.mean &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
+<span id="cb539-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-7"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
+<span id="cb539-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-8"></a>    fore.mean[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb539-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb539-9"></a>}</span></code></pre></div>
 <p>For the variance of the forecasts, we need
 <span class="math inline">\(\mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}\)</span>. As with the mean, <span class="math inline">\(\mathbf{F}^\top_t \equiv \mathbf{Z}_t\)</span>. The variances of the one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\text{Var}(\boldsymbol{\theta}_{t|t-1})\)</span>, are also calculated as part of the Kalman filter algorithm—they are stored as <code>Vtt1</code> in the list produced by the <code>MARSSkfss()</code> function. Lastly, the observation variance <span class="math inline">\(\hat{r}\)</span> was estimated when we fit the DLM to the data using <code>MARSS()</code> and can be extracted from the <code>dlm1</code> fit.</p>
 <p>Putting this together, we can compute the forecast variance:</p>
-<div class="sourceCode" id="cb545"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb545-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-1"></a><span class="co"># variance of regr parameters; 1x2xT array</span></span>
-<span id="cb545-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-2"></a>Phi &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Vtt1</span>
-<span id="cb545-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-3"></a><span class="co">## obs variance; 1x1 matrix</span></span>
-<span id="cb545-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-4"></a>R.est &lt;-<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R</span>
-<span id="cb545-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-5"></a><span class="co">## ts of Var(forecasts)</span></span>
-<span id="cb545-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-6"></a>fore.var &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
-<span id="cb545-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-7"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
-<span id="cb545-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-8"></a>    tZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span></span>
-<span id="cb545-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-9"></a>    fore.var[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est</span>
-<span id="cb545-10"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb545-10"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb540-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-1"></a><span class="co"># variance of regr parameters; 1x2xT array</span></span>
+<span id="cb540-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-2"></a>Phi &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Vtt1</span>
+<span id="cb540-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-3"></a><span class="co">## obs variance; 1x1 matrix</span></span>
+<span id="cb540-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-4"></a>R.est &lt;-<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R</span>
+<span id="cb540-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-5"></a><span class="co">## ts of Var(forecasts)</span></span>
+<span id="cb540-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-6"></a>fore.var &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
+<span id="cb540-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-7"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
+<span id="cb540-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-8"></a>    tZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span></span>
+<span id="cb540-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-9"></a>    fore.var[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est</span>
+<span id="cb540-10"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-10"></a>}</span></code></pre></div>
 <p>Plots of the model mean forecasts with their estimated uncertainty are shown in Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:dlm-plotdlmForeLogit">9.3</a>. Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time <span class="math inline">\(t\)</span> based on data available only through time <span class="math inline">\(t-1\)</span>. In this case, however, MARSS is actually estimating the states at <span class="math inline">\(t=0\)</span> (<span class="math inline">\(\boldsymbol{\theta}_0\)</span>), which allows us to compute a forecast for the first time point.
 <!-- % forecast plot - logit space --></p>
 

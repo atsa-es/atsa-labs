@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -466,8 +466,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-uss-the-structts-function" class="section level2">
 <h2><span class="header-section-number">6.3</span> The StructTS function</h2>
 <p>The <code>StructTS</code> function in the <strong>stats</strong> package in R will also fit the stochastic level model:</p>
-<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="sec-uss-the-structts-function.html#cb404-1"></a>fit.sts &lt;-<span class="st"> </span><span class="kw">StructTS</span>(dat, <span class="dt">type =</span> <span class="st">&quot;level&quot;</span>)</span>
-<span id="cb404-2"><a href="sec-uss-the-structts-function.html#cb404-2"></a>fit.sts</span></code></pre></div>
+<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb399-1"><a href="sec-uss-the-structts-function.html#cb399-1"></a>fit.sts &lt;-<span class="st"> </span><span class="kw">StructTS</span>(dat, <span class="dt">type =</span> <span class="st">&quot;level&quot;</span>)</span>
+<span id="cb399-2"><a href="sec-uss-the-structts-function.html#cb399-2"></a>fit.sts</span></code></pre></div>
 <pre><code>
 Call:
 StructTS(x = dat, type = &quot;level&quot;)
@@ -477,21 +477,21 @@ Variances:
    1469    15099  </code></pre>
 <p>The estimates from <code>StructTS()</code> will be different (though similar) from <code>MARSS()</code> because <code>StructTS()</code> uses <span class="math inline">\(x_1 = y_1\)</span>, that is the hidden state at <span class="math inline">\(t=1\)</span> is fixed to be the data at <span class="math inline">\(t=1\)</span>. That is fine if you have a long data set, but would be disastrous for the short data sets typical in fisheries and ecology.</p>
 <p><code>StructTS()</code> is much, much faster for long time series. The example in <code>?StructTS</code> is pretty much instantaneous with <code>StructTS()</code> but takes minutes with the EM algorithm that is the default in <code>MARSS()</code>. With the BFGS algorithm, it is much closer to <code>StructTS()</code>:</p>
-<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="sec-uss-the-structts-function.html#cb406-1"></a>trees &lt;-<span class="st"> </span><span class="kw">window</span>(treering, <span class="dt">start =</span> <span class="dv">0</span>)</span>
-<span id="cb406-2"><a href="sec-uss-the-structts-function.html#cb406-2"></a>fitts &lt;-<span class="st"> </span><span class="kw">StructTS</span>(trees, <span class="dt">type =</span> <span class="st">&quot;level&quot;</span>)</span>
-<span id="cb406-3"><a href="sec-uss-the-structts-function.html#cb406-3"></a>fitem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(trees, mod.nile<span class="fl">.2</span>)</span>
-<span id="cb406-4"><a href="sec-uss-the-structts-function.html#cb406-4"></a>fitbf &lt;-<span class="st"> </span><span class="kw">MARSS</span>(trees, mod.nile<span class="fl">.2</span>, <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="sec-uss-the-structts-function.html#cb401-1"></a>trees &lt;-<span class="st"> </span><span class="kw">window</span>(treering, <span class="dt">start =</span> <span class="dv">0</span>)</span>
+<span id="cb401-2"><a href="sec-uss-the-structts-function.html#cb401-2"></a>fitts &lt;-<span class="st"> </span><span class="kw">StructTS</span>(trees, <span class="dt">type =</span> <span class="st">&quot;level&quot;</span>)</span>
+<span id="cb401-3"><a href="sec-uss-the-structts-function.html#cb401-3"></a>fitem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(trees, mod.nile<span class="fl">.2</span>)</span>
+<span id="cb401-4"><a href="sec-uss-the-structts-function.html#cb401-4"></a>fitbf &lt;-<span class="st"> </span><span class="kw">MARSS</span>(trees, mod.nile<span class="fl">.2</span>, <span class="dt">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span></code></pre></div>
 <p>Note that <code>mod.nile.2</code> specifies a univariate stochastic level model so we can use it just fine with other univariate data sets.</p>
 <p>In addition, <code>fitted(fit.sts)</code> where <code>fit.sts</code> is a fit from <code>StructTS()</code> is very different than <code>fit.marss$states</code> from <code>MARSS()</code>.</p>
-<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="sec-uss-the-structts-function.html#cb407-1"></a>t &lt;-<span class="st"> </span><span class="dv">10</span></span>
-<span id="cb407-2"><a href="sec-uss-the-structts-function.html#cb407-2"></a><span class="kw">fitted</span>(fit.sts)[t]</span></code></pre></div>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="sec-uss-the-structts-function.html#cb402-1"></a>t &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb402-2"><a href="sec-uss-the-structts-function.html#cb402-2"></a><span class="kw">fitted</span>(fit.sts)[t]</span></code></pre></div>
 <pre><code>[1] 1162.904</code></pre>
 <p>is the expected value of <span class="math inline">\(y_{t+1}\)</span> (in this case <span class="math inline">\(y_{11}\)</span> since we set <span class="math inline">\(t=10\)</span>) given the data up to <span class="math inline">\(y_t\)</span> (in this case, up to <span class="math inline">\(y_{10}\)</span>). It is called the one-step ahead prediction.<br />
 We are not going to use the one-step ahead predictions unless we are forecasting or doing cross-validation.</p>
 <p>Typically, when we analyze fisheries and ecological data, we want to know the estimate of the state, the <span class="math inline">\(x_t\)</span>, given ALL the data (sometimes we might want the estimate of the <span class="math inline">\(y_t\)</span> process given all the data). For example, we might need an estimate of the population size in year 1990 given a time series of counts from 1930 to 2015. We don’t want to use only the data up to 1989; we want to use all the information. <code>fit.marss$states</code> from <code>MARSS()</code> is the expected value of <span class="math inline">\(x_t\)</span> given all the data. In the MARSS package, this is denoted “xtT”.</p>
-<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb409-1"><a href="sec-uss-the-structts-function.html#cb409-1"></a><span class="kw">fitted</span>(kem<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;xtT&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">subset</span>(t <span class="op">==</span><span class="st"> </span><span class="dv">11</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="sec-uss-the-structts-function.html#cb404-1"></a><span class="kw">fitted</span>(kem<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;xtT&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">subset</span>(t <span class="op">==</span><span class="st"> </span><span class="dv">11</span>)</span></code></pre></div>
 <p>If you needed the one-step predictions from <code>MARSS()</code>, you can get that using “xtt1”.</p>
-<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="sec-uss-the-structts-function.html#cb410-1"></a><span class="kw">fitted</span>(kem<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;xtt1&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">subset</span>(t <span class="op">==</span><span class="st"> </span><span class="dv">11</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="sec-uss-the-structts-function.html#cb405-1"></a><span class="kw">fitted</span>(kem<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;xtt1&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">subset</span>(t <span class="op">==</span><span class="st"> </span><span class="dv">11</span>)</span></code></pre></div>
 <p>This is the expected value of <span class="math inline">\(x_t\)</span> conditioned on <span class="math inline">\(y_1\)</span> to <span class="math inline">\(y_{t-1}\)</span>.</p>
 
 <pre><code>Loading required package: lattice</code></pre>

@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -476,66 +476,66 @@ y_t \sim \,\text{N}(x_t, r)
 \tag{12.8}
 \end{equation}\]</span>
 In the two above models, <span class="math inline">\(q\)</span> is the process variance and <span class="math inline">\(r\)</span> is the observation error variance. The JAGS code will use the standard deviation (square root) of these. The code to produce and fit this model is below:</p>
-<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="sec-jags-uss.html#cb629-1"></a><span class="co"># 5. MAKE THE SS MODEL a univariate random walk no</span></span>
-<span id="cb629-2"><a href="sec-jags-uss.html#cb629-2"></a><span class="co"># covariates.</span></span>
-<span id="cb629-3"><a href="sec-jags-uss.html#cb629-3"></a></span>
-<span id="cb629-4"><a href="sec-jags-uss.html#cb629-4"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;ss_model.txt&quot;</span>)</span>
-<span id="cb629-5"><a href="sec-jags-uss.html#cb629-5"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb629-6"><a href="sec-jags-uss.html#cb629-6"></a><span class="st">model {  </span></span>
-<span id="cb629-7"><a href="sec-jags-uss.html#cb629-7"></a><span class="st">   # priors on parameters</span></span>
-<span id="cb629-8"><a href="sec-jags-uss.html#cb629-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
-<span id="cb629-9"><a href="sec-jags-uss.html#cb629-9"></a><span class="st">   tau.pro ~ dgamma(0.001,0.001); </span></span>
-<span id="cb629-10"><a href="sec-jags-uss.html#cb629-10"></a><span class="st">   sd.q &lt;- 1/sqrt(tau.pro);</span></span>
-<span id="cb629-11"><a href="sec-jags-uss.html#cb629-11"></a><span class="st">   tau.obs ~ dgamma(0.001,0.001);</span></span>
-<span id="cb629-12"><a href="sec-jags-uss.html#cb629-12"></a><span class="st">   sd.r &lt;- 1/sqrt(tau.obs); </span></span>
-<span id="cb629-13"><a href="sec-jags-uss.html#cb629-13"></a><span class="st">   phi ~ dnorm(0,1);</span></span>
-<span id="cb629-14"><a href="sec-jags-uss.html#cb629-14"></a><span class="st">   </span></span>
-<span id="cb629-15"><a href="sec-jags-uss.html#cb629-15"></a><span class="st">   X[1] &lt;- mu;</span></span>
-<span id="cb629-16"><a href="sec-jags-uss.html#cb629-16"></a><span class="st">   predY[1] &lt;- X[1];</span></span>
-<span id="cb629-17"><a href="sec-jags-uss.html#cb629-17"></a><span class="st">   Y[1] ~ dnorm(X[1], tau.obs);</span></span>
-<span id="cb629-18"><a href="sec-jags-uss.html#cb629-18"></a></span>
-<span id="cb629-19"><a href="sec-jags-uss.html#cb629-19"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb629-20"><a href="sec-jags-uss.html#cb629-20"></a><span class="st">      predX[i] &lt;- phi*X[i-1]; </span></span>
-<span id="cb629-21"><a href="sec-jags-uss.html#cb629-21"></a><span class="st">      X[i] ~ dnorm(predX[i],tau.pro); # Process variation</span></span>
-<span id="cb629-22"><a href="sec-jags-uss.html#cb629-22"></a><span class="st">      predY[i] &lt;- X[i];</span></span>
-<span id="cb629-23"><a href="sec-jags-uss.html#cb629-23"></a><span class="st">      Y[i] ~ dnorm(X[i], tau.obs); # Observation variation</span></span>
-<span id="cb629-24"><a href="sec-jags-uss.html#cb629-24"></a><span class="st">   }</span></span>
-<span id="cb629-25"><a href="sec-jags-uss.html#cb629-25"></a><span class="st">}  </span></span>
-<span id="cb629-26"><a href="sec-jags-uss.html#cb629-26"></a><span class="st">&quot;</span>, </span>
-<span id="cb629-27"><a href="sec-jags-uss.html#cb629-27"></a>    <span class="dt">file =</span> model.loc)</span>
-<span id="cb629-28"><a href="sec-jags-uss.html#cb629-28"></a></span>
-<span id="cb629-29"><a href="sec-jags-uss.html#cb629-29"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
-<span id="cb629-30"><a href="sec-jags-uss.html#cb629-30"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>)</span>
-<span id="cb629-31"><a href="sec-jags-uss.html#cb629-31"></a>mod_ss =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </span>
-<span id="cb629-32"><a href="sec-jags-uss.html#cb629-32"></a>    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </span>
-<span id="cb629-33"><a href="sec-jags-uss.html#cb629-33"></a>    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb624"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb624-1"><a href="sec-jags-uss.html#cb624-1"></a><span class="co"># 5. MAKE THE SS MODEL a univariate random walk no</span></span>
+<span id="cb624-2"><a href="sec-jags-uss.html#cb624-2"></a><span class="co"># covariates.</span></span>
+<span id="cb624-3"><a href="sec-jags-uss.html#cb624-3"></a></span>
+<span id="cb624-4"><a href="sec-jags-uss.html#cb624-4"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;ss_model.txt&quot;</span>)</span>
+<span id="cb624-5"><a href="sec-jags-uss.html#cb624-5"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb624-6"><a href="sec-jags-uss.html#cb624-6"></a><span class="st">model {  </span></span>
+<span id="cb624-7"><a href="sec-jags-uss.html#cb624-7"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb624-8"><a href="sec-jags-uss.html#cb624-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
+<span id="cb624-9"><a href="sec-jags-uss.html#cb624-9"></a><span class="st">   tau.pro ~ dgamma(0.001,0.001); </span></span>
+<span id="cb624-10"><a href="sec-jags-uss.html#cb624-10"></a><span class="st">   sd.q &lt;- 1/sqrt(tau.pro);</span></span>
+<span id="cb624-11"><a href="sec-jags-uss.html#cb624-11"></a><span class="st">   tau.obs ~ dgamma(0.001,0.001);</span></span>
+<span id="cb624-12"><a href="sec-jags-uss.html#cb624-12"></a><span class="st">   sd.r &lt;- 1/sqrt(tau.obs); </span></span>
+<span id="cb624-13"><a href="sec-jags-uss.html#cb624-13"></a><span class="st">   phi ~ dnorm(0,1);</span></span>
+<span id="cb624-14"><a href="sec-jags-uss.html#cb624-14"></a><span class="st">   </span></span>
+<span id="cb624-15"><a href="sec-jags-uss.html#cb624-15"></a><span class="st">   X[1] &lt;- mu;</span></span>
+<span id="cb624-16"><a href="sec-jags-uss.html#cb624-16"></a><span class="st">   predY[1] &lt;- X[1];</span></span>
+<span id="cb624-17"><a href="sec-jags-uss.html#cb624-17"></a><span class="st">   Y[1] ~ dnorm(X[1], tau.obs);</span></span>
+<span id="cb624-18"><a href="sec-jags-uss.html#cb624-18"></a></span>
+<span id="cb624-19"><a href="sec-jags-uss.html#cb624-19"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb624-20"><a href="sec-jags-uss.html#cb624-20"></a><span class="st">      predX[i] &lt;- phi*X[i-1]; </span></span>
+<span id="cb624-21"><a href="sec-jags-uss.html#cb624-21"></a><span class="st">      X[i] ~ dnorm(predX[i],tau.pro); # Process variation</span></span>
+<span id="cb624-22"><a href="sec-jags-uss.html#cb624-22"></a><span class="st">      predY[i] &lt;- X[i];</span></span>
+<span id="cb624-23"><a href="sec-jags-uss.html#cb624-23"></a><span class="st">      Y[i] ~ dnorm(X[i], tau.obs); # Observation variation</span></span>
+<span id="cb624-24"><a href="sec-jags-uss.html#cb624-24"></a><span class="st">   }</span></span>
+<span id="cb624-25"><a href="sec-jags-uss.html#cb624-25"></a><span class="st">}  </span></span>
+<span id="cb624-26"><a href="sec-jags-uss.html#cb624-26"></a><span class="st">&quot;</span>, </span>
+<span id="cb624-27"><a href="sec-jags-uss.html#cb624-27"></a>    <span class="dt">file =</span> model.loc)</span>
+<span id="cb624-28"><a href="sec-jags-uss.html#cb624-28"></a></span>
+<span id="cb624-29"><a href="sec-jags-uss.html#cb624-29"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
+<span id="cb624-30"><a href="sec-jags-uss.html#cb624-30"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>)</span>
+<span id="cb624-31"><a href="sec-jags-uss.html#cb624-31"></a>mod_ss =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </span>
+<span id="cb624-32"><a href="sec-jags-uss.html#cb624-32"></a>    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb624-33"><a href="sec-jags-uss.html#cb624-33"></a>    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div id="sec-jags-covariates" class="section level3">
 <h3><span class="header-section-number">12.6.1</span> Including covariates</h3>
 <p>Returning to the first example of regression with the intercept only, we will introduce <code>Temp</code> as the covariate explaining our response variable <code>Wind</code>. Note that to include the covariate, we (1) modify the JAGS script to include a new coefficient—in this case <code>beta</code>, (2) update the predictive equation to include the effects of the new covariate, and (3) we include the new covariate in our named data list.</p>
-<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="sec-jags-uss.html#cb630-1"></a><span class="co"># 6. Include some covariates in a linear regression Use</span></span>
-<span id="cb630-2"><a href="sec-jags-uss.html#cb630-2"></a><span class="co"># temperature as a predictor of wind</span></span>
-<span id="cb630-3"><a href="sec-jags-uss.html#cb630-3"></a></span>
-<span id="cb630-4"><a href="sec-jags-uss.html#cb630-4"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;lm.txt&quot;</span>)</span>
-<span id="cb630-5"><a href="sec-jags-uss.html#cb630-5"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb630-6"><a href="sec-jags-uss.html#cb630-6"></a><span class="st">model {  </span></span>
-<span id="cb630-7"><a href="sec-jags-uss.html#cb630-7"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
-<span id="cb630-8"><a href="sec-jags-uss.html#cb630-8"></a><span class="st">   beta ~ dnorm(0,0.01);</span></span>
-<span id="cb630-9"><a href="sec-jags-uss.html#cb630-9"></a><span class="st">   tau.obs ~ dgamma(0.001,0.001); </span></span>
-<span id="cb630-10"><a href="sec-jags-uss.html#cb630-10"></a><span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span></span>
-<span id="cb630-11"><a href="sec-jags-uss.html#cb630-11"></a><span class="st">   </span></span>
-<span id="cb630-12"><a href="sec-jags-uss.html#cb630-12"></a><span class="st">   for(i in 1:N) {</span></span>
-<span id="cb630-13"><a href="sec-jags-uss.html#cb630-13"></a><span class="st">      predY[i] &lt;- mu + C[i]*beta; </span></span>
-<span id="cb630-14"><a href="sec-jags-uss.html#cb630-14"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.obs);</span></span>
-<span id="cb630-15"><a href="sec-jags-uss.html#cb630-15"></a><span class="st">   }</span></span>
-<span id="cb630-16"><a href="sec-jags-uss.html#cb630-16"></a><span class="st">}  </span></span>
-<span id="cb630-17"><a href="sec-jags-uss.html#cb630-17"></a><span class="st">&quot;</span>, </span>
-<span id="cb630-18"><a href="sec-jags-uss.html#cb630-18"></a>    <span class="dt">file =</span> model.loc)</span>
-<span id="cb630-19"><a href="sec-jags-uss.html#cb630-19"></a></span>
-<span id="cb630-20"><a href="sec-jags-uss.html#cb630-20"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N, <span class="dt">C =</span> Temp)</span>
-<span id="cb630-21"><a href="sec-jags-uss.html#cb630-21"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;beta&quot;</span>)</span>
-<span id="cb630-22"><a href="sec-jags-uss.html#cb630-22"></a>mod_lm =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </span>
-<span id="cb630-23"><a href="sec-jags-uss.html#cb630-23"></a>    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </span>
-<span id="cb630-24"><a href="sec-jags-uss.html#cb630-24"></a>    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb625-1"><a href="sec-jags-uss.html#cb625-1"></a><span class="co"># 6. Include some covariates in a linear regression Use</span></span>
+<span id="cb625-2"><a href="sec-jags-uss.html#cb625-2"></a><span class="co"># temperature as a predictor of wind</span></span>
+<span id="cb625-3"><a href="sec-jags-uss.html#cb625-3"></a></span>
+<span id="cb625-4"><a href="sec-jags-uss.html#cb625-4"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;lm.txt&quot;</span>)</span>
+<span id="cb625-5"><a href="sec-jags-uss.html#cb625-5"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb625-6"><a href="sec-jags-uss.html#cb625-6"></a><span class="st">model {  </span></span>
+<span id="cb625-7"><a href="sec-jags-uss.html#cb625-7"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
+<span id="cb625-8"><a href="sec-jags-uss.html#cb625-8"></a><span class="st">   beta ~ dnorm(0,0.01);</span></span>
+<span id="cb625-9"><a href="sec-jags-uss.html#cb625-9"></a><span class="st">   tau.obs ~ dgamma(0.001,0.001); </span></span>
+<span id="cb625-10"><a href="sec-jags-uss.html#cb625-10"></a><span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span></span>
+<span id="cb625-11"><a href="sec-jags-uss.html#cb625-11"></a><span class="st">   </span></span>
+<span id="cb625-12"><a href="sec-jags-uss.html#cb625-12"></a><span class="st">   for(i in 1:N) {</span></span>
+<span id="cb625-13"><a href="sec-jags-uss.html#cb625-13"></a><span class="st">      predY[i] &lt;- mu + C[i]*beta; </span></span>
+<span id="cb625-14"><a href="sec-jags-uss.html#cb625-14"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.obs);</span></span>
+<span id="cb625-15"><a href="sec-jags-uss.html#cb625-15"></a><span class="st">   }</span></span>
+<span id="cb625-16"><a href="sec-jags-uss.html#cb625-16"></a><span class="st">}  </span></span>
+<span id="cb625-17"><a href="sec-jags-uss.html#cb625-17"></a><span class="st">&quot;</span>, </span>
+<span id="cb625-18"><a href="sec-jags-uss.html#cb625-18"></a>    <span class="dt">file =</span> model.loc)</span>
+<span id="cb625-19"><a href="sec-jags-uss.html#cb625-19"></a></span>
+<span id="cb625-20"><a href="sec-jags-uss.html#cb625-20"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N, <span class="dt">C =</span> Temp)</span>
+<span id="cb625-21"><a href="sec-jags-uss.html#cb625-21"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;beta&quot;</span>)</span>
+<span id="cb625-22"><a href="sec-jags-uss.html#cb625-22"></a>mod_lm =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </span>
+<span id="cb625-23"><a href="sec-jags-uss.html#cb625-23"></a>    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb625-24"><a href="sec-jags-uss.html#cb625-24"></a>    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 </div>
 </div>
             </section>

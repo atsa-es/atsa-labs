@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -469,7 +469,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="test-on-simulated-data" class="section level3">
 <h3><span class="header-section-number">5.4.1</span> Test on simulated data</h3>
 <p>Let’s try the KPSS test on white noise with a trend. The default is a null hypothesis with no trend. We will change this to <code>null="Trend"</code>.</p>
-<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="sec-boxjenkins-kpss.html#cb309-1"></a>tseries<span class="op">::</span><span class="kw">kpss.test</span>(wnt, <span class="dt">null =</span> <span class="st">&quot;Trend&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="sec-boxjenkins-kpss.html#cb304-1"></a>tseries<span class="op">::</span><span class="kw">kpss.test</span>(wnt, <span class="dt">null =</span> <span class="st">&quot;Trend&quot;</span>)</span></code></pre></div>
 <pre><code>Warning in tseries::kpss.test(wnt, null = &quot;Trend&quot;): p-value greater than printed
 p-value</code></pre>
 <pre><code>
@@ -479,7 +479,7 @@ data:  wnt
 KPSS Trend = 0.045579, Truncation lag parameter = 4, p-value = 0.1</code></pre>
 <p>The p-value is greater than 0.05. The null hypothesis of stationarity around a trend is not rejected.</p>
 <p>Let’s try the KPSS test on white noise with a trend but let’s use the default of stationary with no trend.</p>
-<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="sec-boxjenkins-kpss.html#cb312-1"></a>tseries<span class="op">::</span><span class="kw">kpss.test</span>(wnt, <span class="dt">null =</span> <span class="st">&quot;Level&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="sec-boxjenkins-kpss.html#cb307-1"></a>tseries<span class="op">::</span><span class="kw">kpss.test</span>(wnt, <span class="dt">null =</span> <span class="st">&quot;Level&quot;</span>)</span></code></pre></div>
 <pre><code>Warning in tseries::kpss.test(wnt, null = &quot;Level&quot;): p-value smaller than printed
 p-value</code></pre>
 <pre><code>
@@ -492,7 +492,7 @@ KPSS Level = 2.1029, Truncation lag parameter = 4, p-value = 0.01</code></pre>
 <div id="test-the-anchovy-data-1" class="section level3">
 <h3><span class="header-section-number">5.4.2</span> Test the anchovy data</h3>
 <p>Let’s try the anchovy data.</p>
-<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="sec-boxjenkins-kpss.html#cb315-1"></a><span class="kw">kpss.test</span>(anchovyts, <span class="dt">null =</span> <span class="st">&quot;Trend&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="sec-boxjenkins-kpss.html#cb310-1"></a><span class="kw">kpss.test</span>(anchovyts, <span class="dt">null =</span> <span class="st">&quot;Trend&quot;</span>)</span></code></pre></div>
 <pre><code>
     KPSS Test for Trend Stationarity
 

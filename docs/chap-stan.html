@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -471,19 +471,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="data-and-packages-8" class="section level3 unnumbered">
 <h3>Data and packages</h3>
 <p>You will need the <strong>atsar</strong> package we have written for fitting state-space time series models with Stan. This is hosted on Github <a href="https://github.com/nwfsc-timeseries/atsar">safs-timeseries</a>. Install using the <strong>devtools</strong> package.</p>
-<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb633-1"><a href="chap-stan.html#cb633-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb633-2"><a href="chap-stan.html#cb633-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb628-1"><a href="chap-stan.html#cb628-1"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb628-2"><a href="chap-stan.html#cb628-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</span></code></pre></div>
 <p>In addition, you will need the <strong>rstan</strong>, <strong>datasets</strong>, <strong>parallel</strong> and <strong>loo</strong> packages. After installing, if needed, load the packages:</p>
-<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="chap-stan.html#cb634-1"></a><span class="kw">library</span>(atsar)</span>
-<span id="cb634-2"><a href="chap-stan.html#cb634-2"></a><span class="kw">library</span>(rstan)</span>
-<span id="cb634-3"><a href="chap-stan.html#cb634-3"></a><span class="kw">library</span>(loo)</span></code></pre></div>
+<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="chap-stan.html#cb629-1"></a><span class="kw">library</span>(atsar)</span>
+<span id="cb629-2"><a href="chap-stan.html#cb629-2"></a><span class="kw">library</span>(rstan)</span>
+<span id="cb629-3"><a href="chap-stan.html#cb629-3"></a><span class="kw">library</span>(loo)</span></code></pre></div>
 <p>Once you have Stan and <strong>rstan</strong> installed, optimize Stan on your machine:</p>
-<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb635-1"><a href="chap-stan.html#cb635-1"></a><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb635-2"><a href="chap-stan.html#cb635-2"></a><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="chap-stan.html#cb630-1"></a><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb630-2"><a href="chap-stan.html#cb630-2"></a><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
 <p>For this lab, we will use a data set on airquality in New York from the <strong>datasets</strong> package. Load the data and create a couple new variables for future use.</p>
-<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="chap-stan.html#cb636-1"></a><span class="kw">data</span>(airquality, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
-<span id="cb636-2"><a href="chap-stan.html#cb636-2"></a>Wind &lt;-<span class="st"> </span>airquality<span class="op">$</span>Wind  <span class="co"># wind speed</span></span>
-<span id="cb636-3"><a href="chap-stan.html#cb636-3"></a>Temp &lt;-<span class="st"> </span>airquality<span class="op">$</span>Temp  <span class="co"># air temperature</span></span></code></pre></div>
+<div class="sourceCode" id="cb631"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb631-1"><a href="chap-stan.html#cb631-1"></a><span class="kw">data</span>(airquality, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
+<span id="cb631-2"><a href="chap-stan.html#cb631-2"></a>Wind &lt;-<span class="st"> </span>airquality<span class="op">$</span>Wind  <span class="co"># wind speed</span></span>
+<span id="cb631-3"><a href="chap-stan.html#cb631-3"></a>Temp &lt;-<span class="st"> </span>airquality<span class="op">$</span>Temp  <span class="co"># air temperature</span></span></code></pre></div>
 </div>
 </div>
             </section>

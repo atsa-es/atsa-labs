@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -471,32 +471,32 @@ E[y_t] = \phi * y_{t-1} + e_{t-1}
 \tag{12.6}
 \end{equation}\]</span></p>
 <p>The JAGS random walk model and R script to run the AR(1) model is below:</p>
-<div class="sourceCode" id="cb628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb628-1"><a href="sec-jags-ar1.html#cb628-1"></a><span class="co"># 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT We&#39;re</span></span>
-<span id="cb628-2"><a href="sec-jags-ar1.html#cb628-2"></a><span class="co"># introducting a new AR coefficient &#39;phi&#39;, so the model is</span></span>
-<span id="cb628-3"><a href="sec-jags-ar1.html#cb628-3"></a><span class="co"># y[t] ~ N(mu + phi*y[n-1], sigma^2)</span></span>
-<span id="cb628-4"><a href="sec-jags-ar1.html#cb628-4"></a></span>
-<span id="cb628-5"><a href="sec-jags-ar1.html#cb628-5"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;ar1_intercept.txt&quot;</span>)</span>
-<span id="cb628-6"><a href="sec-jags-ar1.html#cb628-6"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb628-7"><a href="sec-jags-ar1.html#cb628-7"></a><span class="st">model {  </span></span>
-<span id="cb628-8"><a href="sec-jags-ar1.html#cb628-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
-<span id="cb628-9"><a href="sec-jags-ar1.html#cb628-9"></a><span class="st">   tau.pro ~ dgamma(0.001,0.001); </span></span>
-<span id="cb628-10"><a href="sec-jags-ar1.html#cb628-10"></a><span class="st">   sd.pro &lt;- 1/sqrt(tau.pro); </span></span>
-<span id="cb628-11"><a href="sec-jags-ar1.html#cb628-11"></a><span class="st">   phi ~ dnorm(0, 1); </span></span>
-<span id="cb628-12"><a href="sec-jags-ar1.html#cb628-12"></a><span class="st">   </span></span>
-<span id="cb628-13"><a href="sec-jags-ar1.html#cb628-13"></a><span class="st">   predY[1] &lt;- Y[1];</span></span>
-<span id="cb628-14"><a href="sec-jags-ar1.html#cb628-14"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb628-15"><a href="sec-jags-ar1.html#cb628-15"></a><span class="st">      predY[i] &lt;- mu + phi * Y[i-1]; </span></span>
-<span id="cb628-16"><a href="sec-jags-ar1.html#cb628-16"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.pro);</span></span>
-<span id="cb628-17"><a href="sec-jags-ar1.html#cb628-17"></a><span class="st">   }</span></span>
-<span id="cb628-18"><a href="sec-jags-ar1.html#cb628-18"></a><span class="st">}  </span></span>
-<span id="cb628-19"><a href="sec-jags-ar1.html#cb628-19"></a><span class="st">&quot;</span>, </span>
-<span id="cb628-20"><a href="sec-jags-ar1.html#cb628-20"></a>    <span class="dt">file =</span> model.loc)</span>
-<span id="cb628-21"><a href="sec-jags-ar1.html#cb628-21"></a></span>
-<span id="cb628-22"><a href="sec-jags-ar1.html#cb628-22"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
-<span id="cb628-23"><a href="sec-jags-ar1.html#cb628-23"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.pro&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
-<span id="cb628-24"><a href="sec-jags-ar1.html#cb628-24"></a>mod_ar1_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, </span>
-<span id="cb628-25"><a href="sec-jags-ar1.html#cb628-25"></a>    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb628-26"><a href="sec-jags-ar1.html#cb628-26"></a>    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb623-1"><a href="sec-jags-ar1.html#cb623-1"></a><span class="co"># 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT We&#39;re</span></span>
+<span id="cb623-2"><a href="sec-jags-ar1.html#cb623-2"></a><span class="co"># introducting a new AR coefficient &#39;phi&#39;, so the model is</span></span>
+<span id="cb623-3"><a href="sec-jags-ar1.html#cb623-3"></a><span class="co"># y[t] ~ N(mu + phi*y[n-1], sigma^2)</span></span>
+<span id="cb623-4"><a href="sec-jags-ar1.html#cb623-4"></a></span>
+<span id="cb623-5"><a href="sec-jags-ar1.html#cb623-5"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;ar1_intercept.txt&quot;</span>)</span>
+<span id="cb623-6"><a href="sec-jags-ar1.html#cb623-6"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb623-7"><a href="sec-jags-ar1.html#cb623-7"></a><span class="st">model {  </span></span>
+<span id="cb623-8"><a href="sec-jags-ar1.html#cb623-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
+<span id="cb623-9"><a href="sec-jags-ar1.html#cb623-9"></a><span class="st">   tau.pro ~ dgamma(0.001,0.001); </span></span>
+<span id="cb623-10"><a href="sec-jags-ar1.html#cb623-10"></a><span class="st">   sd.pro &lt;- 1/sqrt(tau.pro); </span></span>
+<span id="cb623-11"><a href="sec-jags-ar1.html#cb623-11"></a><span class="st">   phi ~ dnorm(0, 1); </span></span>
+<span id="cb623-12"><a href="sec-jags-ar1.html#cb623-12"></a><span class="st">   </span></span>
+<span id="cb623-13"><a href="sec-jags-ar1.html#cb623-13"></a><span class="st">   predY[1] &lt;- Y[1];</span></span>
+<span id="cb623-14"><a href="sec-jags-ar1.html#cb623-14"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb623-15"><a href="sec-jags-ar1.html#cb623-15"></a><span class="st">      predY[i] &lt;- mu + phi * Y[i-1]; </span></span>
+<span id="cb623-16"><a href="sec-jags-ar1.html#cb623-16"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.pro);</span></span>
+<span id="cb623-17"><a href="sec-jags-ar1.html#cb623-17"></a><span class="st">   }</span></span>
+<span id="cb623-18"><a href="sec-jags-ar1.html#cb623-18"></a><span class="st">}  </span></span>
+<span id="cb623-19"><a href="sec-jags-ar1.html#cb623-19"></a><span class="st">&quot;</span>, </span>
+<span id="cb623-20"><a href="sec-jags-ar1.html#cb623-20"></a>    <span class="dt">file =</span> model.loc)</span>
+<span id="cb623-21"><a href="sec-jags-ar1.html#cb623-21"></a></span>
+<span id="cb623-22"><a href="sec-jags-ar1.html#cb623-22"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
+<span id="cb623-23"><a href="sec-jags-ar1.html#cb623-23"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.pro&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
+<span id="cb623-24"><a href="sec-jags-ar1.html#cb623-24"></a>mod_ar1_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, </span>
+<span id="cb623-25"><a href="sec-jags-ar1.html#cb623-25"></a>    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb623-26"><a href="sec-jags-ar1.html#cb623-26"></a>    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 </div>
             </section>
 

@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -488,9 +488,9 @@ where <span class="math inline">\(y_t\)</span> is your data. It is written this 
 <div id="test-on-white-noise" class="section level4">
 <h4><span class="header-section-number">5.3.3.1</span> Test on white noise</h4>
 <p>Let’s start by doing the test on data that we know are stationary, white noise. We will use an Augmented Dickey-Fuller test where we use the default number of lags (amount of time-dependency) in our test. For a time-series of 100, this is 4.</p>
-<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb291-1"></a>TT &lt;-<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb291-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb291-2"></a>wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)  <span class="co"># white noise</span></span>
-<span id="cb291-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb291-3"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wn)</span></code></pre></div>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb286-1"></a>TT &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb286-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb286-2"></a>wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)  <span class="co"># white noise</span></span>
+<span id="cb286-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb286-3"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wn)</span></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wn): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -500,7 +500,7 @@ Dickey-Fuller = -4.8309, Lag order = 4, p-value = 0.01
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis is rejected.</p>
 <p>Try a Dickey-Fuller test. This is testing with a null hypothesis of AR(1) stationarity versus a null hypothesis with AR(4) stationarity when we used the default <code>k</code>.</p>
-<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb294-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wn, <span class="dt">k =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb289-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wn, <span class="dt">k =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wn, k = 0): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -513,9 +513,9 @@ alternative hypothesis: stationary</code></pre>
 <div id="test-on-white-noise-with-trend" class="section level4">
 <h4><span class="header-section-number">5.3.3.2</span> Test on white noise with trend</h4>
 <p>Try the test on white noise with a trend and intercept.</p>
-<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb297-1"></a>intercept &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb297-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb297-2"></a>wnt &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT <span class="op">+</span><span class="st"> </span>intercept</span>
-<span id="cb297-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb297-3"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wnt)</span></code></pre></div>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb292-1"></a>intercept &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb292-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb292-2"></a>wnt &lt;-<span class="st"> </span>wn <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>TT <span class="op">+</span><span class="st"> </span>intercept</span>
+<span id="cb292-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb292-3"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(wnt)</span></code></pre></div>
 <pre><code>Warning in tseries::adf.test(wnt): p-value smaller than printed p-value</code></pre>
 <pre><code>
     Augmented Dickey-Fuller Test
@@ -528,8 +528,8 @@ alternative hypothesis: stationary</code></pre>
 <div id="test-on-random-walk" class="section level4">
 <h4><span class="header-section-number">5.3.3.3</span> Test on random walk</h4>
 <p>Let’s try the test on a random walk (nonstationary).</p>
-<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb300-1"></a>rw &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(TT))</span>
-<span id="cb300-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb300-2"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(rw)</span></code></pre></div>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb295-1"></a>rw &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(TT))</span>
+<span id="cb295-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb295-2"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(rw)</span></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -538,7 +538,7 @@ Dickey-Fuller = -2.3038, Lag order = 4, p-value = 0.4508
 alternative hypothesis: stationary</code></pre>
 <p>The null hypothesis is NOT rejected as the p-value is greater than 0.05.</p>
 <p>Try a Dickey-Fuller test.</p>
-<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(rw, <span class="dt">k =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb297-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(rw, <span class="dt">k =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -549,7 +549,7 @@ alternative hypothesis: stationary</code></pre>
 </div>
 <div id="test-the-anchovy-data" class="section level4">
 <h4><span class="header-section-number">5.3.3.4</span> Test the anchovy data</h4>
-<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb304-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(anchovyts)</span></code></pre></div>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb299-1"></a>tseries<span class="op">::</span><span class="kw">adf.test</span>(anchovyts)</span></code></pre></div>
 <pre><code>
     Augmented Dickey-Fuller Test
 
@@ -574,9 +574,9 @@ alternative hypothesis: stationary</code></pre>
 <code>z.diff</code> means <span class="math inline">\(\Delta y_t\)</span> and <code>z.lag.1</code> is <span class="math inline">\(y_{t-1}\)</span>.</p>
 <p>When you use <code>summary()</code> for the output from <code>ur.df()</code>, you will see the estimated values for <span class="math inline">\(\gamma\)</span> (denoted <code>z.lag.1</code>), intercept and trend. If you see <code>***</code> or <code>**</code> on the coefficients list for <code>z.lag.1</code>, it indicates that the effect of <code>z.lag.1</code> is significantly different than 0 and this supports the assumption of stationarity.</p>
 <p>The <code>intercept</code> and <code>tt</code> estimates indicate where there is a non-zero level (intercept) or linear trend (tt).</p>
-<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb307-1"></a>wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)</span>
-<span id="cb307-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb307-2"></a>test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type =</span> <span class="st">&quot;trend&quot;</span>, <span class="dt">lags =</span> <span class="dv">0</span>)</span>
-<span id="cb307-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb307-3"></a><span class="kw">summary</span>(test)</span></code></pre></div>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-1"></a>wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)</span>
+<span id="cb302-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-2"></a>test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type =</span> <span class="st">&quot;trend&quot;</span>, <span class="dt">lags =</span> <span class="dv">0</span>)</span>
+<span id="cb302-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-3"></a><span class="kw">summary</span>(test)</span></code></pre></div>
 <pre><code>
 ############################################### 
 # Augmented Dickey-Fuller Test Unit Root Test # 

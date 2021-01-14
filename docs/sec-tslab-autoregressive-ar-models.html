@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -466,41 +466,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-tslab-autoregressive-ar-models" class="section level2">
 <h2><span class="header-section-number">4.7</span> Autoregressive (AR) models</h2>
 <p>Autoregressive models of order <span class="math inline">\(p\)</span>, abbreviated AR(<span class="math inline">\(p\)</span>), are commonly used in time series analyses. In particular, AR(1) models (and their multivariate extensions) see considerable use in ecology as we will see later in the course. Recall from lecture that an AR(<span class="math inline">\(p\)</span>) model is written as</p>
-<p><span class="math display" id="eq:defnARp">\[\begin{equation}
-\tag{4.22}
+<p><span class="math display">\[\begin{equation}
+(\#eq:defnAR_p_coef)
   x_t = \phi_1 x_{t-1} + \phi_2 x_{t-2} + \dots + \phi_p x_{t-p} + w_t,
 \end{equation}\]</span></p>
 <p>where <span class="math inline">\(\{w_t\}\)</span> is a white noise sequence with zero mean and some variance <span class="math inline">\(\sigma^2\)</span>. For our purposes we usually assume that <span class="math inline">\(w_t \sim \text{N}(0,q)\)</span>. Note that the random walk in Equation <a href="sec-tslab-random-walks-rw.html#eq:defnRW2">(4.18)</a> is a special case of an AR(1) model where <span class="math inline">\(\phi_1=1\)</span> and <span class="math inline">\(\phi_k=0\)</span> for <span class="math inline">\(k \geq 2\)</span>.</p>
-<div id="sec-tslab-simulating-an-arp-process" class="section level3">
+<div id="sec-tslab-simulating-an-AR_p_coef-process" class="section level3">
 <h3><span class="header-section-number">4.7.1</span> Simulating an AR(<span class="math inline">\(p\)</span>) process</h3>
 <p>Although we could simulate an AR(<span class="math inline">\(p\)</span>) process in R using a for loop just as we did for a random walk, it’s much easier with the function <code>arima.sim()</code>, which works for all forms and subsets of ARIMA models. To do so, remember that the AR in ARIMA stands for “autoregressive”, the I for “integrated”, and the MA for “moving-average”; we specify the order of ARIMA models as <span class="math inline">\(p,d,q\)</span>. So, for example, we would specify an AR(2) model as ARIMA(2,0,0), or an MA(1) model as ARIMA(0,0,1). If we had an ARMA(3,1) model that we applied to data that had been twice-differenced, then we would have an ARIMA(3,2,1) model.</p>
-<p><code>arima.sim()</code> will accept many arguments, but we are interested primarily in two of them: <code>n</code> and <code>model</code> (type <code>?arima.sim</code> to learn more). The former simply indicates the length of desired time series, but the latter is more complex. Specifically, <code>model</code> is a list with the following elements:</p>
+<p><code>arima.sim()</code> will accept many arguments, but we are interested primarily in three of them (type <code>?arima.sim</code> to learn more):</p>
+<ol style="list-style-type: decimal">
+<li><p><code>n</code>: the length of desired time series</p></li>
+<li><p><code>model</code>: a list with the following elements:</p></li>
+</ol>
 <ul>
-<li><code>order</code> a vector of length 3 containing the ARIMA(<span class="math inline">\(p,d,q\)</span>) order</li>
-<li><code>ar</code> a vector of length <span class="math inline">\(p\)</span> containing the AR(<span class="math inline">\(p\)</span>) coefficients</li>
-<li><code>ma</code> a vector of length <span class="math inline">\(q\)</span> containing the MA(<span class="math inline">\(q\)</span>) coefficients</li>
-<li><code>sd</code> a scalar indicating the std dev of the Gaussian errors</li>
+<li><code>order</code>: a vector of length 3 containing the ARIMA(<span class="math inline">\(p,d,q\)</span>) order</li>
+<li><code>ar</code>: a vector of length <span class="math inline">\(p\)</span> containing the AR(<span class="math inline">\(p\)</span>) coefficients</li>
+<li><code>ma</code>: a vector of length <span class="math inline">\(q\)</span> containing the MA(<span class="math inline">\(q\)</span>) coefficients</li>
 </ul>
+<ol start="3" style="list-style-type: decimal">
+<li><code>sd</code>: the standard deviation of the Gaussian errors</li>
+</ol>
 <p>Note that you can omit the <code>ma</code> element entirely if you have an AR(<span class="math inline">\(p\)</span>) model, or omit the <code>ar</code> element if you have an MA(<span class="math inline">\(q\)</span>) model. If you omit the <code>sd</code> element, <code>arima.sim()</code> will assume you want normally distributed errors with SD = 1. Also note that you can pass <code>arima.sim()</code> your own time series of random errors or the name of a function that will generate the errors (<em>e.g.</em>, you could use <code>rpois()</code> if you wanted a model with Poisson errors). Type <code>?arima.sim</code> for more details.</p>
 <p>Let’s begin by simulating some AR(1) models and comparing their behavior. First, let’s choose models with contrasting AR coefficients. Recall that in order for an AR(1) model to be stationary, <span class="math inline">\(\phi &lt; \lvert 1 \rvert\)</span>, so we’ll try 0.1 and 0.9. We’ll again set the random number seed so we will get the same answers.</p>
-<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="sec-tslab-autoregressive-ar-models.html#cb252-1"></a><span class="kw">set.seed</span>(<span class="dv">456</span>)</span>
-<span id="cb252-2"><a href="sec-tslab-autoregressive-ar-models.html#cb252-2"></a><span class="co">## list description for AR(1) model with small coef</span></span>
-<span id="cb252-3"><a href="sec-tslab-autoregressive-ar-models.html#cb252-3"></a>AR.sm &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="fl">0.1</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb252-4"><a href="sec-tslab-autoregressive-ar-models.html#cb252-4"></a><span class="co">## list description for AR(1) model with large coef</span></span>
-<span id="cb252-5"><a href="sec-tslab-autoregressive-ar-models.html#cb252-5"></a>AR.lg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="fl">0.9</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb252-6"><a href="sec-tslab-autoregressive-ar-models.html#cb252-6"></a><span class="co">## simulate AR(1)</span></span>
-<span id="cb252-7"><a href="sec-tslab-autoregressive-ar-models.html#cb252-7"></a>AR1.sm &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> AR.sm)</span>
-<span id="cb252-8"><a href="sec-tslab-autoregressive-ar-models.html#cb252-8"></a>AR1.lg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> AR.lg)</span></code></pre></div>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="sec-tslab-autoregressive-ar-models.html#cb247-1"></a><span class="kw">set.seed</span>(<span class="dv">456</span>)</span>
+<span id="cb247-2"><a href="sec-tslab-autoregressive-ar-models.html#cb247-2"></a><span class="co">## list description for AR(1) model with small coef</span></span>
+<span id="cb247-3"><a href="sec-tslab-autoregressive-ar-models.html#cb247-3"></a>AR_sm &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="fl">0.1</span>)</span>
+<span id="cb247-4"><a href="sec-tslab-autoregressive-ar-models.html#cb247-4"></a><span class="co">## list description for AR(1) model with large coef</span></span>
+<span id="cb247-5"><a href="sec-tslab-autoregressive-ar-models.html#cb247-5"></a>AR_lg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="fl">0.9</span>)</span>
+<span id="cb247-6"><a href="sec-tslab-autoregressive-ar-models.html#cb247-6"></a><span class="co">## simulate AR(1)</span></span>
+<span id="cb247-7"><a href="sec-tslab-autoregressive-ar-models.html#cb247-7"></a>AR1_sm &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> AR_sm, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb247-8"><a href="sec-tslab-autoregressive-ar-models.html#cb247-8"></a>AR1_lg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> AR_lg, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span></code></pre></div>
 <p>Now let’s plot the 2 simulated series.</p>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="sec-tslab-autoregressive-ar-models.html#cb253-1"></a><span class="co">## setup plot region</span></span>
-<span id="cb253-2"><a href="sec-tslab-autoregressive-ar-models.html#cb253-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb253-3"><a href="sec-tslab-autoregressive-ar-models.html#cb253-3"></a><span class="co">## get y-limits for common plots</span></span>
-<span id="cb253-4"><a href="sec-tslab-autoregressive-ar-models.html#cb253-4"></a>ylm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(AR1.sm, AR1.lg), <span class="kw">max</span>(AR1.sm, AR1.lg))</span>
-<span id="cb253-5"><a href="sec-tslab-autoregressive-ar-models.html#cb253-5"></a><span class="co">## plot the ts</span></span>
-<span id="cb253-6"><a href="sec-tslab-autoregressive-ar-models.html#cb253-6"></a><span class="kw">plot.ts</span>(AR1.sm, <span class="dt">ylim =</span> ylm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), </span>
-<span id="cb253-7"><a href="sec-tslab-autoregressive-ar-models.html#cb253-7"></a>    <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(phi, <span class="st">&quot; = 0.1&quot;</span>)))</span>
-<span id="cb253-8"><a href="sec-tslab-autoregressive-ar-models.html#cb253-8"></a><span class="kw">plot.ts</span>(AR1.lg, <span class="dt">ylim =</span> ylm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), </span>
-<span id="cb253-9"><a href="sec-tslab-autoregressive-ar-models.html#cb253-9"></a>    <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(phi, <span class="st">&quot; = 0.9&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="sec-tslab-autoregressive-ar-models.html#cb248-1"></a><span class="co">## setup plot region</span></span>
+<span id="cb248-2"><a href="sec-tslab-autoregressive-ar-models.html#cb248-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb248-3"><a href="sec-tslab-autoregressive-ar-models.html#cb248-3"></a><span class="co">## get y-limits for common plots</span></span>
+<span id="cb248-4"><a href="sec-tslab-autoregressive-ar-models.html#cb248-4"></a>ylm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(AR1_sm, AR1_lg), <span class="kw">max</span>(AR1_sm, AR1_lg))</span>
+<span id="cb248-5"><a href="sec-tslab-autoregressive-ar-models.html#cb248-5"></a><span class="co">## plot the ts</span></span>
+<span id="cb248-6"><a href="sec-tslab-autoregressive-ar-models.html#cb248-6"></a><span class="kw">plot.ts</span>(AR1_sm, <span class="dt">ylim =</span> ylm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), </span>
+<span id="cb248-7"><a href="sec-tslab-autoregressive-ar-models.html#cb248-7"></a>    <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(phi, <span class="st">&quot; = 0.1&quot;</span>)))</span>
+<span id="cb248-8"><a href="sec-tslab-autoregressive-ar-models.html#cb248-8"></a><span class="kw">plot.ts</span>(AR1_lg, <span class="dt">ylim =</span> ylm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), </span>
+<span id="cb248-9"><a href="sec-tslab-autoregressive-ar-models.html#cb248-9"></a>    <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(phi, <span class="st">&quot; = 0.9&quot;</span>)))</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotAR1contrast"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotAR1contrast-1.png" alt="Time series of simulated AR(1) processes with \(\phi=0.1\) (left) and \(\phi=0.9\) (right)." width="80%" />
@@ -510,24 +516,24 @@ Figure 4.22: Time series of simulated AR(1) processes with <span class="math inl
 </div>
 <p>What do you notice about the two plots in Figure <a href="sec-tslab-autoregressive-ar-models.html#fig:tslab-plotAR1contrast">4.22</a>? It looks like the time series with the smaller AR coefficient is more “choppy” and seems to stay closer to 0 whereas the time series with the larger AR coefficient appears to wander around more. Remember that as the coefficient in an AR(1) model goes to 0, the model approaches a WN sequence, which is stationary in both the mean and variance. As the coefficient goes to 1, however, the model approaches a random walk, which is not stationary in either the mean or variance.</p>
 <p>Next, let’s generate two AR(1) models that have the same magnitude coeficient, but opposite signs, and compare their behavior.</p>
-<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="sec-tslab-autoregressive-ar-models.html#cb254-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb254-2"><a href="sec-tslab-autoregressive-ar-models.html#cb254-2"></a><span class="co">## list description for AR(1) model with small coef</span></span>
-<span id="cb254-3"><a href="sec-tslab-autoregressive-ar-models.html#cb254-3"></a>AR.pos &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="fl">0.5</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb254-4"><a href="sec-tslab-autoregressive-ar-models.html#cb254-4"></a><span class="co">## list description for AR(1) model with large coef</span></span>
-<span id="cb254-5"><a href="sec-tslab-autoregressive-ar-models.html#cb254-5"></a>AR.neg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="fl">-0.5</span>, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
-<span id="cb254-6"><a href="sec-tslab-autoregressive-ar-models.html#cb254-6"></a><span class="co">## simulate AR(1)</span></span>
-<span id="cb254-7"><a href="sec-tslab-autoregressive-ar-models.html#cb254-7"></a>AR1.pos &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> AR.pos)</span>
-<span id="cb254-8"><a href="sec-tslab-autoregressive-ar-models.html#cb254-8"></a>AR1.neg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> AR.neg)</span></code></pre></div>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="sec-tslab-autoregressive-ar-models.html#cb249-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb249-2"><a href="sec-tslab-autoregressive-ar-models.html#cb249-2"></a><span class="co">## list description for AR(1) model with small coef</span></span>
+<span id="cb249-3"><a href="sec-tslab-autoregressive-ar-models.html#cb249-3"></a>AR_pos &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="fl">0.5</span>)</span>
+<span id="cb249-4"><a href="sec-tslab-autoregressive-ar-models.html#cb249-4"></a><span class="co">## list description for AR(1) model with large coef</span></span>
+<span id="cb249-5"><a href="sec-tslab-autoregressive-ar-models.html#cb249-5"></a>AR_neg &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="fl">-0.5</span>)</span>
+<span id="cb249-6"><a href="sec-tslab-autoregressive-ar-models.html#cb249-6"></a><span class="co">## simulate AR(1)</span></span>
+<span id="cb249-7"><a href="sec-tslab-autoregressive-ar-models.html#cb249-7"></a>AR1_pos &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> AR_pos, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb249-8"><a href="sec-tslab-autoregressive-ar-models.html#cb249-8"></a>AR1_neg &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">model =</span> AR_neg, <span class="dt">sd =</span> <span class="fl">0.1</span>)</span></code></pre></div>
 <p>OK, let’s plot the 2 simulated series.</p>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb255-1"><a href="sec-tslab-autoregressive-ar-models.html#cb255-1"></a><span class="co">## setup plot region</span></span>
-<span id="cb255-2"><a href="sec-tslab-autoregressive-ar-models.html#cb255-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb255-3"><a href="sec-tslab-autoregressive-ar-models.html#cb255-3"></a><span class="co">## get y-limits for common plots</span></span>
-<span id="cb255-4"><a href="sec-tslab-autoregressive-ar-models.html#cb255-4"></a>ylm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(AR1.pos, AR1.neg), <span class="kw">max</span>(AR1.pos, AR1.neg))</span>
-<span id="cb255-5"><a href="sec-tslab-autoregressive-ar-models.html#cb255-5"></a><span class="co">## plot the ts</span></span>
-<span id="cb255-6"><a href="sec-tslab-autoregressive-ar-models.html#cb255-6"></a><span class="kw">plot.ts</span>(AR1.pos, <span class="dt">ylim =</span> ylm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), </span>
-<span id="cb255-7"><a href="sec-tslab-autoregressive-ar-models.html#cb255-7"></a>    <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(phi[<span class="dv">1</span>], <span class="st">&quot; = 0.5&quot;</span>)))</span>
-<span id="cb255-8"><a href="sec-tslab-autoregressive-ar-models.html#cb255-8"></a><span class="kw">plot.ts</span>(AR1.neg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(phi[<span class="dv">1</span>], </span>
-<span id="cb255-9"><a href="sec-tslab-autoregressive-ar-models.html#cb255-9"></a>    <span class="st">&quot; = -0.5&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="sec-tslab-autoregressive-ar-models.html#cb250-1"></a><span class="co">## setup plot region</span></span>
+<span id="cb250-2"><a href="sec-tslab-autoregressive-ar-models.html#cb250-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb250-3"><a href="sec-tslab-autoregressive-ar-models.html#cb250-3"></a><span class="co">## get y-limits for common plots</span></span>
+<span id="cb250-4"><a href="sec-tslab-autoregressive-ar-models.html#cb250-4"></a>ylm &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(AR1_pos, AR1_neg), <span class="kw">max</span>(AR1_pos, AR1_neg))</span>
+<span id="cb250-5"><a href="sec-tslab-autoregressive-ar-models.html#cb250-5"></a><span class="co">## plot the ts</span></span>
+<span id="cb250-6"><a href="sec-tslab-autoregressive-ar-models.html#cb250-6"></a><span class="kw">plot.ts</span>(AR1_pos, <span class="dt">ylim =</span> ylm, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), </span>
+<span id="cb250-7"><a href="sec-tslab-autoregressive-ar-models.html#cb250-7"></a>    <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(phi[<span class="dv">1</span>], <span class="st">&quot; = 0.5&quot;</span>)))</span>
+<span id="cb250-8"><a href="sec-tslab-autoregressive-ar-models.html#cb250-8"></a><span class="kw">plot.ts</span>(AR1_neg, <span class="dt">ylab =</span> <span class="kw">expression</span>(<span class="kw">italic</span>(x)[<span class="kw">italic</span>(t)]), <span class="dt">main =</span> <span class="kw">expression</span>(<span class="kw">paste</span>(phi[<span class="dv">1</span>], </span>
+<span id="cb250-9"><a href="sec-tslab-autoregressive-ar-models.html#cb250-9"></a>    <span class="st">&quot; = -0.5&quot;</span>)))</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotAR1opps"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotAR1opps-1.png" alt="Time series of simulated AR(1) processes with \(\phi_1=0.5\) (left) and \(\phi_1=-0.5\) (right)." width="80%" />
@@ -537,39 +543,39 @@ Figure 4.23: Time series of simulated AR(1) processes with <span class="math inl
 </div>
 <p>Now it appears like both time series vary around the mean by about the same amount, but the model with the negative coefficient produces a much more “sawtooth” time series. It turns out that any AR(1) model with <span class="math inline">\(-1&lt;\phi&lt;0\)</span> will exhibit the 2-point oscillation you see here.</p>
 <p>We can simulate higher order AR(<span class="math inline">\(p\)</span>) models in the same manner, but care must be exercised when choosing a set of coefficients that result in a stationary model or else <code>arima.sim()</code> will fail and report an error. For example, an AR(2) model with both coefficients equal to 0.5 is not stationary, and therefore this function call will not work:</p>
-<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="sec-tslab-autoregressive-ar-models.html#cb256-1"></a><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">model =</span> <span class="kw">list</span>(<span class="kw">order</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb251-1"><a href="sec-tslab-autoregressive-ar-models.html#cb251-1"></a><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">model =</span> <span class="kw">list</span>(<span class="kw">order</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="dt">ar =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>)))</span></code></pre></div>
 <p>If you try, R will respond that the “<code>'ar' part of model is not stationary</code>”.</p>
 </div>
-<div id="sec-tslab-correlation-structure-of-arp-processes" class="section level3">
+<div id="sec-tslab-correlation-structure-of-AR_p_coef-processes" class="section level3">
 <h3><span class="header-section-number">4.7.2</span> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</h3>
 <p>Let’s review what we learned in lecture about the general behavior of the ACF and PACF for AR(<span class="math inline">\(p\)</span>) models. To do so, we’ll simulate four stationary AR(<span class="math inline">\(p\)</span>) models of increasing order <span class="math inline">\(p\)</span> and then examine their ACF’s and PACF’s. Let’s use a really big <span class="math inline">\(n\)</span> so as to make them “pure”, which will provide a much better estimate of the correlation structure.</p>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="sec-tslab-autoregressive-ar-models.html#cb257-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb257-2"><a href="sec-tslab-autoregressive-ar-models.html#cb257-2"></a><span class="co">## the 4 AR coefficients</span></span>
-<span id="cb257-3"><a href="sec-tslab-autoregressive-ar-models.html#cb257-3"></a>ARp &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">-0.1</span>, <span class="fl">-0.3</span>)</span>
-<span id="cb257-4"><a href="sec-tslab-autoregressive-ar-models.html#cb257-4"></a><span class="co">## empty list for storing models</span></span>
-<span id="cb257-5"><a href="sec-tslab-autoregressive-ar-models.html#cb257-5"></a>AR.mods &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
-<span id="cb257-6"><a href="sec-tslab-autoregressive-ar-models.html#cb257-6"></a><span class="co">## loop over orders of p</span></span>
-<span id="cb257-7"><a href="sec-tslab-autoregressive-ar-models.html#cb257-7"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
-<span id="cb257-8"><a href="sec-tslab-autoregressive-ar-models.html#cb257-8"></a>    <span class="co">## assume SD=1, so not specified</span></span>
-<span id="cb257-9"><a href="sec-tslab-autoregressive-ar-models.html#cb257-9"></a>    AR.mods[[p]] &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">10000</span>, <span class="kw">list</span>(<span class="dt">ar =</span> ARp[<span class="dv">1</span><span class="op">:</span>p]))</span>
-<span id="cb257-10"><a href="sec-tslab-autoregressive-ar-models.html#cb257-10"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="sec-tslab-autoregressive-ar-models.html#cb252-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb252-2"><a href="sec-tslab-autoregressive-ar-models.html#cb252-2"></a><span class="co">## the 4 AR coefficients</span></span>
+<span id="cb252-3"><a href="sec-tslab-autoregressive-ar-models.html#cb252-3"></a>AR_p_coef &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">-0.1</span>, <span class="fl">-0.3</span>)</span>
+<span id="cb252-4"><a href="sec-tslab-autoregressive-ar-models.html#cb252-4"></a><span class="co">## empty list for storing models</span></span>
+<span id="cb252-5"><a href="sec-tslab-autoregressive-ar-models.html#cb252-5"></a>AR_mods &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
+<span id="cb252-6"><a href="sec-tslab-autoregressive-ar-models.html#cb252-6"></a><span class="co">## loop over orders of p</span></span>
+<span id="cb252-7"><a href="sec-tslab-autoregressive-ar-models.html#cb252-7"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
+<span id="cb252-8"><a href="sec-tslab-autoregressive-ar-models.html#cb252-8"></a>    <span class="co">## assume sd = 1, so not specified</span></span>
+<span id="cb252-9"><a href="sec-tslab-autoregressive-ar-models.html#cb252-9"></a>    AR_mods[[p]] &lt;-<span class="st"> </span><span class="kw">arima.sim</span>(<span class="dt">n =</span> <span class="dv">10000</span>, <span class="kw">list</span>(<span class="dt">ar =</span> AR_p_coef[<span class="dv">1</span><span class="op">:</span>p]))</span>
+<span id="cb252-10"><a href="sec-tslab-autoregressive-ar-models.html#cb252-10"></a>}</span></code></pre></div>
 <p>Now that we have our four AR(<span class="math inline">\(p\)</span>) models, lets look at plots of the time series, ACF’s, and PACF’s.</p>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="sec-tslab-autoregressive-ar-models.html#cb258-1"></a><span class="co">## set up plot region</span></span>
-<span id="cb258-2"><a href="sec-tslab-autoregressive-ar-models.html#cb258-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">3</span>))</span>
-<span id="cb258-3"><a href="sec-tslab-autoregressive-ar-models.html#cb258-3"></a><span class="co">## loop over orders of p</span></span>
-<span id="cb258-4"><a href="sec-tslab-autoregressive-ar-models.html#cb258-4"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
-<span id="cb258-5"><a href="sec-tslab-autoregressive-ar-models.html#cb258-5"></a>    <span class="kw">plot.ts</span>(AR.mods[[p]][<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>], <span class="dt">ylab =</span> <span class="kw">paste</span>(<span class="st">&quot;AR(&quot;</span>, p, <span class="st">&quot;)&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span>
-<span id="cb258-6"><a href="sec-tslab-autoregressive-ar-models.html#cb258-6"></a>    <span class="kw">acf</span>(AR.mods[[p]], <span class="dt">lag.max =</span> <span class="dv">12</span>)</span>
-<span id="cb258-7"><a href="sec-tslab-autoregressive-ar-models.html#cb258-7"></a>    <span class="kw">pacf</span>(AR.mods[[p]], <span class="dt">lag.max =</span> <span class="dv">12</span>, <span class="dt">ylab =</span> <span class="st">&quot;PACF&quot;</span>)</span>
-<span id="cb258-8"><a href="sec-tslab-autoregressive-ar-models.html#cb258-8"></a>}</span></code></pre></div>
-
-<div class="figure" style="text-align: center"><span id="fig:tslab-plotARpComps"></span>
-<img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotARpComps-1.png" alt="Time series of simulated AR(\(p\)) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF’s (center column) and PACF’s (right column). Note that only the first 50 values of \(x_t\) are plotted." width="80%" />
+<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb253-1"><a href="sec-tslab-autoregressive-ar-models.html#cb253-1"></a><span class="co">## set up plot region</span></span>
+<span id="cb253-2"><a href="sec-tslab-autoregressive-ar-models.html#cb253-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">3</span>))</span>
+<span id="cb253-3"><a href="sec-tslab-autoregressive-ar-models.html#cb253-3"></a><span class="co">## loop over orders of p</span></span>
+<span id="cb253-4"><a href="sec-tslab-autoregressive-ar-models.html#cb253-4"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) {</span>
+<span id="cb253-5"><a href="sec-tslab-autoregressive-ar-models.html#cb253-5"></a>    <span class="kw">plot.ts</span>(AR_mods[[p]][<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>], <span class="dt">ylab =</span> <span class="kw">paste</span>(<span class="st">&quot;AR(&quot;</span>, p, <span class="st">&quot;)&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span>
+<span id="cb253-6"><a href="sec-tslab-autoregressive-ar-models.html#cb253-6"></a>    <span class="kw">acf</span>(AR_mods[[p]], <span class="dt">lag.max =</span> <span class="dv">12</span>)</span>
+<span id="cb253-7"><a href="sec-tslab-autoregressive-ar-models.html#cb253-7"></a>    <span class="kw">pacf</span>(AR_mods[[p]], <span class="dt">lag.max =</span> <span class="dv">12</span>, <span class="dt">ylab =</span> <span class="st">&quot;PACF&quot;</span>)</span>
+<span id="cb253-8"><a href="sec-tslab-autoregressive-ar-models.html#cb253-8"></a>}</span></code></pre></div>
+<p>(ref:tslab-plotAR_p_coefComps) Time series of simulated AR(<span class="math inline">\(p\)</span>) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF’s (center column) and PACF’s (right column). Note that only the first 50 values of <span class="math inline">\(x_t\)</span> are plotted.</p>
+<div class="figure" style="text-align: center">
+<img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotAR_p_coefComps-1.png" alt="(ref:tslab-plotAR_p_coefComps)" width="80%" />
 <p class="caption">
-Figure 4.24: Time series of simulated AR(<span class="math inline">\(p\)</span>) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF’s (center column) and PACF’s (right column). Note that only the first 50 values of <span class="math inline">\(x_t\)</span> are plotted.
+(#fig:tslab-plotAR_p_coefComps)(ref:tslab-plotAR_p_coefComps)
 </p>
 </div>
-<p>As we saw in lecture and is evident from our examples shown in Figure <a href="sec-tslab-autoregressive-ar-models.html#fig:tslab-plotARpComps">4.24</a>, the ACF for an AR(<span class="math inline">\(p\)</span>) process tails off toward zero very slowly, but the PACF goes to zero for lags &gt; <span class="math inline">\(p\)</span>. This is an important diagnostic tool when trying to identify the order of <span class="math inline">\(p\)</span> in ARMA(<span class="math inline">\(p,q\)</span>) models.</p>
+<p>As we saw in lecture and is evident from our examples shown in Figure @ref(fig:tslab-plotAR_p_coefComps), the ACF for an AR(<span class="math inline">\(p\)</span>) process tails off toward zero very slowly, but the PACF goes to zero for lags &gt; <span class="math inline">\(p\)</span>. This is an important diagnostic tool when trying to identify the order of <span class="math inline">\(p\)</span> in ARMA(<span class="math inline">\(p,q\)</span>) models.</p>
 </div>
 </div>
             </section>

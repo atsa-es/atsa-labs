@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -521,12 +521,12 @@ An easy way to get this log-likelihood for the covariate data only is use
 the augmented model (Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marsscovary">(11.2)</a> with terms defined as
 in Equation <a href="sec-mssmiss-overview.html#eq:mssmiss-marss-covar">(11.3)</a> but pass in missing values for the
 non-covariate data. The following code shows how to do this.</p>
-<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb584-1"><a href="sec-mssmiss-overview.html#cb584-1"></a>y.aug =<span class="st"> </span><span class="kw">rbind</span>(data, covariates)</span>
-<span id="cb584-2"><a href="sec-mssmiss-overview.html#cb584-2"></a>fit.aug =<span class="st"> </span><span class="kw">MARSS</span>(y.aug, <span class="dt">model =</span> model.aug)</span></code></pre></div>
+<div class="sourceCode" id="cb579"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb579-1"><a href="sec-mssmiss-overview.html#cb579-1"></a>y.aug =<span class="st"> </span><span class="kw">rbind</span>(data, covariates)</span>
+<span id="cb579-2"><a href="sec-mssmiss-overview.html#cb579-2"></a>fit.aug =<span class="st"> </span><span class="kw">MARSS</span>(y.aug, <span class="dt">model =</span> model.aug)</span></code></pre></div>
 <p><code>fit.aug</code> is the MLE object that can be passed to <code>MARSSkf()</code>. You need to make a version of this MLE object with the non-covariate data filled with NAs so that you can compute the log-likelihood without the covariates. This needs to be done in the <code>marss</code> element since that is what is used by <code>MARSSkf()</code>. Below is code to do this.</p>
-<div class="sourceCode" id="cb585"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb585-1"><a href="sec-mssmiss-overview.html#cb585-1"></a>fit.cov =<span class="st"> </span>fit.aug</span>
-<span id="cb585-2"><a href="sec-mssmiss-overview.html#cb585-2"></a>fit.cov<span class="op">$</span>marss<span class="op">$</span>data[<span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(data)[<span class="dv">1</span>], ] =<span class="st"> </span><span class="ot">NA</span></span>
-<span id="cb585-3"><a href="sec-mssmiss-overview.html#cb585-3"></a>extra.LL =<span class="st"> </span><span class="kw">MARSSkf</span>(fit.cov)<span class="op">$</span>logLik</span></code></pre></div>
+<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb580-1"><a href="sec-mssmiss-overview.html#cb580-1"></a>fit.cov =<span class="st"> </span>fit.aug</span>
+<span id="cb580-2"><a href="sec-mssmiss-overview.html#cb580-2"></a>fit.cov<span class="op">$</span>marss<span class="op">$</span>data[<span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(data)[<span class="dv">1</span>], ] =<span class="st"> </span><span class="ot">NA</span></span>
+<span id="cb580-3"><a href="sec-mssmiss-overview.html#cb580-3"></a>extra.LL =<span class="st"> </span><span class="kw">MARSSkf</span>(fit.cov)<span class="op">$</span>logLik</span></code></pre></div>
 <p>Note that when you fit the augmented model, the estimates of <span class="math inline">\(\mathbf{C}\)</span> and <span class="math inline">\(\mathbf{B}^{(c)}\)</span> are affected by the non-covariate data since the model for both the non-covariate and covariate data are estimated simultaneously and are not independent (since the covariate states affect the non-covariates states). If you want the covariate model to be unaffected by the non-covariate data, you can fit the covariate model separately and use the estimates for <span class="math inline">\(\mathbf{B}^{(c)}\)</span> and <span class="math inline">\(\mathbf{Q}^{(c)}\)</span> as fixed values in your augmented model.</p>
 </div>
             </section>

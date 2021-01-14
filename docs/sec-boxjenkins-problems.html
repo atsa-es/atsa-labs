@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -466,10 +466,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-boxjenkins-problems" class="section level2">
 <h2><span class="header-section-number">5.13</span> Problems</h2>
 <p>For these problems, use the catch landings from Greek waters (<code>greeklandings</code>) and the Chinook landings (<code>chinook</code>) in Washington data. Load the data as follows:</p>
-<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="sec-boxjenkins-problems.html#cb374-1"></a><span class="kw">data</span>(greeklandings, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb374-2"><a href="sec-boxjenkins-problems.html#cb374-2"></a>landings &lt;-<span class="st"> </span>greeklandings</span>
-<span id="cb374-3"><a href="sec-boxjenkins-problems.html#cb374-3"></a><span class="kw">data</span>(chinook, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb374-4"><a href="sec-boxjenkins-problems.html#cb374-4"></a>chinook &lt;-<span class="st"> </span>chinook.month</span></code></pre></div>
+<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="sec-boxjenkins-problems.html#cb369-1"></a><span class="kw">data</span>(greeklandings, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
+<span id="cb369-2"><a href="sec-boxjenkins-problems.html#cb369-2"></a>landings &lt;-<span class="st"> </span>greeklandings</span>
+<span id="cb369-3"><a href="sec-boxjenkins-problems.html#cb369-3"></a><span class="kw">data</span>(chinook, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
+<span id="cb369-4"><a href="sec-boxjenkins-problems.html#cb369-4"></a>chinook &lt;-<span class="st"> </span>chinook.month</span></code></pre></div>
 <ol style="list-style-type: decimal">
 <li><p>Augmented Dickey-Fuller tests in R.</p>
 <ol style="list-style-type: lower-alpha">
@@ -486,24 +486,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>For <code>kpss.test()</code>, what does setting null equal to “Level” versus “Trend” change?</p></li>
 </ol></li>
 <li><p>Repeat the stationarity tests for sardine 1964-1987 in the landings data set. Here is how to set up the data for another species.</p>
-<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="sec-boxjenkins-problems.html#cb375-1"></a>datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Sardine&quot;</span>)</span>
-<span id="cb375-2"><a href="sec-boxjenkins-problems.html#cb375-2"></a>dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</span>
-<span id="cb375-3"><a href="sec-boxjenkins-problems.html#cb375-3"></a>dat &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="sec-boxjenkins-problems.html#cb370-1"></a>datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Sardine&quot;</span>)</span>
+<span id="cb370-2"><a href="sec-boxjenkins-problems.html#cb370-2"></a>dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</span>
+<span id="cb370-3"><a href="sec-boxjenkins-problems.html#cb370-3"></a>dat &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Do a Dickey-Fuller (DF) test using <code>ur.df()</code> and <code>adf.test()</code>. You have to set the lags. What does the result tell you?</p></li>
 <li><p>Do an Augmented Dickey-Fuller (ADF) test using <code>ur.df()</code>. How did you choose to set the lags? How is the ADF test different than the DF test?</p></li>
 <li><p>Do a KPSS test using <code>kpss.test()</code>. What does the result tell you?</p></li>
 </ol></li>
 <li><p>Using the anchovy 1964-1987 data, fit using <code>auto.arima()</code> with <code>trace=TRUE</code>.</p>
-<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="sec-boxjenkins-problems.html#cb376-1"></a>forecast<span class="op">::</span><span class="kw">auto.arima</span>(anchovy, <span class="dt">trace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="sec-boxjenkins-problems.html#cb371-1"></a>forecast<span class="op">::</span><span class="kw">auto.arima</span>(anchovy, <span class="dt">trace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Fit each of the models listed using <code>Arima()</code> and show that you can produce the same AICc value that is shown in the trace table.</p></li>
 <li><p>What models are within <span class="math inline">\(\Delta\)</span>AIC of 2? What is different about these models?</p></li>
 </ol></li>
 <li><p>Repeat the stationarity tests and differencing tests for anchovy using the following two time ranges: 1964-1987 and 1988-2007. The following shows you how to subset the data:</p>
-<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="sec-boxjenkins-problems.html#cb377-1"></a>datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Anchovy&quot;</span>)</span>
-<span id="cb377-2"><a href="sec-boxjenkins-problems.html#cb377-2"></a>dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</span>
-<span id="cb377-3"><a href="sec-boxjenkins-problems.html#cb377-3"></a>dat64<span class="fl">.87</span> &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="sec-boxjenkins-problems.html#cb372-1"></a>datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Anchovy&quot;</span>)</span>
+<span id="cb372-2"><a href="sec-boxjenkins-problems.html#cb372-2"></a>dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</span>
+<span id="cb372-3"><a href="sec-boxjenkins-problems.html#cb372-3"></a>dat64<span class="fl">.87</span> &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Plot the time series for the two time periods. For the <code>kpss.test()</code>, which null is appropriate, “Level” or “Trend”?</p></li>
 <li><p>Do the conclusions regarding stationarity and the amount of differencing needed change depending on which time period you analyze? For both time periods, use <code>adf.test()</code> with default values and <code>kpss.test()</code> with null=“Trend”.</p></li>

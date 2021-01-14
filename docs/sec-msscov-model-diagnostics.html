@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -466,17 +466,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-msscov-model-diagnostics" class="section level2">
 <h2><span class="header-section-number">8.7</span> Model diagnostics</h2>
 <p>We will examine some basic model diagnostics for these three approaches by looking at plots of the model residuals and their autocorrelation functions (ACFs) for all five taxa using the following code:</p>
-<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb527-1"><a href="sec-msscov-model-diagnostics.html#cb527-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) {</span>
-<span id="cb527-2"><a href="sec-msscov-model-diagnostics.html#cb527-2"></a>    <span class="kw">dev.new</span>()</span>
-<span id="cb527-3"><a href="sec-msscov-model-diagnostics.html#cb527-3"></a>    modn &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;seas.mod&quot;</span>, i, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)</span>
-<span id="cb527-4"><a href="sec-msscov-model-diagnostics.html#cb527-4"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
-<span id="cb527-5"><a href="sec-msscov-model-diagnostics.html#cb527-5"></a>        resid.j &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(<span class="kw">get</span>(modn), <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)<span class="op">$</span>model.residuals[j, </span>
-<span id="cb527-6"><a href="sec-msscov-model-diagnostics.html#cb527-6"></a>            ]</span>
-<span id="cb527-7"><a href="sec-msscov-model-diagnostics.html#cb527-7"></a>        <span class="kw">plot.ts</span>(resid.j, <span class="dt">ylab =</span> <span class="st">&quot;Residual&quot;</span>, <span class="dt">main =</span> phytos[j])</span>
-<span id="cb527-8"><a href="sec-msscov-model-diagnostics.html#cb527-8"></a>        <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</span>
-<span id="cb527-9"><a href="sec-msscov-model-diagnostics.html#cb527-9"></a>        <span class="kw">acf</span>(resid.j, <span class="dt">na.action =</span> na.pass)</span>
-<span id="cb527-10"><a href="sec-msscov-model-diagnostics.html#cb527-10"></a>    }</span>
-<span id="cb527-11"><a href="sec-msscov-model-diagnostics.html#cb527-11"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb522-1"><a href="sec-msscov-model-diagnostics.html#cb522-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) {</span>
+<span id="cb522-2"><a href="sec-msscov-model-diagnostics.html#cb522-2"></a>    <span class="kw">dev.new</span>()</span>
+<span id="cb522-3"><a href="sec-msscov-model-diagnostics.html#cb522-3"></a>    modn &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;seas.mod&quot;</span>, i, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)</span>
+<span id="cb522-4"><a href="sec-msscov-model-diagnostics.html#cb522-4"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
+<span id="cb522-5"><a href="sec-msscov-model-diagnostics.html#cb522-5"></a>        resid.j &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(<span class="kw">get</span>(modn), <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)<span class="op">$</span>model.residuals[j, </span>
+<span id="cb522-6"><a href="sec-msscov-model-diagnostics.html#cb522-6"></a>            ]</span>
+<span id="cb522-7"><a href="sec-msscov-model-diagnostics.html#cb522-7"></a>        <span class="kw">plot.ts</span>(resid.j, <span class="dt">ylab =</span> <span class="st">&quot;Residual&quot;</span>, <span class="dt">main =</span> phytos[j])</span>
+<span id="cb522-8"><a href="sec-msscov-model-diagnostics.html#cb522-8"></a>        <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</span>
+<span id="cb522-9"><a href="sec-msscov-model-diagnostics.html#cb522-9"></a>        <span class="kw">acf</span>(resid.j, <span class="dt">na.action =</span> na.pass)</span>
+<span id="cb522-10"><a href="sec-msscov-model-diagnostics.html#cb522-10"></a>    }</span>
+<span id="cb522-11"><a href="sec-msscov-model-diagnostics.html#cb522-11"></a>}</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:msscov-diagnostic-fig"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/msscov-diagnostic-fig-1.png" alt="Residuals for model with season modelled as a discrete Fourier series." width="80%" />

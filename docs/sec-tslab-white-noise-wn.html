@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -484,20 +484,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">4.5.1</span> Simulating white noise</h3>
 <p>Simulating WN in R is straightforward with a variety of built-in random number generators for continuous and discrete distributions. Once you know R’s abbreviation for the distribution of interest, you add an <span class="math inline">\(\texttt{r}\)</span> to the beginning to get the function’s name. For example, a Gaussian (or normal) distribution is abbreviated <span class="math inline">\(\texttt{norm}\)</span> and so the function is <code>rnorm()</code>. All of the random number functions require two things: the number of samples from the distribution and the parameters for the distribution itself (<em>e.g.</em>, mean &amp; SD of a normal). Check the help file for the distribution of interest to find out what parameters you must specify (<em>e.g.</em>, type <code>?rnorm</code> to see the help for a normal distribution).</p>
 <p>Here’s how to generate 100 samples from a normal distribution with mean of 5 and standard deviation of 0.2, and 50 samples from a Poisson distribution with a rate (<span class="math inline">\(\lambda\)</span>) of 20.</p>
-<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="sec-tslab-white-noise-wn.html#cb245-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb245-2"><a href="sec-tslab-white-noise-wn.html#cb245-2"></a><span class="co">## random normal variates</span></span>
-<span id="cb245-3"><a href="sec-tslab-white-noise-wn.html#cb245-3"></a>GWN &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">mean =</span> <span class="dv">5</span>, <span class="dt">sd =</span> <span class="fl">0.2</span>)</span>
-<span id="cb245-4"><a href="sec-tslab-white-noise-wn.html#cb245-4"></a><span class="co">## random Poisson variates</span></span>
-<span id="cb245-5"><a href="sec-tslab-white-noise-wn.html#cb245-5"></a>PWN &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">lambda =</span> <span class="dv">20</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="sec-tslab-white-noise-wn.html#cb240-1"></a><span class="kw">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb240-2"><a href="sec-tslab-white-noise-wn.html#cb240-2"></a><span class="co">## random normal variates</span></span>
+<span id="cb240-3"><a href="sec-tslab-white-noise-wn.html#cb240-3"></a>GWN &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dt">n =</span> <span class="dv">100</span>, <span class="dt">mean =</span> <span class="dv">5</span>, <span class="dt">sd =</span> <span class="fl">0.2</span>)</span>
+<span id="cb240-4"><a href="sec-tslab-white-noise-wn.html#cb240-4"></a><span class="co">## random Poisson variates</span></span>
+<span id="cb240-5"><a href="sec-tslab-white-noise-wn.html#cb240-5"></a>PWN &lt;-<span class="st"> </span><span class="kw">rpois</span>(<span class="dt">n =</span> <span class="dv">50</span>, <span class="dt">lambda =</span> <span class="dv">20</span>)</span></code></pre></div>
 <p>Here are plots of the time series. Notice that on one occasion the same number was drawn twice in a row from the Poisson distribution, which is discrete. That is virtually guaranteed to never happen with a continuous distribution.</p>
-<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="sec-tslab-white-noise-wn.html#cb246-1"></a><span class="co">## set up plot region</span></span>
-<span id="cb246-2"><a href="sec-tslab-white-noise-wn.html#cb246-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb246-3"><a href="sec-tslab-white-noise-wn.html#cb246-3"></a><span class="co">## plot normal variates with mean</span></span>
-<span id="cb246-4"><a href="sec-tslab-white-noise-wn.html#cb246-4"></a><span class="kw">plot.ts</span>(GWN)</span>
-<span id="cb246-5"><a href="sec-tslab-white-noise-wn.html#cb246-5"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">5</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</span>
-<span id="cb246-6"><a href="sec-tslab-white-noise-wn.html#cb246-6"></a><span class="co">## plot Poisson variates with mean</span></span>
-<span id="cb246-7"><a href="sec-tslab-white-noise-wn.html#cb246-7"></a><span class="kw">plot.ts</span>(PWN)</span>
-<span id="cb246-8"><a href="sec-tslab-white-noise-wn.html#cb246-8"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="sec-tslab-white-noise-wn.html#cb241-1"></a><span class="co">## set up plot region</span></span>
+<span id="cb241-2"><a href="sec-tslab-white-noise-wn.html#cb241-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb241-3"><a href="sec-tslab-white-noise-wn.html#cb241-3"></a><span class="co">## plot normal variates with mean</span></span>
+<span id="cb241-4"><a href="sec-tslab-white-noise-wn.html#cb241-4"></a><span class="kw">plot.ts</span>(GWN)</span>
+<span id="cb241-5"><a href="sec-tslab-white-noise-wn.html#cb241-5"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">5</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</span>
+<span id="cb241-6"><a href="sec-tslab-white-noise-wn.html#cb241-6"></a><span class="co">## plot Poisson variates with mean</span></span>
+<span id="cb241-7"><a href="sec-tslab-white-noise-wn.html#cb241-7"></a><span class="kw">plot.ts</span>(PWN)</span>
+<span id="cb241-8"><a href="sec-tslab-white-noise-wn.html#cb241-8"></a><span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">20</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotDWNsims"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotDWNsims-1.png" alt="Time series plots of simulated Gaussian (left) and Poisson (right) white noise." width="80%" />
@@ -506,12 +506,12 @@ Figure 4.18: Time series plots of simulated Gaussian (left) and Poisson (right) 
 </p>
 </div>
 <p>Now let’s examine the ACF for the 2 white noise series and see if there is, in fact, zero autocorrelation for lags <span class="math inline">\(\geq\)</span> 1.</p>
-<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="sec-tslab-white-noise-wn.html#cb247-1"></a><span class="co">## set up plot region</span></span>
-<span id="cb247-2"><a href="sec-tslab-white-noise-wn.html#cb247-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb247-3"><a href="sec-tslab-white-noise-wn.html#cb247-3"></a><span class="co">## plot normal variates with mean</span></span>
-<span id="cb247-4"><a href="sec-tslab-white-noise-wn.html#cb247-4"></a><span class="kw">acf</span>(GWN, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">20</span>)</span>
-<span id="cb247-5"><a href="sec-tslab-white-noise-wn.html#cb247-5"></a><span class="co">## plot Poisson variates with mean</span></span>
-<span id="cb247-6"><a href="sec-tslab-white-noise-wn.html#cb247-6"></a><span class="kw">acf</span>(PWN, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">20</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="sec-tslab-white-noise-wn.html#cb242-1"></a><span class="co">## set up plot region</span></span>
+<span id="cb242-2"><a href="sec-tslab-white-noise-wn.html#cb242-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb242-3"><a href="sec-tslab-white-noise-wn.html#cb242-3"></a><span class="co">## plot normal variates with mean</span></span>
+<span id="cb242-4"><a href="sec-tslab-white-noise-wn.html#cb242-4"></a><span class="kw">acf</span>(GWN, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">20</span>)</span>
+<span id="cb242-5"><a href="sec-tslab-white-noise-wn.html#cb242-5"></a><span class="co">## plot Poisson variates with mean</span></span>
+<span id="cb242-6"><a href="sec-tslab-white-noise-wn.html#cb242-6"></a><span class="kw">acf</span>(PWN, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">lag.max =</span> <span class="dv">20</span>)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:tslab-plotACFdwn"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/tslab-plotACFdwn-1.png" alt="ACF’s for the simulated Gaussian (left) and Poisson (right) white noise shown in Figure 4.18." width="80%" />
@@ -519,7 +519,7 @@ Figure 4.18: Time series plots of simulated Gaussian (left) and Poisson (right) 
 Figure 4.19: ACF’s for the simulated Gaussian (left) and Poisson (right) white noise shown in Figure <a href="sec-tslab-white-noise-wn.html#fig:tslab-plotDWNsims">4.18</a>.
 </p>
 </div>
-<p>Interestingly, the <span class="math inline">\(r_k\)</span> are all greater than zero in absolute value although they are not statistically different from zero for lags 1-20. This is because we are dealing with a <em>sample</em> of the distributions rather than the entire population of all random variates. As an exercise, try setting <code>n=1e6</code> instead of <code>n=100</code> or <code>n=50</code> in the calls calls above to generate the WN sequences and see what effect it has on the estimation of <span class="math inline">\(r_k\)</span>. It is also important to remember, as we discussed earlier, that we should expect that approximately 1 in 20 of the <span class="math inline">\(r_k\)</span> will be statistically greater than zero based on chance alone, especially for relatively small sample sizes, so don’t get too excited if you ever come across a case like then when inspecting model residuals.</p>
+<p>Interestingly, the <span class="math inline">\(r_k\)</span> are all greater than zero in absolute value although they are not statistically different from zero for lags 1-20. This is because we are dealing with a <em>sample</em> of the distributions rather than the entire population of all random variates. As an exercise, try setting <code>n = 1e6</code> instead of <code>n = 100</code> or <code>n = 50</code> in the calls calls above to generate the WN sequences and see what effect it has on the estimation of <span class="math inline">\(r_k\)</span>. It is also important to remember, as we discussed earlier, that we should expect that approximately 1 in 20 of the <span class="math inline">\(r_k\)</span> will be statistically greater than zero based on chance alone, especially for relatively small sample sizes, so don’t get too excited if you ever come across a case like then when inspecting model residuals.</p>
 </div>
 </div>
             </section>

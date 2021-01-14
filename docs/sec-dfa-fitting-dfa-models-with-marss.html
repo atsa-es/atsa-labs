@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -470,39 +470,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-dfa-observation-model" class="section level3">
 <h3><span class="header-section-number">10.6.1</span> The observation model</h3>
 <p>Here we will fit the DFA model above where we have <code>R N_ts</code> observed time series and we want 3 hidden states. Now we need to set up the observation model for <code>MARSS</code>. Here are the vectors and matrices for our first model where each nutrient follows its own process. Recall that we will need to set the elements in the upper R corner of <span class="math inline">\(\mathbf{Z}\)</span> to 0. We will assume that the observation errors have different variances and they are independent of one another.</p>
-<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb560-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb560-1"></a><span class="co">## &#39;ZZ&#39; is loadings matrix</span></span>
-<span id="cb560-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb560-2"></a>Z_vals &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;z11&quot;</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="st">&quot;z21&quot;</span>, <span class="st">&quot;z22&quot;</span>, <span class="dv">0</span>, <span class="st">&quot;z31&quot;</span>, <span class="st">&quot;z32&quot;</span>, <span class="st">&quot;z33&quot;</span>, </span>
-<span id="cb560-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb560-3"></a>    <span class="st">&quot;z41&quot;</span>, <span class="st">&quot;z42&quot;</span>, <span class="st">&quot;z43&quot;</span>, <span class="st">&quot;z51&quot;</span>, <span class="st">&quot;z52&quot;</span>, <span class="st">&quot;z53&quot;</span>)</span>
-<span id="cb560-4"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb560-4"></a>ZZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z_vals, <span class="dt">nrow =</span> N_ts, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb560-5"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb560-5"></a>ZZ</span></code></pre></div>
+<div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb555-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb555-1"></a><span class="co">## &#39;ZZ&#39; is loadings matrix</span></span>
+<span id="cb555-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb555-2"></a>Z_vals &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;z11&quot;</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="st">&quot;z21&quot;</span>, <span class="st">&quot;z22&quot;</span>, <span class="dv">0</span>, <span class="st">&quot;z31&quot;</span>, <span class="st">&quot;z32&quot;</span>, <span class="st">&quot;z33&quot;</span>, </span>
+<span id="cb555-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb555-3"></a>    <span class="st">&quot;z41&quot;</span>, <span class="st">&quot;z42&quot;</span>, <span class="st">&quot;z43&quot;</span>, <span class="st">&quot;z51&quot;</span>, <span class="st">&quot;z52&quot;</span>, <span class="st">&quot;z53&quot;</span>)</span>
+<span id="cb555-4"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb555-4"></a>ZZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z_vals, <span class="dt">nrow =</span> N_ts, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb555-5"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb555-5"></a>ZZ</span></code></pre></div>
 <pre><code>     [,1]  [,2]  [,3] 
 [1,] &quot;z11&quot; 0     0    
 [2,] &quot;z21&quot; &quot;z22&quot; 0    
 [3,] &quot;z31&quot; &quot;z32&quot; &quot;z33&quot;
 [4,] &quot;z41&quot; &quot;z42&quot; &quot;z43&quot;
 [5,] &quot;z51&quot; &quot;z52&quot; &quot;z53&quot;</code></pre>
-<div class="sourceCode" id="cb562"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb562-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb562-1"></a><span class="co">## &#39;aa&#39; is the offset/scaling</span></span>
-<span id="cb562-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb562-2"></a>aa &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb562-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb562-3"></a><span class="co">## &#39;DD&#39; and &#39;d&#39; are for covariates</span></span>
-<span id="cb562-4"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb562-4"></a>DD &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></span>
-<span id="cb562-5"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb562-5"></a>dd &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,1,wk_last)</span></span>
-<span id="cb562-6"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb562-6"></a><span class="co">## &#39;RR&#39; is var-cov matrix for obs errors</span></span>
-<span id="cb562-7"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb562-7"></a>RR &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb557"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb557-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb557-1"></a><span class="co">## &#39;aa&#39; is the offset/scaling</span></span>
+<span id="cb557-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb557-2"></a>aa &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb557-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb557-3"></a><span class="co">## &#39;DD&#39; and &#39;d&#39; are for covariates</span></span>
+<span id="cb557-4"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb557-4"></a>DD &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></span>
+<span id="cb557-5"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb557-5"></a>dd &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,1,wk_last)</span></span>
+<span id="cb557-6"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb557-6"></a><span class="co">## &#39;RR&#39; is var-cov matrix for obs errors</span></span>
+<span id="cb557-7"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb557-7"></a>RR &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span></code></pre></div>
 </div>
 <div id="sec-dfa-process-model" class="section level3">
 <h3><span class="header-section-number">10.6.2</span> The process model</h3>
 <p>We need to specify the explicit form for all of the vectors and matrices in the full form of the MARSS model we defined in Sec 3.1. Note that we do not have to specify anything for the states <span class="math inline">\((\mathbf{x})\)</span> – those are elements that <code>MARSS</code> will identify and estimate itself based on our definitions of the other vectors and matrices.</p>
-<div class="sourceCode" id="cb563"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb563-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-1"></a><span class="co">## number of processes</span></span>
-<span id="cb563-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-2"></a>mm &lt;-<span class="st"> </span><span class="dv">3</span></span>
-<span id="cb563-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-3"></a><span class="co">## &#39;BB&#39; is identity: 1&#39;s along the diagonal &amp; 0&#39;s elsewhere</span></span>
-<span id="cb563-4"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-4"></a>BB &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(mm)</span></span>
-<span id="cb563-5"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-5"></a><span class="co">## &#39;uu&#39; is a column vector of 0&#39;s</span></span>
-<span id="cb563-6"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-6"></a>uu &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></span>
-<span id="cb563-7"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-7"></a><span class="co">## &#39;CC&#39; and &#39;cc&#39; are for covariates</span></span>
-<span id="cb563-8"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-8"></a>CC &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></span>
-<span id="cb563-9"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-9"></a>cc &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,1,wk_last)</span></span>
-<span id="cb563-10"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-10"></a><span class="co">## &#39;QQ&#39; is identity</span></span>
-<span id="cb563-11"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb563-11"></a>QQ &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(mm)</span></span></code></pre></div>
+<div class="sourceCode" id="cb558"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb558-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-1"></a><span class="co">## number of processes</span></span>
+<span id="cb558-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-2"></a>mm &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb558-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-3"></a><span class="co">## &#39;BB&#39; is identity: 1&#39;s along the diagonal &amp; 0&#39;s elsewhere</span></span>
+<span id="cb558-4"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-4"></a>BB &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(mm)</span></span>
+<span id="cb558-5"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-5"></a><span class="co">## &#39;uu&#39; is a column vector of 0&#39;s</span></span>
+<span id="cb558-6"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-6"></a>uu &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></span>
+<span id="cb558-7"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-7"></a><span class="co">## &#39;CC&#39; and &#39;cc&#39; are for covariates</span></span>
+<span id="cb558-8"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-8"></a>CC &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,mm,1)</span></span>
+<span id="cb558-9"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-9"></a>cc &lt;-<span class="st"> &quot;zero&quot;</span>  <span class="co"># matrix(0,1,wk_last)</span></span>
+<span id="cb558-10"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-10"></a><span class="co">## &#39;QQ&#39; is identity</span></span>
+<span id="cb558-11"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb558-11"></a>QQ &lt;-<span class="st"> &quot;identity&quot;</span>  <span class="co"># diag(mm)</span></span></code></pre></div>
 </div>
 <div id="sec-dfa-fit-model-in-marss" class="section level3">
 <h3><span class="header-section-number">10.6.3</span> Fit the model in MARSS</h3>
@@ -512,17 +512,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>A list of any initial values – <code>MARSS</code> will pick its own otherwise;</li>
 <li>A list of control parameters for the <code>MARSS()</code> function.</li>
 </ol>
-<div class="sourceCode" id="cb564"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb564-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb564-1"></a><span class="co">## list with specifications for model vectors/matrices</span></span>
-<span id="cb564-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb564-2"></a>mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Z =</span> ZZ, <span class="dt">A =</span> aa, <span class="dt">D =</span> DD, <span class="dt">d =</span> dd, <span class="dt">R =</span> RR, <span class="dt">B =</span> BB, </span>
-<span id="cb564-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb564-3"></a>    <span class="dt">U =</span> uu, <span class="dt">C =</span> CC, <span class="dt">c =</span> cc, <span class="dt">Q =</span> QQ)</span>
-<span id="cb564-4"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb564-4"></a><span class="co">## list with model inits</span></span>
-<span id="cb564-5"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb564-5"></a>init_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>, mm), mm, <span class="dv">1</span>))</span>
-<span id="cb564-6"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb564-6"></a><span class="co">## list with model control parameters</span></span>
-<span id="cb564-7"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb564-7"></a>con_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">3000</span>, <span class="dt">allow.degen =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb559-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb559-1"></a><span class="co">## list with specifications for model vectors/matrices</span></span>
+<span id="cb559-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb559-2"></a>mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Z =</span> ZZ, <span class="dt">A =</span> aa, <span class="dt">D =</span> DD, <span class="dt">d =</span> dd, <span class="dt">R =</span> RR, <span class="dt">B =</span> BB, </span>
+<span id="cb559-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb559-3"></a>    <span class="dt">U =</span> uu, <span class="dt">C =</span> CC, <span class="dt">c =</span> cc, <span class="dt">Q =</span> QQ)</span>
+<span id="cb559-4"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb559-4"></a><span class="co">## list with model inits</span></span>
+<span id="cb559-5"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb559-5"></a>init_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="kw">rep</span>(<span class="dv">0</span>, mm), mm, <span class="dv">1</span>))</span>
+<span id="cb559-6"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb559-6"></a><span class="co">## list with model control parameters</span></span>
+<span id="cb559-7"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb559-7"></a>con_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">3000</span>, <span class="dt">allow.degen =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>Now we can fit the model.</p>
-<div class="sourceCode" id="cb565"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb565-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb565-1"></a><span class="co">## fit MARSS</span></span>
-<span id="cb565-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb565-2"></a>dfa_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="dt">y =</span> dat, <span class="dt">model =</span> mod_list, <span class="dt">inits =</span> init_list, </span>
-<span id="cb565-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb565-3"></a>    <span class="dt">control =</span> con_list)</span></code></pre></div>
+<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb560-1"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb560-1"></a><span class="co">## fit MARSS</span></span>
+<span id="cb560-2"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb560-2"></a>dfa_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="dt">y =</span> dat, <span class="dt">model =</span> mod_list, <span class="dt">inits =</span> init_list, </span>
+<span id="cb560-3"><a href="sec-dfa-fitting-dfa-models-with-marss.html#cb560-3"></a>    <span class="dt">control =</span> con_list)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 246 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.

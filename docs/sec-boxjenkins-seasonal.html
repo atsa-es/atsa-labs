@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-13" />
+<meta name="date" content="2021-01-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -230,12 +230,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
 <li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
-<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-arp-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
-<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-arp-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
+<li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
+<li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
-<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-maq-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
-<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-maq-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
+<li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
+<li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
 <li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
@@ -466,22 +466,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-boxjenkins-seasonal" class="section level2">
 <h2><span class="header-section-number">5.11</span> Seasonal ARIMA model</h2>
 <p>The Chinook data are monthly and start in January 1990. To make this into a ts object do</p>
-<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb369-1"><a href="sec-boxjenkins-seasonal.html#cb369-1"></a>chinookts &lt;-<span class="st"> </span><span class="kw">ts</span>(chinook<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1990</span>, <span class="dv">1</span>), </span>
-<span id="cb369-2"><a href="sec-boxjenkins-seasonal.html#cb369-2"></a>    <span class="dt">frequency =</span> <span class="dv">12</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="sec-boxjenkins-seasonal.html#cb364-1"></a>chinookts &lt;-<span class="st"> </span><span class="kw">ts</span>(chinook<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1990</span>, <span class="dv">1</span>), </span>
+<span id="cb364-2"><a href="sec-boxjenkins-seasonal.html#cb364-2"></a>    <span class="dt">frequency =</span> <span class="dv">12</span>)</span></code></pre></div>
 <p><code>start</code> is the year and month and frequency is the number of months in the year.</p>
 <p>Use <code>?ts</code> to see more examples of how to set up ts objects.</p>
 <div id="plot-seasonal-data" class="section level3">
 <h3><span class="header-section-number">5.11.1</span> Plot seasonal data</h3>
-<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="sec-boxjenkins-seasonal.html#cb370-1"></a><span class="kw">plot</span>(chinookts)</span></code></pre></div>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="sec-boxjenkins-seasonal.html#cb365-1"></a><span class="kw">plot</span>(chinookts)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-plot-chinook-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="auto.arima-for-seasonal-ts" class="section level3">
 <h3><span class="header-section-number">5.11.2</span> <code>auto.arima()</code> for seasonal ts</h3>
 <p><code>auto.arima()</code> will recognize that our data has season and fit a seasonal ARIMA model to our data by default. Let’s define the training data up to 1998 and use 1999 as the test data.</p>
-<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb371-1"><a href="sec-boxjenkins-seasonal.html#cb371-1"></a>traindat &lt;-<span class="st"> </span><span class="kw">window</span>(chinookts, <span class="kw">c</span>(<span class="dv">1990</span>, <span class="dv">10</span>), <span class="kw">c</span>(<span class="dv">1998</span>, <span class="dv">12</span>))</span>
-<span id="cb371-2"><a href="sec-boxjenkins-seasonal.html#cb371-2"></a>testdat &lt;-<span class="st"> </span><span class="kw">window</span>(chinookts, <span class="kw">c</span>(<span class="dv">1999</span>, <span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1999</span>, <span class="dv">12</span>))</span>
-<span id="cb371-3"><a href="sec-boxjenkins-seasonal.html#cb371-3"></a>fit &lt;-<span class="st"> </span>forecast<span class="op">::</span><span class="kw">auto.arima</span>(traindat)</span>
-<span id="cb371-4"><a href="sec-boxjenkins-seasonal.html#cb371-4"></a>fit</span></code></pre></div>
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="sec-boxjenkins-seasonal.html#cb366-1"></a>traindat &lt;-<span class="st"> </span><span class="kw">window</span>(chinookts, <span class="kw">c</span>(<span class="dv">1990</span>, <span class="dv">10</span>), <span class="kw">c</span>(<span class="dv">1998</span>, <span class="dv">12</span>))</span>
+<span id="cb366-2"><a href="sec-boxjenkins-seasonal.html#cb366-2"></a>testdat &lt;-<span class="st"> </span><span class="kw">window</span>(chinookts, <span class="kw">c</span>(<span class="dv">1999</span>, <span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1999</span>, <span class="dv">12</span>))</span>
+<span id="cb366-3"><a href="sec-boxjenkins-seasonal.html#cb366-3"></a>fit &lt;-<span class="st"> </span>forecast<span class="op">::</span><span class="kw">auto.arima</span>(traindat)</span>
+<span id="cb366-4"><a href="sec-boxjenkins-seasonal.html#cb366-4"></a>fit</span></code></pre></div>
 <pre><code>Series: traindat 
 ARIMA(1,0,0)(0,1,0)[12] with drift 
 
