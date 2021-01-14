@@ -467,13 +467,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">9.9</span> Forecast diagnostics</h2>
 
 <p>In the literature on state-space models, the set of <span class="math inline">\(e_t\)</span> are commonly referred to as “innovations”. <code>MARSS()</code> calculates the innovations as part of the Kalman filter algorithm—they are stored as <code>Innov</code> in the list produced by the <code>MARSSkfss()</code> function.</p>
-<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb548-1"></a><span class="co"># forecast errors</span></span>
-<span id="cb548-2"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb548-2"></a>innov &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Innov</span></code></pre></div>
+<div class="sourceCode" id="cb546"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb546-1"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb546-1"></a><span class="co"># forecast errors</span></span>
+<span id="cb546-2"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb546-2"></a>innov &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Innov</span></code></pre></div>
 <p>Let’s see if our innovations meet the model assumptions. Beginning with (1), we can use a Q-Q plot to see whether the innovations are normally distributed with a mean of zero. We’ll use the <code>qqnorm()</code> function to plot the quantiles of the innovations on the <span class="math inline">\(y\)</span>-axis versus the theoretical quantiles from a Normal distribution on the <span class="math inline">\(x\)</span>-axis. If the 2 distributions are similar, the points should fall on the line defined by <span class="math inline">\(y = x\)</span>.</p>
-<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb549-1"></a><span class="co"># Q-Q plot of innovations</span></span>
-<span id="cb549-2"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb549-2"></a><span class="kw">qqnorm</span>(<span class="kw">t</span>(innov), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb549-3"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb549-3"></a><span class="co"># add y=x line for easier interpretation</span></span>
-<span id="cb549-4"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb549-4"></a><span class="kw">qqline</span>(<span class="kw">t</span>(innov))</span></code></pre></div>
+<div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb547-1"></a><span class="co"># Q-Q plot of innovations</span></span>
+<span id="cb547-2"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb547-2"></a><span class="kw">qqnorm</span>(<span class="kw">t</span>(innov), <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb547-3"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb547-3"></a><span class="co"># add y=x line for easier interpretation</span></span>
+<span id="cb547-4"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb547-4"></a><span class="kw">qqline</span>(<span class="kw">t</span>(innov))</span></code></pre></div>
 <!-- % diagnostics plot: QQ -->
 
 <div class="figure" style="text-align: center"><span id="fig:dlm-plotdlmQQ"></span>
@@ -483,13 +483,13 @@ Figure 9.5: Q-Q plot of the forecast errors (innovations) for the DLM specified 
 </p>
 </div>
 <p>The Q-Q plot (Figure <a href="sec-dlm-dlm-forecast-diagnostics.html#fig:dlm-plotdlmQQ">9.5</a>) indicates that the innovations appear to be more-or-less normally distributed (i.e., most points fall on the line). Furthermore, it looks like the mean of the innovations is about 0, but we should use a more reliable test than simple visual inspection. We can formally test whether the mean of the innovations is significantly different from 0 by using a one-sample <span class="math inline">\(t\)</span>-test. based on a null hypothesis of <span class="math inline">\(\,\text{E}(e_t)=0\)</span>. To do so, we will use the function <code>t.test()</code> and base our inference on a significance value of <span class="math inline">\(\alpha = 0.05\)</span>.</p>
-<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb550-1"></a><span class="co"># p-value for t-test of H0: E(innov) = 0</span></span>
-<span id="cb550-2"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb550-2"></a><span class="kw">t.test</span>(<span class="kw">t</span>(innov), <span class="dt">mu =</span> <span class="dv">0</span>)<span class="op">$</span>p.value</span></code></pre></div>
+<div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb548-1"></a><span class="co"># p-value for t-test of H0: E(innov) = 0</span></span>
+<span id="cb548-2"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb548-2"></a><span class="kw">t.test</span>(<span class="kw">t</span>(innov), <span class="dt">mu =</span> <span class="dv">0</span>)<span class="op">$</span>p.value</span></code></pre></div>
 <pre><code>[1] 0.4840901</code></pre>
 <p>The <span class="math inline">\(p\)</span>-value <span class="math inline">\(&gt;&gt;\)</span> 0.05 so we cannot reject the null hypothesis that <span class="math inline">\(\,\text{E}(e_t)=0\)</span>.</p>
 <p>Moving on to assumption (2), we can use the sample autocorrelation function (ACF) to examine whether the innovations covary with a time-lagged version of themselves. Using the <code>acf()</code> function, we can compute and plot the correlations of <span class="math inline">\(e_t\)</span> and <span class="math inline">\(e_{t-k}\)</span> for various values of <span class="math inline">\(k\)</span>. Assumption (2) will be met if none of the correlation coefficients exceed the 95% confidence intervals defined by <span class="math inline">\(\pm \, z_{0.975} / \sqrt{n}\)</span>.</p>
-<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb552-1"></a><span class="co"># plot ACF of innovations</span></span>
-<span id="cb552-2"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb552-2"></a><span class="kw">acf</span>(<span class="kw">t</span>(innov), <span class="dt">lag.max =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb550-1"></a><span class="co"># plot ACF of innovations</span></span>
+<span id="cb550-2"><a href="sec-dlm-dlm-forecast-diagnostics.html#cb550-2"></a><span class="kw">acf</span>(<span class="kw">t</span>(innov), <span class="dt">lag.max =</span> <span class="dv">10</span>)</span></code></pre></div>
 <!-- % diagnostics plot: ACF -->
 
 <div class="figure" style="text-align: center"><span id="fig:dlm-plotdlmACF"></span>

@@ -480,7 +480,9 @@ The $\mathbf{C}\mathbf{c}_t+\mathbf{w}_t$ are the process errors and represent t
 Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates. Make a plot of the point estimates of the Temp and TP effects with the 95% CIs added to the plot. `tidy()` is an easy way to get the parameters CIs.
 
 3. Estimate the Temp and TP effects using `B="unconstrained"`.  
+
     a. Compare the $\mathbf{B}$ matrix for the fit from question 2 and from question 3.  Describe the species interactions modeled by the $\mathbf{B}$ matrix when `B="unconstrained"`.  How is it different than the $\mathbf{B}$ matrix from question 2? Note, you can retrieve the matrix using `coef(fit, type="matrix")$B`.
+    
     b. Do the Temp and TP effects change when you use `B="unconstrained"`? Make sure to look at the CIs also.
 
 4. Using MARSS models, evaluate which (Temp or TP) is the more important driver or if both are important. Again, leave out the seasonal covariates from question 1, i.e. only use Temp and TP as covariates. Compare two approaches: comparison of effect sizes in a model with both Temp and TP and model selection using a set of models.
@@ -518,18 +520,18 @@ rownames(seqcovs) <- c("Temp","TPresids")
 11. Another approach to looking at effects of covariates which have season cycles is to examine if the seasonal anomalies of the independent variable can be explained by the seasonal anomalies of the dependent variables.  In other words, can an unusually high February abundance (higher than expected) be explained by an unusually high or low February temperature? In this approach, you remove season so you do not need to model it (with factor, polynomial, etc). The `stl()` function can be used to decompose a time series using LOESS. We'll use `stl()` since it can handle missing values. 
 
     a. Decompose the Diatom time series using `stl()` and plot. Use `na.action=zoo::na.approx` to deal with the NAs. Use `s.window="periodic"`. Other than that you can use the defaults.
-```{r, eval=FALSE}
-i <- "Diatoms"
-dati <- ts(dat[i,], frequency=12)
-a <- stl(dati, "periodic", na.action=zoo::na.approx)
-```
+    ```{r, eval=FALSE}
+    i <- "Diatoms"
+    dati <- ts(dat[i,], frequency=12)
+    a <- stl(dati, "periodic", na.action=zoo::na.approx)
+    ```
 
     b. Create dependent variables and covariates that are anomolies by modifying the following code. For the anomaly, you will use the remainder plus the trend. You will need to adapt this code to create the anomalies for Temp and TP and for `dat` (your data).
-```{r}
-i <- "Diatoms"
-a <- stl(ts(dat[i,],frequency=12), "periodic", na.action=zoo::na.approx)
-anom <- a$time.series[,"remainder"]+a$time.series[,"trend"]
-```
+    ```{r}
+    i <- "Diatoms"
+    a <- stl(ts(dat[i,],frequency=12), "periodic", na.action=zoo::na.approx)
+    anom <- a$time.series[,"remainder"]+a$time.series[,"trend"]
+    ```
 
     c. Notice that you have simply removed the seasonal cycle from the data. Using the seasonal anomalies (from part b), estimate the effect of Temp and TP on each taxon's growth rate. You will use the same model as in question 2, but use the seasonal anomalies as data and covariates.
 

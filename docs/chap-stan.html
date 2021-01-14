@@ -471,19 +471,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="data-and-packages-8" class="section level3 unnumbered">
 <h3>Data and packages</h3>
 <p>You will need the <strong>atsar</strong> package we have written for fitting state-space time series models with Stan. This is hosted on Github <a href="https://github.com/nwfsc-timeseries/atsar">safs-timeseries</a>. Install using the <strong>devtools</strong> package.</p>
-<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb635-1"><a href="chap-stan.html#cb635-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb635-2"><a href="chap-stan.html#cb635-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb633-1"><a href="chap-stan.html#cb633-1"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb633-2"><a href="chap-stan.html#cb633-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</span></code></pre></div>
 <p>In addition, you will need the <strong>rstan</strong>, <strong>datasets</strong>, <strong>parallel</strong> and <strong>loo</strong> packages. After installing, if needed, load the packages:</p>
-<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="chap-stan.html#cb636-1"></a><span class="kw">library</span>(atsar)</span>
-<span id="cb636-2"><a href="chap-stan.html#cb636-2"></a><span class="kw">library</span>(rstan)</span>
-<span id="cb636-3"><a href="chap-stan.html#cb636-3"></a><span class="kw">library</span>(loo)</span></code></pre></div>
+<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="chap-stan.html#cb634-1"></a><span class="kw">library</span>(atsar)</span>
+<span id="cb634-2"><a href="chap-stan.html#cb634-2"></a><span class="kw">library</span>(rstan)</span>
+<span id="cb634-3"><a href="chap-stan.html#cb634-3"></a><span class="kw">library</span>(loo)</span></code></pre></div>
 <p>Once you have Stan and <strong>rstan</strong> installed, optimize Stan on your machine:</p>
-<div class="sourceCode" id="cb637"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb637-1"><a href="chap-stan.html#cb637-1"></a><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb637-2"><a href="chap-stan.html#cb637-2"></a><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb635-1"><a href="chap-stan.html#cb635-1"></a><span class="kw">rstan_options</span>(<span class="dt">auto_write =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb635-2"><a href="chap-stan.html#cb635-2"></a><span class="kw">options</span>(<span class="dt">mc.cores =</span> parallel<span class="op">::</span><span class="kw">detectCores</span>())</span></code></pre></div>
 <p>For this lab, we will use a data set on airquality in New York from the <strong>datasets</strong> package. Load the data and create a couple new variables for future use.</p>
-<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="chap-stan.html#cb638-1"></a><span class="kw">data</span>(airquality, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
-<span id="cb638-2"><a href="chap-stan.html#cb638-2"></a>Wind &lt;-<span class="st"> </span>airquality<span class="op">$</span>Wind  <span class="co"># wind speed</span></span>
-<span id="cb638-3"><a href="chap-stan.html#cb638-3"></a>Temp &lt;-<span class="st"> </span>airquality<span class="op">$</span>Temp  <span class="co"># air temperature</span></span></code></pre></div>
+<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="chap-stan.html#cb636-1"></a><span class="kw">data</span>(airquality, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
+<span id="cb636-2"><a href="chap-stan.html#cb636-2"></a>Wind &lt;-<span class="st"> </span>airquality<span class="op">$</span>Wind  <span class="co"># wind speed</span></span>
+<span id="cb636-3"><a href="chap-stan.html#cb636-3"></a>Temp &lt;-<span class="st"> </span>airquality<span class="op">$</span>Temp  <span class="co"># air temperature</span></span></code></pre></div>
 </div>
 </div>
             </section>
