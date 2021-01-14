@@ -235,17 +235,17 @@ mod_5 = atsar::fit_dfa(y = dat.spp.1980, num_trends=5)
 We will compute the Leave One Out Information Criterion (LOOIC) using the **loo** package.  Like AIC, lower is better.
 
 ```{r stan-looic, cache=TRUE, warning=FALSE}
-loo::loo(loo::extract_log_lik(mod_1))$looic
+loo::loo(loo::extract_log_lik(mod_1))$estimates["looic","Estimate"]
 ```
 
 Table of the LOOIC values:
 ```{r stan-looic-table, cache=TRUE, warning=FALSE}
 looics = c(
-  loo::loo(loo::extract_log_lik(mod_1))$looic,
-  loo::loo(loo::extract_log_lik(mod_2))$looic,
-  loo::loo(loo::extract_log_lik(mod_3))$looic,
-  loo::loo(loo::extract_log_lik(mod_4))$looic,
-  loo::loo(loo::extract_log_lik(mod_5))$looic
+  loo::loo(loo::extract_log_lik(mod_1))$estimates["looic","Estimate"],
+  loo::loo(loo::extract_log_lik(mod_2))$estimates["looic","Estimate"],
+  loo::loo(loo::extract_log_lik(mod_3))$estimates["looic","Estimate"],
+  loo::loo(loo::extract_log_lik(mod_4))$estimates["looic","Estimate"],
+  loo::loo(loo::extract_log_lik(mod_5))$estimates["looic","Estimate"]
   )
 looic.table <- data.frame(trends=1:5, LOOIC=looics)
 looic.table
