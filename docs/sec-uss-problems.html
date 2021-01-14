@@ -468,8 +468,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ol style="list-style-type: decimal">
 <li><p>Write the equations for each of these models: ARIMA(0,0,0), ARIMA(0,1,0), ARIMA(1,0,0), ARIMA(0,0,1), ARIMA(1,0,1). Read the help file for the <code>Arima()</code> function (in the <strong>forecast</strong> package) if you are fuzzy on the arima notation.</p></li>
 <li><p>The <strong>MARSS</strong> package includes a data set of sharp-tailed grouse in Washington. Load the data to use as follows:</p>
-<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="sec-uss-problems.html#cb445-1"></a><span class="kw">library</span>(MARSS)</span>
-<span id="cb445-2"><a href="sec-uss-problems.html#cb445-2"></a>dat &lt;-<span class="st"> </span><span class="kw">log</span>(grouse[, <span class="dv">2</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb442-1"><a href="sec-uss-problems.html#cb442-1"></a><span class="kw">library</span>(MARSS)</span>
+<span id="cb442-2"><a href="sec-uss-problems.html#cb442-2"></a>dat &lt;-<span class="st"> </span><span class="kw">log</span>(grouse[, <span class="dv">2</span>])</span></code></pre></div>
 <p>Consider these two models for the data:</p>
 <ul>
 <li><p>Model 1 random walk with no drift observed with no error</p></li>
@@ -504,7 +504,7 @@ y_t = x_t
 </ol>
 <p>Note when using <code>auto.arima()</code>, an AR(1) model of the following form will be fit (notice the <span class="math inline">\(b\)</span>): <span class="math inline">\(x_t = b x_{t-1}+w_t\)</span>. <code>auto.arima()</code> refers to this model <span class="math inline">\(x_t = x_{t-1}+w_t\)</span>, which is also AR(1) but with <span class="math inline">\(b=1\)</span>, as ARIMA(0,1,0). This says that the first difference of the data (that’s the 1 in the middle) is a ARMA(0,0) process (the 0s in the 1st and 3rd spots). So ARIMA(0,1,0) means this: <span class="math inline">\(x_t - x_{t-1} = w_t\)</span>.</p></li>
 <li><p>Create a random walk with drift time series using <code>cumsum()</code> and <code>rnorm()</code>. Look at the <code>rnorm()</code> help file (<code>?rnorm</code>) to make sure you know what the arguments to the <code>rnorm()</code> are.</p>
-<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="sec-uss-problems.html#cb446-1"></a>dat &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb443"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb443-1"><a href="sec-uss-problems.html#cb443-1"></a>dat &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(<span class="dv">100</span>, <span class="fl">0.1</span>, <span class="dv">1</span>))</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>What is the order of this random walk written as ARIMA(p, d, q)? “what is the order” means “what is <span class="math inline">\(p\)</span>, <span class="math inline">\(d\)</span>, and <span class="math inline">\(q\)</span>. Model”order" is how <code>arima()</code> and <code>Arima()</code> specify arima models.</p></li>
 <li><p>Fit that model using <code>Arima()</code> in the <strong>forecast</strong> package. You’ll need to specify the arguments <code>order</code> and <code>include.drift</code>. Use <code>?Arima</code> to review what that function does if needed.</p></li>
@@ -513,7 +513,7 @@ y_t = x_t
 <li><p>How are the two estimates from <code>Arima()</code> and <code>MARSS()</code> different?</p></li>
 </ol></li>
 <li><p>The first-difference of <code>dat</code> used in the previous problem is:</p>
-<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="sec-uss-problems.html#cb447-1"></a>diff.dat &lt;-<span class="st"> </span><span class="kw">diff</span>(dat)</span></code></pre></div>
+<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="sec-uss-problems.html#cb444-1"></a>diff.dat &lt;-<span class="st"> </span><span class="kw">diff</span>(dat)</span></code></pre></div>
 <p>Use <code>?diff</code> to check what the <code>diff()</code> function does.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>If <span class="math inline">\(x_t\)</span> denotes a time series. What is the first difference of <span class="math inline">\(x\)</span>? What is the second difference?</p></li>
@@ -537,8 +537,8 @@ In the population dynamics literature, this equation is called the Gompertz mode
 </ol>
 <p>We will fit what <code>Arima()</code> calls “AR(1) with drift” models in the chapter on MARSS models with covariates.</p></li>
 <li><p>The <strong>MARSS</strong> package includes a data set of gray whales. Load the data to use as follows:</p>
-<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb448-1"><a href="sec-uss-problems.html#cb448-1"></a><span class="kw">library</span>(MARSS)</span>
-<span id="cb448-2"><a href="sec-uss-problems.html#cb448-2"></a>dat &lt;-<span class="st"> </span><span class="kw">log</span>(graywhales[, <span class="dv">2</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="sec-uss-problems.html#cb445-1"></a><span class="kw">library</span>(MARSS)</span>
+<span id="cb445-2"><a href="sec-uss-problems.html#cb445-2"></a>dat &lt;-<span class="st"> </span><span class="kw">log</span>(graywhales[, <span class="dv">2</span>])</span></code></pre></div>
 <p>Fit a random walk with drift model observed with error to the data:
 <span class="math display" id="eq:uss-marss-rw-w-drift">\[\begin{equation}
 \begin{gathered}
@@ -567,17 +567,17 @@ x_0 = a
 <li><p>Compute the AICc’s for each model and likelihood or deviance (-2 * log likelihood). Where to find these? Try <code>names(fit)</code>. <code>logLik()</code> is the standard R function to return log-likelihood from fits.</p></li>
 <li><p>Calculate a table of <span class="math inline">\(\Delta\text{AICc}\)</span> values and AICc weights.</p></li>
 <li><p>Show the acf of the model and state residuals for the best model. You will need a vector of the residuals to do this. If <code>fit</code> is the fit from a fit call like <code>fit = MARSS(dat)</code>, you get the residuals using this code:</p>
-<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="sec-uss-problems.html#cb449-1"></a><span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals[<span class="dv">1</span>, ]</span>
-<span id="cb449-2"><a href="sec-uss-problems.html#cb449-2"></a><span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals[<span class="dv">1</span>, ]</span></code></pre></div>
+<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="sec-uss-problems.html#cb446-1"></a><span class="kw">residuals</span>(fit)<span class="op">$</span>state.residuals[<span class="dv">1</span>, ]</span>
+<span id="cb446-2"><a href="sec-uss-problems.html#cb446-2"></a><span class="kw">residuals</span>(fit)<span class="op">$</span>model.residuals[<span class="dv">1</span>, ]</span></code></pre></div>
 <p>Do the acf’s suggest any problems?</p></li>
 </ol></li>
 <li><p>Evaluate the predictive accuracy of forecasts using the <strong>forecast</strong> package using the <code>airmiles</code> dataset.
 Load the data to use as follows:</p>
-<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb450-1"><a href="sec-uss-problems.html#cb450-1"></a><span class="kw">library</span>(forecast)</span>
-<span id="cb450-2"><a href="sec-uss-problems.html#cb450-2"></a>dat &lt;-<span class="st"> </span><span class="kw">log</span>(airmiles)</span>
-<span id="cb450-3"><a href="sec-uss-problems.html#cb450-3"></a>n &lt;-<span class="st"> </span><span class="kw">length</span>(dat)</span>
-<span id="cb450-4"><a href="sec-uss-problems.html#cb450-4"></a>training.dat &lt;-<span class="st"> </span>dat[<span class="dv">1</span><span class="op">:</span>(n <span class="op">-</span><span class="st"> </span><span class="dv">3</span>)]</span>
-<span id="cb450-5"><a href="sec-uss-problems.html#cb450-5"></a>test.dat &lt;-<span class="st"> </span>dat[(n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)<span class="op">:</span>n]</span></code></pre></div>
+<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="sec-uss-problems.html#cb447-1"></a><span class="kw">library</span>(forecast)</span>
+<span id="cb447-2"><a href="sec-uss-problems.html#cb447-2"></a>dat &lt;-<span class="st"> </span><span class="kw">log</span>(airmiles)</span>
+<span id="cb447-3"><a href="sec-uss-problems.html#cb447-3"></a>n &lt;-<span class="st"> </span><span class="kw">length</span>(dat)</span>
+<span id="cb447-4"><a href="sec-uss-problems.html#cb447-4"></a>training.dat &lt;-<span class="st"> </span>dat[<span class="dv">1</span><span class="op">:</span>(n <span class="op">-</span><span class="st"> </span><span class="dv">3</span>)]</span>
+<span id="cb447-5"><a href="sec-uss-problems.html#cb447-5"></a>test.dat &lt;-<span class="st"> </span>dat[(n <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)<span class="op">:</span>n]</span></code></pre></div>
 <p>This will prepare the training data and set aside the last 3 data points for validation.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Fit the following four models using <code>Arima()</code>: ARIMA(0,0,0), ARIMA(1,0,0), ARIMA(0,0,1), ARIMA(1,0,1).</p></li>
@@ -587,14 +587,14 @@ Load the data to use as follows:</p>
 <li><p>Which model is best supported based on the MASE statistic?</p></li>
 </ol></li>
 <li><p>The WhaleNet Archive of STOP Data has movement data on loggerhead turtles on the east coast of the US from ARGOS tags. The <strong>MARSS</strong> package <code>loggerheadNoisy</code> dataset is lat/lot data on eight individuals, however we have corrupted this data severely by adding random errors in order to create a “bad tag” problem (very noisy). Use <code>head(loggerheadNoisy)</code> to get an idea of the data. Then load the data on one turtle, MaryLee. MARSS needs time across the columns to you need to use transpose the data (as shown).</p>
-<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="sec-uss-problems.html#cb451-1"></a>turtlename &lt;-<span class="st"> &quot;MaryLee&quot;</span></span>
-<span id="cb451-2"><a href="sec-uss-problems.html#cb451-2"></a>dat &lt;-<span class="st"> </span>loggerheadNoisy[<span class="kw">which</span>(loggerheadNoisy<span class="op">$</span>turtle <span class="op">==</span><span class="st"> </span>turtlename), </span>
-<span id="cb451-3"><a href="sec-uss-problems.html#cb451-3"></a>    <span class="dv">5</span><span class="op">:</span><span class="dv">6</span>]</span>
-<span id="cb451-4"><a href="sec-uss-problems.html#cb451-4"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(dat)</span></code></pre></div>
+<div class="sourceCode" id="cb448"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb448-1"><a href="sec-uss-problems.html#cb448-1"></a>turtlename &lt;-<span class="st"> &quot;MaryLee&quot;</span></span>
+<span id="cb448-2"><a href="sec-uss-problems.html#cb448-2"></a>dat &lt;-<span class="st"> </span>loggerheadNoisy[<span class="kw">which</span>(loggerheadNoisy<span class="op">$</span>turtle <span class="op">==</span><span class="st"> </span>turtlename), </span>
+<span id="cb448-3"><a href="sec-uss-problems.html#cb448-3"></a>    <span class="dv">5</span><span class="op">:</span><span class="dv">6</span>]</span>
+<span id="cb448-4"><a href="sec-uss-problems.html#cb448-4"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(dat)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Plot MaryLee’s locations (as a line not dots). Put the latitude locations on the y-axis and the longitude on the y-axis. You can use <code>rownames(dat)</code> to see which is in which row. You can just use <code>plot()</code> for the homework. But if you want, you can look at the MARSS Manual chapter on animal movement to see how to plot the turtle locations on a map using the <strong>maps</strong> package.</p></li>
 <li><p>Analyze the data with a state-space model (movement observed with error) using</p>
-<div class="sourceCode" id="cb452"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb452-1"><a href="sec-uss-problems.html#cb452-1"></a>fit0 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat)</span></code></pre></div>
+<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="sec-uss-problems.html#cb449-1"></a>fit0 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat)</span></code></pre></div>
 <p>Look at the output from the above MARSS call. What is the meaning of the parameters output from MARSS in terms of turtle movement? What exactly is the <span class="math inline">\(u\)</span> estimate for example? Look at the data and think about the model you fit.</p></li>
 <li><p>What assumption did the default MARSS model make about observation error and process error? What does that assumption mean in terms of how steps in the N-S and E-W directions are related? What does that assumption mean in terms of our assumption about the latitudal and longitudinal observation errors?</p></li>
 <li><p>Does MaryLee move faster in the latitude direction versus longitude direction?</p></li>
@@ -606,9 +606,9 @@ Load the data to use as follows:</p>
 <li><p>Lat/lon movements are correlated and the lat/lon variances are the same.</p></li>
 </ul>
 <p>You only need to change <code>Q</code> specification. Your MARSS call will now look like the following with <code>...</code> replaced with your <code>Q</code> specification.</p>
-<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="sec-uss-problems.html#cb453-1"></a>fit1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="kw">list</span>(<span class="dt">Q =</span> ...))</span></code></pre></div></li>
+<div class="sourceCode" id="cb450"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb450-1"><a href="sec-uss-problems.html#cb450-1"></a>fit1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="kw">list</span>(<span class="dt">Q =</span> ...))</span></code></pre></div></li>
 <li><p>Plot your state residuals (true location residuals). What are the problems? Discuss in reference to your plot of the location data. Here is how to get state residuals from <code>MARSS()</code> output:</p>
-<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb454-1"><a href="sec-uss-problems.html#cb454-1"></a>resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit0)<span class="op">$</span>state.residuals</span></code></pre></div>
+<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="sec-uss-problems.html#cb451-1"></a>resids &lt;-<span class="st"> </span><span class="kw">residuals</span>(fit0)<span class="op">$</span>state.residuals</span></code></pre></div>
 <pre><code>The lon residuals are in row 1 and lat residuals are in row 2 (same order as the data).</code></pre></li>
 </ol></li>
 </ol>

@@ -475,10 +475,10 @@ y_t = x_t + v_t \\
 x_t = x_{t-1} + w_t
 \end{equation}\]</span></p>
 <p>Using this model, we can model the Nile River level and fit the model using <code>MARSS()</code>.</p>
-<div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb541-1"><a href="sec-dlm-simple-examples.html#cb541-1"></a><span class="kw">data</span>(Nile, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
-<span id="cb541-2"><a href="sec-dlm-simple-examples.html#cb541-2"></a>mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </span>
-<span id="cb541-3"><a href="sec-dlm-simple-examples.html#cb541-3"></a>    <span class="dt">Z =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="st">&quot;a&quot;</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>))</span>
-<span id="cb541-4"><a href="sec-dlm-simple-examples.html#cb541-4"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="kw">matrix</span>(Nile, <span class="dt">nrow =</span> <span class="dv">1</span>), mod_list)</span></code></pre></div>
+<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb538-1"><a href="sec-dlm-simple-examples.html#cb538-1"></a><span class="kw">data</span>(Nile, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
+<span id="cb538-2"><a href="sec-dlm-simple-examples.html#cb538-2"></a>mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </span>
+<span id="cb538-3"><a href="sec-dlm-simple-examples.html#cb538-3"></a>    <span class="dt">Z =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="st">&quot;a&quot;</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>))</span>
+<span id="cb538-4"><a href="sec-dlm-simple-examples.html#cb538-4"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="kw">matrix</span>(Nile, <span class="dt">nrow =</span> <span class="dv">1</span>), mod_list)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 82 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.

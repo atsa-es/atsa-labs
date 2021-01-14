@@ -483,15 +483,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \end{equation}\]</span></p>
 <p>There are many ways of doing factor rotations, but a common method is the “varimax”" rotation, which seeks a rotation matrix <span class="math inline">\(\mathbf{H}\)</span> that creates the largest difference between the loadings in <span class="math inline">\(\mathbf{Z}\)</span>. For example, imagine that row 3 in our estimated <span class="math inline">\(\mathbf{Z}\)</span> matrix was (0.2, 0.2, 0.2). That would mean that green algae were a mixture of equal parts of processes 1, 2, and 3. If instead row 3 was (0.8, 0.1, 0.05), this would make our interpretation of the model fits easier because we could say that green algae followed the first process most closely. The varimax rotation would find the <span class="math inline">\(\mathbf{H}\)</span> matrix that makes the rows in <span class="math inline">\(\mathbf{Z}\)</span> more like (0.8, 0.1, 0.05) and less like (0.2, 0.2, 0.2).</p>
 <p>The varimax rotation is easy to compute because R has a built in function for this: <code>varimax()</code>. Interestingly, the function returns the inverse of <span class="math inline">\(\mathbf{H}\)</span>, which we need anyway.</p>
-<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb573-1"><a href="sec-dfa-rotating-loadings.html#cb573-1"></a><span class="co">## get the estimated ZZ</span></span>
-<span id="cb573-2"><a href="sec-dfa-rotating-loadings.html#cb573-2"></a>Z_est &lt;-<span class="st"> </span><span class="kw">coef</span>(dfa_<span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>Z</span>
-<span id="cb573-3"><a href="sec-dfa-rotating-loadings.html#cb573-3"></a><span class="co">## get the inverse of the rotation matrix</span></span>
-<span id="cb573-4"><a href="sec-dfa-rotating-loadings.html#cb573-4"></a>H_inv &lt;-<span class="st"> </span><span class="kw">varimax</span>(Z_est)<span class="op">$</span>rotmat</span></code></pre></div>
+<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb570-1"><a href="sec-dfa-rotating-loadings.html#cb570-1"></a><span class="co">## get the estimated ZZ</span></span>
+<span id="cb570-2"><a href="sec-dfa-rotating-loadings.html#cb570-2"></a>Z_est &lt;-<span class="st"> </span><span class="kw">coef</span>(dfa_<span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>Z</span>
+<span id="cb570-3"><a href="sec-dfa-rotating-loadings.html#cb570-3"></a><span class="co">## get the inverse of the rotation matrix</span></span>
+<span id="cb570-4"><a href="sec-dfa-rotating-loadings.html#cb570-4"></a>H_inv &lt;-<span class="st"> </span><span class="kw">varimax</span>(Z_est)<span class="op">$</span>rotmat</span></code></pre></div>
 <p>We can now rotate both <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{x}\)</span>.</p>
-<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb574-1"><a href="sec-dfa-rotating-loadings.html#cb574-1"></a><span class="co">## rotate factor loadings</span></span>
-<span id="cb574-2"><a href="sec-dfa-rotating-loadings.html#cb574-2"></a>Z_rot =<span class="st"> </span>Z_est <span class="op">%*%</span><span class="st"> </span>H_inv</span>
-<span id="cb574-3"><a href="sec-dfa-rotating-loadings.html#cb574-3"></a><span class="co">## rotate processes</span></span>
-<span id="cb574-4"><a href="sec-dfa-rotating-loadings.html#cb574-4"></a>proc_rot =<span class="st"> </span><span class="kw">solve</span>(H_inv) <span class="op">%*%</span><span class="st"> </span>dfa_<span class="dv">1</span><span class="op">$</span>states</span></code></pre></div>
+<div class="sourceCode" id="cb571"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb571-1"><a href="sec-dfa-rotating-loadings.html#cb571-1"></a><span class="co">## rotate factor loadings</span></span>
+<span id="cb571-2"><a href="sec-dfa-rotating-loadings.html#cb571-2"></a>Z_rot =<span class="st"> </span>Z_est <span class="op">%*%</span><span class="st"> </span>H_inv</span>
+<span id="cb571-3"><a href="sec-dfa-rotating-loadings.html#cb571-3"></a><span class="co">## rotate processes</span></span>
+<span id="cb571-4"><a href="sec-dfa-rotating-loadings.html#cb571-4"></a>proc_rot =<span class="st"> </span><span class="kw">solve</span>(H_inv) <span class="op">%*%</span><span class="st"> </span>dfa_<span class="dv">1</span><span class="op">$</span>states</span></code></pre></div>
 </div>
             </section>
 

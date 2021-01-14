@@ -471,7 +471,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb374-3"><a href="sec-boxjenkins-problems.html#cb374-3"></a><span class="kw">data</span>(chinook, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
 <span id="cb374-4"><a href="sec-boxjenkins-problems.html#cb374-4"></a>chinook &lt;-<span class="st"> </span>chinook.month</span></code></pre></div>
 <ol style="list-style-type: decimal">
-<li>Augmented Dickey-Fuller tests in R.
+<li><p>Augmented Dickey-Fuller tests in R.</p>
 <ol style="list-style-type: lower-alpha">
 <li>What is the null hypothesis for the Dickey-Fuller and Augmented Dickey-Fuller tests?</li>
 <li>How do the Dickey-Fuller and Augmented Dickey-Fuller tests differ?</li>
@@ -480,38 +480,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>For <code>ur.df()</code>, how do you determine if the null hypothesis is rejected?</li>
 <li>For <code>ur.df()</code>, how do you determine if there is a significant trend in the data? How do you determine if the intercept is different than zero?</li>
 </ol></li>
-<li>KPSS tests in R.
+<li><p>KPSS tests in R.</p>
 <ol style="list-style-type: lower-alpha">
 <li>What is the null hypothesis for the KPSS test?</li>
 <li>For <code>kpss.test()</code>, what does setting null equal to “Level” versus “Trend” change?</li>
 </ol></li>
-<li>Repeat the stationarity tests for sardine 1964-1987 in the landings data set. Here is how to set up the data for another species.</li>
-</ol>
+<li><p>Repeat the stationarity tests for sardine 1964-1987 in the landings data set. Here is how to set up the data for another species.</p>
 <div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="sec-boxjenkins-problems.html#cb375-1"></a>datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Sardine&quot;</span>)</span>
 <span id="cb375-2"><a href="sec-boxjenkins-problems.html#cb375-2"></a>dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</span>
 <span id="cb375-3"><a href="sec-boxjenkins-problems.html#cb375-3"></a>dat &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</span></code></pre></div>
-<pre><code>a. Do a Dickey-Fuller (DF) test using `ur.df()` and `adf.test()`. You have to set the lags. What does the result tell you?
-a. Do an Augmented Dickey-Fuller (ADF) test using `ur.df()`. How did you choose to set the lags? How is the ADF test different than the DF test?
-b. Do a KPSS test using `kpss.test()`. What does the result tell you?</code></pre>
-<ol start="4" style="list-style-type: decimal">
-<li>Using the anchovy 1964-1987 data, fit using <code>auto.arima()</code> with <code>trace=TRUE</code>.</li>
-</ol>
-<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="sec-boxjenkins-problems.html#cb377-1"></a>forecast<span class="op">::</span><span class="kw">auto.arima</span>(anchovy, <span class="dt">trace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<pre><code>a. Fit each of the models listed using `Arima()` and show that you can produce the same AICc value that is shown in the trace table.
-b. What models are within $\Delta$AIC of 2? What is different about these models?</code></pre>
-<ol start="5" style="list-style-type: decimal">
-<li>Repeat the stationarity tests and differencing tests for anchovy using the following two time ranges: 1964-1987 and 1988-2007. The following shows you how to subset the data:</li>
-</ol>
-<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="sec-boxjenkins-problems.html#cb379-1"></a>datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Anchovy&quot;</span>)</span>
-<span id="cb379-2"><a href="sec-boxjenkins-problems.html#cb379-2"></a>dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</span>
-<span id="cb379-3"><a href="sec-boxjenkins-problems.html#cb379-3"></a>dat64<span class="fl">.87</span> &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</span></code></pre></div>
-<pre><code>a. Plot the time series for the two time periods. For the `kpss.test()`, which null is appropriate, &quot;Level&quot; or &quot;Trend&quot;?
-a. Do the conclusions regarding stationarity and the amount of differencing needed change depending on which time period you analyze? For both time periods, use `adf.test()` with default values and `kpss.test()` with null=&quot;Trend&quot;.
-c. Fit each time period using `auto.arima()`.  Do the selected models change? What do the coefficients mean? Coefficients means the mean and drifts terms and the AR and MA terms.
-d. Discuss the best models for each time period.  How are they different?
-e. You cannot compare the AIC values for an Arima(0,1,0) and Arima(0,0,1). Why do you think that is? Hint when comparing AICs, the data being fit must be the same for each model.</code></pre>
-<ol start="6" style="list-style-type: decimal">
-<li>For the anchovy 1964-2007 data, use <code>auto.arima()</code> with <code>stepwise=FALSE</code> to fit models.
+<ol style="list-style-type: lower-alpha">
+<li>Do a Dickey-Fuller (DF) test using <code>ur.df()</code> and <code>adf.test()</code>. You have to set the lags. What does the result tell you?</li>
+<li>Do an Augmented Dickey-Fuller (ADF) test using <code>ur.df()</code>. How did you choose to set the lags? How is the ADF test different than the DF test?</li>
+<li>Do a KPSS test using <code>kpss.test()</code>. What does the result tell you?</li>
+</ol></li>
+<li><p>Using the anchovy 1964-1987 data, fit using <code>auto.arima()</code> with <code>trace=TRUE</code>.</p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb376-1"><a href="sec-boxjenkins-problems.html#cb376-1"></a>forecast<span class="op">::</span><span class="kw">auto.arima</span>(anchovy, <span class="dt">trace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<ol style="list-style-type: lower-alpha">
+<li>Fit each of the models listed using <code>Arima()</code> and show that you can produce the same AICc value that is shown in the trace table.</li>
+<li>What models are within <span class="math inline">\(\Delta\)</span>AIC of 2? What is different about these models?</li>
+</ol></li>
+<li><p>Repeat the stationarity tests and differencing tests for anchovy using the following two time ranges: 1964-1987 and 1988-2007. The following shows you how to subset the data:</p>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="sec-boxjenkins-problems.html#cb377-1"></a>datdf &lt;-<span class="st"> </span><span class="kw">subset</span>(landings, Species <span class="op">==</span><span class="st"> &quot;Anchovy&quot;</span>)</span>
+<span id="cb377-2"><a href="sec-boxjenkins-problems.html#cb377-2"></a>dat &lt;-<span class="st"> </span><span class="kw">ts</span>(datdf<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="dv">1964</span>)</span>
+<span id="cb377-3"><a href="sec-boxjenkins-problems.html#cb377-3"></a>dat64<span class="fl">.87</span> &lt;-<span class="st"> </span><span class="kw">window</span>(dat, <span class="dt">start =</span> <span class="dv">1964</span>, <span class="dt">end =</span> <span class="dv">1987</span>)</span></code></pre></div>
+<ol style="list-style-type: lower-alpha">
+<li>Plot the time series for the two time periods. For the <code>kpss.test()</code>, which null is appropriate, “Level” or “Trend”?</li>
+<li>Do the conclusions regarding stationarity and the amount of differencing needed change depending on which time period you analyze? For both time periods, use <code>adf.test()</code> with default values and <code>kpss.test()</code> with null=“Trend”.</li>
+<li>Fit each time period using <code>auto.arima()</code>. Do the selected models change? What do the coefficients mean? Coefficients means the mean and drifts terms and the AR and MA terms.</li>
+<li>Discuss the best models for each time period. How are they different?</li>
+<li>You cannot compare the AIC values for an Arima(0,1,0) and Arima(0,0,1). Why do you think that is? Hint when comparing AICs, the data being fit must be the same for each model.</li>
+</ol></li>
+<li><p>For the anchovy 1964-2007 data, use <code>auto.arima()</code> with <code>stepwise=FALSE</code> to fit models.</p>
 <ol style="list-style-type: lower-alpha">
 <li>find the set of models within <span class="math inline">\(\Delta AICc=2\)</span> of the top model.</li>
 <li>Use <code>Arima()</code> to fit the models with Inf or -Inf in the list. Does the set of models within <span class="math inline">\(\Delta AICc=2\)</span> change?</li>
@@ -519,7 +519,7 @@ e. You cannot compare the AIC values for an Arima(0,1,0) and Arima(0,0,1). Why d
 </li>
 <li>How do the forecasts differ in trend and size of prediction intervals?</li>
 </ol></li>
-<li>Using the <code>chinook</code> data set,
+<li><p>Using the <code>chinook</code> data set,</p>
 <ol style="list-style-type: lower-alpha">
 <li>Set up a monthly time series object for the Chinook log metric tons catch for Jan 1990 to Dec 2015.</li>
 <li>Fit a seasonal model to the Chinook Jan 1990 to Dec 1999 data using <code>auto.arima()</code>.<br />

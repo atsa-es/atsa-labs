@@ -649,31 +649,29 @@ chinook <- chinook.month
     b. For `kpss.test()`, what does setting null equal to "Level" versus "Trend" change?
     
 3. Repeat the stationarity tests for sardine 1964-1987 in the landings data set.  Here is how to set up the data for another species.
-```{r get.another.species}
-datdf <- subset(landings, Species=="Sardine")
-dat <- ts(datdf$log.metric.tons, start=1964)
-dat <- window(dat, start=1964, end=1987)
-```
+    ```{r get.another.species}
+    datdf <- subset(landings, Species=="Sardine")
+    dat <- ts(datdf$log.metric.tons, start=1964)
+    dat <- window(dat, start=1964, end=1987)
+    ```
     a. Do a Dickey-Fuller (DF) test using `ur.df()` and `adf.test()`. You have to set the lags. What does the result tell you?
     a. Do an Augmented Dickey-Fuller (ADF) test using `ur.df()`. How did you choose to set the lags? How is the ADF test different than the DF test?
     b. Do a KPSS test using `kpss.test()`. What does the result tell you?
 
 
 4. Using the anchovy 1964-1987 data, fit using `auto.arima()` with `trace=TRUE`.
-
-```{r results='hide'}
-forecast::auto.arima(anchovy, trace=TRUE)
-```
+    ```{r results='hide'}
+    forecast::auto.arima(anchovy, trace=TRUE)
+    ```
     a. Fit each of the models listed using `Arima()` and show that you can produce the same AICc value that is shown in the trace table.
     b. What models are within $\Delta$AIC of 2? What is different about these models?
 
 5. Repeat the stationarity tests and differencing tests for anchovy using the following two time ranges: 1964-1987 and 1988-2007.  The following shows you how to subset the data:
-
-```{r read_data_prob2}
-datdf <- subset(landings, Species=="Anchovy")
-dat <- ts(datdf$log.metric.tons, start=1964)
-dat64.87 <- window(dat, start=1964, end=1987)
-```
+    ```{r read_data_prob2}
+    datdf <- subset(landings, Species=="Anchovy")
+    dat <- ts(datdf$log.metric.tons, start=1964)
+    dat64.87 <- window(dat, start=1964, end=1987)
+    ```
     a. Plot the time series for the two time periods. For the `kpss.test()`, which null is appropriate, "Level" or "Trend"?
     a. Do the conclusions regarding stationarity and the amount of differencing needed change depending on which time period you analyze? For both time periods, use `adf.test()` with default values and `kpss.test()` with null="Trend".
     c. Fit each time period using `auto.arima()`.  Do the selected models change? What do the coefficients mean? Coefficients means the mean and drifts terms and the AR and MA terms.

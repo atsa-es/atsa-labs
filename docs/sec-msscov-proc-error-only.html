@@ -471,13 +471,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \tag{8.4}
 \end{equation}\]</span>
 We can fit this as follows:</p>
-<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="sec-msscov-proc-error-only.html#cb506-1"></a>R &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb506-2"><a href="sec-msscov-proc-error-only.html#cb506-2"></a>B &lt;-<span class="st"> </span>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
-<span id="cb506-3"><a href="sec-msscov-proc-error-only.html#cb506-3"></a>Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></span>
-<span id="cb506-4"><a href="sec-msscov-proc-error-only.html#cb506-4"></a>C &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
-<span id="cb506-5"><a href="sec-msscov-proc-error-only.html#cb506-5"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
-<span id="cb506-6"><a href="sec-msscov-proc-error-only.html#cb506-6"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> covariates)</span>
-<span id="cb506-7"><a href="sec-msscov-proc-error-only.html#cb506-7"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb503-1"><a href="sec-msscov-proc-error-only.html#cb503-1"></a>R &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb503-2"><a href="sec-msscov-proc-error-only.html#cb503-2"></a>B &lt;-<span class="st"> </span>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
+<span id="cb503-3"><a href="sec-msscov-proc-error-only.html#cb503-3"></a>Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></span>
+<span id="cb503-4"><a href="sec-msscov-proc-error-only.html#cb503-4"></a>C &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
+<span id="cb503-5"><a href="sec-msscov-proc-error-only.html#cb503-5"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
+<span id="cb503-6"><a href="sec-msscov-proc-error-only.html#cb503-6"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> covariates)</span>
+<span id="cb503-7"><a href="sec-msscov-proc-error-only.html#cb503-7"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -503,8 +503,8 @@ Initial states (x0) defined at t=0
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>Now, it looks like temperature has a strong negative effect on algae? Also our log-likelihood dropped a lot. Well, the data do not look at all like a random walk model (where <span class="math inline">\(\mathbf{B}=1\)</span>), which we can see from the plot of the data (Figure <a href="sec-msscov-prepare-data.html#fig:msscov-plank-plot">8.1</a>). The data are fluctuating about some mean so let’s switch to a better autoregressive model—a mean-reverting model. To do this, we will allow the diagonal elements of <span class="math inline">\(\mathbf{B}\)</span> to be something other than 1.</p>
-<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="sec-msscov-proc-error-only.html#cb508-1"></a>model.list<span class="op">$</span>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
-<span id="cb508-2"><a href="sec-msscov-proc-error-only.html#cb508-2"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
+<div class="sourceCode" id="cb505"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb505-1"><a href="sec-msscov-proc-error-only.html#cb505-1"></a>model.list<span class="op">$</span>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
+<span id="cb505-2"><a href="sec-msscov-proc-error-only.html#cb505-2"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -533,10 +533,10 @@ Standard errors have not been calculated.
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>Notice that the log-likelihood goes up quite a bit, which means that the mean-reverting model fits the data much better.</p>
 <p>With this model, we are estimating <span class="math inline">\(\mathbf{x}_0\)</span>. If we set <code>model$tinitx=1</code>, we will get a error message that <span class="math inline">\(\mathbf{R}\)</span> diagonals are equal to 0 and we need to fix <code>x0</code>. Because <span class="math inline">\(\mathbf{R}=0\)</span>, if we set the initial states at <span class="math inline">\(t=1\)</span>, then they are fully determined by the data.</p>
-<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="sec-msscov-proc-error-only.html#cb510-1"></a>x0 &lt;-<span class="st"> </span>dat[, <span class="dv">1</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
-<span id="cb510-2"><a href="sec-msscov-proc-error-only.html#cb510-2"></a>model.list<span class="op">$</span>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb510-3"><a href="sec-msscov-proc-error-only.html#cb510-3"></a>model.list<span class="op">$</span>x0 &lt;-<span class="st"> </span>x0</span>
-<span id="cb510-4"><a href="sec-msscov-proc-error-only.html#cb510-4"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
+<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb507-1"><a href="sec-msscov-proc-error-only.html#cb507-1"></a>x0 &lt;-<span class="st"> </span>dat[, <span class="dv">1</span>, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb507-2"><a href="sec-msscov-proc-error-only.html#cb507-2"></a>model.list<span class="op">$</span>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb507-3"><a href="sec-msscov-proc-error-only.html#cb507-3"></a>model.list<span class="op">$</span>x0 &lt;-<span class="st"> </span>x0</span>
+<span id="cb507-4"><a href="sec-msscov-proc-error-only.html#cb507-4"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
