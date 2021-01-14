@@ -1,21 +1,21 @@
-## ----ts-setup, include=FALSE----------------------------------------------------------
+## ----ts-setup, include=FALSE----------------------------------------------------
 knitr::opts_knit$set(unnamed.chunk.label = "ts-")
 knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
 
 
-## ----ts-plot-www, fig.cap = "Number of users connected to the internet"---------------
+## ----ts-plot-www, fig.cap = "Number of users connected to the internet"---------
 data(WWWusage, package="datasets")
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(WWWusage, ylab = "", las = 1, col = "blue", lwd = 2)
 
 
-## ----ts-plot-lynx, fig.cap = "Number of lynx trapped in Canada from 1821-1934"--------
+## ----ts-plot-lynx, fig.cap = "Number of lynx trapped in Canada from 1821-1934"----
 data(lynx, package="datasets")
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(lynx, ylab = "", las = 1, col = "blue", lwd = 2)
 
 
-## ----ts-load-quantmod, message=FALSE, warning=FALSE, echo=FALSE, results='hide'-------
+## ----ts-load-quantmod, message=FALSE, warning=FALSE, echo=FALSE, results='hide'----
 if (!require("quantmod")) {
     install.packages("quantmod")
     library(quantmod)
@@ -26,7 +26,7 @@ getSymbols("MSFT", src = "yahoo", from = start, to = end)
 plot(MSFT[, "MSFT.Close"], main = "MSFT")
 
 
-## ----ts-plot-joint-dist, echo=FALSE, fig.cap="Distribution of realizations"-----------
+## ----ts-plot-joint-dist, echo=FALSE, fig.cap="Distribution of realizations"-----
 set.seed(123)
 nn <- 50
 tt <- 40
@@ -45,14 +45,14 @@ matplot(ww, type="l", lty="solid",  las = 1,
 lines(ww[,1], col = "blue", lwd = 2)
 
 
-## ----ts-ex-WN-------------------------------------------------------------------------
+## ----ts-ex-WN-------------------------------------------------------------------
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 matplot(ww, type="l", lty="solid",  las = 1,
         ylab = expression(italic(x[t])), xlab = "Time",
         col = gray(0.5, 0.4))
 
 
-## ----ts-ex-RW-------------------------------------------------------------------------
+## ----ts-ex-RW-------------------------------------------------------------------
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 matplot(apply(ww, 2, cumsum), type="l", lty="solid",  las = 1,
         ylab = expression(italic(x[t])), xlab = "Time",
@@ -113,7 +113,7 @@ text(x = 1949, y = max(trend, na.rm = TRUE)*0.8,
      adj = c(0,0), col = "darkred")
 
 
-## ----ts-plot-airpass-decomp-seas, echo=FALSE, fig.cap = ""----------------------------
+## ----ts-plot-airpass-decomp-seas, echo=FALSE, fig.cap = ""----------------------
 seas <- trend2 - xx
   
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
@@ -123,13 +123,13 @@ plot.ts(seas, las = 1, ylab = "")
 #      adj = c(0,0), col = "darkorange")
 
 
-## ----ts-mean-seasonal-effects, fig.cap="Mean seasonal effect."------------------------
+## ----ts-mean-seasonal-effects, fig.cap="Mean seasonal effect."------------------
 seas_2 <- decompose(xx)$seasonal
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(seas_2, las = 1, ylab = "")
 
 
-## ----ts-errors, fig.cap="Errors."-----------------------------------------------------
+## ----ts-errors, fig.cap="Errors."-----------------------------------------------
 ee <- decompose(xx)$random
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(ee, las = 1, ylab = "")
@@ -141,7 +141,7 @@ par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(lx, las = 1, ylab = "")
 
 
-## ----ts-plot-lin-trend, echo=FALSE----------------------------------------------------
+## ----ts-plot-lin-trend, echo=FALSE----------------------------------------------
 tt <- as.vector(time(xx))
 cc <- coef(lm(lx ~ tt))
 pp <- cc[1] + cc[2] * tt
@@ -152,12 +152,12 @@ plot(tt, lx, type="l", las = 1,
 lines(tt, pp, col = "blue", lwd = 2)
 
 
-## ----seas_ln_dat, echo=FALSE----------------------------------------------------------
+## ----seas_ln_dat, echo=FALSE----------------------------------------------------
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(lx-pp)
 
 
-## ----mean_seas_effects, echo=FALSE----------------------------------------------------
+## ----mean_seas_effects, echo=FALSE----------------------------------------------
 ## length of ts
 ll <- length(lx)
 ## frequency (ie, 12)
@@ -180,7 +180,7 @@ par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(seas_2, las = 1, ylab = "")
 
 
-## ----ln_errors------------------------------------------------------------------------
+## ----ln_errors------------------------------------------------------------------
 le <- lx - pp - seas_2
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(le, las = 1, ylab = "")

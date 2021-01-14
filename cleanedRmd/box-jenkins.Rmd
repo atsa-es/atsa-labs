@@ -629,6 +629,7 @@ points(testdat)
 ## Problems {#sec-boxjenkins-problems}
 
 For these problems, use the catch landings from Greek waters (`greeklandings`) and the Chinook landings  (`chinook`) in Washington data. Load the data as follows:
+
 ```{r bj-read-data-problems}
 data(greeklandings, package="atsalibrary")
 landings <- greeklandings
@@ -637,57 +638,87 @@ chinook <- chinook.month
 ```
 
 1. Augmented Dickey-Fuller tests in R.
+
     a. What is the null hypothesis for the Dickey-Fuller and Augmented Dickey-Fuller tests?
+    
     b. How do the Dickey-Fuller and Augmented Dickey-Fuller tests differ?
+    
     c. For `adf.test()`, does the test allow the data to have a non-zero level? Does the test allow the data to be stationarity around a trend (a linear slope)?
+    
     d. For `ur.df()`, what does type = "none", "drift", and "trend" mean? Which one gives you the same result as `adf.test()`? What do you have to set the lags equal to get the default lags in `adf.test()`?
+    
     e. For `ur.df()`, how do you determine if the null hypothesis is rejected?
+    
     f. For `ur.df()`, how do you determine if there is a significant trend in the data? How do you determine if the intercept is different than zero?
 
 2. KPSS tests in R.
+
     a. What is the null hypothesis for the KPSS test?
+    
     b. For `kpss.test()`, what does setting null equal to "Level" versus "Trend" change?
     
 3. Repeat the stationarity tests for sardine 1964-1987 in the landings data set.  Here is how to set up the data for another species.
+
     ```{r get.another.species}
     datdf <- subset(landings, Species=="Sardine")
     dat <- ts(datdf$log.metric.tons, start=1964)
     dat <- window(dat, start=1964, end=1987)
     ```
+    
     a. Do a Dickey-Fuller (DF) test using `ur.df()` and `adf.test()`. You have to set the lags. What does the result tell you?
+    
     a. Do an Augmented Dickey-Fuller (ADF) test using `ur.df()`. How did you choose to set the lags? How is the ADF test different than the DF test?
+    
     b. Do a KPSS test using `kpss.test()`. What does the result tell you?
 
 
 4. Using the anchovy 1964-1987 data, fit using `auto.arima()` with `trace=TRUE`.
+
     ```{r results='hide'}
     forecast::auto.arima(anchovy, trace=TRUE)
     ```
+    
     a. Fit each of the models listed using `Arima()` and show that you can produce the same AICc value that is shown in the trace table.
+    
     b. What models are within $\Delta$AIC of 2? What is different about these models?
 
 5. Repeat the stationarity tests and differencing tests for anchovy using the following two time ranges: 1964-1987 and 1988-2007.  The following shows you how to subset the data:
+
     ```{r read_data_prob2}
     datdf <- subset(landings, Species=="Anchovy")
     dat <- ts(datdf$log.metric.tons, start=1964)
     dat64.87 <- window(dat, start=1964, end=1987)
     ```
+    
     a. Plot the time series for the two time periods. For the `kpss.test()`, which null is appropriate, "Level" or "Trend"?
+    
     a. Do the conclusions regarding stationarity and the amount of differencing needed change depending on which time period you analyze? For both time periods, use `adf.test()` with default values and `kpss.test()` with null="Trend".
+    
     c. Fit each time period using `auto.arima()`.  Do the selected models change? What do the coefficients mean? Coefficients means the mean and drifts terms and the AR and MA terms.
+    
     d. Discuss the best models for each time period.  How are they different?
+    
     e. You cannot compare the AIC values for an Arima(0,1,0) and Arima(0,0,1). Why do you think that is? Hint when comparing AICs, the data being fit must be the same for each model.
 
 6. For the anchovy 1964-2007 data, use `auto.arima()` with `stepwise=FALSE` to fit models.
+
     a. find the set of models within $\Delta AICc=2$ of the top model. 
+    
     b. Use `Arima()` to fit the models with Inf or -Inf in the list. Does the set of models within $\Delta AICc=2$ change?
+    
     c. Create a 5-year forecast for each of the top 3 models according to AICc.  
     d. How do the forecasts differ in trend and size of prediction intervals?
+
     
 7. Using the `chinook` data set,
+
     a. Set up a monthly time series object for the Chinook log metric tons catch for Jan 1990 to Dec 2015.
+    
     a. Fit a seasonal model to the Chinook Jan 1990 to Dec 1999 data using `auto.arima()`.  
+    
     b. Create a forecast through 2015 using the model in part b.
+    
     c. Plot the forecast with the 2014 and 2015 actual landings added as data points.
+    
     d. The model from part b has drift.  Fit this model using `Arima()` without drift and compare the 2015 forecast with this model.
 

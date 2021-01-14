@@ -471,15 +471,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Data and packages</h3>
 <p>For the chapter examples, we will use the green and bluegreen algae in the Lake Washington plankton data set and the covariates in that dataset. This is a 32-year time series (1962-1994) of monthly plankton counts (cells per mL) from Lake Washington, Washington, USA with the covariates total phosphorous and pH. <code>lakeWAplanktonTrans</code> is a transformed version of the raw data used for teaching purposes. Zeros have been replaced with NAs (missing). The logged (natural log) raw plankton counts have been standardized to a mean of zero and variance of 1 (so logged and then z-scored). Temperature, TP and pH were also z-scored but not logged (so z-score of the untransformed values for these covariates). The single missing temperature value was replaced with -1 and the single missing TP value was replaced with -0.3.</p>
 <p>We will use the 10 years of data from 1965-1974 (Figure <a href="sec-msscov-prepare-data.html#fig:msscov-plank-plot">8.1</a>), a decade with particularly high green and bluegreen algae levels.</p>
-<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="chap-msscov.html#cb497-1"></a><span class="kw">data</span>(lakeWAplankton, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb497-2"><a href="chap-msscov.html#cb497-2"></a><span class="co"># lakeWA</span></span>
-<span id="cb497-3"><a href="chap-msscov.html#cb497-3"></a>fulldat =<span class="st"> </span>lakeWAplanktonTrans</span>
-<span id="cb497-4"><a href="chap-msscov.html#cb497-4"></a>years =<span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1965</span> <span class="op">&amp;</span><span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;</span><span class="st"> </span><span class="dv">1975</span></span>
-<span id="cb497-5"><a href="chap-msscov.html#cb497-5"></a>dat =<span class="st"> </span><span class="kw">t</span>(fulldat[years, <span class="kw">c</span>(<span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Bluegreens&quot;</span>)])</span>
-<span id="cb497-6"><a href="chap-msscov.html#cb497-6"></a>covariates =<span class="st"> </span><span class="kw">t</span>(fulldat[years, <span class="kw">c</span>(<span class="st">&quot;Temp&quot;</span>, <span class="st">&quot;TP&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="chap-msscov.html#cb496-1"></a><span class="kw">data</span>(lakeWAplankton, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb496-2"><a href="chap-msscov.html#cb496-2"></a><span class="co"># lakeWA</span></span>
+<span id="cb496-3"><a href="chap-msscov.html#cb496-3"></a>fulldat =<span class="st"> </span>lakeWAplanktonTrans</span>
+<span id="cb496-4"><a href="chap-msscov.html#cb496-4"></a>years =<span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1965</span> <span class="op">&amp;</span><span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;</span><span class="st"> </span><span class="dv">1975</span></span>
+<span id="cb496-5"><a href="chap-msscov.html#cb496-5"></a>dat =<span class="st"> </span><span class="kw">t</span>(fulldat[years, <span class="kw">c</span>(<span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Bluegreens&quot;</span>)])</span>
+<span id="cb496-6"><a href="chap-msscov.html#cb496-6"></a>covariates =<span class="st"> </span><span class="kw">t</span>(fulldat[years, <span class="kw">c</span>(<span class="st">&quot;Temp&quot;</span>, <span class="st">&quot;TP&quot;</span>)])</span></code></pre></div>
 <p>Packages:</p>
-<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb498-1"><a href="chap-msscov.html#cb498-1"></a><span class="kw">library</span>(MARSS)</span>
-<span id="cb498-2"><a href="chap-msscov.html#cb498-2"></a><span class="kw">library</span>(ggplot2)</span></code></pre></div>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="chap-msscov.html#cb497-1"></a><span class="kw">library</span>(MARSS)</span>
+<span id="cb497-2"><a href="chap-msscov.html#cb497-2"></a><span class="kw">library</span>(ggplot2)</span></code></pre></div>
 </div>
 </div>
             </section>

@@ -477,7 +477,7 @@ stack.loss_i = \alpha_s + \beta_a air_i + e_i, \text{ where } e_i \sim \text{N}(
 \end{equation}\]</span>
 You get the idea.</p>
 <p>Now we need to add an operator variable as a factor in our stackloss dataframe. Plants 1,3 are run by Sue and plants 2,4 are run by Aneesh.</p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="sec-mlr-betas.html#cb153-1"></a>dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">owner=</span><span class="kw">c</span>(<span class="st">&quot;s&quot;</span>,<span class="st">&quot;a&quot;</span>))</span>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="sec-mlr-betas.html#cb153-1"></a>dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">owner =</span> <span class="kw">c</span>(<span class="st">&quot;s&quot;</span>, <span class="st">&quot;a&quot;</span>))</span>
 <span id="cb153-2"><a href="sec-mlr-betas.html#cb153-2"></a>dat</span></code></pre></div>
 <pre><code>  Air.Flow Water.Temp Acid.Conc. stack.loss reg owner
 1       80         27         89         42   n     s
@@ -486,7 +486,7 @@ You get the idea.</p>
 4       62         24         87         28   s     a</code></pre>
 <p>Since the operator names can be replicated the length of our data set, R fills in the operator colmun by replicating our string of operator names to the right length, conveniently (or alarmingly).</p>
 <p>We can easily fit this model with <code>lm()</code> using the “:” notation.</p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="sec-mlr-betas.html#cb155-1"></a><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow<span class="op">:</span>owner <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data=</span>dat))</span></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="sec-mlr-betas.html#cb155-1"></a><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow<span class="op">:</span>owner <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data =</span> dat))</span></code></pre></div>
 <pre><code>           regn            regs Air.Flow:ownera Air.Flow:owners 
           -38.0            -3.0             0.5             1.0 </code></pre>
 <p>Notice that we have 4 datapoints and are estimating 4 parameters. We are not going to be able to estimate any more parameters than data points. If we want to estimate any more, we’ll need to use the fuller stackflow dataset (which has 21 data points).</p>
@@ -504,17 +504,17 @@ You get the idea.</p>
 \end{equation}\]</span>
 The air data have been written to the right of the 1s and 0s for north/south intercepts because that is how <code>lm()</code> writes this model in Form 1 and I want to duplicate that (for teaching purposes). Also the <span class="math inline">\(\beta\)</span>’s are ordered to be alphabetical because <code>lm()</code> writes the <span class="math inline">\(\mathbf{Z}\)</span> matrix like that.</p>
 <p>Now our model is more complicated and using <code>model.matrix()</code> to get our <span class="math inline">\(\mathbf{Z}\)</span> saves us a lot tedious matrix building.</p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="sec-mlr-betas.html#cb157-1"></a>fit3=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow<span class="op">:</span>owner <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data=</span>dat)</span>
-<span id="cb157-2"><a href="sec-mlr-betas.html#cb157-2"></a>Z=<span class="kw">model.matrix</span>(fit3)</span>
-<span id="cb157-3"><a href="sec-mlr-betas.html#cb157-3"></a>Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="sec-mlr-betas.html#cb157-1"></a>fit3 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Air.Flow<span class="op">:</span>owner <span class="op">+</span><span class="st"> </span>reg, <span class="dt">data =</span> dat)</span>
+<span id="cb157-2"><a href="sec-mlr-betas.html#cb157-2"></a>Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit3)</span>
+<span id="cb157-3"><a href="sec-mlr-betas.html#cb157-3"></a>Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</span></code></pre></div>
 <pre><code>  regn regs Air.Flow:ownera Air.Flow:owners
 1    1    0               0              80
 2    0    1              80               0
 3    1    0               0              75
 4    0    1              62               0</code></pre>
 <p>Notice the matrix output by <code>model.matrix()</code> looks exactly like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-betas.html#eq:stackloss-form1-owner">(2.17)</a> (ignore the attributes info). Now we can solve for the parameters:</p>
-<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="sec-mlr-betas.html#cb159-1"></a>y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</span>
-<span id="cb159-2"><a href="sec-mlr-betas.html#cb159-2"></a><span class="kw">solve</span>(<span class="kw">t</span>(Z)<span class="op">%*%</span>Z)<span class="op">%*%</span><span class="kw">t</span>(Z)<span class="op">%*%</span>y</span></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="sec-mlr-betas.html#cb159-1"></a>y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb159-2"><a href="sec-mlr-betas.html#cb159-2"></a><span class="kw">solve</span>(<span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>Z) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(Z) <span class="op">%*%</span><span class="st"> </span>y</span></code></pre></div>
 <pre><code>                 [,1]
 regn            -38.0
 regs             -3.0

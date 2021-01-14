@@ -478,8 +478,8 @@ Figure 7.1: Plot of the of the count data from the five harbor seal regions (Jef
 <div id="sec-mss-load-the-harbor-seal-data" class="section level3">
 <h3><span class="header-section-number">7.2.1</span> Load the harbor seal data</h3>
 <p>The harbor seal data are included in the <strong>MARSS</strong> package as matrix with years in column 1 and the logged counts in the other columns. Let’s look at the first few years of data:</p>
-<div class="sourceCode" id="cb454"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb454-1"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb454-1"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb454-2"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb454-2"></a><span class="kw">print</span>(harborSealWA[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>, ], <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb453-1"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb453-2"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb453-2"></a><span class="kw">print</span>(harborSealWA[<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>, ], <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>     Year  SJF  SJI EBays PSnd  HC
 [1,] 1978 6.03 6.75  6.63 5.82 6.6
 [2,] 1979   NA   NA    NA   NA  NA
@@ -490,12 +490,12 @@ Figure 7.1: Plot of the of the count data from the five harbor seal regions (Jef
 [7,] 1984 6.93 7.74  7.45   NA  NA
 [8,] 1985 7.16 7.53  7.26 6.60  NA</code></pre>
 <p>We are going to leave out Hood Canal (HC) since that region is somewhat isolated from the others and experiencing very different conditions due to hypoxic events and periodic intense killer whale predation. We will set up the data as follows:</p>
-<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb456-1"></a>dat &lt;-<span class="st"> </span>MARSS<span class="op">::</span>harborSealWA</span>
-<span id="cb456-2"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb456-2"></a>years &lt;-<span class="st"> </span>dat[, <span class="st">&quot;Year&quot;</span>]</span>
-<span id="cb456-3"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb456-3"></a>dat &lt;-<span class="st"> </span>dat[, <span class="op">!</span>(<span class="kw">colnames</span>(dat) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;HC&quot;</span>))]</span>
-<span id="cb456-4"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb456-4"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(dat)  <span class="co"># transpose to have years across columns</span></span>
-<span id="cb456-5"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb456-5"></a><span class="kw">colnames</span>(dat) &lt;-<span class="st"> </span>years</span>
-<span id="cb456-6"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb456-6"></a>n &lt;-<span class="st"> </span><span class="kw">nrow</span>(dat) <span class="op">-</span><span class="st"> </span><span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb455-1"></a>dat &lt;-<span class="st"> </span>MARSS<span class="op">::</span>harborSealWA</span>
+<span id="cb455-2"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb455-2"></a>years &lt;-<span class="st"> </span>dat[, <span class="st">&quot;Year&quot;</span>]</span>
+<span id="cb455-3"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb455-3"></a>dat &lt;-<span class="st"> </span>dat[, <span class="op">!</span>(<span class="kw">colnames</span>(dat) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;HC&quot;</span>))]</span>
+<span id="cb455-4"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb455-4"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(dat)  <span class="co"># transpose to have years across columns</span></span>
+<span id="cb455-5"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb455-5"></a><span class="kw">colnames</span>(dat) &lt;-<span class="st"> </span>years</span>
+<span id="cb455-6"><a href="sec-mss-west-coast-harbor-seals-counts.html#cb455-6"></a>n &lt;-<span class="st"> </span><span class="kw">nrow</span>(dat) <span class="op">-</span><span class="st"> </span><span class="dv">1</span></span></code></pre></div>
 </div>
 </div>
             </section>

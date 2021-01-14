@@ -478,7 +478,7 @@ stack.loss_i = \alpha_2 + e_i, \text{ where } e_i \sim \text{N}(0,\sigma^2)
 \end{equation}\]</span>
 etc.</p>
 <p>We add a column to our dataframe to account for season:</p>
-<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="sec-mlr-season-factor.html#cb161-1"></a>dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">qtr=</span><span class="kw">paste</span>(<span class="kw">rep</span>(<span class="st">&quot;qtr&quot;</span>,<span class="dv">4</span>),<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="sec-mlr-season-factor.html#cb161-1"></a>dat =<span class="st"> </span><span class="kw">cbind</span>(dat, <span class="dt">qtr =</span> <span class="kw">paste</span>(<span class="kw">rep</span>(<span class="st">&quot;qtr&quot;</span>, <span class="dv">4</span>), <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))</span>
 <span id="cb161-2"><a href="sec-mlr-season-factor.html#cb161-2"></a>dat</span></code></pre></div>
 <pre><code>  Air.Flow Water.Temp Acid.Conc. stack.loss reg owner  qtr
 1       80         27         89         42   n     s qtr1
@@ -486,21 +486,21 @@ etc.</p>
 3       75         25         90         37   n     s qtr3
 4       62         24         87         28   s     a qtr4</code></pre>
 <p>And we can easily fit this model with <code>lm()</code>.</p>
-<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="sec-mlr-season-factor.html#cb163-1"></a><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data=</span>dat))</span></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="sec-mlr-season-factor.html#cb163-1"></a><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data =</span> dat))</span></code></pre></div>
 <pre><code>qtrqtr1 qtrqtr2 qtrqtr3 qtrqtr4 
      42      37      37      28 </code></pre>
 <p>The -1 is added to the <code>lm()</code> call to get rid of <span class="math inline">\(\alpha\)</span>. We just want the <span class="math inline">\(\alpha_1\)</span>, <span class="math inline">\(\alpha_2\)</span>, etc. intercepts coming from our quarters.</p>
 <p>For comparison look at</p>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="sec-mlr-season-factor.html#cb165-1"></a><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>qtr, <span class="dt">data=</span>dat))</span></code></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="sec-mlr-season-factor.html#cb165-1"></a><span class="kw">coef</span>(<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>qtr, <span class="dt">data =</span> dat))</span></code></pre></div>
 <pre><code>(Intercept)     qtrqtr2     qtrqtr3     qtrqtr4 
          42          -5          -5         -14 </code></pre>
 <p>Why does it look like that when -1 is missing from the <code>lm()</code> call? Where did the intercept for quarter 1 go and why are the other intercepts so much smaller?</p>
 <div id="sec-mlr-season-form1" class="section level3">
 <h3><span class="header-section-number">2.6.1</span> Seasonal intercepts written in Form 1</h3>
 <p>Remembering that <code>lm()</code> puts models in Form 1, look at the <span class="math inline">\(\mathbf{Z}\)</span> matrix for Form 1:</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="sec-mlr-season-factor.html#cb167-1"></a>fit4=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data=</span>dat)</span>
-<span id="cb167-2"><a href="sec-mlr-season-factor.html#cb167-2"></a>Z=<span class="kw">model.matrix</span>(fit4)</span>
-<span id="cb167-3"><a href="sec-mlr-season-factor.html#cb167-3"></a>Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="sec-mlr-season-factor.html#cb167-1"></a>fit4 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr, <span class="dt">data =</span> dat)</span>
+<span id="cb167-2"><a href="sec-mlr-season-factor.html#cb167-2"></a>Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit4)</span>
+<span id="cb167-3"><a href="sec-mlr-season-factor.html#cb167-3"></a>Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</span></code></pre></div>
 <pre><code>  qtrqtr1 qtrqtr2 qtrqtr3 qtrqtr4
 1       1       0       0       0
 2       0       1       0       0
@@ -517,9 +517,9 @@ etc.</p>
 \begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{e}
 \end{equation}\]</span></p>
 <p>Compare to the model that <code>lm()</code> is using when the intercept included. What does this model look like written in matrix form?</p>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="sec-mlr-season-factor.html#cb169-1"></a>fit5=<span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>qtr, <span class="dt">data=</span>dat)</span>
-<span id="cb169-2"><a href="sec-mlr-season-factor.html#cb169-2"></a>Z=<span class="kw">model.matrix</span>(fit5)</span>
-<span id="cb169-3"><a href="sec-mlr-season-factor.html#cb169-3"></a>Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="sec-mlr-season-factor.html#cb169-1"></a>fit5 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span>qtr, <span class="dt">data =</span> dat)</span>
+<span id="cb169-2"><a href="sec-mlr-season-factor.html#cb169-2"></a>Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit5)</span>
+<span id="cb169-3"><a href="sec-mlr-season-factor.html#cb169-3"></a>Z[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, ]</span></code></pre></div>
 <pre><code>  (Intercept) qtrqtr2 qtrqtr3 qtrqtr4
 1           1       0       0       0
 2           1       1       0       0

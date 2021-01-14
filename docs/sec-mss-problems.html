@@ -466,9 +466,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-mss-problems" class="section level2">
 <h2><span class="header-section-number">7.11</span> Problems</h2>
 <p>For these questions, use the <code>harborSealWA</code> data set in <strong>MARSS</strong>. The data are already logged, but you will need to remove the year column and have time going across the columns not down the rows.</p>
-<div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="sec-mss-problems.html#cb491-1"></a><span class="kw">require</span>(MARSS)</span>
-<span id="cb491-2"><a href="sec-mss-problems.html#cb491-2"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb491-3"><a href="sec-mss-problems.html#cb491-3"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(harborSealWA[, <span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb490-1"><a href="sec-mss-problems.html#cb490-1"></a><span class="kw">require</span>(MARSS)</span>
+<span id="cb490-2"><a href="sec-mss-problems.html#cb490-2"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb490-3"><a href="sec-mss-problems.html#cb490-3"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(harborSealWA[, <span class="dv">2</span><span class="op">:</span><span class="dv">6</span>])</span></code></pre></div>
 <p>The sites are San Juan de Fuca (SJF 3), San Juan Islands (SJI 4), Eastern Bays (EBays 5), Puget Sound (PSnd 6) and Hood Canal (HC 7).</p>
 <div class="figure">
 <img src="images/harborSealWA_regions.png" alt="" />
@@ -540,8 +540,8 @@ A[1,1] &lt;- &quot;sigma2&quot;</code></pre>
 <li><p>Prepare a table of each model with a column for the AICc values. And a column for <span class="math inline">\(\Delta AICc\)</span> (AICc minus the lowest AICc in the group). What is the most supported model?</p></li>
 </ol></li>
 <li><p>Do diagnostics on the model innovations residuals for the 3 subpopulation model from question 4. Use the following code to get your model residuals. This will put NAs in the model residuals where there is missing data. Then do the tests on each row of <code>resids</code>.</p>
-<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="sec-mss-problems.html#cb496-1"></a>resids &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(fit, <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)<span class="op">$</span>model.residuals</span>
-<span id="cb496-2"><a href="sec-mss-problems.html#cb496-2"></a>resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="sec-mss-problems.html#cb495-1"></a>resids &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(fit, <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)<span class="op">$</span>model.residuals</span>
+<span id="cb495-2"><a href="sec-mss-problems.html#cb495-2"></a>resids[<span class="kw">is.na</span>(dat)] &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Plot the model residuals.</p></li>
 <li><p>Plot the ACF of the model residuals. Use <code>acf(..., na.action=na.pass)</code>.</p></li>
