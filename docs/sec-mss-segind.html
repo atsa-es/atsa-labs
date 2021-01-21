@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -531,12 +531,12 @@ No <span class="math inline">\(a\)</span>’s can be estimated since we do not h
 <div id="sec-mss-fitting-mod1" class="section level3">
 <h3><span class="header-section-number">7.4.2</span> Fitting the model</h3>
 <p>We set up the model list for <code>MARSS()</code> as:</p>
-<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="sec-mss-segind.html#cb455-1"></a>mod.list<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">U =</span> <span class="st">&quot;equal&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and equal&quot;</span>, </span>
-<span id="cb455-2"><a href="sec-mss-segind.html#cb455-2"></a>    <span class="dt">Z =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>, <span class="dt">R =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, </span>
-<span id="cb455-3"><a href="sec-mss-segind.html#cb455-3"></a>    <span class="dt">x0 =</span> <span class="st">&quot;unequal&quot;</span>, <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="sec-mss-segind.html#cb456-1"></a>mod.list<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">U =</span> <span class="st">&quot;equal&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and equal&quot;</span>, </span>
+<span id="cb456-2"><a href="sec-mss-segind.html#cb456-2"></a>    <span class="dt">Z =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">A =</span> <span class="st">&quot;scaling&quot;</span>, <span class="dt">R =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, </span>
+<span id="cb456-3"><a href="sec-mss-segind.html#cb456-3"></a>    <span class="dt">x0 =</span> <span class="st">&quot;unequal&quot;</span>, <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p>We introduced a few more short-cuts. <code>"equal"</code> means all the values in the matrix are the same. <code>"diagonal and equal"</code> means that the matrix is diagonal with one value on the diagonal. <code>"unequal"</code> means that all values in the matrix are different.</p>
 <p>We can then fit our model for 4 subpopulations as:</p>
-<div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="sec-mss-segind.html#cb456-1"></a>fit<span class="fl">.1</span> &lt;-<span class="st"> </span>MARSS<span class="op">::</span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.list<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb457-1"><a href="sec-mss-segind.html#cb457-1"></a>fit<span class="fl">.1</span> &lt;-<span class="st"> </span>MARSS<span class="op">::</span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod.list<span class="fl">.1</span>)</span></code></pre></div>
 </div>
 </div>
             </section>

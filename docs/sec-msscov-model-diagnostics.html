@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -466,17 +466,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-msscov-model-diagnostics" class="section level2">
 <h2><span class="header-section-number">8.7</span> Model diagnostics</h2>
 <p>We will examine some basic model diagnostics for these three approaches by looking at plots of the model residuals and their autocorrelation functions (ACFs) for all five taxa using the following code:</p>
-<div class="sourceCode" id="cb522"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb522-1"><a href="sec-msscov-model-diagnostics.html#cb522-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) {</span>
-<span id="cb522-2"><a href="sec-msscov-model-diagnostics.html#cb522-2"></a>    <span class="kw">dev.new</span>()</span>
-<span id="cb522-3"><a href="sec-msscov-model-diagnostics.html#cb522-3"></a>    modn &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;seas.mod&quot;</span>, i, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)</span>
-<span id="cb522-4"><a href="sec-msscov-model-diagnostics.html#cb522-4"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
-<span id="cb522-5"><a href="sec-msscov-model-diagnostics.html#cb522-5"></a>        resid.j &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(<span class="kw">get</span>(modn), <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)<span class="op">$</span>model.residuals[j, </span>
-<span id="cb522-6"><a href="sec-msscov-model-diagnostics.html#cb522-6"></a>            ]</span>
-<span id="cb522-7"><a href="sec-msscov-model-diagnostics.html#cb522-7"></a>        <span class="kw">plot.ts</span>(resid.j, <span class="dt">ylab =</span> <span class="st">&quot;Residual&quot;</span>, <span class="dt">main =</span> phytos[j])</span>
-<span id="cb522-8"><a href="sec-msscov-model-diagnostics.html#cb522-8"></a>        <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</span>
-<span id="cb522-9"><a href="sec-msscov-model-diagnostics.html#cb522-9"></a>        <span class="kw">acf</span>(resid.j, <span class="dt">na.action =</span> na.pass)</span>
-<span id="cb522-10"><a href="sec-msscov-model-diagnostics.html#cb522-10"></a>    }</span>
-<span id="cb522-11"><a href="sec-msscov-model-diagnostics.html#cb522-11"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb523"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb523-1"><a href="sec-msscov-model-diagnostics.html#cb523-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>) {</span>
+<span id="cb523-2"><a href="sec-msscov-model-diagnostics.html#cb523-2"></a>    <span class="kw">dev.new</span>()</span>
+<span id="cb523-3"><a href="sec-msscov-model-diagnostics.html#cb523-3"></a>    modn &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;seas.mod&quot;</span>, i, <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)</span>
+<span id="cb523-4"><a href="sec-msscov-model-diagnostics.html#cb523-4"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) {</span>
+<span id="cb523-5"><a href="sec-msscov-model-diagnostics.html#cb523-5"></a>        resid.j &lt;-<span class="st"> </span><span class="kw">MARSSresiduals</span>(<span class="kw">get</span>(modn), <span class="dt">type =</span> <span class="st">&quot;tt1&quot;</span>)<span class="op">$</span>model.residuals[j, </span>
+<span id="cb523-6"><a href="sec-msscov-model-diagnostics.html#cb523-6"></a>            ]</span>
+<span id="cb523-7"><a href="sec-msscov-model-diagnostics.html#cb523-7"></a>        <span class="kw">plot.ts</span>(resid.j, <span class="dt">ylab =</span> <span class="st">&quot;Residual&quot;</span>, <span class="dt">main =</span> phytos[j])</span>
+<span id="cb523-8"><a href="sec-msscov-model-diagnostics.html#cb523-8"></a>        <span class="kw">abline</span>(<span class="dt">h =</span> <span class="dv">0</span>, <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>)</span>
+<span id="cb523-9"><a href="sec-msscov-model-diagnostics.html#cb523-9"></a>        <span class="kw">acf</span>(resid.j, <span class="dt">na.action =</span> na.pass)</span>
+<span id="cb523-10"><a href="sec-msscov-model-diagnostics.html#cb523-10"></a>    }</span>
+<span id="cb523-11"><a href="sec-msscov-model-diagnostics.html#cb523-11"></a>}</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:msscov-diagnostic-fig"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/msscov-diagnostic-fig-1.png" alt="Residuals for model with season modelled as a discrete Fourier series." width="80%" />

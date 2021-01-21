@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -466,90 +466,90 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-mss-multivariate-state-space-models-with-jags" class="section level2">
 <h2><span class="header-section-number">7.9</span> Fitting a MARSS model with JAGS</h2>
 <p>Here we show you how to fit a MARSS model for the harbor seal data using JAGS. We will focus on four time series from inland Washington and set up the data as follows:</p>
-<div class="sourceCode" id="cb474"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb474-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb474-1"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb474-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb474-2"></a>sites &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SJF&quot;</span>, <span class="st">&quot;SJI&quot;</span>, <span class="st">&quot;EBays&quot;</span>, <span class="st">&quot;PSnd&quot;</span>)</span>
-<span id="cb474-3"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb474-3"></a>Y &lt;-<span class="st"> </span>harborSealWA[, sites]</span>
-<span id="cb474-4"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb474-4"></a>Y &lt;-<span class="st"> </span><span class="kw">t</span>(Y)  <span class="co"># time across columns</span></span></code></pre></div>
+<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-1"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb475-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-2"></a>sites &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SJF&quot;</span>, <span class="st">&quot;SJI&quot;</span>, <span class="st">&quot;EBays&quot;</span>, <span class="st">&quot;PSnd&quot;</span>)</span>
+<span id="cb475-3"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-3"></a>Y &lt;-<span class="st"> </span>harborSealWA[, sites]</span>
+<span id="cb475-4"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-4"></a>Y &lt;-<span class="st"> </span><span class="kw">t</span>(Y)  <span class="co"># time across columns</span></span></code></pre></div>
 <p>We will fit the model with four temporally independent subpopulations with the same population growth rate (<span class="math inline">\(u\)</span>) and year-to-year variance (<span class="math inline">\(q\)</span>). This is the model in Section <a href="sec-mss-segind.html#sec-mss-segind">7.4</a>.</p>
 <div id="sec-mss-writing-the-model-in-jags" class="section level3">
 <h3><span class="header-section-number">7.9.1</span> Writing the model in JAGS</h3>
 <p>The first step is to write this model in JAGS. See Chapter <a href="chap-jags.html#chap-jags">12</a> for more information on and examples of JAGS models.</p>
-<div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb475-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-1"></a>jagsscript &lt;-<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb475-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-2"></a><span class="st">model {  </span></span>
-<span id="cb475-3"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-3"></a><span class="st">   U ~ dnorm(0, 0.01);</span></span>
-<span id="cb475-4"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-4"></a><span class="st">   tauQ~dgamma(0.001,0.001);</span></span>
-<span id="cb475-5"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-5"></a><span class="st">   Q &lt;- 1/tauQ;</span></span>
-<span id="cb475-6"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-6"></a></span>
-<span id="cb475-7"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-7"></a><span class="st">   # Estimate the initial state vector of population abundances</span></span>
-<span id="cb475-8"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-8"></a><span class="st">   for(i in 1:nSites) {</span></span>
-<span id="cb475-9"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-9"></a><span class="st">      X[i,1] ~ dnorm(3,0.01); # vague normal prior </span></span>
-<span id="cb475-10"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-10"></a><span class="st">   }</span></span>
-<span id="cb475-11"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-11"></a></span>
-<span id="cb475-12"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-12"></a><span class="st">   # Autoregressive process for remaining years</span></span>
-<span id="cb475-13"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-13"></a><span class="st">   for(t in 2:nYears) {</span></span>
-<span id="cb475-14"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-14"></a><span class="st">      for(i in 1:nSites) {</span></span>
-<span id="cb475-15"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-15"></a><span class="st">         predX[i,t] &lt;- X[i,t-1] + U;</span></span>
-<span id="cb475-16"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-16"></a><span class="st">         X[i,t] ~ dnorm(predX[i,t], tauQ);</span></span>
-<span id="cb475-17"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-17"></a><span class="st">      }</span></span>
-<span id="cb475-18"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-18"></a><span class="st">   }</span></span>
-<span id="cb475-19"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-19"></a></span>
-<span id="cb475-20"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-20"></a><span class="st">   # Observation model</span></span>
-<span id="cb475-21"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-21"></a><span class="st">   # The Rs are different in each site</span></span>
-<span id="cb475-22"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-22"></a><span class="st">   for(i in 1:nSites) {</span></span>
-<span id="cb475-23"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-23"></a><span class="st">     tauR[i]~dgamma(0.001,0.001);</span></span>
-<span id="cb475-24"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-24"></a><span class="st">     R[i] &lt;- 1/tauR[i];</span></span>
-<span id="cb475-25"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-25"></a><span class="st">   }</span></span>
-<span id="cb475-26"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-26"></a><span class="st">   for(t in 1:nYears) {</span></span>
-<span id="cb475-27"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-27"></a><span class="st">     for(i in 1:nSites) {</span></span>
-<span id="cb475-28"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-28"></a><span class="st">       Y[i,t] ~ dnorm(X[i,t],tauR[i]);</span></span>
-<span id="cb475-29"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-29"></a><span class="st">     }</span></span>
-<span id="cb475-30"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-30"></a><span class="st">   }</span></span>
-<span id="cb475-31"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-31"></a><span class="st">}  </span></span>
-<span id="cb475-32"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-32"></a></span>
-<span id="cb475-33"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-33"></a><span class="st">&quot;</span>, </span>
-<span id="cb475-34"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb475-34"></a>    <span class="dt">file =</span> <span class="st">&quot;marss-jags.txt&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-1"></a>jagsscript &lt;-<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb476-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-2"></a><span class="st">model {  </span></span>
+<span id="cb476-3"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-3"></a><span class="st">   U ~ dnorm(0, 0.01);</span></span>
+<span id="cb476-4"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-4"></a><span class="st">   tauQ~dgamma(0.001,0.001);</span></span>
+<span id="cb476-5"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-5"></a><span class="st">   Q &lt;- 1/tauQ;</span></span>
+<span id="cb476-6"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-6"></a></span>
+<span id="cb476-7"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-7"></a><span class="st">   # Estimate the initial state vector of population abundances</span></span>
+<span id="cb476-8"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-8"></a><span class="st">   for(i in 1:nSites) {</span></span>
+<span id="cb476-9"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-9"></a><span class="st">      X[i,1] ~ dnorm(3,0.01); # vague normal prior </span></span>
+<span id="cb476-10"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-10"></a><span class="st">   }</span></span>
+<span id="cb476-11"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-11"></a></span>
+<span id="cb476-12"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-12"></a><span class="st">   # Autoregressive process for remaining years</span></span>
+<span id="cb476-13"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-13"></a><span class="st">   for(t in 2:nYears) {</span></span>
+<span id="cb476-14"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-14"></a><span class="st">      for(i in 1:nSites) {</span></span>
+<span id="cb476-15"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-15"></a><span class="st">         predX[i,t] &lt;- X[i,t-1] + U;</span></span>
+<span id="cb476-16"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-16"></a><span class="st">         X[i,t] ~ dnorm(predX[i,t], tauQ);</span></span>
+<span id="cb476-17"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-17"></a><span class="st">      }</span></span>
+<span id="cb476-18"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-18"></a><span class="st">   }</span></span>
+<span id="cb476-19"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-19"></a></span>
+<span id="cb476-20"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-20"></a><span class="st">   # Observation model</span></span>
+<span id="cb476-21"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-21"></a><span class="st">   # The Rs are different in each site</span></span>
+<span id="cb476-22"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-22"></a><span class="st">   for(i in 1:nSites) {</span></span>
+<span id="cb476-23"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-23"></a><span class="st">     tauR[i]~dgamma(0.001,0.001);</span></span>
+<span id="cb476-24"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-24"></a><span class="st">     R[i] &lt;- 1/tauR[i];</span></span>
+<span id="cb476-25"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-25"></a><span class="st">   }</span></span>
+<span id="cb476-26"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-26"></a><span class="st">   for(t in 1:nYears) {</span></span>
+<span id="cb476-27"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-27"></a><span class="st">     for(i in 1:nSites) {</span></span>
+<span id="cb476-28"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-28"></a><span class="st">       Y[i,t] ~ dnorm(X[i,t],tauR[i]);</span></span>
+<span id="cb476-29"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-29"></a><span class="st">     }</span></span>
+<span id="cb476-30"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-30"></a><span class="st">   }</span></span>
+<span id="cb476-31"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-31"></a><span class="st">}  </span></span>
+<span id="cb476-32"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-32"></a></span>
+<span id="cb476-33"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-33"></a><span class="st">&quot;</span>, </span>
+<span id="cb476-34"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-34"></a>    <span class="dt">file =</span> <span class="st">&quot;marss-jags.txt&quot;</span>)</span></code></pre></div>
 </div>
 <div id="fit-the-jags-model" class="section level3">
 <h3><span class="header-section-number">7.9.2</span> Fit the JAGS model</h3>
 <p>{#sec-mss-fit-jags}</p>
 <p>Then we write the data list, parameter list, and pass the model to the <code>jags()</code> function:</p>
-<div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb476-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-1"></a>jags.data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Y, <span class="dt">nSites =</span> <span class="kw">nrow</span>(Y), <span class="dt">nYears =</span> <span class="kw">ncol</span>(Y))  <span class="co"># named list</span></span>
-<span id="cb476-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-2"></a>jags.params &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;U&quot;</span>, <span class="st">&quot;Q&quot;</span>, <span class="st">&quot;R&quot;</span>)</span>
-<span id="cb476-3"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-3"></a>model.loc &lt;-<span class="st"> &quot;marss-jags.txt&quot;</span>  <span class="co"># name of the txt file</span></span>
-<span id="cb476-4"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-4"></a>mod_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </span>
-<span id="cb476-5"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-5"></a>    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </span>
-<span id="cb476-6"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb476-6"></a>    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb477-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb477-1"></a>jags.data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Y, <span class="dt">nSites =</span> <span class="kw">nrow</span>(Y), <span class="dt">nYears =</span> <span class="kw">ncol</span>(Y))  <span class="co"># named list</span></span>
+<span id="cb477-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb477-2"></a>jags.params &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;U&quot;</span>, <span class="st">&quot;Q&quot;</span>, <span class="st">&quot;R&quot;</span>)</span>
+<span id="cb477-3"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb477-3"></a>model.loc &lt;-<span class="st"> &quot;marss-jags.txt&quot;</span>  <span class="co"># name of the txt file</span></span>
+<span id="cb477-4"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb477-4"></a>mod_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </span>
+<span id="cb477-5"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb477-5"></a>    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb477-6"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb477-6"></a>    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="sec-mss-plot-the-posteriors-for-the-estimated-states" class="section level3">
 <h3><span class="header-section-number">7.9.3</span> Plot the posteriors for the estimated states</h3>
 <p>We can plot any of the variables we chose to return to R in the <code>jags.params</code> list. Let’s focus on the <code>X</code>. When we look at the dimension of the <code>X</code>, we can use the <code>apply()</code> function to calculate the means and 95 percent CIs of the estimated states.</p>
 
-<div class="sourceCode" id="cb477"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb477-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb477-1"></a><span class="co"># attach.jags attaches the jags.params to our workspace</span></span>
-<span id="cb477-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb477-2"></a><span class="kw">attach.jags</span>(mod_<span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb478-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb478-1"></a><span class="co"># attach.jags attaches the jags.params to our workspace</span></span>
+<span id="cb478-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb478-2"></a><span class="kw">attach.jags</span>(mod_<span class="dv">1</span>)</span></code></pre></div>
 <pre><code>The following objects are masked _by_ .GlobalEnv:
 
     Q, R, U</code></pre>
-<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb479-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-1"></a>means &lt;-<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), mean)</span>
-<span id="cb479-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-2"></a>upperCI &lt;-<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.975</span>)</span>
-<span id="cb479-3"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-3"></a>lowerCI &lt;-<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.025</span>)</span>
-<span id="cb479-4"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-4"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb479-5"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-5"></a>nYears &lt;-<span class="st"> </span><span class="kw">ncol</span>(Y)</span>
-<span id="cb479-6"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(means)) {</span>
-<span id="cb479-7"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-7"></a>    <span class="kw">plot</span>(means[i, ], <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(lowerCI[i, ], upperCI[i, </span>
-<span id="cb479-8"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-8"></a>        ])), <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">main =</span> <span class="kw">colnames</span>(Y)[i], <span class="dt">ylab =</span> <span class="st">&quot;log abundance&quot;</span>, </span>
-<span id="cb479-9"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-9"></a>        <span class="dt">xlab =</span> <span class="st">&quot;time step&quot;</span>)</span>
-<span id="cb479-10"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-10"></a>    <span class="kw">polygon</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nYears, nYears<span class="op">:</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="kw">c</span>(upperCI[i, ], <span class="kw">rev</span>(lowerCI[i, </span>
-<span id="cb479-11"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-11"></a>        ]), upperCI[i, <span class="dv">1</span>]), <span class="dt">col =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="dt">lty =</span> <span class="dv">0</span>)</span>
-<span id="cb479-12"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-12"></a>    <span class="kw">lines</span>(means[i, ], <span class="dt">lwd =</span> <span class="dv">3</span>)</span>
-<span id="cb479-13"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-13"></a>    <span class="kw">title</span>(<span class="kw">rownames</span>(Y)[i])</span>
-<span id="cb479-14"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb479-14"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-1"></a>means &lt;-<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), mean)</span>
+<span id="cb480-2"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-2"></a>upperCI &lt;-<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.975</span>)</span>
+<span id="cb480-3"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-3"></a>lowerCI &lt;-<span class="st"> </span><span class="kw">apply</span>(X, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.025</span>)</span>
+<span id="cb480-4"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-4"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb480-5"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-5"></a>nYears &lt;-<span class="st"> </span><span class="kw">ncol</span>(Y)</span>
+<span id="cb480-6"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-6"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(means)) {</span>
+<span id="cb480-7"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-7"></a>    <span class="kw">plot</span>(means[i, ], <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(lowerCI[i, ], upperCI[i, </span>
+<span id="cb480-8"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-8"></a>        ])), <span class="dt">type =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">main =</span> <span class="kw">colnames</span>(Y)[i], <span class="dt">ylab =</span> <span class="st">&quot;log abundance&quot;</span>, </span>
+<span id="cb480-9"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-9"></a>        <span class="dt">xlab =</span> <span class="st">&quot;time step&quot;</span>)</span>
+<span id="cb480-10"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-10"></a>    <span class="kw">polygon</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span>nYears, nYears<span class="op">:</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="kw">c</span>(upperCI[i, ], <span class="kw">rev</span>(lowerCI[i, </span>
+<span id="cb480-11"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-11"></a>        ]), upperCI[i, <span class="dv">1</span>]), <span class="dt">col =</span> <span class="st">&quot;skyblue&quot;</span>, <span class="dt">lty =</span> <span class="dv">0</span>)</span>
+<span id="cb480-12"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-12"></a>    <span class="kw">lines</span>(means[i, ], <span class="dt">lwd =</span> <span class="dv">3</span>)</span>
+<span id="cb480-13"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-13"></a>    <span class="kw">title</span>(<span class="kw">rownames</span>(Y)[i])</span>
+<span id="cb480-14"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-14"></a>}</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:mss-plot-jags-states"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/mss-plot-jags-states-1.png" alt="Plot of the posterior means and credible intervals for the estimated states." width="80%" />
 <p class="caption">
 Figure 7.6: Plot of the posterior means and credible intervals for the estimated states.
 </p>
 </div>
-<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb480-1"></a><span class="kw">detach.jags</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="sec-mss-multivariate-state-space-models-with-jags.html#cb481-1"></a><span class="kw">detach.jags</span>()</span></code></pre></div>
 </div>
 </div>
             </section>

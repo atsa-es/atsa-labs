@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -492,12 +492,12 @@ Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as
 </ol>
 <p>Make your Temp and TP covariates orthogonal using sequential regression. Do your conclusions about the effects of Temperature and TP change?</p>
 <p>Below is code to construct your orthogonal covariates for sequential regression.</p>
-<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb525-1"><a href="sec-msscov-problems.html#cb525-1"></a>fit &lt;-<span class="st"> </span><span class="kw">lm</span>(covars[<span class="dv">1</span>, ] <span class="op">~</span><span class="st"> </span>covars[<span class="dv">2</span>, ])</span>
-<span id="cb525-2"><a href="sec-msscov-problems.html#cb525-2"></a>seqcovs &lt;-<span class="st"> </span><span class="kw">rbind</span>(covars[<span class="dv">1</span>, ], <span class="kw">residuals</span>(fit))</span>
-<span id="cb525-3"><a href="sec-msscov-problems.html#cb525-3"></a>avg &lt;-<span class="st"> </span><span class="kw">apply</span>(seqcovs, <span class="dv">1</span>, mean)</span>
-<span id="cb525-4"><a href="sec-msscov-problems.html#cb525-4"></a>sd &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(seqcovs, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb525-5"><a href="sec-msscov-problems.html#cb525-5"></a>seqcovs &lt;-<span class="st"> </span>(seqcovs <span class="op">-</span><span class="st"> </span>avg)<span class="op">/</span>sd</span>
-<span id="cb525-6"><a href="sec-msscov-problems.html#cb525-6"></a><span class="kw">rownames</span>(seqcovs) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Temp&quot;</span>, <span class="st">&quot;TPresids&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb526-1"><a href="sec-msscov-problems.html#cb526-1"></a>fit &lt;-<span class="st"> </span><span class="kw">lm</span>(covars[<span class="dv">1</span>, ] <span class="op">~</span><span class="st"> </span>covars[<span class="dv">2</span>, ])</span>
+<span id="cb526-2"><a href="sec-msscov-problems.html#cb526-2"></a>seqcovs &lt;-<span class="st"> </span><span class="kw">rbind</span>(covars[<span class="dv">1</span>, ], <span class="kw">residuals</span>(fit))</span>
+<span id="cb526-3"><a href="sec-msscov-problems.html#cb526-3"></a>avg &lt;-<span class="st"> </span><span class="kw">apply</span>(seqcovs, <span class="dv">1</span>, mean)</span>
+<span id="cb526-4"><a href="sec-msscov-problems.html#cb526-4"></a>sd &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(seqcovs, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb526-5"><a href="sec-msscov-problems.html#cb526-5"></a>seqcovs &lt;-<span class="st"> </span>(seqcovs <span class="op">-</span><span class="st"> </span>avg)<span class="op">/</span>sd</span>
+<span id="cb526-6"><a href="sec-msscov-problems.html#cb526-6"></a><span class="kw">rownames</span>(seqcovs) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Temp&quot;</span>, <span class="st">&quot;TPresids&quot;</span>)</span></code></pre></div>
 <ol start="9" style="list-style-type: decimal">
 <li><p>Compare the AICc’s of the 3 seasonal models from question 1 and the 4 Temp/TP models from question 5. What does this tell you about the Temp and TP only models?</p></li>
 <li><p>We cannot just fit a model with season and Temp plus TP since Temp and TP are highly seasonal. That will cause problems if we have something that explain season (a polynomial) and a covariate that has seasonality. Instead, use sequential regression to fit a model with seasonality, Temp and TP. Use a 3rd order polynomial with the <code>poly()</code> function to create orthogonal season covariates and then use sequential regression (code in problem 8) to create Temp and TP covariates that are orthogonal to your season covariates. Fit the model and compare a model with only season to a model with season and Temp plus TP.</p></li>
@@ -505,31 +505,31 @@ Leave out the seasonal covariates from question 1, i.e. only use Temp and TP as
 <ol style="list-style-type: lower-alpha">
 <li>Decompose the Diatom time series using <code>stl()</code> and plot. Use <code>na.action=zoo::na.approx</code> to deal with the NAs. Use <code>s.window="periodic"</code>. Other than that you can use the defaults.</li>
 </ol>
-<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb526-1"><a href="sec-msscov-problems.html#cb526-1"></a>i &lt;-<span class="st"> &quot;Diatoms&quot;</span></span>
-<span id="cb526-2"><a href="sec-msscov-problems.html#cb526-2"></a>dati &lt;-<span class="st"> </span><span class="kw">ts</span>(dat[i, ], <span class="dt">frequency =</span> <span class="dv">12</span>)</span>
-<span id="cb526-3"><a href="sec-msscov-problems.html#cb526-3"></a>a &lt;-<span class="st"> </span><span class="kw">stl</span>(dati, <span class="st">&quot;periodic&quot;</span>, <span class="dt">na.action =</span> zoo<span class="op">::</span>na.approx)</span></code></pre></div>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb527-1"><a href="sec-msscov-problems.html#cb527-1"></a>i &lt;-<span class="st"> &quot;Diatoms&quot;</span></span>
+<span id="cb527-2"><a href="sec-msscov-problems.html#cb527-2"></a>dati &lt;-<span class="st"> </span><span class="kw">ts</span>(dat[i, ], <span class="dt">frequency =</span> <span class="dv">12</span>)</span>
+<span id="cb527-3"><a href="sec-msscov-problems.html#cb527-3"></a>a &lt;-<span class="st"> </span><span class="kw">stl</span>(dati, <span class="st">&quot;periodic&quot;</span>, <span class="dt">na.action =</span> zoo<span class="op">::</span>na.approx)</span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Create dependent variables and covariates that are anomolies by modifying the following code. For the anomaly, you will use the remainder plus the trend. You will need to adapt this code to create the anomalies for Temp and TP and for <code>dat</code> (your data).</li>
 </ol>
-<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb527-1"><a href="sec-msscov-problems.html#cb527-1"></a>i &lt;-<span class="st"> &quot;Diatoms&quot;</span></span>
-<span id="cb527-2"><a href="sec-msscov-problems.html#cb527-2"></a>a &lt;-<span class="st"> </span><span class="kw">stl</span>(<span class="kw">ts</span>(dat[i, ], <span class="dt">frequency =</span> <span class="dv">12</span>), <span class="st">&quot;periodic&quot;</span>, <span class="dt">na.action =</span> zoo<span class="op">::</span>na.approx)</span>
-<span id="cb527-3"><a href="sec-msscov-problems.html#cb527-3"></a>anom &lt;-<span class="st"> </span>a<span class="op">$</span>time.series[, <span class="st">&quot;remainder&quot;</span>] <span class="op">+</span><span class="st"> </span>a<span class="op">$</span>time.series[, <span class="st">&quot;trend&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb528-1"><a href="sec-msscov-problems.html#cb528-1"></a>i &lt;-<span class="st"> &quot;Diatoms&quot;</span></span>
+<span id="cb528-2"><a href="sec-msscov-problems.html#cb528-2"></a>a &lt;-<span class="st"> </span><span class="kw">stl</span>(<span class="kw">ts</span>(dat[i, ], <span class="dt">frequency =</span> <span class="dv">12</span>), <span class="st">&quot;periodic&quot;</span>, <span class="dt">na.action =</span> zoo<span class="op">::</span>na.approx)</span>
+<span id="cb528-3"><a href="sec-msscov-problems.html#cb528-3"></a>anom &lt;-<span class="st"> </span>a<span class="op">$</span>time.series[, <span class="st">&quot;remainder&quot;</span>] <span class="op">+</span><span class="st"> </span>a<span class="op">$</span>time.series[, <span class="st">&quot;trend&quot;</span>]</span></code></pre></div>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Notice that you have simply removed the seasonal cycle from the data. Using the seasonal anomalies (from part b), estimate the effect of Temp and TP on each taxon’s growth rate. You will use the same model as in question 2, but use the seasonal anomalies as data and covariates.</li>
 </ol></li>
 </ol>
-<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb528-1"><a href="sec-msscov-problems.html#cb528-1"></a>anoms &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="kw">dim</span>(dat)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">dim</span>(covars)[<span class="dv">1</span>], <span class="kw">dim</span>(dat)[<span class="dv">2</span>])</span>
-<span id="cb528-2"><a href="sec-msscov-problems.html#cb528-2"></a><span class="kw">rownames</span>(anoms) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rownames</span>(dat), <span class="kw">rownames</span>(covars))</span>
-<span id="cb528-3"><a href="sec-msscov-problems.html#cb528-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(dat)[<span class="dv">1</span>]) {</span>
-<span id="cb528-4"><a href="sec-msscov-problems.html#cb528-4"></a>    a &lt;-<span class="st"> </span><span class="kw">stl</span>(<span class="kw">ts</span>(dat[i, ], <span class="dt">frequency =</span> <span class="dv">12</span>), <span class="st">&quot;periodic&quot;</span>, <span class="dt">na.action =</span> zoo<span class="op">::</span>na.approx)</span>
-<span id="cb528-5"><a href="sec-msscov-problems.html#cb528-5"></a>    anoms[i, ] &lt;-<span class="st"> </span>a<span class="op">$</span>time.series[, <span class="st">&quot;remainder&quot;</span>] <span class="op">+</span><span class="st"> </span>a<span class="op">$</span>time.series[, </span>
-<span id="cb528-6"><a href="sec-msscov-problems.html#cb528-6"></a>        <span class="st">&quot;trend&quot;</span>]</span>
-<span id="cb528-7"><a href="sec-msscov-problems.html#cb528-7"></a>}</span>
-<span id="cb528-8"><a href="sec-msscov-problems.html#cb528-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(covars)[<span class="dv">1</span>]) {</span>
-<span id="cb528-9"><a href="sec-msscov-problems.html#cb528-9"></a>    a &lt;-<span class="st"> </span><span class="kw">stl</span>(<span class="kw">ts</span>(covars[i, ], <span class="dt">frequency =</span> <span class="dv">12</span>), <span class="st">&quot;periodic&quot;</span>, <span class="dt">na.action =</span> zoo<span class="op">::</span>na.approx)</span>
-<span id="cb528-10"><a href="sec-msscov-problems.html#cb528-10"></a>    anoms[i <span class="op">+</span><span class="st"> </span><span class="kw">dim</span>(dat)[<span class="dv">1</span>], ] &lt;-<span class="st"> </span>a<span class="op">$</span>time.series[, <span class="st">&quot;remainder&quot;</span>] <span class="op">+</span><span class="st"> </span></span>
-<span id="cb528-11"><a href="sec-msscov-problems.html#cb528-11"></a><span class="st">        </span>a<span class="op">$</span>time.series[, <span class="st">&quot;trend&quot;</span>]</span>
-<span id="cb528-12"><a href="sec-msscov-problems.html#cb528-12"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb529-1"><a href="sec-msscov-problems.html#cb529-1"></a>anoms &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="kw">dim</span>(dat)[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">dim</span>(covars)[<span class="dv">1</span>], <span class="kw">dim</span>(dat)[<span class="dv">2</span>])</span>
+<span id="cb529-2"><a href="sec-msscov-problems.html#cb529-2"></a><span class="kw">rownames</span>(anoms) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rownames</span>(dat), <span class="kw">rownames</span>(covars))</span>
+<span id="cb529-3"><a href="sec-msscov-problems.html#cb529-3"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(dat)[<span class="dv">1</span>]) {</span>
+<span id="cb529-4"><a href="sec-msscov-problems.html#cb529-4"></a>    a &lt;-<span class="st"> </span><span class="kw">stl</span>(<span class="kw">ts</span>(dat[i, ], <span class="dt">frequency =</span> <span class="dv">12</span>), <span class="st">&quot;periodic&quot;</span>, <span class="dt">na.action =</span> zoo<span class="op">::</span>na.approx)</span>
+<span id="cb529-5"><a href="sec-msscov-problems.html#cb529-5"></a>    anoms[i, ] &lt;-<span class="st"> </span>a<span class="op">$</span>time.series[, <span class="st">&quot;remainder&quot;</span>] <span class="op">+</span><span class="st"> </span>a<span class="op">$</span>time.series[, </span>
+<span id="cb529-6"><a href="sec-msscov-problems.html#cb529-6"></a>        <span class="st">&quot;trend&quot;</span>]</span>
+<span id="cb529-7"><a href="sec-msscov-problems.html#cb529-7"></a>}</span>
+<span id="cb529-8"><a href="sec-msscov-problems.html#cb529-8"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(covars)[<span class="dv">1</span>]) {</span>
+<span id="cb529-9"><a href="sec-msscov-problems.html#cb529-9"></a>    a &lt;-<span class="st"> </span><span class="kw">stl</span>(<span class="kw">ts</span>(covars[i, ], <span class="dt">frequency =</span> <span class="dv">12</span>), <span class="st">&quot;periodic&quot;</span>, <span class="dt">na.action =</span> zoo<span class="op">::</span>na.approx)</span>
+<span id="cb529-10"><a href="sec-msscov-problems.html#cb529-10"></a>    anoms[i <span class="op">+</span><span class="st"> </span><span class="kw">dim</span>(dat)[<span class="dv">1</span>], ] &lt;-<span class="st"> </span>a<span class="op">$</span>time.series[, <span class="st">&quot;remainder&quot;</span>] <span class="op">+</span><span class="st"> </span></span>
+<span id="cb529-11"><a href="sec-msscov-problems.html#cb529-11"></a><span class="st">        </span>a<span class="op">$</span>time.series[, <span class="st">&quot;trend&quot;</span>]</span>
+<span id="cb529-12"><a href="sec-msscov-problems.html#cb529-12"></a>}</span></code></pre></div>
 
 </div>
 <!-- </div> -->

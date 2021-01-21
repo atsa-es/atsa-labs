@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -569,11 +569,10 @@ alternative hypothesis: stationary</code></pre>
 <h4><span class="header-section-number">5.3.4.1</span> Test on white noise</h4>
 <p>Let’s first do the test on data we know is stationary, white noise. We have to choose the <code>type</code> and <code>lags</code>. If you have no particular reason to not include an intercept and trend, then use <code>type="trend"</code>. This allows both intercept and trend. When you might you have a particular reason not to use <code>"trend"</code>? When you have removed the trend and/or intercept.</p>
 <p>Next you need to chose the <code>lags</code>. We will use <code>lags=0</code> to do the Dickey-Fuller test. Note the number of lags you can test will depend on the amount of data that you have. <code>adf.test()</code> used a default of <code>trunc((length(x)-1)^(1/3))</code> for the lags, but <code>ur.df()</code> requires that you pass in a value or use a fixed default of 1.</p>
-<p><code>lags=0</code> is fitting this model to the data. You are testing if the effect for <code>z.lag.1</code> is 0.</p>
-<p><code>z.diff = gamma * z.lag.1 + intercept + trend * tt</code>
-<code>z.diff</code> means <span class="math inline">\(\Delta y_t\)</span> and <code>z.lag.1</code> is <span class="math inline">\(y_{t-1}\)</span>.</p>
-<p>When you use <code>summary()</code> for the output from <code>ur.df()</code>, you will see the estimated values for <span class="math inline">\(\gamma\)</span> (denoted <code>z.lag.1</code>), intercept and trend. If you see <code>***</code> or <code>**</code> on the coefficients list for <code>z.lag.1</code>, it indicates that the effect of <code>z.lag.1</code> is significantly different than 0 and this supports the assumption of stationarity.</p>
-<p>The <code>intercept</code> and <code>tt</code> estimates indicate where there is a non-zero level (intercept) or linear trend (tt).</p>
+<p><code>lags=0</code> is fitting the following model to the data:</p>
+<p><code>z.diff = gamma * z.lag.1 + intercept + trend * tt</code></p>
+<p><code>z.diff</code> means <span class="math inline">\(\Delta y_t\)</span> and <code>z.lag.1</code> is <span class="math inline">\(y_{t-1}\)</span>. You are testing if the effect for <code>z.lag.1</code> is 0.</p>
+<p>When you use <code>summary()</code> for the output from <code>ur.df()</code>, you will see the estimated values for <span class="math inline">\(\gamma\)</span> (denoted <code>z.lag.1</code>), intercept and trend. If you see <code>***</code> or <code>**</code> on the coefficients list for <code>z.lag.1</code>, it suggest that the effect of <code>z.lag.1</code> is significantly different than 0 and this supports the assumption of stationarity. However, the test level shown is for independent data not time series data. The correct test levels (critical values) are shown at the bottom of the summary output.</p>
 <div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-1"></a>wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)</span>
 <span id="cb302-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-2"></a>test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type =</span> <span class="st">&quot;trend&quot;</span>, <span class="dt">lags =</span> <span class="dv">0</span>)</span>
 <span id="cb302-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-3"></a><span class="kw">summary</span>(test)</span></code></pre></div>
@@ -612,8 +611,15 @@ Critical values for test statistics:
 tau3 -4.04 -3.45 -3.15
 phi2  6.50  4.88  4.16
 phi3  8.73  6.49  5.47</code></pre>
-<p>The coefficient part of the summary indicates that <code>z.lag.1</code> is different than 0 (so stationary) and no support for intercept or trend.</p>
-<p>Notice that the test statistic is LESS than the critical value for <code>tau3</code> at 5 percent. This means the null hypothesis is rejected at <span class="math inline">\(\alpha=0.05\)</span>, a standard level for significance testing.</p>
+<p>We need to look at information at the bottom of the summary output for the test statistics and critical values. The part that looks like this</p>
+<pre><code>Value of test-statistic is: #1 #2 #3
+
+Critical values for test statistics: 
+      1pct  5pct 10pct
+tau3   xxx  xxx   xxx
+...</code></pre>
+<p>The first test statistic number is for <span class="math inline">\(\gamma=0\)</span> and will be labeled <code>tau</code>, <code>tau2</code> or <code>tau3</code>.</p>
+<p>In our example with white noise, notice that the test statistic is LESS than the critical value for <code>tau3</code> at 5 percent. This means the null hypothesis is rejected at <span class="math inline">\(\alpha=0.05\)</span>, a standard level for significance testing.</p>
 </div>
 <div id="when-you-might-want-to-use-ur.df" class="section level4">
 <h4><span class="header-section-number">5.3.4.2</span> When you might want to use <code>ur.df()</code></h4>

@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -469,7 +469,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="test-on-simulated-data" class="section level3">
 <h3><span class="header-section-number">5.4.1</span> Test on simulated data</h3>
 <p>Let’s try the KPSS test on white noise with a trend. The default is a null hypothesis with no trend. We will change this to <code>null="Trend"</code>.</p>
-<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="sec-boxjenkins-kpss.html#cb304-1"></a>tseries<span class="op">::</span><span class="kw">kpss.test</span>(wnt, <span class="dt">null =</span> <span class="st">&quot;Trend&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="sec-boxjenkins-kpss.html#cb305-1"></a>tseries<span class="op">::</span><span class="kw">kpss.test</span>(wnt, <span class="dt">null =</span> <span class="st">&quot;Trend&quot;</span>)</span></code></pre></div>
 <pre><code>Warning in tseries::kpss.test(wnt, null = &quot;Trend&quot;): p-value greater than printed
 p-value</code></pre>
 <pre><code>
@@ -479,7 +479,7 @@ data:  wnt
 KPSS Trend = 0.045579, Truncation lag parameter = 4, p-value = 0.1</code></pre>
 <p>The p-value is greater than 0.05. The null hypothesis of stationarity around a trend is not rejected.</p>
 <p>Let’s try the KPSS test on white noise with a trend but let’s use the default of stationary with no trend.</p>
-<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="sec-boxjenkins-kpss.html#cb307-1"></a>tseries<span class="op">::</span><span class="kw">kpss.test</span>(wnt, <span class="dt">null =</span> <span class="st">&quot;Level&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="sec-boxjenkins-kpss.html#cb308-1"></a>tseries<span class="op">::</span><span class="kw">kpss.test</span>(wnt, <span class="dt">null =</span> <span class="st">&quot;Level&quot;</span>)</span></code></pre></div>
 <pre><code>Warning in tseries::kpss.test(wnt, null = &quot;Level&quot;): p-value smaller than printed
 p-value</code></pre>
 <pre><code>
@@ -492,7 +492,7 @@ KPSS Level = 2.1029, Truncation lag parameter = 4, p-value = 0.01</code></pre>
 <div id="test-the-anchovy-data-1" class="section level3">
 <h3><span class="header-section-number">5.4.2</span> Test the anchovy data</h3>
 <p>Let’s try the anchovy data.</p>
-<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="sec-boxjenkins-kpss.html#cb310-1"></a><span class="kw">kpss.test</span>(anchovyts, <span class="dt">null =</span> <span class="st">&quot;Trend&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="sec-boxjenkins-kpss.html#cb311-1"></a><span class="kw">kpss.test</span>(anchovyts, <span class="dt">null =</span> <span class="st">&quot;Trend&quot;</span>)</span></code></pre></div>
 <pre><code>
     KPSS Test for Trend Stationarity
 

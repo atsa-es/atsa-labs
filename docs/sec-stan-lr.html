@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -471,34 +471,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="math display">\[Y_t \sim N(E[Y_{t}],\sigma)\]</span>
 Remember that in linear regression models, the residual error is interpreted as independent and identically distributed observation error.</p>
 <p>To run this model using our package, we’ll need to specify the response and predictor variables. The covariate matrix with an intercept only is a matrix of 1s. To double check, you could always look at</p>
-<div class="sourceCode" id="cb632"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb632-1"><a href="sec-stan-lr.html#cb632-1"></a>x &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(Temp <span class="op">~</span><span class="st"> </span><span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb633-1"><a href="sec-stan-lr.html#cb633-1"></a>x &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="kw">lm</span>(Temp <span class="op">~</span><span class="st"> </span><span class="dv">1</span>))</span></code></pre></div>
 <p>Fitting the model using our function is done with this code,</p>
-<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb633-1"><a href="sec-stan-lr.html#cb633-1"></a>lm_intercept &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> <span class="kw">as.numeric</span>(Temp), <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, </span>
-<span id="cb633-2"><a href="sec-stan-lr.html#cb633-2"></a>    <span class="kw">length</span>(Temp)), <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="sec-stan-lr.html#cb634-1"></a>lm_intercept &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> <span class="kw">as.numeric</span>(Temp), <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, </span>
+<span id="cb634-2"><a href="sec-stan-lr.html#cb634-2"></a>    <span class="kw">length</span>(Temp)), <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>)</span></code></pre></div>
 <p>Coarse summaries of <code>stanfit</code> objects can be examined by typing one of the following</p>
-<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="sec-stan-lr.html#cb634-1"></a>lm_intercept</span>
-<span id="cb634-2"><a href="sec-stan-lr.html#cb634-2"></a><span class="co"># this is huge</span></span>
-<span id="cb634-3"><a href="sec-stan-lr.html#cb634-3"></a><span class="kw">summary</span>(lm_intercept)</span></code></pre></div>
+<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb635-1"><a href="sec-stan-lr.html#cb635-1"></a>lm_intercept</span>
+<span id="cb635-2"><a href="sec-stan-lr.html#cb635-2"></a><span class="co"># this is huge</span></span>
+<span id="cb635-3"><a href="sec-stan-lr.html#cb635-3"></a><span class="kw">summary</span>(lm_intercept)</span></code></pre></div>
 <p>But to get more detailed output for each parameter, you have to use the <code>extract()</code> function,</p>
-<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb635-1"><a href="sec-stan-lr.html#cb635-1"></a>pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(lm_intercept)</span>
-<span id="cb635-2"><a href="sec-stan-lr.html#cb635-2"></a><span class="kw">names</span>(pars)</span></code></pre></div>
+<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="sec-stan-lr.html#cb636-1"></a>pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(lm_intercept)</span>
+<span id="cb636-2"><a href="sec-stan-lr.html#cb636-2"></a><span class="kw">names</span>(pars)</span></code></pre></div>
 <pre><code>[1] &quot;beta&quot;    &quot;sigma&quot;   &quot;pred&quot;    &quot;log_lik&quot; &quot;lp__&quot;   </code></pre>
 <p><code>extract()</code> will return the draws from the posterior for your parameters and any derived variables specified in your stan code. In this case, our model is
 <span class="math display">\[y_t = \beta \times 1 + e_t, e_t \sim N(0,\sigma)\]</span>
 so our estimated parameters are <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>. Our stan code computed the derived variables: predicted <span class="math inline">\(y_t\)</span> which is <span class="math inline">\(\hat{y}_t = \beta \times 1\)</span> and the log-likelihood. lp__ is the log posterior which is automatically returned.</p>
 <p>We can then make basic plots or summaries of each of these parameters,</p>
-<div class="sourceCode" id="cb637"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb637-1"><a href="sec-stan-lr.html#cb637-1"></a><span class="kw">hist</span>(pars<span class="op">$</span>beta, <span class="dv">40</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Intercept&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="sec-stan-lr.html#cb638-1"></a><span class="kw">hist</span>(pars<span class="op">$</span>beta, <span class="dv">40</span>, <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;Intercept&quot;</span>, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/stan-hist-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="sec-stan-lr.html#cb638-1"></a><span class="kw">quantile</span>(pars<span class="op">$</span>beta, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb639"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb639-1"><a href="sec-stan-lr.html#cb639-1"></a><span class="kw">quantile</span>(pars<span class="op">$</span>beta, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.5</span>, <span class="fl">0.975</span>))</span></code></pre></div>
 <pre><code>     2.5%       50%     97.5% 
  4.236396  8.883829 13.139452 </code></pre>
 <p>One of the other useful things we can do is look at the predicted values of our model (<span class="math inline">\(\hat{y}_t=\beta \times 1\)</span>) and overlay the data. The predicted values are <em>pars$pred</em>.</p>
-<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="sec-stan-lr.html#cb640-1"></a><span class="kw">plot</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, mean), <span class="dt">main =</span> <span class="st">&quot;Predicted values&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, </span>
-<span id="cb640-2"><a href="sec-stan-lr.html#cb640-2"></a>    <span class="dt">ylab =</span> <span class="st">&quot;Wind&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(pars<span class="op">$</span>pred), <span class="kw">max</span>(pars<span class="op">$</span>pred)), </span>
-<span id="cb640-3"><a href="sec-stan-lr.html#cb640-3"></a>    <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</span>
-<span id="cb640-4"><a href="sec-stan-lr.html#cb640-4"></a><span class="kw">lines</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>))</span>
-<span id="cb640-5"><a href="sec-stan-lr.html#cb640-5"></a><span class="kw">lines</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
-<span id="cb640-6"><a href="sec-stan-lr.html#cb640-6"></a><span class="kw">points</span>(Wind, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb641-1"><a href="sec-stan-lr.html#cb641-1"></a><span class="kw">plot</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, mean), <span class="dt">main =</span> <span class="st">&quot;Predicted values&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, </span>
+<span id="cb641-2"><a href="sec-stan-lr.html#cb641-2"></a>    <span class="dt">ylab =</span> <span class="st">&quot;Wind&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(pars<span class="op">$</span>pred), <span class="kw">max</span>(pars<span class="op">$</span>pred)), </span>
+<span id="cb641-3"><a href="sec-stan-lr.html#cb641-3"></a>    <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</span>
+<span id="cb641-4"><a href="sec-stan-lr.html#cb641-4"></a><span class="kw">lines</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>))</span>
+<span id="cb641-5"><a href="sec-stan-lr.html#cb641-5"></a><span class="kw">lines</span>(<span class="kw">apply</span>(pars<span class="op">$</span>pred, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
+<span id="cb641-6"><a href="sec-stan-lr.html#cb641-6"></a><span class="kw">points</span>(Wind, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-fig-lm"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/stan-fig-lm-1.png" alt="Data and predicted values for the linear regression model." width="80%" />
 <p class="caption">
@@ -508,12 +508,12 @@ Figure 13.1: Data and predicted values for the linear regression model.
 <div id="sec-stan-burn" class="section level3">
 <h3><span class="header-section-number">13.1.1</span> Burn-in and thinning</h3>
 <p>To illustrate the effects of the burn-in/warmup period and thinning, we can re-run the above model, but for just 1 MCMC chain (the default is 3).</p>
-<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb641-1"><a href="sec-stan-lr.html#cb641-1"></a>lm_intercept &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), </span>
-<span id="cb641-2"><a href="sec-stan-lr.html#cb641-2"></a>    <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>, <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, </span>
-<span id="cb641-3"><a href="sec-stan-lr.html#cb641-3"></a>        <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb642-1"><a href="sec-stan-lr.html#cb642-1"></a>lm_intercept &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), </span>
+<span id="cb642-2"><a href="sec-stan-lr.html#cb642-2"></a>    <span class="dt">model_name =</span> <span class="st">&quot;regression&quot;</span>, <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, </span>
+<span id="cb642-3"><a href="sec-stan-lr.html#cb642-3"></a>        <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</span></code></pre></div>
 <p>Here is a plot of the time series of <code>beta</code> with one chain and no burn-in. Based on visual inspection, when does the chain converge?</p>
-<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb642-1"><a href="sec-stan-lr.html#cb642-1"></a>pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(lm_intercept)</span>
-<span id="cb642-2"><a href="sec-stan-lr.html#cb642-2"></a><span class="kw">plot</span>(pars<span class="op">$</span>beta)</span></code></pre></div>
+<div class="sourceCode" id="cb643"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb643-1"><a href="sec-stan-lr.html#cb643-1"></a>pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(lm_intercept)</span>
+<span id="cb643-2"><a href="sec-stan-lr.html#cb643-2"></a><span class="kw">plot</span>(pars<span class="op">$</span>beta)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-fig-burnin"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/stan-fig-burnin-1.png" alt="A time series of our posterior draws using one chain and no burn-in." width="80%" />
 <p class="caption">

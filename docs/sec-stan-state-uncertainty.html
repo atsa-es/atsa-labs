@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -466,22 +466,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-stan-state-uncertainty" class="section level2">
 <h2><span class="header-section-number">13.7</span> Uncertainty intervals on states</h2>
 <p>We will look at the effect of missing data on the uncertainty intervals on estimates states using a DFA on the harbor seal dataset.</p>
-<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb673-1"><a href="sec-stan-state-uncertainty.html#cb673-1"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb673-2"><a href="sec-stan-state-uncertainty.html#cb673-2"></a><span class="co"># the first column is year</span></span>
-<span id="cb673-3"><a href="sec-stan-state-uncertainty.html#cb673-3"></a><span class="kw">matplot</span>(harborSealWA[, <span class="dv">1</span>], harborSealWA[, <span class="dv">-1</span>], <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Log abundance&quot;</span>, </span>
-<span id="cb673-4"><a href="sec-stan-state-uncertainty.html#cb673-4"></a>    <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb674"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb674-1"><a href="sec-stan-state-uncertainty.html#cb674-1"></a><span class="kw">data</span>(harborSealWA, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb674-2"><a href="sec-stan-state-uncertainty.html#cb674-2"></a><span class="co"># the first column is year</span></span>
+<span id="cb674-3"><a href="sec-stan-state-uncertainty.html#cb674-3"></a><span class="kw">matplot</span>(harborSealWA[, <span class="dv">1</span>], harborSealWA[, <span class="dv">-1</span>], <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Log abundance&quot;</span>, </span>
+<span id="cb674-4"><a href="sec-stan-state-uncertainty.html#cb674-4"></a>    <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/stan-harborseal-data-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Assume they are all observing a single trend.</p>
-<div class="sourceCode" id="cb674"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb674-1"><a href="sec-stan-state-uncertainty.html#cb674-1"></a>seal.mod &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> <span class="kw">t</span>(harborSealWA[, <span class="dv">-1</span>]), <span class="dt">num_trends =</span> <span class="dv">1</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb675-1"><a href="sec-stan-state-uncertainty.html#cb675-1"></a>pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(seal.mod)</span></code></pre></div>
-<div class="sourceCode" id="cb676"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb676-1"><a href="sec-stan-state-uncertainty.html#cb676-1"></a>pred_mean &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), mean))</span>
-<span id="cb676-2"><a href="sec-stan-state-uncertainty.html#cb676-2"></a>pred_lo &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.025</span>))</span>
-<span id="cb676-3"><a href="sec-stan-state-uncertainty.html#cb676-3"></a>pred_hi &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.975</span>))</span>
-<span id="cb676-4"><a href="sec-stan-state-uncertainty.html#cb676-4"></a></span>
-<span id="cb676-5"><a href="sec-stan-state-uncertainty.html#cb676-5"></a><span class="kw">plot</span>(pred_mean, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(pred_mean, </span>
-<span id="cb676-6"><a href="sec-stan-state-uncertainty.html#cb676-6"></a>    pred_lo, pred_hi)), <span class="dt">main =</span> <span class="st">&quot;Trend&quot;</span>)</span>
-<span id="cb676-7"><a href="sec-stan-state-uncertainty.html#cb676-7"></a><span class="kw">lines</span>(pred_lo)</span>
-<span id="cb676-8"><a href="sec-stan-state-uncertainty.html#cb676-8"></a><span class="kw">lines</span>(pred_hi)</span></code></pre></div>
+<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb675-1"><a href="sec-stan-state-uncertainty.html#cb675-1"></a>seal.mod &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> <span class="kw">t</span>(harborSealWA[, <span class="dv">-1</span>]), <span class="dt">num_trends =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb676"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb676-1"><a href="sec-stan-state-uncertainty.html#cb676-1"></a>pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(seal.mod)</span></code></pre></div>
+<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb677-1"><a href="sec-stan-state-uncertainty.html#cb677-1"></a>pred_mean &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), mean))</span>
+<span id="cb677-2"><a href="sec-stan-state-uncertainty.html#cb677-2"></a>pred_lo &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.025</span>))</span>
+<span id="cb677-3"><a href="sec-stan-state-uncertainty.html#cb677-3"></a>pred_hi &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.975</span>))</span>
+<span id="cb677-4"><a href="sec-stan-state-uncertainty.html#cb677-4"></a></span>
+<span id="cb677-5"><a href="sec-stan-state-uncertainty.html#cb677-5"></a><span class="kw">plot</span>(pred_mean, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">ylim =</span> <span class="kw">range</span>(<span class="kw">c</span>(pred_mean, </span>
+<span id="cb677-6"><a href="sec-stan-state-uncertainty.html#cb677-6"></a>    pred_lo, pred_hi)), <span class="dt">main =</span> <span class="st">&quot;Trend&quot;</span>)</span>
+<span id="cb677-7"><a href="sec-stan-state-uncertainty.html#cb677-7"></a><span class="kw">lines</span>(pred_lo)</span>
+<span id="cb677-8"><a href="sec-stan-state-uncertainty.html#cb677-8"></a><span class="kw">lines</span>(pred_hi)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-plot-seal"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/stan-plot-seal-1.png" alt="Estimated states and 95 percent credible intervals." width="80%" />
 <p class="caption">

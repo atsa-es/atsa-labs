@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -467,66 +467,66 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">7.10</span> Fitting a MARSS model with Stan</h2>
 <p>Let’s fit the same model as in Section <a href="sec-mss-multivariate-state-space-models-with-jags.html#sec-mss-multivariate-state-space-models-with-jags">7.9</a> with Stan using the <strong>rstan</strong> package. If you have not already, you will need to install the <strong>rstan</strong> package. This package depends on a number of other packages which should install automatically when you install <strong>rstan</strong>.</p>
 <p>First we write the model. We could write this to a file (recommended), but for this example, we write as a character object. Though the syntax is different from the JAGS code, it has many similarities. Note that Stan does not allow missing values in the data, thus we need to pass in only the non-missing values along with the row and column indices of those values. The latter is so we can match them to the appropriate state (<span class="math inline">\(x\)</span>) values.</p>
-<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="sec-marss-fitting-with-stan.html#cb481-1"></a>scode &lt;-<span class="st"> &quot;</span></span>
-<span id="cb481-2"><a href="sec-marss-fitting-with-stan.html#cb481-2"></a><span class="st">data {</span></span>
-<span id="cb481-3"><a href="sec-marss-fitting-with-stan.html#cb481-3"></a><span class="st">  int&lt;lower=0&gt; TT; // length of ts</span></span>
-<span id="cb481-4"><a href="sec-marss-fitting-with-stan.html#cb481-4"></a><span class="st">  int&lt;lower=0&gt; N; // num of ts; rows of y</span></span>
-<span id="cb481-5"><a href="sec-marss-fitting-with-stan.html#cb481-5"></a><span class="st">  int&lt;lower=0&gt; n_pos; // number of non-NA values in y</span></span>
-<span id="cb481-6"><a href="sec-marss-fitting-with-stan.html#cb481-6"></a><span class="st">  int&lt;lower=0&gt; col_indx_pos[n_pos]; // col index of non-NA vals</span></span>
-<span id="cb481-7"><a href="sec-marss-fitting-with-stan.html#cb481-7"></a><span class="st">  int&lt;lower=0&gt; row_indx_pos[n_pos]; // row index of non-NA vals</span></span>
-<span id="cb481-8"><a href="sec-marss-fitting-with-stan.html#cb481-8"></a><span class="st">  vector[n_pos] y;</span></span>
-<span id="cb481-9"><a href="sec-marss-fitting-with-stan.html#cb481-9"></a><span class="st">}</span></span>
-<span id="cb481-10"><a href="sec-marss-fitting-with-stan.html#cb481-10"></a><span class="st">parameters {</span></span>
-<span id="cb481-11"><a href="sec-marss-fitting-with-stan.html#cb481-11"></a><span class="st">  vector[N] x0; // initial states</span></span>
-<span id="cb481-12"><a href="sec-marss-fitting-with-stan.html#cb481-12"></a><span class="st">  real u;</span></span>
-<span id="cb481-13"><a href="sec-marss-fitting-with-stan.html#cb481-13"></a><span class="st">  vector[N] pro_dev[TT]; // refed as pro_dev[TT,N]</span></span>
-<span id="cb481-14"><a href="sec-marss-fitting-with-stan.html#cb481-14"></a><span class="st">  real&lt;lower=0&gt; sd_q;</span></span>
-<span id="cb481-15"><a href="sec-marss-fitting-with-stan.html#cb481-15"></a><span class="st">  real&lt;lower=0&gt; sd_r[N]; // obs variances are different</span></span>
-<span id="cb481-16"><a href="sec-marss-fitting-with-stan.html#cb481-16"></a><span class="st">}</span></span>
-<span id="cb481-17"><a href="sec-marss-fitting-with-stan.html#cb481-17"></a><span class="st">transformed parameters {</span></span>
-<span id="cb481-18"><a href="sec-marss-fitting-with-stan.html#cb481-18"></a><span class="st">  vector[N] x[TT]; // refed as x[TT,N]</span></span>
-<span id="cb481-19"><a href="sec-marss-fitting-with-stan.html#cb481-19"></a><span class="st">  for(i in 1:N){</span></span>
-<span id="cb481-20"><a href="sec-marss-fitting-with-stan.html#cb481-20"></a><span class="st">    x[1,i] = x0[i] + u + pro_dev[1,i];</span></span>
-<span id="cb481-21"><a href="sec-marss-fitting-with-stan.html#cb481-21"></a><span class="st">    for(t in 2:TT) {</span></span>
-<span id="cb481-22"><a href="sec-marss-fitting-with-stan.html#cb481-22"></a><span class="st">      x[t,i] = x[t-1,i] + u + pro_dev[t,i];</span></span>
-<span id="cb481-23"><a href="sec-marss-fitting-with-stan.html#cb481-23"></a><span class="st">    }</span></span>
-<span id="cb481-24"><a href="sec-marss-fitting-with-stan.html#cb481-24"></a><span class="st">  }</span></span>
-<span id="cb481-25"><a href="sec-marss-fitting-with-stan.html#cb481-25"></a><span class="st">}</span></span>
-<span id="cb481-26"><a href="sec-marss-fitting-with-stan.html#cb481-26"></a><span class="st">model {</span></span>
-<span id="cb481-27"><a href="sec-marss-fitting-with-stan.html#cb481-27"></a><span class="st">  sd_q ~ cauchy(0,5);</span></span>
-<span id="cb481-28"><a href="sec-marss-fitting-with-stan.html#cb481-28"></a><span class="st">  for(i in 1:N){</span></span>
-<span id="cb481-29"><a href="sec-marss-fitting-with-stan.html#cb481-29"></a><span class="st">    x0[i] ~ normal(y[i],10); // assume no missing y[1]</span></span>
-<span id="cb481-30"><a href="sec-marss-fitting-with-stan.html#cb481-30"></a><span class="st">    sd_r[i] ~ cauchy(0,5);</span></span>
-<span id="cb481-31"><a href="sec-marss-fitting-with-stan.html#cb481-31"></a><span class="st">    for(t in 1:TT){</span></span>
-<span id="cb481-32"><a href="sec-marss-fitting-with-stan.html#cb481-32"></a><span class="st">    pro_dev[t,i] ~ normal(0, sd_q);</span></span>
-<span id="cb481-33"><a href="sec-marss-fitting-with-stan.html#cb481-33"></a><span class="st">    }</span></span>
-<span id="cb481-34"><a href="sec-marss-fitting-with-stan.html#cb481-34"></a><span class="st">  }</span></span>
-<span id="cb481-35"><a href="sec-marss-fitting-with-stan.html#cb481-35"></a><span class="st">  u ~ normal(0,2);</span></span>
-<span id="cb481-36"><a href="sec-marss-fitting-with-stan.html#cb481-36"></a><span class="st">  for(i in 1:n_pos){</span></span>
-<span id="cb481-37"><a href="sec-marss-fitting-with-stan.html#cb481-37"></a><span class="st">    y[i] ~ normal(x[col_indx_pos[i], row_indx_pos[i]], sd_r[row_indx_pos[i]]);</span></span>
-<span id="cb481-38"><a href="sec-marss-fitting-with-stan.html#cb481-38"></a><span class="st">  }</span></span>
-<span id="cb481-39"><a href="sec-marss-fitting-with-stan.html#cb481-39"></a><span class="st">}</span></span>
-<span id="cb481-40"><a href="sec-marss-fitting-with-stan.html#cb481-40"></a><span class="st">generated quantities {</span></span>
-<span id="cb481-41"><a href="sec-marss-fitting-with-stan.html#cb481-41"></a><span class="st">  vector[n_pos] log_lik;</span></span>
-<span id="cb481-42"><a href="sec-marss-fitting-with-stan.html#cb481-42"></a><span class="st">  for (n in 1:n_pos) log_lik[n] = normal_lpdf(y[n] | x[col_indx_pos[n], row_indx_pos[n]], sd_r[row_indx_pos[n]]);</span></span>
-<span id="cb481-43"><a href="sec-marss-fitting-with-stan.html#cb481-43"></a><span class="st">}</span></span>
-<span id="cb481-44"><a href="sec-marss-fitting-with-stan.html#cb481-44"></a><span class="st">&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="sec-marss-fitting-with-stan.html#cb482-1"></a>scode &lt;-<span class="st"> &quot;</span></span>
+<span id="cb482-2"><a href="sec-marss-fitting-with-stan.html#cb482-2"></a><span class="st">data {</span></span>
+<span id="cb482-3"><a href="sec-marss-fitting-with-stan.html#cb482-3"></a><span class="st">  int&lt;lower=0&gt; TT; // length of ts</span></span>
+<span id="cb482-4"><a href="sec-marss-fitting-with-stan.html#cb482-4"></a><span class="st">  int&lt;lower=0&gt; N; // num of ts; rows of y</span></span>
+<span id="cb482-5"><a href="sec-marss-fitting-with-stan.html#cb482-5"></a><span class="st">  int&lt;lower=0&gt; n_pos; // number of non-NA values in y</span></span>
+<span id="cb482-6"><a href="sec-marss-fitting-with-stan.html#cb482-6"></a><span class="st">  int&lt;lower=0&gt; col_indx_pos[n_pos]; // col index of non-NA vals</span></span>
+<span id="cb482-7"><a href="sec-marss-fitting-with-stan.html#cb482-7"></a><span class="st">  int&lt;lower=0&gt; row_indx_pos[n_pos]; // row index of non-NA vals</span></span>
+<span id="cb482-8"><a href="sec-marss-fitting-with-stan.html#cb482-8"></a><span class="st">  vector[n_pos] y;</span></span>
+<span id="cb482-9"><a href="sec-marss-fitting-with-stan.html#cb482-9"></a><span class="st">}</span></span>
+<span id="cb482-10"><a href="sec-marss-fitting-with-stan.html#cb482-10"></a><span class="st">parameters {</span></span>
+<span id="cb482-11"><a href="sec-marss-fitting-with-stan.html#cb482-11"></a><span class="st">  vector[N] x0; // initial states</span></span>
+<span id="cb482-12"><a href="sec-marss-fitting-with-stan.html#cb482-12"></a><span class="st">  real u;</span></span>
+<span id="cb482-13"><a href="sec-marss-fitting-with-stan.html#cb482-13"></a><span class="st">  vector[N] pro_dev[TT]; // refed as pro_dev[TT,N]</span></span>
+<span id="cb482-14"><a href="sec-marss-fitting-with-stan.html#cb482-14"></a><span class="st">  real&lt;lower=0&gt; sd_q;</span></span>
+<span id="cb482-15"><a href="sec-marss-fitting-with-stan.html#cb482-15"></a><span class="st">  real&lt;lower=0&gt; sd_r[N]; // obs variances are different</span></span>
+<span id="cb482-16"><a href="sec-marss-fitting-with-stan.html#cb482-16"></a><span class="st">}</span></span>
+<span id="cb482-17"><a href="sec-marss-fitting-with-stan.html#cb482-17"></a><span class="st">transformed parameters {</span></span>
+<span id="cb482-18"><a href="sec-marss-fitting-with-stan.html#cb482-18"></a><span class="st">  vector[N] x[TT]; // refed as x[TT,N]</span></span>
+<span id="cb482-19"><a href="sec-marss-fitting-with-stan.html#cb482-19"></a><span class="st">  for(i in 1:N){</span></span>
+<span id="cb482-20"><a href="sec-marss-fitting-with-stan.html#cb482-20"></a><span class="st">    x[1,i] = x0[i] + u + pro_dev[1,i];</span></span>
+<span id="cb482-21"><a href="sec-marss-fitting-with-stan.html#cb482-21"></a><span class="st">    for(t in 2:TT) {</span></span>
+<span id="cb482-22"><a href="sec-marss-fitting-with-stan.html#cb482-22"></a><span class="st">      x[t,i] = x[t-1,i] + u + pro_dev[t,i];</span></span>
+<span id="cb482-23"><a href="sec-marss-fitting-with-stan.html#cb482-23"></a><span class="st">    }</span></span>
+<span id="cb482-24"><a href="sec-marss-fitting-with-stan.html#cb482-24"></a><span class="st">  }</span></span>
+<span id="cb482-25"><a href="sec-marss-fitting-with-stan.html#cb482-25"></a><span class="st">}</span></span>
+<span id="cb482-26"><a href="sec-marss-fitting-with-stan.html#cb482-26"></a><span class="st">model {</span></span>
+<span id="cb482-27"><a href="sec-marss-fitting-with-stan.html#cb482-27"></a><span class="st">  sd_q ~ cauchy(0,5);</span></span>
+<span id="cb482-28"><a href="sec-marss-fitting-with-stan.html#cb482-28"></a><span class="st">  for(i in 1:N){</span></span>
+<span id="cb482-29"><a href="sec-marss-fitting-with-stan.html#cb482-29"></a><span class="st">    x0[i] ~ normal(y[i],10); // assume no missing y[1]</span></span>
+<span id="cb482-30"><a href="sec-marss-fitting-with-stan.html#cb482-30"></a><span class="st">    sd_r[i] ~ cauchy(0,5);</span></span>
+<span id="cb482-31"><a href="sec-marss-fitting-with-stan.html#cb482-31"></a><span class="st">    for(t in 1:TT){</span></span>
+<span id="cb482-32"><a href="sec-marss-fitting-with-stan.html#cb482-32"></a><span class="st">    pro_dev[t,i] ~ normal(0, sd_q);</span></span>
+<span id="cb482-33"><a href="sec-marss-fitting-with-stan.html#cb482-33"></a><span class="st">    }</span></span>
+<span id="cb482-34"><a href="sec-marss-fitting-with-stan.html#cb482-34"></a><span class="st">  }</span></span>
+<span id="cb482-35"><a href="sec-marss-fitting-with-stan.html#cb482-35"></a><span class="st">  u ~ normal(0,2);</span></span>
+<span id="cb482-36"><a href="sec-marss-fitting-with-stan.html#cb482-36"></a><span class="st">  for(i in 1:n_pos){</span></span>
+<span id="cb482-37"><a href="sec-marss-fitting-with-stan.html#cb482-37"></a><span class="st">    y[i] ~ normal(x[col_indx_pos[i], row_indx_pos[i]], sd_r[row_indx_pos[i]]);</span></span>
+<span id="cb482-38"><a href="sec-marss-fitting-with-stan.html#cb482-38"></a><span class="st">  }</span></span>
+<span id="cb482-39"><a href="sec-marss-fitting-with-stan.html#cb482-39"></a><span class="st">}</span></span>
+<span id="cb482-40"><a href="sec-marss-fitting-with-stan.html#cb482-40"></a><span class="st">generated quantities {</span></span>
+<span id="cb482-41"><a href="sec-marss-fitting-with-stan.html#cb482-41"></a><span class="st">  vector[n_pos] log_lik;</span></span>
+<span id="cb482-42"><a href="sec-marss-fitting-with-stan.html#cb482-42"></a><span class="st">  for (n in 1:n_pos) log_lik[n] = normal_lpdf(y[n] | x[col_indx_pos[n], row_indx_pos[n]], sd_r[row_indx_pos[n]]);</span></span>
+<span id="cb482-43"><a href="sec-marss-fitting-with-stan.html#cb482-43"></a><span class="st">}</span></span>
+<span id="cb482-44"><a href="sec-marss-fitting-with-stan.html#cb482-44"></a><span class="st">&quot;</span></span></code></pre></div>
 <p>Then we call <code>stan()</code> and pass in the data, names of parameter we wish to have returned, and information on number of chains, samples (iter), and thinning. The output is verbose (hidden here) and may have some warnings.</p>
-<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="sec-marss-fitting-with-stan.html#cb482-1"></a>ypos &lt;-<span class="st"> </span>Y[<span class="op">!</span><span class="kw">is.na</span>(Y)]</span>
-<span id="cb482-2"><a href="sec-marss-fitting-with-stan.html#cb482-2"></a>n_pos &lt;-<span class="st"> </span><span class="kw">length</span>(ypos)  <span class="co"># number on non-NA ys</span></span>
-<span id="cb482-3"><a href="sec-marss-fitting-with-stan.html#cb482-3"></a>indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(Y), <span class="dt">arr.ind =</span> <span class="ot">TRUE</span>)  <span class="co"># index on the non-NAs</span></span>
-<span id="cb482-4"><a href="sec-marss-fitting-with-stan.html#cb482-4"></a>col_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[, <span class="st">&quot;col&quot;</span>])</span>
-<span id="cb482-5"><a href="sec-marss-fitting-with-stan.html#cb482-5"></a>row_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[, <span class="st">&quot;row&quot;</span>])</span>
-<span id="cb482-6"><a href="sec-marss-fitting-with-stan.html#cb482-6"></a>mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> ypos, </span>
-<span id="cb482-7"><a href="sec-marss-fitting-with-stan.html#cb482-7"></a>    <span class="dt">TT =</span> <span class="kw">ncol</span>(Y), <span class="dt">N =</span> <span class="kw">nrow</span>(Y), <span class="dt">n_pos =</span> n_pos, <span class="dt">col_indx_pos =</span> col_indx_pos, </span>
-<span id="cb482-8"><a href="sec-marss-fitting-with-stan.html#cb482-8"></a>    <span class="dt">row_indx_pos =</span> row_indx_pos), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, </span>
-<span id="cb482-9"><a href="sec-marss-fitting-with-stan.html#cb482-9"></a>    <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">chains =</span> <span class="dv">3</span>, <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">thin =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb483-1"><a href="sec-marss-fitting-with-stan.html#cb483-1"></a>ypos &lt;-<span class="st"> </span>Y[<span class="op">!</span><span class="kw">is.na</span>(Y)]</span>
+<span id="cb483-2"><a href="sec-marss-fitting-with-stan.html#cb483-2"></a>n_pos &lt;-<span class="st"> </span><span class="kw">length</span>(ypos)  <span class="co"># number on non-NA ys</span></span>
+<span id="cb483-3"><a href="sec-marss-fitting-with-stan.html#cb483-3"></a>indx_pos &lt;-<span class="st"> </span><span class="kw">which</span>(<span class="op">!</span><span class="kw">is.na</span>(Y), <span class="dt">arr.ind =</span> <span class="ot">TRUE</span>)  <span class="co"># index on the non-NAs</span></span>
+<span id="cb483-4"><a href="sec-marss-fitting-with-stan.html#cb483-4"></a>col_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[, <span class="st">&quot;col&quot;</span>])</span>
+<span id="cb483-5"><a href="sec-marss-fitting-with-stan.html#cb483-5"></a>row_indx_pos &lt;-<span class="st"> </span><span class="kw">as.vector</span>(indx_pos[, <span class="st">&quot;row&quot;</span>])</span>
+<span id="cb483-6"><a href="sec-marss-fitting-with-stan.html#cb483-6"></a>mod &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">stan</span>(<span class="dt">model_code =</span> scode, <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">y =</span> ypos, </span>
+<span id="cb483-7"><a href="sec-marss-fitting-with-stan.html#cb483-7"></a>    <span class="dt">TT =</span> <span class="kw">ncol</span>(Y), <span class="dt">N =</span> <span class="kw">nrow</span>(Y), <span class="dt">n_pos =</span> n_pos, <span class="dt">col_indx_pos =</span> col_indx_pos, </span>
+<span id="cb483-8"><a href="sec-marss-fitting-with-stan.html#cb483-8"></a>    <span class="dt">row_indx_pos =</span> row_indx_pos), <span class="dt">pars =</span> <span class="kw">c</span>(<span class="st">&quot;sd_q&quot;</span>, <span class="st">&quot;x&quot;</span>, <span class="st">&quot;sd_r&quot;</span>, </span>
+<span id="cb483-9"><a href="sec-marss-fitting-with-stan.html#cb483-9"></a>    <span class="st">&quot;u&quot;</span>, <span class="st">&quot;x0&quot;</span>), <span class="dt">chains =</span> <span class="dv">3</span>, <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">thin =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>We use <code>extract()</code> to extract the parameters from the fitted model and then the means and 95% credible intervals.</p>
-<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb483-1"><a href="sec-marss-fitting-with-stan.html#cb483-1"></a>pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod)</span>
-<span id="cb483-2"><a href="sec-marss-fitting-with-stan.html#cb483-2"></a>means &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), mean)</span>
-<span id="cb483-3"><a href="sec-marss-fitting-with-stan.html#cb483-3"></a>upperCI &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.975</span>)</span>
-<span id="cb483-4"><a href="sec-marss-fitting-with-stan.html#cb483-4"></a>lowerCI &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.025</span>)</span>
-<span id="cb483-5"><a href="sec-marss-fitting-with-stan.html#cb483-5"></a><span class="kw">colnames</span>(means) &lt;-<span class="st"> </span><span class="kw">colnames</span>(upperCI) &lt;-<span class="st"> </span><span class="kw">colnames</span>(lowerCI) &lt;-<span class="st"> </span><span class="kw">rownames</span>(Y)</span></code></pre></div>
+<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="sec-marss-fitting-with-stan.html#cb484-1"></a>pars &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(mod)</span>
+<span id="cb484-2"><a href="sec-marss-fitting-with-stan.html#cb484-2"></a>means &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), mean)</span>
+<span id="cb484-3"><a href="sec-marss-fitting-with-stan.html#cb484-3"></a>upperCI &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.975</span>)</span>
+<span id="cb484-4"><a href="sec-marss-fitting-with-stan.html#cb484-4"></a>lowerCI &lt;-<span class="st"> </span><span class="kw">apply</span>(pars<span class="op">$</span>x, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>), quantile, <span class="fl">0.025</span>)</span>
+<span id="cb484-5"><a href="sec-marss-fitting-with-stan.html#cb484-5"></a><span class="kw">colnames</span>(means) &lt;-<span class="st"> </span><span class="kw">colnames</span>(upperCI) &lt;-<span class="st"> </span><span class="kw">colnames</span>(lowerCI) &lt;-<span class="st"> </span><span class="kw">rownames</span>(Y)</span></code></pre></div>
 <pre><code>No id variables; using all as measure variables
 No id variables; using all as measure variables
 No id variables; using all as measure variables</code></pre>

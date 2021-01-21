@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -493,15 +493,15 @@ The elements in <span class="math inline">\(\mathbf{a}\)</span> are the intercep
 \tag{8.3}
 \end{equation}\]</span></p>
 <p>Let’s fit this model with MARSS. The <span class="math inline">\(\mathbf{x}\)</span> part of the model is irrelevant so we want to fix the parameters in that part of the model. We won’t set <span class="math inline">\(\mathbf{B}=0\)</span> or <span class="math inline">\(\mathbf{Z}=0\)</span> since that might cause numerical issues for the Kalman filter. Instead we fix them as identity matrices and fix <span class="math inline">\(\mathbf{x}_0=0\)</span> so that <span class="math inline">\(\mathbf{x}_t=0\)</span> for all <span class="math inline">\(t\)</span>.</p>
-<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="sec-msscov-obs-error-only.html#cb495-1"></a>Q &lt;-<span class="st"> </span>U &lt;-<span class="st"> </span>x0 &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb495-2"><a href="sec-msscov-obs-error-only.html#cb495-2"></a>B &lt;-<span class="st"> </span>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
-<span id="cb495-3"><a href="sec-msscov-obs-error-only.html#cb495-3"></a>d &lt;-<span class="st"> </span>covariates</span>
-<span id="cb495-4"><a href="sec-msscov-obs-error-only.html#cb495-4"></a>A &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb495-5"><a href="sec-msscov-obs-error-only.html#cb495-5"></a>D &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
-<span id="cb495-6"><a href="sec-msscov-obs-error-only.html#cb495-6"></a>y &lt;-<span class="st"> </span>dat  <span class="co"># to show relationship between dat &amp; the equation</span></span>
-<span id="cb495-7"><a href="sec-msscov-obs-error-only.html#cb495-7"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">D =</span> D, </span>
-<span id="cb495-8"><a href="sec-msscov-obs-error-only.html#cb495-8"></a>    <span class="dt">d =</span> d, <span class="dt">x0 =</span> x0)</span>
-<span id="cb495-9"><a href="sec-msscov-obs-error-only.html#cb495-9"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(y, <span class="dt">model =</span> model.list)</span></code></pre></div>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="sec-msscov-obs-error-only.html#cb496-1"></a>Q &lt;-<span class="st"> </span>U &lt;-<span class="st"> </span>x0 &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb496-2"><a href="sec-msscov-obs-error-only.html#cb496-2"></a>B &lt;-<span class="st"> </span>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
+<span id="cb496-3"><a href="sec-msscov-obs-error-only.html#cb496-3"></a>d &lt;-<span class="st"> </span>covariates</span>
+<span id="cb496-4"><a href="sec-msscov-obs-error-only.html#cb496-4"></a>A &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb496-5"><a href="sec-msscov-obs-error-only.html#cb496-5"></a>D &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
+<span id="cb496-6"><a href="sec-msscov-obs-error-only.html#cb496-6"></a>y &lt;-<span class="st"> </span>dat  <span class="co"># to show relationship between dat &amp; the equation</span></span>
+<span id="cb496-7"><a href="sec-msscov-obs-error-only.html#cb496-7"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">D =</span> D, </span>
+<span id="cb496-8"><a href="sec-msscov-obs-error-only.html#cb496-8"></a>    <span class="dt">d =</span> d, <span class="dt">x0 =</span> x0)</span>
+<span id="cb496-9"><a href="sec-msscov-obs-error-only.html#cb496-9"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(y, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.

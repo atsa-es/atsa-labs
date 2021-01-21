@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -466,9 +466,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="modeling-seasonal-swe" class="section level2">
 <h2><span class="header-section-number">11.3</span> Modeling Seasonal SWE</h2>
 <p>When we look at all months, we see that SWE is highly seasonal. Note October and November are missing for all years.</p>
-<div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb598-1"><a href="modeling-seasonal-swe.html#cb598-1"></a>swe.yr &lt;-<span class="st"> </span>snotel</span>
-<span id="cb598-2"><a href="modeling-seasonal-swe.html#cb598-2"></a>swe.yr &lt;-<span class="st"> </span>swe.yr[swe.yr<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id, ]</span>
-<span id="cb598-3"><a href="modeling-seasonal-swe.html#cb598-3"></a>swe.yr<span class="op">$</span>Station &lt;-<span class="st"> </span><span class="kw">droplevels</span>(swe.yr<span class="op">$</span>Station)</span></code></pre></div>
+<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb599-1"><a href="modeling-seasonal-swe.html#cb599-1"></a>swe.yr &lt;-<span class="st"> </span>snotel</span>
+<span id="cb599-2"><a href="modeling-seasonal-swe.html#cb599-2"></a>swe.yr &lt;-<span class="st"> </span>swe.yr[swe.yr<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id, ]</span>
+<span id="cb599-3"><a href="modeling-seasonal-swe.html#cb599-3"></a>swe.yr<span class="op">$</span>Station &lt;-<span class="st"> </span><span class="kw">droplevels</span>(swe.yr<span class="op">$</span>Station)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-seasonal-swe-plot-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <!--
 An AR(2) or AR(1) model for the seasonal differences fits well for most of the time series.  The table shows the $\Delta AICc$ for different ARMA models for the seasonally differenced data in different locations.  AR(1) is within 2 of the AR(2) model in most cases and the AR(2) or AR(1) is best in all but 2 locations.
@@ -493,38 +493,38 @@ An AR(2) or AR(1) model for the seasonal differences fits well for most of the t
 |Tinkham Creek     |  5.4833530|  1.5342261|  0.000000| 1.1318307|
 -->
 <p>Set up the data matrix of monthly SNOTEL data:</p>
-<div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb599-1"><a href="modeling-seasonal-swe.html#cb599-1"></a>dat.yr &lt;-<span class="st"> </span>snotel</span>
-<span id="cb599-2"><a href="modeling-seasonal-swe.html#cb599-2"></a>dat.yr &lt;-<span class="st"> </span>dat.yr[dat.yr<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id, ]</span>
-<span id="cb599-3"><a href="modeling-seasonal-swe.html#cb599-3"></a>dat.yr<span class="op">$</span>Station &lt;-<span class="st"> </span><span class="kw">droplevels</span>(dat.yr<span class="op">$</span>Station)</span>
-<span id="cb599-4"><a href="modeling-seasonal-swe.html#cb599-4"></a>dat.yr<span class="op">$</span>Month &lt;-<span class="st"> </span><span class="kw">factor</span>(dat.yr<span class="op">$</span>Month, <span class="dt">level =</span> month.abb)</span>
-<span id="cb599-5"><a href="modeling-seasonal-swe.html#cb599-5"></a>dat.yr &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">acast</span>(dat.yr, Station <span class="op">~</span><span class="st"> </span>Year <span class="op">+</span><span class="st"> </span>Month, <span class="dt">value.var =</span> <span class="st">&quot;SWE&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb600-1"><a href="modeling-seasonal-swe.html#cb600-1"></a>dat.yr &lt;-<span class="st"> </span>snotel</span>
+<span id="cb600-2"><a href="modeling-seasonal-swe.html#cb600-2"></a>dat.yr &lt;-<span class="st"> </span>dat.yr[dat.yr<span class="op">$</span>Station.Id <span class="op">%in%</span><span class="st"> </span>y<span class="op">$</span>Station.Id, ]</span>
+<span id="cb600-3"><a href="modeling-seasonal-swe.html#cb600-3"></a>dat.yr<span class="op">$</span>Station &lt;-<span class="st"> </span><span class="kw">droplevels</span>(dat.yr<span class="op">$</span>Station)</span>
+<span id="cb600-4"><a href="modeling-seasonal-swe.html#cb600-4"></a>dat.yr<span class="op">$</span>Month &lt;-<span class="st"> </span><span class="kw">factor</span>(dat.yr<span class="op">$</span>Month, <span class="dt">level =</span> month.abb)</span>
+<span id="cb600-5"><a href="modeling-seasonal-swe.html#cb600-5"></a>dat.yr &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">acast</span>(dat.yr, Station <span class="op">~</span><span class="st"> </span>Year <span class="op">+</span><span class="st"> </span>Month, <span class="dt">value.var =</span> <span class="st">&quot;SWE&quot;</span>)</span></code></pre></div>
 <p>We will model the seasonal differences using a periodic model. The covariates are</p>
-<div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb600-1"><a href="modeling-seasonal-swe.html#cb600-1"></a>period &lt;-<span class="st"> </span><span class="dv">12</span></span>
-<span id="cb600-2"><a href="modeling-seasonal-swe.html#cb600-2"></a>TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.yr)[<span class="dv">2</span>]</span>
-<span id="cb600-3"><a href="modeling-seasonal-swe.html#cb600-3"></a>cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</span>
-<span id="cb600-4"><a href="modeling-seasonal-swe.html#cb600-4"></a>sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</span>
-<span id="cb600-5"><a href="modeling-seasonal-swe.html#cb600-5"></a>c.seas &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t, sin.t)</span></code></pre></div>
+<div class="sourceCode" id="cb601"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb601-1"><a href="modeling-seasonal-swe.html#cb601-1"></a>period &lt;-<span class="st"> </span><span class="dv">12</span></span>
+<span id="cb601-2"><a href="modeling-seasonal-swe.html#cb601-2"></a>TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.yr)[<span class="dv">2</span>]</span>
+<span id="cb601-3"><a href="modeling-seasonal-swe.html#cb601-3"></a>cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</span>
+<span id="cb601-4"><a href="modeling-seasonal-swe.html#cb601-4"></a>sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</span>
+<span id="cb601-5"><a href="modeling-seasonal-swe.html#cb601-5"></a>c.seas &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t, sin.t)</span></code></pre></div>
 <div id="modeling-season-across-sites" class="section level3">
 <h3><span class="header-section-number">11.3.1</span> Modeling season across sites</h3>
 <p>We will create a state for the seasonal cycle and each station will have a scaled effect of that seasonal cycle. The observations will have the seasonal effect plus a mean and residuals (observation - season - mean) will be allowed to correlate across stations.</p>
-<div class="sourceCode" id="cb601"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb601-1"><a href="modeling-seasonal-swe.html#cb601-1"></a>ns &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.yr)[<span class="dv">1</span>]</span>
-<span id="cb601-2"><a href="modeling-seasonal-swe.html#cb601-2"></a>B &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb601-3"><a href="modeling-seasonal-swe.html#cb601-3"></a>Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>)</span>
-<span id="cb601-4"><a href="modeling-seasonal-swe.html#cb601-4"></a>R &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
-<span id="cb601-5"><a href="modeling-seasonal-swe.html#cb601-5"></a>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb601-6"><a href="modeling-seasonal-swe.html#cb601-6"></a>x0 &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb601-7"><a href="modeling-seasonal-swe.html#cb601-7"></a>Z &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">paste0</span>(<span class="st">&quot;z&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns), ns, <span class="dv">1</span>)</span>
-<span id="cb601-8"><a href="modeling-seasonal-swe.html#cb601-8"></a>A &lt;-<span class="st"> &quot;unequal&quot;</span></span>
-<span id="cb601-9"><a href="modeling-seasonal-swe.html#cb601-9"></a>mod.list.dfa =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Z =</span> Z, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">A =</span> A, </span>
-<span id="cb601-10"><a href="modeling-seasonal-swe.html#cb601-10"></a>    <span class="dt">x0 =</span> x0)</span>
-<span id="cb601-11"><a href="modeling-seasonal-swe.html#cb601-11"></a>C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="st">&quot;c1&quot;</span>, <span class="st">&quot;c2&quot;</span>), <span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb601-12"><a href="modeling-seasonal-swe.html#cb601-12"></a>c &lt;-<span class="st"> </span>c.seas</span>
-<span id="cb601-13"><a href="modeling-seasonal-swe.html#cb601-13"></a>mod.list.seas &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">A =</span> A, <span class="dt">R =</span> R, <span class="dt">Z =</span> Z, </span>
-<span id="cb601-14"><a href="modeling-seasonal-swe.html#cb601-14"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> c, <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb602-1"><a href="modeling-seasonal-swe.html#cb602-1"></a>ns &lt;-<span class="st"> </span><span class="kw">dim</span>(dat.yr)[<span class="dv">1</span>]</span>
+<span id="cb602-2"><a href="modeling-seasonal-swe.html#cb602-2"></a>B &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb602-3"><a href="modeling-seasonal-swe.html#cb602-3"></a>Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>)</span>
+<span id="cb602-4"><a href="modeling-seasonal-swe.html#cb602-4"></a>R &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
+<span id="cb602-5"><a href="modeling-seasonal-swe.html#cb602-5"></a>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb602-6"><a href="modeling-seasonal-swe.html#cb602-6"></a>x0 &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb602-7"><a href="modeling-seasonal-swe.html#cb602-7"></a>Z &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">paste0</span>(<span class="st">&quot;z&quot;</span>, <span class="dv">1</span><span class="op">:</span>ns), ns, <span class="dv">1</span>)</span>
+<span id="cb602-8"><a href="modeling-seasonal-swe.html#cb602-8"></a>A &lt;-<span class="st"> &quot;unequal&quot;</span></span>
+<span id="cb602-9"><a href="modeling-seasonal-swe.html#cb602-9"></a>mod.list.dfa =<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">Z =</span> Z, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, <span class="dt">A =</span> A, </span>
+<span id="cb602-10"><a href="modeling-seasonal-swe.html#cb602-10"></a>    <span class="dt">x0 =</span> x0)</span>
+<span id="cb602-11"><a href="modeling-seasonal-swe.html#cb602-11"></a>C &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="st">&quot;c1&quot;</span>, <span class="st">&quot;c2&quot;</span>), <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb602-12"><a href="modeling-seasonal-swe.html#cb602-12"></a>c &lt;-<span class="st"> </span>c.seas</span>
+<span id="cb602-13"><a href="modeling-seasonal-swe.html#cb602-13"></a>mod.list.seas &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">A =</span> A, <span class="dt">R =</span> R, <span class="dt">Z =</span> Z, </span>
+<span id="cb602-14"><a href="modeling-seasonal-swe.html#cb602-14"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> c, <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> <span class="dv">0</span>)</span></code></pre></div>
 <p>Now we can fit the model:</p>
-<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb602-1"><a href="modeling-seasonal-swe.html#cb602-1"></a>m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.yr, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb602-2"><a href="modeling-seasonal-swe.html#cb602-2"></a>fit.seas &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.yr, <span class="dt">model =</span> mod.list.seas, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">500</span>), </span>
-<span id="cb602-3"><a href="modeling-seasonal-swe.html#cb602-3"></a>    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="modeling-seasonal-swe.html#cb603-1"></a>m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.yr, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb603-2"><a href="modeling-seasonal-swe.html#cb603-2"></a>fit.seas &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.yr, <span class="dt">model =</span> mod.list.seas, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">500</span>), </span>
+<span id="cb603-3"><a href="modeling-seasonal-swe.html#cb603-3"></a>    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</span></code></pre></div>
 <p><strong>The seasonal patterns</strong></p>
 <p>Figure @ref{fig:mssmiss-seas} shows the seasonal estimate plus prediction intervals for each station. This is <span class="math inline">\(z_i x_i + a_i\)</span>. The prediction interval shows our estimate of the range of the data we would see around the seasonal estimate.</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/mssmiss-seas-1.png" width="80%" style="display: block; margin: auto;" /></p>

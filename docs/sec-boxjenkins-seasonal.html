@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -466,22 +466,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-boxjenkins-seasonal" class="section level2">
 <h2><span class="header-section-number">5.11</span> Seasonal ARIMA model</h2>
 <p>The Chinook data are monthly and start in January 1990. To make this into a ts object do</p>
-<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb364-1"><a href="sec-boxjenkins-seasonal.html#cb364-1"></a>chinookts &lt;-<span class="st"> </span><span class="kw">ts</span>(chinook<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1990</span>, <span class="dv">1</span>), </span>
-<span id="cb364-2"><a href="sec-boxjenkins-seasonal.html#cb364-2"></a>    <span class="dt">frequency =</span> <span class="dv">12</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="sec-boxjenkins-seasonal.html#cb365-1"></a>chinookts &lt;-<span class="st"> </span><span class="kw">ts</span>(chinook<span class="op">$</span>log.metric.tons, <span class="dt">start =</span> <span class="kw">c</span>(<span class="dv">1990</span>, <span class="dv">1</span>), </span>
+<span id="cb365-2"><a href="sec-boxjenkins-seasonal.html#cb365-2"></a>    <span class="dt">frequency =</span> <span class="dv">12</span>)</span></code></pre></div>
 <p><code>start</code> is the year and month and frequency is the number of months in the year.</p>
 <p>Use <code>?ts</code> to see more examples of how to set up ts objects.</p>
 <div id="plot-seasonal-data" class="section level3">
 <h3><span class="header-section-number">5.11.1</span> Plot seasonal data</h3>
-<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="sec-boxjenkins-seasonal.html#cb365-1"></a><span class="kw">plot</span>(chinookts)</span></code></pre></div>
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="sec-boxjenkins-seasonal.html#cb366-1"></a><span class="kw">plot</span>(chinookts)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/bj-plot-chinook-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="auto.arima-for-seasonal-ts" class="section level3">
 <h3><span class="header-section-number">5.11.2</span> <code>auto.arima()</code> for seasonal ts</h3>
 <p><code>auto.arima()</code> will recognize that our data has season and fit a seasonal ARIMA model to our data by default. Let’s define the training data up to 1998 and use 1999 as the test data.</p>
-<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="sec-boxjenkins-seasonal.html#cb366-1"></a>traindat &lt;-<span class="st"> </span><span class="kw">window</span>(chinookts, <span class="kw">c</span>(<span class="dv">1990</span>, <span class="dv">10</span>), <span class="kw">c</span>(<span class="dv">1998</span>, <span class="dv">12</span>))</span>
-<span id="cb366-2"><a href="sec-boxjenkins-seasonal.html#cb366-2"></a>testdat &lt;-<span class="st"> </span><span class="kw">window</span>(chinookts, <span class="kw">c</span>(<span class="dv">1999</span>, <span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1999</span>, <span class="dv">12</span>))</span>
-<span id="cb366-3"><a href="sec-boxjenkins-seasonal.html#cb366-3"></a>fit &lt;-<span class="st"> </span>forecast<span class="op">::</span><span class="kw">auto.arima</span>(traindat)</span>
-<span id="cb366-4"><a href="sec-boxjenkins-seasonal.html#cb366-4"></a>fit</span></code></pre></div>
+<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb367-1"><a href="sec-boxjenkins-seasonal.html#cb367-1"></a>traindat &lt;-<span class="st"> </span><span class="kw">window</span>(chinookts, <span class="kw">c</span>(<span class="dv">1990</span>, <span class="dv">10</span>), <span class="kw">c</span>(<span class="dv">1998</span>, <span class="dv">12</span>))</span>
+<span id="cb367-2"><a href="sec-boxjenkins-seasonal.html#cb367-2"></a>testdat &lt;-<span class="st"> </span><span class="kw">window</span>(chinookts, <span class="kw">c</span>(<span class="dv">1999</span>, <span class="dv">1</span>), <span class="kw">c</span>(<span class="dv">1999</span>, <span class="dv">12</span>))</span>
+<span id="cb367-3"><a href="sec-boxjenkins-seasonal.html#cb367-3"></a>fit &lt;-<span class="st"> </span>forecast<span class="op">::</span><span class="kw">auto.arima</span>(traindat)</span>
+<span id="cb367-4"><a href="sec-boxjenkins-seasonal.html#cb367-4"></a>fit</span></code></pre></div>
 <pre><code>Series: traindat 
 ARIMA(1,0,0)(0,1,0)[12] with drift 
 

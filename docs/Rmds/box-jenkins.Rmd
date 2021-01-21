@@ -283,14 +283,13 @@ Let's first do the test on data we know is stationary, white noise.  We have to 
 
 Next you need to chose the `lags`.  We will use `lags=0` to do the Dickey-Fuller test.  Note the number of lags you can test will depend on the amount of data that you have.  `adf.test()` used a default of `trunc((length(x)-1)^(1/3))` for the lags, but `ur.df()` requires that you pass in a value or use a fixed default of 1.
 
-`lags=0` is fitting this model to the data. You are testing if the effect for `z.lag.1` is 0.  
+`lags=0` is fitting the following model to the data:
 
 `z.diff = gamma * z.lag.1 + intercept + trend * tt`
-`z.diff` means $\Delta y_t$  and `z.lag.1` is $y_{t-1}$.
 
-When you use `summary()` for the output from `ur.df()`, you will see the estimated values for $\gamma$ (denoted `z.lag.1`), intercept and trend.  If you see `***` or `**` on the coefficients list for `z.lag.1`, it indicates that the effect of `z.lag.1` is significantly different than 0 and this supports the assumption of stationarity.
+`z.diff` means $\Delta y_t$  and `z.lag.1` is $y_{t-1}$. You are testing if the effect for `z.lag.1` is 0.  
 
-The `intercept` and `tt` estimates indicate where there is a non-zero level (intercept) or linear trend (tt).
+When you use `summary()` for the output from `ur.df()`, you will see the estimated values for $\gamma$ (denoted `z.lag.1`), intercept and trend.  If you see `***` or `**` on the coefficients list for `z.lag.1`, it suggest that the effect of `z.lag.1` is significantly different than 0 and this supports the assumption of stationarity. However, the test level shown is for independent data not time series data. The correct test levels (critical values) are shown at the bottom of the summary output.
 
 ```{r bj-df-wn2}
 wn <- rnorm(TT)
@@ -298,9 +297,20 @@ test <- urca::ur.df(wn, type="trend", lags=0)
 summary(test)
 ```
 
-The coefficient part of the summary indicates that `z.lag.1` is different than 0 (so stationary) and no support for intercept or trend.
+We need to look at information at the bottom of the summary output for the test statistics and critical values. The part that looks like this
 
-Notice that the test statistic is LESS than the critical value for `tau3` at 5 percent.  This means the null hypothesis is rejected at $\alpha=0.05$, a standard level for significance testing.
+```
+Value of test-statistic is: #1 #2 #3
+
+Critical values for test statistics: 
+      1pct  5pct 10pct
+tau3   xxx  xxx   xxx
+...
+```
+
+The first test statistic number is for $\gamma=0$ and will be labeled `tau`, `tau2` or `tau3`. 
+
+In our example with white noise, notice that the test statistic is LESS than the critical value for `tau3` at 5 percent.  This means the null hypothesis is rejected at $\alpha=0.05$, a standard level for significance testing.
 
 #### When you might want to use `ur.df()`
 
@@ -665,14 +675,14 @@ chinook <- chinook.month
     dat <- window(dat, start=1964, end=1987)
     ```
     
-    a. Do a Dickey-Fuller (DF) test using `ur.df()` and `adf.test()`. You have to set the lags. What does the result tell you?
+    a. Do a Dickey-Fuller (DF) test using `ur.df()` and `adf.test()`. You will have to set the lags. What does the result tell you? *Note for `ur.df()` use `summary(ur.df(...))` and look at the bottom of the summary information for the test statistics and critical values. The first test statistic is the one you want, labeled `tau` (or `tau3`).*
     
     a. Do an Augmented Dickey-Fuller (ADF) test using `ur.df()`. How did you choose to set the lags? How is the ADF test different than the DF test?
     
     b. Do a KPSS test using `kpss.test()`. What does the result tell you?
 
 
-4. Using the anchovy 1964-1987 data, fit using `auto.arima()` with `trace=TRUE`.
+4. Use the anchovy 1964-2007 data [Corrected 1/20. If you did the HW with 1964-1987, that's fine but part b won't have any models within 2 of the best for the shorter series.]. Fit this time series using `auto.arima()` with `trace=TRUE`.
 
     ```{r results='hide'}
     forecast::auto.arima(anchovy, trace=TRUE)
@@ -680,7 +690,7 @@ chinook <- chinook.month
     
     a. Fit each of the models listed using `Arima()` and show that you can produce the same AICc value that is shown in the trace table.
     
-    b. What models are within $\Delta$AIC of 2? What is different about these models?
+    b. What models are within $\Delta$AICc of 2 of the best model (model with lowest AICc)? What is different about these models?
 
 5. Repeat the stationarity tests and differencing tests for anchovy using the following two time ranges: 1964-1987 and 1988-2007.  The following shows you how to subset the data:
 

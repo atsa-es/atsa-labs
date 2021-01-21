@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -466,47 +466,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-dfa-lake-wa-data" class="section level2">
 <h2><span class="header-section-number">10.5</span> Lake Washington phytoplankton data</h2>
 <p>For this exercise, we will use the Lake Washington phytoplankton data contained in the <strong>MARSS</strong> package. Let’s begin by reading in the monthly values for all of the data, including metabolism, chemistry, and climate.</p>
-<div class="sourceCode" id="cb551"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb551-1"><a href="sec-dfa-lake-wa-data.html#cb551-1"></a><span class="co">## load the data (there are 3 datasets contained here)</span></span>
-<span id="cb551-2"><a href="sec-dfa-lake-wa-data.html#cb551-2"></a><span class="kw">data</span>(lakeWAplankton, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb551-3"><a href="sec-dfa-lake-wa-data.html#cb551-3"></a><span class="co">## we want lakeWAplanktonTrans, which has been transformed so</span></span>
-<span id="cb551-4"><a href="sec-dfa-lake-wa-data.html#cb551-4"></a><span class="co">## the 0s are replaced with NAs and the data z-scored</span></span>
-<span id="cb551-5"><a href="sec-dfa-lake-wa-data.html#cb551-5"></a>all_dat &lt;-<span class="st"> </span>lakeWAplanktonTrans</span>
-<span id="cb551-6"><a href="sec-dfa-lake-wa-data.html#cb551-6"></a><span class="co">## use only the 10 years from 1980-1989</span></span>
-<span id="cb551-7"><a href="sec-dfa-lake-wa-data.html#cb551-7"></a>yr_frst &lt;-<span class="st"> </span><span class="dv">1980</span></span>
-<span id="cb551-8"><a href="sec-dfa-lake-wa-data.html#cb551-8"></a>yr_last &lt;-<span class="st"> </span><span class="dv">1989</span></span>
-<span id="cb551-9"><a href="sec-dfa-lake-wa-data.html#cb551-9"></a>plank_dat &lt;-<span class="st"> </span>all_dat[all_dat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span>yr_frst <span class="op">&amp;</span><span class="st"> </span>all_dat[, </span>
-<span id="cb551-10"><a href="sec-dfa-lake-wa-data.html#cb551-10"></a>    <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;=</span><span class="st"> </span>yr_last, ]</span>
-<span id="cb551-11"><a href="sec-dfa-lake-wa-data.html#cb551-11"></a><span class="co">## create vector of phytoplankton group names</span></span>
-<span id="cb551-12"><a href="sec-dfa-lake-wa-data.html#cb551-12"></a>phytoplankton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cryptomonas&quot;</span>, <span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, </span>
-<span id="cb551-13"><a href="sec-dfa-lake-wa-data.html#cb551-13"></a>    <span class="st">&quot;Other.algae&quot;</span>)</span>
-<span id="cb551-14"><a href="sec-dfa-lake-wa-data.html#cb551-14"></a><span class="co">## get only the phytoplankton</span></span>
-<span id="cb551-15"><a href="sec-dfa-lake-wa-data.html#cb551-15"></a>dat_<span class="dv">1980</span> &lt;-<span class="st"> </span>plank_dat[, phytoplankton]</span></code></pre></div>
+<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="sec-dfa-lake-wa-data.html#cb552-1"></a><span class="co">## load the data (there are 3 datasets contained here)</span></span>
+<span id="cb552-2"><a href="sec-dfa-lake-wa-data.html#cb552-2"></a><span class="kw">data</span>(lakeWAplankton, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb552-3"><a href="sec-dfa-lake-wa-data.html#cb552-3"></a><span class="co">## we want lakeWAplanktonTrans, which has been transformed so</span></span>
+<span id="cb552-4"><a href="sec-dfa-lake-wa-data.html#cb552-4"></a><span class="co">## the 0s are replaced with NAs and the data z-scored</span></span>
+<span id="cb552-5"><a href="sec-dfa-lake-wa-data.html#cb552-5"></a>all_dat &lt;-<span class="st"> </span>lakeWAplanktonTrans</span>
+<span id="cb552-6"><a href="sec-dfa-lake-wa-data.html#cb552-6"></a><span class="co">## use only the 10 years from 1980-1989</span></span>
+<span id="cb552-7"><a href="sec-dfa-lake-wa-data.html#cb552-7"></a>yr_frst &lt;-<span class="st"> </span><span class="dv">1980</span></span>
+<span id="cb552-8"><a href="sec-dfa-lake-wa-data.html#cb552-8"></a>yr_last &lt;-<span class="st"> </span><span class="dv">1989</span></span>
+<span id="cb552-9"><a href="sec-dfa-lake-wa-data.html#cb552-9"></a>plank_dat &lt;-<span class="st"> </span>all_dat[all_dat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span>yr_frst <span class="op">&amp;</span><span class="st"> </span>all_dat[, </span>
+<span id="cb552-10"><a href="sec-dfa-lake-wa-data.html#cb552-10"></a>    <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;=</span><span class="st"> </span>yr_last, ]</span>
+<span id="cb552-11"><a href="sec-dfa-lake-wa-data.html#cb552-11"></a><span class="co">## create vector of phytoplankton group names</span></span>
+<span id="cb552-12"><a href="sec-dfa-lake-wa-data.html#cb552-12"></a>phytoplankton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cryptomonas&quot;</span>, <span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, </span>
+<span id="cb552-13"><a href="sec-dfa-lake-wa-data.html#cb552-13"></a>    <span class="st">&quot;Other.algae&quot;</span>)</span>
+<span id="cb552-14"><a href="sec-dfa-lake-wa-data.html#cb552-14"></a><span class="co">## get only the phytoplankton</span></span>
+<span id="cb552-15"><a href="sec-dfa-lake-wa-data.html#cb552-15"></a>dat_<span class="dv">1980</span> &lt;-<span class="st"> </span>plank_dat[, phytoplankton]</span></code></pre></div>
 <p>Next, we transpose the data matrix and calculate the number of time series and their length.</p>
-<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="sec-dfa-lake-wa-data.html#cb552-1"></a><span class="co">## transpose data so time goes across columns</span></span>
-<span id="cb552-2"><a href="sec-dfa-lake-wa-data.html#cb552-2"></a>dat_<span class="dv">1980</span> &lt;-<span class="st"> </span><span class="kw">t</span>(dat_<span class="dv">1980</span>)</span>
-<span id="cb552-3"><a href="sec-dfa-lake-wa-data.html#cb552-3"></a><span class="co">## get number of time series</span></span>
-<span id="cb552-4"><a href="sec-dfa-lake-wa-data.html#cb552-4"></a>N_ts &lt;-<span class="st"> </span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">1</span>]</span>
-<span id="cb552-5"><a href="sec-dfa-lake-wa-data.html#cb552-5"></a><span class="co">## get length of time series</span></span>
-<span id="cb552-6"><a href="sec-dfa-lake-wa-data.html#cb552-6"></a>TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb553-1"><a href="sec-dfa-lake-wa-data.html#cb553-1"></a><span class="co">## transpose data so time goes across columns</span></span>
+<span id="cb553-2"><a href="sec-dfa-lake-wa-data.html#cb553-2"></a>dat_<span class="dv">1980</span> &lt;-<span class="st"> </span><span class="kw">t</span>(dat_<span class="dv">1980</span>)</span>
+<span id="cb553-3"><a href="sec-dfa-lake-wa-data.html#cb553-3"></a><span class="co">## get number of time series</span></span>
+<span id="cb553-4"><a href="sec-dfa-lake-wa-data.html#cb553-4"></a>N_ts &lt;-<span class="st"> </span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">1</span>]</span>
+<span id="cb553-5"><a href="sec-dfa-lake-wa-data.html#cb553-5"></a><span class="co">## get length of time series</span></span>
+<span id="cb553-6"><a href="sec-dfa-lake-wa-data.html#cb553-6"></a>TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>]</span></code></pre></div>
 <p>It will be easier to estimate the real parameters of interest if we de-mean the data, so let’s do that.</p>
-<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb553-1"><a href="sec-dfa-lake-wa-data.html#cb553-1"></a>y_bar &lt;-<span class="st"> </span><span class="kw">apply</span>(dat_<span class="dv">1980</span>, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb553-2"><a href="sec-dfa-lake-wa-data.html#cb553-2"></a>dat &lt;-<span class="st"> </span>dat_<span class="dv">1980</span> <span class="op">-</span><span class="st"> </span>y_bar</span>
-<span id="cb553-3"><a href="sec-dfa-lake-wa-data.html#cb553-3"></a><span class="kw">rownames</span>(dat) &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat_<span class="dv">1980</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb554-1"><a href="sec-dfa-lake-wa-data.html#cb554-1"></a>y_bar &lt;-<span class="st"> </span><span class="kw">apply</span>(dat_<span class="dv">1980</span>, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb554-2"><a href="sec-dfa-lake-wa-data.html#cb554-2"></a>dat &lt;-<span class="st"> </span>dat_<span class="dv">1980</span> <span class="op">-</span><span class="st"> </span>y_bar</span>
+<span id="cb554-3"><a href="sec-dfa-lake-wa-data.html#cb554-3"></a><span class="kw">rownames</span>(dat) &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat_<span class="dv">1980</span>)</span></code></pre></div>
 <div id="sec-dfa-plot-lake-wa-data" class="section level3">
 <h3><span class="header-section-number">10.5.1</span> Plots of the data</h3>
 <p>Here are time series plots of all five phytoplankton functional groups.</p>
-<div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb554-1"><a href="sec-dfa-lake-wa-data.html#cb554-1"></a>spp &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat_<span class="dv">1980</span>)</span>
-<span id="cb554-2"><a href="sec-dfa-lake-wa-data.html#cb554-2"></a>clr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;brown&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;darkgreen&quot;</span>, <span class="st">&quot;darkred&quot;</span>, <span class="st">&quot;purple&quot;</span>)</span>
-<span id="cb554-3"><a href="sec-dfa-lake-wa-data.html#cb554-3"></a>cnt &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb554-4"><a href="sec-dfa-lake-wa-data.html#cb554-4"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(N_ts, <span class="dv">1</span>), <span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), <span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>, </span>
-<span id="cb554-5"><a href="sec-dfa-lake-wa-data.html#cb554-5"></a>    <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb554-6"><a href="sec-dfa-lake-wa-data.html#cb554-6"></a><span class="cf">for</span> (i <span class="cf">in</span> spp) {</span>
-<span id="cb554-7"><a href="sec-dfa-lake-wa-data.html#cb554-7"></a>    <span class="kw">plot</span>(dat[i, ], <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Abundance index&quot;</span>, <span class="dt">bty =</span> <span class="st">&quot;L&quot;</span>, </span>
-<span id="cb554-8"><a href="sec-dfa-lake-wa-data.html#cb554-8"></a>        <span class="dt">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> clr[cnt], <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>)</span>
-<span id="cb554-9"><a href="sec-dfa-lake-wa-data.html#cb554-9"></a>    <span class="kw">axis</span>(<span class="dv">1</span>, <span class="dv">12</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>]) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, yr_frst <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])</span>
-<span id="cb554-10"><a href="sec-dfa-lake-wa-data.html#cb554-10"></a>    <span class="kw">title</span>(i)</span>
-<span id="cb554-11"><a href="sec-dfa-lake-wa-data.html#cb554-11"></a>    cnt &lt;-<span class="st"> </span>cnt <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb554-12"><a href="sec-dfa-lake-wa-data.html#cb554-12"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb555"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb555-1"><a href="sec-dfa-lake-wa-data.html#cb555-1"></a>spp &lt;-<span class="st"> </span><span class="kw">rownames</span>(dat_<span class="dv">1980</span>)</span>
+<span id="cb555-2"><a href="sec-dfa-lake-wa-data.html#cb555-2"></a>clr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;brown&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;darkgreen&quot;</span>, <span class="st">&quot;darkred&quot;</span>, <span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb555-3"><a href="sec-dfa-lake-wa-data.html#cb555-3"></a>cnt &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb555-4"><a href="sec-dfa-lake-wa-data.html#cb555-4"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(N_ts, <span class="dv">1</span>), <span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.7</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), <span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>, </span>
+<span id="cb555-5"><a href="sec-dfa-lake-wa-data.html#cb555-5"></a>    <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb555-6"><a href="sec-dfa-lake-wa-data.html#cb555-6"></a><span class="cf">for</span> (i <span class="cf">in</span> spp) {</span>
+<span id="cb555-7"><a href="sec-dfa-lake-wa-data.html#cb555-7"></a>    <span class="kw">plot</span>(dat[i, ], <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Abundance index&quot;</span>, <span class="dt">bty =</span> <span class="st">&quot;L&quot;</span>, </span>
+<span id="cb555-8"><a href="sec-dfa-lake-wa-data.html#cb555-8"></a>        <span class="dt">xaxt =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>, <span class="dt">col =</span> clr[cnt], <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>)</span>
+<span id="cb555-9"><a href="sec-dfa-lake-wa-data.html#cb555-9"></a>    <span class="kw">axis</span>(<span class="dv">1</span>, <span class="dv">12</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>]) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, yr_frst <span class="op">+</span><span class="st"> </span><span class="dv">0</span><span class="op">:</span><span class="kw">dim</span>(dat_<span class="dv">1980</span>)[<span class="dv">2</span>])</span>
+<span id="cb555-10"><a href="sec-dfa-lake-wa-data.html#cb555-10"></a>    <span class="kw">title</span>(i)</span>
+<span id="cb555-11"><a href="sec-dfa-lake-wa-data.html#cb555-11"></a>    cnt &lt;-<span class="st"> </span>cnt <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb555-12"><a href="sec-dfa-lake-wa-data.html#cb555-12"></a>}</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:dfa-plot-phytos"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/dfa-plot-phytos-1.png" alt="Demeaned time series of Lake Washington phytoplankton." width="80%" />
 <p class="caption">

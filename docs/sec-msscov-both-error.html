@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -475,18 +475,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \end{equation}\]</span>
 <span class="math inline">\(\mathbf{x}\)</span> is the true algae abundances and <span class="math inline">\(\mathbf{y}\)</span> is the observation of the <span class="math inline">\(\mathbf{x}\)</span>’s.</p>
 <p>Let’s say we knew that the observation variance on the algae measurements was about 0.16 and we wanted to include that known value in the model. To do that, we can simply add <span class="math inline">\(\mathbf{R}\)</span> to the model list from the process-error only model in the last example.</p>
-<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb503-1"><a href="sec-msscov-both-error.html#cb503-1"></a>D &lt;-<span class="st"> </span>d &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb503-2"><a href="sec-msscov-both-error.html#cb503-2"></a>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
-<span id="cb503-3"><a href="sec-msscov-both-error.html#cb503-3"></a>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
-<span id="cb503-4"><a href="sec-msscov-both-error.html#cb503-4"></a>Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></span>
-<span id="cb503-5"><a href="sec-msscov-both-error.html#cb503-5"></a>C &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
-<span id="cb503-6"><a href="sec-msscov-both-error.html#cb503-6"></a>c &lt;-<span class="st"> </span>covariates</span>
-<span id="cb503-7"><a href="sec-msscov-both-error.html#cb503-7"></a>R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.16</span>, <span class="dv">2</span>)</span>
-<span id="cb503-8"><a href="sec-msscov-both-error.html#cb503-8"></a>x0 &lt;-<span class="st"> &quot;unequal&quot;</span></span>
-<span id="cb503-9"><a href="sec-msscov-both-error.html#cb503-9"></a>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb503-10"><a href="sec-msscov-both-error.html#cb503-10"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
-<span id="cb503-11"><a href="sec-msscov-both-error.html#cb503-11"></a>    <span class="dt">D =</span> D, <span class="dt">d =</span> d, <span class="dt">C =</span> C, <span class="dt">c =</span> c, <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> tinitx)</span>
-<span id="cb503-12"><a href="sec-msscov-both-error.html#cb503-12"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
+<div class="sourceCode" id="cb504"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb504-1"><a href="sec-msscov-both-error.html#cb504-1"></a>D &lt;-<span class="st"> </span>d &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb504-2"><a href="sec-msscov-both-error.html#cb504-2"></a>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
+<span id="cb504-3"><a href="sec-msscov-both-error.html#cb504-3"></a>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
+<span id="cb504-4"><a href="sec-msscov-both-error.html#cb504-4"></a>Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></span>
+<span id="cb504-5"><a href="sec-msscov-both-error.html#cb504-5"></a>C &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
+<span id="cb504-6"><a href="sec-msscov-both-error.html#cb504-6"></a>c &lt;-<span class="st"> </span>covariates</span>
+<span id="cb504-7"><a href="sec-msscov-both-error.html#cb504-7"></a>R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.16</span>, <span class="dv">2</span>)</span>
+<span id="cb504-8"><a href="sec-msscov-both-error.html#cb504-8"></a>x0 &lt;-<span class="st"> &quot;unequal&quot;</span></span>
+<span id="cb504-9"><a href="sec-msscov-both-error.html#cb504-9"></a>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb504-10"><a href="sec-msscov-both-error.html#cb504-10"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
+<span id="cb504-11"><a href="sec-msscov-both-error.html#cb504-11"></a>    <span class="dt">D =</span> D, <span class="dt">d =</span> d, <span class="dt">C =</span> C, <span class="dt">c =</span> c, <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> tinitx)</span>
+<span id="cb504-12"><a href="sec-msscov-both-error.html#cb504-12"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 36 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -523,18 +523,18 @@ Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 \tag{8.6}
 \end{equation}\]</span>
 <span class="math inline">\(\mathbf{x}\)</span> is the true algae abundances and <span class="math inline">\(\mathbf{y}\)</span> is the observation of the <span class="math inline">\(\mathbf{x}\)</span>’s.</p>
-<div class="sourceCode" id="cb505"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb505-1"><a href="sec-msscov-both-error.html#cb505-1"></a>C &lt;-<span class="st"> </span>c &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb505-2"><a href="sec-msscov-both-error.html#cb505-2"></a>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
-<span id="cb505-3"><a href="sec-msscov-both-error.html#cb505-3"></a>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
-<span id="cb505-4"><a href="sec-msscov-both-error.html#cb505-4"></a>Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></span>
-<span id="cb505-5"><a href="sec-msscov-both-error.html#cb505-5"></a>D &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
-<span id="cb505-6"><a href="sec-msscov-both-error.html#cb505-6"></a>d &lt;-<span class="st"> </span>covariates</span>
-<span id="cb505-7"><a href="sec-msscov-both-error.html#cb505-7"></a>R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.16</span>, <span class="dv">2</span>)</span>
-<span id="cb505-8"><a href="sec-msscov-both-error.html#cb505-8"></a>x0 &lt;-<span class="st"> &quot;unequal&quot;</span></span>
-<span id="cb505-9"><a href="sec-msscov-both-error.html#cb505-9"></a>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb505-10"><a href="sec-msscov-both-error.html#cb505-10"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
-<span id="cb505-11"><a href="sec-msscov-both-error.html#cb505-11"></a>    <span class="dt">D =</span> D, <span class="dt">d =</span> d, <span class="dt">C =</span> C, <span class="dt">c =</span> c, <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> tinitx)</span>
-<span id="cb505-12"><a href="sec-msscov-both-error.html#cb505-12"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="sec-msscov-both-error.html#cb506-1"></a>C &lt;-<span class="st"> </span>c &lt;-<span class="st"> </span>A &lt;-<span class="st"> </span>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb506-2"><a href="sec-msscov-both-error.html#cb506-2"></a>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
+<span id="cb506-3"><a href="sec-msscov-both-error.html#cb506-3"></a>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
+<span id="cb506-4"><a href="sec-msscov-both-error.html#cb506-4"></a>Q &lt;-<span class="st"> &quot;equalvarcov&quot;</span></span>
+<span id="cb506-5"><a href="sec-msscov-both-error.html#cb506-5"></a>D &lt;-<span class="st"> &quot;unconstrained&quot;</span></span>
+<span id="cb506-6"><a href="sec-msscov-both-error.html#cb506-6"></a>d &lt;-<span class="st"> </span>covariates</span>
+<span id="cb506-7"><a href="sec-msscov-both-error.html#cb506-7"></a>R &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="fl">0.16</span>, <span class="dv">2</span>)</span>
+<span id="cb506-8"><a href="sec-msscov-both-error.html#cb506-8"></a>x0 &lt;-<span class="st"> &quot;unequal&quot;</span></span>
+<span id="cb506-9"><a href="sec-msscov-both-error.html#cb506-9"></a>tinitx &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb506-10"><a href="sec-msscov-both-error.html#cb506-10"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
+<span id="cb506-11"><a href="sec-msscov-both-error.html#cb506-11"></a>    <span class="dt">D =</span> D, <span class="dt">d =</span> d, <span class="dt">C =</span> C, <span class="dt">c =</span> c, <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> tinitx)</span>
+<span id="cb506-12"><a href="sec-msscov-both-error.html#cb506-12"></a>kem &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 45 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.

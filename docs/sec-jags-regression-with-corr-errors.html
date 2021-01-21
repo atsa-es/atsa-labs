@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -476,52 +476,52 @@ E[y_t] = \mu + \phi * e_{t-1}
 \tag{12.4}
 \end{equation}\]</span></p>
 <p>Like in our first model, we assume that the data follow a normal likelihood (or equivalently that the residuals are normally distributed), <span class="math inline">\({y_t} = E[{y_t}] + {e}_{t}\)</span>, or <span class="math inline">\({y_t} \sim \,\text{N}(E[y_t], \sigma^2)\)</span>. Thus, it is possible to express the subsequent deviations as <span class="math inline">\(e_t = y_t - E[y_t]\)</span>, or equivalently as <span class="math inline">\(e_t = y_t - \mu -\phi \times e_{t-1}\)</span>. The JAGS script for this model is:</p>
-<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb617-1"><a href="sec-jags-regression-with-corr-errors.html#cb617-1"></a><span class="co"># 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS no</span></span>
-<span id="cb617-2"><a href="sec-jags-regression-with-corr-errors.html#cb617-2"></a><span class="co"># covariates, so intercept only.</span></span>
-<span id="cb617-3"><a href="sec-jags-regression-with-corr-errors.html#cb617-3"></a></span>
-<span id="cb617-4"><a href="sec-jags-regression-with-corr-errors.html#cb617-4"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;lmcor_intercept.txt&quot;</span>)</span>
-<span id="cb617-5"><a href="sec-jags-regression-with-corr-errors.html#cb617-5"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb617-6"><a href="sec-jags-regression-with-corr-errors.html#cb617-6"></a><span class="st">model {  </span></span>
-<span id="cb617-7"><a href="sec-jags-regression-with-corr-errors.html#cb617-7"></a><span class="st">   # priors on parameters</span></span>
-<span id="cb617-8"><a href="sec-jags-regression-with-corr-errors.html#cb617-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
-<span id="cb617-9"><a href="sec-jags-regression-with-corr-errors.html#cb617-9"></a><span class="st">   tau.obs ~ dgamma(0.001,0.001); </span></span>
-<span id="cb617-10"><a href="sec-jags-regression-with-corr-errors.html#cb617-10"></a><span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span></span>
-<span id="cb617-11"><a href="sec-jags-regression-with-corr-errors.html#cb617-11"></a><span class="st">   phi ~ dunif(-1,1);</span></span>
-<span id="cb617-12"><a href="sec-jags-regression-with-corr-errors.html#cb617-12"></a><span class="st">   tau.cor &lt;- tau.obs / (1-phi*phi); # Var = sigma2 * (1-rho^2)</span></span>
-<span id="cb617-13"><a href="sec-jags-regression-with-corr-errors.html#cb617-13"></a><span class="st">   </span></span>
-<span id="cb617-14"><a href="sec-jags-regression-with-corr-errors.html#cb617-14"></a><span class="st">   epsilon[1] &lt;- Y[1] - mu;</span></span>
-<span id="cb617-15"><a href="sec-jags-regression-with-corr-errors.html#cb617-15"></a><span class="st">   predY[1] &lt;- mu; # initial value</span></span>
-<span id="cb617-16"><a href="sec-jags-regression-with-corr-errors.html#cb617-16"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb617-17"><a href="sec-jags-regression-with-corr-errors.html#cb617-17"></a><span class="st">      predY[i] &lt;- mu + phi * epsilon[i-1]; </span></span>
-<span id="cb617-18"><a href="sec-jags-regression-with-corr-errors.html#cb617-18"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.cor);</span></span>
-<span id="cb617-19"><a href="sec-jags-regression-with-corr-errors.html#cb617-19"></a><span class="st">      epsilon[i] &lt;- (Y[i] - mu) - phi*epsilon[i-1];</span></span>
-<span id="cb617-20"><a href="sec-jags-regression-with-corr-errors.html#cb617-20"></a><span class="st">   }</span></span>
-<span id="cb617-21"><a href="sec-jags-regression-with-corr-errors.html#cb617-21"></a><span class="st">}</span></span>
-<span id="cb617-22"><a href="sec-jags-regression-with-corr-errors.html#cb617-22"></a><span class="st">&quot;</span>, </span>
-<span id="cb617-23"><a href="sec-jags-regression-with-corr-errors.html#cb617-23"></a>    <span class="dt">file =</span> model.loc)</span></code></pre></div>
+<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb618-1"><a href="sec-jags-regression-with-corr-errors.html#cb618-1"></a><span class="co"># 2. LINEAR REGRESSION WITH AUTOCORRELATED ERRORS no</span></span>
+<span id="cb618-2"><a href="sec-jags-regression-with-corr-errors.html#cb618-2"></a><span class="co"># covariates, so intercept only.</span></span>
+<span id="cb618-3"><a href="sec-jags-regression-with-corr-errors.html#cb618-3"></a></span>
+<span id="cb618-4"><a href="sec-jags-regression-with-corr-errors.html#cb618-4"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;lmcor_intercept.txt&quot;</span>)</span>
+<span id="cb618-5"><a href="sec-jags-regression-with-corr-errors.html#cb618-5"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb618-6"><a href="sec-jags-regression-with-corr-errors.html#cb618-6"></a><span class="st">model {  </span></span>
+<span id="cb618-7"><a href="sec-jags-regression-with-corr-errors.html#cb618-7"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb618-8"><a href="sec-jags-regression-with-corr-errors.html#cb618-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
+<span id="cb618-9"><a href="sec-jags-regression-with-corr-errors.html#cb618-9"></a><span class="st">   tau.obs ~ dgamma(0.001,0.001); </span></span>
+<span id="cb618-10"><a href="sec-jags-regression-with-corr-errors.html#cb618-10"></a><span class="st">   sd.obs &lt;- 1/sqrt(tau.obs); </span></span>
+<span id="cb618-11"><a href="sec-jags-regression-with-corr-errors.html#cb618-11"></a><span class="st">   phi ~ dunif(-1,1);</span></span>
+<span id="cb618-12"><a href="sec-jags-regression-with-corr-errors.html#cb618-12"></a><span class="st">   tau.cor &lt;- tau.obs / (1-phi*phi); # Var = sigma2 * (1-rho^2)</span></span>
+<span id="cb618-13"><a href="sec-jags-regression-with-corr-errors.html#cb618-13"></a><span class="st">   </span></span>
+<span id="cb618-14"><a href="sec-jags-regression-with-corr-errors.html#cb618-14"></a><span class="st">   epsilon[1] &lt;- Y[1] - mu;</span></span>
+<span id="cb618-15"><a href="sec-jags-regression-with-corr-errors.html#cb618-15"></a><span class="st">   predY[1] &lt;- mu; # initial value</span></span>
+<span id="cb618-16"><a href="sec-jags-regression-with-corr-errors.html#cb618-16"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb618-17"><a href="sec-jags-regression-with-corr-errors.html#cb618-17"></a><span class="st">      predY[i] &lt;- mu + phi * epsilon[i-1]; </span></span>
+<span id="cb618-18"><a href="sec-jags-regression-with-corr-errors.html#cb618-18"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.cor);</span></span>
+<span id="cb618-19"><a href="sec-jags-regression-with-corr-errors.html#cb618-19"></a><span class="st">      epsilon[i] &lt;- (Y[i] - mu) - phi*epsilon[i-1];</span></span>
+<span id="cb618-20"><a href="sec-jags-regression-with-corr-errors.html#cb618-20"></a><span class="st">   }</span></span>
+<span id="cb618-21"><a href="sec-jags-regression-with-corr-errors.html#cb618-21"></a><span class="st">}</span></span>
+<span id="cb618-22"><a href="sec-jags-regression-with-corr-errors.html#cb618-22"></a><span class="st">&quot;</span>, </span>
+<span id="cb618-23"><a href="sec-jags-regression-with-corr-errors.html#cb618-23"></a>    <span class="dt">file =</span> model.loc)</span></code></pre></div>
 <p>Notice several subtle changes from the simpler first model: (1) we are estimating the autocorrelation parameter <span class="math inline">\(\phi\)</span>, which is assigned a Uniform(-1, 1) prior, (2) we model the residual variance as a function of the autocorrelation, and (3) we allow the autocorrelation to affect the predicted values <code>predY</code>. One other change we can make is to add <code>predY</code> to the list of parameters we want returned to R.</p>
-<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb618-1"><a href="sec-jags-regression-with-corr-errors.html#cb618-1"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
-<span id="cb618-2"><a href="sec-jags-regression-with-corr-errors.html#cb618-2"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
-<span id="cb618-3"><a href="sec-jags-regression-with-corr-errors.html#cb618-3"></a>mod_lmcor_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, </span>
-<span id="cb618-4"><a href="sec-jags-regression-with-corr-errors.html#cb618-4"></a>    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb618-5"><a href="sec-jags-regression-with-corr-errors.html#cb618-5"></a>    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb619-1"><a href="sec-jags-regression-with-corr-errors.html#cb619-1"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
+<span id="cb619-2"><a href="sec-jags-regression-with-corr-errors.html#cb619-2"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.obs&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
+<span id="cb619-3"><a href="sec-jags-regression-with-corr-errors.html#cb619-3"></a>mod_lmcor_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, </span>
+<span id="cb619-4"><a href="sec-jags-regression-with-corr-errors.html#cb619-4"></a>    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb619-5"><a href="sec-jags-regression-with-corr-errors.html#cb619-5"></a>    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>For some models, we may be interested in examining the posterior fits to data. You can make this plot yourself, but we have also put together a simple function whose arguments are one of our fitted models and the raw data. The function is:</p>
-<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb619-1"><a href="sec-jags-regression-with-corr-errors.html#cb619-1"></a>plotModelOutput =<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {</span>
-<span id="cb619-2"><a href="sec-jags-regression-with-corr-errors.html#cb619-2"></a>    <span class="co"># attach the model</span></span>
-<span id="cb619-3"><a href="sec-jags-regression-with-corr-errors.html#cb619-3"></a>    <span class="kw">attach.jags</span>(jagsmodel)</span>
-<span id="cb619-4"><a href="sec-jags-regression-with-corr-errors.html#cb619-4"></a>    x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))</span>
-<span id="cb619-5"><a href="sec-jags-regression-with-corr-errors.html#cb619-5"></a>    summaryPredictions =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), </span>
-<span id="cb619-6"><a href="sec-jags-regression-with-corr-errors.html#cb619-6"></a>        <span class="kw">apply</span>(predY, <span class="dv">2</span>, mean), <span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
-<span id="cb619-7"><a href="sec-jags-regression-with-corr-errors.html#cb619-7"></a>    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, summaryPredictions)), </span>
-<span id="cb619-8"><a href="sec-jags-regression-with-corr-errors.html#cb619-8"></a>        <span class="kw">max</span>(<span class="kw">c</span>(Y, summaryPredictions))), <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, </span>
-<span id="cb619-9"><a href="sec-jags-regression-with-corr-errors.html#cb619-9"></a>        <span class="dt">main =</span> <span class="kw">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="op">$</span>model.file))</span>
-<span id="cb619-10"><a href="sec-jags-regression-with-corr-errors.html#cb619-10"></a>    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="kw">rev</span>(summaryPredictions[, </span>
-<span id="cb619-11"><a href="sec-jags-regression-with-corr-errors.html#cb619-11"></a>        <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
-<span id="cb619-12"><a href="sec-jags-regression-with-corr-errors.html#cb619-12"></a>    <span class="kw">lines</span>(summaryPredictions[, <span class="dv">2</span>])</span>
-<span id="cb619-13"><a href="sec-jags-regression-with-corr-errors.html#cb619-13"></a>    <span class="kw">points</span>(Y)</span>
-<span id="cb619-14"><a href="sec-jags-regression-with-corr-errors.html#cb619-14"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb620-1"><a href="sec-jags-regression-with-corr-errors.html#cb620-1"></a>plotModelOutput =<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {</span>
+<span id="cb620-2"><a href="sec-jags-regression-with-corr-errors.html#cb620-2"></a>    <span class="co"># attach the model</span></span>
+<span id="cb620-3"><a href="sec-jags-regression-with-corr-errors.html#cb620-3"></a>    <span class="kw">attach.jags</span>(jagsmodel)</span>
+<span id="cb620-4"><a href="sec-jags-regression-with-corr-errors.html#cb620-4"></a>    x =<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))</span>
+<span id="cb620-5"><a href="sec-jags-regression-with-corr-errors.html#cb620-5"></a>    summaryPredictions =<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), </span>
+<span id="cb620-6"><a href="sec-jags-regression-with-corr-errors.html#cb620-6"></a>        <span class="kw">apply</span>(predY, <span class="dv">2</span>, mean), <span class="kw">apply</span>(predY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
+<span id="cb620-7"><a href="sec-jags-regression-with-corr-errors.html#cb620-7"></a>    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, summaryPredictions)), </span>
+<span id="cb620-8"><a href="sec-jags-regression-with-corr-errors.html#cb620-8"></a>        <span class="kw">max</span>(<span class="kw">c</span>(Y, summaryPredictions))), <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, </span>
+<span id="cb620-9"><a href="sec-jags-regression-with-corr-errors.html#cb620-9"></a>        <span class="dt">main =</span> <span class="kw">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="op">$</span>model.file))</span>
+<span id="cb620-10"><a href="sec-jags-regression-with-corr-errors.html#cb620-10"></a>    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="kw">rev</span>(summaryPredictions[, </span>
+<span id="cb620-11"><a href="sec-jags-regression-with-corr-errors.html#cb620-11"></a>        <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb620-12"><a href="sec-jags-regression-with-corr-errors.html#cb620-12"></a>    <span class="kw">lines</span>(summaryPredictions[, <span class="dv">2</span>])</span>
+<span id="cb620-13"><a href="sec-jags-regression-with-corr-errors.html#cb620-13"></a>    <span class="kw">points</span>(Y)</span>
+<span id="cb620-14"><a href="sec-jags-regression-with-corr-errors.html#cb620-14"></a>}</span></code></pre></div>
 <p>We can use the function to plot the predicted posterior mean with 95% CIs, as well as the raw data. For example, try</p>
-<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb620-1"><a href="sec-jags-regression-with-corr-errors.html#cb620-1"></a><span class="kw">plotModelOutput</span>(mod_lmcor_intercept, Wind)</span></code></pre></div>
+<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb621-1"><a href="sec-jags-regression-with-corr-errors.html#cb621-1"></a><span class="kw">plotModelOutput</span>(mod_lmcor_intercept, Wind)</span></code></pre></div>
 
 <pre><code>The following object is masked _by_ .GlobalEnv:
 

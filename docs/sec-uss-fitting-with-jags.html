@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-14" />
+<meta name="date" content="2021-01-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -466,88 +466,88 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-uss-fitting-with-jags" class="section level2">
 <h2><span class="header-section-number">6.6</span> Fitting with JAGS</h2>
 <p>Here we show how to fit the stochastic level model, model 3 Equation <a href="sec-uss-examples-using-the-nile-river-data.html#eq:uss-random-walk-w-noise-w-drift">(6.7)</a>, with JAGS. This is a model where the level is a random walk with drift and the Nile River flow is that level plus error.</p>
-<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="sec-uss-fitting-with-jags.html#cb420-1"></a><span class="kw">library</span>(datasets)</span>
-<span id="cb420-2"><a href="sec-uss-fitting-with-jags.html#cb420-2"></a>y &lt;-<span class="st"> </span>Nile</span></code></pre></div>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="sec-uss-fitting-with-jags.html#cb421-1"></a><span class="kw">library</span>(datasets)</span>
+<span id="cb421-2"><a href="sec-uss-fitting-with-jags.html#cb421-2"></a>y &lt;-<span class="st"> </span>Nile</span></code></pre></div>
 <p>This section requires that you have JAGS installed and the <strong>R2jags</strong>, <strong>rjags</strong> and <strong>coda</strong> R packages loaded.</p>
-<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="sec-uss-fitting-with-jags.html#cb421-1"></a><span class="kw">library</span>(R2jags)</span>
-<span id="cb421-2"><a href="sec-uss-fitting-with-jags.html#cb421-2"></a><span class="kw">library</span>(rjags)</span>
-<span id="cb421-3"><a href="sec-uss-fitting-with-jags.html#cb421-3"></a><span class="kw">library</span>(coda)</span></code></pre></div>
+<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="sec-uss-fitting-with-jags.html#cb422-1"></a><span class="kw">library</span>(R2jags)</span>
+<span id="cb422-2"><a href="sec-uss-fitting-with-jags.html#cb422-2"></a><span class="kw">library</span>(rjags)</span>
+<span id="cb422-3"><a href="sec-uss-fitting-with-jags.html#cb422-3"></a><span class="kw">library</span>(coda)</span></code></pre></div>
 <p>The first step is to write the model for JAGS to a file (filename in <code>model.loc</code>):</p>
-<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="sec-uss-fitting-with-jags.html#cb422-1"></a>model.loc &lt;-<span class="st"> &quot;ss_model.txt&quot;</span></span>
-<span id="cb422-2"><a href="sec-uss-fitting-with-jags.html#cb422-2"></a>jagsscript &lt;-<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb422-3"><a href="sec-uss-fitting-with-jags.html#cb422-3"></a><span class="st">   model {  </span></span>
-<span id="cb422-4"><a href="sec-uss-fitting-with-jags.html#cb422-4"></a><span class="st">   # priors on parameters</span></span>
-<span id="cb422-5"><a href="sec-uss-fitting-with-jags.html#cb422-5"></a><span class="st">   mu ~ dnorm(Y1, 1/(Y1*100)); # normal mean = 0, sd = 1/sqrt(0.01)</span></span>
-<span id="cb422-6"><a href="sec-uss-fitting-with-jags.html#cb422-6"></a><span class="st">   tau.q ~ dgamma(0.001,0.001); # This is inverse gamma</span></span>
-<span id="cb422-7"><a href="sec-uss-fitting-with-jags.html#cb422-7"></a><span class="st">   sd.q &lt;- 1/sqrt(tau.q); # sd is treated as derived parameter</span></span>
-<span id="cb422-8"><a href="sec-uss-fitting-with-jags.html#cb422-8"></a><span class="st">   tau.r ~ dgamma(0.001,0.001); # This is inverse gamma</span></span>
-<span id="cb422-9"><a href="sec-uss-fitting-with-jags.html#cb422-9"></a><span class="st">   sd.r &lt;- 1/sqrt(tau.r); # sd is treated as derived parameter</span></span>
-<span id="cb422-10"><a href="sec-uss-fitting-with-jags.html#cb422-10"></a><span class="st">   u ~ dnorm(0, 0.01);</span></span>
-<span id="cb422-11"><a href="sec-uss-fitting-with-jags.html#cb422-11"></a><span class="st">    </span></span>
-<span id="cb422-12"><a href="sec-uss-fitting-with-jags.html#cb422-12"></a><span class="st">   # Because init X is specified at t=0</span></span>
-<span id="cb422-13"><a href="sec-uss-fitting-with-jags.html#cb422-13"></a><span class="st">   X0 &lt;- mu</span></span>
-<span id="cb422-14"><a href="sec-uss-fitting-with-jags.html#cb422-14"></a><span class="st">   X[1] ~ dnorm(X0+u,tau.q);</span></span>
-<span id="cb422-15"><a href="sec-uss-fitting-with-jags.html#cb422-15"></a><span class="st">   Y[1] ~ dnorm(X[1], tau.r);</span></span>
-<span id="cb422-16"><a href="sec-uss-fitting-with-jags.html#cb422-16"></a><span class="st"> </span></span>
-<span id="cb422-17"><a href="sec-uss-fitting-with-jags.html#cb422-17"></a><span class="st">   for(i in 2:TT) {</span></span>
-<span id="cb422-18"><a href="sec-uss-fitting-with-jags.html#cb422-18"></a><span class="st">   predX[i] &lt;- X[i-1]+u; </span></span>
-<span id="cb422-19"><a href="sec-uss-fitting-with-jags.html#cb422-19"></a><span class="st">   X[i] ~ dnorm(predX[i],tau.q); # Process variation</span></span>
-<span id="cb422-20"><a href="sec-uss-fitting-with-jags.html#cb422-20"></a><span class="st">   Y[i] ~ dnorm(X[i], tau.r); # Observation variation</span></span>
-<span id="cb422-21"><a href="sec-uss-fitting-with-jags.html#cb422-21"></a><span class="st">   }</span></span>
-<span id="cb422-22"><a href="sec-uss-fitting-with-jags.html#cb422-22"></a><span class="st">   }                  </span></span>
-<span id="cb422-23"><a href="sec-uss-fitting-with-jags.html#cb422-23"></a><span class="st">   &quot;</span>, </span>
-<span id="cb422-24"><a href="sec-uss-fitting-with-jags.html#cb422-24"></a>    <span class="dt">file =</span> model.loc)</span></code></pre></div>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="sec-uss-fitting-with-jags.html#cb423-1"></a>model.loc &lt;-<span class="st"> &quot;ss_model.txt&quot;</span></span>
+<span id="cb423-2"><a href="sec-uss-fitting-with-jags.html#cb423-2"></a>jagsscript &lt;-<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb423-3"><a href="sec-uss-fitting-with-jags.html#cb423-3"></a><span class="st">   model {  </span></span>
+<span id="cb423-4"><a href="sec-uss-fitting-with-jags.html#cb423-4"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb423-5"><a href="sec-uss-fitting-with-jags.html#cb423-5"></a><span class="st">   mu ~ dnorm(Y1, 1/(Y1*100)); # normal mean = 0, sd = 1/sqrt(0.01)</span></span>
+<span id="cb423-6"><a href="sec-uss-fitting-with-jags.html#cb423-6"></a><span class="st">   tau.q ~ dgamma(0.001,0.001); # This is inverse gamma</span></span>
+<span id="cb423-7"><a href="sec-uss-fitting-with-jags.html#cb423-7"></a><span class="st">   sd.q &lt;- 1/sqrt(tau.q); # sd is treated as derived parameter</span></span>
+<span id="cb423-8"><a href="sec-uss-fitting-with-jags.html#cb423-8"></a><span class="st">   tau.r ~ dgamma(0.001,0.001); # This is inverse gamma</span></span>
+<span id="cb423-9"><a href="sec-uss-fitting-with-jags.html#cb423-9"></a><span class="st">   sd.r &lt;- 1/sqrt(tau.r); # sd is treated as derived parameter</span></span>
+<span id="cb423-10"><a href="sec-uss-fitting-with-jags.html#cb423-10"></a><span class="st">   u ~ dnorm(0, 0.01);</span></span>
+<span id="cb423-11"><a href="sec-uss-fitting-with-jags.html#cb423-11"></a><span class="st">    </span></span>
+<span id="cb423-12"><a href="sec-uss-fitting-with-jags.html#cb423-12"></a><span class="st">   # Because init X is specified at t=0</span></span>
+<span id="cb423-13"><a href="sec-uss-fitting-with-jags.html#cb423-13"></a><span class="st">   X0 &lt;- mu</span></span>
+<span id="cb423-14"><a href="sec-uss-fitting-with-jags.html#cb423-14"></a><span class="st">   X[1] ~ dnorm(X0+u,tau.q);</span></span>
+<span id="cb423-15"><a href="sec-uss-fitting-with-jags.html#cb423-15"></a><span class="st">   Y[1] ~ dnorm(X[1], tau.r);</span></span>
+<span id="cb423-16"><a href="sec-uss-fitting-with-jags.html#cb423-16"></a><span class="st"> </span></span>
+<span id="cb423-17"><a href="sec-uss-fitting-with-jags.html#cb423-17"></a><span class="st">   for(i in 2:TT) {</span></span>
+<span id="cb423-18"><a href="sec-uss-fitting-with-jags.html#cb423-18"></a><span class="st">   predX[i] &lt;- X[i-1]+u; </span></span>
+<span id="cb423-19"><a href="sec-uss-fitting-with-jags.html#cb423-19"></a><span class="st">   X[i] ~ dnorm(predX[i],tau.q); # Process variation</span></span>
+<span id="cb423-20"><a href="sec-uss-fitting-with-jags.html#cb423-20"></a><span class="st">   Y[i] ~ dnorm(X[i], tau.r); # Observation variation</span></span>
+<span id="cb423-21"><a href="sec-uss-fitting-with-jags.html#cb423-21"></a><span class="st">   }</span></span>
+<span id="cb423-22"><a href="sec-uss-fitting-with-jags.html#cb423-22"></a><span class="st">   }                  </span></span>
+<span id="cb423-23"><a href="sec-uss-fitting-with-jags.html#cb423-23"></a><span class="st">   &quot;</span>, </span>
+<span id="cb423-24"><a href="sec-uss-fitting-with-jags.html#cb423-24"></a>    <span class="dt">file =</span> model.loc)</span></code></pre></div>
 <p>Next we specify the data (and any other input) that the JAGS code needs. In this case, we need to pass in <code>dat</code> and the number of time steps since that is used in the for loop. We also specify the parameters that we want to monitor. We need to specify at least one, but we will monitor all of them so we can plot them after fitting. Note, that the hidden state is a parameter in the Bayesian context (but not in the maximum likelihood context).</p>
-<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="sec-uss-fitting-with-jags.html#cb423-1"></a>jags.data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> y, <span class="dt">TT =</span> <span class="kw">length</span>(y), <span class="dt">Y1 =</span> y[<span class="dv">1</span>])</span>
-<span id="cb423-2"><a href="sec-uss-fitting-with-jags.html#cb423-2"></a>jags.params &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;X&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;u&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="sec-uss-fitting-with-jags.html#cb424-1"></a>jags.data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> y, <span class="dt">TT =</span> <span class="kw">length</span>(y), <span class="dt">Y1 =</span> y[<span class="dv">1</span>])</span>
+<span id="cb424-2"><a href="sec-uss-fitting-with-jags.html#cb424-2"></a>jags.params &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.q&quot;</span>, <span class="st">&quot;sd.r&quot;</span>, <span class="st">&quot;X&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;u&quot;</span>)</span></code></pre></div>
 <p>Now we can fit the model:</p>
-<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="sec-uss-fitting-with-jags.html#cb424-1"></a>mod_ss &lt;-<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </span>
-<span id="cb424-2"><a href="sec-uss-fitting-with-jags.html#cb424-2"></a>    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </span>
-<span id="cb424-3"><a href="sec-uss-fitting-with-jags.html#cb424-3"></a>    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="sec-uss-fitting-with-jags.html#cb425-1"></a>mod_ss &lt;-<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, <span class="dt">model.file =</span> model.loc, </span>
+<span id="cb425-2"><a href="sec-uss-fitting-with-jags.html#cb425-2"></a>    <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, <span class="dt">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb425-3"><a href="sec-uss-fitting-with-jags.html#cb425-3"></a>    <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>We can then show the posteriors along with the MLEs from MARSS on top (Figure <a href="sec-uss-fitting-with-jags.html#fig:uss-fig-posteriors">6.6</a> ) using the code below.</p>
 
-<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="sec-uss-fitting-with-jags.html#cb425-1"></a><span class="kw">attach.jags</span>(mod_ss)</span>
-<span id="cb425-2"><a href="sec-uss-fitting-with-jags.html#cb425-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb425-3"><a href="sec-uss-fitting-with-jags.html#cb425-3"></a><span class="kw">hist</span>(mu)</span>
-<span id="cb425-4"><a href="sec-uss-fitting-with-jags.html#cb425-4"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb425-5"><a href="sec-uss-fitting-with-jags.html#cb425-5"></a><span class="kw">hist</span>(u)</span>
-<span id="cb425-6"><a href="sec-uss-fitting-with-jags.html#cb425-6"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb425-7"><a href="sec-uss-fitting-with-jags.html#cb425-7"></a><span class="kw">hist</span>(<span class="kw">log</span>(sd.q<span class="op">^</span><span class="dv">2</span>))</span>
-<span id="cb425-8"><a href="sec-uss-fitting-with-jags.html#cb425-8"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb425-9"><a href="sec-uss-fitting-with-jags.html#cb425-9"></a><span class="kw">hist</span>(<span class="kw">log</span>(sd.r<span class="op">^</span><span class="dv">2</span>))</span>
-<span id="cb425-10"><a href="sec-uss-fitting-with-jags.html#cb425-10"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="sec-uss-fitting-with-jags.html#cb426-1"></a><span class="kw">attach.jags</span>(mod_ss)</span>
+<span id="cb426-2"><a href="sec-uss-fitting-with-jags.html#cb426-2"></a><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb426-3"><a href="sec-uss-fitting-with-jags.html#cb426-3"></a><span class="kw">hist</span>(mu)</span>
+<span id="cb426-4"><a href="sec-uss-fitting-with-jags.html#cb426-4"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>x0, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb426-5"><a href="sec-uss-fitting-with-jags.html#cb426-5"></a><span class="kw">hist</span>(u)</span>
+<span id="cb426-6"><a href="sec-uss-fitting-with-jags.html#cb426-6"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>U, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb426-7"><a href="sec-uss-fitting-with-jags.html#cb426-7"></a><span class="kw">hist</span>(<span class="kw">log</span>(sd.q<span class="op">^</span><span class="dv">2</span>))</span>
+<span id="cb426-8"><a href="sec-uss-fitting-with-jags.html#cb426-8"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>Q), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb426-9"><a href="sec-uss-fitting-with-jags.html#cb426-9"></a><span class="kw">hist</span>(<span class="kw">log</span>(sd.r<span class="op">^</span><span class="dv">2</span>))</span>
+<span id="cb426-10"><a href="sec-uss-fitting-with-jags.html#cb426-10"></a><span class="kw">abline</span>(<span class="dt">v =</span> <span class="kw">log</span>(<span class="kw">coef</span>(kem<span class="fl">.3</span>)<span class="op">$</span>R), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-fig-posteriors"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-fig-posteriors-1.png" alt="The posteriors for model 3 with MLE estimates from MARSS() shown in red." width="80%" />
 <p class="caption">
 Figure 6.6: The posteriors for model 3 with MLE estimates from <code>MARSS()</code> shown in red.
 </p>
 </div>
-<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="sec-uss-fitting-with-jags.html#cb426-1"></a><span class="kw">detach.jags</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="sec-uss-fitting-with-jags.html#cb427-1"></a><span class="kw">detach.jags</span>()</span></code></pre></div>
 <p>To plot the estimated states ( Figure <a href="sec-uss-fitting-with-jags.html#fig:uss-fig-bayesian-states">6.7</a> ), we write a helper function:</p>
-<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="sec-uss-fitting-with-jags.html#cb427-1"></a>plotModelOutput &lt;-<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {</span>
-<span id="cb427-2"><a href="sec-uss-fitting-with-jags.html#cb427-2"></a>    <span class="kw">attach.jags</span>(jagsmodel)</span>
-<span id="cb427-3"><a href="sec-uss-fitting-with-jags.html#cb427-3"></a>    x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))</span>
-<span id="cb427-4"><a href="sec-uss-fitting-with-jags.html#cb427-4"></a>    XPred &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(X, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), <span class="kw">apply</span>(X, <span class="dv">2</span>, </span>
-<span id="cb427-5"><a href="sec-uss-fitting-with-jags.html#cb427-5"></a>        mean), <span class="kw">apply</span>(X, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
-<span id="cb427-6"><a href="sec-uss-fitting-with-jags.html#cb427-6"></a>    ylims &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, XPred), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="kw">max</span>(<span class="kw">c</span>(Y, XPred), </span>
-<span id="cb427-7"><a href="sec-uss-fitting-with-jags.html#cb427-7"></a>        <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb427-8"><a href="sec-uss-fitting-with-jags.html#cb427-8"></a>    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> ylims, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;State predictions&quot;</span>)</span>
-<span id="cb427-9"><a href="sec-uss-fitting-with-jags.html#cb427-9"></a>    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(XPred[, <span class="dv">1</span>], <span class="kw">rev</span>(XPred[, <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, </span>
-<span id="cb427-10"><a href="sec-uss-fitting-with-jags.html#cb427-10"></a>        <span class="dt">border =</span> <span class="ot">NA</span>)</span>
-<span id="cb427-11"><a href="sec-uss-fitting-with-jags.html#cb427-11"></a>    <span class="kw">lines</span>(XPred[, <span class="dv">2</span>])</span>
-<span id="cb427-12"><a href="sec-uss-fitting-with-jags.html#cb427-12"></a>    <span class="kw">points</span>(Y)</span>
-<span id="cb427-13"><a href="sec-uss-fitting-with-jags.html#cb427-13"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="sec-uss-fitting-with-jags.html#cb428-1"></a>plotModelOutput &lt;-<span class="st"> </span><span class="cf">function</span>(jagsmodel, Y) {</span>
+<span id="cb428-2"><a href="sec-uss-fitting-with-jags.html#cb428-2"></a>    <span class="kw">attach.jags</span>(jagsmodel)</span>
+<span id="cb428-3"><a href="sec-uss-fitting-with-jags.html#cb428-3"></a>    x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(Y))</span>
+<span id="cb428-4"><a href="sec-uss-fitting-with-jags.html#cb428-4"></a>    XPred &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">apply</span>(X, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), <span class="kw">apply</span>(X, <span class="dv">2</span>, </span>
+<span id="cb428-5"><a href="sec-uss-fitting-with-jags.html#cb428-5"></a>        mean), <span class="kw">apply</span>(X, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
+<span id="cb428-6"><a href="sec-uss-fitting-with-jags.html#cb428-6"></a>    ylims &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">min</span>(<span class="kw">c</span>(Y, XPred), <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="kw">max</span>(<span class="kw">c</span>(Y, XPred), </span>
+<span id="cb428-7"><a href="sec-uss-fitting-with-jags.html#cb428-7"></a>        <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb428-8"><a href="sec-uss-fitting-with-jags.html#cb428-8"></a>    <span class="kw">plot</span>(Y, <span class="dt">col =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">ylim =</span> ylims, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;State predictions&quot;</span>)</span>
+<span id="cb428-9"><a href="sec-uss-fitting-with-jags.html#cb428-9"></a>    <span class="kw">polygon</span>(<span class="kw">c</span>(x, <span class="kw">rev</span>(x)), <span class="kw">c</span>(XPred[, <span class="dv">1</span>], <span class="kw">rev</span>(XPred[, <span class="dv">3</span>])), <span class="dt">col =</span> <span class="st">&quot;grey70&quot;</span>, </span>
+<span id="cb428-10"><a href="sec-uss-fitting-with-jags.html#cb428-10"></a>        <span class="dt">border =</span> <span class="ot">NA</span>)</span>
+<span id="cb428-11"><a href="sec-uss-fitting-with-jags.html#cb428-11"></a>    <span class="kw">lines</span>(XPred[, <span class="dv">2</span>])</span>
+<span id="cb428-12"><a href="sec-uss-fitting-with-jags.html#cb428-12"></a>    <span class="kw">points</span>(Y)</span>
+<span id="cb428-13"><a href="sec-uss-fitting-with-jags.html#cb428-13"></a>}</span></code></pre></div>
 
-<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="sec-uss-fitting-with-jags.html#cb428-1"></a><span class="kw">plotModelOutput</span>(mod_ss, y)</span></code></pre></div>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="sec-uss-fitting-with-jags.html#cb429-1"></a><span class="kw">plotModelOutput</span>(mod_ss, y)</span></code></pre></div>
 <pre><code>The following objects are masked _by_ .GlobalEnv:
 
     mu, u</code></pre>
-<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="sec-uss-fitting-with-jags.html#cb430-1"></a><span class="kw">lines</span>(kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb430-2"><a href="sec-uss-fitting-with-jags.html#cb430-2"></a><span class="kw">lines</span>(<span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>, ] <span class="op">+</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, </span>
-<span id="cb430-3"><a href="sec-uss-fitting-with-jags.html#cb430-3"></a>    <span class="dt">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb430-4"><a href="sec-uss-fitting-with-jags.html#cb430-4"></a><span class="kw">lines</span>(<span class="op">-</span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>, ] <span class="op">+</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, </span>
-<span id="cb430-5"><a href="sec-uss-fitting-with-jags.html#cb430-5"></a>    <span class="dt">lty =</span> <span class="dv">2</span>)</span>
-<span id="cb430-6"><a href="sec-uss-fitting-with-jags.html#cb430-6"></a><span class="kw">title</span>(<span class="st">&quot;State estimate and data from</span><span class="ch">\n</span><span class="st">JAGS (black) versus MARSS (red)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="sec-uss-fitting-with-jags.html#cb431-1"></a><span class="kw">lines</span>(kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb431-2"><a href="sec-uss-fitting-with-jags.html#cb431-2"></a><span class="kw">lines</span>(<span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>, ] <span class="op">+</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, </span>
+<span id="cb431-3"><a href="sec-uss-fitting-with-jags.html#cb431-3"></a>    <span class="dt">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb431-4"><a href="sec-uss-fitting-with-jags.html#cb431-4"></a><span class="kw">lines</span>(<span class="op">-</span><span class="fl">1.96</span> <span class="op">*</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states.se[<span class="dv">1</span>, ] <span class="op">+</span><span class="st"> </span>kem<span class="fl">.3</span><span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, </span>
+<span id="cb431-5"><a href="sec-uss-fitting-with-jags.html#cb431-5"></a>    <span class="dt">lty =</span> <span class="dv">2</span>)</span>
+<span id="cb431-6"><a href="sec-uss-fitting-with-jags.html#cb431-6"></a><span class="kw">title</span>(<span class="st">&quot;State estimate and data from</span><span class="ch">\n</span><span class="st">JAGS (black) versus MARSS (red)&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:uss-fig-bayesian-states"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/uss-fig-bayesian-states-1.png" alt="The estimated states from the Bayesian fit along with 95% credible intervals (black and grey) with the MLE states and 95% condidence intervals in red." width="80%" />
 <p class="caption">
