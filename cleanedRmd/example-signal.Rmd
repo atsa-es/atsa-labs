@@ -1,0 +1,326 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache=FALSE)
+```
+
+# Detecting a signal from noisy sensors {#chap-noisy-sensors-}
+\chaptermark{Noisy sensors}
+
+We have 3 sensors that are tracking some signal. One sensor is good (low error). The other 2 sensors are horrible in different ways. One has high auto-correlated error. The third is basically a random walk and not tracking our signal at all. However, we do not know which ones are bad or if in fact any are bad. 
+
+What we do know is that for these sensors an AR-1 error model is a good approximation: $y_t = a + e_t$ where $a$ is our signal and $e_t = b e_{t_1} + w_t$. $w_t$ is white noise with some unknown standard deviation and mean 0.
+
+We will create some simulated data with this set-up and estimate the signal.
+
+
+## Prep
+
+```{r}
+library(ggplot2)
+library(MARSS)
+library(stringr)
+set.seed(1234)
+```
+
+## Create a signal
+
+I want something fairly smooth but still stochastic. It is not important how you create it. We are not interested in its parameters but only its shape. The idea is that there is some average signal (imagine a mean temperature, say) that is slowly changing.  We are trying to pick up that signal and separate it from the noise added by our sensors. Our sensors might not be noisy because they are *bad*. It may be that what we are measuring has a local noisy component (from say local winds or currents or something). That noise might be autoregressive (temporally correlated) because whatever we are measuring is temporally correlated (like temperature).
+
+Here I use `arima.sim()` to create a signal and then then smooth it with `filter()`. I set the seed. Change to make a new data set.
+
+```{r read-in-data, echo=FALSE}
+TT <- 30
+qa <- .1
+signal <- arima.sim(TT+3, model=list(ar=.9, sd=sqrt(qa)))
+signal <- filter(signal, rep(1/3,3), sides=1)[4:(TT+3)]
+signal <- signal - mean(signal)
+dfsignal <- data.frame(t=1:TT, val=signal, name="signal")
+p1 <- ggplot(dfsignal, aes(x=t, y=val)) + geom_line() + ggtitle("The signal")
+p1
+```
+
+## Create data
+
+```{r sub.dat, echo=FALSE}
+createdata <- function(n, TT, ar, sd){
+dat <- matrix(NA, n, TT)
+rownames(dat) <- paste0("S", 1:n)
+err <- dat
+rownames(err) <- paste0("E", 1:n)
+df <- dfsignal
+for(i in 1:n){
+  err[i,] <- arima.sim(TT, model=list(ar=ar[i]), sd=sd[i])
+  err[i,] <- err[i, ] - mean(err[i, ])
+  dat[i,] <- signal + err[i,]
+  tmp <-  data.frame(t=1:TT, val=dat[i,], name=paste0("dat",i))
+  tmp2 <-  data.frame(t=1:TT, val=err[i,], name=paste0("err",i))
+  df <- rbind(df, tmp, tmp2)
+}
+return(list(dat=dat, df=df))
+}
+
+n <- 3
+ar <- c(.7, .4, .99)
+sd <- sqrt(c(1, 28, 41))
+tmp <- createdata(n, TT, ar, sd)
+dat <- tmp$dat
+df <- tmp$df
+```
+
+Plot the data and the error added to the signal by each sensor. The data is the error (on right) plus the signal. The signal is definitely not obvious in the data. The data look mostly like the error, which is autocorrelated so has trends in it unlike white noise error.
+
+```{r}
+p1 <- ggplot(subset(df, name!="signal"), 
+             aes(x=t, y=val)) + geom_line() + facet_wrap(~name, ncol=2)
+p1
+```
+
+## Model Shared stochastic level with AR-1 observation errors
+
+This time I will allow AR-1 errors that are not a random walk, so classic AR-1 errors. This means estimating the diagonals of a $B$ matrix. To do that I will need to get rid of the mean of the data since trying to estimate a $B$ matrix and mean levels is hard (there is a huge ridge in the likelihood and the problem is poorly defined).
+
+
+$$\begin{bmatrix}a \\ x1 \\ x2 \\ x3\end{bmatrix}_t = \begin{bmatrix}1&0&0&0\\0&b_1&0&0 \\ 0&0&b_2&0 \\ 0&0&0&b_3\end{bmatrix}\begin{bmatrix}a \\ x1 \\ x2 \\ x3\end{bmatrix}_{t-1} + \begin{bmatrix}e \\ w1 \\ w2 \\ w3\end{bmatrix}_t, \quad \begin{bmatrix}e \\ w1 \\ w2 \\ w3\end{bmatrix}_t \sim MVN\left(0, \begin{bmatrix}1&0&0&0\\0&q_1&0&0 \\ 0&0&q_2&0 \\ 0&0&0&q_3\end{bmatrix}\right)$$
+
+Here is the data model BUT the $y$ will be demeaned. Each sensor observes $a$ plus their own independent local AR-1 trend. Notice no $v_t$. The model error comes through the AR-1 $x$ processes.
+
+$$\begin{bmatrix}y1 \\ y2 \\ y3\end{bmatrix} = \begin{bmatrix}1&1&0&0 \\ 1&0&1&0 \\ 1&0&0&1\end{bmatrix} \begin{bmatrix}a \\ x1 \\ x2 \\ x3\end{bmatrix}_t$$
+
+## Fit the model
+
+We specify this one-to-one in R for `MARSS()`:
+
+```{r mod.list1}
+makemod <- function(n){
+  B <- matrix(list(0), n+1, n+1)
+diag(B)[2:(n+1)] <- paste0("b", 1:n)
+B[1,1] <- 1
+A <- "zero"
+Z <- cbind(1,diag(1,n))
+Q <- matrix(list(0),n+1,n+1)
+Q[1,1] <- 1
+diag(Q)[2:(n+1)] <- paste0("q",1:n)
+R <- "zero"
+U <- "zero"
+x0 <- "zero"
+mod.list <- list(B=B, A=A, Z=Z, Q=Q, R=R, U=U, x0=x0, tinitx=0)
+return(mod.list)
+}
+mod.list1 <- makemod(3)
+```
+
+Demean the data.
+```{r fit.mod1}
+dat2 <- dat - apply(dat,1,mean) %*% matrix(1,1,TT)
+```
+
+Fit to that
+```{r}
+fit.mod1 <- MARSS(dat2, model=mod.list1)
+```
+
+## Show the fits
+
+X1 is the estimate of the signal. The mean has been removed. X2, X3 and X4 are the AR-1 errors for our sensors.
+
+```{r}
+require(ggplot2)
+autoplot(fit.mod1, plot.type="xtT", conf.int=FALSE)
+```
+
+
+## Estimated common trend from state-space model
+
+```{r echo=FALSE}
+t <- 1:TT
+df <- data.frame(val=c(fit.mod1$states[1,],
+                 signal,
+                 apply(dat2,2,mean)),
+                 name=rep(c("estimate","true signal","mean data"),each=TT),
+                 x=rep(t, 3))
+rmse <- sqrt(mean((fit.mod1$states[1,] - signal)^2))
+
+ggplot(subset(df, name!="mean data"),aes(y = val, x = x, color = name)) + 
+  geom_line(size=1.2) + ggtitle(paste0("RMSE = ", rmse))
+```
+
+## Compare the common trend to mean of data 
+
+You could just take the average of the 3 sensors assuming they were independent with similar error levels.  With some of the sensors being really bad, this would not give a good estimate of the signal.  The model allowed us to estimate $b$ for each sensor and $q$ (variance) thus allowing us to estimate how much to weight each sensor.
+
+```{r echo=FALSE}
+ggplot(df, aes(y = val, x = x, color = name)) + 
+  geom_line(size=1.2)
+```
+
+## Missing data
+
+One nice features of this approach is that it is robust to a fair bit of missing data. Here I delete a third of the data. I do this randomly throughout the dataset.  The data look pretty hopeless. No signal to be seen.
+
+```{r echo=FALSE}
+dat.miss <- dat
+dat.miss[sample(n*TT,n*TT/3)] <- NA
+dat2.miss <- dat.miss - apply(dat.miss,1,mean,na.rm=TRUE) %*% matrix(1,1,TT)
+df <- data.frame(val=as.vector(t(dat.miss)),
+                 name=rep(rownames(dat.miss),each=TT),
+                 x=rep(t, 3))
+ggplot(df, aes(y = val, x = x)) + 
+  geom_line(size=1.2) + facet_wrap(~name)
+```
+
+Fit as usual:
+```{r}
+fit <- MARSS(dat2.miss, model=mod.list1, silent=TRUE)
+```
+
+But though we can't see the signal in the data, it is there.
+```{r echo=FALSE}
+df <- data.frame(val=c(fit$states[1,],
+                 signal,
+                 apply(dat2.miss,2,mean, na.rm=TRUE)),
+                 name=rep(c("estimate","true signal","mean data"),each=TT),
+                 x=rep(1:TT, 3))
+rmse <- sqrt(mean((fit$states[1,] - signal)^2))
+
+ggplot(subset(df, name!="mean data"),aes(y = val, x = x, color = name)) + 
+  geom_line(size=1.2) + ggtitle(paste0("RMSE = ", rmse))
+```
+
+Averaging our sensors doesn't work since there are so many missing values and we will have missing values in our average.
+
+```{r echo=FALSE}
+ggplot(df,aes(y = val, x = x, color = name)) + 
+  geom_line(size=1.2)
+```
+
+Another type of missing data are strings of missing data. Here I create a data set with random strings of missing values. Again the data look really hopeless and definitely cannot average across the data since we'd be averaging across different data sets.
+```{r echo=FALSE}
+dat.miss <- dat
+for(i in 1:n)
+dat.miss[i, arima.sim(TT, model=list(ar=.8)) < -1] <- NA
+dat2.miss <- dat.miss - apply(dat.miss,1,mean,na.rm=TRUE) %*% matrix(1,1,TT)
+df <- data.frame(val=as.vector(t(dat.miss)),
+                 name=rep(rownames(dat.miss),each=TT),
+                 x=rep(t, 3))
+ggplot(df, aes(y = val, x = x)) + 
+  geom_line(size=1.2) + facet_wrap(~name)
+```
+
+We can fit as usual and see that it is possible to recover the signal.
+```{r}
+fit <- MARSS(dat2.miss, model=mod.list1, silent=TRUE)
+```
+
+```{r echo=FALSE}
+t <- 1:TT
+df <- data.frame(val=c(fit$states[1,],
+                 signal,
+                 apply(dat2.miss,2,mean, na.rm=TRUE)),
+                 name=rep(c("estimate","true signal","mean data"),each=TT),
+                 x=rep(t, 3))
+rmse <- sqrt(mean((fit$states[1,] - signal)^2))
+
+ggplot(subset(df, name!="mean data"),aes(y = val, x = x, color = name)) + 
+  geom_line(size=1.2) + ggtitle(paste0("RMSE = ", rmse))
+
+```
+
+## Correlated noise
+
+In the simulated data, the AR-1 errors were uncorrelated. Each error time series was independent of the others. But we might want to test a model where the errors are correlated. The processes that drive variability in sensors can sometimes be a factor that are common across all our sensors, like say average wind speed or rainfall.
+
+Our AR-1 errors would look like so with covariance $c$.
+
+$$\begin{bmatrix}e \\ w_1 \\ w_2 \\ w_3\end{bmatrix}_t, \quad \begin{bmatrix}e \\ w_1 \\ w_2 \\ w_3\end{bmatrix}_t \sim MVN\left(0, \begin{bmatrix}1&0&0&0\\0&q_1&c_1&c_2 \\ 0&c_1&q_2&c_3 \\ 0&c_2&c_3&q_3\end{bmatrix}\right)$$
+ To fit this model, we need to create a $Q$ matrix that looks like the above.  It's a bit of a hassle.
+ 
+```{r}
+Q <- matrix(list(0),n+1,n+1)
+Q[1,1] <- 1
+Q2 <- matrix("q",n,n)
+diag(Q2) <- paste0("q", 1:n)
+Q2[upper.tri(Q2)] <- paste0("c",1:n)
+Q2[lower.tri(Q2)] <- paste0("c",1:n)
+Q[2:(n+1),2:(n+1)] <- Q2
+Q
+```
+
+Now we can fit as usual using this $Q$ in our model list.
+
+```{r}
+mod.list2 <- mod.list1
+mod.list2$Q <- Q
+fit <- MARSS(dat2, model=mod.list2)
+```
+
+The AIC is larger indicating that this model is not more supported, which is not surprising given that the data are not correlated with each other.
+```{r}
+c(fit$AIC, fit.mod1$AIC)
+```
+
+```{r echo=FALSE}
+df <- data.frame(val=c(fit$states[1,],
+                 signal,
+                 apply(dat2,2,mean, na.rm=TRUE)),
+                 name=rep(c("estimate","true signal","mean data"),each=TT),
+                 x=rep(t, 3))
+rmse <- sqrt(mean((fit$states[1,] - signal)^2))
+
+ggplot(subset(df, name!="mean data"),aes(y = val, x = x, color = name)) + 
+  geom_line(size=1.2) + ggtitle(paste0("RMSE = ", rmse))
+```
+
+
+
+## Discussion
+
+This example worked because I had a sensor that was quite a bit better than the others with a much smaller level of observation error variance (sd=1 versus 28 and 41 for the others). I didn't know which one it was, but I did have at least one good sensor. If I up the observation error variance on the first (good) sensor, then my signal estimate is not so good. The variance of the signal estimate is better than the average, but it is still bad. There is only so much that can be done when the sensor adds so much error.
+
+```{r}
+sd <- sqrt(c(10, 28, 41))
+dat[1,] <- signal + arima.sim(TT, model=list(ar=ar[1]), sd=sd[1])
+dat2 <- dat - apply(dat,1,mean) %*% matrix(1,1,TT)
+
+fit <- MARSS(dat2, model=mod.list1, silent=TRUE)
+```
+
+```{r echo=FALSE}
+df <- data.frame(val=c(fit$states[1,],
+                 signal,
+                 apply(dat2,2,mean)),
+                 name=rep(c("estimate","true signal","mean data"),each=TT),
+                 x=rep(t, 3))
+rmse <- sqrt(mean((fit$states[1,] - signal)^2))
+ggplot(df ,aes(y = val, x = x, color = name)) + 
+  geom_line(size=1.2) + ggtitle(paste0("3 bad sensors. RMSE = ", rmse))
+```
+
+One solution is to have more sensors.  They can all be horrible but now that I have more, I can get a better estimate of the signal.  In this example I have 12 bad sensors instead of 3.  The properties of the sensors are the same as in the example above. I will add the new data to the existing data.
+
+```{r}
+set.seed(123)
+datm <- dat
+for (i in 1:2){
+tmp <- createdata(n, TT, ar, sd)
+datm <- rbind(datm, tmp$dat)
+}
+datm2 <- datm - apply(datm,1,mean) %*% matrix(1,1,TT)
+
+fit <- MARSS(datm2, model=makemod(dim(datm2)[1]), silent=TRUE)
+```
+
+```{r echo=FALSE}
+rmse <- sqrt(mean((fit$states[1,] - signal)^2))
+df <- data.frame(val=c(fit$states[1,],
+                 signal,
+                 apply(dat2,2,mean)),
+                 name=rep(c("estimate","true signal","mean data"),each=TT),
+                 x=rep(t, 3))
+ggplot(df ,aes(y = val, x = x, color = name)) + 
+  geom_line(size=1.2) + ggtitle(paste0(dim(datm2)[1], " bad sensors. RMSE = ", rmse))
+```
+
+Some more caveats are that I simulated data that was the same as the model that I fit, except the signal. However an AR-1 with $b$ and $q$ (sd) estimated is quite flexible and this will likely work for data that is roughly AR-1.  A common exception is very smooth data that you get from sensors that record dense data (like every second).  That kind of sensor data may need to be subsampled (every 10 or 20 or 30 data point) to get AR-1 like data.  
+
+Lastly I set the seed to 1234 to have an example that looks *ok*. If you comment that out and rerun the code, you'll quickly see that the example I used is not one of the bad ones. It's not unusually good, just not unusually bad. 
+
+On the otherhand, I poised a difficult problem with two quite awful sensors. A sensor with a random walk error would be really alarming and hopefully you would not have that type of error.  But you might.  IT can happen when local conditions are undergoing a random walk with slow reversion to the mean. Many natural systems look like that.  If you have that problem, subsampling that *random walk* sensor might be a good idea.
