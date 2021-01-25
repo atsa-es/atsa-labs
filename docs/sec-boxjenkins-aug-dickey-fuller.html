@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-24" />
+<meta name="date" content="2021-01-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -589,7 +589,7 @@ alternative hypothesis: stationary</code></pre>
 <p>When you use <code>summary()</code> for the output from <code>ur.df()</code>, you will see the estimated values for <span class="math inline">\(\gamma\)</span> (denoted <code>z.lag.1</code>), intercept and trend. If you see <code>***</code> or <code>**</code> on the coefficients list for <code>z.lag.1</code>, it suggest that the effect of <code>z.lag.1</code> is significantly different than 0 and this supports the assumption of stationarity. However, the test level shown is for independent data not time series data. The correct test levels (critical values) are shown at the bottom of the summary output.</p>
 <div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-1"></a>wn &lt;-<span class="st"> </span><span class="kw">rnorm</span>(TT)</span>
 <span id="cb302-2"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-2"></a>test &lt;-<span class="st"> </span>urca<span class="op">::</span><span class="kw">ur.df</span>(wn, <span class="dt">type =</span> <span class="st">&quot;trend&quot;</span>, <span class="dt">lags =</span> <span class="dv">0</span>)</span>
-<span id="cb302-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-3"></a><span class="kw">summary</span>(test)</span></code></pre></div>
+<span id="cb302-3"><a href="sec-boxjenkins-aug-dickey-fuller.html#cb302-3"></a>urca<span class="op">::</span><span class="kw">summary</span>(test)</span></code></pre></div>
 <pre><code>
 ############################################### 
 # Augmented Dickey-Fuller Test Unit Root Test # 
@@ -602,29 +602,30 @@ Call:
 lm(formula = z.diff ~ z.lag.1 + 1 + tt)
 
 Residuals:
-    Min      1Q  Median      3Q     Max 
--2.2170 -0.6654 -0.1210  0.5311  2.6277 
+     Min       1Q   Median       3Q      Max 
+-2.12069 -0.66791  0.02269  0.56328  2.12039 
 
 Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  0.0776865  0.2037709   0.381    0.704    
-z.lag.1     -1.0797598  0.1014244 -10.646   &lt;2e-16 ***
-tt           0.0004891  0.0035321   0.138    0.890    
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  0.155556   0.193254   0.805    0.423    
+z.lag.1     -0.972285   0.102681  -9.469 2.06e-15 ***
+tt          -0.004764   0.003387  -1.407    0.163    
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 1.004 on 96 degrees of freedom
-Multiple R-squared:  0.5416,    Adjusted R-squared:  0.532 
-F-statistic: 56.71 on 2 and 96 DF,  p-value: &lt; 2.2e-16
+Residual standard error: 0.9501 on 96 degrees of freedom
+Multiple R-squared:  0.483, Adjusted R-squared:  0.4722 
+F-statistic: 44.84 on 2 and 96 DF,  p-value: 1.771e-14
 
 
-Value of test-statistic is: -10.646 37.806 56.7083 
+Value of test-statistic is: -9.469 29.8972 44.8402 
 
 Critical values for test statistics: 
       1pct  5pct 10pct
 tau3 -4.04 -3.45 -3.15
 phi2  6.50  4.88  4.16
 phi3  8.73  6.49  5.47</code></pre>
+<p>Note <code>urca::</code> in front of <code>summary()</code> is needed if you have not loaded the urca package with <code>library(urca)</code>.</p>
 <p>We need to look at information at the bottom of the summary output for the test statistics and critical values. The part that looks like this</p>
 <pre><code>Value of test-statistic is: #1 #2 #3
 

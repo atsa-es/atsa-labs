@@ -151,7 +151,7 @@ tseries::adf.test(anchovyts)
 ## ----bj-df-wn2----------------------------------------------------------------------------------
 wn <- rnorm(TT)
 test <- urca::ur.df(wn, type="trend", lags=0)
-summary(test)
+urca::summary(test)
 
 
 ## ----bj-kpss-wnt--------------------------------------------------------------------------------

@@ -294,8 +294,9 @@ When you use `summary()` for the output from `ur.df()`, you will see the estimat
 ```{r bj-df-wn2}
 wn <- rnorm(TT)
 test <- urca::ur.df(wn, type="trend", lags=0)
-summary(test)
+urca::summary(test)
 ```
+Note `urca::` in front of `summary()` is needed if you have not loaded the urca package with `library(urca)`.
 
 We need to look at information at the bottom of the summary output for the test statistics and critical values. The part that looks like this
 
