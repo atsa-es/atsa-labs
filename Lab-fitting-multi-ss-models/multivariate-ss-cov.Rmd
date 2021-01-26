@@ -16,10 +16,10 @@ We will use the 10 years of data from 1965-1974 (Figure \@ref(fig:msscov-plank-p
 ```{r msscov-load-plankton-data}
 data(lakeWAplankton, package="MARSS")
 # lakeWA
-fulldat = lakeWAplanktonTrans
-years = fulldat[,"Year"]>=1965 & fulldat[,"Year"]<1975
-dat = t(fulldat[years,c("Greens", "Bluegreens")])
-covariates = t(fulldat[years,c("Temp", "TP")])
+fulldat <- lakeWAplanktonTrans
+years <- fulldat[,"Year"]>=1965 & fulldat[,"Year"]<1975
+dat <- t(fulldat[years,c("Greens", "Bluegreens")])
+covariates <- t(fulldat[years,c("Temp", "TP")])
 ```
 
 Packages:
@@ -48,15 +48,15 @@ We will prepare the data by z-scoring. The original data `lakeWAplanktonTrans` w
 
 ```{r msscov-z-score-data}
 # z-score the response variables
-the.mean = apply(dat,1,mean,na.rm=TRUE)
-the.sigma = sqrt(apply(dat,1,var,na.rm=TRUE))
-dat = (dat-the.mean)*(1/the.sigma)
+the.mean <- apply(dat,1,mean,na.rm=TRUE)
+the.sigma <- sqrt(apply(dat,1,var,na.rm=TRUE))
+dat <- (dat-the.mean)*(1/the.sigma)
 ```
 Next we set up the covariate data, temperature and total phosphorous. We z-score the covariates to standardize and remove the mean.
 ```{r msscov-z-score-covar-data}
-the.mean = apply(covariates,1,mean,na.rm=TRUE)
-the.sigma = sqrt(apply(covariates,1,var,na.rm=TRUE))
-covariates = (covariates-the.mean)*(1/the.sigma)
+the.mean <- apply(covariates,1,mean,na.rm=TRUE)
+the.sigma <- sqrt(apply(covariates,1,var,na.rm=TRUE))
+covariates <- (covariates-the.mean)*(1/the.sigma)
 ```
 
 (ref:msscov-plank-dat) Time series of Green and Bluegreen algae abundances in Lake Washington along with the temperature and total phosporous covariates.
@@ -90,7 +90,7 @@ The elements in $\mathbf{a}$ are the intercepts and those in $\mathbf{D}$ are th
     \beta_{\mathrm{bg,temp}}&\beta_{\mathrm{bg,tp}}  \end{bmatrix} 
  \begin{bmatrix}
     \mathrm{temp} \\
-    \mathrm{tp} \end{bmatrix}_{t-1} +
+    \mathrm{tp} \end{bmatrix}_{t} +
  \begin{bmatrix}
     v_{1} \\
     v_{2} \end{bmatrix}_t 
