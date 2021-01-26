@@ -230,18 +230,7 @@ Note, we should do some cross-validation (fitting with data left out) to ensure 
 
 #### Diagnostics
 
-The state residuals have a tendency for negative autocorrelation at lag-1 (Figure \@ref(fig:mssmiss-stateresids-ar1)).  
-
-(ref:mssmiss-stateresids-ar1) State residuals for the AR(1) model.  Many stations have autocorrelation at lag-1.
-
-```{r mssmiss-stateresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-stateresids-ar1)'}
-fit <- fit.ar1
-par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit, type="tT")$state.residuals[,1:30], 1, acf,
-      na.action=na.pass)
-```
-
-The model residuals also have a tendency for negative autocorrelation at lag-1 (Figure \@ref(fig:mssmiss-modelresids-ar1)).  
+The model residuals have a tendency for negative autocorrelation at lag-1 (Figure \@ref(fig:mssmiss-modelresids-ar1)).  
 
 (ref:mssmiss-modelresids-ar1) Model residuals for the AR(1) model.
 
@@ -354,19 +343,13 @@ p
 
 #### Diagnostics
 
-The state and model residuals have no tendency towards negative autocorrelation now that we removed the autoregressive component from the process ($x$) model. 
+The model residuals have no tendency towards negative autocorrelation now that we removed the autoregressive component from the process ($x$) model. 
 
-```{r mssmiss-stateresids-fit-corr-states, warning=FALSE, results='hide'}
-fit <- fit.corr
-par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit)$state.residuals, 1, acf, na.action=na.pass)
-mtext("State Residuals ACF", outer=TRUE, side=3)
-```
 
 ```{r mssmiss-stateresids-fit-corr-model, warning=FALSE, results='hide'}
 fit <- fit.corr
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit)$model.residuals, 1, acf, na.action=na.pass)
+apply(MARSSresiduals(fit, type="tt1")$model.residuals, 1, acf, na.action=na.pass)
 mtext("Model Residuals ACF", outer=TRUE, side=3)
 ```
 
@@ -472,19 +455,12 @@ p
 
 ### Diagnostics
 
-The state residuals are uncorrelated. 
+The model residuals are uncorrelated. 
 
-```{r mssmiss-stateresit-fit-dfa, results='hide'}
-fit <- fit.dfa
-par(mfrow=c(1,2),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit)$state.residuals[,1:30,drop=FALSE], 1, acf)
-```
-
-As are the model residuals: 
 
 ```{r mssmiss-modelresids-fit-dfa-model, results='hide'}
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit)$model.residual, 1, function(x){acf(x, na.action=na.pass)})
+apply(MARSSresiduals(fit, type="tt1")$model.residual, 1, function(x){acf(x, na.action=na.pass)})
 ```
 
 ### Plot the fitted or mean Feb SWE using DFA

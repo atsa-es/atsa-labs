@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-25" />
+<meta name="date" content="2021-01-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -481,13 +481,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">8.2</span> Prepare the plankton data</h2>
 <p>We will prepare the data by z-scoring. The original data <code>lakeWAplanktonTrans</code> were already z-scored, but we changed the mean when we subsampled the years so we need to z-score again.</p>
 <div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="sec-msscov-prepare-data.html#cb494-1"></a><span class="co"># z-score the response variables</span></span>
-<span id="cb494-2"><a href="sec-msscov-prepare-data.html#cb494-2"></a>the.mean =<span class="st"> </span><span class="kw">apply</span>(dat, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb494-3"><a href="sec-msscov-prepare-data.html#cb494-3"></a>the.sigma =<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb494-4"><a href="sec-msscov-prepare-data.html#cb494-4"></a>dat =<span class="st"> </span>(dat <span class="op">-</span><span class="st"> </span>the.mean) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>the.sigma)</span></code></pre></div>
+<span id="cb494-2"><a href="sec-msscov-prepare-data.html#cb494-2"></a>the.mean &lt;-<span class="st"> </span><span class="kw">apply</span>(dat, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb494-3"><a href="sec-msscov-prepare-data.html#cb494-3"></a>the.sigma &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb494-4"><a href="sec-msscov-prepare-data.html#cb494-4"></a>dat &lt;-<span class="st"> </span>(dat <span class="op">-</span><span class="st"> </span>the.mean) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>the.sigma)</span></code></pre></div>
 <p>Next we set up the covariate data, temperature and total phosphorous. We z-score the covariates to standardize and remove the mean.</p>
-<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="sec-msscov-prepare-data.html#cb495-1"></a>the.mean =<span class="st"> </span><span class="kw">apply</span>(covariates, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb495-2"><a href="sec-msscov-prepare-data.html#cb495-2"></a>the.sigma =<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(covariates, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb495-3"><a href="sec-msscov-prepare-data.html#cb495-3"></a>covariates =<span class="st"> </span>(covariates <span class="op">-</span><span class="st"> </span>the.mean) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>the.sigma)</span></code></pre></div>
+<div class="sourceCode" id="cb495"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb495-1"><a href="sec-msscov-prepare-data.html#cb495-1"></a>the.mean &lt;-<span class="st"> </span><span class="kw">apply</span>(covariates, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb495-2"><a href="sec-msscov-prepare-data.html#cb495-2"></a>the.sigma &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(covariates, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb495-3"><a href="sec-msscov-prepare-data.html#cb495-3"></a>covariates &lt;-<span class="st"> </span>(covariates <span class="op">-</span><span class="st"> </span>the.mean) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>the.sigma)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:msscov-plank-plot"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/msscov-plank-plot-1.png" alt="Time series of Green and Bluegreen algae abundances in Lake Washington along with the temperature and total phosporous covariates." width="80%" />

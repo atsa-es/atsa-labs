@@ -82,13 +82,6 @@ p <- ggplot(data = d) +
 p
 
 
-## ----mssmiss-stateresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-stateresids-ar1)'----
-fit <- fit.ar1
-par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit, type="tT")$state.residuals[,1:30], 1, acf,
-      na.action=na.pass)
-
-
 ## ----mssmiss-modelresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-modelresids-ar1)'----
 fit <- fit.ar1
 par(mfrow=c(4,4),mar=c(2,2,1,1))
@@ -126,17 +119,10 @@ p <- ggplot(data = d) +
 p
 
 
-## ----mssmiss-stateresids-fit-corr-states, warning=FALSE, results='hide'-------------------------
-fit <- fit.corr
-par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit)$state.residuals, 1, acf, na.action=na.pass)
-mtext("State Residuals ACF", outer=TRUE, side=3)
-
-
 ## ----mssmiss-stateresids-fit-corr-model, warning=FALSE, results='hide'--------------------------
 fit <- fit.corr
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit)$model.residuals, 1, acf, na.action=na.pass)
+apply(MARSSresiduals(fit, type="tt1")$model.residuals, 1, acf, na.action=na.pass)
 mtext("Model Residuals ACF", outer=TRUE, side=3)
 
 
@@ -204,15 +190,9 @@ p <- ggplot(data = d) +
 p
 
 
-## ----mssmiss-stateresit-fit-dfa, results='hide'-------------------------------------------------
-fit <- fit.dfa
-par(mfrow=c(1,2),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit)$state.residuals[,1:30,drop=FALSE], 1, acf)
-
-
 ## ----mssmiss-modelresids-fit-dfa-model, results='hide'------------------------------------------
 par(mfrow=c(4,4),mar=c(2,2,1,1))
-apply(MARSSresiduals(fit)$model.residual, 1, function(x){acf(x, na.action=na.pass)})
+apply(MARSSresiduals(fit, type="tt1")$model.residual, 1, function(x){acf(x, na.action=na.pass)})
 
 
 ## ----mssfitted-snotelplotstates-dfa, warning=FALSE, echo=FALSE----------------------------------

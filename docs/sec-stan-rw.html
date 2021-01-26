@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-25" />
+<meta name="date" content="2021-01-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -483,7 +483,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[y_t = y_{t-1} + e_{t}\]</span></p>
 <p>And the <span class="math inline">\({e}_{t} \sim N(0, \sigma)\)</span>. Remember back to the autocorrelated model (or MA(1) models) that we assumed that the errors <span class="math inline">\(e_t\)</span> followed a random walk. In contrast, this model assumes that the errors are independent, but that the state of nature follows a random walk. Note also that this model as written doesn’t include a drift term (this can be turned on / off using the <code>est_drift</code> argument).</p>
 <p>We can fit the random walk model using argument <code>model_name = 'rw'</code> passed to the <code>fit_stan()</code> function.</p>
-<div class="sourceCode" id="cb645"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb645-1"><a href="sec-stan-rw.html#cb645-1"></a>rw &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">est_drift =</span> <span class="ot">FALSE</span>, <span class="dt">model_name =</span> <span class="st">&quot;rw&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb642-1"><a href="sec-stan-rw.html#cb642-1"></a>rw &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">est_drift =</span> <span class="ot">FALSE</span>, <span class="dt">model_name =</span> <span class="st">&quot;rw&quot;</span>)</span></code></pre></div>
 </div>
             </section>
 

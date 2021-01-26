@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-25" />
+<meta name="date" content="2021-01-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -485,9 +485,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="math display">\[{ \sigma  }^{ 2 }={ \psi  }^{ 2 }\left( 1-{ \phi  }^{ 2 } \right)\]</span>
 Like in our first model, we assume that the data follows a normal likelihood (or equivalently that the residuals are normally distributed), <span class="math inline">\(y_t = E[Y_t] + e_t\)</span>, or <span class="math inline">\(Y_t \sim N(E[{Y_t}], \sigma)\)</span>. Thus, it is possible to express the subsequent deviations as <span class="math inline">\({e}_{t} = {y}_{t} - E[{Y_t}]\)</span>, or equivalently as <span class="math inline">\({e}_{t} = {y}_{t} - \beta -\phi {e}_{t-1}\)</span>.</p>
 <p>We can fit this regression with autocorrelated errors by changing the model name to ‘regression_cor’</p>
-<div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb644-1"><a href="sec-stan-lr-ar.html#cb644-1"></a>lm_intercept_cor &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), </span>
-<span id="cb644-2"><a href="sec-stan-lr-ar.html#cb644-2"></a>    <span class="dt">model_name =</span> <span class="st">&quot;regression_cor&quot;</span>, <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, </span>
-<span id="cb644-3"><a href="sec-stan-lr-ar.html#cb644-3"></a>        <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb641-1"><a href="sec-stan-lr-ar.html#cb641-1"></a>lm_intercept_cor &lt;-<span class="st"> </span>atsar<span class="op">::</span><span class="kw">fit_stan</span>(<span class="dt">y =</span> Temp, <span class="dt">x =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">length</span>(Temp)), </span>
+<span id="cb641-2"><a href="sec-stan-lr-ar.html#cb641-2"></a>    <span class="dt">model_name =</span> <span class="st">&quot;regression_cor&quot;</span>, <span class="dt">mcmc_list =</span> <span class="kw">list</span>(<span class="dt">n_mcmc =</span> <span class="dv">1000</span>, </span>
+<span id="cb641-3"><a href="sec-stan-lr-ar.html#cb641-3"></a>        <span class="dt">n_burn =</span> <span class="dv">1</span>, <span class="dt">n_chain =</span> <span class="dv">1</span>, <span class="dt">n_thin =</span> <span class="dv">1</span>))</span></code></pre></div>
 </div>
             </section>
 

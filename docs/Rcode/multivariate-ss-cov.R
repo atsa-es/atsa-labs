@@ -1,10 +1,10 @@
 ## ----msscov-load-plankton-data------------------------------------------------------------------
 data(lakeWAplankton, package="MARSS")
 # lakeWA
-fulldat = lakeWAplanktonTrans
-years = fulldat[,"Year"]>=1965 & fulldat[,"Year"]<1975
-dat = t(fulldat[years,c("Greens", "Bluegreens")])
-covariates = t(fulldat[years,c("Temp", "TP")])
+fulldat <- lakeWAplanktonTrans
+years <- fulldat[,"Year"]>=1965 & fulldat[,"Year"]<1975
+dat <- t(fulldat[years,c("Greens", "Bluegreens")])
+covariates <- t(fulldat[years,c("Temp", "TP")])
 
 
 ## ----msscov-packages----------------------------------------------------------------------------
@@ -14,15 +14,15 @@ library(ggplot2)
 
 ## ----msscov-z-score-data------------------------------------------------------------------------
 # z-score the response variables
-the.mean = apply(dat,1,mean,na.rm=TRUE)
-the.sigma = sqrt(apply(dat,1,var,na.rm=TRUE))
-dat = (dat-the.mean)*(1/the.sigma)
+the.mean <- apply(dat,1,mean,na.rm=TRUE)
+the.sigma <- sqrt(apply(dat,1,var,na.rm=TRUE))
+dat <- (dat-the.mean)*(1/the.sigma)
 
 
 ## ----msscov-z-score-covar-data------------------------------------------------------------------
-the.mean = apply(covariates,1,mean,na.rm=TRUE)
-the.sigma = sqrt(apply(covariates,1,var,na.rm=TRUE))
-covariates = (covariates-the.mean)*(1/the.sigma)
+the.mean <- apply(covariates,1,mean,na.rm=TRUE)
+the.sigma <- sqrt(apply(covariates,1,var,na.rm=TRUE))
+covariates <- (covariates-the.mean)*(1/the.sigma)
 
 
 ## ----msscov-plank-plot, fig=TRUE, echo=FALSE, fig.cap='(ref:msscov-plank-dat)', warning=FALSE----
