@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-26" />
+<meta name="date" content="2021-01-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -485,7 +485,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Data and packages</h3>
 <p>We will use the catch landings from Greek waters (<code>greeklandings</code>) and the Chinook landings (<code>chinook</code>) in Washington data sets for this chapter. These datasets are in the <strong>atsalibrary</strong> package on GitHub. Install using the <strong>devtools</strong> package.</p>
 <div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="chap-boxjenkins-.html#cb268-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb268-2"><a href="chap-boxjenkins-.html#cb268-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
+<span id="cb268-2"><a href="chap-boxjenkins-.html#cb268-2"></a><span class="co"># Windows users will likely need to set this</span></span>
+<span id="cb268-3"><a href="chap-boxjenkins-.html#cb268-3"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
+<span id="cb268-4"><a href="chap-boxjenkins-.html#cb268-4"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
 <p>Load the data.</p>
 <div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="chap-boxjenkins-.html#cb269-1"></a><span class="kw">data</span>(greeklandings, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
 <span id="cb269-2"><a href="chap-boxjenkins-.html#cb269-2"></a>landings &lt;-<span class="st"> </span>greeklandings</span>

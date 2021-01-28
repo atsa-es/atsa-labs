@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-26" />
+<meta name="date" content="2021-01-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -491,7 +491,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb203-4"><a href="chap-tslab.html#cb203-4"></a><span class="kw">library</span>(datasets)</span></code></pre></div>
 <p>The chapter uses data sets which are in the <strong>atsalibrary</strong> package. If needed, install using the <strong>devtools</strong> package.</p>
 <div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="chap-tslab.html#cb204-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb204-2"><a href="chap-tslab.html#cb204-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
+<span id="cb204-2"><a href="chap-tslab.html#cb204-2"></a><span class="co"># Windows users will likely need to set this</span></span>
+<span id="cb204-3"><a href="chap-tslab.html#cb204-3"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
+<span id="cb204-4"><a href="chap-tslab.html#cb204-4"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
 <p>The main one is a time series of the atmospheric concentration of CO<span class="math inline">\(_2\)</span> collected at the Mauna Loa Observatory in Hawai’i (<code>MLCO2</code>). The second is Northern Hemisphere land and ocean temperature anomalies from NOAA. (<code>NHTemp</code>). The problems use a data set on hourly phytoplankton counts (<code>hourlyphyto</code>). Use <code>?MLCO2</code>, <code>?NHTemp</code> and <code>?hourlyphyto</code> for information on these datasets.</p>
 <p>Load the data.</p>
 <div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="chap-tslab.html#cb205-1"></a><span class="kw">data</span>(NHTemp, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
