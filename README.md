@@ -26,6 +26,10 @@
     install_github("rstudio/bookdown")
     install_github("nwfsc-timeseries/atsalibrary")
     ```
+Note Windows users may need to run:
+    ```
+    Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
+    ```
 
 To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
 

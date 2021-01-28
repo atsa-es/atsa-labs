@@ -14,6 +14,8 @@ A script with all the R code in the chapter can be downloaded  [here](./Rcode/fi
 You will need the **atsar** package we have written for fitting state-space time series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/nwfsc-timeseries/atsar).  Install  using the **devtools** package.
 ```{r stan-load, eval=FALSE}
 library(devtools)
+# Windows users will likely need to set this
+# Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 devtools::install_github("nwfsc-timeseries/atsar")
 ```
 In addition, you will need the **rstan**, **datasets**, **parallel** and **loo** packages. After installing, if needed, load the packages:

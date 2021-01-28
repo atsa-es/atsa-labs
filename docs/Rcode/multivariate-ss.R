@@ -1,11 +1,11 @@
-## ----mss-loadpackages, results='hide', message=FALSE, warning=FALSE-----------------------------
+## ----mss-loadpackages, results='hide', message=FALSE, warning=FALSE----
 library(MARSS)
 library(R2jags)
 library(coda)
 library(rstan)
 
 
-## ----mss-noshowlegend, echo=FALSE, results='hide'-----------------------------------------------
+## ----mss-noshowlegend, echo=FALSE, results='hide'-----------------
 d <- MARSS::harborSealWA
 legendnames <- (unlist(dimnames(d)[2]))[2:ncol(d)]
 for (i in 1:length(legendnames)) cat(paste(i, legendnames[i], "\n", sep = " "))
@@ -20,12 +20,12 @@ p <- ggplot(pdat, aes(x = Year, y = value, col = region)) +
 p + ggtitle("Puget Sound Harbor Seal Surveys")
 
 
-## ----mss-Cs2-showdata---------------------------------------------------------------------------
+## ----mss-Cs2-showdata---------------------------------------------
 data(harborSealWA, package = "MARSS")
 print(harborSealWA[1:8, ], digits = 3)
 
 
-## ----mss-Cs2-readindata-------------------------------------------------------------------------
+## ----mss-Cs2-readindata-------------------------------------------
 dat <- MARSS::harborSealWA
 years <- dat[, "Year"]
 dat <- dat[, !(colnames(dat) %in% c("Year", "HC"))]
@@ -34,7 +34,7 @@ colnames(dat) <- years
 n <- nrow(dat) - 1
 
 
-## ----mss-fit.0.model----------------------------------------------------------------------------
+## ----mss-fit.0.model----------------------------------------------
 mod.list.0 <- list(
   B = matrix(1),
   U = matrix("u"),
@@ -47,11 +47,11 @@ mod.list.0 <- list(
 )
 
 
-## ----mss-fit.0.fit------------------------------------------------------------------------------
+## ----mss-fit.0.fit------------------------------------------------
 fit.0 <- MARSS(dat, model = mod.list.0)
 
 
-## ----mss-model-resids, fig.show='hide'----------------------------------------------------------
+## ----mss-model-resids, fig.show='hide'----------------------------
 par(mfrow = c(2, 2))
 resids <- MARSSresiduals(fit.0, type="tt1")
 for (i in 1:4) {
@@ -61,7 +61,7 @@ for (i in 1:4) {
 }
 
 
-## ----mss-model-resids-plot, echo=FALSE, fig=TRUE, fig.cap='(ref:mss-model-resids-plot)'---------
+## ----mss-model-resids-plot, echo=FALSE, fig=TRUE, fig.cap='(ref:mss-model-resids-plot)'----
 par(mfrow = c(2, 2))
 resids <- MARSSresiduals(fit.0, type="tt1")
 for (i in 1:4) {
@@ -71,7 +71,7 @@ for (i in 1:4) {
 }
 
 
-## ----mss-fit-1-model----------------------------------------------------------------------------
+## ----mss-fit-1-model----------------------------------------------
 mod.list.1 <- list(
   B = "identity",
   U = "equal",
@@ -84,24 +84,24 @@ mod.list.1 <- list(
 )
 
 
-## ----mss-fit.1.fit, results='hide'--------------------------------------------------------------
+## ----mss-fit.1.fit, results='hide'--------------------------------
 fit.1 <- MARSS::MARSS(dat, model = mod.list.1)
 
 
-## ----mss-fit-2-model----------------------------------------------------------------------------
+## ----mss-fit-2-model----------------------------------------------
 mod.list.2 <- mod.list.1
 mod.list.2$Q <- "equalvarcov"
 
 
-## ----mss-fit-1-fit, results='hide'--------------------------------------------------------------
+## ----mss-fit-1-fit, results='hide'--------------------------------
 fit.2 <- MARSS::MARSS(dat, model = mod.list.2)
 
 
-## ----mss-fits-aicc------------------------------------------------------------------------------
+## ----mss-fits-aicc------------------------------------------------
 c(fit.0$AICc, fit.1$AICc, fit.2$AICc)
 
 
-## ----mss-model-resids-2, echo=FALSE, fig=TRUE, fig.cap='(ref:mss-model-resids-2)'---------------
+## ----mss-model-resids-2, echo=FALSE, fig=TRUE, fig.cap='(ref:mss-model-resids-2)'----
 par(mfrow = c(2, 2))
 resids <- MARSSresiduals(fit.2, type="tt1")
 for (i in 1:4) {
@@ -111,7 +111,7 @@ for (i in 1:4) {
 }
 
 
-## ----mss-fig2, fig.show='hide'------------------------------------------------------------------
+## ----mss-fig2, fig.show='hide'------------------------------------
 par(mfrow = c(2, 2))
 for (i in 1:4) {
   plot(years, fit.2$states[i, ], ylab = "log subpopulation estimate", xlab = "", type = "l")
@@ -131,7 +131,7 @@ for (i in 1:4) {
 }
 
 
-## ----mss-Cs01-setup-data------------------------------------------------------------------------
+## ----mss-Cs01-setup-data------------------------------------------
 dat <- MARSS::harborSeal
 years <- dat[, "Year"]
 good <- !(colnames(dat) %in% c("Year", "HoodCanal"))
@@ -152,18 +152,18 @@ p <- ggplot(pdat, aes(Year, value)) +
 p + facet_wrap(~region)
 
 
-## ----mss-Zmodel, tidy=FALSE---------------------------------------------------------------------
+## ----mss-Zmodel, tidy=FALSE---------------------------------------
 Z.model <- matrix(0, 11, 3)
 Z.model[c(1, 2, 9, 10), 1] <- 1 # which elements in col 1 are 1
 Z.model[c(3:6, 11), 2] <- 1 # which elements in col 2 are 1
 Z.model[7:8, 3] <- 1 # which elements in col 3 are 1
 
 
-## ----mss-Zmodel1--------------------------------------------------------------------------------
+## ----mss-Zmodel1--------------------------------------------------
 Z1 <- factor(c("pnw", "pnw", rep("ps", 4), "ca", "ca", "pnw", "pnw", "ps"))
 
 
-## ----mss-model-list, tidy=FALSE-----------------------------------------------------------------
+## ----mss-model-list, tidy=FALSE-----------------------------------
 mod.list <- list(
   B = "identity",
   U = "unequal",
@@ -176,7 +176,7 @@ mod.list <- list(
 )
 
 
-## ----mss-set-up-Zs, tidy=FALSE------------------------------------------------------------------
+## ----mss-set-up-Zs, tidy=FALSE------------------------------------
 Z.models <- list(
   H1 = factor(c("pnw", "pnw", rep("ps", 4), "ca", "ca", "pnw", "pnw", "ps")),
   H2 = factor(c(rep("coast", 2), rep("ps", 4), rep("coast", 4), "ps")),
@@ -189,7 +189,7 @@ names(Z.models) <-
   c("stock", "coast+PS", "N+S", "NC+strait+PS+SC", "panmictic", "site")
 
 
-## ----mss-Cs05-run-models, cache=TRUE------------------------------------------------------------
+## ----mss-Cs05-run-models, cache=TRUE------------------------------
 out.tab <- NULL
 fits <- list()
 for (i in 1:length(Z.models)) {
@@ -211,43 +211,43 @@ for (i in 1:length(Z.models)) {
 }
 
 
-## ----mss-Cs06-sort-results----------------------------------------------------------------------
+## ----mss-Cs06-sort-results----------------------------------------
 min.AICc <- order(out.tab$AICc)
 out.tab.1 <- out.tab[min.AICc,]
 
 
-## ----mss-Cs07-add-delta-aicc--------------------------------------------------------------------
+## ----mss-Cs07-add-delta-aicc--------------------------------------
 out.tab.1 <- cbind(out.tab.1,
   delta.AICc = out.tab.1$AICc - out.tab.1$AICc[1]
 )
 
 
-## ----mss-Cs08-add-delta-aicc--------------------------------------------------------------------
+## ----mss-Cs08-add-delta-aicc--------------------------------------
 out.tab.1 <- cbind(out.tab.1,
   rel.like = exp(-1 * out.tab.1$delta.AICc / 2)
 )
 
 
-## ----mss-Cs09-aic-weight------------------------------------------------------------------------
+## ----mss-Cs09-aic-weight------------------------------------------
 out.tab.1 <- cbind(out.tab.1,
   AIC.weight = out.tab.1$rel.like / sum(out.tab.1$rel.like)
 )
 
 
-## ----mss-Cs10-print-table, echo=FALSE-----------------------------------------------------------
+## ----mss-Cs10-print-table, echo=FALSE-----------------------------
 out.tab.1$delta.AICc <- round(out.tab.1$delta.AICc, digits = 2)
 out.tab.1$AIC.weight <- round(out.tab.1$AIC.weight, digits = 3)
 print(out.tab.1[, c("H", "delta.AICc", "AIC.weight", "converged")], row.names = FALSE)
 
 
-## ----mss-set-up-seal-data-jags------------------------------------------------------------------
+## ----mss-set-up-seal-data-jags------------------------------------
 data(harborSealWA, package = "MARSS")
 sites <- c("SJF", "SJI", "EBays", "PSnd")
 Y <- harborSealWA[, sites]
 Y <- t(Y) # time across columns
 
 
-## ----mss-jagsscript-----------------------------------------------------------------------------
+## ----mss-jagsscript-----------------------------------------------
 jagsscript <- cat("
 model {  
    U ~ dnorm(0, 0.01);
@@ -283,7 +283,7 @@ model {
 ",file="marss-jags.txt")
 
 
-## ----mss-marss-jags, results='hide', message=FALSE, cache=TRUE----------------------------------
+## ----mss-marss-jags, results='hide', message=FALSE, cache=TRUE----
 jags.data <- list("Y" = Y, nSites = nrow(Y), nYears = ncol(Y)) # named list
 jags.params <- c("X", "U", "Q", "R")
 model.loc <- "marss-jags.txt" # name of the txt file
@@ -294,7 +294,7 @@ mod_1 <- jags(jags.data,
 )
 
 
-## ----mss-plot-jags-states, fig.cap='(ref:NA)'---------------------------------------------------
+## ----mss-plot-jags-states, fig.cap='(ref:NA)'---------------------
 #attach.jags attaches the jags.params to our workspace
 attach.jags(mod_1)
 means <- apply(X, c(2, 3), mean)
@@ -319,7 +319,7 @@ detach.jags()
 
 
 
-## ----marss-stan-model---------------------------------------------------------------------------
+## ----marss-stan-model---------------------------------------------
 scode <- "
 data {
   int<lower=0> TT; // length of ts
@@ -366,7 +366,7 @@ generated quantities {
 "
 
 
-## ----marss-stan-fit-model, message=FALSE, warning=FALSE, results='hide', cache=TRUE-------------
+## ----marss-stan-fit-model, message=FALSE, warning=FALSE, results='hide', cache=TRUE----
 ypos <- Y[!is.na(Y)]
 n_pos <- length(ypos) # number on non-NA ys
 indx_pos <- which(!is.na(Y), arr.ind = TRUE) # index on the non-NAs
@@ -385,7 +385,7 @@ mod <- rstan::stan(
 )
 
 
-## ----marss-stan-extract, message=FALSE----------------------------------------------------------
+## ----marss-stan-extract, message=FALSE----------------------------
 pars <- rstan::extract(mod)
 means <- apply(pars$x, c(2,3), mean)
 upperCI <- apply(pars$x, c(2,3), quantile, 0.975)
@@ -408,13 +408,13 @@ ggplot(pdat , aes(x = year , y = mean)) +
   theme_bw()
 
 
-## ----mss-problems-data--------------------------------------------------------------------------
+## ----mss-problems-data--------------------------------------------
 require(MARSS)
 data(harborSealWA, package="MARSS")
 dat <- t(harborSealWA[,2:6])
 
 
-## ----mss-resids, eval=FALSE---------------------------------------------------------------------
+## ----mss-resids, eval=FALSE---------------------------------------
 ## resids <- MARSSresiduals(fit, type="tt1")$model.residuals
 ## resids[is.na(dat)] <- NA
 
