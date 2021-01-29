@@ -479,18 +479,100 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="sec-dfa-problems" class="section level2">
 <h2><span class="header-section-number">10.13</span> Problems</h2>
-<p>For your homework this week, we will continue to investigate common trends in the Lake Washington plankton data.</p>
+<p>For questions 1-3, use the Lake Washington plankton data from the chapter. <code>dat</code> is the data to use.</p>
+<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb578-1"><a href="sec-dfa-problems.html#cb578-1"></a><span class="kw">library</span>(MARSS)</span>
+<span id="cb578-2"><a href="sec-dfa-problems.html#cb578-2"></a><span class="kw">data</span>(lakeWAplankton, <span class="dt">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb578-3"><a href="sec-dfa-problems.html#cb578-3"></a>all_dat &lt;-<span class="st"> </span>lakeWAplanktonTrans</span>
+<span id="cb578-4"><a href="sec-dfa-problems.html#cb578-4"></a>yr_frst &lt;-<span class="st"> </span><span class="dv">1980</span></span>
+<span id="cb578-5"><a href="sec-dfa-problems.html#cb578-5"></a>yr_last &lt;-<span class="st"> </span><span class="dv">1989</span></span>
+<span id="cb578-6"><a href="sec-dfa-problems.html#cb578-6"></a>plank_dat &lt;-<span class="st"> </span>all_dat[all_dat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span>yr_frst <span class="op">&amp;</span><span class="st"> </span>all_dat[, </span>
+<span id="cb578-7"><a href="sec-dfa-problems.html#cb578-7"></a>    <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;=</span><span class="st"> </span>yr_last, ]</span>
+<span id="cb578-8"><a href="sec-dfa-problems.html#cb578-8"></a>phytoplankton &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Cryptomonas&quot;</span>, <span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, </span>
+<span id="cb578-9"><a href="sec-dfa-problems.html#cb578-9"></a>    <span class="st">&quot;Other.algae&quot;</span>)</span>
+<span id="cb578-10"><a href="sec-dfa-problems.html#cb578-10"></a>dat_<span class="dv">1980</span> &lt;-<span class="st"> </span>plank_dat[, phytoplankton]</span>
+<span id="cb578-11"><a href="sec-dfa-problems.html#cb578-11"></a><span class="co">## transpose data so time goes across columns</span></span>
+<span id="cb578-12"><a href="sec-dfa-problems.html#cb578-12"></a>dat_<span class="dv">1980</span> &lt;-<span class="st"> </span><span class="kw">t</span>(dat_<span class="dv">1980</span>)</span>
+<span id="cb578-13"><a href="sec-dfa-problems.html#cb578-13"></a><span class="co">## remove the mean</span></span>
+<span id="cb578-14"><a href="sec-dfa-problems.html#cb578-14"></a>dat &lt;-<span class="st"> </span><span class="kw">zscore</span>(dat_<span class="dv">1980</span>, <span class="dt">mean.only =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <ol style="list-style-type: decimal">
-<li><p>Fit other DFA models to the phytoplankton data with varying numbers of trends from 1-4 (we fit a 3-trend model above). Do not include any covariates in these models. Using <code>R="diagonal and unequal"</code> for the observation errors, which of the DFA models has the most support from the data?</p>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">10.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">10.10</a>. Do they reasonable? Are there any particular problems or outliers?</p></li>
-<li><p>How does the best model from Question 1 compare to a DFA model with the same number of trends, but with <code>R="unconstrained"</code>?</p>
-<p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">10.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">10.10</a>. Do they reasonable? Are there any particular problems or outliers?</p></li>
+<li><p>Fit other DFA models to the phytoplankton data with varying numbers of latent trends from 1-4 (we fit a 3 latent trend model above). Do not include any covariates in these models. Using <code>R="diagonal and unequal"</code> for the observation errors, which of the DFA models has the most support from the data?</p>
+<p>Plot the model states (latent trends) and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">10.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
+<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">10.10</a>. Do they look reasonable? Are there any particular problems or outliers?</p></li>
+<li><p>How does the best model from Question 1 compare to a DFA model with the same number of latent trends, but with <code>R="unconstrained"</code>?</p>
+<p>Plot the model states (latent trends) and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">10.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
+<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">10.10</a>. Do they look reasonable? Are there any particular problems or outliers?</p></li>
 <li><p>Fit a DFA model that includes temperature as a covariate and 3 trends (as in Section <a href="sec-dfa-lakeWA.html#sec-dfa-lakeWA">10.12</a>), but with<code>R="unconstrained"</code>? How does this model compare to the model with <code>R="diagonal and unequal"</code>? How does it compare to the model in Question 2?</p>
 <p>Plot the model states and loadings as in Section <a href="sec-dfa-estimated-states.html#sec-dfa-estimated-states">10.9</a>. Describe the general patterns in the states and the ways the different taxa load onto those trends.</p>
-<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">10.10</a>. Do they reasonable? Are there any particular problems or outliers?</p></li>
+<p>Also plot the the model fits as in Section <a href="sec-dfa-plot-data.html#sec-dfa-plot-data">10.10</a>. Do they look reasonable? Are there any particular problems or outliers?</p></li>
 </ol>
+<!--
+
+In questions 4-6, you will explore some DFA models for the Lake Washington zooplankton community. Here is the code for the data to use.
+
+
+```r
+## zooplankton species
+zooplankton <- c("Cyclops", "Daphnia", "Diaptomus", "Non.daphnid.cladocerans", 
+    "Epischura")
+dat_zoop <- plank_dat[, zooplankton]
+## rename Non.daphnid.cladocerans to NDC
+colnames(dat_zoop)[4] <- "NDC"
+## transpose data so time goes across columns
+dat_zoop <- t(dat_zoop)
+## de-mean the data
+dat_zoop <- zscore(dat_zoop, mean.only = TRUE)
+```
+
+4.  Fit a DFA model with 1 latent trend and no covariates to the zooplankton data. Use a `diagonal and equal` covariance matrix for the observation errors. Here is some skeleton code.
+
+    ```
+    ## fill in this list as appropriate
+    mod_list = list(m = ?, R = ?)
+
+    ## fit the model
+    dfa_task_1 <- MARSS(dat_zoop, model = mod_list, form = "dfa", z.score = FALSE,
+                    control = con_list)
+    ```
+
+    Plot the trend and the corresponding loadings and describe what you see. You can use the [code](#sec-dfa-estimated-states) in the chapter to do so, but make sure to change the first two lines as follows:
+
+    ```
+    ylbl <- zooplankton
+    w_ts <- seq(dim(dat_zoop)[2]))
+    ```
+
+    and add another line just below them to reflect the number of trends being fit:
+
+    ```
+    mm <- ?
+    ```
+
+5. Fit a DFA model with 2 latent trends and no covariates to the zooplankton data. Use a `diagonal and equal` covariance matrix for the observation errors. Plot the trends and the corresponding loadings and describe what you see. How does the data support for this model compare to the 1-trend model you fit above?
+
+    ```
+    ## fill in this list as appropriate
+    mod_list = list(m = ?, R = ?)
+
+    ## fit the model
+    dfa_task_2 <- MARSS(dat_zoop, model = mod_list, form = "dfa", z.score = FALSE,
+                    control = con_list)
+    ```
+
+6. Fit a DFA model with 1 latent trend and 2 seasonal covariates based upon a discrete Fourier series as [above](#sec-dfa-lakeWA). How does the data support for this model compare to the two above?
+
+    ```
+    ## fill in this list as appropriate
+    mod_list = list(m = ?, R = ?)
+
+    ## assign the covariates
+    dd <- ?
+  
+    ## fit the model
+    dfa_task_3 <- MARSS(dat_zoop, model = mod_list, form = "dfa", z.score = FALSE,
+                    control = con_list, covariates = dd)
+    ```
+
+-->
 
 </div>
 <!-- </div> -->

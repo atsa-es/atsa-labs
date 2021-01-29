@@ -504,54 +504,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb573-1"><a href="sec-dfa-lakeWA.html#cb573-1"></a>cos_t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span><span class="dv">12</span>)</span>
 <span id="cb573-2"><a href="sec-dfa-lakeWA.html#cb573-2"></a>sin_t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span><span class="dv">12</span>)</span>
 <span id="cb573-3"><a href="sec-dfa-lakeWA.html#cb573-3"></a>dd &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos_t, sin_t)</span>
-<span id="cb573-4"><a href="sec-dfa-lakeWA.html#cb573-4"></a>dfa_seas &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat_<span class="dv">1980</span>, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">TRUE</span>, </span>
+<span id="cb573-4"><a href="sec-dfa-lakeWA.html#cb573-4"></a>dfa_seas &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> mod_list, <span class="dt">form =</span> <span class="st">&quot;dfa&quot;</span>, <span class="dt">z.score =</span> <span class="ot">FALSE</span>, </span>
 <span id="cb573-5"><a href="sec-dfa-lakeWA.html#cb573-5"></a>    <span class="dt">control =</span> con_list, <span class="dt">covariates =</span> dd)</span></code></pre></div>
-<pre><code>Success! abstol and log-log tests passed at 384 iterations.
+<pre><code>Success! abstol and log-log tests passed at 451 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
 
 MARSS fit is
 Estimation method: kem 
 Convergence test: conv.test.slope.tol = 0.5, abstol = 0.001
-Estimation converged in 384 iterations. 
-Log-likelihood: -713.8464 
-AIC: 1481.693   AICc: 1484.355   
+Estimation converged in 451 iterations. 
+Log-likelihood: -633.1283 
+AIC: 1320.257   AICc: 1322.919   
  
                             Estimate
-Z.11                         0.49562
-Z.21                         0.27206
-Z.31                         0.03354
-Z.41                         0.51692
-Z.51                         0.18981
-Z.22                         0.05290
-Z.32                        -0.08042
-Z.42                         0.06336
-Z.52                         0.06157
-Z.33                         0.02383
-Z.43                         0.19506
-Z.53                        -0.10800
-R.(Cryptomonas,Cryptomonas)  0.51583
-R.(Diatoms,Diatoms)          0.53296
-R.(Greens,Greens)            0.60329
-R.(Unicells,Unicells)        0.19787
-R.(Other.algae,Other.algae)  0.52977
-D.(Cryptomonas,cos_t)       -0.43973
-D.(Diatoms,cos_t)           -0.44836
-D.(Greens,cos_t)            -0.66003
-D.(Unicells,cos_t)          -0.34898
-D.(Other.algae,cos_t)       -0.42773
-D.(Cryptomonas,sin_t)        0.23672
-D.(Diatoms,sin_t)            0.72062
-D.(Greens,sin_t)            -0.46019
-D.(Unicells,sin_t)          -0.00873
-D.(Other.algae,sin_t)       -0.64228
+Z.11                         0.26207
+Z.21                         0.24762
+Z.31                         0.03689
+Z.41                         0.51329
+Z.51                         0.18479
+Z.22                         0.04819
+Z.32                        -0.08824
+Z.42                         0.06454
+Z.52                         0.05905
+Z.33                         0.02673
+Z.43                         0.19343
+Z.53                        -0.10528
+R.(Cryptomonas,Cryptomonas)  0.14406
+R.(Diatoms,Diatoms)          0.44205
+R.(Greens,Greens)            0.73113
+R.(Unicells,Unicells)        0.19533
+R.(Other.algae,Other.algae)  0.50127
+D.(Cryptomonas,cos_t)       -0.23244
+D.(Diatoms,cos_t)           -0.40829
+D.(Greens,cos_t)            -0.72656
+D.(Unicells,cos_t)          -0.34666
+D.(Other.algae,cos_t)       -0.41606
+D.(Cryptomonas,sin_t)        0.12515
+D.(Diatoms,sin_t)            0.65621
+D.(Greens,sin_t)            -0.50657
+D.(Unicells,sin_t)          -0.00867
+D.(Other.algae,sin_t)       -0.62474
 Initial states (x0) defined at t=0
 
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb575-1"><a href="sec-dfa-lakeWA.html#cb575-1"></a>dfa_seas<span class="op">$</span>AICc</span></code></pre></div>
-<pre><code>[1] 1484.355</code></pre>
-<p>The model with a dummy seasonal factor does much better than the covariate models, but still not as well as the model with only 3 trends. The model fits for the seasonal effects model are shown below.</p>
+<pre><code>[1] 1322.919</code></pre>
+<p>The model with a dummy seasonal factor does much better than the covariate models. The model fits for the seasonal effects model are shown below.</p>
 <div class="sourceCode" id="cb577"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb577-1"><a href="sec-dfa-lakeWA.html#cb577-1"></a><span class="co">## get model fits &amp; CI&#39;s</span></span>
 <span id="cb577-2"><a href="sec-dfa-lakeWA.html#cb577-2"></a>mod_fit &lt;-<span class="st"> </span><span class="kw">get_DFA_fits</span>(dfa_seas, <span class="dt">dd =</span> dd)</span>
 <span id="cb577-3"><a href="sec-dfa-lakeWA.html#cb577-3"></a><span class="co">## plot the fits</span></span>

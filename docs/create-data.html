@@ -480,9 +480,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="create-data" class="section level2">
 <h2><span class="header-section-number">14.3</span> Create data</h2>
 <p>Plot the data and the error added to the signal by each sensor. The data is the error (on right) plus the signal. The signal is definitely not obvious in the data. The data look mostly like the error, which is autocorrelated so has trends in it unlike white noise error.</p>
-<div class="sourceCode" id="cb676"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb676-1"><a href="create-data.html#cb676-1"></a>p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">subset</span>(df, name <span class="op">!=</span><span class="st"> &quot;signal&quot;</span>), <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> val)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb676-2"><a href="create-data.html#cb676-2"></a><span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>name, <span class="dt">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb676-3"><a href="create-data.html#cb676-3"></a>p1</span></code></pre></div>
+<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb677-1"><a href="create-data.html#cb677-1"></a>p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">subset</span>(df, name <span class="op">!=</span><span class="st"> &quot;signal&quot;</span>), <span class="kw">aes</span>(<span class="dt">x =</span> t, <span class="dt">y =</span> val)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb677-2"><a href="create-data.html#cb677-2"></a><span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>name, <span class="dt">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb677-3"><a href="create-data.html#cb677-3"></a>p1</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
             </section>

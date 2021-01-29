@@ -653,23 +653,106 @@ for(i in 1:N_ts) {
 
 ## Problems  {#sec-dfa-problems}
 
-For your homework this week, we will continue to investigate common trends in the Lake Washington plankton data.
+For questions 1-3, use the Lake Washington plankton data from the chapter. `dat` is the data to use.
 
-1. Fit other DFA models to the phytoplankton data with varying numbers of trends from 1-4 (we fit a 3-trend model above). Do not include any covariates in these models. Using `R="diagonal and unequal"` for the observation errors, which of the DFA models has the most support from the data?
+```{r hw-data}
+library(MARSS)
+data(lakeWAplankton, package = "MARSS")
+all_dat <- lakeWAplanktonTrans
+yr_frst <- 1980; yr_last <- 1989
+plank_dat <- all_dat[all_dat[, "Year"] >= yr_frst & 
+                       all_dat[, "Year"] <= yr_last,]
+phytoplankton <- c("Cryptomonas", "Diatoms", "Greens",
+                   "Unicells", "Other.algae")
+dat_1980 <- plank_dat[, phytoplankton]
+## transpose data so time goes across columns
+dat_1980 <- t(dat_1980)
+## remove the mean
+dat <- zscore(dat_1980, mean.only=TRUE)
+```
 
-    Plot the model states and loadings as in Section \@ref(sec-dfa-estimated-states). Describe the general patterns in the states and the ways the different taxa load onto those trends.
+1. Fit other DFA models to the phytoplankton data with varying numbers of latent trends from 1-4 (we fit a 3 latent trend model above). Do not include any covariates in these models. Using `R="diagonal and unequal"` for the observation errors, which of the DFA models has the most support from the data?
 
-    Also plot the the model fits as in Section \@ref(sec-dfa-plot-data). Do they reasonable? Are there any particular problems or outliers?
+    Plot the model states (latent trends) and loadings as in Section \@ref(sec-dfa-estimated-states). Describe the general patterns in the states and the ways the different taxa load onto those trends.
 
-2. How does the best model from Question 1 compare to a DFA model with the same number of trends, but with `R="unconstrained"`? 
+    Also plot the the model fits as in Section \@ref(sec-dfa-plot-data). Do they look reasonable? Are there any particular problems or outliers?
 
-    Plot the model states and loadings as in Section \@ref(sec-dfa-estimated-states). Describe the general patterns in the states and the ways the different taxa load onto those trends.
+2. How does the best model from Question 1 compare to a DFA model with the same number of latent trends, but with `R="unconstrained"`? 
 
-    Also plot the the model fits as in Section \@ref(sec-dfa-plot-data). Do they reasonable? Are there any particular problems or outliers?
+    Plot the model states (latent trends) and loadings as in Section \@ref(sec-dfa-estimated-states). Describe the general patterns in the states and the ways the different taxa load onto those trends.
+
+    Also plot the the model fits as in Section \@ref(sec-dfa-plot-data). Do they look reasonable? Are there any particular problems or outliers?
 
 3. Fit a DFA model that includes temperature as a covariate and 3 trends (as in Section \@ref(sec-dfa-lakeWA)), but with`R="unconstrained"`? How does this model compare to the model with `R="diagonal and unequal"`? How does it compare to the model in Question 2? 
 
     Plot the model states and loadings as in Section \@ref(sec-dfa-estimated-states). Describe the general patterns in the states and the ways the different taxa load onto those trends.
 
-   Also plot the the model fits as in Section \@ref(sec-dfa-plot-data).  Do they reasonable? Are there any particular problems or outliers?
+   Also plot the the model fits as in Section \@ref(sec-dfa-plot-data).  Do they look reasonable? Are there any particular problems or outliers?
 
+<!--
+
+In questions 4-6, you will explore some DFA models for the Lake Washington zooplankton community. Here is the code for the data to use.
+
+```{r lwa_zoops, echo = TRUE}
+## zooplankton species
+zooplankton <- c("Cyclops", "Daphnia", "Diaptomus",
+                 "Non.daphnid.cladocerans", "Epischura")
+dat_zoop <- plank_dat[, zooplankton]
+## rename Non.daphnid.cladocerans to NDC
+colnames(dat_zoop)[4] <- "NDC"
+## transpose data so time goes across columns
+dat_zoop <- t(dat_zoop)
+## de-mean the data
+dat_zoop <- zscore(dat_zoop, mean.only = TRUE)
+```
+
+4.  Fit a DFA model with 1 latent trend and no covariates to the zooplankton data. Use a `diagonal and equal` covariance matrix for the observation errors. Here is some skeleton code.
+
+    ```
+    ## fill in this list as appropriate
+    mod_list = list(m = ?, R = ?)
+
+    ## fit the model
+    dfa_task_1 <- MARSS(dat_zoop, model = mod_list, form = "dfa", z.score = FALSE,
+                    control = con_list)
+    ```
+
+    Plot the trend and the corresponding loadings and describe what you see. You can use the [code](#sec-dfa-estimated-states) in the chapter to do so, but make sure to change the first two lines as follows:
+
+    ```
+    ylbl <- zooplankton
+    w_ts <- seq(dim(dat_zoop)[2]))
+    ```
+
+    and add another line just below them to reflect the number of trends being fit:
+
+    ```
+    mm <- ?
+    ```
+
+5. Fit a DFA model with 2 latent trends and no covariates to the zooplankton data. Use a `diagonal and equal` covariance matrix for the observation errors. Plot the trends and the corresponding loadings and describe what you see. How does the data support for this model compare to the 1-trend model you fit above?
+
+    ```
+    ## fill in this list as appropriate
+    mod_list = list(m = ?, R = ?)
+
+    ## fit the model
+    dfa_task_2 <- MARSS(dat_zoop, model = mod_list, form = "dfa", z.score = FALSE,
+                    control = con_list)
+    ```
+
+6. Fit a DFA model with 1 latent trend and 2 seasonal covariates based upon a discrete Fourier series as [above](#sec-dfa-lakeWA). How does the data support for this model compare to the two above?
+
+    ```
+    ## fill in this list as appropriate
+    mod_list = list(m = ?, R = ?)
+
+    ## assign the covariates
+    dd <- ?
+  
+    ## fit the model
+    dfa_task_3 <- MARSS(dat_zoop, model = mod_list, form = "dfa", z.score = FALSE,
+                    control = con_list, covariates = dd)
+    ```
+
+-->

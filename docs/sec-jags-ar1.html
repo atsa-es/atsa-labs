@@ -485,32 +485,32 @@ E[y_t] = \phi * y_{t-1} + e_{t-1}
 \tag{12.6}
 \end{equation}\]</span></p>
 <p>The JAGS random walk model and R script to run the AR(1) model is below:</p>
-<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb621-1"><a href="sec-jags-ar1.html#cb621-1"></a><span class="co"># 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT We&#39;re</span></span>
-<span id="cb621-2"><a href="sec-jags-ar1.html#cb621-2"></a><span class="co"># introducting a new AR coefficient &#39;phi&#39;, so the model is</span></span>
-<span id="cb621-3"><a href="sec-jags-ar1.html#cb621-3"></a><span class="co"># y[t] ~ N(mu + phi*y[n-1], sigma^2)</span></span>
-<span id="cb621-4"><a href="sec-jags-ar1.html#cb621-4"></a></span>
-<span id="cb621-5"><a href="sec-jags-ar1.html#cb621-5"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;ar1_intercept.txt&quot;</span>)</span>
-<span id="cb621-6"><a href="sec-jags-ar1.html#cb621-6"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb621-7"><a href="sec-jags-ar1.html#cb621-7"></a><span class="st">model {  </span></span>
-<span id="cb621-8"><a href="sec-jags-ar1.html#cb621-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
-<span id="cb621-9"><a href="sec-jags-ar1.html#cb621-9"></a><span class="st">   tau.pro ~ dgamma(0.001,0.001); </span></span>
-<span id="cb621-10"><a href="sec-jags-ar1.html#cb621-10"></a><span class="st">   sd.pro &lt;- 1/sqrt(tau.pro); </span></span>
-<span id="cb621-11"><a href="sec-jags-ar1.html#cb621-11"></a><span class="st">   phi ~ dnorm(0, 1); </span></span>
-<span id="cb621-12"><a href="sec-jags-ar1.html#cb621-12"></a><span class="st">   </span></span>
-<span id="cb621-13"><a href="sec-jags-ar1.html#cb621-13"></a><span class="st">   predY[1] &lt;- Y[1];</span></span>
-<span id="cb621-14"><a href="sec-jags-ar1.html#cb621-14"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb621-15"><a href="sec-jags-ar1.html#cb621-15"></a><span class="st">      predY[i] &lt;- mu + phi * Y[i-1]; </span></span>
-<span id="cb621-16"><a href="sec-jags-ar1.html#cb621-16"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.pro);</span></span>
-<span id="cb621-17"><a href="sec-jags-ar1.html#cb621-17"></a><span class="st">   }</span></span>
-<span id="cb621-18"><a href="sec-jags-ar1.html#cb621-18"></a><span class="st">}  </span></span>
-<span id="cb621-19"><a href="sec-jags-ar1.html#cb621-19"></a><span class="st">&quot;</span>, </span>
-<span id="cb621-20"><a href="sec-jags-ar1.html#cb621-20"></a>    <span class="dt">file =</span> model.loc)</span>
-<span id="cb621-21"><a href="sec-jags-ar1.html#cb621-21"></a></span>
-<span id="cb621-22"><a href="sec-jags-ar1.html#cb621-22"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
-<span id="cb621-23"><a href="sec-jags-ar1.html#cb621-23"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.pro&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
-<span id="cb621-24"><a href="sec-jags-ar1.html#cb621-24"></a>mod_ar1_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, </span>
-<span id="cb621-25"><a href="sec-jags-ar1.html#cb621-25"></a>    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb621-26"><a href="sec-jags-ar1.html#cb621-26"></a>    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb622"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb622-1"><a href="sec-jags-ar1.html#cb622-1"></a><span class="co"># 4. AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT We&#39;re</span></span>
+<span id="cb622-2"><a href="sec-jags-ar1.html#cb622-2"></a><span class="co"># introducting a new AR coefficient &#39;phi&#39;, so the model is</span></span>
+<span id="cb622-3"><a href="sec-jags-ar1.html#cb622-3"></a><span class="co"># y[t] ~ N(mu + phi*y[n-1], sigma^2)</span></span>
+<span id="cb622-4"><a href="sec-jags-ar1.html#cb622-4"></a></span>
+<span id="cb622-5"><a href="sec-jags-ar1.html#cb622-5"></a>model.loc =<span class="st"> </span>(<span class="st">&quot;ar1_intercept.txt&quot;</span>)</span>
+<span id="cb622-6"><a href="sec-jags-ar1.html#cb622-6"></a>jagsscript =<span class="st"> </span><span class="kw">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb622-7"><a href="sec-jags-ar1.html#cb622-7"></a><span class="st">model {  </span></span>
+<span id="cb622-8"><a href="sec-jags-ar1.html#cb622-8"></a><span class="st">   mu ~ dnorm(0, 0.01); </span></span>
+<span id="cb622-9"><a href="sec-jags-ar1.html#cb622-9"></a><span class="st">   tau.pro ~ dgamma(0.001,0.001); </span></span>
+<span id="cb622-10"><a href="sec-jags-ar1.html#cb622-10"></a><span class="st">   sd.pro &lt;- 1/sqrt(tau.pro); </span></span>
+<span id="cb622-11"><a href="sec-jags-ar1.html#cb622-11"></a><span class="st">   phi ~ dnorm(0, 1); </span></span>
+<span id="cb622-12"><a href="sec-jags-ar1.html#cb622-12"></a><span class="st">   </span></span>
+<span id="cb622-13"><a href="sec-jags-ar1.html#cb622-13"></a><span class="st">   predY[1] &lt;- Y[1];</span></span>
+<span id="cb622-14"><a href="sec-jags-ar1.html#cb622-14"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb622-15"><a href="sec-jags-ar1.html#cb622-15"></a><span class="st">      predY[i] &lt;- mu + phi * Y[i-1]; </span></span>
+<span id="cb622-16"><a href="sec-jags-ar1.html#cb622-16"></a><span class="st">      Y[i] ~ dnorm(predY[i], tau.pro);</span></span>
+<span id="cb622-17"><a href="sec-jags-ar1.html#cb622-17"></a><span class="st">   }</span></span>
+<span id="cb622-18"><a href="sec-jags-ar1.html#cb622-18"></a><span class="st">}  </span></span>
+<span id="cb622-19"><a href="sec-jags-ar1.html#cb622-19"></a><span class="st">&quot;</span>, </span>
+<span id="cb622-20"><a href="sec-jags-ar1.html#cb622-20"></a>    <span class="dt">file =</span> model.loc)</span>
+<span id="cb622-21"><a href="sec-jags-ar1.html#cb622-21"></a></span>
+<span id="cb622-22"><a href="sec-jags-ar1.html#cb622-22"></a>jags.data =<span class="st"> </span><span class="kw">list</span>(<span class="dt">Y =</span> Wind, <span class="dt">N =</span> N)</span>
+<span id="cb622-23"><a href="sec-jags-ar1.html#cb622-23"></a>jags.params =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;sd.pro&quot;</span>, <span class="st">&quot;predY&quot;</span>, <span class="st">&quot;mu&quot;</span>, <span class="st">&quot;phi&quot;</span>)</span>
+<span id="cb622-24"><a href="sec-jags-ar1.html#cb622-24"></a>mod_ar1_intercept =<span class="st"> </span><span class="kw">jags</span>(jags.data, <span class="dt">parameters.to.save =</span> jags.params, </span>
+<span id="cb622-25"><a href="sec-jags-ar1.html#cb622-25"></a>    <span class="dt">model.file =</span> model.loc, <span class="dt">n.chains =</span> <span class="dv">3</span>, <span class="dt">n.burnin =</span> <span class="dv">5000</span>, <span class="dt">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb622-26"><a href="sec-jags-ar1.html#cb622-26"></a>    <span class="dt">n.iter =</span> <span class="dv">10000</span>, <span class="dt">DIC =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 </div>
             </section>
 
