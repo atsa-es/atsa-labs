@@ -768,6 +768,8 @@ https://www.ramlegacy.org/
 
 For this exercise, we will use spawner-recruit data for sockeye salmon (_Oncorhynchus nerka_) from the Kvichak River in SW Alaska that span the years 1952-1989.  In addition, we'll examine the potential effects of the Pacific Decadal Oscillation (PDO) during the salmon's first year in the ocean, which is widely believed to be a "bottleneck" to survival.
 
+![](images/BB_sockeye_rivers.png)
+
 These data are in the **atsalibrary** package on GitHub.  If needed, install  using the **devtools** package.
 ```{r dlm-load-atsa, eval=FALSE}
 library(devtools)
@@ -783,7 +785,7 @@ data(KvichakSockeye, package="atsalibrary")
 SRdata <- KvichakSockeye
 ```
 
-The data are a dataframe with columns for brood year (`brood.yr`), number of spawners (`Sp`), number of recruits (`Rec`) and PDO at year $t-2$ (`PDO.t2`) and $t-3$ (`PDO.t3`).
+The data are a dataframe with columns for brood year (`brood_year`), number of spawners (`spawners`), number of recruits (`recruits`) and PDO at year $t-2$ in summer (`pdo_summer_t2`) and in winter (`pdo_winter_t2`).
 ```{r dlm-data-head}
 # head of data file
 head(SRdata)
