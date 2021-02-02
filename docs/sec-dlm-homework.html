@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-01-28" />
+<meta name="date" content="2021-02-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -511,6 +511,7 @@ R_t = a S_t e^{-b S + v_t}.
 
 <a href="https://www.ramlegacy.org/" class="uri">https://www.ramlegacy.org/</a></p>
 <p>For this exercise, we will use spawner-recruit data for sockeye salmon (<em>Oncorhynchus nerka</em>) from the Kvichak River in SW Alaska that span the years 1952-1989. In addition, we’ll examine the potential effects of the Pacific Decadal Oscillation (PDO) during the salmon’s first year in the ocean, which is widely believed to be a “bottleneck” to survival.</p>
+<p><img src="images/BB_sockeye_rivers.png" /></p>
 <p>These data are in the <strong>atsalibrary</strong> package on GitHub. If needed, install using the <strong>devtools</strong> package.</p>
 <div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="sec-dlm-homework.html#cb547-1"></a><span class="kw">library</span>(devtools)</span>
 <span id="cb547-2"><a href="sec-dlm-homework.html#cb547-2"></a><span class="co"># Windows users will likely need to set this</span></span>
@@ -519,7 +520,7 @@ R_t = a S_t e^{-b S + v_t}.
 <p>Load the data.</p>
 <div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="sec-dlm-homework.html#cb548-1"></a><span class="kw">data</span>(KvichakSockeye, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
 <span id="cb548-2"><a href="sec-dlm-homework.html#cb548-2"></a>SRdata &lt;-<span class="st"> </span>KvichakSockeye</span></code></pre></div>
-<p>The data are a dataframe with columns for brood year (<code>brood.yr</code>), number of spawners (<code>Sp</code>), number of recruits (<code>Rec</code>) and PDO at year <span class="math inline">\(t-2\)</span> (<code>PDO.t2</code>) and <span class="math inline">\(t-3\)</span> (<code>PDO.t3</code>).</p>
+<p>The data are a dataframe with columns for brood year (<code>brood_year</code>), number of spawners (<code>spawners</code>), number of recruits (<code>recruits</code>) and PDO at year <span class="math inline">\(t-2\)</span> in summer (<code>pdo_summer_t2</code>) and in winter (<code>pdo_winter_t2</code>).</p>
 <div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="sec-dlm-homework.html#cb549-1"></a><span class="co"># head of data file</span></span>
 <span id="cb549-2"><a href="sec-dlm-homework.html#cb549-2"></a><span class="kw">head</span>(SRdata)</span></code></pre></div>
 <pre><code>  brood.yr   Sp   Rec PDO.t2 PDO.t3
