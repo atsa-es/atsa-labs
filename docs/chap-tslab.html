@@ -485,23 +485,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="data-and-packages-1" class="section level3 unnumbered">
 <h3>Data and packages</h3>
 <p>This chapter uses the <strong>stats</strong> package, which is often loaded by default when you start R, the <strong>MARSS</strong> package and the <strong>forecast</strong> package. The problems use a dataset in the <strong>datasets</strong> package. After installing the packages, if needed, load:</p>
-<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="chap-tslab.html#cb203-1"></a><span class="kw">library</span>(stats)</span>
-<span id="cb203-2"><a href="chap-tslab.html#cb203-2"></a><span class="kw">library</span>(MARSS)</span>
-<span id="cb203-3"><a href="chap-tslab.html#cb203-3"></a><span class="kw">library</span>(forecast)</span>
-<span id="cb203-4"><a href="chap-tslab.html#cb203-4"></a><span class="kw">library</span>(datasets)</span></code></pre></div>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="chap-tslab.html#cb204-1"></a><span class="kw">library</span>(stats)</span>
+<span id="cb204-2"><a href="chap-tslab.html#cb204-2"></a><span class="kw">library</span>(MARSS)</span>
+<span id="cb204-3"><a href="chap-tslab.html#cb204-3"></a><span class="kw">library</span>(forecast)</span>
+<span id="cb204-4"><a href="chap-tslab.html#cb204-4"></a><span class="kw">library</span>(datasets)</span></code></pre></div>
 <p>The chapter uses data sets which are in the <strong>atsalibrary</strong> package. If needed, install using the <strong>devtools</strong> package.</p>
-<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="chap-tslab.html#cb204-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb204-2"><a href="chap-tslab.html#cb204-2"></a><span class="co"># Windows users will likely need to set this</span></span>
-<span id="cb204-3"><a href="chap-tslab.html#cb204-3"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
-<span id="cb204-4"><a href="chap-tslab.html#cb204-4"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="chap-tslab.html#cb205-1"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb205-2"><a href="chap-tslab.html#cb205-2"></a><span class="co"># Windows users will likely need to set this</span></span>
+<span id="cb205-3"><a href="chap-tslab.html#cb205-3"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
+<span id="cb205-4"><a href="chap-tslab.html#cb205-4"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
 <p>The main one is a time series of the atmospheric concentration of CO<span class="math inline">\(_2\)</span> collected at the Mauna Loa Observatory in Hawai’i (<code>MLCO2</code>). The second is Northern Hemisphere land and ocean temperature anomalies from NOAA. (<code>NHTemp</code>). The problems use a data set on hourly phytoplankton counts (<code>hourlyphyto</code>). Use <code>?MLCO2</code>, <code>?NHTemp</code> and <code>?hourlyphyto</code> for information on these datasets.</p>
 <p>Load the data.</p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="chap-tslab.html#cb205-1"></a><span class="kw">data</span>(NHTemp, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb205-2"><a href="chap-tslab.html#cb205-2"></a>Temp &lt;-<span class="st"> </span>NHTemp</span>
-<span id="cb205-3"><a href="chap-tslab.html#cb205-3"></a><span class="kw">data</span>(MLCO2, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb205-4"><a href="chap-tslab.html#cb205-4"></a>CO2 &lt;-<span class="st"> </span>MLCO2</span>
-<span id="cb205-5"><a href="chap-tslab.html#cb205-5"></a><span class="kw">data</span>(hourlyphyto, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb205-6"><a href="chap-tslab.html#cb205-6"></a>phyto_dat &lt;-<span class="st"> </span>hourlyphyto</span></code></pre></div>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="chap-tslab.html#cb206-1"></a><span class="kw">data</span>(NHTemp, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
+<span id="cb206-2"><a href="chap-tslab.html#cb206-2"></a>Temp &lt;-<span class="st"> </span>NHTemp</span>
+<span id="cb206-3"><a href="chap-tslab.html#cb206-3"></a><span class="kw">data</span>(MLCO2, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
+<span id="cb206-4"><a href="chap-tslab.html#cb206-4"></a>CO2 &lt;-<span class="st"> </span>MLCO2</span>
+<span id="cb206-5"><a href="chap-tslab.html#cb206-5"></a><span class="kw">data</span>(hourlyphyto, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
+<span id="cb206-6"><a href="chap-tslab.html#cb206-6"></a>phyto_dat &lt;-<span class="st"> </span>hourlyphyto</span></code></pre></div>
 </div>
 </div>
             </section>

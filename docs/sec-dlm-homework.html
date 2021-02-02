@@ -511,7 +511,7 @@ R_t = a S_t e^{-b S + v_t}.
 
 <a href="https://www.ramlegacy.org/" class="uri">https://www.ramlegacy.org/</a></p>
 <p>For this exercise, we will use spawner-recruit data for sockeye salmon (<em>Oncorhynchus nerka</em>) from the Kvichak River in SW Alaska that span the years 1952-1989. In addition, we’ll examine the potential effects of the Pacific Decadal Oscillation (PDO) during the salmon’s first year in the ocean, which is widely believed to be a “bottleneck” to survival.</p>
-<p><img src="images/BB_sockeye_rivers.png" /></p>
+<p><img src="images/BB_sockeye_rivers_inset.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>These data are in the <strong>atsalibrary</strong> package on GitHub. If needed, install using the <strong>devtools</strong> package.</p>
 <div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="sec-dlm-homework.html#cb547-1"></a><span class="kw">library</span>(devtools)</span>
 <span id="cb547-2"><a href="sec-dlm-homework.html#cb547-2"></a><span class="co"># Windows users will likely need to set this</span></span>
@@ -523,13 +523,16 @@ R_t = a S_t e^{-b S + v_t}.
 <p>The data are a dataframe with columns for brood year (<code>brood_year</code>), number of spawners (<code>spawners</code>), number of recruits (<code>recruits</code>) and PDO at year <span class="math inline">\(t-2\)</span> in summer (<code>pdo_summer_t2</code>) and in winter (<code>pdo_winter_t2</code>).</p>
 <div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="sec-dlm-homework.html#cb549-1"></a><span class="co"># head of data file</span></span>
 <span id="cb549-2"><a href="sec-dlm-homework.html#cb549-2"></a><span class="kw">head</span>(SRdata)</span></code></pre></div>
-<pre><code>  brood.yr   Sp   Rec PDO.t2 PDO.t3
-1     1952 5970 17310  -0.61  -0.61
-2     1953  320   520  -1.48  -2.66
-3     1954  240   750  -2.05  -1.26
-4     1955  250  1280   0.01   0.11
-5     1956 9443 39036   0.86   0.37
-6     1957 2843  4091  -0.25   0.29</code></pre>
+<pre><code># A tibble: 6 x 5
+# Groups:   brood_year [6]
+  brood_year spawners recruits pdo_summer_t2 pdo_winter_t2
+       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+1       1952       NA    20200         -2.79         -1.68
+2       1953       NA      593         -1.2          -1.05
+3       1954       NA      799         -1.85         -1.25
+4       1955       NA     1500         -0.6          -0.68
+5       1956     9440    39000         -0.5          -0.31
+6       1957     2840     4090         -2.36         -1.78</code></pre>
 
 </div>
 </div>

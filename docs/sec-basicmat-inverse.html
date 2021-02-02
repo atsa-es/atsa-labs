@@ -480,27 +480,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-basicmat-inverse" class="section level2">
 <h2><span class="header-section-number">1.6</span> Taking the inverse of a square matrix</h2>
 <p>The inverse of a matrix is denoted <span class="math inline">\(\mathbf{A}^{-1}\)</span>. You can think of the inverse of a matrix like <span class="math inline">\(1/a\)</span>. <span class="math inline">\(1/a \times a = 1\)</span>. <span class="math inline">\(\mathbf{A}^{-1}\mathbf{A} = \mathbf{A}\mathbf{A}^{-1} = \mathbf{I}\)</span>. The inverse of a matrix does not always exist; for one it has to be square. We’ll be using inverses for variance-covariance matrices and by definition (of a variance-covariance matrix), the inverse of those exist. In R, there are a couple way common ways to take the inverse of a variance-covariance matrix (or something with the same properties). <code>solve()</code> is the most common probably:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="sec-basicmat-inverse.html#cb111-1"></a>A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb111-2"><a href="sec-basicmat-inverse.html#cb111-2"></a>invA =<span class="st"> </span><span class="kw">solve</span>(A)</span>
-<span id="cb111-3"><a href="sec-basicmat-inverse.html#cb111-3"></a>invA <span class="op">%*%</span><span class="st"> </span>A</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="sec-basicmat-inverse.html#cb112-1"></a>A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb112-2"><a href="sec-basicmat-inverse.html#cb112-2"></a>invA =<span class="st"> </span><span class="kw">solve</span>(A)</span>
+<span id="cb112-3"><a href="sec-basicmat-inverse.html#cb112-3"></a>invA <span class="op">%*%</span><span class="st"> </span>A</span></code></pre></div>
 <pre><code>             [,1]          [,2] [,3]
 [1,] 1.000000e+00 -6.938894e-18    0
 [2,] 2.081668e-17  1.000000e+00    0
 [3,] 0.000000e+00  0.000000e+00    1</code></pre>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="sec-basicmat-inverse.html#cb113-1"></a>A <span class="op">%*%</span><span class="st"> </span>invA</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="sec-basicmat-inverse.html#cb114-1"></a>A <span class="op">%*%</span><span class="st"> </span>invA</span></code></pre></div>
 <pre><code>             [,1]          [,2] [,3]
 [1,] 1.000000e+00 -6.938894e-18    0
 [2,] 2.081668e-17  1.000000e+00    0
 [3,] 0.000000e+00  0.000000e+00    1</code></pre>
 <p>Another option is to use <code>chol2inv()</code> which uses a Cholesky decomposition:</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="sec-basicmat-inverse.html#cb115-1"></a>A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb115-2"><a href="sec-basicmat-inverse.html#cb115-2"></a>invA =<span class="st"> </span><span class="kw">chol2inv</span>(<span class="kw">chol</span>(A))</span>
-<span id="cb115-3"><a href="sec-basicmat-inverse.html#cb115-3"></a>invA <span class="op">%*%</span><span class="st"> </span>A</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="sec-basicmat-inverse.html#cb116-1"></a>A =<span class="st"> </span><span class="kw">diag</span>(<span class="dv">3</span>, <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb116-2"><a href="sec-basicmat-inverse.html#cb116-2"></a>invA =<span class="st"> </span><span class="kw">chol2inv</span>(<span class="kw">chol</span>(A))</span>
+<span id="cb116-3"><a href="sec-basicmat-inverse.html#cb116-3"></a>invA <span class="op">%*%</span><span class="st"> </span>A</span></code></pre></div>
 <pre><code>              [,1]         [,2]          [,3]
 [1,]  1.000000e+00 6.938894e-17  0.000000e+00
 [2,]  2.081668e-17 1.000000e+00 -2.775558e-17
 [3,] -5.551115e-17 0.000000e+00  1.000000e+00</code></pre>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="sec-basicmat-inverse.html#cb117-1"></a>A <span class="op">%*%</span><span class="st"> </span>invA</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="sec-basicmat-inverse.html#cb118-1"></a>A <span class="op">%*%</span><span class="st"> </span>invA</span></code></pre></div>
 <pre><code>             [,1]          [,2]          [,3]
 [1,] 1.000000e+00  2.081668e-17 -5.551115e-17
 [2,] 6.938894e-17  1.000000e+00  0.000000e+00

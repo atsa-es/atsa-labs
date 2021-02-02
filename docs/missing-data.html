@@ -480,19 +480,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="missing-data" class="section level2">
 <h2><span class="header-section-number">14.9</span> Missing data</h2>
 <p>One nice features of this approach is that it is robust to a fair bit of missing data. Here I delete a third of the data. I do this randomly throughout the dataset. The data look pretty hopeless. No signal to be seen.</p>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-14-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Fit as usual:</p>
 <div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="missing-data.html#cb683-1"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat2.miss, <span class="dt">model =</span> mod.list1, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>But though we can’t see the signal in the data, it is there.
-<img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-15-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Averaging our sensors doesn’t work since there are so many missing values and we will have missing values in our average.</p>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-16-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-17-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Another type of missing data are strings of missing data. Here I create a data set with random strings of missing values. Again the data look really hopeless and definitely cannot average across the data since we’d be averaging across different data sets.</p>
 <pre><code>Warning: Removed 5 row(s) containing missing values (geom_path).</code></pre>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-17-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-18-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>We can fit as usual and see that it is possible to recover the signal.</p>
 <div class="sourceCode" id="cb685"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb685-1"><a href="missing-data.html#cb685-1"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat2.miss, <span class="dt">model =</span> mod.list1, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-19-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-20-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
             </section>
 

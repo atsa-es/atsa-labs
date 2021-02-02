@@ -480,12 +480,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-mlr-season-w-var" class="section level2">
 <h2><span class="header-section-number">2.7</span> Seasonal effect plus other explanatory variables*</h2>
 <p>With our four data points, we are limited to estimating four parameters. Let’s use the full 21 data points so we can estimate some more complex models. We’ll add an owner variable and a quarter variable to the stackloss dataset.</p>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="sec-mlr-season-w-var.html#cb171-1"></a><span class="kw">data</span>(stackloss, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
-<span id="cb171-2"><a href="sec-mlr-season-w-var.html#cb171-2"></a>fulldat =<span class="st"> </span>stackloss</span>
-<span id="cb171-3"><a href="sec-mlr-season-w-var.html#cb171-3"></a>n =<span class="st"> </span><span class="kw">nrow</span>(fulldat)</span>
-<span id="cb171-4"><a href="sec-mlr-season-w-var.html#cb171-4"></a>fulldat =<span class="st"> </span><span class="kw">cbind</span>(fulldat, <span class="dt">owner =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;sue&quot;</span>, <span class="st">&quot;aneesh&quot;</span>, <span class="st">&quot;joe&quot;</span>), </span>
-<span id="cb171-5"><a href="sec-mlr-season-w-var.html#cb171-5"></a>    n)[<span class="dv">1</span><span class="op">:</span>n], <span class="dt">qtr =</span> <span class="kw">paste</span>(<span class="st">&quot;qtr&quot;</span>, <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, n)[<span class="dv">1</span><span class="op">:</span>n], <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>), </span>
-<span id="cb171-6"><a href="sec-mlr-season-w-var.html#cb171-6"></a>    <span class="dt">reg =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;s&quot;</span>), n)[<span class="dv">1</span><span class="op">:</span>n])</span></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="sec-mlr-season-w-var.html#cb172-1"></a><span class="kw">data</span>(stackloss, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
+<span id="cb172-2"><a href="sec-mlr-season-w-var.html#cb172-2"></a>fulldat =<span class="st"> </span>stackloss</span>
+<span id="cb172-3"><a href="sec-mlr-season-w-var.html#cb172-3"></a>n =<span class="st"> </span><span class="kw">nrow</span>(fulldat)</span>
+<span id="cb172-4"><a href="sec-mlr-season-w-var.html#cb172-4"></a>fulldat =<span class="st"> </span><span class="kw">cbind</span>(fulldat, <span class="dt">owner =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;sue&quot;</span>, <span class="st">&quot;aneesh&quot;</span>, <span class="st">&quot;joe&quot;</span>), </span>
+<span id="cb172-5"><a href="sec-mlr-season-w-var.html#cb172-5"></a>    n)[<span class="dv">1</span><span class="op">:</span>n], <span class="dt">qtr =</span> <span class="kw">paste</span>(<span class="st">&quot;qtr&quot;</span>, <span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, n)[<span class="dv">1</span><span class="op">:</span>n], <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>), </span>
+<span id="cb172-6"><a href="sec-mlr-season-w-var.html#cb172-6"></a>    <span class="dt">reg =</span> <span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;n&quot;</span>, <span class="st">&quot;s&quot;</span>), n)[<span class="dv">1</span><span class="op">:</span>n])</span></code></pre></div>
 <p>Let’s fit a model where there is only an effect of air flow, but that effect varies by owner and by quarter. We also want a different intercept for each quarter. So if datapoint <span class="math inline">\(i\)</span> is from quarter <span class="math inline">\(j\)</span> on a plant owned by owner <span class="math inline">\(k\)</span>, the model is
 <span class="math display" id="eq:stackloss-mult-beta">\[\begin{equation}
 \tag{2.23}
@@ -493,15 +493,15 @@ stack.loss_i = \alpha_j + \beta_{j,k} air_i + e_i
 \end{equation}\]</span>
 So there there are <span class="math inline">\(4 \times 3\)</span> <span class="math inline">\(\beta\)</span>’s (4 quarters and 3 owners) and 4 <span class="math inline">\(\alpha\)</span>’s (4 quarters).</p>
 <p>With <code>lm()</code>, we fit the model as:</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="sec-mlr-season-w-var.html#cb172-1"></a>fit7 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr <span class="op">+</span><span class="st"> </span>Air.Flow<span class="op">:</span>qtr<span class="op">:</span>owner, <span class="dt">data =</span> fulldat)</span></code></pre></div>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="sec-mlr-season-w-var.html#cb173-1"></a>fit7 =<span class="st"> </span><span class="kw">lm</span>(stack.loss <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>qtr <span class="op">+</span><span class="st"> </span>Air.Flow<span class="op">:</span>qtr<span class="op">:</span>owner, <span class="dt">data =</span> fulldat)</span></code></pre></div>
 <p>Take a look at <span class="math inline">\(\mathbf{Z}\)</span> for Form 1 using <code>model.matrix(Z)</code>. It’s not shown since it is large:</p>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="sec-mlr-season-w-var.html#cb173-1"></a><span class="kw">model.matrix</span>(fit7)</span></code></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="sec-mlr-season-w-var.html#cb174-1"></a><span class="kw">model.matrix</span>(fit7)</span></code></pre></div>
 <p>The <span class="math inline">\(\mathbf{x}\)</span> will be
 <span class="math display">\[\begin{equation}
 \begin{bmatrix}\alpha_1 \\ \alpha_2 \\ \alpha_3 \\ \alpha_4 \\ \beta_{1,a} \\ \beta_{2,a} \\ \beta_{3,a} \\ \dots \end{bmatrix}
 \end{equation}\]</span></p>
 <p>Take a look at the model matrix that <code>lm()</code> is using and make sure you understand how <span class="math inline">\(\mathbf{Z}\mathbf{x}\)</span> produces Equation <a href="sec-mlr-season-w-var.html#eq:stackloss-mult-beta">(2.23)</a>.</p>
-<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="sec-mlr-season-w-var.html#cb174-1"></a>Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit7)</span></code></pre></div>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="sec-mlr-season-w-var.html#cb175-1"></a>Z =<span class="st"> </span><span class="kw">model.matrix</span>(fit7)</span></code></pre></div>
 </div>
             </section>
 

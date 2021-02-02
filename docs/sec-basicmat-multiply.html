@@ -482,40 +482,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>You will need to be very solid in matrix multiplication for the course. If you haven’t done it in awhile, google `matrix multiplication youtube’ and you find lots of 5min videos to remind you.</p>
 <p>In R, you use the <code>%*%</code> operation to do matrix multiplication. When you do matrix multiplication, the columns of the matrix on the left must equal the rows of the matrix on the right. The result is a matrix that has the number of rows of the matrix on the left and number of columns of the matrix on the right.
 <span class="math display">\[(n \times m)(m \times p) = (n \times p)\]</span></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="sec-basicmat-multiply.html#cb36-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="co">#2 rows, 3 columns</span></span>
-<span id="cb36-2"><a href="sec-basicmat-multiply.html#cb36-2"></a>B=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">2</span>) <span class="co">#3 rows, 2 columns</span></span>
-<span id="cb36-3"><a href="sec-basicmat-multiply.html#cb36-3"></a>A<span class="op">%*%</span>B <span class="co">#this works</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="sec-basicmat-multiply.html#cb37-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="co">#2 rows, 3 columns</span></span>
+<span id="cb37-2"><a href="sec-basicmat-multiply.html#cb37-2"></a>B=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">3</span>, <span class="dv">2</span>) <span class="co">#3 rows, 2 columns</span></span>
+<span id="cb37-3"><a href="sec-basicmat-multiply.html#cb37-3"></a>A<span class="op">%*%</span>B <span class="co">#this works</span></span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]   22   49
 [2,]   28   64</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="sec-basicmat-multiply.html#cb38-1"></a>B<span class="op">%*%</span>A <span class="co">#this works</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="sec-basicmat-multiply.html#cb39-1"></a>B<span class="op">%*%</span>A <span class="co">#this works</span></span></code></pre></div>
 <pre><code>     [,1] [,2] [,3]
 [1,]    9   19   29
 [2,]   12   26   40
 [3,]   15   33   51</code></pre>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="sec-basicmat-multiply.html#cb40-1"></a><span class="kw">try</span>(B<span class="op">%*%</span>B) <span class="co">#this doesn&#39;t</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="sec-basicmat-multiply.html#cb41-1"></a><span class="kw">try</span>(B<span class="op">%*%</span>B) <span class="co">#this doesn&#39;t</span></span></code></pre></div>
 <pre><code>Error in B %*% B : non-conformable arguments</code></pre>
 <p>To add two matrices use <code>+</code>. The matrices have to have the same dimensions.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="sec-basicmat-multiply.html#cb42-1"></a>A<span class="op">+</span>A <span class="co">#works</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="sec-basicmat-multiply.html#cb43-1"></a>A<span class="op">+</span>A <span class="co">#works</span></span></code></pre></div>
 <pre><code>     [,1] [,2] [,3]
 [1,]    2    6   10
 [2,]    4    8   12</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="sec-basicmat-multiply.html#cb44-1"></a>A<span class="op">+</span><span class="kw">t</span>(B) <span class="co">#works</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="sec-basicmat-multiply.html#cb45-1"></a>A<span class="op">+</span><span class="kw">t</span>(B) <span class="co">#works</span></span></code></pre></div>
 <pre><code>     [,1] [,2] [,3]
 [1,]    2    5    8
 [2,]    6    9   12</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="sec-basicmat-multiply.html#cb46-1"></a><span class="kw">try</span>(A<span class="op">+</span>B) <span class="co">#does not work since A has 2 rows and B has 3</span></span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="sec-basicmat-multiply.html#cb47-1"></a><span class="kw">try</span>(A<span class="op">+</span>B) <span class="co">#does not work since A has 2 rows and B has 3</span></span></code></pre></div>
 <pre><code>Error in A + B : non-conformable arrays</code></pre>
 <p>The transpose of a matrix is denoted <span class="math inline">\(\mathbf{A}^\top\)</span> or <span class="math inline">\(\mathbf{A}^\prime\)</span>. To transpose a matrix in R, you use <code>t()</code>.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="sec-basicmat-multiply.html#cb48-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="co">#2 rows, 3 columns</span></span>
-<span id="cb48-2"><a href="sec-basicmat-multiply.html#cb48-2"></a><span class="kw">t</span>(A) <span class="co">#is the transpose of A</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="sec-basicmat-multiply.html#cb49-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="co">#2 rows, 3 columns</span></span>
+<span id="cb49-2"><a href="sec-basicmat-multiply.html#cb49-2"></a><span class="kw">t</span>(A) <span class="co">#is the transpose of A</span></span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]    1    2
 [2,]    3    4
 [3,]    5    6</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="sec-basicmat-multiply.html#cb50-1"></a><span class="kw">try</span>(A<span class="op">%*%</span>A) <span class="co">#this won&#39;t work</span></span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="sec-basicmat-multiply.html#cb51-1"></a><span class="kw">try</span>(A<span class="op">%*%</span>A) <span class="co">#this won&#39;t work</span></span></code></pre></div>
 <pre><code>Error in A %*% A : non-conformable arguments</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="sec-basicmat-multiply.html#cb52-1"></a>A<span class="op">%*%</span><span class="kw">t</span>(A) <span class="co">#this will</span></span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="sec-basicmat-multiply.html#cb53-1"></a>A<span class="op">%*%</span><span class="kw">t</span>(A) <span class="co">#this will</span></span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]   35   44
 [2,]   44   56</code></pre>

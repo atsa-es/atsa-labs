@@ -245,7 +245,9 @@ No? Run
     ```
 Note this code will fail if _bookdown_files folder or any cache files do not exist.  In that case, use 'Build Book' in RStudio. If any code to be cached is changed or created, 'Build Book' must be used to remake the cache.  Takes a long time since all the cache is rebuilt.  Always rerun 'cleanDefsinRmd.R' before using 'Build Book'.  Note that build book to pdf will fail if there are \newcommands in the Rmd files.  That's ok.  Cache will still be built and then run `render_book`.  You can select the arrow next to 'Build Book' and just use build to gitbook.
 
-You can use 'Build Book' under the build tab in RStudio but make sure to run `source("cleanDefsinRmd.R")` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.  
+You can use 'Build Book' under the build tab in RStudio but make sure to run `source("cleanDefsinRmd.R")` first.  To see the 'Build Book' option on the build tab, go Tools:Project Options:Build Tools and set the project type to 'Website'.
+
+**Common problems** If build fails, there will be junk left over labeled "Applied_Time_Series_Analysis". All that needs to be deleted. Usually it is just an Rmd file but if you see other stuff (like cache folders), that needs to go also. The caching causes endless problems with book building especially if that gets updated in GitHub. So best if only one person builds and only on one machine. Build the whole book periodically or when ever there are code changes (as opposed to text only changes). Restart R before rebuilding. Typically `bookdown::render_book("index.Rmd", "bookdown::gitbook")` works for awhile and builds fast, and then it doesn't work and you see errors and warnings about cache or rds files. Then it is time for a full rebuild. Check that `_bookdown_files` (the cache) is empty and do a full rebuild using Build Book tab.
 
 ## Build a chapter
 [back to top](#afts-labbook-info)

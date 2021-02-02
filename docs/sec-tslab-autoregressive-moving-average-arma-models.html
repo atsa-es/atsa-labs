@@ -539,8 +539,8 @@ sigma^2 estimated as 0.9972:  log likelihood = -14175.92,  aic = 28363.84</code>
 <span id="cb260-11"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-11"></a>        cc &lt;-<span class="st"> </span>cc <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
 <span id="cb260-12"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-12"></a>    }</span>
 <span id="cb260-13"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb260-13"></a>}</span></code></pre></div>
-<pre><code>Warning in arima(x = ARMA_sim, order = c(p, 0, q)): possible convergence problem:
-optim gave code = 1</code></pre>
+<pre><code>Warning in arima(x = ARMA_sim, order = c(p, 0, q)): possible convergence
+problem: optim gave code = 1</code></pre>
 <div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb262-1"></a><span class="co">## get AIC values for model evaluation</span></span>
 <span id="cb262-2"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb262-2"></a>ARMA_AIC &lt;-<span class="st"> </span><span class="kw">sapply</span>(ARMA_res, <span class="cf">function</span>(x) x<span class="op">$</span>aic)</span>
 <span id="cb262-3"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#cb262-3"></a><span class="co">## model with lowest AIC is the best</span></span>

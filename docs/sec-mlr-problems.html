@@ -480,25 +480,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-mlr-problems" class="section level2">
 <h2><span class="header-section-number">2.10</span> Problems</h2>
 <p>For the homework questions, we will using part of the <code>airquality</code> data set in R. Load that as</p>
-<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="sec-mlr-problems.html#cb189-1"></a><span class="kw">data</span>(airquality, <span class="dt">package=</span><span class="st">&quot;datasets&quot;</span>)</span>
-<span id="cb189-2"><a href="sec-mlr-problems.html#cb189-2"></a><span class="co">#remove any rows with NAs omitted.</span></span>
-<span id="cb189-3"><a href="sec-mlr-problems.html#cb189-3"></a>airquality=<span class="kw">na.omit</span>(airquality)</span>
-<span id="cb189-4"><a href="sec-mlr-problems.html#cb189-4"></a><span class="co">#make Month a factor (i.e., the Month number is a name rather than a number)</span></span>
-<span id="cb189-5"><a href="sec-mlr-problems.html#cb189-5"></a>airquality<span class="op">$</span>Month=<span class="kw">as.factor</span>(airquality<span class="op">$</span>Month)</span>
-<span id="cb189-6"><a href="sec-mlr-problems.html#cb189-6"></a><span class="co">#add a region factor</span></span>
-<span id="cb189-7"><a href="sec-mlr-problems.html#cb189-7"></a>airquality<span class="op">$</span>region =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;north&quot;</span>,<span class="st">&quot;south&quot;</span>),<span class="dv">60</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">111</span>]</span>
-<span id="cb189-8"><a href="sec-mlr-problems.html#cb189-8"></a><span class="co">#Only use 5 data points for the homework so you can show the matrices easily</span></span>
-<span id="cb189-9"><a href="sec-mlr-problems.html#cb189-9"></a>homeworkdat =<span class="st"> </span>airquality[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="sec-mlr-problems.html#cb190-1"></a><span class="kw">data</span>(airquality, <span class="dt">package=</span><span class="st">&quot;datasets&quot;</span>)</span>
+<span id="cb190-2"><a href="sec-mlr-problems.html#cb190-2"></a><span class="co">#remove any rows with NAs omitted.</span></span>
+<span id="cb190-3"><a href="sec-mlr-problems.html#cb190-3"></a>airquality=<span class="kw">na.omit</span>(airquality)</span>
+<span id="cb190-4"><a href="sec-mlr-problems.html#cb190-4"></a><span class="co">#make Month a factor (i.e., the Month number is a name rather than a number)</span></span>
+<span id="cb190-5"><a href="sec-mlr-problems.html#cb190-5"></a>airquality<span class="op">$</span>Month=<span class="kw">as.factor</span>(airquality<span class="op">$</span>Month)</span>
+<span id="cb190-6"><a href="sec-mlr-problems.html#cb190-6"></a><span class="co">#add a region factor</span></span>
+<span id="cb190-7"><a href="sec-mlr-problems.html#cb190-7"></a>airquality<span class="op">$</span>region =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;north&quot;</span>,<span class="st">&quot;south&quot;</span>),<span class="dv">60</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">111</span>]</span>
+<span id="cb190-8"><a href="sec-mlr-problems.html#cb190-8"></a><span class="co">#Only use 5 data points for the homework so you can show the matrices easily</span></span>
+<span id="cb190-9"><a href="sec-mlr-problems.html#cb190-9"></a>homeworkdat =<span class="st"> </span>airquality[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,]</span></code></pre></div>
 <ol style="list-style-type: decimal">
 <li><p>Using Form 1 <span class="math inline">\(\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e}\)</span>, write out the model, showing the <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> matrices, being fit by this command</p>
-<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="sec-mlr-problems.html#cb190-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data =</span> homeworkdat)</span></code></pre></div></li>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="sec-mlr-problems.html#cb191-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data =</span> homeworkdat)</span></code></pre></div></li>
 <li><p>For the above model, write out the following R code.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Create the <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{Z}\)</span> matrices in R.</li>
 <li>Solve for <span class="math inline">\(\mathbf{x}\)</span> (the parameters). Show that they match what you get from the first <code>lm()</code> call.</li>
 </ol></li>
 <li><p>Add -1 to your <code>lm()</code> call in question 1:</p>
-<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="sec-mlr-problems.html#cb191-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data =</span> homeworkdat)</span></code></pre></div>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="sec-mlr-problems.html#cb192-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Wind <span class="op">+</span><span class="st"> </span>Temp, <span class="dt">data =</span> homeworkdat)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li>What changes in your model?</li>
 <li>Write out the in Form 1 as an equation. Show the new <span class="math inline">\(\mathbf{Z}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> matrices.</li>
@@ -511,7 +511,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Solve for the parameters using the code from subsection <a href="sec-mlr-solveform2.html#sec-mlr-solveform2code">2.9.0.1</a>.</li>
 </ol></li>
 <li><p>A model of the ozone data with only a region (north/south) effect can be written:</p>
-<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="sec-mlr-problems.html#cb192-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>region, <span class="dt">data =</span> homeworkdat)</span></code></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="sec-mlr-problems.html#cb193-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>region, <span class="dt">data =</span> homeworkdat)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li>Write this model in Form 1 as an equation.</li>
 <li>Solve for the parameter values and show that they match what you get from the <code>lm()</code> call.</li>
@@ -523,12 +523,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Solve for the parameter values and show that they match what you get from the <code>lm()</code> call. To do this, you adapt the code from subsection <a href="sec-mlr-solveform2.html#sec-mlr-solveform2code">2.9.0.1</a>.</li>
 </ol></li>
 <li><p>Write the model below in Form 2 as an equation. Show the <span class="math inline">\(\mathbf{Z}\)</span>, <span class="math inline">\(\mathbf{y}\)</span> and <span class="math inline">\(\mathbf{x}\)</span> matrices.</p>
-<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="sec-mlr-problems.html#cb193-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Temp<span class="op">:</span>region, <span class="dt">data =</span> homeworkdat)</span></code></pre></div></li>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="sec-mlr-problems.html#cb194-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span>Temp<span class="op">:</span>region, <span class="dt">data =</span> homeworkdat)</span></code></pre></div></li>
 <li><p>Using the airquality dataset with 111 data points</p>
 <ol style="list-style-type: lower-alpha">
 <li>Write the model below in Form 2.</li>
 </ol>
-<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="sec-mlr-problems.html#cb194-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Temp<span class="op">:</span>region <span class="op">+</span><span class="st"> </span>Month, <span class="dt">data =</span> airquality)</span></code></pre></div>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="sec-mlr-problems.html#cb195-1"></a>fit =<span class="st"> </span><span class="kw">lm</span>(Ozone <span class="op">~</span><span class="st"> </span><span class="dv">-1</span> <span class="op">+</span><span class="st"> </span>Temp<span class="op">:</span>region <span class="op">+</span><span class="st"> </span>Month, <span class="dt">data =</span> airquality)</span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Solve for the parameters by adapting code from subsection <a href="sec-mlr-solveform2.html#sec-mlr-solveform2code">2.9.0.1</a>.</li>
 </ol></li>

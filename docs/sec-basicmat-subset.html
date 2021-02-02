@@ -480,75 +480,75 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-basicmat-subset" class="section level2">
 <h2><span class="header-section-number">1.3</span> Subsetting a matrix</h2>
 <p>To subset a matrix, we use <code>[ ]</code>:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="sec-basicmat-subset.html#cb54-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>) <span class="co">#3 rows, 3 columns</span></span>
-<span id="cb54-2"><a href="sec-basicmat-subset.html#cb54-2"></a><span class="co">#get the first and second rows of A</span></span>
-<span id="cb54-3"><a href="sec-basicmat-subset.html#cb54-3"></a><span class="co">#it&#39;s a 2x3 matrix</span></span>
-<span id="cb54-4"><a href="sec-basicmat-subset.html#cb54-4"></a>A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="sec-basicmat-subset.html#cb55-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>) <span class="co">#3 rows, 3 columns</span></span>
+<span id="cb55-2"><a href="sec-basicmat-subset.html#cb55-2"></a><span class="co">#get the first and second rows of A</span></span>
+<span id="cb55-3"><a href="sec-basicmat-subset.html#cb55-3"></a><span class="co">#it&#39;s a 2x3 matrix</span></span>
+<span id="cb55-4"><a href="sec-basicmat-subset.html#cb55-4"></a>A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]</span></code></pre></div>
 <pre><code>     [,1] [,2] [,3]
 [1,]    1    4    7
 [2,]    2    5    8</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="sec-basicmat-subset.html#cb56-1"></a><span class="co">#get the top 2 rows and left 2 columns</span></span>
-<span id="cb56-2"><a href="sec-basicmat-subset.html#cb56-2"></a>A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="sec-basicmat-subset.html#cb57-1"></a><span class="co">#get the top 2 rows and left 2 columns</span></span>
+<span id="cb57-2"><a href="sec-basicmat-subset.html#cb57-2"></a>A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]    1    4
 [2,]    2    5</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="sec-basicmat-subset.html#cb58-1"></a><span class="co">#What does this do?</span></span>
-<span id="cb58-2"><a href="sec-basicmat-subset.html#cb58-2"></a>A[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="sec-basicmat-subset.html#cb59-1"></a><span class="co">#What does this do?</span></span>
+<span id="cb59-2"><a href="sec-basicmat-subset.html#cb59-2"></a>A[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]    1    7
 [2,]    3    9</code></pre>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="sec-basicmat-subset.html#cb60-1"></a><span class="co">#This?</span></span>
-<span id="cb60-2"><a href="sec-basicmat-subset.html#cb60-2"></a>A[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="sec-basicmat-subset.html#cb61-1"></a><span class="co">#This?</span></span>
+<span id="cb61-2"><a href="sec-basicmat-subset.html#cb61-2"></a>A[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">1</span>),<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)]</span></code></pre></div>
 <pre><code>     [,1] [,2]
 [1,]    4    7
 [2,]    5    8
 [3,]    4    7</code></pre>
 <p>If you have used matlab, you know you can say something like <code>A[1,end]</code> to denote the element of a matrix in row 1 and the last column. R does not have `end’. To do, the same in R you do something like:</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="sec-basicmat-subset.html#cb62-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb62-2"><a href="sec-basicmat-subset.html#cb62-2"></a>A[<span class="dv">1</span>,<span class="kw">ncol</span>(A)]</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="sec-basicmat-subset.html#cb63-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb63-2"><a href="sec-basicmat-subset.html#cb63-2"></a>A[<span class="dv">1</span>,<span class="kw">ncol</span>(A)]</span></code></pre></div>
 <pre><code>[1] 7</code></pre>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="sec-basicmat-subset.html#cb64-1"></a><span class="co">#or</span></span>
-<span id="cb64-2"><a href="sec-basicmat-subset.html#cb64-2"></a>A[<span class="dv">1</span>,<span class="kw">dim</span>(A)[<span class="dv">2</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="sec-basicmat-subset.html#cb65-1"></a><span class="co">#or</span></span>
+<span id="cb65-2"><a href="sec-basicmat-subset.html#cb65-2"></a>A[<span class="dv">1</span>,<span class="kw">dim</span>(A)[<span class="dv">2</span>]]</span></code></pre></div>
 <pre><code>[1] 7</code></pre>
 <p><strong>Warning R will create vectors from subsetting matrices!</strong></p>
 <p>One of the really bad things that R does with matrices is create a vector if you happen to subset a matrix to create a matrix with 1 row or 1 column. Look at this:</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="sec-basicmat-subset.html#cb66-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb66-2"><a href="sec-basicmat-subset.html#cb66-2"></a><span class="co">#take the first 2 rows</span></span>
-<span id="cb66-3"><a href="sec-basicmat-subset.html#cb66-3"></a>B=A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]</span>
-<span id="cb66-4"><a href="sec-basicmat-subset.html#cb66-4"></a><span class="co">#everything is ok</span></span>
-<span id="cb66-5"><a href="sec-basicmat-subset.html#cb66-5"></a><span class="kw">dim</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="sec-basicmat-subset.html#cb67-1"></a>A=<span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">9</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb67-2"><a href="sec-basicmat-subset.html#cb67-2"></a><span class="co">#take the first 2 rows</span></span>
+<span id="cb67-3"><a href="sec-basicmat-subset.html#cb67-3"></a>B=A[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,]</span>
+<span id="cb67-4"><a href="sec-basicmat-subset.html#cb67-4"></a><span class="co">#everything is ok</span></span>
+<span id="cb67-5"><a href="sec-basicmat-subset.html#cb67-5"></a><span class="kw">dim</span>(B)</span></code></pre></div>
 <pre><code>[1] 2 3</code></pre>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="sec-basicmat-subset.html#cb68-1"></a><span class="kw">class</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="sec-basicmat-subset.html#cb69-1"></a><span class="kw">class</span>(B)</span></code></pre></div>
 <pre><code>[1] &quot;matrix&quot; &quot;array&quot; </code></pre>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="sec-basicmat-subset.html#cb70-1"></a><span class="co">#take the first row</span></span>
-<span id="cb70-2"><a href="sec-basicmat-subset.html#cb70-2"></a>B=A[<span class="dv">1</span>,]</span>
-<span id="cb70-3"><a href="sec-basicmat-subset.html#cb70-3"></a><span class="co">#oh no! It should be a 1x3 matrix but it is not.</span></span>
-<span id="cb70-4"><a href="sec-basicmat-subset.html#cb70-4"></a><span class="kw">dim</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="sec-basicmat-subset.html#cb71-1"></a><span class="co">#take the first row</span></span>
+<span id="cb71-2"><a href="sec-basicmat-subset.html#cb71-2"></a>B=A[<span class="dv">1</span>,]</span>
+<span id="cb71-3"><a href="sec-basicmat-subset.html#cb71-3"></a><span class="co">#oh no! It should be a 1x3 matrix but it is not.</span></span>
+<span id="cb71-4"><a href="sec-basicmat-subset.html#cb71-4"></a><span class="kw">dim</span>(B)</span></code></pre></div>
 <pre><code>NULL</code></pre>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="sec-basicmat-subset.html#cb72-1"></a><span class="co">#It is not even a matrix any more</span></span>
-<span id="cb72-2"><a href="sec-basicmat-subset.html#cb72-2"></a><span class="kw">class</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="sec-basicmat-subset.html#cb73-1"></a><span class="co">#It is not even a matrix any more</span></span>
+<span id="cb73-2"><a href="sec-basicmat-subset.html#cb73-2"></a><span class="kw">class</span>(B)</span></code></pre></div>
 <pre><code>[1] &quot;integer&quot;</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="sec-basicmat-subset.html#cb74-1"></a><span class="co">#and what happens if we take the transpose?</span></span>
-<span id="cb74-2"><a href="sec-basicmat-subset.html#cb74-2"></a><span class="co">#Oh no, it&#39;s a 1x3 matrix not a 3x1 (transpose of 1x3)</span></span>
-<span id="cb74-3"><a href="sec-basicmat-subset.html#cb74-3"></a><span class="kw">t</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="sec-basicmat-subset.html#cb75-1"></a><span class="co">#and what happens if we take the transpose?</span></span>
+<span id="cb75-2"><a href="sec-basicmat-subset.html#cb75-2"></a><span class="co">#Oh no, it&#39;s a 1x3 matrix not a 3x1 (transpose of 1x3)</span></span>
+<span id="cb75-3"><a href="sec-basicmat-subset.html#cb75-3"></a><span class="kw">t</span>(B)</span></code></pre></div>
 <pre><code>     [,1] [,2] [,3]
 [1,]    1    4    7</code></pre>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="sec-basicmat-subset.html#cb76-1"></a><span class="co">#A%*%B should fail because A is (3x3) and B is (1x3)</span></span>
-<span id="cb76-2"><a href="sec-basicmat-subset.html#cb76-2"></a>A<span class="op">%*%</span>B</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="sec-basicmat-subset.html#cb77-1"></a><span class="co">#A%*%B should fail because A is (3x3) and B is (1x3)</span></span>
+<span id="cb77-2"><a href="sec-basicmat-subset.html#cb77-2"></a>A<span class="op">%*%</span>B</span></code></pre></div>
 <pre><code>     [,1]
 [1,]   66
 [2,]   78
 [3,]   90</code></pre>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="sec-basicmat-subset.html#cb78-1"></a><span class="co">#It works? That is horrible!</span></span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="sec-basicmat-subset.html#cb79-1"></a><span class="co">#It works? That is horrible!</span></span></code></pre></div>
 <p>This will create hard to find bugs in your code because you will look at <code>B=A[1,]</code> and everything looks fine. Why is R saying it is not a matrix! To stop R from doing this use <code>drop=FALSE</code>.</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="sec-basicmat-subset.html#cb79-1"></a>B=A[<span class="dv">1</span>,,drop=<span class="ot">FALSE</span>]</span>
-<span id="cb79-2"><a href="sec-basicmat-subset.html#cb79-2"></a><span class="co">#Now it is a matrix as it should be</span></span>
-<span id="cb79-3"><a href="sec-basicmat-subset.html#cb79-3"></a><span class="kw">dim</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="sec-basicmat-subset.html#cb80-1"></a>B=A[<span class="dv">1</span>,,drop=<span class="ot">FALSE</span>]</span>
+<span id="cb80-2"><a href="sec-basicmat-subset.html#cb80-2"></a><span class="co">#Now it is a matrix as it should be</span></span>
+<span id="cb80-3"><a href="sec-basicmat-subset.html#cb80-3"></a><span class="kw">dim</span>(B)</span></code></pre></div>
 <pre><code>[1] 1 3</code></pre>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="sec-basicmat-subset.html#cb81-1"></a><span class="kw">class</span>(B)</span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="sec-basicmat-subset.html#cb82-1"></a><span class="kw">class</span>(B)</span></code></pre></div>
 <pre><code>[1] &quot;matrix&quot; &quot;array&quot; </code></pre>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="sec-basicmat-subset.html#cb83-1"></a><span class="co">#this fails as it should (alerting you to a problem!)</span></span>
-<span id="cb83-2"><a href="sec-basicmat-subset.html#cb83-2"></a><span class="kw">try</span>(A<span class="op">%*%</span>B)</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="sec-basicmat-subset.html#cb84-1"></a><span class="co">#this fails as it should (alerting you to a problem!)</span></span>
+<span id="cb84-2"><a href="sec-basicmat-subset.html#cb84-2"></a><span class="kw">try</span>(A<span class="op">%*%</span>B)</span></code></pre></div>
 <pre><code>Error in A %*% B : non-conformable arguments</code></pre>
 </div>
             </section>

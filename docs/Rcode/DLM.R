@@ -193,6 +193,11 @@ par(mar=c(4,4,1,0), oma=c(0,0,0,0.5))
 acf(t(innov), lwd=2, lag.max=10)
 
 
+## ----echo=FALSE--------------------------------------------------------------------------------------------
+knitr::include_graphics("images/BB_sockeye_rivers_inset.png")
+# ![](images/BB_sockeye_rivers_inset.png)
+
+
 ## ----dlm-load-atsa, eval=FALSE-----------------------------------------------------------------------------
 ## library(devtools)
 ## # Windows users will likely need to set this

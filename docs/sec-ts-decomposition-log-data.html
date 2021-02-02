@@ -480,9 +480,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="sec-ts-decomposition-log-data" class="section level2">
 <h2><span class="header-section-number">3.7</span> Decomposition on log-transformed data</h2>
 <p>Let’s repeat the decomposition with the log of the airline data.</p>
-<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="sec-ts-decomposition-log-data.html#cb201-1"></a>lx &lt;-<span class="st"> </span><span class="kw">log</span>(AirPassengers)</span>
-<span id="cb201-2"><a href="sec-ts-decomposition-log-data.html#cb201-2"></a><span class="kw">par</span>(<span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), <span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb201-3"><a href="sec-ts-decomposition-log-data.html#cb201-3"></a><span class="kw">plot.ts</span>(lx, <span class="dt">las =</span> <span class="dv">1</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="sec-ts-decomposition-log-data.html#cb202-1"></a>lx &lt;-<span class="st"> </span><span class="kw">log</span>(AirPassengers)</span>
+<span id="cb202-2"><a href="sec-ts-decomposition-log-data.html#cb202-2"></a><span class="kw">par</span>(<span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), <span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb202-3"><a href="sec-ts-decomposition-log-data.html#cb202-3"></a><span class="kw">plot.ts</span>(lx, <span class="dt">las =</span> <span class="dv">1</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:ts-plot-ln-airpass"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/ts-plot-ln-airpass-1.png" alt="Log monthly airline passengers from 1949-1960" width="80%" />
 <p class="caption">
@@ -503,9 +503,9 @@ Figure 3.11: Log monthly airline passengers from 1949-1960
 </div>
 <div id="remainder-e_t-1" class="section level3">
 <h3><span class="header-section-number">3.7.4</span> Remainder (<span class="math inline">\(e_t\)</span>)</h3>
-<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="sec-ts-decomposition-log-data.html#cb202-1"></a>le &lt;-<span class="st"> </span>lx <span class="op">-</span><span class="st"> </span>pp <span class="op">-</span><span class="st"> </span>seas_<span class="dv">2</span></span>
-<span id="cb202-2"><a href="sec-ts-decomposition-log-data.html#cb202-2"></a><span class="kw">par</span>(<span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), <span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb202-3"><a href="sec-ts-decomposition-log-data.html#cb202-3"></a><span class="kw">plot.ts</span>(le, <span class="dt">las =</span> <span class="dv">1</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="sec-ts-decomposition-log-data.html#cb203-1"></a>le &lt;-<span class="st"> </span>lx <span class="op">-</span><span class="st"> </span>pp <span class="op">-</span><span class="st"> </span>seas_<span class="dv">2</span></span>
+<span id="cb203-2"><a href="sec-ts-decomposition-log-data.html#cb203-2"></a><span class="kw">par</span>(<span class="dt">mai =</span> <span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>), <span class="dt">omi =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb203-3"><a href="sec-ts-decomposition-log-data.html#cb203-3"></a><span class="kw">plot.ts</span>(le, <span class="dt">las =</span> <span class="dv">1</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/ln_errors-1.png" width="80%" style="display: block; margin: auto;" /></p>
 
 </div>
