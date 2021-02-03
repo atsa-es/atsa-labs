@@ -103,16 +103,30 @@ mod.list <- list(
   Q = "diagonal and unequal",
   Z = Z,
   A = "zero")
-fit <- MARSS(yt, model=mod.list, inits=list(x0=matrix(0,3,1)))
-beta1s = fit$states[2,]
-beta2s = fit$states[3,]
-value = beta1s*sin(2*pi*(1:TT/p))+beta2s*cos(2*pi*(1:TT)/p)
-
-plot(1:TT, value, type="l")
-abline(v=seq(0,TT,p))
+fit <- MARSS(yt, model=mod.list, inits=list(x0=matrix(0,3,1)), silent=TRUE)
+return(fit)
 }
-river <- "NAKNEK"
-fitriver(river)
+```
+
+```{r}
+fits <- list()
+for(river in names(a)){
+  fits[[river]] <- fitriver(river)
+}
+```
+
+```{r}
+dfz <- data.frame()
+for(river in names(a)){
+  fit <- fits[[river]]
+  dfz <- rbind(dfz,data.frame(zt =sqrt(fit$states[2,]^2+fit$states[3,]^2),
+                          river=river,
+                          t=subset(sockeye, region==river)$brood_year))
+}
+```
+
+```{r}
+ggplot(dfz, aes(x=t, y=zt)) + geom_line() + facet_wrap(~river, scales="free_y")
 ```
 
 
