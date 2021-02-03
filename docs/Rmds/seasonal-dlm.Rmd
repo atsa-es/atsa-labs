@@ -254,7 +254,7 @@ require(MARSS)
 fit <- MARSS(yt, model=mod.list, inits=list(x0=matrix(0,2,1)))
 ```
 
-In this simulation, it gets the level well and get the shape of the $z_t$ but underestimates the size of the $z_t$ (amplitude of cycles). There is not a lot of data on the amplitude of the cycles as $z_t$ changes quite quickly so this is not surprising.
+We are able to recover the level, seasonality and changing amplitude of the seasonality.
 
 ```{r echo=FALSE}
 df <- data.frame(t=1:TT, value=zt*beta1, type="true", var="amplitude scaling")

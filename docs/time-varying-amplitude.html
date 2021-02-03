@@ -535,7 +535,9 @@ The seasonality (peak location) will be the same for <span class="math inline">\
 <div class="sourceCode" id="cb707"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb707-1"><a href="time-varying-amplitude.html#cb707-1"></a><span class="kw">require</span>(MARSS)</span>
 <span id="cb707-2"><a href="time-varying-amplitude.html#cb707-2"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(yt, <span class="dt">model =</span> mod.list, <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="dv">0</span>, </span>
 <span id="cb707-3"><a href="time-varying-amplitude.html#cb707-3"></a>    <span class="dv">2</span>, <span class="dv">1</span>)))</span></code></pre></div>
-<p>In this simulation, it gets the level well and get the shape of the <span class="math inline">\(z_t\)</span> but underestimates the size of the <span class="math inline">\(z_t\)</span> (amplitude of cycles). There is not a lot of data on the amplitude of the cycles as <span class="math inline">\(z_t\)</span> changes quite quickly so this is not surprising.</p>
+<p>We are able to recover the level, seasonality and changing amplitude of the seasonality.</p>
+<pre><code>Warning in coef(fit)$Z * cov2[1:12]: Recycling array of length 1 in array-vector arithmetic is deprecated.
+  Use c() or as.vector() instead.</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-44-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 </div>
