@@ -1,5 +1,5 @@
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache=FALSE)
+knitr::opts_chunk$set(echo = TRUE, cache=FALSE, message=FALSE,warning=FALSE)
 ```
 
 # Using DLMs to model changing seasonality {#chap-seasonal-dlm}
@@ -47,7 +47,7 @@ df$line <- as.factor(df$line)
 ggplot(df, aes(x=month, y=value, color=line)) + geom_line()
 ```
 
-## Time-varying season
+## Time-varying seasonality and amplitude
 
 If $\beta_1$ and $\beta_2$ vary in time then the seasonal cycle also varies in time. Let's imagine that $\beta_1$ varies from -1 to 1 over our 100 time steps while $\beta_2$ varies from 1 to -1.
 
@@ -180,7 +180,78 @@ ggplot(df, aes(x=month, y=value, color=type)) +
   ggtitle("Seasonal cycle at different times")
 ```
 
-## Multivariate DLMs
+## Time-varying amplitude 
+
+Instead of a constant seasonality, we can imagine that it varies in time. The first way it might vary is in the amplitude of the seasonality. So the location of the peak is the same but the difference between the peak and valley changes.
+
+$$z_t\left(\beta_1 \sin(2 \pi t/p) + \beta_2 \cos(2 \pi t/p)\right)$$
+
+In this case, the $\beta$'s remain constant but the sum of the sines and cosines is multiplied by a time-varying scaling factor.
+
+```{r echo=FALSE, message=FALSE}
+require(ggplot2)
+df <- data.frame()
+beta1 <- 0.6; beta2 <- 0.4
+for(zt in c(0.1,1,2)){
+    tmp <- data.frame(line = paste0("zt = ", zt), 
+    value = zt*beta1*sin(2*pi*(1:12)/12)+zt*beta2*cos(2*pi*(1:12)/12), month=1:12)
+    df <- rbind(df, tmp)
+  }
+df$line <- as.factor(df$line)
+ggplot(df, aes(x=month, y=value, color=line)) + geom_line()
+```
+
+Here we simulate some data where $z_t$ is sinusoidal and is largest in the beginning of the time-series. Note we want $z_t$ to stay positive otherwise our peak will become a valley when $z_t$ goes negative.
+
+```{r}
+set.seed(1234)
+TT <- 100
+q <- 0.1; r <- 0.1
+beta1 <- 0.6; beta2 <- 0.4
+zt <- 0.5*sin(2*pi*(1:TT)/TT) + 0.75
+cov1 <- sin(2*pi*(1:TT)/12)
+cov2 <- cos(2*pi*(1:TT)/12)
+xt <- cumsum(rnorm(TT,0,q))
+yt <- xt + zt*beta1*cov1 + zt*beta2*cov2 + rnorm(TT,0,r)
+plot(yt, type="l", xlab="t")
+```
+
+Now our $x$ and $y$ models look like this. Notice that the $\mathbf{Z}$ is $1 \times 2$ instead of $1 \times 3$.
+
+$$\begin{bmatrix}x_1 \\ x_2  \end{bmatrix}_t = \begin{bmatrix}x_1 \\ x_2 \end{bmatrix}_{t-1} + \begin{bmatrix}w_1 \\ w_2 \end{bmatrix}_t$$
+
+$$y_t = \begin{bmatrix}1& \beta_1 \sin(2\pi t/p) + \beta_2 \cos(2\pi t/p)\end{bmatrix} \begin{bmatrix}x_1 \\ x_2 \end{bmatrix}_t + v_t$$
+
+```{r mod.list2}
+Z <- array(list(1), dim=c(1,2,TT))
+Z[1,2,] <- paste0("0 + ",sin(2*pi*(1:TT)/12),"*beta1 + ",cos(2*pi*(1:TT)/12),"*beta2")
+```
+
+Then we make our model list. We need to set `A` since `MARSS()` doesn't like the default value of `scaling` when `Z` is time-varying.
+```{r}
+mod.list <- list(
+  U = "zero",
+  Q = "diagonal and unequal",
+  Z = Z,
+  A = "zero")
+```
+
+```{r results="hide"}
+require(MARSS)
+fit <- MARSS(yt, model=mod.list, inits=list(x0=matrix(0,2,1)))
+```
+
+In this simulation, it gets the level well and get the shape of the $z_t$ but underestimates the size of the $z_t$ (amplitude of cycles). There is not a lot of data on the amplitude of the cycles as $z_t$ changes quite quickly so this is not surprising.
+
+```{r echo=FALSE}
+df <- data.frame(t=1:TT, value=zt, type="true", var="zt")
+df <- rbind(df, data.frame(t=1:TT, value=xt, type="true", var="xt"))
+df <- rbind(df, data.frame(t=1:TT, value=fit$states[2,], type="estimate", var="zt"))
+df <- rbind(df, data.frame(t=1:TT, value=fit$states[1,], type="estimate", var="xt"))
+ggplot(df, aes(x=t, y=value, color=type)) + geom_line() + facet_wrap(~var, scales="free_y")
+```
+
+## Multivariate responses
 
 Let's imagine that we have two sites $y_1$ and $y_2$. We can model relationship between the seasonality in these two sites in many different ways. How we model it depends on our assumptions about our site or might reflect different relationships that we want to test.
 
