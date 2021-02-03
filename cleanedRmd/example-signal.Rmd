@@ -1,6 +1,10 @@
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache=FALSE)
+```{r signal-setup, include=FALSE}
+knitr::opts_knit$set(unnamed.chunk.label = "signal-")
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%', message=FALSE, warning=FALSE)
 ```
+
+knitr::opts_knit$set(unnamed.chunk.label = "dlm-")
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
 
 # Detecting a signal from noisy sensors {#chap-noisy-sensors-}
 \chaptermark{Noisy sensors}
@@ -27,7 +31,7 @@ I want something fairly smooth but still stochastic. It is not important how you
 
 Here I use `arima.sim()` to create a signal and then then smooth it with `filter()`. I set the seed. Change to make a new data set.
 
-```{r read-in-data, echo=FALSE}
+```{r signal-read-in-data, echo=FALSE}
 TT <- 30
 qa <- .1
 signal <- arima.sim(TT+3, model=list(ar=.9, sd=sqrt(qa)))
@@ -40,7 +44,7 @@ p1
 
 ## Create data
 
-```{r sub.dat, echo=FALSE}
+```{r signal-sub.dat, echo=FALSE}
 createdata <- function(n, TT, ar, sd){
 dat <- matrix(NA, n, TT)
 rownames(dat) <- paste0("S", 1:n)
@@ -89,7 +93,7 @@ $$\begin{bmatrix}y1 \\ y2 \\ y3\end{bmatrix} = \begin{bmatrix}1&1&0&0 \\ 1&0&1&0
 
 We specify this one-to-one in R for `MARSS()`:
 
-```{r mod.list1}
+```{r signal-mod.list1}
 makemod <- function(n){
   B <- matrix(list(0), n+1, n+1)
 diag(B)[2:(n+1)] <- paste0("b", 1:n)
@@ -109,7 +113,7 @@ mod.list1 <- makemod(3)
 ```
 
 Demean the data.
-```{r fit.mod1}
+```{r signal-fit.mod1}
 dat2 <- dat - apply(dat,1,mean) %*% matrix(1,1,TT)
 ```
 

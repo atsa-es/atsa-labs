@@ -1,5 +1,6 @@
-## ----setup, include=FALSE----------------------------------------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE, cache=FALSE)
+## ----signal-setup, include=FALSE---------------------------------------------------------------------------
+knitr::opts_knit$set(unnamed.chunk.label = "signal-")
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%', message=FALSE, warning=FALSE)
 
 
 ## ----------------------------------------------------------------------------------------------------------
@@ -9,7 +10,7 @@ library(stringr)
 set.seed(1234)
 
 
-## ----read-in-data, echo=FALSE------------------------------------------------------------------------------
+## ----signal-read-in-data, echo=FALSE-----------------------------------------------------------------------
 TT <- 30
 qa <- .1
 signal <- arima.sim(TT+3, model=list(ar=.9, sd=sqrt(qa)))
@@ -20,7 +21,7 @@ p1 <- ggplot(dfsignal, aes(x=t, y=val)) + geom_line() + ggtitle("The signal")
 p1
 
 
-## ----sub.dat, echo=FALSE-----------------------------------------------------------------------------------
+## ----signal-sub.dat, echo=FALSE----------------------------------------------------------------------------
 createdata <- function(n, TT, ar, sd){
 dat <- matrix(NA, n, TT)
 rownames(dat) <- paste0("S", 1:n)
@@ -52,7 +53,7 @@ p1 <- ggplot(subset(df, name!="signal"),
 p1
 
 
-## ----mod.list1---------------------------------------------------------------------------------------------
+## ----signal-mod.list1--------------------------------------------------------------------------------------
 makemod <- function(n){
   B <- matrix(list(0), n+1, n+1)
 diag(B)[2:(n+1)] <- paste0("b", 1:n)
@@ -71,7 +72,7 @@ return(mod.list)
 mod.list1 <- makemod(3)
 
 
-## ----fit.mod1----------------------------------------------------------------------------------------------
+## ----signal-fit.mod1---------------------------------------------------------------------------------------
 dat2 <- dat - apply(dat,1,mean) %*% matrix(1,1,TT)
 
 
