@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2.9 Solving for the parameters for Form 2* | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>16.3 Univariate results | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2.9 Solving for the parameters for Form 2* | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta property="og:title" content="16.3 Univariate results | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2.9 Solving for the parameters for Form 2* | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta name="twitter:title" content="16.3 Univariate results | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="prev" href="sec-mlr-confound.html"/>
-<link rel="next" href="sec-mlr-problems.html"/>
+<link rel="prev" href="modeling-the-cycle.html"/>
+<link rel="next" href="multivariate-dlm.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -504,205 +504,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-mlr-solveform2" class="section level2">
-<h2><span class="header-section-number">2.9</span> Solving for the parameters for Form 2*</h2>
-<p>Solving for the parameters when the model is written in Form 2 is not straight-forward. We could re-write the model in Form 1, or another approach is to use Kronecker products and permutation matrices.</p>
-<p>To solve for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, we need our parameters in a column matrix like so <span class="math inline">\(\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]\)</span>. We start by moving the intercept matrix, <span class="math inline">\(\mathbf{a}\)</span> into <span class="math inline">\(\mathbf{Z}\)</span>.
-<span class="math display" id="eq:stackloss-form2-solve">\[\begin{equation}
-\tag{2.24}
-\begin{bmatrix}stack.loss_1\\stack.loss_2\\stack.loss_3\\stack.loss_4\end{bmatrix}
-= 
-\begin{bmatrix}
-\alpha&amp;\beta&amp;0&amp;0&amp;0\\
-\alpha&amp;0&amp;\beta&amp;0&amp;0\\
-\alpha&amp;0&amp;0&amp;\beta&amp;0\\
-\alpha&amp;0&amp;0&amp;0&amp;\beta
-\end{bmatrix}
-\begin{bmatrix}1\\air_1\\air_2\\air_3\\air_4\end{bmatrix}
-+
-\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}
-= \mathbf{Z}\mathbf{x} + \mathbf{e}.
-\end{equation}\]</span></p>
-<p>Then we rewrite <span class="math inline">\(\mathbf{Z}\mathbf{x}\)</span> in Equation <a href="sec-mlr-solveform2.html#eq:stackloss-form2-solve">(2.24)</a> in `vec’ form: if <span class="math inline">\(\mathbf{Z}\)</span> is a <span class="math inline">\(n \times m\)</span> matrix and <span class="math inline">\(\mathbf{x}\)</span> is a matrix with 1 column and <span class="math inline">\(m\)</span> rows, then <span class="math inline">\(\mathbf{Z}\mathbf{x} = (\mathbf{x}^\top \otimes \mathbf{I}_n)\,\text{vec}(\mathbf{Z})\)</span>. The symbol <span class="math inline">\(\otimes\)</span> means Kronecker product and just ignore it since you’ll never see it again in our course (or google ‘kronecker product’ if you are curious). The “vec” of a matrix is that matrix rearranged as a single column:
-<span class="math display">\[\begin{equation*}
-\,\text{vec} \begin{bmatrix}
-1&amp;2\\
-3&amp;4
-\end{bmatrix} = \begin{bmatrix}
-1\\3\\2\\4
-\end{bmatrix} 
-\end{equation*}\]</span>
-Notice how you just take each column one by one and stack them under each other. In R, the vec is</p>
-<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb181-1"><a href="sec-mlr-solveform2.html#cb181-1"></a>A =<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">nrow =</span> <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb181-2"><a href="sec-mlr-solveform2.html#cb181-2"></a>vecA =<span class="st"> </span><span class="kw">matrix</span>(A, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><span class="math inline">\(\mathbf{I}_n\)</span> is a <span class="math inline">\(n \times n\)</span> identity matrix, a diagonal matrix with all 0s on the off-diagonals and all 1s on the diagonal. In R, this is simply <code>diag(n)</code>.</p>
-<p>To show how we solve for <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, let’s use an example with only 3 data points so Equation <a href="sec-mlr-solveform2.html#eq:stackloss-form2-solve">(2.24)</a> becomes:
-<span class="math display" id="eq:stackloss-form2-small">\[\begin{equation}
-\tag{2.25}
-\begin{bmatrix}stack.loss_1\\stack.loss_2\\stack.loss_3\end{bmatrix}
-= 
-\begin{bmatrix}
-\alpha&amp;\beta&amp;0&amp;0\\
-\alpha&amp;0&amp;\beta&amp;0\\
-\alpha&amp;0&amp;0&amp;\beta
-\end{bmatrix}
-\begin{bmatrix}1\\air_1\\air_2\\air_3\end{bmatrix}
-+
-\begin{bmatrix}e_1\\e_2\\e_3\end{bmatrix}
-\end{equation}\]</span>
-Using <span class="math inline">\(\mathbf{Z}\mathbf{x} = (\mathbf{x}^\top \otimes \mathbf{I}_n)\,\text{vec}(\mathbf{Z})\)</span>, this means
-<span class="math display">\[\begin{equation}
-\begin{bmatrix}
-\alpha&amp;\beta&amp;0&amp;0\\
-\alpha&amp;0&amp;\beta&amp;0\\
-\alpha&amp;0&amp;0&amp;\beta
-\end{bmatrix}
-\begin{bmatrix}1\\air_1\\air_2\\air_3\end{bmatrix}
-=\big(\begin{bmatrix}1&amp;air_1&amp;air_2&amp; air_3\end{bmatrix} \otimes \begin{bmatrix}1&amp;0&amp;0\\ 0&amp;1&amp;0 \\ 0&amp;0&amp;1 \end{bmatrix} \bigr)
-\begin{bmatrix}
-\alpha\\
-\alpha\\
-\alpha\\
-\beta\\
-0\\
-0\\
-0\\
-\beta\\
-0\\
-0\\
-0\\
-\beta
-\end{bmatrix}
-\end{equation}\]</span>
-We need to rewrite the <span class="math inline">\(\,\text{vec}(\mathbf{Z})\)</span> as a `permutation’ matrix times <span class="math inline">\(\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]\)</span>:
-<span class="math display">\[\begin{equation}
-\begin{bmatrix}
-\alpha\\
-\alpha\\
-\alpha\\
-\beta\\
-0\\
-0\\
-0\\
-\beta\\
-0\\
-0\\
-0\\
-\beta
-\end{bmatrix}
-=
-\begin{bmatrix}
-1&amp;0\\
-1&amp;0\\
-1&amp;0\\
-0&amp;1\\
-0&amp;0\\
-0&amp;0\\
-0&amp;0\\
-0&amp;1\\
-0&amp;0\\
-0&amp;0\\
-0&amp;0\\
-0&amp;1\\
-\end{bmatrix}
-\begin{bmatrix}
-\alpha\\
-\beta
-\end{bmatrix} = \mathbf{P}\mathbf{p}
-\end{equation}\]</span>
-where <span class="math inline">\(\mathbf{P}\)</span> is the permutation matrix and <span class="math inline">\(\mathbf{p}=\left[ \begin{smallmatrix}\alpha\\\beta\end{smallmatrix} \right]\)</span>.
-Thus,
-<span class="math display" id="eq:stackloss-form2-small2">\[\begin{equation}
-\tag{2.26}
-\mathbf{y}=\mathbf{Z}\mathbf{x}+\mathbf{e} = (\mathbf{x}^\top \otimes \mathbf{I}_n)\mathbf{P}\begin{bmatrix}\alpha\\ \beta\end{bmatrix} = \mathbf{M}\mathbf{p} + \mathbf{e}
-\end{equation}\]</span>
-where <span class="math inline">\(\mathbf{M}=(\mathbf{x}^\top \otimes \mathbf{I}_n)\mathbf{P}\)</span>.
-We can solve for <span class="math inline">\(\mathbf{p}\)</span>, the parameters, using
-<span class="math display">\[(\mathbf{M}^\top\mathbf{M})^{-1}\mathbf{M}^\top\mathbf{y}\]</span>
-as before.</p>
-<div id="sec-mlr-solveform2code" class="section level4">
-<h4><span class="header-section-number">2.9.0.1</span> Code to solve for parameters in Form 2</h4>
-<p>In the homework, you will use the R code in this section to solve for the parameters in Form 2.</p>
-<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="sec-mlr-solveform2.html#cb182-1"></a><span class="co">#make your y and x matrices</span></span>
-<span id="cb182-2"><a href="sec-mlr-solveform2.html#cb182-2"></a>y=<span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol=</span><span class="dv">1</span>)</span>
-<span id="cb182-3"><a href="sec-mlr-solveform2.html#cb182-3"></a>x=<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>,dat<span class="op">$</span>Air.Flow),<span class="dt">ncol=</span><span class="dv">1</span>)</span>
-<span id="cb182-4"><a href="sec-mlr-solveform2.html#cb182-4"></a><span class="co">#make the Z matrix</span></span>
-<span id="cb182-5"><a href="sec-mlr-solveform2.html#cb182-5"></a>n=<span class="kw">nrow</span>(dat) <span class="co">#number of rows in our data file</span></span>
-<span id="cb182-6"><a href="sec-mlr-solveform2.html#cb182-6"></a>k=<span class="dv">1</span></span>
-<span id="cb182-7"><a href="sec-mlr-solveform2.html#cb182-7"></a><span class="co">#Z has n rows and 1 col for intercept, and n cols for the n air data points</span></span>
-<span id="cb182-8"><a href="sec-mlr-solveform2.html#cb182-8"></a><span class="co">#a list matrix allows us to combine &quot;characters&quot; and numbers</span></span>
-<span id="cb182-9"><a href="sec-mlr-solveform2.html#cb182-9"></a>Z=<span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>),n,k<span class="op">*</span>n<span class="op">+</span><span class="dv">1</span>) </span>
-<span id="cb182-10"><a href="sec-mlr-solveform2.html#cb182-10"></a>Z[,<span class="dv">1</span>]=<span class="st">&quot;alpha&quot;</span></span>
-<span id="cb182-11"><a href="sec-mlr-solveform2.html#cb182-11"></a><span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n,<span class="dv">1</span><span class="op">+</span><span class="dv">1</span><span class="op">:</span>n])=<span class="st">&quot;beta&quot;</span> </span>
-<span id="cb182-12"><a href="sec-mlr-solveform2.html#cb182-12"></a><span class="co">#this function creates that permutation matrix for you</span></span>
-<span id="cb182-13"><a href="sec-mlr-solveform2.html#cb182-13"></a>P=MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[,,<span class="dv">1</span>]</span>
-<span id="cb182-14"><a href="sec-mlr-solveform2.html#cb182-14"></a>M=<span class="kw">kronecker</span>(<span class="kw">t</span>(x),<span class="kw">diag</span>(n))<span class="op">%*%</span>P</span>
-<span id="cb182-15"><a href="sec-mlr-solveform2.html#cb182-15"></a><span class="kw">solve</span>(<span class="kw">t</span>(M)<span class="op">%*%</span>M)<span class="op">%*%</span><span class="kw">t</span>(M)<span class="op">%*%</span>y</span></code></pre></div>
-<pre><code>             [,1]
-alpha -11.6159170
-beta    0.6412918</code></pre>
-<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="sec-mlr-solveform2.html#cb184-1"></a><span class="kw">coef</span>(<span class="kw">lm</span>(dat<span class="op">$</span>stack.loss <span class="op">~</span><span class="st"> </span>dat<span class="op">$</span>Air.Flow))</span></code></pre></div>
-<pre><code> (Intercept) dat$Air.Flow 
- -11.6159170    0.6412918 </code></pre>
-<p>Go through this code line by line at the R command line. Look at <code>Z</code>. It is a list matrix that allows you to combine numbers (the 0s) with character string (names of parameters). Notice that <code>class(Z[1,3])="numeric"</code> while <code>class(Z[1,2])="character"</code>. This is important. <code>0</code> in R is a number while <code>"0"</code> would be a character (the name of a parameter).
-Look at the permutation matrix <code>P</code>. Try <code>MARSS:::convert.model.mat(Z)$free</code> and see that it returns a 3D matrix, which is why the <code>[,,1]</code> appears (to get us a 2D matrix). To use more data points, you can redefine
-<code>dat</code> to say <code>dat=stackloss</code> to use all 21 data points.</p>
-<p>Here’s another example. Rewrite the model with multiple intercepts (Equation <a href="sec-mlr-intercepts.html#eq:stackloss-form2-ns">(2.14)</a> ) as
-<span class="math display" id="eq:stackloss-form2-ns-compact">\[\begin{equation}
-\tag{2.27}
-\begin{bmatrix}stack.loss_1\\ stack.loss_2\\ stack.loss_3\\ stack.loss_4\end{bmatrix}
-= 
-\begin{bmatrix}
-\alpha_n&amp;\beta&amp;0&amp;0&amp;0\\
-\alpha_s&amp;0&amp;\beta&amp;0&amp;0\\
-\alpha_n&amp;0&amp;0&amp;\beta&amp;0\\
-\alpha_s&amp;0&amp;0&amp;0&amp;\beta
-\end{bmatrix}\begin{bmatrix}1\\air_1\\air_2\\air_3\\air_4\end{bmatrix}
-+
-\begin{bmatrix}e_1\\e_2\\e_3\\e_4\end{bmatrix}=\mathbf{Z}\mathbf{x}+\mathbf{a}+\mathbf{e}
-\end{equation}\]</span>
-To estimate the parameters, we need to be able to write a list matrix that looks like <span class="math inline">\(\mathbf{Z}\)</span> in Equation <a href="sec-mlr-solveform2.html#eq:stackloss-form2-ns-compact">(2.27)</a>. We can use the same code as above with <span class="math inline">\(\mathbf{Z}\)</span> changed to look like that in Equation <a href="sec-mlr-solveform2.html#eq:stackloss-form2-ns-compact">(2.27)</a>.</p>
-<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="sec-mlr-solveform2.html#cb186-1"></a>y =<span class="st"> </span><span class="kw">matrix</span>(dat<span class="op">$</span>stack.loss, <span class="dt">ncol =</span> <span class="dv">1</span>)</span>
-<span id="cb186-2"><a href="sec-mlr-solveform2.html#cb186-2"></a>x =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, dat<span class="op">$</span>Air.Flow), <span class="dt">ncol =</span> <span class="dv">1</span>)</span>
-<span id="cb186-3"><a href="sec-mlr-solveform2.html#cb186-3"></a>n =<span class="st"> </span><span class="kw">nrow</span>(dat)</span>
-<span id="cb186-4"><a href="sec-mlr-solveform2.html#cb186-4"></a>k =<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb186-5"><a href="sec-mlr-solveform2.html#cb186-5"></a><span class="co"># list matrix allows us to combine numbers and character</span></span>
-<span id="cb186-6"><a href="sec-mlr-solveform2.html#cb186-6"></a><span class="co"># strings</span></span>
-<span id="cb186-7"><a href="sec-mlr-solveform2.html#cb186-7"></a>Z =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n, k <span class="op">*</span><span class="st"> </span>n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb186-8"><a href="sec-mlr-solveform2.html#cb186-8"></a>Z[<span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphanorth&quot;</span></span>
-<span id="cb186-9"><a href="sec-mlr-solveform2.html#cb186-9"></a>Z[<span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphasouth&quot;</span></span>
-<span id="cb186-10"><a href="sec-mlr-solveform2.html#cb186-10"></a><span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>n]) =<span class="st"> &quot;beta&quot;</span></span>
-<span id="cb186-11"><a href="sec-mlr-solveform2.html#cb186-11"></a>P =<span class="st"> </span>MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[, , <span class="dv">1</span>]</span>
-<span id="cb186-12"><a href="sec-mlr-solveform2.html#cb186-12"></a>M =<span class="st"> </span><span class="kw">kronecker</span>(<span class="kw">t</span>(x), <span class="kw">diag</span>(n)) <span class="op">%*%</span><span class="st"> </span>P</span>
-<span id="cb186-13"><a href="sec-mlr-solveform2.html#cb186-13"></a><span class="kw">solve</span>(<span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>M) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>y</span></code></pre></div>
-<pre><code>                 [,1]
-alphanorth -2.0257880
-alphasouth -5.5429799
-beta        0.5358166</code></pre>
-<p>Similarly to estimate the parameters for Equation <a href="sec-mlr-betas.html#eq:stackloss-form2-owners">(2.18)</a>, we change the <span class="math inline">\(\beta\)</span>’s in our <span class="math inline">\(\mathbf{Z}\)</span> list matrix to have owner designations:</p>
-<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="sec-mlr-solveform2.html#cb188-1"></a>Z =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n, k <span class="op">*</span><span class="st"> </span>n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb188-2"><a href="sec-mlr-solveform2.html#cb188-2"></a>Z[<span class="kw">seq</span>(<span class="dv">1</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphanorth&quot;</span></span>
-<span id="cb188-3"><a href="sec-mlr-solveform2.html#cb188-3"></a>Z[<span class="kw">seq</span>(<span class="dv">2</span>, n, <span class="dv">2</span>), <span class="dv">1</span>] =<span class="st"> &quot;alphasouth&quot;</span></span>
-<span id="cb188-4"><a href="sec-mlr-solveform2.html#cb188-4"></a><span class="kw">diag</span>(Z[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span>n]) =<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;beta.s&quot;</span>, <span class="st">&quot;beta.a&quot;</span>), n)[<span class="dv">1</span><span class="op">:</span>n]</span>
-<span id="cb188-5"><a href="sec-mlr-solveform2.html#cb188-5"></a>P =<span class="st"> </span>MARSS<span class="op">:::</span><span class="kw">convert.model.mat</span>(Z)<span class="op">$</span>free[, , <span class="dv">1</span>]</span>
-<span id="cb188-6"><a href="sec-mlr-solveform2.html#cb188-6"></a>M =<span class="st"> </span><span class="kw">kronecker</span>(<span class="kw">t</span>(x), <span class="kw">diag</span>(n)) <span class="op">%*%</span><span class="st"> </span>P</span>
-<span id="cb188-7"><a href="sec-mlr-solveform2.html#cb188-7"></a><span class="kw">solve</span>(<span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>M) <span class="op">%*%</span><span class="st"> </span><span class="kw">t</span>(M) <span class="op">%*%</span><span class="st"> </span>y</span></code></pre></div>
-<pre><code>            [,1]
-alphanorth -38.0
-alphasouth  -3.0
-beta.s       1.0
-beta.a       0.5</code></pre>
-<p>The parameters estimates are the same as with the model in Form 1, though <span class="math inline">\(\beta\)</span>’s are given in reversed order simply due to the way <code>convert.model.mat()</code> is ordering the columns in Form 2’s <span class="math inline">\(\mathbf{Z}\)</span>.</p>
-
-</div>
+<div id="univariate-results" class="section level2">
+<h2><span class="header-section-number">16.3</span> Univariate results</h2>
+<p>Plot of the amplitude of the cycles. All the rivers were analyzed independently. It certainly looks like there are common patterns in the amplitude of the cycles with many showing a steady decline in amplitude. Note the counts were not decreasing so this is not due to fewer spawners.</p>
+<div class="sourceCode" id="cb720"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb720-1"><a href="univariate-results.html#cb720-1"></a><span class="kw">ggplot</span>(dfz, <span class="kw">aes</span>(<span class="dt">x =</span> brood_year, <span class="dt">y =</span> amplitude)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb720-2"><a href="univariate-results.html#cb720-2"></a><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>river, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Cycle Amplitude&quot;</span>)</span></code></pre></div>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-56-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>Plot of the stochastic level. Again all the rivers were analyzed independently. It certainly looks like there are common patterns in the trends. In the next step, we can test this.</p>
+<div class="sourceCode" id="cb721"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb721-1"><a href="univariate-results.html#cb721-1"></a><span class="kw">ggplot</span>(dfz, <span class="kw">aes</span>(<span class="dt">x =</span> brood_year, <span class="dt">y =</span> trend)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>river, </span>
+<span id="cb721-2"><a href="univariate-results.html#cb721-2"></a>    <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Stochastic Level&quot;</span>)</span></code></pre></div>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-57-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="sec-mlr-confound.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sec-mlr-problems.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="modeling-the-cycle.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multivariate-dlm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -733,7 +552,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/linear-regression-models-matrix.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/cyclic-sockeye.Rmd",
 "text": "Edit"
 },
 "history": {

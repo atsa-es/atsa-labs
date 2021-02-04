@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 16 Modeling changing sockeye seasonality | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>Chapter 16 Modeling cyclic sockeye | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 16 Modeling changing sockeye seasonality | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta property="og:title" content="Chapter 16 Modeling cyclic sockeye | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 16 Modeling changing sockeye seasonality | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta name="twitter:title" content="Chapter 16 Modeling cyclic sockeye | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -471,7 +471,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="15.5" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>15.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling changing sockeye seasonality</a><ul>
+<li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a><ul>
 <li class="chapter" data-level="16.1" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.1</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.2" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.2</b> Modeling the cycle</a><ul>
 <li class="chapter" data-level="16.2.1" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#set-up-the-data"><i class="fa fa-check"></i><b>16.2.1</b> Set up the data</a></li>
@@ -480,7 +480,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="16.2.4" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#fit-the-model-1"><i class="fa fa-check"></i><b>16.2.4</b> Fit the model</a></li>
 <li class="chapter" data-level="16.2.5" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#plot-the-output"><i class="fa fa-check"></i><b>16.2.5</b> Plot the output</a></li>
 </ul></li>
-<li class="chapter" data-level="16.3" data-path="multivariate-dlm.html"><a href="multivariate-dlm.html"><i class="fa fa-check"></i><b>16.3</b> Multivariate DLM</a></li>
+<li class="chapter" data-level="16.3" data-path="univariate-results.html"><a href="univariate-results.html"><i class="fa fa-check"></i><b>16.3</b> Univariate results</a></li>
+<li class="chapter" data-level="16.4" data-path="multivariate-dlm.html"><a href="multivariate-dlm.html"><i class="fa fa-check"></i><b>16.4</b> Multivariate DLM</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -504,7 +505,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="chap-cyclic-sockeye" class="section level1">
-<h1><span class="header-section-number">Chapter 16</span> Modeling changing sockeye seasonality</h1>
+<h1><span class="header-section-number">Chapter 16</span> Modeling cyclic sockeye</h1>
 
 <div class="sourceCode" id="cb709"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb709-1"><a href="chap-cyclic-sockeye.html#cb709-1"></a><span class="kw">library</span>(atsalibrary)</span>
 <span id="cb709-2"><a href="chap-cyclic-sockeye.html#cb709-2"></a><span class="kw">library</span>(ggplot2)</span>

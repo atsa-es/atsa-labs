@@ -32,7 +32,7 @@
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="analysis-goal.html"/>
-<link rel="next" href="multivariate-dlm.html"/>
+<link rel="next" href="univariate-results.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -471,7 +471,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="15.5" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>15.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling changing sockeye seasonality</a><ul>
+<li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a><ul>
 <li class="chapter" data-level="16.1" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.1</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.2" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.2</b> Modeling the cycle</a><ul>
 <li class="chapter" data-level="16.2.1" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#set-up-the-data"><i class="fa fa-check"></i><b>16.2.1</b> Set up the data</a></li>
@@ -480,7 +480,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="16.2.4" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#fit-the-model-1"><i class="fa fa-check"></i><b>16.2.4</b> Fit the model</a></li>
 <li class="chapter" data-level="16.2.5" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#plot-the-output"><i class="fa fa-check"></i><b>16.2.5</b> Plot the output</a></li>
 </ul></li>
-<li class="chapter" data-level="16.3" data-path="multivariate-dlm.html"><a href="multivariate-dlm.html"><i class="fa fa-check"></i><b>16.3</b> Multivariate DLM</a></li>
+<li class="chapter" data-level="16.3" data-path="univariate-results.html"><a href="univariate-results.html"><i class="fa fa-check"></i><b>16.3</b> Univariate results</a></li>
+<li class="chapter" data-level="16.4" data-path="multivariate-dlm.html"><a href="multivariate-dlm.html"><i class="fa fa-check"></i><b>16.4</b> Multivariate DLM</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -511,31 +512,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We can fit the model to the Kvichak River log spawner data and estimate the <span class="math inline">\(\beta\)</span>’s and stochastic level (<span class="math inline">\(x\)</span>). This is annual data so what does <span class="math inline">\(p\)</span> mean? <span class="math inline">\(p\)</span> is the time steps between peaks. For sockeye that is 5 years. So we set <span class="math inline">\(p=5\)</span>. If <span class="math inline">\(p\)</span> were changing, that would cause problems, but it is not for these data (which you can confirm by looking at the ACF for different parts of the time series).</p>
 <div id="set-up-the-data" class="section level3">
 <h3><span class="header-section-number">16.2.1</span> Set up the data</h3>
-<div class="sourceCode" id="cb710"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb710-1"><a href="modeling-the-cycle.html#cb710-1"></a>river &lt;-<span class="st"> &quot;KVICHAK&quot;</span></span>
-<span id="cb710-2"><a href="modeling-the-cycle.html#cb710-2"></a>df &lt;-<span class="st"> </span><span class="kw">subset</span>(sockeye, region <span class="op">==</span><span class="st"> </span>river)</span>
-<span id="cb710-3"><a href="modeling-the-cycle.html#cb710-3"></a>yt &lt;-<span class="st"> </span><span class="kw">log</span>(df<span class="op">$</span>spawners)</span>
-<span id="cb710-4"><a href="modeling-the-cycle.html#cb710-4"></a>TT &lt;-<span class="st"> </span><span class="kw">length</span>(yt)</span>
-<span id="cb710-5"><a href="modeling-the-cycle.html#cb710-5"></a>p &lt;-<span class="st"> </span><span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb711"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb711-1"><a href="modeling-the-cycle.html#cb711-1"></a>river &lt;-<span class="st"> &quot;KVICHAK&quot;</span></span>
+<span id="cb711-2"><a href="modeling-the-cycle.html#cb711-2"></a>df &lt;-<span class="st"> </span><span class="kw">subset</span>(sockeye, region <span class="op">==</span><span class="st"> </span>river)</span>
+<span id="cb711-3"><a href="modeling-the-cycle.html#cb711-3"></a>yt &lt;-<span class="st"> </span><span class="kw">log</span>(df<span class="op">$</span>spawners)</span>
+<span id="cb711-4"><a href="modeling-the-cycle.html#cb711-4"></a>TT &lt;-<span class="st"> </span><span class="kw">length</span>(yt)</span>
+<span id="cb711-5"><a href="modeling-the-cycle.html#cb711-5"></a>p &lt;-<span class="st"> </span><span class="dv">5</span></span></code></pre></div>
 </div>
 <div id="specify-the-mathbfz-matrix" class="section level3">
 <h3><span class="header-section-number">16.2.2</span> Specify the <span class="math inline">\(\mathbf{Z}\)</span> matrix</h3>
 <p><span class="math inline">\(\mathbf{Z}\)</span> is time-varying and we set this up with an array with the 3rd dimension being time.</p>
-<div class="sourceCode" id="cb711"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb711-1"><a href="modeling-the-cycle.html#cb711-1"></a>Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">1</span>, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, TT))</span>
-<span id="cb711-2"><a href="modeling-the-cycle.html#cb711-2"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>, ] &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>p)</span>
-<span id="cb711-3"><a href="modeling-the-cycle.html#cb711-3"></a>Z[<span class="dv">1</span>, <span class="dv">3</span>, ] &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>p)</span></code></pre></div>
+<div class="sourceCode" id="cb712"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb712-1"><a href="modeling-the-cycle.html#cb712-1"></a>Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">1</span>, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, TT))</span>
+<span id="cb712-2"><a href="modeling-the-cycle.html#cb712-2"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>, ] &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>p)</span>
+<span id="cb712-3"><a href="modeling-the-cycle.html#cb712-3"></a>Z[<span class="dv">1</span>, <span class="dv">3</span>, ] &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>p)</span></code></pre></div>
 </div>
 <div id="specify-the-model-list" class="section level3">
 <h3><span class="header-section-number">16.2.3</span> Specify the model list</h3>
 <p>Then we make our model list. We need to set <span class="math inline">\(\mathbf{A}\)</span> since <code>MARSS()</code> doesn’t like the default value of <code>scaling</code> when <span class="math inline">\(\mathbf{Z}\)</span> is time-varying.</p>
-<div class="sourceCode" id="cb712"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb712-1"><a href="modeling-the-cycle.html#cb712-1"></a>mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, <span class="dt">Z =</span> Z, </span>
-<span id="cb712-2"><a href="modeling-the-cycle.html#cb712-2"></a>    <span class="dt">A =</span> <span class="st">&quot;zero&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb713"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb713-1"><a href="modeling-the-cycle.html#cb713-1"></a>mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, <span class="dt">Z =</span> Z, </span>
+<span id="cb713-2"><a href="modeling-the-cycle.html#cb713-2"></a>    <span class="dt">A =</span> <span class="st">&quot;zero&quot;</span>)</span></code></pre></div>
 </div>
 <div id="fit-the-model-1" class="section level3">
 <h3><span class="header-section-number">16.2.4</span> Fit the model</h3>
 <p>When we fit the model we need to give <code>MARSS()</code> initial values for <code>x0</code>. It cannot come up with default ones for this model. It doesn’t really matter what you pick.</p>
-<div class="sourceCode" id="cb713"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb713-1"><a href="modeling-the-cycle.html#cb713-1"></a>m &lt;-<span class="st"> </span><span class="kw">dim</span>(Z)[<span class="dv">2</span>]</span>
-<span id="cb713-2"><a href="modeling-the-cycle.html#cb713-2"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(yt, <span class="dt">model =</span> mod.list, <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="dv">0</span>, </span>
-<span id="cb713-3"><a href="modeling-the-cycle.html#cb713-3"></a>    m, <span class="dv">1</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb714"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb714-1"><a href="modeling-the-cycle.html#cb714-1"></a>m &lt;-<span class="st"> </span><span class="kw">dim</span>(Z)[<span class="dv">2</span>]</span>
+<span id="cb714-2"><a href="modeling-the-cycle.html#cb714-2"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(yt, <span class="dt">model =</span> mod.list, <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb714-3"><a href="modeling-the-cycle.html#cb714-3"></a>    m, <span class="dv">1</span>)))</span></code></pre></div>
 <pre><code>Warning! Abstol convergence only. Maxit (=500) reached before log-log convergence.
 
 MARSS fit is
@@ -573,41 +574,33 @@ Convergence warnings
 <p>We can plot our cycle estimates and see that the peak has shifted over time. The peak has not been regularly every 5 years.</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-52-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Let’s look at the other rivers. Write a function to do the fit.</p>
-<div class="sourceCode" id="cb716"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb716-1"><a href="modeling-the-cycle.html#cb716-1"></a>fitriver &lt;-<span class="st"> </span><span class="cf">function</span>(river, <span class="dt">p =</span> <span class="dv">5</span>) {</span>
-<span id="cb716-2"><a href="modeling-the-cycle.html#cb716-2"></a>    df &lt;-<span class="st"> </span><span class="kw">subset</span>(sockeye, region <span class="op">==</span><span class="st"> </span>river)</span>
-<span id="cb716-3"><a href="modeling-the-cycle.html#cb716-3"></a>    yt &lt;-<span class="st"> </span><span class="kw">log</span>(df<span class="op">$</span>spawners)</span>
-<span id="cb716-4"><a href="modeling-the-cycle.html#cb716-4"></a>    TT &lt;-<span class="st"> </span><span class="kw">length</span>(yt)</span>
-<span id="cb716-5"><a href="modeling-the-cycle.html#cb716-5"></a>    Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">1</span>, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, TT))</span>
-<span id="cb716-6"><a href="modeling-the-cycle.html#cb716-6"></a>    Z[<span class="dv">1</span>, <span class="dv">2</span>, ] &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>p)</span>
-<span id="cb716-7"><a href="modeling-the-cycle.html#cb716-7"></a>    Z[<span class="dv">1</span>, <span class="dv">3</span>, ] &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>p)</span>
-<span id="cb716-8"><a href="modeling-the-cycle.html#cb716-8"></a>    mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, </span>
-<span id="cb716-9"><a href="modeling-the-cycle.html#cb716-9"></a>        <span class="dt">Z =</span> Z, <span class="dt">A =</span> <span class="st">&quot;zero&quot;</span>)</span>
-<span id="cb716-10"><a href="modeling-the-cycle.html#cb716-10"></a>    fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(yt, <span class="dt">model =</span> mod.list, <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="dv">0</span>, </span>
-<span id="cb716-11"><a href="modeling-the-cycle.html#cb716-11"></a>        <span class="dv">3</span>, <span class="dv">1</span>)), <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb716-12"><a href="modeling-the-cycle.html#cb716-12"></a>    <span class="kw">return</span>(fit)</span>
-<span id="cb716-13"><a href="modeling-the-cycle.html#cb716-13"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb717"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb717-1"><a href="modeling-the-cycle.html#cb717-1"></a>fitriver &lt;-<span class="st"> </span><span class="cf">function</span>(river, <span class="dt">p =</span> <span class="dv">5</span>) {</span>
+<span id="cb717-2"><a href="modeling-the-cycle.html#cb717-2"></a>    df &lt;-<span class="st"> </span><span class="kw">subset</span>(sockeye, region <span class="op">==</span><span class="st"> </span>river)</span>
+<span id="cb717-3"><a href="modeling-the-cycle.html#cb717-3"></a>    yt &lt;-<span class="st"> </span><span class="kw">log</span>(df<span class="op">$</span>spawners)</span>
+<span id="cb717-4"><a href="modeling-the-cycle.html#cb717-4"></a>    TT &lt;-<span class="st"> </span><span class="kw">length</span>(yt)</span>
+<span id="cb717-5"><a href="modeling-the-cycle.html#cb717-5"></a>    Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">1</span>, <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, TT))</span>
+<span id="cb717-6"><a href="modeling-the-cycle.html#cb717-6"></a>    Z[<span class="dv">1</span>, <span class="dv">2</span>, ] &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>p)</span>
+<span id="cb717-7"><a href="modeling-the-cycle.html#cb717-7"></a>    Z[<span class="dv">1</span>, <span class="dv">3</span>, ] &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>p)</span>
+<span id="cb717-8"><a href="modeling-the-cycle.html#cb717-8"></a>    mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, </span>
+<span id="cb717-9"><a href="modeling-the-cycle.html#cb717-9"></a>        <span class="dt">Z =</span> Z, <span class="dt">A =</span> <span class="st">&quot;zero&quot;</span>)</span>
+<span id="cb717-10"><a href="modeling-the-cycle.html#cb717-10"></a>    fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(yt, <span class="dt">model =</span> mod.list, <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb717-11"><a href="modeling-the-cycle.html#cb717-11"></a>        <span class="dv">3</span>, <span class="dv">1</span>)), <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb717-12"><a href="modeling-the-cycle.html#cb717-12"></a>    <span class="kw">return</span>(fit)</span>
+<span id="cb717-13"><a href="modeling-the-cycle.html#cb717-13"></a>}</span></code></pre></div>
 <p>The make a list with all the fits.</p>
-<div class="sourceCode" id="cb717"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb717-1"><a href="modeling-the-cycle.html#cb717-1"></a>fits &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
-<span id="cb717-2"><a href="modeling-the-cycle.html#cb717-2"></a><span class="cf">for</span> (river <span class="cf">in</span> <span class="kw">names</span>(a)) {</span>
-<span id="cb717-3"><a href="modeling-the-cycle.html#cb717-3"></a>    fits[[river]] &lt;-<span class="st"> </span><span class="kw">fitriver</span>(river)</span>
-<span id="cb717-4"><a href="modeling-the-cycle.html#cb717-4"></a>}</span></code></pre></div>
-<p>Create a data frame of the amplitude of the cycle (<span class="math inline">\(\sqrt{\beta_1^2+\beta_2^2}\)</span>) and the stochastic level (<span class="math inline">\(x\)</span>).</p>
-<div class="sourceCode" id="cb718"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb718-1"><a href="modeling-the-cycle.html#cb718-1"></a>dfz &lt;-<span class="st"> </span><span class="kw">data.frame</span>()</span>
+<div class="sourceCode" id="cb718"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb718-1"><a href="modeling-the-cycle.html#cb718-1"></a>fits &lt;-<span class="st"> </span><span class="kw">list</span>()</span>
 <span id="cb718-2"><a href="modeling-the-cycle.html#cb718-2"></a><span class="cf">for</span> (river <span class="cf">in</span> <span class="kw">names</span>(a)) {</span>
-<span id="cb718-3"><a href="modeling-the-cycle.html#cb718-3"></a>    fit &lt;-<span class="st"> </span>fits[[river]]</span>
-<span id="cb718-4"><a href="modeling-the-cycle.html#cb718-4"></a>    tmp &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">amplitude =</span> <span class="kw">sqrt</span>(fit<span class="op">$</span>states[<span class="dv">2</span>, ]<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>fit<span class="op">$</span>states[<span class="dv">3</span>, </span>
-<span id="cb718-5"><a href="modeling-the-cycle.html#cb718-5"></a>        ]<span class="op">^</span><span class="dv">2</span>), <span class="dt">trend =</span> fit<span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">river =</span> river, <span class="dt">brood_year =</span> <span class="kw">subset</span>(sockeye, </span>
-<span id="cb718-6"><a href="modeling-the-cycle.html#cb718-6"></a>        region <span class="op">==</span><span class="st"> </span>river)<span class="op">$</span>brood_year)</span>
-<span id="cb718-7"><a href="modeling-the-cycle.html#cb718-7"></a>    dfz &lt;-<span class="st"> </span><span class="kw">rbind</span>(dfz, tmp)</span>
-<span id="cb718-8"><a href="modeling-the-cycle.html#cb718-8"></a>}</span></code></pre></div>
-<p>Plot of the amplitude of the cycles. All the rivers were analyzed independently. It certainly looks like there are common patterns in the amplitude of the cycles with many showing a steady decline in amplitude. Note the counts were not decreasing so this is not due to fewer spawners.</p>
-<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb719-1"><a href="modeling-the-cycle.html#cb719-1"></a><span class="kw">ggplot</span>(dfz, <span class="kw">aes</span>(<span class="dt">x =</span> brood_year, <span class="dt">y =</span> amplitude)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb719-2"><a href="modeling-the-cycle.html#cb719-2"></a><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="op">~</span>river, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Cycle Amplitude&quot;</span>)</span></code></pre></div>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-56-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>Plot of the stochastic level. Again all the rivers were analyzed independently. It certainly looks like there are common patterns in the trends. In the next step, we can test this.</p>
-<div class="sourceCode" id="cb720"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb720-1"><a href="modeling-the-cycle.html#cb720-1"></a><span class="kw">ggplot</span>(dfz, <span class="kw">aes</span>(<span class="dt">x =</span> brood_year, <span class="dt">y =</span> trend)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>river, </span>
-<span id="cb720-2"><a href="modeling-the-cycle.html#cb720-2"></a>    <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Stochastic Level&quot;</span>)</span></code></pre></div>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-57-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<span id="cb718-3"><a href="modeling-the-cycle.html#cb718-3"></a>    fits[[river]] &lt;-<span class="st"> </span><span class="kw">fitriver</span>(river)</span>
+<span id="cb718-4"><a href="modeling-the-cycle.html#cb718-4"></a>}</span></code></pre></div>
+<p>Create a data frame of the amplitude of the cycle (<span class="math inline">\(\sqrt{\beta_1^2+\beta_2^2}\)</span>) and the stochastic level (<span class="math inline">\(x\)</span>).</p>
+<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb719-1"><a href="modeling-the-cycle.html#cb719-1"></a>dfz &lt;-<span class="st"> </span><span class="kw">data.frame</span>()</span>
+<span id="cb719-2"><a href="modeling-the-cycle.html#cb719-2"></a><span class="cf">for</span> (river <span class="cf">in</span> <span class="kw">names</span>(a)) {</span>
+<span id="cb719-3"><a href="modeling-the-cycle.html#cb719-3"></a>    fit &lt;-<span class="st"> </span>fits[[river]]</span>
+<span id="cb719-4"><a href="modeling-the-cycle.html#cb719-4"></a>    tmp &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">amplitude =</span> <span class="kw">sqrt</span>(fit<span class="op">$</span>states[<span class="dv">2</span>, ]<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>fit<span class="op">$</span>states[<span class="dv">3</span>, </span>
+<span id="cb719-5"><a href="modeling-the-cycle.html#cb719-5"></a>        ]<span class="op">^</span><span class="dv">2</span>), <span class="dt">trend =</span> fit<span class="op">$</span>states[<span class="dv">1</span>, ], <span class="dt">river =</span> river, <span class="dt">brood_year =</span> <span class="kw">subset</span>(sockeye, </span>
+<span id="cb719-6"><a href="modeling-the-cycle.html#cb719-6"></a>        region <span class="op">==</span><span class="st"> </span>river)<span class="op">$</span>brood_year)</span>
+<span id="cb719-7"><a href="modeling-the-cycle.html#cb719-7"></a>    dfz &lt;-<span class="st"> </span><span class="kw">rbind</span>(dfz, tmp)</span>
+<span id="cb719-8"><a href="modeling-the-cycle.html#cb719-8"></a>}</span></code></pre></div>
 </div>
 </div>
             </section>
@@ -616,7 +609,7 @@ Convergence warnings
         </div>
       </div>
 <a href="analysis-goal.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="multivariate-dlm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="univariate-results.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
