@@ -3,7 +3,7 @@ knitr::opts_knit$set(unnamed.chunk.label = "cyclic-sockeye-")
 knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%', message=FALSE, warning=FALSE)
 ```
 
-# Modeling changing sockeye seasonality {#chap-cyclic-sockeye}
+# Modeling cyclic sockeye {#chap-cyclic-sockeye}
 \chaptermark{Cyclic sockeye}
 
 ```{r}
@@ -151,6 +151,8 @@ for(river in names(a)){
   dfz <- rbind(dfz, tmp)
 }
 ```
+
+## Univariate results
 
 Plot of the amplitude of the cycles.  All the rivers were analyzed independently. It certainly looks like there are common patterns in the amplitude of the cycles with many showing a steady decline in amplitude. Note the counts were not decreasing so this is not due to fewer spawners.
 ```{r}
