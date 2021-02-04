@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -508,7 +508,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">9.11</span> Problems</h2>
 <p>Use the information and data in the previous section to answer the following questions. Note that if any model is not converging, then you will need to increase the <code>maxit</code> parameter in the <code>control</code> argument/list that gets passed to <code>MARSS()</code>. For example, you might try <code>control=list(maxit=2000)</code>.</p>
 <ol style="list-style-type: decimal">
-<li>Begin by fitting a reduced form of Equation <a href="sec-dlm-homework.html#eq:dlm-lnTVRicker">(9.34)</a> that includes only a time-varying level (<span class="math inline">\(\alpha_t\)</span>) and observation error (<span class="math inline">\(v_t\)</span>). That is,</li>
+<li>Begin by fitting a reduced form of Equation <a href="sec-dlm-homework.html#eq:dlm-lnTVRicker">(9.33)</a> that includes only a time-varying level (<span class="math inline">\(\alpha_t\)</span>) and observation error (<span class="math inline">\(v_t\)</span>). That is,</li>
 </ol>
 <p><span class="math display">\[\begin{align*}
 \text{log}(R_t) &amp;= \alpha_t + \text{log}(S_t) + v_t \\
@@ -516,9 +516,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 \end{align*}\]</span></p>
 <p>This model assumes no density-dependent survival in that the number of recruits is an ascending function of spawners. Plot the ts of <span class="math inline">\(\alpha_t\)</span> and note the AICc for this model. Also plot appropriate model diagnostics.</p>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Fit the full model specified by Equation <a href="sec-dlm-homework.html#eq:dlm-lnTVRicker">(9.34)</a>. For this model, obtain the time series of <span class="math inline">\(\alpha_t\)</span>, which is an estimate of the stock productivity in the absence of density-dependent effects. How do these estimates of productivity compare to those from the previous question? Plot the ts of <span class="math inline">\(\alpha_t\)</span> and note the AICc for this model. Also plot appropriate model diagnostics. (<span class="math inline">\(Hint\)</span>: If you don’t want a parameter to vary with time, what does that say about its process variance?)</p></li>
-<li><p>Fit the model specified by Equation <a href="sec-dlm-homework.html#eq:dlm-lnCovRicker">(9.35)</a> with the summer PDO index as the covariate (<code>PDO.t2</code>). What is the mean level of productivity? Plot the ts of <span class="math inline">\(\delta_t\)</span> and note the AICc for this model. Also plot appropriate model diagnostics.</p></li>
-<li><p>Fit the model specified by Equation <a href="sec-dlm-homework.html#eq:dlm-lnCovRicker">(9.35)</a> with the winter PDO index as the covariate (<code>PDO.t3</code>). What is the mean level of productivity? Plot the ts of <span class="math inline">\(\delta_t\)</span> and note the AICc for this model. Also plot appropriate model diagnostics.</p></li>
+<li><p>Fit the full model specified by Equation <a href="sec-dlm-homework.html#eq:dlm-lnTVRicker">(9.33)</a>. For this model, obtain the time series of <span class="math inline">\(\alpha_t\)</span>, which is an estimate of the stock productivity in the absence of density-dependent effects. How do these estimates of productivity compare to those from the previous question? Plot the ts of <span class="math inline">\(\alpha_t\)</span> and note the AICc for this model. Also plot appropriate model diagnostics. (<span class="math inline">\(Hint\)</span>: If you don’t want a parameter to vary with time, what does that say about its process variance?)</p></li>
+<li><p>Fit the model specified by Equation <a href="sec-dlm-homework.html#eq:dlm-lnCovRicker">(9.34)</a> with the summer PDO index as the covariate (<code>pdo_summer_t2</code>). What is the mean level of productivity? Plot the ts of <span class="math inline">\(\delta_t\)</span> and note the AICc for this model. Also plot appropriate model diagnostics.</p></li>
+<li><p>Fit the model specified by Equation <a href="sec-dlm-homework.html#eq:dlm-lnCovRicker">(9.34)</a> with the winter PDO index as the covariate (<code>pdo_winter_t2</code>). What is the mean level of productivity? Plot the ts of <span class="math inline">\(\delta_t\)</span> and note the AICc for this model. Also plot appropriate model diagnostics.</p></li>
 <li><p>Based on AICc, which of the models above is the most parsimonious? Is it well behaved (<span class="math inline">\(i.e.\)</span>, are the model assumptions met)? Plot the model forecasts for the best model. Is this a good forecast model?</p></li>
 </ol>
 

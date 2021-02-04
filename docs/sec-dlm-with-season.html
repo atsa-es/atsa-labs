@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -508,7 +508,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">9.5</span> DLM with seasonal effect</h2>
 <p>Let’s add a simple fixed quarter effect to the regression model:</p>
 <p><span class="math display" id="eq:dlm-seasonal-effect">\[\begin{equation}
-\tag{9.12}
+\tag{9.11}
 y_t = \alpha_t + \beta_t x_t + \gamma_{qtr} + e_t \\
 \gamma_{qtr} = 
 \begin{cases}
@@ -518,9 +518,9 @@ y_t = \alpha_t + \beta_t x_t + \gamma_{qtr} + e_t \\
   \gamma_{4} &amp; \text{if } qtr = 4
 \end{cases}
 \end{equation}\]</span></p>
-<p>We can write Equation <a href="sec-dlm-with-season.html#eq:dlm-seasonal-effect">(9.12)</a> in matrix form. In our model for <span class="math inline">\(\gamma\)</span>, we will set the variance to 0 so that the <span class="math inline">\(\gamma\)</span> does not change with time.</p>
+<p>We can write Equation <a href="sec-dlm-with-season.html#eq:dlm-seasonal-effect">(9.11)</a> in matrix form. In our model for <span class="math inline">\(\gamma\)</span>, we will set the variance to 0 so that the <span class="math inline">\(\gamma\)</span> does not change with time.</p>
 <p><span class="math display" id="eq:dlm-seasonal-effect-2">\[\begin{equation}
-\tag{9.13}
+\tag{9.12}
 y_t = 
 \begin{bmatrix}
   1 &amp; x_t &amp; 1
@@ -544,7 +544,7 @@ y_t = \mathbf{Z}_{t}\mathbf{x}_{t}+v_t \\
 \end{equation}\]</span></p>
 <p>How do we select the right quarterly effect? Let’s separate out the quarterly effects and add them to <span class="math inline">\(\mathbf{x}\)</span>. We could then select the right <span class="math inline">\(\gamma\)</span> using 0s and 1s in the <span class="math inline">\(\mathbf{Z}_t\)</span> matrix. For example, if <span class="math inline">\(t\)</span> is in quarter 1, our model would be</p>
 <p><span class="math display" id="eq:dlm-seasonal-effect-3">\[\begin{equation}
-\tag{9.14}
+\tag{9.13}
 y_t = 
 \begin{bmatrix}
   1 &amp; x_t &amp; 1 &amp; 0 &amp; 0 &amp; 0
@@ -555,7 +555,7 @@ y_t =
 \end{equation}\]</span></p>
 <p>While if <span class="math inline">\(t\)</span> is in quarter 2, the model is</p>
 <p><span class="math display" id="eq:dlm-seasonal-effect-4">\[\begin{equation}
-\tag{9.15}
+\tag{9.14}
 y_t = 
 \begin{bmatrix}
   1 &amp; x_t &amp; 0 &amp; 1 &amp; 0 &amp; 0
@@ -567,7 +567,7 @@ y_t =
 <p>This would work, but we would have to have a different <span class="math inline">\(\mathbf{Z}_t\)</span> matrix and it might get cumbersome to keep track of the 0s and 1s. If we wanted the <span class="math inline">\(\gamma\)</span> to evolve with time, we might need to do this. However, if the <span class="math inline">\(\gamma\)</span> are fixed, i.e. the quarterly effect does not change over time, a less cumbersome approach is possible.</p>
 <p>We could instead keep the <span class="math inline">\(\mathbf{Z}_t\)</span> matrix the same, but reorder the <span class="math inline">\(\gamma_i\)</span> within <span class="math inline">\(\mathbf{x}\)</span>. If <span class="math inline">\(t\)</span> is in quarter 1,</p>
 <p><span class="math display" id="eq:dlm-seasonal-effect-5">\[\begin{equation}
-\tag{9.16}
+\tag{9.15}
 y_t = 
 \begin{bmatrix}
   1 &amp; x_t &amp; 1 &amp; 0 &amp; 0 &amp; 0
@@ -578,7 +578,7 @@ y_t =
 \end{equation}\]</span>
 While if <span class="math inline">\(t\)</span> is in quarter 2,</p>
 <p><span class="math display" id="eq:dlm-seasonal-effect-6">\[\begin{equation}
-\tag{9.17}
+\tag{9.16}
 y_t = 
 \begin{bmatrix}
   1 &amp; x_t &amp; 1 &amp; 0 &amp; 0 &amp; 0
@@ -601,7 +601,7 @@ y_t =
 \]</span></p>
 <p>With this <span class="math inline">\(\mathbf{G}\)</span>, the <span class="math inline">\(\gamma\)</span> rotate within <span class="math inline">\(\mathbf{x}\)</span> with each time step. If <span class="math inline">\(t\)</span> is in quarter 1, then <span class="math inline">\(t+1\)</span> is in quarter 2, and we want <span class="math inline">\(\gamma_2\)</span> to be in the 3rd row.</p>
 <p><span class="math display" id="eq:dlm-seasonal-effect-7">\[\begin{equation}
-\tag{9.18}
+\tag{9.17}
 \begin{bmatrix} \alpha \\ \beta \\ \gamma_2 \\ \gamma_3 \\ \gamma_4 \\ \gamma_1
 \end{bmatrix}_{t+1} =
 \begin{bmatrix}
@@ -621,7 +621,7 @@ y_t =
 \end{equation}\]</span></p>
 <p>At <span class="math inline">\(t+2\)</span>, we are in quarter 3 and <span class="math inline">\(\gamma_3\)</span> will be in row 3.</p>
 <p><span class="math display" id="eq:dlm-seasonal-effect-8">\[\begin{equation}
-\tag{9.19}
+\tag{9.18}
 \begin{bmatrix} \alpha \\ \beta \\ \gamma_3 \\ \gamma_4 \\ \gamma_1 \\ \gamma_2
 \end{bmatrix}_{t+2} =
 \begin{bmatrix}

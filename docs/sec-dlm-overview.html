@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -512,26 +512,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 y_i = \alpha + \beta f_i + v_i,
 \end{equation}\]</span>
 where the <span class="math inline">\(\alpha\)</span> is the intercept, <span class="math inline">\(\beta\)</span> is the regression slope, <span class="math inline">\(f_i\)</span> is the predictor variable matched to the <span class="math inline">\(i^{th}\)</span> observation (<span class="math inline">\(y_i\)</span>), and <span class="math inline">\(v_i \sim \text{N}(0,r)\)</span>. It is important to note here that there is no implicit ordering of the index <span class="math inline">\(i\)</span>. That is, we could shuffle any/all of the <span class="math inline">\((y_i, f_i)\)</span> pairs in our dataset with no effect on our ability to estimate the model parameters.</p>
-<p>We can write Equation <a href="sec-dlm-overview.html#eq:dlm-lm">(9.1)</a> using matrix notation, as
-<span class="math display" id="eq:dlm-lmVec">\[\begin{align}
+<p>We can write Equation <a href="sec-dlm-overview.html#eq:dlm-lm">(9.1)</a> using matrix notation, as</p>
+<p><span class="math display" id="eq:dlm-lmVec">\[\begin{align}
 \tag{9.2}
 y_i &amp;= \begin{bmatrix}1&amp;f_i\end{bmatrix} 
 \begin{bmatrix}\alpha\\ \beta\end{bmatrix} + v_i \nonumber\\
 &amp;= \mathbf{F}_i^{\top}\boldsymbol{\theta} + v_i,
-\end{align}\]</span>
-where <span class="math inline">\(\mathbf{F}_i^{\top} = \begin{bmatrix}1&amp;f_i\end{bmatrix}\)</span> and <span class="math inline">\(\boldsymbol{\theta} = \begin{bmatrix}\alpha\\ \beta\end{bmatrix}\)</span>.</p>
-<p>In a DLM, however, the regression parameters are <em>dynamic</em> in that they “evolve” over time. For a single observation at time <span class="math inline">\(t\)</span>, we can write
-<span class="math display" id="eq:dlm-dlm1">\[\begin{equation}
-\tag{9.3}
+\end{align}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{F}_i^{\top} = \begin{bmatrix}1&amp;f_i\end{bmatrix}\)</span> and <span class="math inline">\(\boldsymbol{\theta} = \begin{bmatrix}\alpha\\ \beta\end{bmatrix}\)</span>.</p>
+<p>In a DLM, however, the regression parameters are <em>dynamic</em> in that they “evolve” over time. For a single observation at time <span class="math inline">\(t\)</span>, we can write</p>
+<p><span class="math display">\[\begin{equation}
+(\#eq:dlm-dlm_1)
 y_t = \mathbf{F}_{t}^{\top}\boldsymbol{\theta}_t + v_t,
-\end{equation}\]</span>
-where <span class="math inline">\(\mathbf{F}_t\)</span> is a column vector of predictor variables (covariates) at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\boldsymbol{\theta}_t\)</span> is a column vector of regression parameters at time <span class="math inline">\(t\)</span> and <span class="math inline">\(v_{t}\sim\,\text{N}(0,r)\)</span>. This formulation presents two features that distinguish it from Equation <a href="sec-dlm-overview.html#eq:dlm-lmVec">(9.2)</a>. First, the observed data are explicitly time ordered (i.e., <span class="math inline">\(\mathbf{y}=\lbrace{y_1,y_2,y_3,\dots,y_T}\rbrace\)</span>), which means we expect them to contain implicit information. Second, the relationship between the observed datum and the predictor variables are unique at every time <span class="math inline">\(t\)</span> (i.e., <span class="math inline">\(\boldsymbol{\theta}=\lbrace{\boldsymbol{\theta}_1,\boldsymbol{\theta}_2,\boldsymbol{\theta}_3,\dots,\boldsymbol{\theta}_T}\rbrace\)</span>).</p>
-<p>However, closer examination of Equation <a href="sec-dlm-overview.html#eq:dlm-dlm1">(9.3)</a> reveals an apparent complication for parameter estimation. With only one datum at each time step <span class="math inline">\(t\)</span>, we could, at best, estimate only one regression parameter, and even then, the 1:1 correspondence between data and parameters would preclude any estimation of parameter uncertainty. To address this shortcoming, we return to the time ordering of model parameters. Rather than assume the regression parameters are independent from one time step to another, we instead model them as an autoregressive process where
-<span class="math display" id="eq:dlm-dlm2">\[\begin{equation}
-\tag{9.4}
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{F}_t\)</span> is a column vector of predictor variables (covariates) at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\boldsymbol{\theta}_t\)</span> is a column vector of regression parameters at time <span class="math inline">\(t\)</span> and <span class="math inline">\(v_{t}\sim\,\text{N}(0,r)\)</span>. This formulation presents two features that distinguish it from Equation <a href="sec-dlm-overview.html#eq:dlm-lmVec">(9.2)</a>. First, the observed data are explicitly time ordered (i.e., <span class="math inline">\(\mathbf{y}=\lbrace{y_1,y_2,y_3,\dots,y_T}\rbrace\)</span>), which means we expect them to contain implicit information. Second, the relationship between the observed datum and the predictor variables are unique at every time <span class="math inline">\(t\)</span> (i.e., <span class="math inline">\(\boldsymbol{\theta}=\lbrace{\boldsymbol{\theta}_1,\boldsymbol{\theta}_2,\boldsymbol{\theta}_3,\dots,\boldsymbol{\theta}_T}\rbrace\)</span>).</p>
+<p>However, closer examination of Equation @ref(eq:dlm-dlm_1) reveals an apparent complication for parameter estimation. With only one datum at each time step <span class="math inline">\(t\)</span>, we could, at best, estimate only one regression parameter, and even then, the 1:1 correspondence between data and parameters would preclude any estimation of parameter uncertainty. To address this shortcoming, we return to the time ordering of model parameters. Rather than assume the regression parameters are independent from one time step to another, we instead model them as an autoregressive process where</p>
+<p><span class="math display" id="eq:dlm-dlm2">\[\begin{equation}
+\tag{9.3}
 \boldsymbol{\theta}_t = \mathbf{G}_t\boldsymbol{\theta}_{t-1} + \mathbf{w}_t,
-\end{equation}\]</span>
-<span class="math inline">\(\mathbf{G}_t\)</span> is the parameter “evolution” matrix, and <span class="math inline">\(\mathbf{w}_t\)</span> is a vector of process errors, such that <span class="math inline">\(\mathbf{w}_t \sim \,\text{MVN}(\mathbf{0},\mathbf{Q})\)</span>. The elements of <span class="math inline">\(\mathbf{G}_t\)</span> may be known and fixed <em>a priori</em>, or unknown and estimated from the data. Although we could allow <span class="math inline">\(\mathbf{G}_t\)</span> to be time-varying, we will typically assume that it is time invariant or assume <span class="math inline">\(\mathbf{G}_t\)</span> is an <span class="math inline">\(m \times m\)</span> identity matrix <span class="math inline">\(\mathbf{I}_m\)</span>.</p>
+\end{equation}\]</span></p>
+<p><span class="math inline">\(\mathbf{G}_t\)</span> is the parameter “evolution” matrix, and <span class="math inline">\(\mathbf{w}_t\)</span> is a vector of process errors, such that <span class="math inline">\(\mathbf{w}_t \sim \,\text{MVN}(\mathbf{0},\mathbf{Q})\)</span>. The elements of <span class="math inline">\(\mathbf{G}_t\)</span> may be known and fixed <em>a priori</em>, or unknown and estimated from the data. Although we could allow <span class="math inline">\(\mathbf{G}_t\)</span> to be time-varying, we will typically assume that it is time invariant or assume <span class="math inline">\(\mathbf{G}_t\)</span> is an <span class="math inline">\(m \times m\)</span> identity matrix <span class="math inline">\(\mathbf{I}_m\)</span>.</p>
 <p>The idea is that the evolution matrix <span class="math inline">\(\mathbf{G}_t\)</span> deterministically maps the parameter space from one time step to the next, so the parameters at time <span class="math inline">\(t\)</span> are temporally related to those before and after. However, the process is corrupted by stochastic error, which amounts to a degradation of information over time. If the diagonal elements of <span class="math inline">\(\mathbf{Q}\)</span> are relatively large, then the parameters can vary widely from <span class="math inline">\(t\)</span> to <span class="math inline">\(t+1\)</span>. If <span class="math inline">\(\mathbf{Q} = \mathbf{0}\)</span>, then <span class="math inline">\(\boldsymbol{\theta}_1=\boldsymbol{\theta}_2=\boldsymbol{\theta}_T\)</span> and we are back to the static model in Equation <a href="sec-dlm-overview.html#eq:dlm-lm">(9.1)</a>.</p>
 </div>
             </section>

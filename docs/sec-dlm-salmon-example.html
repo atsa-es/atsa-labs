@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -508,31 +508,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">9.6</span> Analysis of salmon survival</h2>
 <p>Let’s see an example of a DLM used to analyze real data from the literature. <span class="citation">Scheuerell and Williams (<a href="references.html#ref-ScheuerellWilliams2005" role="doc-biblioref">2005</a>)</span> used a DLM to examine the relationship between marine survival of Chinook salmon and an index of ocean upwelling strength along the west coast of the USA. Upwelling brings cool, nutrient-rich waters from the deep ocean to shallower coastal areas. Scheuerell &amp; Williams hypothesized that stronger upwelling in April should create better growing conditions for phytoplankton, which would then translate into more zooplankton. In turn, juvenile salmon (“smolts”) entering the ocean in May and June should find better foraging opportunities. Thus, for smolts entering the ocean in year <span class="math inline">\(t\)</span>,
 <span class="math display" id="eq:dlm-dlmSW1">\[\begin{equation}
-\tag{9.20}
+\tag{9.19}
 survival_t = \alpha_t + \beta_t f_t + v_t \text{ with } v_{t}\sim\,\text{N}(0,r),
 \end{equation}\]</span>
 and <span class="math inline">\(f_t\)</span> is the coastal upwelling index (cubic meters of seawater per second per 100 m of coastline) for the month of April in year <span class="math inline">\(t\)</span>.</p>
 <p>Both the intercept and slope are time varying, so</p>
 <p><span class="math display" id="eq:dlm-dlmSW2">\[\begin{align}
-\tag{9.21}
+\tag{9.20}
 \alpha_t &amp;= \alpha_{t-1} + w_{\alpha,t} \text{ with } w_{\alpha,t} \sim \,\text{N}(0,q_{\alpha})\\
 \beta_t &amp;= \beta_{t-1} + w_{\beta,t} \text{ with } w_{\beta,t} \sim \,\text{N}(0,q_{\beta}).
-\end{align}\]</span>
-If we define <span class="math inline">\(\boldsymbol{\theta}_t = \begin{bmatrix}\alpha \\ \beta\end{bmatrix}_t\)</span>, <span class="math inline">\(\mathbf{G}_t = \mathbf{I}\)</span>, <span class="math inline">\(\mathbf{w}_t = \begin{bmatrix} w_\alpha \\ w_\beta\end{bmatrix}_t\)</span>, and <span class="math inline">\(\mathbf{Q} = \begin{bmatrix}q_\alpha&amp; 0 \\ 0&amp;q_\beta\end{bmatrix}\)</span>, we get Equation <a href="sec-dlm-overview.html#eq:dlm-dlm2">(9.4)</a>. If we define <span class="math inline">\(y_t = survival_t\)</span> and <span class="math inline">\(\mathbf{F}_t = \begin{bmatrix}1 \\ f_t\end{bmatrix}\)</span>, we can write out the full DLM as a state-space model with the following form:
-<span class="math display" id="eq:dlm-dlmSW3">\[\begin{equation}
-\tag{9.22}
+\end{align}\]</span></p>
+<p>If we define <span class="math inline">\(\boldsymbol{\theta}_t = \begin{bmatrix}\alpha \\ \beta\end{bmatrix}_t\)</span>, <span class="math inline">\(\mathbf{G}_t = \mathbf{I}\)</span>, <span class="math inline">\(\mathbf{w}_t = \begin{bmatrix} w_\alpha \\ w_\beta\end{bmatrix}_t\)</span>, and <span class="math inline">\(\mathbf{Q} = \begin{bmatrix}q_\alpha&amp; 0 \\ 0&amp;q_\beta\end{bmatrix}\)</span>, we get Equation <a href="sec-dlm-overview.html#eq:dlm-dlm2">(9.3)</a>. If we define <span class="math inline">\(y_t = survival_t\)</span> and <span class="math inline">\(\mathbf{F}_t = \begin{bmatrix}1 \\ f_t\end{bmatrix}\)</span>, we can write out the full DLM as a state-space model with the following form:</p>
+<p><span class="math display" id="eq:dlm-dlmSW3">\[\begin{equation}
+\tag{9.21}
 y_t = \mathbf{F}_t^{\top}\boldsymbol{\theta}_t + v_t \text{ with } v_t\sim\,\text{N}(0,r)\\
 \boldsymbol{\theta}_t = \mathbf{G}_t\boldsymbol{\theta}_{t-1} + \mathbf{w}_t \text{ with } \mathbf{w}_t \sim \,\text{MVN}(\mathbf{0},\mathbf{Q})\\
 \boldsymbol{\theta}_0 = \boldsymbol{\pi}_0.
 \end{equation}\]</span></p>
-<p>Equation <a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW3">(9.22)</a> is equivalent to our standard MARSS model:
-<span class="math display" id="eq:dlm-MARSSdlm">\[\begin{equation}
-\tag{9.23}
+<p>Equation <a href="sec-dlm-salmon-example.html#eq:dlm-dlmSW3">(9.21)</a> is equivalent to our standard MARSS model:</p>
+<p><span class="math display" id="eq:dlm-MARSSdlm">\[\begin{equation}
+\tag{9.22}
 \mathbf{y}_t = \mathbf{Z}_t\mathbf{x}_t + \mathbf{a} + \mathbf{v}_t \text{ with } \mathbf{v}_t \sim \,\text{MVN}(0,\mathbf{R}_t)\\
 \mathbf{x}_t = \mathbf{B}_t\mathbf{x}_{t-1} + \mathbf{u} +  \mathbf{w}_t \text{ with } \mathbf{w}_t \sim \,\text{MVN}(0,\mathbf{Q}_t)\\
 \mathbf{x}_0 = \boldsymbol{\pi}
-\end{equation}\]</span>
-where <span class="math inline">\(\mathbf{x}_t = \boldsymbol{\theta}_t\)</span>, <span class="math inline">\(\mathbf{B}_t = \mathbf{G}_t\)</span>, <span class="math inline">\(\mathbf{y}_t = y_t\)</span> (i.e., <span class="math inline">\(\mathbf{y}_t\)</span> is 1 <span class="math inline">\(\times\)</span> 1), <span class="math inline">\(\mathbf{Z}_t = \mathbf{F}_t^{\top}\)</span>, <span class="math inline">\(\mathbf{a} = \mathbf{u} = \mathbf{0}\)</span>, and <span class="math inline">\(\mathbf{R}_t = r\)</span> (i.e., <span class="math inline">\(\mathbf{R}_t\)</span> is 1 <span class="math inline">\(\times\)</span> 1).</p>
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(\mathbf{x}_t = \boldsymbol{\theta}_t\)</span>, <span class="math inline">\(\mathbf{B}_t = \mathbf{G}_t\)</span>, <span class="math inline">\(\mathbf{y}_t = y_t\)</span> (i.e., <span class="math inline">\(\mathbf{y}_t\)</span> is 1 <span class="math inline">\(\times\)</span> 1), <span class="math inline">\(\mathbf{Z}_t = \mathbf{F}_t^{\top}\)</span>, <span class="math inline">\(\mathbf{a} = \mathbf{u} = \mathbf{0}\)</span>, and <span class="math inline">\(\mathbf{R}_t = r\)</span> (i.e., <span class="math inline">\(\mathbf{R}_t\)</span> is 1 <span class="math inline">\(\times\)</span> 1).</p>
 </div>
             </section>
 

@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -508,12 +508,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">9.10</span> Homework discussion and data</h2>
 <p>For the homework this week we will use a DLM to examine some of the time-varying properties of the spawner-recruit relationship for Pacific salmon. Much work has been done on this topic, particularly by Randall Peterman and his students and post-docs at Simon Fraser University. To do so, researchers commonly use a Ricker model because of its relatively simple form, such that the number of recruits (offspring) born in year <span class="math inline">\(t\)</span> (<span class="math inline">\(R_t\)</span>) from the number of spawners (parents) (<span class="math inline">\(S_t\)</span>) is</p>
 <p><span class="math display" id="eq:dlm-baseRicker">\[\begin{equation}
-\tag{9.32}
+\tag{9.31}
 R_t = a S_t e^{-b S + v_t}.
 \end{equation}\]</span></p>
 <p>The parameter <span class="math inline">\(a\)</span> determines the maximum reproductive rate in the absence of any density-dependent effects (the slope of the curve at the origin), <span class="math inline">\(b\)</span> is the strength of density dependence, and <span class="math inline">\(v_t \sim N(0,\sigma)\)</span>. In practice, the model is typically log-transformed so as to make it linear with respect to the predictor variable <span class="math inline">\(S_t\)</span>, such that</p>
 <p><span class="math display" id="eq:dlm-lnRicker">\[\begin{align}
-\tag{9.33}
+\tag{9.32}
 \text{log}(R_t) &amp;= \text{log}(a) + \text{log}(S_t) -b S_t + v_t \\
 \text{log}(R_t) - \text{log}(S_t) &amp;= \text{log}(a) -b S_t + v_t \\
 \text{log}(R_t/S_t) &amp;= \text{log}(a) - b S_t + v_t.
@@ -521,14 +521,14 @@ R_t = a S_t e^{-b S + v_t}.
 <p>Substituting <span class="math inline">\(y_t = \text{log}(R_t/S_t)\)</span>, <span class="math inline">\(x_t = S_t\)</span>, and <span class="math inline">\(\alpha = \text{log}(a)\)</span> yields a simple linear regression model with intercept <span class="math inline">\(\alpha\)</span> and slope <span class="math inline">\(b\)</span>.</p>
 <p>Unfortunately, however, residuals from this simple model typically show high-autocorrelation due to common environmental conditions that affect overlapping generations. Therefore, to correct for this and allow for an index of stock productivity that controls for any density-dependent effects, the model may be re-written as</p>
 <p><span class="math display" id="eq:dlm-lnTVRicker">\[\begin{align}
-\tag{9.34}
+\tag{9.33}
 \text{log}(R_t/S_t) &amp;= \alpha_t - b S_t + v_t, \\
 \alpha_t &amp;= \alpha_{t-1} + w_t,
 \end{align}\]</span></p>
 <p>and <span class="math inline">\(w_t \sim N(0,q)\)</span>. By treating the brood-year specific productivity as a random walk, we allow it to vary, but in an autocorrelated manner so that consecutive years are not independent from one another.</p>
 <p>More recently, interest has grown in using covariates (<span class="math inline">\(e.g.\)</span>, sea-surface temperature) to explain the interannual variability in productivity. In that case, we can can write the model as</p>
 <p><span class="math display" id="eq:dlm-lnCovRicker">\[\begin{equation}
-\tag{9.35}
+\tag{9.34}
 \text{log}(R_t/S_t) = \alpha + \delta_t X_t - b S_t + v_t.
 \end{equation}\]</span></p>
 <p>In this case we are estimating some base-level productivity (<span class="math inline">\(\alpha\)</span>) plus the time-varying effect of some covariate <span class="math inline">\(X_t\)</span> (<span class="math inline">\(\delta_t\)</span>).</p>
@@ -541,15 +541,15 @@ R_t = a S_t e^{-b S + v_t}.
 <p><img src="images/BB_sockeye_rivers_inset.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>These data are in the <strong>atsalibrary</strong> package on GitHub. If needed, install using the <strong>devtools</strong> package.</p>
 <div class="sourceCode" id="cb547"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb547-1"><a href="sec-dlm-homework.html#cb547-1"></a><span class="kw">library</span>(devtools)</span>
-<span id="cb547-2"><a href="sec-dlm-homework.html#cb547-2"></a><span class="co"># Windows users will likely need to set this</span></span>
-<span id="cb547-3"><a href="sec-dlm-homework.html#cb547-3"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
+<span id="cb547-2"><a href="sec-dlm-homework.html#cb547-2"></a><span class="co">## Windows users will likely need to set this</span></span>
+<span id="cb547-3"><a href="sec-dlm-homework.html#cb547-3"></a><span class="co">## Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
 <span id="cb547-4"><a href="sec-dlm-homework.html#cb547-4"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsalibrary&quot;</span>)</span></code></pre></div>
 <p>Load the data.</p>
 <div class="sourceCode" id="cb548"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb548-1"><a href="sec-dlm-homework.html#cb548-1"></a><span class="kw">data</span>(KvichakSockeye, <span class="dt">package =</span> <span class="st">&quot;atsalibrary&quot;</span>)</span>
-<span id="cb548-2"><a href="sec-dlm-homework.html#cb548-2"></a>SRdata &lt;-<span class="st"> </span>KvichakSockeye</span></code></pre></div>
+<span id="cb548-2"><a href="sec-dlm-homework.html#cb548-2"></a>SR_data &lt;-<span class="st"> </span>KvichakSockeye</span></code></pre></div>
 <p>The data are a dataframe with columns for brood year (<code>brood_year</code>), number of spawners (<code>spawners</code>), number of recruits (<code>recruits</code>) and PDO at year <span class="math inline">\(t-2\)</span> in summer (<code>pdo_summer_t2</code>) and in winter (<code>pdo_winter_t2</code>).</p>
-<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="sec-dlm-homework.html#cb549-1"></a><span class="co"># head of data file</span></span>
-<span id="cb549-2"><a href="sec-dlm-homework.html#cb549-2"></a><span class="kw">head</span>(SRdata)</span></code></pre></div>
+<div class="sourceCode" id="cb549"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb549-1"><a href="sec-dlm-homework.html#cb549-1"></a><span class="co">## head of data file</span></span>
+<span id="cb549-2"><a href="sec-dlm-homework.html#cb549-2"></a><span class="kw">head</span>(SR_data)</span></code></pre></div>
 <pre><code># A tibble: 6 x 5
 # Groups:   brood_year [6]
   brood_year spawners recruits pdo_summer_t2 pdo_winter_t2

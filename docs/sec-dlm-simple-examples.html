@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -508,7 +508,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">9.3</span> Stochastic level models</h2>
 <p>The most simple DLM is a stochastic level model, where the level is a random walk without drift, and this level is observed with error. We will write it first in using regression notation where the intercept is <span class="math inline">\(\alpha\)</span> and then in MARSS notation. In the latter, <span class="math inline">\(\alpha_t=x_t\)</span>.</p>
 <p><span class="math display" id="eq:dlm-stoch-level">\[\begin{equation}
-\tag{9.6}
+\tag{9.5}
 y_t = \alpha_t + e_t \\
 \alpha_t = \alpha_{t-1} + w_t \\
 \Downarrow \\
@@ -516,10 +516,15 @@ y_t = x_t + v_t \\
 x_t = x_{t-1} + w_t
 \end{equation}\]</span></p>
 <p>Using this model, we can model the Nile River level and fit the model using <code>MARSS()</code>.</p>
-<div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb531-1"><a href="sec-dlm-simple-examples.html#cb531-1"></a><span class="kw">data</span>(Nile, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
-<span id="cb531-2"><a href="sec-dlm-simple-examples.html#cb531-2"></a>mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </span>
-<span id="cb531-3"><a href="sec-dlm-simple-examples.html#cb531-3"></a>    <span class="dt">Z =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="st">&quot;a&quot;</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>))</span>
-<span id="cb531-4"><a href="sec-dlm-simple-examples.html#cb531-4"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="kw">matrix</span>(Nile, <span class="dt">nrow =</span> <span class="dv">1</span>), mod_list)</span></code></pre></div>
+<div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb531-1"><a href="sec-dlm-simple-examples.html#cb531-1"></a><span class="co">## load Nile flow data</span></span>
+<span id="cb531-2"><a href="sec-dlm-simple-examples.html#cb531-2"></a><span class="kw">data</span>(Nile, <span class="dt">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
+<span id="cb531-3"><a href="sec-dlm-simple-examples.html#cb531-3"></a></span>
+<span id="cb531-4"><a href="sec-dlm-simple-examples.html#cb531-4"></a><span class="co">## define model list</span></span>
+<span id="cb531-5"><a href="sec-dlm-simple-examples.html#cb531-5"></a>mod_list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="kw">matrix</span>(<span class="st">&quot;q&quot;</span>), </span>
+<span id="cb531-6"><a href="sec-dlm-simple-examples.html#cb531-6"></a>    <span class="dt">Z =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">A =</span> <span class="kw">matrix</span>(<span class="st">&quot;a&quot;</span>), <span class="dt">R =</span> <span class="kw">matrix</span>(<span class="st">&quot;r&quot;</span>))</span>
+<span id="cb531-7"><a href="sec-dlm-simple-examples.html#cb531-7"></a></span>
+<span id="cb531-8"><a href="sec-dlm-simple-examples.html#cb531-8"></a><span class="co">## fit the model with MARSS</span></span>
+<span id="cb531-9"><a href="sec-dlm-simple-examples.html#cb531-9"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(<span class="kw">matrix</span>(Nile, <span class="dt">nrow =</span> <span class="dv">1</span>), mod_list)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 82 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -545,7 +550,7 @@ Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <h3><span class="header-section-number">9.3.1</span> Stochastic level with drift</h3>
 <p>We can add a drift term to the level model to allow the level to tend upward or downward with a deterministic rate <span class="math inline">\(\eta\)</span>. This is a random walk with bias.</p>
 <p><span class="math display" id="eq:dlm-stoch-level-drift">\[\begin{equation}
-\tag{9.7}
+\tag{9.6}
 y_t = \alpha_t + e_t \\
 \alpha_t = \alpha_{t-1} + \eta + w_t \\
 \Downarrow \\
@@ -554,14 +559,14 @@ x_t = x_{t-1} + u + w_t
 \end{equation}\]</span></p>
 <p>We can allow that the drift term <span class="math inline">\(\eta\)</span> evolves over time along with the level. In this case, <span class="math inline">\(\eta\)</span> is modeled as a random walk along with <span class="math inline">\(\alpha\)</span>. This model is</p>
 <p><span class="math display" id="eq:dlm-stoch-level-drift-2">\[\begin{equation}
-\tag{9.8}
+\tag{9.7}
   y_t = \alpha_t + e_t \\
   \alpha_t = \alpha_{t-1} + \eta_{t-1} + w_{\alpha,t} \\
   \eta_t = \eta_{t-1} + w_{\eta,t}
 \end{equation}\]</span>
-Equation <a href="sec-dlm-simple-examples.html#eq:dlm-stoch-level-drift-2">(9.8)</a> can be written in matrix form as:
+Equation <a href="sec-dlm-simple-examples.html#eq:dlm-stoch-level-drift-2">(9.7)</a> can be written in matrix form as:
 <span class="math display" id="eq:dlm-stoch-level-drift-3">\[\begin{equation}
-\tag{9.9}
+\tag{9.8}
 y_t = \begin{bmatrix}1&amp;0\end{bmatrix}\begin{bmatrix}
     \alpha \\
     \eta
@@ -580,7 +585,7 @@ y_t = \begin{bmatrix}1&amp;0\end{bmatrix}\begin{bmatrix}
     w_{\eta}
   \end{bmatrix}_t
 \end{equation}\]</span>
-Equation <a href="sec-dlm-simple-examples.html#eq:dlm-stoch-level-drift-3">(9.9)</a> is a MARSS model.</p>
+Equation <a href="sec-dlm-simple-examples.html#eq:dlm-stoch-level-drift-3">(9.8)</a> is a MARSS model.</p>
 <p><span class="math display">\[\begin{equation}
 y_t = \mathbf{Z}\mathbf{x}_t + v_t \\
 \mathbf{x}_t = \mathbf{B}\mathbf{x}_{t-1} + \mathbf{w}_t

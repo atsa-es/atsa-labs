@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -513,28 +513,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ol>
 <div id="estimate-of-the-regression-parameters" class="section level3">
 <h3><span class="header-section-number">9.8.1</span> Estimate of the regression parameters</h3>
-<p>For step 1, we want to compute the distribution of the regression parameters at time <span class="math inline">\(t\)</span> conditioned on the data up to time <span class="math inline">\(t-1\)</span>, also known as the one-step ahead forecasts of the regression parameters. Let’s denote <span class="math inline">\(\boldsymbol{\theta}_{t-1}\)</span> conditioned on <span class="math inline">\(y_{1:t-1}\)</span> as <span class="math inline">\(\boldsymbol{\theta}_{t-1|t-1}\)</span> and denote <span class="math inline">\(\boldsymbol{\theta}_{t}\)</span> conditioned on <span class="math inline">\(y_{1:t-1}\)</span> as <span class="math inline">\(\boldsymbol{\theta}_{t|t-1}\)</span>. We will start by defining the distribution of <span class="math inline">\(\boldsymbol{\theta}_{t|t}\)</span> as follows
-<span class="math display" id="eq:dlm-distthetatt">\[\begin{equation}
-\tag{9.24}
+<p>For step 1, we want to compute the distribution of the regression parameters at time <span class="math inline">\(t\)</span> conditioned on the data up to time <span class="math inline">\(t-1\)</span>, also known as the one-step ahead forecasts of the regression parameters. Let’s denote <span class="math inline">\(\boldsymbol{\theta}_{t-1}\)</span> conditioned on <span class="math inline">\(y_{1:t-1}\)</span> as <span class="math inline">\(\boldsymbol{\theta}_{t-1|t-1}\)</span> and denote <span class="math inline">\(\boldsymbol{\theta}_{t}\)</span> conditioned on <span class="math inline">\(y_{1:t-1}\)</span> as <span class="math inline">\(\boldsymbol{\theta}_{t|t-1}\)</span>. We will start by defining the distribution of <span class="math inline">\(\boldsymbol{\theta}_{t|t}\)</span> as follows</p>
+<p><span class="math display" id="eq:dlm-distthetatt">\[\begin{equation}
+\tag{9.23}
 \boldsymbol{\theta}_{t|t} \sim \text{MVN}(\boldsymbol{\pi}_t,\boldsymbol{\Lambda}_t) \end{equation}\]</span>
-where <span class="math inline">\(\boldsymbol{\pi}_t = \text{E}(\boldsymbol{\theta}_{t|t})\)</span> and <span class="math inline">\(\mathbf{\Lambda}_t = \text{Var}(\boldsymbol{\theta}_{t|t})\)</span>.
-Now we can compute the distribution of <span class="math inline">\(\boldsymbol{\theta}_{t}\)</span> conditioned on <span class="math inline">\(y_{1:t-1}\)</span> using the process equation for <span class="math inline">\(\boldsymbol{\theta}\)</span>:
-<span class="math display">\[\begin{equation}
+where <span class="math inline">\(\boldsymbol{\pi}_t = \text{E}(\boldsymbol{\theta}_{t|t})\)</span> and <span class="math inline">\(\mathbf{\Lambda}_t = \text{Var}(\boldsymbol{\theta}_{t|t})\)</span>.</p>
+<p>Now we can compute the distribution of <span class="math inline">\(\boldsymbol{\theta}_{t}\)</span> conditioned on <span class="math inline">\(y_{1:t-1}\)</span> using the process equation for <span class="math inline">\(\boldsymbol{\theta}\)</span>:</p>
+<p><span class="math display">\[\begin{equation}
 \boldsymbol{\theta}_{t} = \mathbf{G}_t \boldsymbol{\theta}_{t-1} + \mathbf{w}_t ~ \text{with} ~ \mathbf{w}_t \sim \text{MVN}(\mathbf{0}, \mathbf{Q}) \\
-\end{equation}\]</span>
-The expected value of <span class="math inline">\(\boldsymbol{\theta}_{t|t-1}\)</span> is thus
-<span class="math display" id="eq:dlm-distthetatt-mean">\[\begin{equation}
-\tag{9.25}
+\end{equation}\]</span></p>
+<p>The expected value of <span class="math inline">\(\boldsymbol{\theta}_{t|t-1}\)</span> is thus</p>
+<p><span class="math display" id="eq:dlm-distthetatt-mean">\[\begin{equation}
+\tag{9.24}
 \text{E}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{G}_t \text{E}(\boldsymbol{\theta}_{t-1|t-1}) = \mathbf{G}_t \boldsymbol{\pi}_{t-1}
-\end{equation}\]</span>
-The variance of <span class="math inline">\(\boldsymbol{\theta}_{t|t-1}\)</span> is
-<span class="math display" id="eq:dlm-distthetatt-var">\[\begin{equation}
-\tag{9.26}
+\end{equation}\]</span></p>
+<p>The variance of <span class="math inline">\(\boldsymbol{\theta}_{t|t-1}\)</span> is</p>
+<p><span class="math display" id="eq:dlm-distthetatt-var">\[\begin{equation}
+\tag{9.25}
 \text{Var}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{G}_t \text{Var}(\boldsymbol{\theta}_{t-1|t-1}) \mathbf{G}_t^{\top} + \mathbf{Q} = \mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q}
-\end{equation}\]</span>
-Thus the distribution of <span class="math inline">\(\boldsymbol{\theta}_{t}\)</span> conditioned on <span class="math inline">\(y_{1:t-1}\)</span> is
-<span class="math display" id="eq:dlm-distthetatplus1-t">\[\begin{equation}
-\tag{9.27}
+\end{equation}\]</span></p>
+<p>Thus the distribution of <span class="math inline">\(\boldsymbol{\theta}_{t}\)</span> conditioned on <span class="math inline">\(y_{1:t-1}\)</span> is</p>
+<p><span class="math display" id="eq:dlm-distthetatplus1-t">\[\begin{equation}
+\tag{9.26}
 \text{E}(\boldsymbol{\theta}_{t|t-1}) \sim \text{MVN}(\mathbf{G}_t \boldsymbol{\pi}_{t-1}, \mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q})
 \end{equation}\]</span></p>
 </div>
@@ -542,85 +542,89 @@ Thus the distribution of <span class="math inline">\(\boldsymbol{\theta}_{t}\)</
 <h3><span class="header-section-number">9.8.2</span> Prediction of the response variable <span class="math inline">\(y_t\)</span></h3>
 <p>For step 2, we make the prediction of <span class="math inline">\(y_{t}\)</span> given the predictor variables at time <span class="math inline">\(t\)</span> and the estimate of the regression parameters at time <span class="math inline">\(t\)</span>. This is called the one-step ahead prediction for the observation at time <span class="math inline">\(t\)</span>. We will denote the prediction of <span class="math inline">\(y\)</span> as <span class="math inline">\(\hat{y}\)</span> and we want to compute its distribution (mean and variance). We do this using the equation for <span class="math inline">\(y_t\)</span> but substituting the expected value of <span class="math inline">\(\boldsymbol{\theta}_{t|t-1}\)</span> for <span class="math inline">\(\boldsymbol{\theta}_t\)</span>.</p>
 <p><span class="math display" id="eq:dlm-predict-y-tplus1">\[\begin{equation}
-\tag{9.28}
+\tag{9.27}
 \hat{y}_{t|t-1} = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) + e_{t} ~ \text{with} ~ e_{t} \sim \text{N}(0, r)  \\
-\end{equation}\]</span>
-Our prediction of <span class="math inline">\(y\)</span> at <span class="math inline">\(t\)</span> has a normal distribution with mean (expected value) and variance. The expected value of <span class="math inline">\(\hat{y}_{t|t-1}\)</span> is
-<span class="math display" id="eq:dlm-predict-y-mean">\[\begin{equation}
-\tag{9.29}
+\end{equation}\]</span></p>
+<p>Our prediction of <span class="math inline">\(y\)</span> at <span class="math inline">\(t\)</span> has a normal distribution with mean (expected value) and variance. The expected value of <span class="math inline">\(\hat{y}_{t|t-1}\)</span> is</p>
+<p><span class="math display" id="eq:dlm-predict-y-mean">\[\begin{equation}
+\tag{9.28}
 \text{E}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{F}^{\top}_{t} (\mathbf{G}_t \boldsymbol{\pi}_{t-1}) \\
-\end{equation}\]</span>
-and the variance of <span class="math inline">\(\hat{y}_{t|t-1}\)</span> is
-<span class="math display" id="eq:dlm-predict-y-var">\[\begin{align}
-\tag{9.30}
+\end{equation}\]</span></p>
+<p>and the variance of <span class="math inline">\(\hat{y}_{t|t-1}\)</span> is</p>
+<p><span class="math display" id="eq:dlm-predict-y-var">\[\begin{align}
+\tag{9.29}
 \text{Var}(\hat{y}_{t|t-1}) &amp;= \mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + r \\
  &amp;= \mathbf{F}^{\top}_{t} (\mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q}) \mathbf{F}_{t} + r \\
 \end{align}\]</span></p>
 </div>
 <div id="computing-the-prediction" class="section level3">
 <h3><span class="header-section-number">9.8.3</span> Computing the prediction</h3>
-<p>The expectations and variance of <span class="math inline">\(\boldsymbol{\theta}_t\)</span> conditioned on <span class="math inline">\(y_{1:t}\)</span> and <span class="math inline">\(y_{1:t-1}\)</span> are standard output from the Kalman filter. Thus to produce the predictions, all we need to do is run our DLM state-space model through a Kalman filter to get <span class="math inline">\(\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span> and <span class="math inline">\(\text{Var}(\boldsymbol{\theta}_{t|t-1})\)</span> and then use Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-predict-y-mean">(9.29)</a> to compute the mean prediction and Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-predict-y-var">(9.30)</a> to compute its variance.</p>
+<p>The expectations and variance of <span class="math inline">\(\boldsymbol{\theta}_t\)</span> conditioned on <span class="math inline">\(y_{1:t}\)</span> and <span class="math inline">\(y_{1:t-1}\)</span> are standard output from the Kalman filter. Thus to produce the predictions, all we need to do is run our DLM state-space model through a Kalman filter to get <span class="math inline">\(\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span> and <span class="math inline">\(\text{Var}(\boldsymbol{\theta}_{t|t-1})\)</span> and then use Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-predict-y-mean">(9.28)</a> to compute the mean prediction and Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-predict-y-var">(9.29)</a> to compute its variance.</p>
 <p>The Kalman filter will need <span class="math inline">\(\mathbf{F}_t\)</span>, <span class="math inline">\(\mathbf{G}_t\)</span> and estimates of <span class="math inline">\(\mathbf{Q}\)</span> and <span class="math inline">\(r\)</span>. The latter are calculated by fitting the DLM to the data <span class="math inline">\(y_{1:t}\)</span>, using for example the <code>MARSS()</code> function.</p>
 <p>Let’s see an example with the salmon survival DLM. We will use the Kalman filter function in the <strong>MARSS</strong> package and the DLM fit from <code>MARSS()</code>.</p>
 </div>
 <div id="forecasting-salmon-survival" class="section level3">
 <h3><span class="header-section-number">9.8.4</span> Forecasting salmon survival</h3>
 <p><span class="citation">Scheuerell and Williams (<a href="references.html#ref-ScheuerellWilliams2005" role="doc-biblioref">2005</a>)</span> were interested in how well upwelling could be used to actually <em>forecast</em> expected survival of salmon, so let’s look at how well our model does in that context. To do so, we need the predictive distribution for the survival at time <span class="math inline">\(t\)</span> given the upwelling at time <span class="math inline">\(t\)</span> and the predicted regression parameters at <span class="math inline">\(t\)</span>.</p>
-<p>In the salmon survival DLM, the <span class="math inline">\(\mathbf{G}_t\)</span> matrix is the identity matrix, thus the mean and variance of the one-step ahead predictive distribution for the observation at time <span class="math inline">\(t\)</span> reduces to (from Equations <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-predict-y-mean">(9.29)</a> and <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-predict-y-var">(9.30)</a>)
-<span class="math display" id="eq:dlm-dlmFore3">\[\begin{equation}
-\tag{9.31}
+<p>In the salmon survival DLM, the <span class="math inline">\(\mathbf{G}_t\)</span> matrix is the identity matrix, thus the mean and variance of the one-step ahead predictive distribution for the observation at time <span class="math inline">\(t\)</span> reduces to (from Equations <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-predict-y-mean">(9.28)</a> and <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-predict-y-var">(9.29)</a>)</p>
+<p><span class="math display" id="eq:dlm-dlmFore3">\[\begin{equation}
+\tag{9.30}
 \text{E}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) \\ 
 \text{Var}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}
-\end{equation}\]</span>
-where
-<span class="math display">\[
+\end{equation}\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
 \mathbf{F}_{t}=\begin{bmatrix}1 \\ f_{t}\end{bmatrix}
-\]</span>
-and <span class="math inline">\(f_{t}\)</span> is the upwelling index at <span class="math inline">\(t+1\)</span>. <span class="math inline">\(\hat{r}\)</span> is the estimated observation variance from our model fit.</p>
+\]</span></p>
+<p>and <span class="math inline">\(f_{t}\)</span> is the upwelling index at <span class="math inline">\(t+1\)</span>. <span class="math inline">\(\hat{r}\)</span> is the estimated observation variance from our model fit.</p>
 </div>
 <div id="sec-dlm-forecasting-a-univariate-dlm-with-marss" class="section level3">
 <h3><span class="header-section-number">9.8.5</span> Forecasting using MARSS</h3>
-<p>Working from Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-dlmFore3">(9.31)</a>, we can compute the expected value of the forecast at time <span class="math inline">\(t\)</span> and its variance using the Kalman filter. For the expectation, we need <span class="math inline">\(\mathbf{F}_{t}^\top\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>.
+<p>Working from Equation <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#eq:dlm-dlmFore3">(9.30)</a>, we can compute the expected value of the forecast at time <span class="math inline">\(t\)</span> and its variance using the Kalman filter. For the expectation, we need <span class="math inline">\(\mathbf{F}_{t}^\top\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>.
 <span class="math inline">\(\mathbf{F}_t^\top\)</span> is called <span class="math inline">\(\mathbf{Z}_t\)</span> in MARSS notation. The one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, the <span class="math inline">\(\text{E}(\boldsymbol{\theta}_{t|t-1})\)</span>, are calculated as part of the Kalman filter algorithm—they are termed <span class="math inline">\(\tilde{x}_t^{t-1}\)</span> in MARSS notation and stored as <code>xtt1</code> in the list produced by the <code>MARSSkfss()</code> Kalman filter function.</p>
 <p>Using the <code>Z</code> defined in <a href="sec-dlm-salmon-example.html#sec-dlm-salmon-example">9.6</a>, we compute the mean forecast as follows:</p>
-<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb540-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-1"></a><span class="co"># get list of Kalman filter output</span></span>
-<span id="cb540-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-2"></a>kf.out &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm1)</span>
-<span id="cb540-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-3"></a><span class="co">## forecasts of regr parameters; 2xT matrix</span></span>
-<span id="cb540-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-4"></a>eta &lt;-<span class="st"> </span>kf.out<span class="op">$</span>xtt1</span>
-<span id="cb540-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-5"></a><span class="co">## ts of E(forecasts)</span></span>
-<span id="cb540-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-6"></a>fore.mean &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
-<span id="cb540-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-7"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
-<span id="cb540-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-8"></a>    fore.mean[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
-<span id="cb540-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-9"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb540-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-1"></a><span class="co">## get list of Kalman filter output</span></span>
+<span id="cb540-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-2"></a>kf_out &lt;-<span class="st"> </span><span class="kw">MARSSkfss</span>(dlm_<span class="dv">1</span>)</span>
+<span id="cb540-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-3"></a></span>
+<span id="cb540-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-4"></a><span class="co">## forecasts of regr parameters; 2xT matrix</span></span>
+<span id="cb540-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-5"></a>eta &lt;-<span class="st"> </span>kf_out<span class="op">$</span>xtt1</span>
+<span id="cb540-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-6"></a></span>
+<span id="cb540-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-7"></a><span class="co">## ts of E(forecasts)</span></span>
+<span id="cb540-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-8"></a>fore_mean &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
+<span id="cb540-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-9"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
+<span id="cb540-10"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-10"></a>    fore_mean[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>eta[, t, drop =<span class="st"> </span><span class="ot">FALSE</span>]</span>
+<span id="cb540-11"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb540-11"></a>}</span></code></pre></div>
 <p>For the variance of the forecasts, we need
-<span class="math inline">\(\mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}\)</span>. As with the mean, <span class="math inline">\(\mathbf{F}^\top_t \equiv \mathbf{Z}_t\)</span>. The variances of the one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\text{Var}(\boldsymbol{\theta}_{t|t-1})\)</span>, are also calculated as part of the Kalman filter algorithm—they are stored as <code>Vtt1</code> in the list produced by the <code>MARSSkfss()</code> function. Lastly, the observation variance <span class="math inline">\(\hat{r}\)</span> was estimated when we fit the DLM to the data using <code>MARSS()</code> and can be extracted from the <code>dlm1</code> fit.</p>
+<span class="math inline">\(\mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}\)</span>. As with the mean, <span class="math inline">\(\mathbf{F}^\top_t \equiv \mathbf{Z}_t\)</span>. The variances of the one-step ahead forecasts of the regression parameters at time <span class="math inline">\(t\)</span>, <span class="math inline">\(\text{Var}(\boldsymbol{\theta}_{t|t-1})\)</span>, are also calculated as part of the Kalman filter algorithm—they are stored as <code>Vtt1</code> in the list produced by the <code>MARSSkfss()</code> function. Lastly, the observation variance <span class="math inline">\(\hat{r}\)</span> was estimated when we fit the DLM to the data using <code>MARSS()</code> and can be extracted from the <code>dlm_1</code> fit.</p>
 <p>Putting this together, we can compute the forecast variance:</p>
-<div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb541-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-1"></a><span class="co"># variance of regr parameters; 1x2xT array</span></span>
-<span id="cb541-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-2"></a>Phi &lt;-<span class="st"> </span>kf.out<span class="op">$</span>Vtt1</span>
-<span id="cb541-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-3"></a><span class="co">## obs variance; 1x1 matrix</span></span>
-<span id="cb541-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-4"></a>R.est &lt;-<span class="st"> </span><span class="kw">coef</span>(dlm1, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R</span>
-<span id="cb541-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-5"></a><span class="co">## ts of Var(forecasts)</span></span>
-<span id="cb541-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-6"></a>fore.var &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
-<span id="cb541-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-7"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
-<span id="cb541-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-8"></a>    tZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span></span>
-<span id="cb541-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-9"></a>    fore.var[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R.est</span>
-<span id="cb541-10"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-10"></a>}</span></code></pre></div>
-<p>Plots of the model mean forecasts with their estimated uncertainty are shown in Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:dlm-plotdlmForeLogit">9.3</a>. Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time <span class="math inline">\(t\)</span> based on data available only through time <span class="math inline">\(t-1\)</span>. In this case, however, MARSS is actually estimating the states at <span class="math inline">\(t=0\)</span> (<span class="math inline">\(\boldsymbol{\theta}_0\)</span>), which allows us to compute a forecast for the first time point.
+<div class="sourceCode" id="cb541"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb541-1"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-1"></a><span class="co">## variance of regr parameters; 1x2xT array</span></span>
+<span id="cb541-2"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-2"></a>Phi &lt;-<span class="st"> </span>kf_out<span class="op">$</span>Vtt1</span>
+<span id="cb541-3"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-3"></a></span>
+<span id="cb541-4"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-4"></a><span class="co">## obs variance; 1x1 matrix</span></span>
+<span id="cb541-5"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-5"></a>R_est &lt;-<span class="st"> </span><span class="kw">coef</span>(dlm_<span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>R</span>
+<span id="cb541-6"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-6"></a></span>
+<span id="cb541-7"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-7"></a><span class="co">## ts of Var(forecasts)</span></span>
+<span id="cb541-8"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-8"></a>fore_var &lt;-<span class="st"> </span><span class="kw">vector</span>()</span>
+<span id="cb541-9"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-9"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
+<span id="cb541-10"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-10"></a>    tZ &lt;-<span class="st"> </span><span class="kw">matrix</span>(Z[, , t], m, <span class="dv">1</span>)  <span class="co">## transpose of Z</span></span>
+<span id="cb541-11"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-11"></a>    fore_var[t] &lt;-<span class="st"> </span>Z[, , t] <span class="op">%*%</span><span class="st"> </span>Phi[, , t] <span class="op">%*%</span><span class="st"> </span>tZ <span class="op">+</span><span class="st"> </span>R_est</span>
+<span id="cb541-12"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#cb541-12"></a>}</span></code></pre></div>
+<p>Plots of the model mean forecasts with their estimated uncertainty are shown in Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:dlm-plotdlmForeLogit">9.2</a>. Nearly all of the observed values fell within the approximate prediction interval. Notice that we have a forecasted value for the first year of the time series (1964), which may seem at odds with our notion of forecasting at time <span class="math inline">\(t\)</span> based on data available only through time <span class="math inline">\(t-1\)</span>. In this case, however, MARSS is actually estimating the states at <span class="math inline">\(t=0\)</span> (<span class="math inline">\(\boldsymbol{\theta}_0\)</span>), which allows us to compute a forecast for the first time point.
 <!-- % forecast plot - logit space --></p>
 
 <div class="figure" style="text-align: center"><span id="fig:dlm-plotdlmForeLogit"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/dlm-plotdlmForeLogit-1.png" alt="Time series of logit-transformed survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals." width="80%" />
 <p class="caption">
-Figure 9.3: Time series of logit-transformed survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals.
+Figure 9.2: Time series of logit-transformed survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals.
 </p>
 </div>
-<p>Although our model forecasts look reasonable in logit-space, it is worthwhile to examine how well they look when the survival data and forecasts are back-transformed onto the interval [0,1] (Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:dlm-plotdlmForeRaw">9.4</a>). In that case, the accuracy does not seem to be affected, but the precision appears much worse, especially during the early and late portions of the time series when survival is changing rapidly.
-<!-- % forecast plot - normal space --></p>
+<p>Although our model forecasts look reasonable in logit-space, it is worthwhile to examine how well they look when the survival data and forecasts are back-transformed onto the interval [0,1] (Figure <a href="sec-dlm-forecasting-with-a-univariate-dlm.html#fig:dlm-plotdlmForeRaw">9.3</a>). In that case, the accuracy does not seem to be affected, but the precision appears much worse, especially during the early and late portions of the time series when survival is changing rapidly.</p>
+<!-- % forecast plot - normal space -->
 
 <div class="figure" style="text-align: center"><span id="fig:dlm-plotdlmForeRaw"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/dlm-plotdlmForeRaw-1.png" alt="Time series of survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals." width="80%" />
 <p class="caption">
-Figure 9.4: Time series of survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals.
+Figure 9.3: Time series of survival data (blue dots) and model mean forecasts (thick line). Thin lines denote the approximate 95% prediction intervals.
 </p>
 </div>
 <p>Notice that we passed the DLM fit to all the data to <code>MARSSkfss()</code>. This meant that the Kalman filter used estimates of <span class="math inline">\(\mathbf{Q}\)</span> and <span class="math inline">\(r\)</span> using all the data in the <code>xtt1</code> and <code>Vtt1</code> calculations. Thus our predictions at time <span class="math inline">\(t\)</span> are not entirely based on only data up to time <span class="math inline">\(t-1\)</span> since the <span class="math inline">\(\mathbf{Q}\)</span> and <span class="math inline">\(r\)</span> estimates were from all the data from 1964 to 2005.</p>

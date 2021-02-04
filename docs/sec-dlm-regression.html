@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-03" />
+<meta name="date" content="2021-02-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -508,14 +508,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">9.4</span> Stochastic regression model</h2>
 <p>The stochastic level models in Section <a href="sec-dlm-simple-examples.html#sec-dlm-simple-examples">9.3</a> do not have predictor variables (covariates). Let’s add one predictor variable <span class="math inline">\(f_t\)</span> and write a simple DLM where the intercept <span class="math inline">\(\alpha\)</span> and slope <span class="math inline">\(\beta\)</span> are stochastic. We will specify that <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> evolve according to a simple random walk. Normally <span class="math inline">\(x\)</span> is used for the predictor variables in a regression model, but we will avoid that since we are using <span class="math inline">\(x\)</span> for the state equation in a state-space model. This model is</p>
 <p><span class="math display" id="eq:dlm-stoch-regression-1">\[\begin{equation}
-\tag{9.10}
+\tag{9.9}
   y_t = \alpha_t + \beta_t f_t + v_t \\
   \alpha_t = \alpha_{t-1} + w_{\alpha,t} \\
   \beta_t = \beta_{t-1} + w_{\beta,t}
 \end{equation}\]</span>
 Written in matrix form, the model is
 <span class="math display" id="eq:dlm-stoch-regression-2">\[\begin{equation}
-\tag{9.11}
+\tag{9.10}
 y_t = \begin{bmatrix}
     1 &amp;
     f_t
@@ -536,7 +536,7 @@ y_t = \begin{bmatrix}
     w_{\beta}
   \end{bmatrix}_t 
 \end{equation}\]</span></p>
-<p>Equation <a href="sec-dlm-regression.html#eq:dlm-stoch-regression-2">(9.11)</a> is a MARSS model:
+<p>Equation <a href="sec-dlm-regression.html#eq:dlm-stoch-regression-2">(9.10)</a> is a MARSS model:
 <span class="math display">\[\begin{equation}
 y_t = \mathbf{Z}\mathbf{x}_t + v_t \\
 \mathbf{x}_t = \mathbf{x}_{t-1} + \mathbf{w}_t
