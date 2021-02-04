@@ -33,7 +33,8 @@ basefiles=c(
   "Lab-intro-to-stan/fitting-models-with-stan",
   "Lab-box-jenkins-method/box-jenkins",
   "Applications/example-signal",
-  "Applications/seasonal-dlm"
+  "Applications/seasonal-dlm",
+  "Applications/cyclic-sockeye"
 )
 for(basefile in basefiles){
   filename=str_split(basefile,"/")[[1]][2]
