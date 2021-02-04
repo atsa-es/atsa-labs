@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>15.3 Time-varying amplitude | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
+  <title>16.4 Multivariate DLM 1: Synchrony in levels | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="15.3 Time-varying amplitude | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta property="og:title" content="16.4 Multivariate DLM 1: Synchrony in levels | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="images/cover.png" />
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="15.3 Time-varying amplitude | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
+  <meta name="twitter:title" content="16.4 Multivariate DLM 1: Synchrony in levels | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   <meta name="twitter:image" content="images/cover.png" />
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="prev" href="using-dlms-to-estimate-changing-season.html"/>
-<link rel="next" href="multivariate-responses.html"/>
+<link rel="prev" href="univariate-results.html"/>
+<link rel="next" href="references.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -509,62 +509,153 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="time-varying-amplitude" class="section level2">
-<h2><span class="header-section-number">15.3</span> Time-varying amplitude</h2>
-<p>Instead of a constant seasonality, we can imagine that it varies in time. The first way it might vary is in the amplitude of the seasonality. So the location of the peak is the same but the difference between the peak and valley changes.</p>
-<p><span class="math display">\[z_t\left(\beta_1 \sin(2 \pi t/p) + \beta_2 \cos(2 \pi t/p)\right)\]</span></p>
-<p>In this case, the <span class="math inline">\(\beta\)</span>’s remain constant but the sum of the sines and cosines is multiplied by a time-varying scaling factor.</p>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-41-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<p>Here we simulate some data where <span class="math inline">\(z_t\)</span> is sinusoidal and is largest in the beginning of the time-series. Note we want <span class="math inline">\(z_t\)</span> to stay positive otherwise our peak will become a valley when <span class="math inline">\(z_t\)</span> goes negative.</p>
-<div class="sourceCode" id="cb704"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb704-1"><a href="time-varying-amplitude.html#cb704-1"></a><span class="kw">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb704-2"><a href="time-varying-amplitude.html#cb704-2"></a>TT &lt;-<span class="st"> </span><span class="dv">100</span></span>
-<span id="cb704-3"><a href="time-varying-amplitude.html#cb704-3"></a>q &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
-<span id="cb704-4"><a href="time-varying-amplitude.html#cb704-4"></a>r &lt;-<span class="st"> </span><span class="fl">0.1</span></span>
-<span id="cb704-5"><a href="time-varying-amplitude.html#cb704-5"></a>beta1 &lt;-<span class="st"> </span><span class="fl">0.6</span></span>
-<span id="cb704-6"><a href="time-varying-amplitude.html#cb704-6"></a>beta2 &lt;-<span class="st"> </span><span class="fl">0.4</span></span>
-<span id="cb704-7"><a href="time-varying-amplitude.html#cb704-7"></a>zt &lt;-<span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span>TT) <span class="op">+</span><span class="st"> </span><span class="fl">0.75</span></span>
-<span id="cb704-8"><a href="time-varying-amplitude.html#cb704-8"></a>cov1 &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span><span class="dv">12</span>)</span>
-<span id="cb704-9"><a href="time-varying-amplitude.html#cb704-9"></a>cov2 &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span><span class="dv">12</span>)</span>
-<span id="cb704-10"><a href="time-varying-amplitude.html#cb704-10"></a>xt &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(TT, <span class="dv">0</span>, q))</span>
-<span id="cb704-11"><a href="time-varying-amplitude.html#cb704-11"></a>yt &lt;-<span class="st"> </span>xt <span class="op">+</span><span class="st"> </span>zt <span class="op">*</span><span class="st"> </span>beta1 <span class="op">*</span><span class="st"> </span>cov1 <span class="op">+</span><span class="st"> </span>zt <span class="op">*</span><span class="st"> </span>beta2 <span class="op">*</span><span class="st"> </span>cov2 <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(TT, </span>
-<span id="cb704-12"><a href="time-varying-amplitude.html#cb704-12"></a>    <span class="dv">0</span>, r)</span>
-<span id="cb704-13"><a href="time-varying-amplitude.html#cb704-13"></a><span class="kw">plot</span>(yt, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">xlab =</span> <span class="st">&quot;t&quot;</span>)</span></code></pre></div>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-42-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<div id="fitting-the-model" class="section level3">
-<h3><span class="header-section-number">15.3.1</span> Fitting the model</h3>
-<p>When the seasonality is written as
-<span class="math display">\[z_t\left(\beta_1 \sin(2 \pi t/p) + \beta_2 \cos(2 \pi t/p)\right)\]</span>
-our model is under-determined because we have <span class="math inline">\(z_t \beta_1\)</span> and <span class="math inline">\(z_t \beta_2\)</span>. We can scale the $z_t up and the <span class="math inline">\(\beta\)</span>’s correspondingly down and have the same values (so multiply <span class="math inline">\(z_t\)</span> by 2 and divide the <span class="math inline">\(\beta\)</span>’s by 2, say). We can fix that by multiplying the <span class="math inline">\(z_t\)</span> and dividing the seaonal part by <span class="math inline">\(\beta_1\)</span>. Then our seasonal model becomes <em>Recognizing when your model is under-determined takes some experience. If you work in a Bayesian framework, it is a bit easier because it is easy to look at the posterior distributions and look for ridges.</em></p>
-<p><span class="math display">\[(z_t/\beta_1) \left(\sin(2 \pi t/p) + (\beta_2/\beta_1) \cos(2 \pi t/p)\right) = \\
-x_{2,t} \left(\sin(2 \pi t/p) + \beta \cos(2 \pi t/p)\right)
-\]</span>
-The seasonality (peak location) will be the same for <span class="math inline">\((\sin(2 \pi t/p) + \beta \cos(2 \pi t/p))\)</span> and <span class="math inline">\((\beta_1 \sin(2 \pi t/p) + \beta_2 \cos(2 \pi t/p))\)</span>. The only thing that is different is the amplitude and we are using <span class="math inline">\(x_{2,t}\)</span> to determine the amplitude.</p>
-<p>Now our <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> models look like this. Notice that the <span class="math inline">\(\mathbf{Z}\)</span> is <span class="math inline">\(1 \times 2\)</span> instead of <span class="math inline">\(1 \times 3\)</span>.</p>
-<p><span class="math display">\[\begin{bmatrix}x_1 \\ x_2  \end{bmatrix}_t = \begin{bmatrix}x_1 \\ x_2 \end{bmatrix}_{t-1} + \begin{bmatrix}w_1 \\ w_2 \end{bmatrix}_t\]</span></p>
-<p><span class="math display">\[y_t = \begin{bmatrix}1&amp; \sin(2\pi t/p) + \beta \cos(2\pi t/p)\end{bmatrix} \begin{bmatrix}x_1 \\ x_2 \end{bmatrix}_t + v_t\]</span></p>
-<p>To set up the <code>Z</code> matrix, we can pass in values like <code>"1 + 0.5*beta"</code>. <code>MARSS()</code> will translate that to <span class="math inline">\(1+0.5\beta\)</span>.</p>
-<div class="sourceCode" id="cb705"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb705-1"><a href="time-varying-amplitude.html#cb705-1"></a>Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="kw">list</span>(<span class="dv">1</span>), <span class="dt">dim =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, TT))</span>
-<span id="cb705-2"><a href="time-varying-amplitude.html#cb705-2"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>, ] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span><span class="dv">12</span>), <span class="st">&quot; + &quot;</span>, <span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span></span>
-<span id="cb705-3"><a href="time-varying-amplitude.html#cb705-3"></a><span class="st">    </span>(<span class="dv">1</span><span class="op">:</span>TT)<span class="op">/</span><span class="dv">12</span>), <span class="st">&quot;*beta&quot;</span>)</span></code></pre></div>
-<p>Then we make our model list. We need to set <code>A</code> since <code>MARSS()</code> doesn’t like the default value of <code>scaling</code> when <code>Z</code> is time-varying.</p>
-<div class="sourceCode" id="cb706"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb706-1"><a href="time-varying-amplitude.html#cb706-1"></a>mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, <span class="dt">Z =</span> Z, </span>
-<span id="cb706-2"><a href="time-varying-amplitude.html#cb706-2"></a>    <span class="dt">A =</span> <span class="st">&quot;zero&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb707"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb707-1"><a href="time-varying-amplitude.html#cb707-1"></a><span class="kw">require</span>(MARSS)</span>
-<span id="cb707-2"><a href="time-varying-amplitude.html#cb707-2"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(yt, <span class="dt">model =</span> mod.list, <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="dv">0</span>, </span>
-<span id="cb707-3"><a href="time-varying-amplitude.html#cb707-3"></a>    <span class="dv">2</span>, <span class="dv">1</span>)))</span></code></pre></div>
-<p>We are able to recover the level, seasonality and changing amplitude of the seasonality.</p>
-<pre><code>Warning in coef(fit)$Z * cov2[1:12]: Recycling array of length 1 in array-vector arithmetic is deprecated.
-  Use c() or as.vector() instead.</code></pre>
-<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-44-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<div id="multivariate-dlm-1-synchrony-in-levels" class="section level2">
+<h2><span class="header-section-number">16.4</span> Multivariate DLM 1: Synchrony in levels</h2>
+<p>In the first analysis, we will look at whether the stochastic levels (underlying trends) are correlated. We will analyze all the rivers together but in the equations, we will show just two rivers to keep the equations concise.</p>
+<div id="state-model" class="section level3">
+<h3><span class="header-section-number">16.4.1</span> State model</h3>
+<p>The hidden states model will have the following components:</p>
+<ul>
+<li>Each trend <span class="math inline">\(x\)</span> will be modeled as separate but allowed to be correlated. This means either an unconstrained <span class="math inline">\(\mathbf{Q}\)</span> or an equal variance and equal covariance matrix.</li>
+<li>Each seasonal trend, the <span class="math inline">\(\beta\)</span>’s, will also be treated as separate but independent. This means either a diagonal and equal variance <span class="math inline">\(\mathbf{Q}\)</span> or diagona and unequal variances.</li>
+</ul>
+<p>The <span class="math inline">\(\mathbf{x}\)</span> equation is then:</p>
+<p><span class="math display">\[\begin{bmatrix}x_a \\ x_b \\ \beta_{1a} \\ \beta_{1b} \\ \beta_{2a} \\ \beta_{2b} \end{bmatrix}_t = \begin{bmatrix}x_a \\ x_b \\ \beta_{1a} \\ \beta_{1b} \\ \beta_{2a} \\ \beta_{2b}\end{bmatrix}_{t-1} + \begin{bmatrix}w_1 \\ w_2 \\ w_3 \\ w_4 \\ w_5 \\ w_6 \end{bmatrix}_t\]</span></p>
+<p><span class="math display">\[\begin{bmatrix}w_1 \\ w_2 \\ w_3 \\ w_4 \\ w_5 \\ w_6 \end{bmatrix}_t \sim \text{MVN}\left(0, \begin{bmatrix}
+q_a &amp; c &amp; 0 &amp; 0 &amp; 0 &amp; 0\\ 
+c &amp; q_b &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\ 
+0 &amp; 0 &amp; q_1 &amp; 0 &amp; 0 &amp; 0 \\ 
+0 &amp; 0 &amp; 0 &amp; q_2 &amp; 0 &amp; 0 \\ 
+0 &amp; 0 &amp; 0 &amp; 0 &amp; q_3 &amp; 0 \\ 
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; q_4 \end{bmatrix}\right)\]</span></p>
+</div>
+<div id="observation-model" class="section level3">
+<h3><span class="header-section-number">16.4.2</span> Observation model</h3>
+<p>The observation model will have the following components:</p>
+<ul>
+<li>Each spawner count time series will be treated as independent with independent error (equal or unequal variance).</li>
+</ul>
+<p><span class="math display">\[\begin{bmatrix}y_a \\ y_b\end{bmatrix}_t = 
+\begin{bmatrix}
+1 &amp; 0 &amp; \sin(2\pi t/p) &amp; 0 &amp; \cos(2\pi t/p) &amp; 0\\
+0 &amp; 1 &amp; 0&amp;\sin(2\pi t/p) &amp; 0&amp;\cos(2\pi t/p)
+\end{bmatrix} \begin{bmatrix}
+x_a \\ x_b \\ 
+\beta_{1a} \\ \beta_{1b} \\
+\beta_{2a} \\ \beta_{2b}
+\end{bmatrix}_t + \mathbf{v}_t\]</span></p>
+</div>
+<div id="fit-model" class="section level3">
+<h3><span class="header-section-number">16.4.3</span> Fit model</h3>
+<p>Set the number of rivers.</p>
+<div class="sourceCode" id="cb722"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb722-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb722-1"></a>n &lt;-<span class="st"> </span><span class="dv">2</span></span></code></pre></div>
+<p>The following code will create the <span class="math inline">\(\mathbf{Z}\)</span> for a model with <span class="math inline">\(n\)</span> rivers. The first <span class="math inline">\(\mathbf{Z}\)</span> is shown.</p>
+<div class="sourceCode" id="cb723"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb723-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb723-1"></a>Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">1</span>, <span class="dt">dim =</span> <span class="kw">c</span>(n, n <span class="op">*</span><span class="st"> </span><span class="dv">3</span>, TT))</span>
+<span id="cb723-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb723-2"></a>Z[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span><span class="op">:</span>n, ] &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span>, n)</span>
+<span id="cb723-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb723-3"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
+<span id="cb723-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb723-4"></a>    Z[, (n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">:</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>n), t] &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>t<span class="op">/</span>p), n)</span>
+<span id="cb723-5"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb723-5"></a>    Z[, (<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">:</span>(<span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n), t] &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>t<span class="op">/</span>p), n)</span>
+<span id="cb723-6"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb723-6"></a>}</span>
+<span id="cb723-7"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb723-7"></a>Z[, , <span class="dv">1</span>]</span></code></pre></div>
+<pre><code>     [,1] [,2]      [,3]      [,4]     [,5]     [,6]
+[1,]    1    0 0.9510565 0.0000000 0.309017 0.000000
+[2,]    0    1 0.0000000 0.9510565 0.000000 0.309017</code></pre>
+<p>And this code will make the <span class="math inline">\(\mathbf{Q}\)</span> matrix:</p>
+<div class="sourceCode" id="cb725"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb725-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb725-1"></a>Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), <span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n, <span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n)</span>
+<span id="cb725-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb725-2"></a>Q[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span><span class="op">:</span>n] &lt;-<span class="st"> &quot;c&quot;</span></span>
+<span id="cb725-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb725-3"></a><span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;q&quot;</span>, letters[<span class="dv">1</span><span class="op">:</span>n]), <span class="kw">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="op">:</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>n)))</span>
+<span id="cb725-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb725-4"></a>Q</span></code></pre></div>
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,] &quot;qa&quot; &quot;c&quot;  0    0    0    0   
+[2,] &quot;c&quot;  &quot;qb&quot; 0    0    0    0   
+[3,] 0    0    &quot;q1&quot; 0    0    0   
+[4,] 0    0    0    &quot;q2&quot; 0    0   
+[5,] 0    0    0    0    &quot;q3&quot; 0   
+[6,] 0    0    0    0    0    &quot;q4&quot;</code></pre>
+<p>We will write a function to prepare the model matrices and fit. It takes the names of the rivers.</p>
+<div class="sourceCode" id="cb727"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb727-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-1"></a>fitriver.m &lt;-<span class="st"> </span><span class="cf">function</span>(river, <span class="dt">p =</span> <span class="dv">5</span>) {</span>
+<span id="cb727-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-2"></a>    <span class="kw">require</span>(tidyr)</span>
+<span id="cb727-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-3"></a>    <span class="kw">require</span>(dplyr)</span>
+<span id="cb727-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-4"></a>    <span class="kw">require</span>(MARSS)</span>
+<span id="cb727-5"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-5"></a>    df &lt;-<span class="st"> </span><span class="kw">subset</span>(sockeye, region <span class="op">%in%</span><span class="st"> </span>river)</span>
+<span id="cb727-6"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-6"></a>    df &lt;-<span class="st"> </span>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_wider</span>(<span class="dt">id_cols =</span> brood_year, <span class="dt">names_from =</span> <span class="st">&quot;region&quot;</span>, </span>
+<span id="cb727-7"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-7"></a>        <span class="dt">values_from =</span> spawners) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>brood_year)</span>
+<span id="cb727-8"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-8"></a>    yt &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">log</span>(df))</span>
+<span id="cb727-9"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-9"></a>    TT &lt;-<span class="st"> </span><span class="kw">ncol</span>(yt)</span>
+<span id="cb727-10"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-10"></a>    n &lt;-<span class="st"> </span><span class="kw">nrow</span>(yt)</span>
+<span id="cb727-11"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-11"></a>    Z &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">1</span>, <span class="dt">dim =</span> <span class="kw">c</span>(n, n <span class="op">*</span><span class="st"> </span><span class="dv">3</span>, TT))</span>
+<span id="cb727-12"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-12"></a>    Z[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span><span class="op">:</span>n, ] &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="dv">1</span>, n)</span>
+<span id="cb727-13"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-13"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>TT) {</span>
+<span id="cb727-14"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-14"></a>        Z[, (n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">:</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>n), t] &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>t<span class="op">/</span>p), n)</span>
+<span id="cb727-15"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-15"></a>        Z[, (<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">:</span>(<span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n), t] &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span>t<span class="op">/</span>p), </span>
+<span id="cb727-16"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-16"></a>            n)</span>
+<span id="cb727-17"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-17"></a>    }</span>
+<span id="cb727-18"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-18"></a>    Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), <span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n, <span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n)</span>
+<span id="cb727-19"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-19"></a>    Q[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span><span class="op">:</span>n] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;c&quot;</span>, <span class="dv">1</span><span class="op">:</span>(n<span class="op">^</span><span class="dv">2</span>))</span>
+<span id="cb727-20"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-20"></a>    <span class="kw">diag</span>(Q) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">paste0</span>(<span class="st">&quot;q&quot;</span>, letters[<span class="dv">1</span><span class="op">:</span>n]), <span class="kw">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="op">:</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span></span>
+<span id="cb727-21"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-21"></a><span class="st">        </span>n)))</span>
+<span id="cb727-22"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-22"></a>    Q[<span class="kw">lower.tri</span>(Q)] &lt;-<span class="st"> </span><span class="kw">t</span>(Q)[<span class="kw">lower.tri</span>(Q)]</span>
+<span id="cb727-23"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-23"></a>    mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> <span class="st">&quot;zero&quot;</span>)</span>
+<span id="cb727-24"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-24"></a>    fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(yt, <span class="dt">model =</span> mod.list, <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">x0 =</span> <span class="kw">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb727-25"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-25"></a>        <span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n, <span class="dv">1</span>)), <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb727-26"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-26"></a>    <span class="kw">return</span>(fit)</span>
+<span id="cb727-27"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb727-27"></a>}</span></code></pre></div>
+<p>Now we can fit for two (or more) rivers. Note it didn’t quite converge as some of the variances for the <span class="math inline">\(\beta\)</span>’s are going to 0 (constant <span class="math inline">\(\beta\)</span> value).</p>
+<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb728-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb728-1"></a>river &lt;-<span class="st"> </span><span class="kw">unique</span>(sockeye<span class="op">$</span>region)</span>
+<span id="cb728-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb728-2"></a>n &lt;-<span class="st"> </span><span class="kw">length</span>(river)</span>
+<span id="cb728-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb728-3"></a>fit &lt;-<span class="st"> </span><span class="kw">fitriver.m</span>(river)</span></code></pre></div>
+<pre><code>Loading required package: tidyr</code></pre>
+<pre><code>
+Attaching package: &#39;tidyr&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:rstan&#39;:
+
+    extract</code></pre>
+<pre><code>The following object is masked from &#39;package:reshape2&#39;:
+
+    smiths</code></pre>
+<pre><code>Loading required package: dplyr</code></pre>
+<pre><code>
+Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:Hmisc&#39;:
+
+    src, summarize</code></pre>
+<pre><code>The following object is masked from &#39;package:gridExtra&#39;:
+
+    combine</code></pre>
+<pre><code>The following objects are masked from &#39;package:xts&#39;:
+
+    first, last</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
+
+    filter, lag</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div id="look-at-the-results" class="section level3">
+<h3><span class="header-section-number">16.4.4</span> Look at the results</h3>
+<p>We will look at the correlation plot for the trends.</p>
+<div class="sourceCode" id="cb740"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb740-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb740-1"></a><span class="kw">require</span>(corrplot)</span></code></pre></div>
+<pre><code>Loading required package: corrplot</code></pre>
+<pre><code>corrplot 0.84 loaded</code></pre>
+<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb743-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb743-1"></a>Qmat &lt;-<span class="st"> </span><span class="kw">coef</span>(fit, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>Q[<span class="dv">1</span><span class="op">:</span>n, <span class="dv">1</span><span class="op">:</span>n]</span>
+<span id="cb743-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb743-2"></a><span class="kw">rownames</span>(Qmat) &lt;-<span class="st"> </span><span class="kw">colnames</span>(Qmat) &lt;-<span class="st"> </span>river</span>
+<span id="cb743-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb743-3"></a>M &lt;-<span class="st"> </span><span class="kw">cov2cor</span>(Qmat)</span>
+<span id="cb743-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb743-4"></a><span class="kw">corrplot</span>(M, <span class="dt">order =</span> <span class="st">&quot;hclust&quot;</span>, <span class="dt">addrect =</span> <span class="dv">4</span>)</span></code></pre></div>
+<p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-63-1.png" width="80%" style="display: block; margin: auto;" /></p>
+<p>We can compare to the locations and see that this suggests that there is small scale regional correlation in the spawner counts.</p>
+<p><img src="images/BB_sockeye_rivers_inset.png" width="50%" style="display: block; margin: auto;" /></p>
+
 </div>
 </div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="using-dlms-to-estimate-changing-season.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="multivariate-responses.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="univariate-results.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -595,7 +686,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/seasonal-dlm.Rmd",
+"link": "https://github.com/nwfsc-timeseries/AFTSLabbook/blob/master/cleanedRmd/cyclic-sockeye.Rmd",
 "text": "Edit"
 },
 "history": {

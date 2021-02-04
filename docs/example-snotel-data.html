@@ -481,7 +481,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="16.2.5" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#plot-the-output"><i class="fa fa-check"></i><b>16.2.5</b> Plot the output</a></li>
 </ul></li>
 <li class="chapter" data-level="16.3" data-path="univariate-results.html"><a href="univariate-results.html"><i class="fa fa-check"></i><b>16.3</b> Univariate results</a></li>
-<li class="chapter" data-level="16.4" data-path="multivariate-dlm.html"><a href="multivariate-dlm.html"><i class="fa fa-check"></i><b>16.4</b> Multivariate DLM</a></li>
+<li class="chapter" data-level="16.4" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html"><i class="fa fa-check"></i><b>16.4</b> Multivariate DLM 1: Synchrony in levels</a><ul>
+<li class="chapter" data-level="16.4.1" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html#state-model"><i class="fa fa-check"></i><b>16.4.1</b> State model</a></li>
+<li class="chapter" data-level="16.4.2" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html#observation-model"><i class="fa fa-check"></i><b>16.4.2</b> Observation model</a></li>
+<li class="chapter" data-level="16.4.3" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html#fit-model"><i class="fa fa-check"></i><b>16.4.3</b> Fit model</a></li>
+<li class="chapter" data-level="16.4.4" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html#look-at-the-results"><i class="fa fa-check"></i><b>16.4.4</b> Look at the results</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -584,7 +589,7 @@ v_1 \\ v_2 \\ \dots \\ v_{15}
 <span id="cb587-2"><a href="example-snotel-data.html#cb587-2"></a>m &lt;-<span class="st"> </span><span class="kw">apply</span>(dat.feb, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
 <span id="cb587-3"><a href="example-snotel-data.html#cb587-3"></a>fit.ar1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat.feb, <span class="dt">model =</span> mod.list.ar1, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">5000</span>), </span>
 <span id="cb587-4"><a href="example-snotel-data.html#cb587-4"></a>    <span class="dt">inits =</span> <span class="kw">list</span>(<span class="dt">A =</span> <span class="kw">matrix</span>(m, ns, <span class="dv">1</span>)))</span></code></pre></div>
-<p>The <span class="math inline">\(b\)</span> estimate is <code>0.4494841</code>.</p>
+<p>The <span class="math inline">\(b\)</span> estimate is ````.</p>
 <p>Let’s plot the estimated SWEs for the missing years (Figure <a href="example-snotel-data.html#fig:mssmiss-snotelplotfits-ar1">11.3</a>). These estimates use all the information about the correlation with other sites and uses information about correlation with the prior and subsequent years. We will use the <code>tidy()</code> function to get the estimates and the 95% prediction intervals. The prediction interval is for the range of SWE values we might observe for that site. Notice that for some sites, intervals are low in early years as these sites are highly correlated with site for which there are data. In other sites, the uncertainty is high in early years because the sites with data in those years are not highly correlated. There are no intervals for sites with data. We have data for those sites, so we are not uncertain about the observed SWE for those.</p>
 
 <div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb588-1"><a href="example-snotel-data.html#cb588-1"></a>fit &lt;-<span class="st"> </span>fit.ar1</span>

@@ -9,7 +9,7 @@ library(ggplot2)
 library(MARSS)
 
 
-## ----echo=FALSE--------------------------------------------------------------------------------------------
+## ----echo=FALSE, out.width="50%"---------------------------------------------------------------------------
 knitr::include_graphics("images/BB_sockeye_rivers_inset.png")
 # ![](images/BB_sockeye_rivers_inset.png)
 
@@ -118,4 +118,75 @@ ggplot(dfz, aes(x=brood_year, y=trend)) +
   geom_line() + 
   facet_wrap(~river, scales="free_y") + 
   ggtitle("Stochastic Level")
+
+
+## ----------------------------------------------------------------------------------------------------------
+n <- 2
+
+
+## ----------------------------------------------------------------------------------------------------------
+Z <- array(1, dim=c(n,n*3,TT))
+Z[1:n,1:n,] <- diag(1,n)
+for(t in 1:TT){
+Z[,(n+1):(2*n),t] <- diag(sin(2*pi*t/p),n)
+Z[,(2*n+1):(3*n),t] <- diag(cos(2*pi*t/p),n)
+}
+Z[,,1]
+
+
+## ----------------------------------------------------------------------------------------------------------
+Q <- matrix(list(0), 3*n, 3*n)
+Q[1:n,1:n] <- "c"
+diag(Q) <- c(paste0("q",letters[1:n]), paste0("q",1:(2*n)))
+Q
+
+
+## ----------------------------------------------------------------------------------------------------------
+fitriver.m <- function(river, p=5){ 
+  require(tidyr)
+  require(dplyr)
+  require(MARSS)
+df <- subset(sockeye, region %in% river)
+df <- df %>% pivot_wider(id_cols=brood_year,names_from="region", values_from=spawners) %>%
+  ungroup() %>% select(-brood_year)
+yt <- t(log(df))
+TT <- ncol(yt)
+n <- nrow(yt)
+Z <- array(1, dim=c(n,n*3,TT))
+Z[1:n,1:n,] <- diag(1,n)
+for(t in 1:TT){
+Z[,(n+1):(2*n),t] <- diag(sin(2*pi*t/p),n)
+Z[,(2*n+1):(3*n),t] <- diag(cos(2*pi*t/p),n)
+}
+Q <- matrix(list(0), 3*n, 3*n)
+Q[1:n,1:n] <- paste0("c",1:(n^2))
+diag(Q) <- c(paste0("q",letters[1:n]), paste0("q",1:(2*n)))
+Q[lower.tri(Q)] <- t(Q)[lower.tri(Q)]
+mod.list <- list(
+  U = "zero",
+  Q = Q,
+  Z = Z,
+  A = "zero")
+fit <- MARSS(yt, model=mod.list, inits=list(x0=matrix(0,3*n,1)), silent=TRUE)
+return(fit)
+}
+
+
+## ----cache=TRUE--------------------------------------------------------------------------------------------
+river <- unique(sockeye$region)
+n <- length(river)
+fit <- fitriver.m(river)
+
+
+## ----------------------------------------------------------------------------------------------------------
+require(corrplot)
+Qmat <- coef(fit, type="matrix")$Q[1:n,1:n]
+rownames(Qmat) <- colnames(Qmat) <- river
+M <- cov2cor(Qmat)
+corrplot(M, order = "hclust", addrect = 4)
+
+
+## ----echo=FALSE, out.width="50%"---------------------------------------------------------------------------
+knitr::include_graphics("images/BB_sockeye_rivers_inset.png")
+# ![](images/BB_sockeye_rivers_inset.png)
 
