@@ -316,7 +316,7 @@ saveRDS(site_data_var, "neon_barc.rds")
 
 Familiarize yourself with the oxygen and temperature data from Lake Barco
 
-Question: what sory of models do you think would be good candidates for forecasting?
+Question: what sort of models do you think would be good candidates for forecasting?
 
 ## NEON EFI Aquatics Challenge {#sec-neon-oxygen}
 
@@ -375,6 +375,8 @@ fit <- stan(file="model_01.stan", data=stan_data)
 
 ```
 
+Try fitting the Bayesian model with a short chain length (maybe 1000 iterations) and 1 MCMC chain.
+
 But because we're interested in doing this quickly, and running the model a bunch of times, we'll try Stan's optimizing function for MAP estimation.
 
 ```{r}
@@ -397,11 +399,11 @@ Question: modify the code above (just on the R side, not Stan) to fit a lag-2 or
 
 ## NEON EFI Aquatics Challenge {#sec-neon-oxygen-iterate}
 
-In generating forecasts, it's often a good idea to use multiple training / test sets. One question with this challenge is what's the best lag (or order of AR model) for generating forecasts? Starting with lag-1, we can evaluate the effects of different lags by starting at some point in the dataset (e.g. using 50% of the observations), and generate and evaluate forecasts. We then iterate, adding a day of data, generating and evaluating forecasts, and repeating through the rest of the data. 
+In generating forecasts, it's often a good idea to use multiple training / test sets. One question with this challenge is what's the best lag (or order of AR model) for generating forecasts? Starting with lag-1, we can evaluate the effects of different lags by starting at some point in the dataset (e.g. using 50% of the observations), and generate and evaluate forecasts. We then iterate, adding a day of data, generating and evaluating forecasts, and repeating through the rest of the data. [An alternative approach would be to adopt a moving window, where each prediction would be based on the same number of historical data points].
 
 I've generalized the code above into a function that takes the initial Lake Barco dataset, and 
 
-```{r}
+```{r eval=FALSE}
 create_stan_data = function(data, last_obs, n_forecast, n_lag) {
   o2_test <- dplyr::filter(data, 
               indx %in% seq(last_obs+1,(last_obs+n_forecast)))
@@ -431,7 +433,7 @@ create_stan_data = function(data, last_obs, n_forecast, n_lag) {
 
 Now we can try iterating over sets of data with a lag 1 model
 
-```{r}
+```{r eval=FALSE}
 n_forecast <- 7
 n_lag <- 1
 rmse <- NA
@@ -439,7 +441,7 @@ for(i in 500:(nrow(data)-n_lag)) {
   dat_list = create_stan_data(data, last_obs = i, n_forecast = n_forecast, n_lag = n_lag)
   
   # fit the model. opimizing can be sensitive to starting values, so let's try 
-  best_map = 0
+  best_map = -1.0e100
   for(j in 1:10) {
     test_fit <- rstan::optimizing(m,data=dat_list$stan_data)
     if(test_fit$value > best_map) {
@@ -448,14 +450,106 @@ for(i in 500:(nrow(data)-n_lag)) {
     }
   }
   if(fit$return_code == 0) {
-  # extract forecasts
-  pred = fit$par[grep("forecast",names(fit$par))]
+    # extract forecasts
+    pred = fit$par[grep("forecast",names(fit$par))]
   
-  # evaluate predictions
-  rmse[i] <- sqrt(mean((dat_list$test$oxygen - pred)^2,na.rm=T))
+    # evaluate predictions
+    rmse[i] <- sqrt(mean((dat_list$test$oxygen - pred)^2,na.rm=T))
+  
   }
 }
+
 ```
+
+## NEON EFI Aquatics Challenge {#sec-neon-oxygen-temp}
+
+So far, these models have only included oxygen. We can easily bring in the temperature
+data, which has it's own standard error associated with it. We can set up a null model
+modeling temperature and oxygen independently, with different lags allowed
+
+First we have to modify our data function to also generate temperature data.
+
+```{r eval=FALSE}
+
+create_stan_data = function(data, last_obs, n_forecast, n_lag_o2, n_lag_temp) {
+  # create test data
+  o2_test <- dplyr::filter(data, indx %in% seq(last_obs+1,(last_obs+n_forecast)))
+  temp_test <- dplyr::filter(data, indx %in% seq(last_obs+1,(last_obs+n_forecast)))
+  
+  o2_train <- dplyr::filter(data, indx <= last_obs, !is.na(oxygen))
+  o2_x = o2_train$indx
+  o2_y = o2_train$oxygen
+  o2_sd = o2_train$oxygen_sd
+  n_o2 = nrow(o2_train)
+  
+  temp_train <- dplyr::filter(data, indx <= last_obs, !is.na(temperature))
+  temp_x = temp_train$indx
+  temp_y = temp_train$temperature
+  temp_sd = temp_train$temperature_sd
+  n_temp = nrow(temp_train)
+  
+  stan_data = list(
+    n = last_obs,
+    n_lag_o2 = n_lag_o2,
+    n_lag_temp = n_lag_temp,
+    n_forecast = n_forecast,
+    n_o2 = n_o2,    
+    o2_x = o2_x,
+    o2_y = o2_y,
+    o2_sd = o2_sd,
+    n_temp = n_temp,    
+    temp_x = temp_x,
+    temp_y = temp_y,
+    temp_sd = temp_sd    
+  )
+  
+  return(list(o2_train=o2_train, temp_train=temp_train,
+              stan_data = stan_data,
+              o2_test = o2_test, temp_test = temp_test))
+}
+```
+
+```{r eval=FALSE}
+m <- stan_model(file="model_02.stan")
+```
+
+
+```{r eval=FALSE}
+# Now we can try iterating over sets of data with a lag 1 model
+n_forecast <- 7
+n_lag <- 1
+rmse <- NA
+for(i in 500:(nrow(data)-n_lag)) {
+  dat_list = create_stan_data(data, last_obs = i, n_forecast = n_forecast, n_lag_o2 = n_lag,
+                              n_lag_temp = n_lag)
+  
+  # fit the model. opimizing can be sensitive to starting values, so let's try 
+  best_map = -1.0e100
+  for(j in 1:10) {
+    test_fit <- rstan::optimizing(m,data=dat_list$stan_data)
+    if(test_fit$value > best_map) {
+      fit <- test_fit
+      best_map <- test_fit$value
+    }
+  }
+  
+  # extract forecasts
+  o2_pred = fit$par[grep("o2_forecast",names(fit$par))]
+  temp_pred = fit$par[grep("temp_forecast",names(fit$par))]
+  
+  pred = c(o2_pred, temp_pred)
+  obs = c(dat_list$o2_test$oxygen,dat_list$temp_test$temperature)
+  # evaluate predictions
+  rmse[i] <- sqrt(mean((obs-pred)^2,na.rm=T))
+  print(rmse)
+}
+
+
+```
+
+Question: why do the future predictions of either temp or oxygen sometimes fall to 0, and appear to do poorly?
+
+Question: modify the script above to loop over various oxygen and temperature lags. Using a subset of data, say observations 500:800, which combination yields the best predictions?
 
 \clearpage
 
@@ -470,3 +564,5 @@ for(i in 500:(nrow(data)-n_lag)) {
 4. To see the effect of this increased flexibility in estimating the autocorrelation, make a plot of the predictions from the AR(1) model (Section \@ref(sec-stan-ar1) and the RW model (\@ref(sec-stan-rw)).
 
 5. Fit the univariate state-space model (Section \@ref(sec-stan-uss)) with and without the autoregressive parameter $\phi$ and compare the estimated process and observation error variances.  Recall that AR(1) without the $\phi$ parameter is a random walk.
+
+6. Run the examples related to the EFI challenge. Work through the questions associated with each exercise
