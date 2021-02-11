@@ -17,6 +17,8 @@ library(devtools)
 # Windows users will likely need to set this
 # Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 devtools::install_github("nwfsc-timeseries/atsar")
+devtools::install_github("nwfsc-timeseries/tvvarss")
+devtools::install_github("fate-ewi/bayesdfa")
 ```
 In addition, you will need the **rstan**, **datasets**, **parallel** and **loo** packages. After installing, if needed, load the packages:
 ```{r stan-loadpackages, results='hide', warning=FALSE, message=FALSE}
@@ -208,12 +210,12 @@ for(i in 1:5)
 
 Run a 3 trend model on these data.
 ```{r stan-dfa-3-trend, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-mod_3 <- atsar::fit_dfa(y = dat.spp.1980, num_trends=3)
+mod_3 <- bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=3)
 ```
 
 Rotate the estimated trends and look at what it produces.
 ```{r stan-dfa-rot}
-rot <- atsar::rotate_trends(mod_3)
+rot <- bayesdfa::rotate_trends(mod_3)
 names(rot)
 ```
 
@@ -227,11 +229,11 @@ matplot(t(rot$trends_mean),type="l",lwd=2,ylab="mean trend")
 We will fit multiple DFA with different numbers of trends and use leave one out (LOO) cross-validation to choose the best model.
 
 ```{r stan-dfa-5-models, results='hide', cache=TRUE}
-mod_1 = atsar::fit_dfa(y = dat.spp.1980, num_trends=1)
-mod_2 = atsar::fit_dfa(y = dat.spp.1980, num_trends=2)
-mod_3 = atsar::fit_dfa(y = dat.spp.1980, num_trends=3)
-mod_4 = atsar::fit_dfa(y = dat.spp.1980, num_trends=4)
-mod_5 = atsar::fit_dfa(y = dat.spp.1980, num_trends=5)
+mod_1 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=1)
+mod_2 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=2)
+mod_3 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=3)
+mod_4 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=4)
+mod_5 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=5)
 ```
 
 We will compute the Leave One Out Information Criterion (LOOIC) using the **loo** package.  Like AIC, lower is better.
@@ -266,7 +268,7 @@ matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
 
 Assume they are all observing a single trend.
 ```{r stan-seal-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-seal.mod <- atsar::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
+seal.mod <- bayesdfa::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
 ```
 
 ```{r stan-seal-trend, cache=TRUE}
@@ -282,6 +284,117 @@ plot(pred_mean, type="l", lwd = 3, ylim = range(c(pred_mean, pred_lo, pred_hi)),
 lines(pred_lo)
 lines(pred_hi)
 ```
+
+## NEON EFI Aquatics Challenge {#sec-neon-data}
+
+The data for the aquatics challenge comes from a NEON site at Lake Barco (Florida). More about the data and challenge is [here](https://ecoforecast.org/efi-rcn-forecast-challenges/) and the Github repository for getting all the necessary data is [here](https://github.com/eco4cast/neon4cast-aquatics).
+
+We can pull in the data with the code from the challenge
+```{r}
+library(tidyverse)
+library(lubridate)
+library(rstan)
+library(ggplot2)
+# This taken from code on NEON aquatics challenge
+targets <- read_csv("aquatics-targets.csv.gz", guess_max = 10000)
+
+site_data_var <- targets %>%
+  filter(siteID == "BARC")
+
+# This is key here - I added the forecast horizon on the end of the data for the forecast period
+full_time <- tibble(time = seq(min(site_data_var$time), max(site_data_var$time), by = "1 day"))
+
+# Join the full time with the site_data_var so there aren't gaps in the time column
+site_data_var <- left_join(full_time, site_data_var) %>% 
+  dplyr::rename(date=time)
+site_data_var$year = year(site_data_var$date)
+site_data_var$cal_day = yday(site_data_var$date)
+
+saveRDS(site_data_var, "neon_barc.rds")
+
+```
+
+Familiarize yourself with the oxygen and temperature data from Lake Barco
+
+Question: what sory of models do you think would be good candidates for forecasting?
+
+## NEON EFI Aquatics Challenge {#sec-neon-oxygen}
+
+Before modeling temperature and oxygen jointly, we'll start working with just the oxygen data alone. 
+
+We'll just with just a AR(p) state space model. The Lake Barco data has associated standard errors with the oxygen data, so we'll use that as a known observation error (rather than estimating that variance parameter, in our previous work).
+
+A script that describes the model is called `model_01.stan`. This should be familiar, following from the `atsar` code with a couple modifications. First, Stan doesn't like NAs being passed in as data, and we've had to do some indexing to avoid that. Second, notice that the model is flexible and can be used to fit models with any numbers of lags. 
+
+To get the data prepped for Stan, we need to do a few things. First, specify the lag and forecast horizon
+
+```{r}
+# Now data is ready for running our Stan models
+data <- readRDS("neon_barc.rds")
+data$indx = seq(1,nrow(data))
+n_forecast <- 7
+n_lag <- 1
+
+```
+
+Next, we'll drop observations with missing oxygen. If you wanted to do some validation, we could also split the data into a training and test set.
+```{r}
+# As a first model, we'll just work with modeling oxygen
+o2_dat <- dplyr::filter(data, !is.na(oxygen))  
+
+# split the test and training data
+last_obs <- max(data$indx) - n_forecast
+o2_train <- dplyr::filter(o2_dat, indx <= last_obs)
+test = dplyr::filter(data, indx > last_obs)
+
+o2_x = o2_train$indx
+o2_y = o2_train$oxygen
+o2_sd = o2_train$oxygen_sd
+n_o2 = nrow(o2_train)
+
+```
+
+Remember that the Stan data needs to be in a list, 
+
+```{r}
+stan_data = list(
+  n = last_obs,
+  n_o2 = n_o2,
+  n_lag = n_lag,
+  n_forecast = n_forecast,
+  o2_x = o2_x,
+  o2_y = o2_y,
+  o2_sd = o2_sd 
+)
+```
+
+Finally we can compile the model. If we wanted to do fully Bayesian estimates, we could do that with 
+
+```{r eval=FALSE}
+fit <- stan(file="model_01.stan", data=stan_data)
+
+```
+
+But because we're interested in doing this quickly, and running the model a bunch of times, we'll try Stan's optimizing function for MAP estimation.
+
+```{r}
+m <- stan_model(file="model_01.stan")
+o2_model <- rstan::optimizing(m,data=stan_data, hessian=TRUE)
+
+```
+
+Let's extract predictions from the fitted object, 
+```{r}
+data$pred = o2_model$par[grep("pred",names(o2_model$par))]
+ggplot(data, aes(date, pred)) + geom_line() + 
+  geom_point(aes(date,oxygen),col="red",alpha=0.5)
+```
+
+
+Question how do we evaluate predictions? We'll talk about that more next week, but for today we can think about it as RMSE(observations,predictions)
+
+Question: modify the code above (just on the R side, not Stan) to fit a lag-2 or lag-3 model. Are the predictions similar?
+
 
 \clearpage
 
