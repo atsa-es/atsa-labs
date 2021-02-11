@@ -395,6 +395,67 @@ Question how do we evaluate predictions? We'll talk about that more next week, b
 
 Question: modify the code above (just on the R side, not Stan) to fit a lag-2 or lag-3 model. Are the predictions similar?
 
+## NEON EFI Aquatics Challenge {#sec-neon-oxygen-iterate}
+
+In generating forecasts, it's often a good idea to use multiple training / test sets. One question with this challenge is what's the best lag (or order of AR model) for generating forecasts? Starting with lag-1, we can evaluate the effects of different lags by starting at some point in the dataset (e.g. using 50% of the observations), and generate and evaluate forecasts. We then iterate, adding a day of data, generating and evaluating forecasts, and repeating through the rest of the data. 
+
+I've generalized the code above into a function that takes the initial Lake Barco dataset, and 
+
+```{r}
+create_stan_data = function(data, last_obs, n_forecast, n_lag) {
+  o2_test <- dplyr::filter(data, 
+              indx %in% seq(last_obs+1,(last_obs+n_forecast)))
+  
+  o2_train <- dplyr::filter(data, 
+              indx <= last_obs, !is.na(oxygen))
+  o2_x = o2_train$indx
+  o2_y = o2_train$oxygen
+  o2_sd = o2_train$oxygen_sd
+  n_o2 = nrow(o2_train)
+  
+  stan_data = list(
+    n = last_obs,
+    n_o2 = n_o2,
+    n_lag = n_lag,
+    n_forecast = n_forecast,
+    o2_x = o2_x,
+    o2_y = o2_y,
+    o2_sd = o2_sd 
+  )
+  
+  return(list(train=o2_train, 
+              stan_data = stan_data,
+              test = o2_test))
+}
+```
+
+Now we can try iterating over sets of data with a lag 1 model
+
+```{r}
+n_forecast <- 7
+n_lag <- 1
+rmse <- NA
+for(i in 500:(nrow(data)-n_lag)) {
+  dat_list = create_stan_data(data, last_obs = i, n_forecast = n_forecast, n_lag = n_lag)
+  
+  # fit the model. opimizing can be sensitive to starting values, so let's try 
+  best_map = 0
+  for(j in 1:10) {
+    test_fit <- rstan::optimizing(m,data=dat_list$stan_data)
+    if(test_fit$value > best_map) {
+      fit <- test_fit
+      best_map <- test_fit$value
+    }
+  }
+  if(fit$return_code == 0) {
+  # extract forecasts
+  pred = fit$par[grep("forecast",names(fit$par))]
+  
+  # evaluate predictions
+  rmse[i] <- sqrt(mean((dat_list$test$oxygen - pred)^2,na.rm=T))
+  }
+}
+```
 
 \clearpage
 

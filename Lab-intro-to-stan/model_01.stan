@@ -16,7 +16,7 @@ transformed data {
 parameters {
   vector[n+n_forecast-1] o2_devs;
   //cov_matrix[2] Sigma;
-  //real<lower=0> o2_sd_proc;
+  real<lower=0> o2_sd_proc;
   //real<lower=0> temp_sd_proc;
   real o2_x0[n_lag]; // initial conditions
   real<lower=-1,upper=1> o2_b[n_lag];
@@ -29,12 +29,12 @@ transformed parameters {
     o2_pred[t] = o2_x0[t];
   }
   
-  for(i in 2:(n+n_forecast)) {
+  for(i in (1+n_lag):(n+n_forecast)) {
     o2_pred[i] = 0;
     for(k in 1:n_lag) {
-      o2_pred[i] = o2_pred[i] + o2_b[k]*o2_pred[i-1];
+      o2_pred[i] = o2_pred[i] + o2_b[k]*o2_pred[i-k];
     }
-    o2_pred[i] = o2_pred[i] + o2_devs[i-1];
+    o2_pred[i] = o2_pred[i] + o2_sd_proc*o2_devs[i-1];
   }
   // this is redundant but easier to work with output -- creates object o2_forecast
   // containing forecast n_forecast time steps ahead
@@ -47,7 +47,7 @@ model {
   // initial conditions
   o2_x0 ~ normal(0,1);
   o2_b ~ normal(0,1);
-  
+  o2_sd_proc ~ student_t(3,0,1);
   // process standard deviations
   o2_devs ~ std_normal();
 
