@@ -324,7 +324,7 @@ Before modeling temperature and oxygen jointly, we'll start working with just th
 
 We'll just with just a AR(p) state space model. The Lake Barco data has associated standard errors with the oxygen data, so we'll use that as a known observation error (rather than estimating that variance parameter, in our previous work).
 
-A script that describes the model is called `model_01.stan`. You can download this file [here]("./Rcode/model_01.stan").
+A script that describes the model is called `model_01.stan`. You can download this file [here](./Rcode/model_01.stan).
 This should be familiar, following from the `atsar` code with a couple modifications. First, Stan doesn't like NAs being passed in as data, and we've had to do some indexing to avoid that. Second, notice that the model is flexible and can be used to fit models with any numbers of lags. 
 
 To get the data prepped for Stan, we need to do a few things. First, specify the lag and forecast horizon
@@ -515,7 +515,7 @@ create_stan_data <- function(data, last_obs, n_forecast, n_lag_o2, n_lag_temp) {
 ```{r eval=FALSE}
 m <- stan_model(file = "model_02.stan")
 ```
-where `model_02.stan` is the Stan model file that you can [download here]("./Rcode/model_02.stan").
+where `model_02.stan` is the Stan model file that you can [download here](./Rcode/model_02.stan).
 
 
 

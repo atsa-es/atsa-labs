@@ -521,39 +521,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">13.9</span> NEON EFI Aquatics Challenge</h2>
 <p>Before modeling temperature and oxygen jointly, we’ll start working with just the oxygen data alone.</p>
 <p>We’ll just with just a AR(p) state space model. The Lake Barco data has associated standard errors with the oxygen data, so we’ll use that as a known observation error (rather than estimating that variance parameter, in our previous work).</p>
-<p>A script that describes the model is called <code>model_01.stan</code>. You can download this file <a href="%22./Rcode/model_01.stan%22">here</a>.
+<p>A script that describes the model is called <code>model_01.stan</code>. You can download this file <a href="./Rcode/model_01.stan">here</a>.
 This should be familiar, following from the <code>atsar</code> code with a couple modifications. First, Stan doesn’t like NAs being passed in as data, and we’ve had to do some indexing to avoid that. Second, notice that the model is flexible and can be used to fit models with any numbers of lags.</p>
 <p>To get the data prepped for Stan, we need to do a few things. First, specify the lag and forecast horizon</p>
-<div class="sourceCode" id="cb665"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb665-1"><a href="sec-neon-oxygen.html#cb665-1"></a>data &lt;-<span class="st"> </span>neon_barc</span>
-<span id="cb665-2"><a href="sec-neon-oxygen.html#cb665-2"></a>data<span class="op">$</span>indx &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(data))</span>
-<span id="cb665-3"><a href="sec-neon-oxygen.html#cb665-3"></a>n_forecast &lt;-<span class="st"> </span><span class="dv">7</span></span>
-<span id="cb665-4"><a href="sec-neon-oxygen.html#cb665-4"></a>n_lag &lt;-<span class="st"> </span><span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb670"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb670-1"><a href="sec-neon-oxygen.html#cb670-1"></a>data &lt;-<span class="st"> </span>neon_barc</span>
+<span id="cb670-2"><a href="sec-neon-oxygen.html#cb670-2"></a>data<span class="op">$</span>indx &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(data))</span>
+<span id="cb670-3"><a href="sec-neon-oxygen.html#cb670-3"></a>n_forecast &lt;-<span class="st"> </span><span class="dv">7</span></span>
+<span id="cb670-4"><a href="sec-neon-oxygen.html#cb670-4"></a>n_lag &lt;-<span class="st"> </span><span class="dv">1</span></span></code></pre></div>
 <p>Next, we’ll drop observations with missing oxygen. If you wanted to do some validation, we could also split the data into a training and test set.</p>
-<div class="sourceCode" id="cb666"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb666-1"><a href="sec-neon-oxygen.html#cb666-1"></a><span class="co"># As a first model, we&#39;ll just work with modeling oxygen</span></span>
-<span id="cb666-2"><a href="sec-neon-oxygen.html#cb666-2"></a>o2_dat &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(data, <span class="op">!</span><span class="kw">is.na</span>(oxygen))</span>
-<span id="cb666-3"><a href="sec-neon-oxygen.html#cb666-3"></a></span>
-<span id="cb666-4"><a href="sec-neon-oxygen.html#cb666-4"></a><span class="co"># split the test and training data</span></span>
-<span id="cb666-5"><a href="sec-neon-oxygen.html#cb666-5"></a>last_obs &lt;-<span class="st"> </span><span class="kw">max</span>(data<span class="op">$</span>indx) <span class="op">-</span><span class="st"> </span>n_forecast</span>
-<span id="cb666-6"><a href="sec-neon-oxygen.html#cb666-6"></a>o2_train &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(o2_dat, indx <span class="op">&lt;=</span><span class="st"> </span>last_obs)</span>
-<span id="cb666-7"><a href="sec-neon-oxygen.html#cb666-7"></a>test &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(data, indx <span class="op">&gt;</span><span class="st"> </span>last_obs)</span>
-<span id="cb666-8"><a href="sec-neon-oxygen.html#cb666-8"></a></span>
-<span id="cb666-9"><a href="sec-neon-oxygen.html#cb666-9"></a>o2_x &lt;-<span class="st"> </span>o2_train<span class="op">$</span>indx</span>
-<span id="cb666-10"><a href="sec-neon-oxygen.html#cb666-10"></a>o2_y &lt;-<span class="st"> </span>o2_train<span class="op">$</span>oxygen</span>
-<span id="cb666-11"><a href="sec-neon-oxygen.html#cb666-11"></a>o2_sd &lt;-<span class="st"> </span>o2_train<span class="op">$</span>oxygen_sd</span>
-<span id="cb666-12"><a href="sec-neon-oxygen.html#cb666-12"></a>n_o2 &lt;-<span class="st"> </span><span class="kw">nrow</span>(o2_train)</span></code></pre></div>
+<div class="sourceCode" id="cb671"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb671-1"><a href="sec-neon-oxygen.html#cb671-1"></a><span class="co"># As a first model, we&#39;ll just work with modeling oxygen</span></span>
+<span id="cb671-2"><a href="sec-neon-oxygen.html#cb671-2"></a>o2_dat &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(data, <span class="op">!</span><span class="kw">is.na</span>(oxygen))</span>
+<span id="cb671-3"><a href="sec-neon-oxygen.html#cb671-3"></a></span>
+<span id="cb671-4"><a href="sec-neon-oxygen.html#cb671-4"></a><span class="co"># split the test and training data</span></span>
+<span id="cb671-5"><a href="sec-neon-oxygen.html#cb671-5"></a>last_obs &lt;-<span class="st"> </span><span class="kw">max</span>(data<span class="op">$</span>indx) <span class="op">-</span><span class="st"> </span>n_forecast</span>
+<span id="cb671-6"><a href="sec-neon-oxygen.html#cb671-6"></a>o2_train &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(o2_dat, indx <span class="op">&lt;=</span><span class="st"> </span>last_obs)</span>
+<span id="cb671-7"><a href="sec-neon-oxygen.html#cb671-7"></a>test &lt;-<span class="st"> </span>dplyr<span class="op">::</span><span class="kw">filter</span>(data, indx <span class="op">&gt;</span><span class="st"> </span>last_obs)</span>
+<span id="cb671-8"><a href="sec-neon-oxygen.html#cb671-8"></a></span>
+<span id="cb671-9"><a href="sec-neon-oxygen.html#cb671-9"></a>o2_x &lt;-<span class="st"> </span>o2_train<span class="op">$</span>indx</span>
+<span id="cb671-10"><a href="sec-neon-oxygen.html#cb671-10"></a>o2_y &lt;-<span class="st"> </span>o2_train<span class="op">$</span>oxygen</span>
+<span id="cb671-11"><a href="sec-neon-oxygen.html#cb671-11"></a>o2_sd &lt;-<span class="st"> </span>o2_train<span class="op">$</span>oxygen_sd</span>
+<span id="cb671-12"><a href="sec-neon-oxygen.html#cb671-12"></a>n_o2 &lt;-<span class="st"> </span><span class="kw">nrow</span>(o2_train)</span></code></pre></div>
 <p>Remember that the Stan data needs to be in a list,</p>
-<div class="sourceCode" id="cb667"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb667-1"><a href="sec-neon-oxygen.html#cb667-1"></a>stan_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> last_obs, <span class="dt">n_o2 =</span> n_o2, <span class="dt">n_lag =</span> n_lag, <span class="dt">n_forecast =</span> n_forecast, </span>
-<span id="cb667-2"><a href="sec-neon-oxygen.html#cb667-2"></a>    <span class="dt">o2_x =</span> o2_x, <span class="dt">o2_y =</span> o2_y, <span class="dt">o2_sd =</span> o2_sd)</span></code></pre></div>
+<div class="sourceCode" id="cb672"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb672-1"><a href="sec-neon-oxygen.html#cb672-1"></a>stan_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> last_obs, <span class="dt">n_o2 =</span> n_o2, <span class="dt">n_lag =</span> n_lag, <span class="dt">n_forecast =</span> n_forecast, </span>
+<span id="cb672-2"><a href="sec-neon-oxygen.html#cb672-2"></a>    <span class="dt">o2_x =</span> o2_x, <span class="dt">o2_y =</span> o2_y, <span class="dt">o2_sd =</span> o2_sd)</span></code></pre></div>
 <p>Finally we can compile the model. If we wanted to do fully Bayesian estimates, we could do that with</p>
-<div class="sourceCode" id="cb668"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb668-1"><a href="sec-neon-oxygen.html#cb668-1"></a>fit &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">file =</span> <span class="st">&quot;model_01.stan&quot;</span>, <span class="dt">data =</span> stan_data)</span></code></pre></div>
+<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb673-1"><a href="sec-neon-oxygen.html#cb673-1"></a>fit &lt;-<span class="st"> </span><span class="kw">stan</span>(<span class="dt">file =</span> <span class="st">&quot;model_01.stan&quot;</span>, <span class="dt">data =</span> stan_data)</span></code></pre></div>
 <p>Try fitting the Bayesian model with a short chain length (maybe 1000 iterations) and 1 MCMC chain.</p>
 <p>But because we’re interested in doing this quickly, and running the model a bunch of times, we’ll try Stan’s optimizing function for MAP estimation.</p>
-<div class="sourceCode" id="cb669"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb669-1"><a href="sec-neon-oxygen.html#cb669-1"></a>m &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="dt">file =</span> <span class="st">&quot;model_01.stan&quot;</span>)</span>
-<span id="cb669-2"><a href="sec-neon-oxygen.html#cb669-2"></a>o2_model &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">optimizing</span>(m, <span class="dt">data =</span> stan_data, <span class="dt">hessian =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb674"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb674-1"><a href="sec-neon-oxygen.html#cb674-1"></a>m &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="dt">file =</span> <span class="st">&quot;model_01.stan&quot;</span>)</span>
+<span id="cb674-2"><a href="sec-neon-oxygen.html#cb674-2"></a>o2_model &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">optimizing</span>(m, <span class="dt">data =</span> stan_data, <span class="dt">hessian =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>Let’s extract predictions from the fitted object,</p>
-<div class="sourceCode" id="cb670"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb670-1"><a href="sec-neon-oxygen.html#cb670-1"></a>data<span class="op">$</span>pred &lt;-<span class="st"> </span>o2_model<span class="op">$</span>par[<span class="kw">grep</span>(<span class="st">&quot;pred&quot;</span>, <span class="kw">names</span>(o2_model<span class="op">$</span>par))]</span>
-<span id="cb670-2"><a href="sec-neon-oxygen.html#cb670-2"></a><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(date, pred)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(date, </span>
-<span id="cb670-3"><a href="sec-neon-oxygen.html#cb670-3"></a>    oxygen), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb675-1"><a href="sec-neon-oxygen.html#cb675-1"></a>data<span class="op">$</span>pred &lt;-<span class="st"> </span>o2_model<span class="op">$</span>par[<span class="kw">grep</span>(<span class="st">&quot;pred&quot;</span>, <span class="kw">names</span>(o2_model<span class="op">$</span>par))]</span>
+<span id="cb675-2"><a href="sec-neon-oxygen.html#cb675-2"></a><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(date, pred)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(date, </span>
+<span id="cb675-3"><a href="sec-neon-oxygen.html#cb675-3"></a>    oxygen), <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <p>Question how do we evaluate predictions? We’ll talk about that more next week, but for today we can think about it as RMSE(observations,predictions)</p>
 <p>Question: modify the code above (just on the R side, not Stan) to fit a lag-2 or lag-3 model. Are the predictions similar?</p>
 </div>

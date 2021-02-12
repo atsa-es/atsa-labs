@@ -520,27 +520,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="fit-the-model" class="section level2">
 <h2><span class="header-section-number">14.6</span> Fit the model</h2>
 <p>We specify this one-to-one in R for <code>MARSS()</code>:</p>
-<div class="sourceCode" id="cb678"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb678-1"><a href="fit-the-model.html#cb678-1"></a>makemod &lt;-<span class="st"> </span><span class="cf">function</span>(n) {</span>
-<span id="cb678-2"><a href="fit-the-model.html#cb678-2"></a>    B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb678-3"><a href="fit-the-model.html#cb678-3"></a>    <span class="kw">diag</span>(B)[<span class="dv">2</span><span class="op">:</span>(n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;b&quot;</span>, <span class="dv">1</span><span class="op">:</span>n)</span>
-<span id="cb678-4"><a href="fit-the-model.html#cb678-4"></a>    B[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb678-5"><a href="fit-the-model.html#cb678-5"></a>    A &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb678-6"><a href="fit-the-model.html#cb678-6"></a>    Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">diag</span>(<span class="dv">1</span>, n))</span>
-<span id="cb678-7"><a href="fit-the-model.html#cb678-7"></a>    Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb678-8"><a href="fit-the-model.html#cb678-8"></a>    Q[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb678-9"><a href="fit-the-model.html#cb678-9"></a>    <span class="kw">diag</span>(Q)[<span class="dv">2</span><span class="op">:</span>(n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="op">:</span>n)</span>
-<span id="cb678-10"><a href="fit-the-model.html#cb678-10"></a>    R &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb678-11"><a href="fit-the-model.html#cb678-11"></a>    U &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb678-12"><a href="fit-the-model.html#cb678-12"></a>    x0 &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb678-13"><a href="fit-the-model.html#cb678-13"></a>    mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">A =</span> A, <span class="dt">Z =</span> Z, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, </span>
-<span id="cb678-14"><a href="fit-the-model.html#cb678-14"></a>        <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> <span class="dv">0</span>)</span>
-<span id="cb678-15"><a href="fit-the-model.html#cb678-15"></a>    <span class="kw">return</span>(mod.list)</span>
-<span id="cb678-16"><a href="fit-the-model.html#cb678-16"></a>}</span>
-<span id="cb678-17"><a href="fit-the-model.html#cb678-17"></a>mod.list1 &lt;-<span class="st"> </span><span class="kw">makemod</span>(<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="fit-the-model.html#cb683-1"></a>makemod &lt;-<span class="st"> </span><span class="cf">function</span>(n) {</span>
+<span id="cb683-2"><a href="fit-the-model.html#cb683-2"></a>    B &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb683-3"><a href="fit-the-model.html#cb683-3"></a>    <span class="kw">diag</span>(B)[<span class="dv">2</span><span class="op">:</span>(n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;b&quot;</span>, <span class="dv">1</span><span class="op">:</span>n)</span>
+<span id="cb683-4"><a href="fit-the-model.html#cb683-4"></a>    B[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb683-5"><a href="fit-the-model.html#cb683-5"></a>    A &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb683-6"><a href="fit-the-model.html#cb683-6"></a>    Z &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">diag</span>(<span class="dv">1</span>, n))</span>
+<span id="cb683-7"><a href="fit-the-model.html#cb683-7"></a>    Q &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">list</span>(<span class="dv">0</span>), n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb683-8"><a href="fit-the-model.html#cb683-8"></a>    Q[<span class="dv">1</span>, <span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb683-9"><a href="fit-the-model.html#cb683-9"></a>    <span class="kw">diag</span>(Q)[<span class="dv">2</span><span class="op">:</span>(n <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)] &lt;-<span class="st"> </span><span class="kw">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="op">:</span>n)</span>
+<span id="cb683-10"><a href="fit-the-model.html#cb683-10"></a>    R &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb683-11"><a href="fit-the-model.html#cb683-11"></a>    U &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb683-12"><a href="fit-the-model.html#cb683-12"></a>    x0 &lt;-<span class="st"> &quot;zero&quot;</span></span>
+<span id="cb683-13"><a href="fit-the-model.html#cb683-13"></a>    mod.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">A =</span> A, <span class="dt">Z =</span> Z, <span class="dt">Q =</span> Q, <span class="dt">R =</span> R, <span class="dt">U =</span> U, </span>
+<span id="cb683-14"><a href="fit-the-model.html#cb683-14"></a>        <span class="dt">x0 =</span> x0, <span class="dt">tinitx =</span> <span class="dv">0</span>)</span>
+<span id="cb683-15"><a href="fit-the-model.html#cb683-15"></a>    <span class="kw">return</span>(mod.list)</span>
+<span id="cb683-16"><a href="fit-the-model.html#cb683-16"></a>}</span>
+<span id="cb683-17"><a href="fit-the-model.html#cb683-17"></a>mod.list1 &lt;-<span class="st"> </span><span class="kw">makemod</span>(<span class="dv">3</span>)</span></code></pre></div>
 <p>Demean the data.</p>
-<div class="sourceCode" id="cb679"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb679-1"><a href="fit-the-model.html#cb679-1"></a>dat2 &lt;-<span class="st"> </span>dat <span class="op">-</span><span class="st"> </span><span class="kw">apply</span>(dat, <span class="dv">1</span>, mean) <span class="op">%*%</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, TT)</span></code></pre></div>
+<div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb684-1"><a href="fit-the-model.html#cb684-1"></a>dat2 &lt;-<span class="st"> </span>dat <span class="op">-</span><span class="st"> </span><span class="kw">apply</span>(dat, <span class="dv">1</span>, mean) <span class="op">%*%</span><span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, TT)</span></code></pre></div>
 <p>Fit to that</p>
-<div class="sourceCode" id="cb680"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb680-1"><a href="fit-the-model.html#cb680-1"></a>fit.mod1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat2, <span class="dt">model =</span> mod.list1)</span></code></pre></div>
+<div class="sourceCode" id="cb685"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb685-1"><a href="fit-the-model.html#cb685-1"></a>fit.mod1 &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat2, <span class="dt">model =</span> mod.list1)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.

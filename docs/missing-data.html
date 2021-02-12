@@ -522,7 +522,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>One nice features of this approach is that it is robust to a fair bit of missing data. Here I delete a third of the data. I do this randomly throughout the dataset. The data look pretty hopeless. No signal to be seen.</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-26-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Fit as usual:</p>
-<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="missing-data.html#cb683-1"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat2.miss, <span class="dt">model =</span> mod.list1, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb688"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb688-1"><a href="missing-data.html#cb688-1"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat2.miss, <span class="dt">model =</span> mod.list1, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>But though we can’t see the signal in the data, it is there.
 <img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-28-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Averaging our sensors doesn’t work since there are so many missing values and we will have missing values in our average.</p>
@@ -530,7 +530,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Another type of missing data are strings of missing data. Here I create a data set with random strings of missing values. Again the data look really hopeless and definitely cannot average across the data since we’d be averaging across different data sets.
 <img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-30-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>We can fit as usual and see that it is possible to recover the signal.</p>
-<div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb684-1"><a href="missing-data.html#cb684-1"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat2.miss, <span class="dt">model =</span> mod.list1, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb689"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb689-1"><a href="missing-data.html#cb689-1"></a>fit &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat2.miss, <span class="dt">model =</span> mod.list1, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-32-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
             </section>

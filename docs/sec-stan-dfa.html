@@ -563,8 +563,8 @@ Figure 13.3: Phytoplankton data.
 <p>Rotate the estimated trends and look at what it produces.</p>
 <div class="sourceCode" id="cb652"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb652-1"><a href="sec-stan-dfa.html#cb652-1"></a>rot &lt;-<span class="st"> </span>bayesdfa<span class="op">::</span><span class="kw">rotate_trends</span>(mod_<span class="dv">3</span>)</span>
 <span id="cb652-2"><a href="sec-stan-dfa.html#cb652-2"></a><span class="kw">names</span>(rot)</span></code></pre></div>
-<pre><code>[1] &quot;Z_rot&quot;         &quot;trends&quot;        &quot;Z_rot_mean&quot;    &quot;Z_rot_median&quot; 
-[5] &quot;trends_mean&quot;   &quot;trends_median&quot; &quot;trends_lower&quot;  &quot;trends_upper&quot; </code></pre>
+<pre><code>[1] &quot;Z_rot&quot;         &quot;trends&quot;        &quot;Z_rot_mean&quot;    &quot;Z_rot_median&quot;  &quot;trends_mean&quot;   &quot;trends_median&quot;
+[7] &quot;trends_lower&quot;  &quot;trends_upper&quot; </code></pre>
 <p>Plot the estimate of the trends.</p>
 <div class="sourceCode" id="cb654"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb654-1"><a href="sec-stan-dfa.html#cb654-1"></a><span class="kw">matplot</span>(<span class="kw">t</span>(rot<span class="op">$</span>trends_mean), <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">ylab =</span> <span class="st">&quot;mean trend&quot;</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:stan-dfa-plot-trends"></span>
@@ -581,19 +581,32 @@ Figure 13.4: Trends.
 <span id="cb655-3"><a href="sec-stan-dfa.html#cb655-3"></a>mod_<span class="dv">2</span> &lt;-<span class="st"> </span>bayesdfa<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">2</span>, </span>
 <span id="cb655-4"><a href="sec-stan-dfa.html#cb655-4"></a>    <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">chains =</span> <span class="dv">1</span>)</span>
 <span id="cb655-5"><a href="sec-stan-dfa.html#cb655-5"></a>mod_<span class="dv">3</span> &lt;-<span class="st"> </span>bayesdfa<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">3</span>, </span>
-<span id="cb655-6"><a href="sec-stan-dfa.html#cb655-6"></a>    <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">chains =</span> <span class="dv">1</span>)</span>
-<span id="cb655-7"><a href="sec-stan-dfa.html#cb655-7"></a>mod_<span class="dv">4</span> &lt;-<span class="st"> </span>bayesdfa<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">4</span>, </span>
-<span id="cb655-8"><a href="sec-stan-dfa.html#cb655-8"></a>    <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">chains =</span> <span class="dv">1</span>)</span>
-<span id="cb655-9"><a href="sec-stan-dfa.html#cb655-9"></a><span class="co"># mod_5 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=5)</span></span></code></pre></div>
+<span id="cb655-6"><a href="sec-stan-dfa.html#cb655-6"></a>    <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">chains =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#bulk-ess</code></pre>
+<pre><code>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb658-1"><a href="sec-stan-dfa.html#cb658-1"></a>mod_<span class="dv">4</span> &lt;-<span class="st"> </span>bayesdfa<span class="op">::</span><span class="kw">fit_dfa</span>(<span class="dt">y =</span> dat.spp<span class="fl">.1980</span>, <span class="dt">num_trends =</span> <span class="dv">4</span>, </span>
+<span id="cb658-2"><a href="sec-stan-dfa.html#cb658-2"></a>    <span class="dt">iter =</span> <span class="dv">1000</span>, <span class="dt">chains =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#bulk-ess
+
+Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+http://mc-stan.org/misc/warnings.html#tail-ess</code></pre>
+<div class="sourceCode" id="cb660"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb660-1"><a href="sec-stan-dfa.html#cb660-1"></a><span class="co"># mod_5 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=5)</span></span></code></pre></div>
 <p>We will compute the Leave One Out Information Criterion (LOOIC) using the <strong>loo</strong> package. Like AIC, lower is better.</p>
-<div class="sourceCode" id="cb656"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb656-1"><a href="sec-stan-dfa.html#cb656-1"></a><span class="kw">loo</span>(mod_<span class="dv">1</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb661"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb661-1"><a href="sec-stan-dfa.html#cb661-1"></a><span class="kw">loo</span>(mod_<span class="dv">1</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span></code></pre></div>
 <pre><code>[1] 1613.411</code></pre>
 <p>Table of the LOOIC values:</p>
-<div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb658-1"><a href="sec-stan-dfa.html#cb658-1"></a>looics &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">loo</span>(mod_<span class="dv">1</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, <span class="st">&quot;Estimate&quot;</span>], <span class="kw">loo</span>(mod_<span class="dv">2</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
-<span id="cb658-2"><a href="sec-stan-dfa.html#cb658-2"></a>    <span class="st">&quot;Estimate&quot;</span>], <span class="kw">loo</span>(mod_<span class="dv">3</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, <span class="st">&quot;Estimate&quot;</span>], <span class="kw">loo</span>(mod_<span class="dv">4</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
-<span id="cb658-3"><a href="sec-stan-dfa.html#cb658-3"></a>    <span class="st">&quot;Estimate&quot;</span>])</span>
-<span id="cb658-4"><a href="sec-stan-dfa.html#cb658-4"></a>looic.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trends =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">LOOIC =</span> looics)</span>
-<span id="cb658-5"><a href="sec-stan-dfa.html#cb658-5"></a>looic.table</span></code></pre></div>
+<div class="sourceCode" id="cb663"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb663-1"><a href="sec-stan-dfa.html#cb663-1"></a>looics &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">loo</span>(mod_<span class="dv">1</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, <span class="st">&quot;Estimate&quot;</span>], <span class="kw">loo</span>(mod_<span class="dv">2</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
+<span id="cb663-2"><a href="sec-stan-dfa.html#cb663-2"></a>    <span class="st">&quot;Estimate&quot;</span>], <span class="kw">loo</span>(mod_<span class="dv">3</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, <span class="st">&quot;Estimate&quot;</span>], <span class="kw">loo</span>(mod_<span class="dv">4</span>)<span class="op">$</span>estimates[<span class="st">&quot;looic&quot;</span>, </span>
+<span id="cb663-3"><a href="sec-stan-dfa.html#cb663-3"></a>    <span class="st">&quot;Estimate&quot;</span>])</span>
+<span id="cb663-4"><a href="sec-stan-dfa.html#cb663-4"></a>looic.table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">trends =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">LOOIC =</span> looics)</span>
+<span id="cb663-5"><a href="sec-stan-dfa.html#cb663-5"></a>looic.table</span></code></pre></div>
 <pre><code>  trends    LOOIC
 1      1 1613.411
 2      2 1545.113

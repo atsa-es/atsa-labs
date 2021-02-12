@@ -267,7 +267,7 @@ df <- rbind(df, data.frame(t=1:TT, value=xt, type="true", var="xt"))
 df <- rbind(df, data.frame(t=1:12, value=cov1[1:12]+(beta2/beta1)*cov2[1:12], type="true", var="season"))
 df <- rbind(df, data.frame(t=1:TT, value=fit$states[2,], type="estimate", var="amplitude scaling"))
 df <- rbind(df, data.frame(t=1:TT, value=fit$states[1,], type="estimate", var="xt"))
-df <- rbind(df, data.frame(t=1:12, value=cov1[1:12]+coef(fit)$Z*cov2[1:12], type="estimate", var="season"))
+df <- rbind(df, data.frame(t=1:12, value=cov1[1:12]+coef(fit)$Z[1]*cov2[1:12], type="estimate", var="season"))
 ggplot(df, aes(x=t, y=value, color=type)) + geom_line() + facet_wrap(~var, scales="free")
 ```
 
