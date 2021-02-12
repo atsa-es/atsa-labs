@@ -1,5 +1,10 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 ```{r stan-setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
+knitr::opts_chunk$set(echo = TRUE, comment = NA, cache = TRUE, tidy.opts = list(width.cutoff = 60), tidy = TRUE, fig.align = "center", out.width = "80%")
 ```
 
 # Stan for Bayesian time series analysis {#chap-stan}
@@ -7,16 +12,18 @@ knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.
 
 For this lab, we will use [Stan](http://mc-stan.org/documentation/) for fitting models. These examples are primarily drawn from the Stan manual and previous code from this class.  
 
-A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-models-with-stan.R).
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-models-with-stan.R). The Rmd for this chapter can be downloaded [here](./Rmds/fitting-models-with-stan.Rmd)
 
 ### Data and packages {-}
 
-You will need the **atsar** package we have written for fitting state-space time series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/nwfsc-timeseries/atsar).  Install  using the **devtools** package.
+You will need the **atsar** and **bayesdfa** packages we have written for fitting state-space time series models with Stan.  Install  using the **devtools** package.
 ```{r stan-load, eval=FALSE}
 library(devtools)
 # Windows users will likely need to set this
 # Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 devtools::install_github("nwfsc-timeseries/atsar")
+devtools::install_github("nwfsc-timeseries/tvvarss")
+devtools::install_github("fate-ewi/bayesdfa")
 ```
 In addition, you will need the **rstan**, **datasets**, **parallel** and **loo** packages. After installing, if needed, load the packages:
 ```{r stan-loadpackages, results='hide', warning=FALSE, message=FALSE}
@@ -30,10 +37,10 @@ rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 ```
 
-For this lab, we will use a data set on airquality in New York from the **datasets** package. Load the data and create a couple new variables for future use. 
+For this lab, we will use a data set on air quality in New York from the **datasets** package. Load the data and create a couple new variables for future use. 
 
 ```{r stan-data}
-data(airquality, package="datasets")
+data(airquality, package = "datasets")
 Wind <- airquality$Wind # wind speed
 Temp <- airquality$Temp # air temperature
 ```
@@ -50,14 +57,16 @@ Remember that in linear regression models, the residual error is interpreted as 
 To run this model using our package, we'll need to specify the response and predictor variables. The covariate matrix with an intercept only is a matrix of 1s. To double check, you could always look at 
 
 ```{r stan-lm}
-x <- model.matrix(lm(Temp~1))
+x <- model.matrix(lm(Temp ~ 1))
 ```
 
 Fitting the model using our function is done with this code, 
 
 ```{r stan-lr1, warning=FALSE, message=FALSE, results='hide', cache=TRUE}
-lm_intercept <- atsar::fit_stan(y = as.numeric(Temp), x = rep(1, length(Temp)),
-  model_name = "regression")
+lm_intercept <- atsar::fit_stan(
+  y = as.numeric(Temp), x = rep(1, length(Temp)),
+  model_name = "regression"
+)
 ```
 
 Coarse summaries of ``stanfit`` objects can be examined by typing one of the following
@@ -81,18 +90,20 @@ so our estimated parameters are $\beta$ and $\sigma$.  Our stan code computed th
 We can then make basic plots or summaries of each of these parameters, 
 
 ```{r stan-hist}
-hist(pars$beta, 40, col="grey", xlab="Intercept", main="")
-quantile(pars$beta, c(0.025,0.5,0.975))
+hist(pars$beta, 40, col = "grey", xlab = "Intercept", main = "")
+quantile(pars$beta, c(0.025, 0.5, 0.975))
 ```
 
 One of the other useful things we can do is look at the predicted values of our model ($\hat{y}_t=\beta \times 1$) and overlay the data. The predicted values are *pars$pred*.
 
 ```{r stan-fig-lm, fig.cap='Data and predicted values for the linear regression model.'}
-plot(apply(pars$pred, 2, mean), main="Predicted values", lwd=2, 
-  ylab="Wind", ylim= c(min(pars$pred), max(pars$pred)), type="l")
-lines(apply(pars$pred, 2, quantile,0.025))
-lines(apply(pars$pred, 2, quantile,0.975))
-points(Wind, col="red")
+plot(apply(pars$pred, 2, mean),
+  main = "Predicted values", lwd = 2,
+  ylab = "Wind", ylim = c(min(pars$pred), max(pars$pred)), type = "l"
+)
+lines(apply(pars$pred, 2, quantile, 0.025))
+lines(apply(pars$pred, 2, quantile, 0.975))
+points(Wind, col = "red")
 ```
 
 ### Burn-in and thinning {#sec-stan-burn}
@@ -100,9 +111,11 @@ points(Wind, col="red")
 To illustrate the effects of the burn-in/warmup period and thinning, we can re-run the above model, but for just 1 MCMC chain (the default is 3).  
 
 ```{r stan-lm2, cache=TRUE, results='hide'}
-lm_intercept <- atsar::fit_stan(y = Temp, x = rep(1, length(Temp)),
-  model_name = "regression", 
-  mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
+lm_intercept <- atsar::fit_stan(
+  y = Temp, x = rep(1, length(Temp)),
+  model_name = "regression",
+  mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1)
+)
 ```
 
 Here is a plot of the time series of `beta` with one chain and no burn-in. Based on visual inspection, when does the chain converge? 
@@ -125,9 +138,11 @@ Like in our first model, we assume that the data follows a normal likelihood (or
 We can fit this regression with autocorrelated errors by changing the model name to  'regression_cor' 
 
 ```{r stan-lr-ar, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-lm_intercept_cor <- atsar::fit_stan(y = Temp, x = rep(1, length(Temp)),
-  model_name = "regression_cor", 
-  mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1))
+lm_intercept_cor <- atsar::fit_stan(
+  y = Temp, x = rep(1, length(Temp)),
+  model_name = "regression_cor",
+  mcmc_list = list(n_mcmc = 1000, n_burn = 1, n_chain = 1, n_thin = 1)
+)
 ```
 
 ## Random walk model {#sec-stan-rw}
@@ -152,8 +167,10 @@ $$y_t = \phi y_{t-1} + e_{t}$$.
 The ``fit_stan()`` function can fit higher order AR models, but for now we just want to fit an AR(1) model and make a histogram of phi.
 
 ```{r stan-ar1-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-ar1 <- atsar::fit_stan(y = Temp, x = matrix(1, nrow = length(Temp), ncol = 1), 
-  model_name = "ar", est_drift=FALSE, P = 1)
+ar1 <- atsar::fit_stan(
+  y = Temp, x = matrix(1, nrow = length(Temp), ncol = 1),
+  model_name = "ar", est_drift = FALSE, P = 1
+)
 ```
 
 ## Univariate state-space models {#sec-stan-uss}
@@ -168,58 +185,63 @@ In the two above models, we'll refer to $q$ as the standard deviation of the pro
 
 We can fit the state-space AR(1) and random walk models using the ``fit_stan()`` function:
 ```{r stan-arrw, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-ss_ar <- atsar::fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_ar")
-ss_rw <- atsar::fit_stan(y = Temp, est_drift=FALSE, model_name = "ss_rw")
+ss_ar <- atsar::fit_stan(y = Temp, est_drift = FALSE, model_name = "ss_ar")
+ss_rw <- atsar::fit_stan(y = Temp, est_drift = FALSE, model_name = "ss_rw")
 ```
 
 ## Dynamic factor analysis {#sec-stan-dfa}
 
 First load the plankton dataset from the **MARSS** package.
 ```{r stan-dfa-data}
- library(MARSS)
- data(lakeWAplankton, package="MARSS")
- # we want lakeWAplanktonTrans, which has been transformed
- # so the 0s are replaced with NAs and the data z-scored
- dat <- lakeWAplanktonTrans
- # use only the 10 years from 1980-1989
- plankdat <- dat[dat[,"Year"]>=1980 & dat[,"Year"]<1990,]
- # create vector of phytoplankton group names
- phytoplankton <- c("Cryptomonas", "Diatoms", "Greens",
-                   "Unicells", "Other.algae")
- # get only the phytoplankton
- dat.spp.1980 <- t(plankdat[,phytoplankton])
- # z-score the data since we subsetted time
- dat.spp.1980 <- dat.spp.1980-apply(dat.spp.1980,1,mean,na.rm=TRUE)
- dat.spp.1980 <- dat.spp.1980/sqrt(apply(dat.spp.1980,1,var,na.rm=TRUE))
- #check our z-score
- apply(dat.spp.1980,1,mean,na.rm=TRUE)
- apply(dat.spp.1980,1,var,na.rm=TRUE)
+library(MARSS)
+data(lakeWAplankton, package = "MARSS")
+# we want lakeWAplanktonTrans, which has been transformed
+# so the 0s are replaced with NAs and the data z-scored
+dat <- lakeWAplanktonTrans
+# use only the 10 years from 1980-1989
+plankdat <- dat[dat[, "Year"] >= 1980 & dat[, "Year"] < 1990, ]
+# create vector of phytoplankton group names
+phytoplankton <- c(
+  "Cryptomonas", "Diatoms", "Greens",
+  "Unicells", "Other.algae"
+)
+# get only the phytoplankton
+dat.spp.1980 <- t(plankdat[, phytoplankton])
+# z-score the data since we subsetted time
+dat.spp.1980 <- dat.spp.1980 - apply(dat.spp.1980, 1, mean, na.rm = TRUE)
+dat.spp.1980 <- dat.spp.1980 / sqrt(apply(dat.spp.1980, 1, var, na.rm = TRUE))
+# check our z-score
+apply(dat.spp.1980, 1, mean, na.rm = TRUE)
+apply(dat.spp.1980, 1, var, na.rm = TRUE)
 ```
 
 Plot the data.
 ```{r stan-plot-dfa, fig=TRUE, fig.cap='Phytoplankton data.'}
-#make into ts since easier to plot
-dat.ts <- ts(t(dat.spp.1980),frequency=12, start=c(1980,1))
-par(mfrow=c(3,2),mar=c(2,2,2,2))
-for(i in 1:5) 
-  plot(dat.ts[,i], type="b",
-       main=colnames(dat.ts)[i],col="blue",pch=16)
+# make into ts since easier to plot
+dat.ts <- ts(t(dat.spp.1980), frequency = 12, start = c(1980, 1))
+par(mfrow = c(3, 2), mar = c(2, 2, 2, 2))
+for (i in 1:5) {
+  plot(dat.ts[, i],
+    type = "b",
+    main = colnames(dat.ts)[i], col = "blue", pch = 16
+  )
+}
 ```
 
 Run a 3 trend model on these data.
 ```{r stan-dfa-3-trend, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-mod_3 <- atsar::fit_dfa(y = dat.spp.1980, num_trends=3)
+mod_3 <- bayesdfa::fit_dfa(y = dat.spp.1980, num_trends = 3, chains = 1, iter = 1000)
 ```
 
 Rotate the estimated trends and look at what it produces.
 ```{r stan-dfa-rot}
-rot <- atsar::rotate_trends(mod_3)
+rot <- bayesdfa::rotate_trends(mod_3)
 names(rot)
 ```
 
 Plot the estimate of the trends.
 ```{r stan-dfa-plot-trends, fig=TRUE, fig.cap='Trends.'}
-matplot(t(rot$trends_mean),type="l",lwd=2,ylab="mean trend")
+matplot(t(rot$trends_mean), type = "l", lwd = 2, ylab = "mean trend")
 ```
 
 ### Using leave one out cross-validation to select models {#sec-stan-loo}
@@ -227,29 +249,28 @@ matplot(t(rot$trends_mean),type="l",lwd=2,ylab="mean trend")
 We will fit multiple DFA with different numbers of trends and use leave one out (LOO) cross-validation to choose the best model.
 
 ```{r stan-dfa-5-models, results='hide', cache=TRUE}
-mod_1 = atsar::fit_dfa(y = dat.spp.1980, num_trends=1)
-mod_2 = atsar::fit_dfa(y = dat.spp.1980, num_trends=2)
-mod_3 = atsar::fit_dfa(y = dat.spp.1980, num_trends=3)
-mod_4 = atsar::fit_dfa(y = dat.spp.1980, num_trends=4)
-mod_5 = atsar::fit_dfa(y = dat.spp.1980, num_trends=5)
+mod_1 <- bayesdfa::fit_dfa(y = dat.spp.1980, num_trends = 1, iter = 1000, chains = 1)
+mod_2 <- bayesdfa::fit_dfa(y = dat.spp.1980, num_trends = 2, iter = 1000, chains = 1)
+mod_3 <- bayesdfa::fit_dfa(y = dat.spp.1980, num_trends = 3, iter = 1000, chains = 1)
+mod_4 <- bayesdfa::fit_dfa(y = dat.spp.1980, num_trends = 4, iter = 1000, chains = 1)
+# mod_5 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=5)
 ```
 
 We will compute the Leave One Out Information Criterion (LOOIC) using the **loo** package.  Like AIC, lower is better.
 
 ```{r stan-looic, cache=TRUE, warning=FALSE}
-loo::loo(loo::extract_log_lik(mod_1))$estimates["looic","Estimate"]
+loo(mod_1)$estimates["looic", "Estimate"]
 ```
 
 Table of the LOOIC values:
 ```{r stan-looic-table, cache=TRUE, warning=FALSE}
-looics = c(
-  loo::loo(loo::extract_log_lik(mod_1))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_2))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_3))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_4))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_5))$estimates["looic","Estimate"]
-  )
-looic.table <- data.frame(trends=1:5, LOOIC=looics)
+looics <- c(
+  loo(mod_1)$estimates["looic", "Estimate"],
+  loo(mod_2)$estimates["looic", "Estimate"],
+  loo(mod_3)$estimates["looic", "Estimate"],
+  loo(mod_4)$estimates["looic", "Estimate"]
+)
+looic.table <- data.frame(trends = 1:4, LOOIC = looics)
 looic.table
 ```
 
@@ -258,30 +279,283 @@ looic.table
 We will look at the effect of missing data on the uncertainty intervals on estimates states using a DFA on the harbor seal dataset.
 
 ```{r stan-harborseal-data}
-data(harborSealWA, package="MARSS")
-#the first column is year
-matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
-        ylab="Log abundance", xlab="")
+data(harborSealWA, package = "MARSS")
+# the first column is year
+matplot(harborSealWA[, 1], harborSealWA[, -1],
+  type = "l",
+  ylab = "Log abundance", xlab = ""
+)
 ```
 
 Assume they are all observing a single trend.
 ```{r stan-seal-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-seal.mod <- atsar::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
+seal.mod <- bayesdfa::fit_dfa(y = t(harborSealWA[, -1]), num_trends = 1, chains = 1, iter = 1000)
 ```
 
 ```{r stan-seal-trend, cache=TRUE}
-pars <- rstan::extract(seal.mod)
+pars <- rstan::extract(seal.mod$model)
 ```
 
 ```{r stan-plot-seal, fig = TRUE, fig.cap='Estimated states and 95 percent credible intervals.'}
-pred_mean <- c(apply(pars$x, c(2,3), mean))
-pred_lo <- c(apply(pars$x, c(2,3), quantile, 0.025))
-pred_hi <- c(apply(pars$x, c(2,3), quantile, 0.975))
+pred_mean <- c(apply(pars$x, c(2, 3), mean))
+pred_lo <- c(apply(pars$x, c(2, 3), quantile, 0.025))
+pred_hi <- c(apply(pars$x, c(2, 3), quantile, 0.975))
 
-plot(pred_mean, type="l", lwd = 3, ylim = range(c(pred_mean, pred_lo, pred_hi)), main = "Trend")
+plot(pred_mean, type = "l", lwd = 3, ylim = range(c(pred_mean, pred_lo, pred_hi)), main = "Trend")
 lines(pred_lo)
 lines(pred_hi)
 ```
+
+## NEON EFI Aquatics Challenge {#sec-neon-data}
+
+The data for the aquatics challenge comes from a NEON site at Lake Barco (Florida). More about the data and challenge is [here](https://ecoforecast.org/efi-rcn-forecast-challenges/) and the Github repository for getting all the necessary data is [here](https://github.com/eco4cast/neon4cast-aquatics).
+
+We pulled in the data with the code from the challenge and saved the data for Lake Barco in the atsalibrary package. See `?neon_barc` for more details.
+```{r}
+data(neon_barc, package="atsalibrary")
+```
+
+Familiarize yourself with the oxygen and temperature data from Lake Barco by looking at `neon_barc`.
+
+Question: what sort of models do you think would be good candidates for forecasting?
+
+## NEON EFI Aquatics Challenge {#sec-neon-oxygen}
+
+Before modeling temperature and oxygen jointly, we'll start working with just the oxygen data alone. 
+
+We'll just with just a AR(p) state space model. The Lake Barco data has associated standard errors with the oxygen data, so we'll use that as a known observation error (rather than estimating that variance parameter, in our previous work).
+
+A script that describes the model is called `model_01.stan`. You can download this file [here]("./Rcode/model_01.stan").
+This should be familiar, following from the `atsar` code with a couple modifications. First, Stan doesn't like NAs being passed in as data, and we've had to do some indexing to avoid that. Second, notice that the model is flexible and can be used to fit models with any numbers of lags. 
+
+To get the data prepped for Stan, we need to do a few things. First, specify the lag and forecast horizon
+
+```{r}
+data <- neon_barc
+data$indx <- seq(1, nrow(data))
+n_forecast <- 7
+n_lag <- 1
+```
+
+Next, we'll drop observations with missing oxygen. If you wanted to do some validation, we could also split the data into a training and test set.
+```{r}
+# As a first model, we'll just work with modeling oxygen
+o2_dat <- dplyr::filter(data, !is.na(oxygen))
+
+# split the test and training data
+last_obs <- max(data$indx) - n_forecast
+o2_train <- dplyr::filter(o2_dat, indx <= last_obs)
+test <- dplyr::filter(data, indx > last_obs)
+
+o2_x <- o2_train$indx
+o2_y <- o2_train$oxygen
+o2_sd <- o2_train$oxygen_sd
+n_o2 <- nrow(o2_train)
+```
+
+Remember that the Stan data needs to be in a list, 
+
+```{r}
+stan_data <- list(
+  n = last_obs,
+  n_o2 = n_o2,
+  n_lag = n_lag,
+  n_forecast = n_forecast,
+  o2_x = o2_x,
+  o2_y = o2_y,
+  o2_sd = o2_sd
+)
+```
+
+Finally we can compile the model. If we wanted to do fully Bayesian estimates, we could do that with 
+
+```{r eval=FALSE}
+fit <- stan(file = "model_01.stan", data = stan_data)
+```
+
+Try fitting the Bayesian model with a short chain length (maybe 1000 iterations) and 1 MCMC chain.
+
+But because we're interested in doing this quickly, and running the model a bunch of times, we'll try Stan's optimizing function for MAP estimation.
+
+```{r eval = FALSE}
+m <- stan_model(file = "model_01.stan")
+o2_model <- rstan::optimizing(m, data = stan_data, hessian = TRUE)
+```
+
+Let's extract predictions from the fitted object, 
+```{r eval = FALSE}
+data$pred <- o2_model$par[grep("pred", names(o2_model$par))]
+ggplot(data, aes(date, pred)) +
+  geom_line() +
+  geom_point(aes(date, oxygen), col = "red", alpha = 0.5)
+```
+
+
+Question how do we evaluate predictions? We'll talk about that more next week, but for today we can think about it as RMSE(observations,predictions)
+
+Question: modify the code above (just on the R side, not Stan) to fit a lag-2 or lag-3 model. Are the predictions similar?
+
+## NEON EFI Aquatics Challenge {#sec-neon-oxygen-iterate}
+
+In generating forecasts, it's often a good idea to use multiple training / test sets. One question with this challenge is what's the best lag (or order of AR model) for generating forecasts? Starting with lag-1, we can evaluate the effects of different lags by starting at some point in the dataset (e.g. using 50% of the observations), and generate and evaluate forecasts. We then iterate, adding a day of data, generating and evaluating forecasts, and repeating through the rest of the data. [An alternative approach would be to adopt a moving window, where each prediction would be based on the same number of historical data points].
+
+I've generalized the code above into a function that takes the initial Lake Barco dataset, and 
+
+```{r eval=FALSE}
+create_stan_data <- function(data, last_obs, n_forecast, n_lag) {
+  o2_test <- dplyr::filter(
+    data,
+    indx %in% seq(last_obs + 1, (last_obs + n_forecast))
+  )
+
+  o2_train <- dplyr::filter(
+    data,
+    indx <= last_obs, !is.na(oxygen)
+  )
+  o2_x <- o2_train$indx
+  o2_y <- o2_train$oxygen
+  o2_sd <- o2_train$oxygen_sd
+  n_o2 <- nrow(o2_train)
+
+  stan_data <- list(
+    n = last_obs,
+    n_o2 = n_o2,
+    n_lag = n_lag,
+    n_forecast = n_forecast,
+    o2_x = o2_x,
+    o2_y = o2_y,
+    o2_sd = o2_sd
+  )
+
+  return(list(
+    train = o2_train,
+    stan_data = stan_data,
+    test = o2_test
+  ))
+}
+```
+
+Now we can try iterating over sets of data with a lag 1 model
+
+```{r eval=FALSE}
+n_forecast <- 7
+n_lag <- 1
+rmse <- NA
+for (i in 500:(nrow(data) - n_lag)) {
+  dat_list <- create_stan_data(data, last_obs = i, n_forecast = n_forecast, n_lag = n_lag)
+
+  # fit the model. opimizing can be sensitive to starting values, so let's try
+  best_map <- -1.0e100
+  for (j in 1:10) {
+    test_fit <- rstan::optimizing(m, data = dat_list$stan_data)
+    if (test_fit$value > best_map) {
+      fit <- test_fit
+      best_map <- test_fit$value
+    }
+  }
+  if (fit$return_code == 0) {
+    # extract forecasts
+    pred <- fit$par[grep("forecast", names(fit$par))]
+
+    # evaluate predictions
+    rmse[i] <- sqrt(mean((dat_list$test$oxygen - pred)^2, na.rm = T))
+  }
+}
+```
+
+## NEON EFI Aquatics Challenge {#sec-neon-oxygen-temp}
+
+So far, these models have only included oxygen. We can easily bring in the temperature
+data, which has it's own standard error associated with it. We can set up a null model
+modeling temperature and oxygen independently, with different lags allowed
+
+First we have to modify our data function to also generate temperature data.
+
+```{r eval=FALSE}
+
+create_stan_data <- function(data, last_obs, n_forecast, n_lag_o2, n_lag_temp) {
+  # create test data
+  o2_test <- dplyr::filter(data, indx %in% seq(last_obs + 1, (last_obs + n_forecast)))
+  temp_test <- dplyr::filter(data, indx %in% seq(last_obs + 1, (last_obs + n_forecast)))
+
+  o2_train <- dplyr::filter(data, indx <= last_obs, !is.na(oxygen))
+  o2_x <- o2_train$indx
+  o2_y <- o2_train$oxygen
+  o2_sd <- o2_train$oxygen_sd
+  n_o2 <- nrow(o2_train)
+
+  temp_train <- dplyr::filter(data, indx <= last_obs, !is.na(temperature))
+  temp_x <- temp_train$indx
+  temp_y <- temp_train$temperature
+  temp_sd <- temp_train$temperature_sd
+  n_temp <- nrow(temp_train)
+
+  stan_data <- list(
+    n = last_obs,
+    n_lag_o2 = n_lag_o2,
+    n_lag_temp = n_lag_temp,
+    n_forecast = n_forecast,
+    n_o2 = n_o2,
+    o2_x = o2_x,
+    o2_y = o2_y,
+    o2_sd = o2_sd,
+    n_temp = n_temp,
+    temp_x = temp_x,
+    temp_y = temp_y,
+    temp_sd = temp_sd
+  )
+
+  return(list(
+    o2_train = o2_train, temp_train = temp_train,
+    stan_data = stan_data,
+    o2_test = o2_test, temp_test = temp_test
+  ))
+}
+```
+
+```{r eval=FALSE}
+m <- stan_model(file = "model_02.stan")
+```
+where `model_02.stan` is the Stan model file that you can [download here]("./Rcode/model_02.stan").
+
+
+
+```{r eval=FALSE}
+# Now we can try iterating over sets of data with a lag 1 model
+n_forecast <- 7
+n_lag <- 1
+rmse <- NA
+for (i in 500:(nrow(data) - n_lag)) {
+  dat_list <- create_stan_data(data,
+    last_obs = i, n_forecast = n_forecast, n_lag_o2 = n_lag,
+    n_lag_temp = n_lag
+  )
+
+  # fit the model. opimizing can be sensitive to starting values, so let's try
+  best_map <- -1.0e100
+  for (j in 1:10) {
+    test_fit <- rstan::optimizing(m, data = dat_list$stan_data)
+    if (test_fit$value > best_map) {
+      fit <- test_fit
+      best_map <- test_fit$value
+    }
+  }
+
+  # extract forecasts
+  o2_pred <- fit$par[grep("o2_forecast", names(fit$par))]
+  temp_pred <- fit$par[grep("temp_forecast", names(fit$par))]
+
+  pred <- c(o2_pred, temp_pred)
+  obs <- c(dat_list$o2_test$oxygen, dat_list$temp_test$temperature)
+  # evaluate predictions
+  rmse[i] <- sqrt(mean((obs - pred)^2, na.rm = T))
+  print(rmse)
+}
+```
+
+Question: why do the future predictions of either temp or oxygen sometimes fall to 0, and appear to do poorly?
+
+Question: modify the script above to loop over various oxygen and temperature lags. Using a subset of data, say observations 500:800, which combination yields the best predictions?
 
 \clearpage
 
@@ -296,3 +570,5 @@ lines(pred_hi)
 4. To see the effect of this increased flexibility in estimating the autocorrelation, make a plot of the predictions from the AR(1) model (Section \@ref(sec-stan-ar1) and the RW model (\@ref(sec-stan-rw)).
 
 5. Fit the univariate state-space model (Section \@ref(sec-stan-uss)) with and without the autoregressive parameter $\phi$ and compare the estimated process and observation error variances.  Recall that AR(1) without the $\phi$ parameter is a random walk.
+
+6. Run the examples related to the EFI challenge. Work through the questions associated with each exercise
