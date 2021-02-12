@@ -1,5 +1,5 @@
 ## ----stan-setup, include=FALSE-----------------------------------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE, comment = NA, cache = TRUE, tidy.opts = list(width.cutoff = 60), tidy = TRUE, fig.align = "center", out.width = "80%")
+knitr::opts_chunk$set(echo = TRUE, comment = NA, cache = TRUE, tidy.opts = list(width.cutoff = 60), tidy = TRUE, fig.align = "center", out.width = "80%", warning=FALSE, message=FALSE)
 
 
 ## ----stan-load, eval=FALSE---------------------------------------------------------------------------------
@@ -118,8 +118,7 @@ phytoplankton <- c(
 # get only the phytoplankton
 dat.spp.1980 <- t(plankdat[, phytoplankton])
 # z-score the data since we subsetted time
-dat.spp.1980 <- dat.spp.1980 - apply(dat.spp.1980, 1, mean, na.rm = TRUE)
-dat.spp.1980 <- dat.spp.1980 / sqrt(apply(dat.spp.1980, 1, var, na.rm = TRUE))
+dat.spp.1980 <- MARSS::zscore(dat.spp.1980)
 # check our z-score
 apply(dat.spp.1980, 1, mean, na.rm = TRUE)
 apply(dat.spp.1980, 1, var, na.rm = TRUE)

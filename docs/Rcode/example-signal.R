@@ -14,7 +14,7 @@ set.seed(1234)
 TT <- 30
 qa <- .1
 signal <- arima.sim(TT+3, model=list(ar=.9, sd=sqrt(qa)))
-signal <- filter(signal, rep(1/3,3), sides=1)[4:(TT+3)]
+signal <- stats::filter(signal, rep(1/3,3), sides=1)[4:(TT+3)]
 signal <- signal - mean(signal)
 dfsignal <- data.frame(t=1:TT, val=signal, name="signal")
 p1 <- ggplot(dfsignal, aes(x=t, y=val)) + geom_line() + ggtitle("The signal")
