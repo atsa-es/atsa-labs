@@ -210,7 +210,7 @@ for(i in 1:5)
 
 Run a 3 trend model on these data.
 ```{r stan-dfa-3-trend, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-mod_3 <- bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=3)
+mod_3 <- bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=3, chains=1, iter=1000)
 ```
 
 Rotate the estimated trends and look at what it produces.
@@ -229,11 +229,11 @@ matplot(t(rot$trends_mean),type="l",lwd=2,ylab="mean trend")
 We will fit multiple DFA with different numbers of trends and use leave one out (LOO) cross-validation to choose the best model.
 
 ```{r stan-dfa-5-models, results='hide', cache=TRUE}
-mod_1 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=1)
-mod_2 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=2)
-mod_3 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=3)
-mod_4 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=4)
-mod_5 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=5)
+mod_1 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=1, iter=1000, chains=1)
+mod_2 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=2, iter=1000, chains=1)
+mod_3 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=3, iter=1000, chains=1)
+mod_4 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=4, iter=1000, chains=1)
+#mod_5 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=5)
 ```
 
 We will compute the Leave One Out Information Criterion (LOOIC) using the **loo** package.  Like AIC, lower is better.
@@ -248,10 +248,10 @@ looics = c(
   loo::loo(loo::extract_log_lik(mod_1))$estimates["looic","Estimate"],
   loo::loo(loo::extract_log_lik(mod_2))$estimates["looic","Estimate"],
   loo::loo(loo::extract_log_lik(mod_3))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_4))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_5))$estimates["looic","Estimate"]
+  loo::loo(loo::extract_log_lik(mod_4))$estimates["looic","Estimate"]
+  #loo::loo(loo::extract_log_lik(mod_5))$estimates["looic","Estimate"]
   )
-looic.table <- data.frame(trends=1:5, LOOIC=looics)
+looic.table <- data.frame(trends=1:4, LOOIC=looics)
 looic.table
 ```
 
@@ -268,7 +268,7 @@ matplot(harborSealWA[,1],harborSealWA[,-1],type="l",
 
 Assume they are all observing a single trend.
 ```{r stan-seal-fit, cache=TRUE, message=FALSE, warning=FALSE, results='hide'}
-seal.mod <- bayesdfa::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1)
+seal.mod <- bayesdfa::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1, chains=1, iter=1000)
 ```
 
 ```{r stan-seal-trend, cache=TRUE}
