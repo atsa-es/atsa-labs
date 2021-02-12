@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 ```{r stan-setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%')
 ```
@@ -239,16 +244,16 @@ mod_4 = bayesdfa::fit_dfa(y = dat.spp.1980, num_trends=4, iter=1000, chains=1)
 We will compute the Leave One Out Information Criterion (LOOIC) using the **loo** package.  Like AIC, lower is better.
 
 ```{r stan-looic, cache=TRUE, warning=FALSE}
-loo::loo(loo::extract_log_lik(mod_1))$estimates["looic","Estimate"]
+loo(mod_1)$estimates["looic","Estimate"]
 ```
 
 Table of the LOOIC values:
 ```{r stan-looic-table, cache=TRUE, warning=FALSE}
 looics = c(
-  loo::loo(loo::extract_log_lik(mod_1))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_2))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_3))$estimates["looic","Estimate"],
-  loo::loo(loo::extract_log_lik(mod_4))$estimates["looic","Estimate"]
+  loo(mod_1)$estimates["looic","Estimate"],
+  loo(mod_2)$estimates["looic","Estimate"],
+  loo(mod_3)$estimates["looic","Estimate"],
+  loo(mod_4)$estimates["looic","Estimate"]
   #loo::loo(loo::extract_log_lik(mod_5))$estimates["looic","Estimate"]
   )
 looic.table <- data.frame(trends=1:4, LOOIC=looics)
@@ -272,7 +277,7 @@ seal.mod <- bayesdfa::fit_dfa(y = t(harborSealWA[,-1]), num_trends = 1, chains=1
 ```
 
 ```{r stan-seal-trend, cache=TRUE}
-pars <- rstan::extract(seal.mod)
+pars <- rstan::extract(seal.mod$model)
 ```
 
 ```{r stan-plot-seal, fig = TRUE, fig.cap='Estimated states and 95 percent credible intervals.'}
@@ -379,14 +384,14 @@ Try fitting the Bayesian model with a short chain length (maybe 1000 iterations)
 
 But because we're interested in doing this quickly, and running the model a bunch of times, we'll try Stan's optimizing function for MAP estimation.
 
-```{r}
+```{r eval = FALSE}
 m <- stan_model(file="model_01.stan")
 o2_model <- rstan::optimizing(m,data=stan_data, hessian=TRUE)
 
 ```
 
 Let's extract predictions from the fitted object, 
-```{r}
+```{r eval = FALSE}
 data$pred = o2_model$par[grep("pred",names(o2_model$par))]
 ggplot(data, aes(date, pred)) + geom_line() + 
   geom_point(aes(date,oxygen),col="red",alpha=0.5)
