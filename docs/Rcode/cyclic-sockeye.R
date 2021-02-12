@@ -3,7 +3,7 @@ knitr::opts_knit$set(unnamed.chunk.label = "cyclic-sockeye-")
 knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%', message=FALSE, warning=FALSE)
 
 
-## ----------------------------------------------------------------------------------------------------------
+## ----message=FALSE-----------------------------------------------------------------------------------------
 library(atsalibrary)
 library(ggplot2)
 library(MARSS)

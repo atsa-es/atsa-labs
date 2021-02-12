@@ -12,11 +12,11 @@ knitr::opts_chunk$set(echo = TRUE, comment = NA, cache = TRUE, tidy.opts = list(
 
 For this lab, we will use [Stan](http://mc-stan.org/documentation/) for fitting models. These examples are primarily drawn from the Stan manual and previous code from this class.  
 
-A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-models-with-stan.R).
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/fitting-models-with-stan.R). The Rmd for this chapter can be downloaded [here](./Rmds/fitting-models-with-stan.Rmd)
 
 ### Data and packages {-}
 
-You will need the **atsar** package we have written for fitting state-space time series models with Stan. This is hosted on  Github [safs-timeseries](https://github.com/nwfsc-timeseries/atsar).  Install  using the **devtools** package.
+You will need the **atsar** and **bayesdfa** packages we have written for fitting state-space time series models with Stan.  Install  using the **devtools** package.
 ```{r stan-load, eval=FALSE}
 library(devtools)
 # Windows users will likely need to set this
@@ -37,7 +37,7 @@ rstan_options(auto_write = TRUE)
 options(mc.cores = parallel::detectCores())
 ```
 
-For this lab, we will use a data set on airquality in New York from the **datasets** package. Load the data and create a couple new variables for future use. 
+For this lab, we will use a data set on air quality in New York from the **datasets** package. Load the data and create a couple new variables for future use. 
 
 ```{r stan-data}
 data(airquality, package = "datasets")
@@ -269,7 +269,6 @@ looics <- c(
   loo(mod_2)$estimates["looic", "Estimate"],
   loo(mod_3)$estimates["looic", "Estimate"],
   loo(mod_4)$estimates["looic", "Estimate"]
-  # loo::loo(loo::extract_log_lik(mod_5))$estimates["looic","Estimate"]
 )
 looic.table <- data.frame(trends = 1:4, LOOIC = looics)
 looic.table
@@ -326,13 +325,13 @@ Before modeling temperature and oxygen jointly, we'll start working with just th
 
 We'll just with just a AR(p) state space model. The Lake Barco data has associated standard errors with the oxygen data, so we'll use that as a known observation error (rather than estimating that variance parameter, in our previous work).
 
-A script that describes the model is called `model_01.stan`. This should be familiar, following from the `atsar` code with a couple modifications. First, Stan doesn't like NAs being passed in as data, and we've had to do some indexing to avoid that. Second, notice that the model is flexible and can be used to fit models with any numbers of lags. 
+A script that describes the model is called `model_01.stan`. You can download this file [here]("./Rcode/model_01.stan").
+This should be familiar, following from the `atsar` code with a couple modifications. First, Stan doesn't like NAs being passed in as data, and we've had to do some indexing to avoid that. Second, notice that the model is flexible and can be used to fit models with any numbers of lags. 
 
 To get the data prepped for Stan, we need to do a few things. First, specify the lag and forecast horizon
 
 ```{r}
-# Now data is ready for running our Stan models
-data <- readRDS("neon_barc.rds")
+data <- neon_barc
 data$indx <- seq(1, nrow(data))
 n_forecast <- 7
 n_lag <- 1
@@ -517,6 +516,8 @@ create_stan_data <- function(data, last_obs, n_forecast, n_lag_o2, n_lag_temp) {
 ```{r eval=FALSE}
 m <- stan_model(file = "model_02.stan")
 ```
+where `model_02.stan` is the Stan model file that you can [download here]("./Rcode/model_02.stan").
+
 
 
 ```{r eval=FALSE}

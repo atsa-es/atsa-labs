@@ -9,6 +9,10 @@ knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE, tidy.opts=list(width.
 # Detecting a signal from noisy sensors {#chap-noisy-sensors-}
 \chaptermark{Noisy sensors}
 
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/example-signal.R). The Rmd for this chapter can be downloaded [here](./Rmds/example-signal.Rmd)
+
+## Overview {#sec-signal-overview}
+
 We have 3 sensors that are tracking some signal. One sensor is good (low error). The other 2 sensors are horrible in different ways. One has high auto-correlated error. The third is basically a random walk and not tracking our signal at all. However, we do not know which ones are bad or if in fact any are bad. 
 
 What we do know is that for these sensors an AR-1 error model is a good approximation: $y_t = a + e_t$ where $a$ is our signal and $e_t = b e_{t_1} + w_t$. $w_t$ is white noise with some unknown standard deviation and mean 0.
