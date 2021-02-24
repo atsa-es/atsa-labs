@@ -239,40 +239,41 @@ plotModelOutput(mod_lm, Wind)
 plotModelOutput(mod_lm, Wind)
 ```
  
-## Random walk time series model {#sec-jags-rw}
+## Random walk with drift {#sec-jags-rw}
 
-All of the previous three models can be interpreted as observation error models. Switching gears, we can alternatively model error in the state of nature, creating process error models. A simple process error model that many of you may have seen before is the random walk model. In this model, the assumption is that the true state of nature (or latent states) are measured perfectly. Thus, all uncertainty is originating from process variation (for ecological problems, this is often interpreted as environmental variation). For this simple model, we will assume that our process of interest (in this case, daily wind speed) exhibits no daily trend, but behaves as a random walk. 
+All of the previous three models can be interpreted as observation error models. Switching gears, we can alternatively model error in the state of nature, creating process error models. A simple process error model that many of you may have seen before is the random walk model. In this model, the assumption is that the true state of nature (or latent states) are measured perfectly. Thus, all uncertainty is originating from process variation (for ecological problems, this is often interpreted as environmental variation). 
+
+For this simple model, we will assume that our process of interest (in this case, daily wind speed) behaves as a random walk. We will call this process $x$ to prepare for the state-space model to come.
 
 \begin{equation}
-E[y_t] = y_{t-1} + e_{t-1}
+x_t = x_{t-1} + u + w_t, \text{ where }w_t \sim \N(0,q)
 (\#eq:jags-obs-eqn-rw)
 \end{equation}
+Now $x_t$ is stochastic and $E[x_t] = x_{t-1}$ and $x_t \sim \N(E[x_t],q)$.
 
-And the $e_t \sim \N(0, q)$. The JAGS random walk model and R script to run it is below:
+The JAGS random walk model and R script to run it is below:
 
 ```{r jags-ar1, results='hide', cache=TRUE}
-# RANDOM WALK no covariates.
-# we will call the precision tau.pro
-# Note that we have to define predY[1]
+# RANDOM WALK with drift
 
 model.loc <- ("rw_intercept.txt")
 jagsscript <- cat("
 model {  
-   mu ~ dnorm(0, 0.01); 
-   tau.pro ~ dgamma(0.001,0.001); 
-   sd.pro <- 1/sqrt(tau.pro);
-
-   predY[1] <- mu; # initial value
+   u ~ dnorm(0, 0.01); 
+   tau.q ~ dgamma(0.001,0.001); 
+   sd.q <- 1/sqrt(tau.q);
+   
+   EX[1] <- X[1];
    for(i in 2:N) {
-      predY[i] <- Y[i-1]; 
-      Y[i] ~ dnorm(predY[i], tau.pro);
+      EX[i] <- X[i-1] + u; 
+      X[i] ~ dnorm(EX[i], tau.q);
    }
 }  
 ", file = model.loc)
 
-jags.data <- list("Y" = Wind, "N" = N)
-jags.params <- c("sd.pro", "predY", "mu")
-mod_rw_intercept <- jags(jags.data,
+jags.data <- list("X" = Wind, "N" = N)
+jags.params <- c("sd.q", "EX", "u")
+mod_rw_intercept <- R2jags::jags(jags.data,
   parameters.to.save = jags.params, model.file = model.loc,
   n.chains = 3, n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
 )
@@ -280,18 +281,19 @@ mod_rw_intercept <- jags(jags.data,
 ```{r clean3, echo=FALSE, purl=FALSE}
 removefiles <- c(removefiles, model.loc)
 ```
-`sd.pro` is $\sqrt{q}$
+`sd.q` is $\sqrt{q}$
 
 ## Autoregressive AR(1) time series models {#sec-jags-ar1}
 
-A variation of the random walk model described previously is the autoregressive time series model of order 1, AR(1). This model introduces a coefficient, which we will call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean---when $\phi = 1$, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we will discuss more in future lectures. The math to describe the AR(1) time series model is:
+A variation of the random walk model is the autoregressive time series model of order 1, AR(1). This model introduces a coefficient, which we will call $\phi$. The parameter $\phi$ controls the degree to which the random walk reverts to the mean---when $\phi = 1$, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $\phi$ can take on negative values, which we will discuss more in future lectures. 
+
+The math to describe the AR(1) time series model is:
 
 \begin{equation}
-E[y_t] = \phi * y_{t-1} + e_{t-1}
+x_t = \phi \, x_{t-1} + u + w_t, \text{ where }w_t \sim \N(0,q)
 (\#eq:jags-obs-eqn-ar1)
 \end{equation}
-
-The JAGS random walk model to run the AR(1) model is below:
+Now $E[x_t] = \phi \, x_{t-1} + u$. Note it is unwise to set the model up like this. Better would be to subtract the mean off the data and set $u=0$, but this will allow us to see the ridge in the $u-\phi$ likelihood surface.
 
 ```{r jags-ar1est, echo=TRUE, results='hide', cache=TRUE}
 # AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT
@@ -301,22 +303,22 @@ The JAGS random walk model to run the AR(1) model is below:
 model.loc <- ("ar1_intercept.txt")
 jagsscript <- cat("
 model {  
-   mu ~ dnorm(0, 0.01); 
-   tau.pro ~ dgamma(0.001,0.001); 
-   sd.pro <- 1/sqrt(tau.pro); 
+   u ~ dnorm(0, 0.01); 
+   tau.q ~ dgamma(0.001,0.001); 
+   sd.q <- 1/sqrt(tau.q); 
    phi ~ dnorm(0, 1); 
    
-   predY[1] <- Y[1];
+   EX[1] <- X[1];
    for(i in 2:N) {
-      predY[i] <- mu + phi * Y[i-1]; 
-      Y[i] ~ dnorm(predY[i], tau.pro);
+      EX[i] <- u + phi * X[i-1]; 
+      X[i] ~ dnorm(EX[i], tau.q);
    }
 }  
 ", file = model.loc)
 
-jags.data <- list("Y" = Wind, "N" = N)
-jags.params <- c("sd.pro", "predY", "mu", "phi")
-mod_ar1_intercept <- jags(jags.data,
+jags.data <- list("X" = Wind, "N" = N)
+jags.params <- c("sd.q", "EX", "u", "phi")
+mod_ar1_intercept <- R2jags::jags(jags.data,
   parameters.to.save = jags.params,
   model.file = model.loc, n.chains = 3, n.burnin = 5000, n.thin = 1,
   n.iter = 10000, DIC = TRUE

@@ -1,0 +1,12 @@
+
+model {  
+   u ~ dnorm(0, 0.01); 
+   tau.q ~ dgamma(0.001,0.001); 
+   sd.q <- 1/sqrt(tau.q);
+   
+   EX[1] <- X[1];
+   for(i in 2:N) {
+      EX[i] <- X[i-1] + u; 
+      X[i] ~ dnorm(EX[i], tau.q);
+   }
+}  
