@@ -1,7 +1,7 @@
 ---
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 ```{r stan-setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = NA, cache = TRUE, tidy.opts = list(width.cutoff = 60), tidy = TRUE, fig.align = "center", out.width = "80%", warning=FALSE, message=FALSE)
@@ -99,11 +99,11 @@ One of the other useful things we can do is look at the predicted values of our 
 ```{r stan-fig-lm, fig.cap='Data and predicted values for the linear regression model.'}
 plot(apply(pars$pred, 2, mean),
   main = "Predicted values", lwd = 2,
-  ylab = "Wind", ylim = c(min(pars$pred), max(pars$pred)), type = "l"
+  ylab = "Temp", ylim = c(min(pars$pred), max(pars$pred)), type = "l"
 )
 lines(apply(pars$pred, 2, quantile, 0.025))
 lines(apply(pars$pred, 2, quantile, 0.975))
-points(Wind, col = "red")
+points(Temp, col = "red")
 ```
 
 ### Burn-in and thinning {#sec-stan-burn}

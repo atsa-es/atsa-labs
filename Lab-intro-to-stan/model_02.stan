@@ -22,23 +22,23 @@ parameters {
   vector[n+n_forecast-1] o2_devs;
   vector[n+n_forecast-1] temp_devs;
   //cov_matrix[2] Sigma;
-  real log_o2_sd_proc;
-  real log_temp_sd_proc;
   real o2_x0[n_lag_o2]; // initial conditions
   real<lower=-1,upper=1> o2_b[n_lag_o2];
+  real<lower=0.05, upper=0.25> o2_sd_proc;
+  real<lower=0.3,upper=0.6> temp_sd_proc;
+  real<lower=2> o2_df;
+  real<lower=2> temp_df;
   real temp_x0[n_lag_temp]; // initial conditions
-  real<lower=-1,upper=1> temp_b[n_lag_temp];  
+  real<lower=-1,upper=1> temp_b[n_lag_temp]; 
 }
 transformed parameters {
-  real o2_sd_proc;
-  real temp_sd_proc;
   vector[n+n_forecast] o2_pred;
   vector[n_forecast] o2_forecast;
   vector[n+n_forecast] temp_pred;
   vector[n_forecast] temp_forecast;  
+  vector[n_lag_temp] temp_b_trans;
+  vector[n_lag_o2] o2_b_trans;
   
-  o2_sd_proc = exp(log_o2_sd_proc);
-  temp_sd_proc = exp(log_temp_sd_proc);
   // predictions for first states
   for(t in 1:n_lag_o2) {
     o2_pred[t] = o2_x0[t];
@@ -50,18 +50,16 @@ transformed parameters {
   for(i in (1+n_lag_o2):(n+n_forecast)) {
     o2_pred[i] = 0;
     for(k in 1:n_lag_o2) {
-      o2_pred[i] = o2_pred[i] + o2_b[k]*o2_pred[i-k];
+      o2_pred[i] += o2_b[k]*o2_pred[i-k];
     }
-    o2_pred[i] = o2_pred[i] + o2_sd_proc*o2_devs[i-1];
-    if(o2_pred[i] < 0) o2_pred[i] = 0; 
+    o2_pred[i] += o2_sd_proc*o2_devs[i-1];
   }
   for(i in (1+n_lag_temp):(n+n_forecast)) {
     temp_pred[i] = 0;
     for(k in 1:n_lag_temp) {
-      temp_pred[i] = temp_pred[i] + temp_b[k]*temp_pred[i-k];
+      temp_pred[i] += temp_b[k]*temp_pred[i-k];
     }
-    temp_pred[i] = temp_pred[i] + temp_sd_proc*temp_devs[i-1]; 
-    if(temp_pred[i] < 0) temp_pred[i] = 0; 
+    temp_pred[i] += temp_sd_proc*temp_devs[i-1];
   }
   
   // this is redundant but easier to work with output -- creates object o2_forecast
@@ -74,16 +72,21 @@ transformed parameters {
 }
 model {
   // initial conditions
-  o2_x0 ~ normal(0,1);
-  o2_b ~ normal(0,1);
+  o2_x0 ~ normal(7,3);
+  o2_b ~ normal(1,1);
   // coefficients
-  temp_x0 ~ normal(0,1);
-  temp_b ~ normal(0,1);
-  log_o2_sd_proc ~ normal(-2,1);
-  log_temp_sd_proc ~ normal(-2,1);
+  temp_x0 ~ normal(22,3);
+  temp_b ~ normal(1,1);
+  o2_sd_proc ~ student_t(3,0,2);
+  temp_sd_proc ~ student_t(3,0,2);
+  //o2_sd_obs ~ student_t(3,0,2);
+  //temp_sd_obs ~ student_t(3,0,2);
+  // df parameters
+  o2_df ~ student_t(3,2,2);
+  temp_df ~ student_t(3,2,2);
   // process standard deviations
-  o2_devs ~ std_normal();
-  temp_devs ~ std_normal();
+  o2_devs ~ student_t(o2_df,0,1);
+  temp_devs ~ student_t(temp_df,0,1);
   
   // likelihood
   for(t in 1:n_o2) {
