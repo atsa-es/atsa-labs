@@ -1,8 +1,8 @@
-## ----mssmiss-load-data-------------------------------------------------------------------------------------
+## ----mssmiss-load-data----------------------------------------------------------
 data(snotel, package="atsalibrary")
 
 
-## ----mssmiss-loadpackages, message=FALSE-------------------------------------------------------------------
+## ----mssmiss-loadpackages, message=FALSE----------------------------------------
 library(MARSS)
 library(forecast)
 library(ggplot2)
@@ -10,18 +10,18 @@ library(ggmap)
 library(broom)
 
 
-## ----get-LL-aug, eval=FALSE--------------------------------------------------------------------------------
+## ----get-LL-aug, eval=FALSE-----------------------------------------------------
 ## y.aug = rbind(data,covariates)
 ## fit.aug = MARSS(y.aug, model=model.aug)
 
 
-## ----mssmiss-get-LL-aug-2, eval=FALSE----------------------------------------------------------------------
+## ----mssmiss-get-LL-aug-2, eval=FALSE-------------------------------------------
 ## fit.cov = fit.aug
 ## fit.cov$marss$data[1:dim(data)[1],] = NA
 ## extra.LL = MARSSkf(fit.cov)$logLik
 
 
-## ----mssmiss-setupsnoteldata-------------------------------------------------------------------------------
+## ----mssmiss-setupsnoteldata----------------------------------------------------
 y <- snotelmeta
 # Just use a subset
 y = y[which(y$Longitude < -121.4),]
@@ -30,7 +30,7 @@ y = y[which(y$Latitude < 47.5),]
 y = y[which(y$Latitude > 46.5),]
 
 
-## ----mssmiss-plotsnotel, echo=FALSE, warning=FALSE, message=FALSE, fig.cap='(ref:snotelsites)'-------------
+## ----mssmiss-plotsnotel, echo=FALSE, warning=FALSE, message=FALSE, fig.cap='(ref:snotelsites)'----
 ylims=c(min(snotelmeta$Latitude)-1,max(snotelmeta$Latitude)+1)
 xlims=c(min(snotelmeta$Longitude)-1,max(snotelmeta$Longitude)+1)
 base = ggmap::get_map(location=c(xlims[1],ylims[1],xlims[2],ylims[2]), zoom=7, maptype="terrain-background")
@@ -40,18 +40,18 @@ map1 + geom_point(data=y, aes(x=Longitude, y=Latitude), color="blue", cex=2.5) +
   theme_bw()
 
 
-## ----mssmiss-plotsnotelts, warning=FALSE, fig.cap='(ref:snotelsites-plot)'---------------------------------
+## ----mssmiss-plotsnotelts, warning=FALSE, fig.cap='(ref:snotelsites-plot)'------
 swe.feb <- snotel
 swe.feb <- swe.feb[swe.feb$Station.Id %in% y$Station.Id & swe.feb$Month=="Feb",]
 p <- ggplot(swe.feb, aes(x=Date, y=SWE)) + geom_line()
 p + facet_wrap(~Station)
 
 
-## ----mssmiss-snotel-acast----------------------------------------------------------------------------------
+## ----mssmiss-snotel-acast-------------------------------------------------------
 dat.feb <- reshape2::acast(swe.feb, Station ~ Year, value.var="SWE")
 
 
-## ----mssmiss-snotel-marss-model----------------------------------------------------------------------------
+## ----mssmiss-snotel-marss-model-------------------------------------------------
 ns <- length(unique(swe.feb$Station))
 B <- "diagonal and equal"
 Q <- "unconstrained"
@@ -62,7 +62,7 @@ x0 <- "unequal"
 mod.list.ar1 = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=1)
 
 
-## ----mssmiss-snotelfit, results="hide"---------------------------------------------------------------------
+## ----mssmiss-snotelfit, results="hide"------------------------------------------
 library(MARSS)
 m <- apply(dat.feb, 1, mean, na.rm=TRUE)
 fit.ar1 <- MARSS(dat.feb, model=mod.list.ar1, control=list(maxit=5000), 
@@ -82,14 +82,14 @@ p <- ggplot(data = d) +
 p
 
 
-## ----mssmiss-modelresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-modelresids-ar1)'-------
+## ----mssmiss-modelresids-ar1, warning=FALSE, results='hide', fig.cap='(ref:mssmiss-modelresids-ar1)'----
 fit <- fit.ar1
 par(mfrow=c(4,4),mar=c(2,2,1,1))
 apply(MARSSresiduals(fit, type="tt1")$model.residuals[,1:30], 1, acf,
       na.action=na.pass)
 
 
-## ----mssmiss-snotel-marss-model-corr-----------------------------------------------------------------------
+## ----mssmiss-snotel-marss-model-corr--------------------------------------------
 ns <- length(unique(swe.feb$Station))
 B <- "zero"
 Q <- "unconstrained"
@@ -100,7 +100,7 @@ x0 <- "zero"
 mod.list.corr = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=0)
 
 
-## ----mssmiss-snotelfit-corr, results="hide"----------------------------------------------------------------
+## ----mssmiss-snotelfit-corr, results="hide"-------------------------------------
 m <- apply(dat.feb, 1, mean, na.rm=TRUE)
 fit.corr <- MARSS(dat.feb, model=mod.list.corr, control=list(maxit=5000), 
                   inits=list(A=matrix(m,ns,1)))
@@ -119,14 +119,14 @@ p <- ggplot(data = d) +
 p
 
 
-## ----mssmiss-stateresids-fit-corr-model, warning=FALSE, results='hide'-------------------------------------
+## ----mssmiss-stateresids-fit-corr-model, warning=FALSE, results='hide'----------
 fit <- fit.corr
 par(mfrow=c(4,4),mar=c(2,2,1,1))
 apply(MARSSresiduals(fit, type="tt1")$model.residuals, 1, acf, na.action=na.pass)
 mtext("Model Residuals ACF", outer=TRUE, side=3)
 
 
-## ----mssmiss-snotel-dfa------------------------------------------------------------------------------------
+## ----mssmiss-snotel-dfa---------------------------------------------------------
 ns <- dim(dat.feb)[1]
 B <- matrix(list(0),2,2)
 B[1,1] <- "b1"; B[2,2] <- "b2"
@@ -141,14 +141,14 @@ A <- "unequal"
 mod.list.dfa = list(B=B, Z=Z, Q=Q, R=R, U=U, A=A, x0=x0)
 
 
-## ----mssmiss-snotelfit-dfa, results="hide"-----------------------------------------------------------------
+## ----mssmiss-snotelfit-dfa, results="hide"--------------------------------------
 library(MARSS)
 m <- apply(dat.feb, 1, mean, na.rm=TRUE)
 fit.dfa <- MARSS(dat.feb, model=mod.list.dfa, control=list(maxit=1000), 
                  inits=list(A=matrix(m,ns,1)))
 
 
-## ----mssmiss-ifwewantedloadings-dfa, include=FALSE---------------------------------------------------------
+## ----mssmiss-ifwewantedloadings-dfa, include=FALSE------------------------------
 # if you want factor loadings
 fit <- fit.dfa
 # get the inverse of the rotation matrix
@@ -177,7 +177,7 @@ mtext(paste("Factor loadings on trend",i,sep=" "),side=3,line=.5)
 } # end i loop
 
 
-## ----mssmiss-snotelplotstates-dfa, warning=FALSE, echo=FALSE-----------------------------------------------
+## ----mssmiss-snotelplotstates-dfa, warning=FALSE, echo=FALSE--------------------
 fit <- fit.dfa
 d <- fitted(fit, type="ytT", interval="prediction")
 d$Year <- d$t + 1980
@@ -190,12 +190,12 @@ p <- ggplot(data = d) +
 p
 
 
-## ----mssmiss-modelresids-fit-dfa-model, results='hide'-----------------------------------------------------
+## ----mssmiss-modelresids-fit-dfa-model, results='hide'--------------------------
 par(mfrow=c(4,4),mar=c(2,2,1,1))
 apply(MARSSresiduals(fit, type="tt1")$model.residual, 1, function(x){acf(x, na.action=na.pass)})
 
 
-## ----mssfitted-snotelplotstates-dfa, warning=FALSE, echo=FALSE---------------------------------------------
+## ----mssfitted-snotelplotstates-dfa, warning=FALSE, echo=FALSE------------------
 fit <- fit.dfa
 d <- tsSmooth(fit, type="ytT", interval="confidence")
 d$Year <- d$t + 1980
@@ -208,20 +208,20 @@ p <- ggplot(data = d) +
 p
 
 
-## ----mssmiss-swe-all-months--------------------------------------------------------------------------------
+## ----mssmiss-swe-all-months-----------------------------------------------------
 swe.yr <- snotel
 swe.yr <- swe.yr[swe.yr$Station.Id %in% y$Station.Id,]
 swe.yr$Station <- droplevels(swe.yr$Station)
 
 
-## ----mssmiss-seasonal-swe-plot, echo=FALSE, warning=FALSE--------------------------------------------------
+## ----mssmiss-seasonal-swe-plot, echo=FALSE, warning=FALSE-----------------------
 y3 <- swe.yr[swe.yr$Year>2010,]
 p <- ggplot(y3, aes(x=Date, y=SWE)) + geom_line()
 p + facet_wrap(~Station) + 
   scale_x_date(breaks=as.Date(paste0(2011:2013,"-01-01")), labels=2011:2013)
 
 
-## ----echo=FALSE--------------------------------------------------------------------------------------------
+## ----echo=FALSE-----------------------------------------------------------------
 fitb <- function(x){
   a <- ts(x, start=1981, frequency=12)
   fit1 <- Arima(a, order=c(1,0,2), seasonal=c(0,1,0))
@@ -240,7 +240,7 @@ ta2 <- reshape2::dcast(ta, L1 ~ model)
 knitr::kable(ta2)
 
 
-## ----mssmiss-snotel-monthly-dat----------------------------------------------------------------------------
+## ----mssmiss-snotel-monthly-dat-------------------------------------------------
 dat.yr <- snotel
 dat.yr <- dat.yr[dat.yr$Station.Id %in% y$Station.Id,]
 dat.yr$Station <- droplevels(dat.yr$Station)
@@ -248,7 +248,7 @@ dat.yr$Month <- factor(dat.yr$Month, level=month.abb)
 dat.yr <- reshape2::acast(dat.yr, Station ~ Year+Month, value.var="SWE")
 
 
-## ----mssmis-seasonal-fourier-------------------------------------------------------------------------------
+## ----mssmis-seasonal-fourier----------------------------------------------------
 period <- 12
 TT <- dim(dat.yr)[2]
 cos.t <- cos(2 * pi * seq(TT) / period)
@@ -256,7 +256,7 @@ sin.t <- sin(2 * pi * seq(TT) / period)
 c.seas <- rbind(cos.t,sin.t)
 
 
-## ----mssmiss-month-dfa-------------------------------------------------------------------------------------
+## ----mssmiss-month-dfa----------------------------------------------------------
 ns <- dim(dat.yr)[1]
 B <- "zero"
 Q <- matrix(1)
@@ -271,12 +271,12 @@ c <- c.seas
 mod.list.seas <- list(B=B, U=U, Q=Q, A=A, R=R, Z=Z, C=C, c=c, x0=x0, tinitx=0)
 
 
-## ----mssmiss-seas-fit, results="hide"----------------------------------------------------------------------
+## ----mssmiss-seas-fit, results="hide"-------------------------------------------
 m <- apply(dat.yr, 1, mean, na.rm=TRUE)
 fit.seas <- MARSS(dat.yr, model=mod.list.seas, control=list(maxit=500), inits=list(A=matrix(m,ns,1)))
 
 
-## ----mssmiss-seas, warning=FALSE, echo=FALSE---------------------------------------------------------------
+## ----mssmiss-seas, warning=FALSE, echo=FALSE------------------------------------
 #this is the estimate using only the season
 fit <- fit.seas
 d <- tsSmooth(fit, type="ytT", interval="prediction")
@@ -291,7 +291,7 @@ p <- ggplot(data = d) +
 p
 
 
-## ----mssmiss-snotelplotstates-seas, warning=FALSE, echo=FALSE----------------------------------------------
+## ----mssmiss-snotelplotstates-seas, warning=FALSE, echo=FALSE-------------------
 fit <- fit.seas
 d <- tsSmooth(fit, type="ytT", interval="none")
 d$Year <- swe.yr$Year

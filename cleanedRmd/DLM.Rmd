@@ -66,12 +66,14 @@ The idea is that the evolution matrix $\mathbf{G}_t$ deterministically maps the 
 A DLM is a state-space model and can be written in MARSS form:
 
 \begin{equation}
+\begin{gathered}
 (\#eq:dlm-ssform)
 y_t = \mathbf{F}^{\top}_t \boldsymbol{\theta}_t + e_t \\
 \boldsymbol{\theta}_t = \mathbf{G} \boldsymbol{\theta}_{t-1} + \mathbf{w}_t \\
 \Downarrow \\
 y_t = \mathbf{Z}_t \mathbf{x}_t + v_t \\
 \mathbf{x}_t = \mathbf{B} \mathbf{x}_{t-1} + \mathbf{w}_t
+\end{gathered}
 \end{equation}
 
 Note that DLMs include predictor variables (covariates) in the observation equation much differently than other forms of MARSS models.  In a DLM, $\mathbf{Z}$ is a matrix of predictor variables and $\mathbf{x}_t$ are the time-evolving regression parameters.
@@ -91,12 +93,14 @@ y_t = \mathbf{Z}_t \mathbf{x}_t + \boxed{\mathbf{D} \mathbf{d}_t} +v_t.
 The most simple DLM is a stochastic level model, where the level is a random walk without drift, and this level is observed with error.  We will write it first in using regression notation where the intercept is $\alpha$ and then in MARSS notation.  In the latter, $\alpha_t=x_t$.
 
 \begin{equation}
+\begin{gathered}
 (\#eq:dlm-stoch-level)
 y_t = \alpha_t + e_t \\
 \alpha_t = \alpha_{t-1} + w_t \\
 \Downarrow \\
 y_t = x_t + v_t \\
 x_t = x_{t-1} + w_t
+\end{gathered}
 \end{equation}
 
 Using this model, we can model the Nile River level and fit the model using `MARSS()`.
@@ -131,24 +135,29 @@ We can add a drift term to the level model to allow the level to tend upward or 
 
 
 \begin{equation}
+\begin{gathered}
 (\#eq:dlm-stoch-level-drift)
 y_t = \alpha_t + e_t \\
 \alpha_t = \alpha_{t-1} + \eta + w_t \\
 \Downarrow \\
 y_t = x_t + v_t \\
 x_t = x_{t-1} + u + w_t
+\end{gathered}
 \end{equation}
 
 We can allow that the drift term $\eta$ evolves over time along with the level.  In this case, $\eta$ is modeled as a random walk along with $\alpha$. This model is
 
 \begin{equation}
+\begin{gathered}
 (\#eq:dlm-stoch-level-drift-2)
   y_t = \alpha_t + e_t \\
   \alpha_t = \alpha_{t-1} + \eta_{t-1} + w_{\alpha,t} \\
   \eta_t = \eta_{t-1} + w_{\eta,t}
+\end{gathered}
 \end{equation}
 Equation \@ref(eq:dlm-stoch-level-drift-2) can be written in matrix form as:
 \begin{equation}
+\begin{gathered}
 (\#eq:dlm-stoch-level-drift-3)
 y_t = \begin{bmatrix}1&0\end{bmatrix}\begin{bmatrix}
     \alpha \\
@@ -167,6 +176,7 @@ y_t = \begin{bmatrix}1&0\end{bmatrix}\begin{bmatrix}
     w_{\alpha} \\
     w_{\eta}
   \end{bmatrix}_t
+\end{gathered}
 \end{equation}
 Equation \@ref(eq:dlm-stoch-level-drift-3) is a MARSS model.
 
@@ -495,13 +505,13 @@ dlm_1 <- MARSS(dat, inits = inits_list, model = mod_list)
 
 Notice that the MARSS output does not list any estimates of the regression parameters themselves. Why not? Remember that in a DLM the matrix of states $(\mathbf{x})$ contains the estimates of the regression parameters $(\boldsymbol{\theta})$. Therefore, we need to look in ```dlm_1$states``` for the MLEs of the regression parameters, and in ```dlm_1$states.se``` for their standard errors.
 
-Time series of the estimated intercept and slope are shown in Figure \@ref(fig:dlm-plotdlm_1). It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (```Q.q1```). In fact, although the effect of April upwelling appears to be increasing over time, it doesn't really become important as a predictor variable until about 1990 when the approximate 95\% confidence interval for the slope no longer overlaps zero.
+Time series of the estimated intercept and slope are shown in Figure \@ref(fig:dlm-plotdlm-1). It appears as though the intercept is much more dynamic than the slope, as indicated by a much larger estimate of process variance for the former (```Q.q1```). In fact, although the effect of April upwelling appears to be increasing over time, it doesn't really become important as a predictor variable until about 1990 when the approximate 95\% confidence interval for the slope no longer overlaps zero.
 
 <!-- % plot regression parameters -->
 
-(ref:plotdlm_1) Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the DLM specified by Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). Thin lines denote the mean $\pm$ 2 standard deviations.
+(ref:plotdlm-1) Time series of estimated mean states (thick lines) for the intercept (top) and slope (bottom) parameters from the DLM specified by Equations \@ref(eq:dlm-dlmSW1)--\@ref(eq:dlm-dlmSW3). Thin lines denote the mean $\pm$ 2 standard deviations.
 
-```{r dlm-plotdlm_1, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=4, fig.width=6, fig.cap='(ref:plotdlm_1)'}
+```{r dlm-plotdlm-1, eval=TRUE, echo=FALSE, fig=TRUE, fig.height=4, fig.width=6, fig.cap='(ref:plotdlm-1)'}
 ylabs <- c(expression(alpha[t]), expression(beta[t]))
 colr <- c("darkgreen","blue")
 par(mfrow = c(m, 1), mar = c(4, 4, 0.1, 0), oma = c(0, 0, 2, 0.5))
@@ -539,7 +549,7 @@ where $\boldsymbol{\pi}_t = \text{E}(\boldsymbol{\theta}_{t|t})$ and $\mathbf{\L
 Now we can compute the distribution of  $\boldsymbol{\theta}_{t}$ conditioned on $y_{1:t-1}$ using the process equation for $\boldsymbol{\theta}$:
 
 \begin{equation}
-\boldsymbol{\theta}_{t} = \mathbf{G}_t \boldsymbol{\theta}_{t-1} + \mathbf{w}_t ~ \text{with} ~ \mathbf{w}_t \sim \text{MVN}(\mathbf{0}, \mathbf{Q}) \\
+\boldsymbol{\theta}_{t} = \mathbf{G}_t \boldsymbol{\theta}_{t-1} + \mathbf{w}_t, \, \mathbf{w}_t \sim \text{MVN}(\mathbf{0}, \mathbf{Q})
 \end{equation}
 
 The expected value of $\boldsymbol{\theta}_{t|t-1}$ is thus
@@ -569,14 +579,14 @@ For step 2, we make the prediction of $y_{t}$ given the predictor variables at t
 
 \begin{equation}
 (\#eq:dlm-predict-y-tplus1)
-\hat{y}_{t|t-1} = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) + e_{t} ~ \text{with} ~ e_{t} \sim \text{N}(0, r)  \\
+\hat{y}_{t|t-1} = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) + e_{t}, \, e_{t} \sim \text{N}(0, r)
 \end{equation}
 
 Our prediction of $y$ at $t$ has a normal distribution with mean (expected value) and variance.  The expected value of $\hat{y}_{t|t-1}$ is
 
 \begin{equation}
 (\#eq:dlm-predict-y-mean)
-\text{E}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{F}^{\top}_{t} (\mathbf{G}_t \boldsymbol{\pi}_{t-1}) \\
+\text{E}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) = \mathbf{F}^{\top}_{t} (\mathbf{G}_t \boldsymbol{\pi}_{t-1})
 \end{equation}
 
 and the variance of $\hat{y}_{t|t-1}$ is
@@ -584,7 +594,7 @@ and the variance of $\hat{y}_{t|t-1}$ is
 \begin{align}
 (\#eq:dlm-predict-y-var)
 \text{Var}(\hat{y}_{t|t-1}) &= \mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + r \\
- &= \mathbf{F}^{\top}_{t} (\mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q}) \mathbf{F}_{t} + r \\
+ &= \mathbf{F}^{\top}_{t} (\mathbf{G}_t \mathbf{\Lambda}_{t-1} \mathbf{G}_t^{\top} + \mathbf{Q}) \mathbf{F}_{t} + r
 \end{align}
 
 ### Computing the prediction
@@ -602,9 +612,11 @@ Let's see an example with the salmon survival DLM.  We will use the Kalman filte
 In the salmon survival DLM, the $\mathbf{G}_t$ matrix is the identity matrix, thus the mean and variance of the one-step ahead predictive distribution for the observation at time $t$ reduces to (from Equations \@ref(eq:dlm-predict-y-mean) and \@ref(eq:dlm-predict-y-var))
 
 \begin{equation}
+\begin{gathered}
 (\#eq:dlm-dlmFore3)
 \text{E}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{E}(\boldsymbol{\theta}_{t|t-1}) \\ 
 \text{Var}(\hat{y}_{t|t-1}) = \mathbf{F}^{\top}_{t} \text{Var}(\boldsymbol{\theta}_{t|t-1}) \mathbf{F}_{t} + \hat{r}
+\end{gathered}
 \end{equation}
 
 where

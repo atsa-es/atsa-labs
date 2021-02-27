@@ -427,7 +427,12 @@ Let's start with fitting to simulated data.
 
 Simulate AR(2) data and add a mean level so that the data are not mean 0.
 
-$$x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\y_t = x_t + m$$
+\begin{equation}
+\begin{gathered}
+x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\
+y_t = x_t + m
+\end{gathered}
+\end{equation}
 
 
 ```{r bj-sim-ar2}
@@ -446,12 +451,24 @@ forecast::Arima(ar2, order=c(2,0,0), include.constant=TRUE)
 
 Note, the model being fit by `Arima()` is  not this model
 
-$$y_t = m + 0.8 y_{t-1} + 0.1 y_{t-2} + e_t$$
+\begin{equation}
+y_t = m + 0.8 y_{t-1} + 0.1 y_{t-2} + e_t
+\end{equation}
+
 It is this model:
 
-$$(y_t - m) = 0.8 (y_{t-1}-m) + 0.1 (y_{t-2}-m)+ e_t$$
+\begin{equation}
+(y_t - m) = 0.8 (y_{t-1}-m) + 0.1 (y_{t-2}-m)+ e_t
+\end{equation}
+
 or as written above:
-$$x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\y_t = x_t + m$$
+\begin{equation}
+\begin{gathered}
+x_t = 0.8 x_{t-1} + 0.1 x_{t-2} + e_t\\
+y_t = x_t + m
+\end{gathered}
+\end{equation}
+
 
 We could also use `arima()` to fit to the data.
 ```{r bj-arima}

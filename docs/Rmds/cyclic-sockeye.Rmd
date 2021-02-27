@@ -1,6 +1,9 @@
 ```{r cylcic-sockeye-setup, include=FALSE}
 knitr::opts_knit$set(unnamed.chunk.label = "cyclic-sockeye-")
-knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=FALSE, tidy.opts=list(width.cutoff=60), tidy=TRUE, fig.align='center', out.width='80%', message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo = TRUE, comment=NA, cache=TRUE,
+                      tidy.opts=list(width.cutoff=60), tidy=TRUE,
+                      fig.align='center', out.width='80%', message=FALSE,
+                      warning=FALSE)
 ```
 
 # Modeling cyclic sockeye {#chap-cyclic-sockeye}
@@ -81,7 +84,7 @@ Z[1,3,] <- cos(2*pi*(1:TT)/p)
 ### Specify the model list
 
 Then we make our model list. We need to set $\mathbf{A}$ since `MARSS()` doesn't like the default value of `scaling` when $\mathbf{Z}$ is time-varying.
-```{r cylcic-sockeye-mod.list1}
+```{r cylcic-sockeye-mod-list1}
 mod.list <- list(
   U = "zero",
   Q = "diagonal and unequal",
@@ -92,7 +95,7 @@ mod.list <- list(
 ### Fit the model
 
 When we fit the model we need to give `MARSS()` initial values for `x0`. It cannot come up with default ones for this model. It doesn't really matter what you pick.
-```{r}
+```{r cyclic-sockeye-fit-1, cache=TRUE}
 m <- dim(Z)[2]
 fit <- MARSS(yt, model=mod.list, inits=list(x0=matrix(0,m,1)))
 ```
@@ -138,7 +141,7 @@ return(fit)
 ```
 
 The make a list with all the fits.
-```{r}
+```{r cyclic-sockeye-list-of-fits, cache=TRUE}
 fits <- list()
 for(river in names(a)){
   fits[[river]] <- fitriver(river)
@@ -277,7 +280,7 @@ return(fit)
 ```
 
 Now we can fit for two (or more) rivers. Note it didn't quite converge as some of the variances for the $\beta$'s are going to 0 (constant $\beta$ value).
-```{r cache=TRUE}
+```{r cyclic-sockeye-more-rivers, cache=TRUE}
 river <- unique(sockeye$region)
 n <- length(river)
 fit <- fitriver.m(river)
@@ -286,7 +289,7 @@ fit <- fitriver.m(river)
 ### Look at the results
 
 We will look at the correlation plot for the trends.
-```{r}
+```{r cyclic-sockeye-corrplot}
 require(corrplot)
 Qmat <- coef(fit, type="matrix")$Q[1:n,1:n]
 rownames(Qmat) <- colnames(Qmat) <- river

@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-12" />
+<meta name="date" content="2021-02-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,6 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="sec-msscov-both-error.html"/>
 <link rel="next" href="sec-msscov-model-diagnostics.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -50,22 +51,20 @@
 
 
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -85,7 +84,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {   }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -134,12 +133,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Applied Time Series Analysis</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a><ul>
+<li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
+<ul>
 <li class="chapter" data-level="1.1" data-path="sec-basicmat-create.html"><a href="sec-basicmat-create.html"><i class="fa fa-check"></i><b>1.1</b> Creating matrices in R</a></li>
 <li class="chapter" data-level="1.2" data-path="sec-basicmat-multiply.html"><a href="sec-basicmat-multiply.html"><i class="fa fa-check"></i><b>1.2</b> Matrix multiplication, addition and transpose</a></li>
 <li class="chapter" data-level="1.3" data-path="sec-basicmat-subset.html"><a href="sec-basicmat-subset.html"><i class="fa fa-check"></i><b>1.3</b> Subsetting a matrix</a></li>
@@ -148,28 +149,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.6" data-path="sec-basicmat-inverse.html"><a href="sec-basicmat-inverse.html"><i class="fa fa-check"></i><b>1.6</b> Taking the inverse of a square matrix</a></li>
 <li class="chapter" data-level="1.7" data-path="sec-basicmat-problems.html"><a href="sec-basicmat-problems.html"><i class="fa fa-check"></i><b>1.7</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="chap-mlr.html"><a href="chap-mlr.html"><i class="fa fa-check"></i><b>2</b> Linear regression in matrix form</a><ul>
+<li class="chapter" data-level="2" data-path="chap-mlr.html"><a href="chap-mlr.html"><i class="fa fa-check"></i><b>2</b> Linear regression in matrix form</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-mlr.html"><a href="chap-mlr.html#data-and-packages"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="2.1" data-path="sec-mlr-lr1.html"><a href="sec-mlr-lr1.html"><i class="fa fa-check"></i><b>2.1</b> A simple regression: one explanatory variable</a></li>
-<li class="chapter" data-level="2.2" data-path="sec-mlr-form1.html"><a href="sec-mlr-form1.html"><i class="fa fa-check"></i><b>2.2</b> Matrix Form 1</a><ul>
+<li class="chapter" data-level="2.2" data-path="sec-mlr-form1.html"><a href="sec-mlr-form1.html"><i class="fa fa-check"></i><b>2.2</b> Matrix Form 1</a>
+<ul>
 <li class="chapter" data-level="2.2.1" data-path="sec-mlr-form1.html"><a href="sec-mlr-form1.html#sec-mlr-solveform1"><i class="fa fa-check"></i><b>2.2.1</b> Solving for the parameters</a></li>
 <li class="chapter" data-level="2.2.2" data-path="sec-mlr-form1.html"><a href="sec-mlr-form1.html#sec-mlr-form1m"><i class="fa fa-check"></i><b>2.2.2</b> Form 1 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.2.3" data-path="sec-mlr-form1.html"><a href="sec-mlr-form1.html#sec-mlr-form1when"><i class="fa fa-check"></i><b>2.2.3</b> When does Form 1 arise?</a></li>
 <li class="chapter" data-level="2.2.4" data-path="sec-mlr-form1.html"><a href="sec-mlr-form1.html#sec-mlr-form1b"><i class="fa fa-check"></i><b>2.2.4</b> Matrix Form 1b: The transpose of Form 1</a></li>
 </ul></li>
-<li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a><ul>
+<li class="chapter" data-level="2.3" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html"><i class="fa fa-check"></i><b>2.3</b> Matrix Form 2</a>
+<ul>
 <li class="chapter" data-level="2.3.1" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2m"><i class="fa fa-check"></i><b>2.3.1</b> Form 2 with multiple explanatory variables</a></li>
 <li class="chapter" data-level="2.3.2" data-path="sec-mlr-form2.html"><a href="sec-mlr-form2.html#sec-mlr-form2when"><i class="fa fa-check"></i><b>2.3.2</b> When does Form 2 arise?</a></li>
 </ul></li>
-<li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a><ul>
+<li class="chapter" data-level="2.4" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html"><i class="fa fa-check"></i><b>2.4</b> Groups of intercepts</a>
+<ul>
 <li class="chapter" data-level="2.4.1" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form1"><i class="fa fa-check"></i><b>2.4.1</b> North/South intercepts in Form 1</a></li>
 <li class="chapter" data-level="2.4.2" data-path="sec-mlr-intercepts.html"><a href="sec-mlr-intercepts.html#sec-mlr-intercepts-form2"><i class="fa fa-check"></i><b>2.4.2</b> North/South intercepts in Form 2</a></li>
 </ul></li>
-<li class="chapter" data-level="2.5" data-path="sec-mlr-betas.html"><a href="sec-mlr-betas.html"><i class="fa fa-check"></i><b>2.5</b> Groups of <span class="math inline">\(\beta\)</span>’s</a><ul>
+<li class="chapter" data-level="2.5" data-path="sec-mlr-betas.html"><a href="sec-mlr-betas.html"><i class="fa fa-check"></i><b>2.5</b> Groups of <span class="math inline">\(\beta\)</span>’s</a>
+<ul>
 <li class="chapter" data-level="2.5.1" data-path="sec-mlr-betas.html"><a href="sec-mlr-betas.html#sec-mlr-betas-form1"><i class="fa fa-check"></i><b>2.5.1</b> Owner <span class="math inline">\(\beta\)</span>’s in Form 1</a></li>
 <li class="chapter" data-level="2.5.2" data-path="sec-mlr-betas.html"><a href="sec-mlr-betas.html#sec-mlr-betas-form2"><i class="fa fa-check"></i><b>2.5.2</b> Owner <span class="math inline">\(\beta\)</span>’s in Form 2</a></li>
 </ul></li>
-<li class="chapter" data-level="2.6" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html"><i class="fa fa-check"></i><b>2.6</b> Seasonal effect as a factor</a><ul>
+<li class="chapter" data-level="2.6" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html"><i class="fa fa-check"></i><b>2.6</b> Seasonal effect as a factor</a>
+<ul>
 <li class="chapter" data-level="2.6.1" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html#sec-mlr-season-form1"><i class="fa fa-check"></i><b>2.6.1</b> Seasonal intercepts written in Form 1</a></li>
 <li class="chapter" data-level="2.6.2" data-path="sec-mlr-season-factor.html"><a href="sec-mlr-season-factor.html#sec-mlr-season-form2"><i class="fa fa-check"></i><b>2.6.2</b> Seasonal intercepts written in Form 2</a></li>
 </ul></li>
@@ -178,9 +185,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.9" data-path="sec-mlr-solveform2.html"><a href="sec-mlr-solveform2.html"><i class="fa fa-check"></i><b>2.9</b> Solving for the parameters for Form 2*</a></li>
 <li class="chapter" data-level="2.10" data-path="sec-mlr-problems.html"><a href="sec-mlr-problems.html"><i class="fa fa-check"></i><b>2.10</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a><ul>
+<li class="chapter" data-level="3" data-path="chap-ts.html"><a href="chap-ts.html"><i class="fa fa-check"></i><b>3</b> Introduction to time series</a>
+<ul>
 <li class="chapter" data-level="3.1" data-path="sec-ts-examples.html"><a href="sec-ts-examples.html"><i class="fa fa-check"></i><b>3.1</b> Examples of time series</a></li>
-<li class="chapter" data-level="3.2" data-path="sec-ts-classification.html"><a href="sec-ts-classification.html"><i class="fa fa-check"></i><b>3.2</b> Classification of time series</a><ul>
+<li class="chapter" data-level="3.2" data-path="sec-ts-classification.html"><a href="sec-ts-classification.html"><i class="fa fa-check"></i><b>3.2</b> Classification of time series</a>
+<ul>
 <li class="chapter" data-level="3.2.1" data-path="sec-ts-classification.html"><a href="sec-ts-classification.html#by-some-index-set"><i class="fa fa-check"></i><b>3.2.1</b> By some <em>index set</em></a></li>
 <li class="chapter" data-level="3.2.2" data-path="sec-ts-classification.html"><a href="sec-ts-classification.html#by-the-underlying-process"><i class="fa fa-check"></i><b>3.2.2</b> By the <em>underlying process</em></a></li>
 <li class="chapter" data-level="3.2.3" data-path="sec-ts-classification.html"><a href="sec-ts-classification.html#by-the-number-of-values-recorded"><i class="fa fa-check"></i><b>3.2.3</b> By the <em>number of values recorded</em></a></li>
@@ -189,90 +198,109 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.3" data-path="sec-ts-stat-analysis.html"><a href="sec-ts-stat-analysis.html"><i class="fa fa-check"></i><b>3.3</b> Statistical analyses of time series</a></li>
 <li class="chapter" data-level="3.4" data-path="sec-ts-definition.html"><a href="sec-ts-definition.html"><i class="fa fa-check"></i><b>3.4</b> What is a time series model?</a></li>
 <li class="chapter" data-level="3.5" data-path="sec-ts-two-examples.html"><a href="sec-ts-two-examples.html"><i class="fa fa-check"></i><b>3.5</b> Two simple and classic time series models</a></li>
-<li class="chapter" data-level="3.6" data-path="sec-ts-classical-decomposition.html"><a href="sec-ts-classical-decomposition.html"><i class="fa fa-check"></i><b>3.6</b> Classical decomposition</a><ul>
+<li class="chapter" data-level="3.6" data-path="sec-ts-classical-decomposition.html"><a href="sec-ts-classical-decomposition.html"><i class="fa fa-check"></i><b>3.6</b> Classical decomposition</a>
+<ul>
 <li class="chapter" data-level="3.6.1" data-path="sec-ts-classical-decomposition.html"><a href="sec-ts-classical-decomposition.html#the-trend-m_t"><i class="fa fa-check"></i><b>3.6.1</b> 1. The trend (<span class="math inline">\(m_t\)</span>)</a></li>
 <li class="chapter" data-level="3.6.2" data-path="sec-ts-classical-decomposition.html"><a href="sec-ts-classical-decomposition.html#example-of-linear-filtering"><i class="fa fa-check"></i><b>3.6.2</b> Example of linear filtering</a></li>
 <li class="chapter" data-level="3.6.3" data-path="sec-ts-classical-decomposition.html"><a href="sec-ts-classical-decomposition.html#seasonal-effect-s_t"><i class="fa fa-check"></i><b>3.6.3</b> 2. Seasonal effect (<span class="math inline">\(s_t\)</span>)</a></li>
 <li class="chapter" data-level="3.6.4" data-path="sec-ts-classical-decomposition.html"><a href="sec-ts-classical-decomposition.html#remainder-e_t"><i class="fa fa-check"></i><b>3.6.4</b> 3. Remainder (<span class="math inline">\(e_t\)</span>)</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="sec-ts-decomposition-log-data.html"><a href="sec-ts-decomposition-log-data.html"><i class="fa fa-check"></i><b>3.7</b> Decomposition on log-transformed data</a><ul>
+<li class="chapter" data-level="3.7" data-path="sec-ts-decomposition-log-data.html"><a href="sec-ts-decomposition-log-data.html"><i class="fa fa-check"></i><b>3.7</b> Decomposition on log-transformed data</a>
+<ul>
 <li class="chapter" data-level="3.7.1" data-path="sec-ts-decomposition-log-data.html"><a href="sec-ts-decomposition-log-data.html#the-trend-m_t-1"><i class="fa fa-check"></i><b>3.7.1</b> The trend (<span class="math inline">\(m_t\)</span>)</a></li>
 <li class="chapter" data-level="3.7.2" data-path="sec-ts-decomposition-log-data.html"><a href="sec-ts-decomposition-log-data.html#seasonal-effect-s_t-with-error-e_t"><i class="fa fa-check"></i><b>3.7.2</b> Seasonal effect (<span class="math inline">\(s_t\)</span>) with error (<span class="math inline">\(e_t\)</span>)</a></li>
 <li class="chapter" data-level="3.7.3" data-path="sec-ts-decomposition-log-data.html"><a href="sec-ts-decomposition-log-data.html#mean-seasonal-effect-s_t"><i class="fa fa-check"></i><b>3.7.3</b> Mean seasonal effect (<span class="math inline">\(s_t\)</span>)</a></li>
 <li class="chapter" data-level="3.7.4" data-path="sec-ts-decomposition-log-data.html"><a href="sec-ts-decomposition-log-data.html#remainder-e_t-1"><i class="fa fa-check"></i><b>3.7.4</b> Remainder (<span class="math inline">\(e_t\)</span>)</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="chap-tslab.html"><a href="chap-tslab.html"><i class="fa fa-check"></i><b>4</b> Basic time series functions in R</a><ul>
+<li class="chapter" data-level="4" data-path="chap-tslab.html"><a href="chap-tslab.html"><i class="fa fa-check"></i><b>4</b> Basic time series functions in R</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-tslab.html"><a href="chap-tslab.html#data-and-packages-1"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="4.1" data-path="sec-tslab-time-series-plots.html"><a href="sec-tslab-time-series-plots.html"><i class="fa fa-check"></i><b>4.1</b> Time series plots</a><ul>
+<li class="chapter" data-level="4.1" data-path="sec-tslab-time-series-plots.html"><a href="sec-tslab-time-series-plots.html"><i class="fa fa-check"></i><b>4.1</b> Time series plots</a>
+<ul>
 <li class="chapter" data-level="4.1.1" data-path="sec-tslab-time-series-plots.html"><a href="sec-tslab-time-series-plots.html#sec-tslab-textbfts-objects-and-verbplotts"><i class="fa fa-check"></i><b>4.1.1</b> <strong>ts</strong> objects and <code>plot.ts()</code></a></li>
 <li class="chapter" data-level="4.1.2" data-path="sec-tslab-time-series-plots.html"><a href="sec-tslab-time-series-plots.html#sec-tslab-combining-and-plotting-multiple-textbfts-objects"><i class="fa fa-check"></i><b>4.1.2</b> Combining and plotting multiple <strong>ts</strong> objects</a></li>
 </ul></li>
-<li class="chapter" data-level="4.2" data-path="sec-tslab-decomposition-of-time-series.html"><a href="sec-tslab-decomposition-of-time-series.html"><i class="fa fa-check"></i><b>4.2</b> Decomposition of time series</a><ul>
+<li class="chapter" data-level="4.2" data-path="sec-tslab-decomposition-of-time-series.html"><a href="sec-tslab-decomposition-of-time-series.html"><i class="fa fa-check"></i><b>4.2</b> Decomposition of time series</a>
+<ul>
 <li class="chapter" data-level="4.2.1" data-path="sec-tslab-decomposition-of-time-series.html"><a href="sec-tslab-decomposition-of-time-series.html#sec-tslab-estimating-trends"><i class="fa fa-check"></i><b>4.2.1</b> Estimating trends</a></li>
 <li class="chapter" data-level="4.2.2" data-path="sec-tslab-decomposition-of-time-series.html"><a href="sec-tslab-decomposition-of-time-series.html#sec-tslab-estimating-seasonal-effects"><i class="fa fa-check"></i><b>4.2.2</b> Estimating seasonal effects</a></li>
 <li class="chapter" data-level="4.2.3" data-path="sec-tslab-decomposition-of-time-series.html"><a href="sec-tslab-decomposition-of-time-series.html#sec-tslab-completing-the-model"><i class="fa fa-check"></i><b>4.2.3</b> Completing the model</a></li>
 <li class="chapter" data-level="4.2.4" data-path="sec-tslab-decomposition-of-time-series.html"><a href="sec-tslab-decomposition-of-time-series.html#sec-tslab-using-verbdecompose-for-decomposition"><i class="fa fa-check"></i><b>4.2.4</b> Using <code>decompose()</code> for decomposition</a></li>
 </ul></li>
-<li class="chapter" data-level="4.3" data-path="sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects.html"><a href="sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects.html"><i class="fa fa-check"></i><b>4.3</b> Differencing to remove a trend or seasonal effects</a><ul>
+<li class="chapter" data-level="4.3" data-path="sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects.html"><a href="sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects.html"><i class="fa fa-check"></i><b>4.3</b> Differencing to remove a trend or seasonal effects</a>
+<ul>
 <li class="chapter" data-level="4.3.1" data-path="sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects.html"><a href="sec-tslab-differencing-to-remove-a-trend-or-seasonal-effects.html#sec-tslab-using-the-verbdiff-function"><i class="fa fa-check"></i><b>4.3.1</b> Using the <code>diff()</code> function</a></li>
 </ul></li>
-<li class="chapter" data-level="4.4" data-path="sec-tslab-correlation-within-and-among-time-series.html"><a href="sec-tslab-correlation-within-and-among-time-series.html"><i class="fa fa-check"></i><b>4.4</b> Correlation within and among time series</a><ul>
+<li class="chapter" data-level="4.4" data-path="sec-tslab-correlation-within-and-among-time-series.html"><a href="sec-tslab-correlation-within-and-among-time-series.html"><i class="fa fa-check"></i><b>4.4</b> Correlation within and among time series</a>
+<ul>
 <li class="chapter" data-level="4.4.1" data-path="sec-tslab-correlation-within-and-among-time-series.html"><a href="sec-tslab-correlation-within-and-among-time-series.html#sec-tslab-autocorrelation-function-acf"><i class="fa fa-check"></i><b>4.4.1</b> Autocorrelation function (ACF)</a></li>
 <li class="chapter" data-level="4.4.2" data-path="sec-tslab-correlation-within-and-among-time-series.html"><a href="sec-tslab-correlation-within-and-among-time-series.html#sec-tslab-partial-autocorrelation-function-pacf"><i class="fa fa-check"></i><b>4.4.2</b> Partial autocorrelation function (PACF)</a></li>
 <li class="chapter" data-level="4.4.3" data-path="sec-tslab-correlation-within-and-among-time-series.html"><a href="sec-tslab-correlation-within-and-among-time-series.html#sec-tslab-cross-correlation-function-ccf"><i class="fa fa-check"></i><b>4.4.3</b> Cross-correlation function (CCF)</a></li>
 </ul></li>
-<li class="chapter" data-level="4.5" data-path="sec-tslab-white-noise-wn.html"><a href="sec-tslab-white-noise-wn.html"><i class="fa fa-check"></i><b>4.5</b> White noise (WN)</a><ul>
+<li class="chapter" data-level="4.5" data-path="sec-tslab-white-noise-wn.html"><a href="sec-tslab-white-noise-wn.html"><i class="fa fa-check"></i><b>4.5</b> White noise (WN)</a>
+<ul>
 <li class="chapter" data-level="4.5.1" data-path="sec-tslab-white-noise-wn.html"><a href="sec-tslab-white-noise-wn.html#sec-tslab-simulating-white-noise"><i class="fa fa-check"></i><b>4.5.1</b> Simulating white noise</a></li>
 </ul></li>
-<li class="chapter" data-level="4.6" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html"><i class="fa fa-check"></i><b>4.6</b> Random walks (RW)</a><ul>
+<li class="chapter" data-level="4.6" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html"><i class="fa fa-check"></i><b>4.6</b> Random walks (RW)</a>
+<ul>
 <li class="chapter" data-level="4.6.1" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-simulating-a-random-walk"><i class="fa fa-check"></i><b>4.6.1</b> Simulating a random walk</a></li>
 <li class="chapter" data-level="4.6.2" data-path="sec-tslab-random-walks-rw.html"><a href="sec-tslab-random-walks-rw.html#sec-tslab-alternative-formulation-of-a-random-walk"><i class="fa fa-check"></i><b>4.6.2</b> Alternative formulation of a random walk</a></li>
 </ul></li>
-<li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a><ul>
+<li class="chapter" data-level="4.7" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html"><i class="fa fa-check"></i><b>4.7</b> Autoregressive (AR) models</a>
+<ul>
 <li class="chapter" data-level="4.7.1" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-simulating-an-AR_p_coef-process"><i class="fa fa-check"></i><b>4.7.1</b> Simulating an AR(<span class="math inline">\(p\)</span>) process</a></li>
 <li class="chapter" data-level="4.7.2" data-path="sec-tslab-autoregressive-ar-models.html"><a href="sec-tslab-autoregressive-ar-models.html#sec-tslab-correlation-structure-of-AR_p_coef-processes"><i class="fa fa-check"></i><b>4.7.2</b> Correlation structure of AR(<span class="math inline">\(p\)</span>) processes</a></li>
 </ul></li>
-<li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a><ul>
+<li class="chapter" data-level="4.8" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html"><i class="fa fa-check"></i><b>4.8</b> Moving-average (MA) models</a>
+<ul>
 <li class="chapter" data-level="4.8.1" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-simulating-an-MA_q_coef-process"><i class="fa fa-check"></i><b>4.8.1</b> Simulating an MA(<span class="math inline">\(q\)</span>) process</a></li>
 <li class="chapter" data-level="4.8.2" data-path="sec-tslab-moving-average-ma-models.html"><a href="sec-tslab-moving-average-ma-models.html#sec-tslab-correlation-structure-of-MA_q_coef-processes"><i class="fa fa-check"></i><b>4.8.2</b> Correlation structure of MA(<span class="math inline">\(q\)</span>) processes</a></li>
 </ul></li>
-<li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a><ul>
+<li class="chapter" data-level="4.9" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html"><i class="fa fa-check"></i><b>4.9</b> Autoregressive moving-average (ARMA) models</a>
+<ul>
 <li class="chapter" data-level="4.9.1" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-fitting-armapq-models-with-verbarima"><i class="fa fa-check"></i><b>4.9.1</b> Fitting ARMA(<span class="math inline">\(p,q\)</span>) models with <code>arima()</code></a></li>
 <li class="chapter" data-level="4.9.2" data-path="sec-tslab-autoregressive-moving-average-arma-models.html"><a href="sec-tslab-autoregressive-moving-average-arma-models.html#sec-tslab-searching-over-model-orders"><i class="fa fa-check"></i><b>4.9.2</b> Searching over model orders</a></li>
 </ul></li>
 <li class="chapter" data-level="4.10" data-path="sec-tslab-problems.html"><a href="sec-tslab-problems.html"><i class="fa fa-check"></i><b>4.10</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="chap-boxjenkins-.html"><a href="chap-boxjenkins-.html"><i class="fa fa-check"></i><b>5</b> Box-Jenkins method</a><ul>
+<li class="chapter" data-level="5" data-path="chap-boxjenkins-.html"><a href="chap-boxjenkins-.html"><i class="fa fa-check"></i><b>5</b> Box-Jenkins method</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-boxjenkins-.html"><a href="chap-boxjenkins-.html#data-and-packages-2"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="5.1" data-path="sec-boxjenkins-intro.html"><a href="sec-boxjenkins-intro.html"><i class="fa fa-check"></i><b>5.1</b> Box-Jenkins method</a></li>
-<li class="chapter" data-level="5.2" data-path="sec-boxjenkins-stationarity.html"><a href="sec-boxjenkins-stationarity.html"><i class="fa fa-check"></i><b>5.2</b> Stationarity</a><ul>
+<li class="chapter" data-level="5.2" data-path="sec-boxjenkins-stationarity.html"><a href="sec-boxjenkins-stationarity.html"><i class="fa fa-check"></i><b>5.2</b> Stationarity</a>
+<ul>
 <li class="chapter" data-level="5.2.1" data-path="sec-boxjenkins-stationarity.html"><a href="sec-boxjenkins-stationarity.html#look-at-stationarity-in-simulated-data"><i class="fa fa-check"></i><b>5.2.1</b> Look at stationarity in simulated data</a></li>
 <li class="chapter" data-level="5.2.2" data-path="sec-boxjenkins-stationarity.html"><a href="sec-boxjenkins-stationarity.html#stationary-around-a-linear-trend"><i class="fa fa-check"></i><b>5.2.2</b> Stationary around a linear trend</a></li>
 <li class="chapter" data-level="5.2.3" data-path="sec-boxjenkins-stationarity.html"><a href="sec-boxjenkins-stationarity.html#greek-landing-data"><i class="fa fa-check"></i><b>5.2.3</b> Greek landing data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.3" data-path="sec-boxjenkins-aug-dickey-fuller.html"><a href="sec-boxjenkins-aug-dickey-fuller.html"><i class="fa fa-check"></i><b>5.3</b> Dickey-Fuller and Augmented Dickey-Fuller tests</a><ul>
+<li class="chapter" data-level="5.3" data-path="sec-boxjenkins-aug-dickey-fuller.html"><a href="sec-boxjenkins-aug-dickey-fuller.html"><i class="fa fa-check"></i><b>5.3</b> Dickey-Fuller and Augmented Dickey-Fuller tests</a>
+<ul>
 <li class="chapter" data-level="5.3.1" data-path="sec-boxjenkins-aug-dickey-fuller.html"><a href="sec-boxjenkins-aug-dickey-fuller.html#dickey-fuller-test"><i class="fa fa-check"></i><b>5.3.1</b> Dickey-Fuller test</a></li>
 <li class="chapter" data-level="5.3.2" data-path="sec-boxjenkins-aug-dickey-fuller.html"><a href="sec-boxjenkins-aug-dickey-fuller.html#augmented-dickey-fuller-test"><i class="fa fa-check"></i><b>5.3.2</b> Augmented Dickey-Fuller test</a></li>
 <li class="chapter" data-level="5.3.3" data-path="sec-boxjenkins-aug-dickey-fuller.html"><a href="sec-boxjenkins-aug-dickey-fuller.html#adf-test-using-adf.test"><i class="fa fa-check"></i><b>5.3.3</b> ADF test using <code>adf.test()</code></a></li>
 <li class="chapter" data-level="5.3.4" data-path="sec-boxjenkins-aug-dickey-fuller.html"><a href="sec-boxjenkins-aug-dickey-fuller.html#adf-test-using-ur.df"><i class="fa fa-check"></i><b>5.3.4</b> ADF test using <code>ur.df()</code></a></li>
 </ul></li>
-<li class="chapter" data-level="5.4" data-path="sec-boxjenkins-kpss.html"><a href="sec-boxjenkins-kpss.html"><i class="fa fa-check"></i><b>5.4</b> KPSS test</a><ul>
+<li class="chapter" data-level="5.4" data-path="sec-boxjenkins-kpss.html"><a href="sec-boxjenkins-kpss.html"><i class="fa fa-check"></i><b>5.4</b> KPSS test</a>
+<ul>
 <li class="chapter" data-level="5.4.1" data-path="sec-boxjenkins-kpss.html"><a href="sec-boxjenkins-kpss.html#test-on-simulated-data"><i class="fa fa-check"></i><b>5.4.1</b> Test on simulated data</a></li>
 <li class="chapter" data-level="5.4.2" data-path="sec-boxjenkins-kpss.html"><a href="sec-boxjenkins-kpss.html#test-the-anchovy-data-1"><i class="fa fa-check"></i><b>5.4.2</b> Test the anchovy data</a></li>
 </ul></li>
-<li class="chapter" data-level="5.5" data-path="sec-boxjenkins-non-stationarity.html"><a href="sec-boxjenkins-non-stationarity.html"><i class="fa fa-check"></i><b>5.5</b> Dealing with non-stationarity</a><ul>
+<li class="chapter" data-level="5.5" data-path="sec-boxjenkins-non-stationarity.html"><a href="sec-boxjenkins-non-stationarity.html"><i class="fa fa-check"></i><b>5.5</b> Dealing with non-stationarity</a>
+<ul>
 <li class="chapter" data-level="5.5.1" data-path="sec-boxjenkins-non-stationarity.html"><a href="sec-boxjenkins-non-stationarity.html#ndiffs"><i class="fa fa-check"></i><b>5.5.1</b> <code>ndiffs()</code></a></li>
 </ul></li>
 <li class="chapter" data-level="5.6" data-path="sec-boxjenkins-stationarity-summary.html"><a href="sec-boxjenkins-stationarity-summary.html"><i class="fa fa-check"></i><b>5.6</b> Summary: stationarity testing</a></li>
-<li class="chapter" data-level="5.7" data-path="sec-boxjenkins-est-ARMA-params.html"><a href="sec-boxjenkins-est-ARMA-params.html"><i class="fa fa-check"></i><b>5.7</b> Estimating ARMA parameters</a><ul>
+<li class="chapter" data-level="5.7" data-path="sec-boxjenkins-est-ARMA-params.html"><a href="sec-boxjenkins-est-ARMA-params.html"><i class="fa fa-check"></i><b>5.7</b> Estimating ARMA parameters</a>
+<ul>
 <li class="chapter" data-level="5.7.1" data-path="sec-boxjenkins-est-ARMA-params.html"><a href="sec-boxjenkins-est-ARMA-params.html#ar2-data"><i class="fa fa-check"></i><b>5.7.1</b> AR(2) data</a></li>
 <li class="chapter" data-level="5.7.2" data-path="sec-boxjenkins-est-ARMA-params.html"><a href="sec-boxjenkins-est-ARMA-params.html#fit-with-arima"><i class="fa fa-check"></i><b>5.7.2</b> Fit with <code>Arima()</code></a></li>
 <li class="chapter" data-level="5.7.3" data-path="sec-boxjenkins-est-ARMA-params.html"><a href="sec-boxjenkins-est-ARMA-params.html#ar1-simulated-data"><i class="fa fa-check"></i><b>5.7.3</b> AR(1) simulated data</a></li>
 <li class="chapter" data-level="5.7.4" data-path="sec-boxjenkins-est-ARMA-params.html"><a href="sec-boxjenkins-est-ARMA-params.html#arma12-simulated-data"><i class="fa fa-check"></i><b>5.7.4</b> ARMA(1,2) simulated data</a></li>
 <li class="chapter" data-level="5.7.5" data-path="sec-boxjenkins-est-ARMA-params.html"><a href="sec-boxjenkins-est-ARMA-params.html#these-functions-work-for-data-with-missing-values"><i class="fa fa-check"></i><b>5.7.5</b> These functions work for data with missing values</a></li>
 </ul></li>
-<li class="chapter" data-level="5.8" data-path="sec-boxjenkins-est-ARMA-orders.html"><a href="sec-boxjenkins-est-ARMA-orders.html"><i class="fa fa-check"></i><b>5.8</b> Estimating the ARMA orders</a><ul>
+<li class="chapter" data-level="5.8" data-path="sec-boxjenkins-est-ARMA-orders.html"><a href="sec-boxjenkins-est-ARMA-orders.html"><i class="fa fa-check"></i><b>5.8</b> Estimating the ARMA orders</a>
+<ul>
 <li class="chapter" data-level="5.8.1" data-path="sec-boxjenkins-est-ARMA-orders.html"><a href="sec-boxjenkins-est-ARMA-orders.html#example-model-selection-for-ar2-data"><i class="fa fa-check"></i><b>5.8.1</b> Example: model selection for AR(2) data</a></li>
 <li class="chapter" data-level="5.8.2" data-path="sec-boxjenkins-est-ARMA-orders.html"><a href="sec-boxjenkins-est-ARMA-orders.html#fitting-to-100-simulated-data-sets"><i class="fa fa-check"></i><b>5.8.2</b> Fitting to 100 simulated data sets</a></li>
 <li class="chapter" data-level="5.8.3" data-path="sec-boxjenkins-est-ARMA-orders.html"><a href="sec-boxjenkins-est-ARMA-orders.html#tracetrue"><i class="fa fa-check"></i><b>5.8.3</b> Trace=TRUE</a></li>
@@ -281,17 +309,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5.9" data-path="sec-boxjenkins-check-resids.html"><a href="sec-boxjenkins-check-resids.html"><i class="fa fa-check"></i><b>5.9</b> Check residuals</a></li>
 <li class="chapter" data-level="5.10" data-path="sec-boxjenkins-forecast.html"><a href="sec-boxjenkins-forecast.html"><i class="fa fa-check"></i><b>5.10</b> Forecast from a fitted ARIMA model</a></li>
-<li class="chapter" data-level="5.11" data-path="sec-boxjenkins-seasonal.html"><a href="sec-boxjenkins-seasonal.html"><i class="fa fa-check"></i><b>5.11</b> Seasonal ARIMA model</a><ul>
+<li class="chapter" data-level="5.11" data-path="sec-boxjenkins-seasonal.html"><a href="sec-boxjenkins-seasonal.html"><i class="fa fa-check"></i><b>5.11</b> Seasonal ARIMA model</a>
+<ul>
 <li class="chapter" data-level="5.11.1" data-path="sec-boxjenkins-seasonal.html"><a href="sec-boxjenkins-seasonal.html#plot-seasonal-data"><i class="fa fa-check"></i><b>5.11.1</b> Plot seasonal data</a></li>
 <li class="chapter" data-level="5.11.2" data-path="sec-boxjenkins-seasonal.html"><a href="sec-boxjenkins-seasonal.html#auto.arima-for-seasonal-ts"><i class="fa fa-check"></i><b>5.11.2</b> <code>auto.arima()</code> for seasonal ts</a></li>
 </ul></li>
 <li class="chapter" data-level="5.12" data-path="sec-boxjenkins-forecast-seasonal.html"><a href="sec-boxjenkins-forecast-seasonal.html"><i class="fa fa-check"></i><b>5.12</b> Forecast using a seasonal model</a></li>
 <li class="chapter" data-level="5.13" data-path="sec-boxjenkins-problems.html"><a href="sec-boxjenkins-problems.html"><i class="fa fa-check"></i><b>5.13</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="chap-univariate-state-space.html"><a href="chap-univariate-state-space.html"><i class="fa fa-check"></i><b>6</b> Univariate state-space models</a><ul>
+<li class="chapter" data-level="6" data-path="chap-univariate-state-space.html"><a href="chap-univariate-state-space.html"><i class="fa fa-check"></i><b>6</b> Univariate state-space models</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-univariate-state-space.html"><a href="chap-univariate-state-space.html#data-and-packages-3"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="6.1" data-path="sec-uss-fitting-a-state-space-model-with-marss.html"><a href="sec-uss-fitting-a-state-space-model-with-marss.html"><i class="fa fa-check"></i><b>6.1</b> Fitting a state-space model with MARSS</a></li>
-<li class="chapter" data-level="6.2" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html"><i class="fa fa-check"></i><b>6.2</b> Examples using the Nile river data</a><ul>
+<li class="chapter" data-level="6.2" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html"><i class="fa fa-check"></i><b>6.2</b> Examples using the Nile river data</a>
+<ul>
 <li class="chapter" data-level="6.2.1" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-flat-level-model"><i class="fa fa-check"></i><b>6.2.1</b> Flat level model</a></li>
 <li class="chapter" data-level="6.2.2" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-linear-trend-in-flow-model"><i class="fa fa-check"></i><b>6.2.2</b> Linear trend in flow model</a></li>
 <li class="chapter" data-level="6.2.3" data-path="sec-uss-examples-using-the-nile-river-data.html"><a href="sec-uss-examples-using-the-nile-river-data.html#sec-uss-stochastic-level-model"><i class="fa fa-check"></i><b>6.2.3</b> Stochastic level model</a></li>
@@ -299,7 +330,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="6.3" data-path="sec-uss-the-structts-function.html"><a href="sec-uss-the-structts-function.html"><i class="fa fa-check"></i><b>6.3</b> The StructTS function</a></li>
 <li class="chapter" data-level="6.4" data-path="sec-uss-comparing-models-with-aic-and-model-weights.html"><a href="sec-uss-comparing-models-with-aic-and-model-weights.html"><i class="fa fa-check"></i><b>6.4</b> Comparing models with AIC and model weights</a></li>
-<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a><ul>
+<li class="chapter" data-level="6.5" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html"><i class="fa fa-check"></i><b>6.5</b> Basic diagnostics</a>
+<ul>
 <li class="chapter" data-level="6.5.1" data-path="sec-uss-basic-diagnostics.html"><a href="sec-uss-basic-diagnostics.html#sec-uss-more-diagnostics"><i class="fa fa-check"></i><b>6.5.1</b> Outlier diagnostics</a></li>
 </ul></li>
 <li class="chapter" data-level="6.6" data-path="sec-uss-fitting-with-jags.html"><a href="sec-uss-fitting-with-jags.html"><i class="fa fa-check"></i><b>6.6</b> Fitting with JAGS</a></li>
@@ -307,31 +339,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.8" data-path="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><a href="sec-uss-a-simple-random-walk-model-of-animal-movement.html"><i class="fa fa-check"></i><b>6.8</b> A random walk model of animal movement</a></li>
 <li class="chapter" data-level="6.9" data-path="sec-uss-problems.html"><a href="sec-uss-problems.html"><i class="fa fa-check"></i><b>6.9</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>7</b> MARSS models</a><ul>
+<li class="chapter" data-level="7" data-path="chap-mss.html"><a href="chap-mss.html"><i class="fa fa-check"></i><b>7</b> MARSS models</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-mss.html"><a href="chap-mss.html#data-and-packages-4"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="7.1" data-path="sec-mss-overview.html"><a href="sec-mss-overview.html"><i class="fa fa-check"></i><b>7.1</b> Overview</a></li>
-<li class="chapter" data-level="7.2" data-path="sec-mss-west-coast-harbor-seals-counts.html"><a href="sec-mss-west-coast-harbor-seals-counts.html"><i class="fa fa-check"></i><b>7.2</b> West coast harbor seals counts</a><ul>
+<li class="chapter" data-level="7.2" data-path="sec-mss-west-coast-harbor-seals-counts.html"><a href="sec-mss-west-coast-harbor-seals-counts.html"><i class="fa fa-check"></i><b>7.2</b> West coast harbor seals counts</a>
+<ul>
 <li class="chapter" data-level="7.2.1" data-path="sec-mss-west-coast-harbor-seals-counts.html"><a href="sec-mss-west-coast-harbor-seals-counts.html#sec-mss-load-the-harbor-seal-data"><i class="fa fa-check"></i><b>7.2.1</b> Load the harbor seal data</a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html"><i class="fa fa-check"></i><b>7.3</b> A single well-mixed population</a><ul>
+<li class="chapter" data-level="7.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html"><i class="fa fa-check"></i><b>7.3</b> A single well-mixed population</a>
+<ul>
 <li class="chapter" data-level="7.3.1" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-the-observation-process"><i class="fa fa-check"></i><b>7.3.1</b> The observation process</a></li>
 <li class="chapter" data-level="7.3.2" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-fitting-the-model"><i class="fa fa-check"></i><b>7.3.2</b> Fitting the model</a></li>
 <li class="chapter" data-level="7.3.3" data-path="sec-mss-a-single-well-mixed-population.html"><a href="sec-mss-a-single-well-mixed-population.html#sec-mss-model-residuals"><i class="fa fa-check"></i><b>7.3.3</b> Model residuals</a></li>
 </ul></li>
-<li class="chapter" data-level="7.4" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html"><i class="fa fa-check"></i><b>7.4</b> Four subpopulations with temporally uncorrelated errors</a><ul>
+<li class="chapter" data-level="7.4" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html"><i class="fa fa-check"></i><b>7.4</b> Four subpopulations with temporally uncorrelated errors</a>
+<ul>
 <li class="chapter" data-level="7.4.1" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-the-observation-process-2"><i class="fa fa-check"></i><b>7.4.1</b> The observation process</a></li>
 <li class="chapter" data-level="7.4.2" data-path="sec-mss-segind.html"><a href="sec-mss-segind.html#sec-mss-fitting-mod1"><i class="fa fa-check"></i><b>7.4.2</b> Fitting the model</a></li>
 </ul></li>
-<li class="chapter" data-level="7.5" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><i class="fa fa-check"></i><b>7.5</b> Four subpopulations with temporally correlated errors</a><ul>
+<li class="chapter" data-level="7.5" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><i class="fa fa-check"></i><b>7.5</b> Four subpopulations with temporally correlated errors</a>
+<ul>
 <li class="chapter" data-level="7.5.1" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html#sec-mss-fitting-mod2"><i class="fa fa-check"></i><b>7.5.1</b> Fitting the model</a></li>
 <li class="chapter" data-level="7.5.2" data-path="sec-mss-four-subpopulations-with-temporally-correlated-errors.html"><a href="sec-mss-four-subpopulations-with-temporally-correlated-errors.html#sec-mss-residuals-mod2"><i class="fa fa-check"></i><b>7.5.2</b> Model residuals</a></li>
 </ul></li>
 <li class="chapter" data-level="7.6" data-path="sec-mss-using-marss-models-to-study-spatial-structure.html"><a href="sec-mss-using-marss-models-to-study-spatial-structure.html"><i class="fa fa-check"></i><b>7.6</b> Using MARSS models to study spatial structure</a></li>
 <li class="chapter" data-level="7.7" data-path="sec-mss-hypotheses-regarding-spatial-structure.html"><a href="sec-mss-hypotheses-regarding-spatial-structure.html"><i class="fa fa-check"></i><b>7.7</b> Hypotheses regarding spatial structure</a></li>
-<li class="chapter" data-level="7.8" data-path="sec-mss-set-up-the-hypotheses-as-different-models.html"><a href="sec-mss-set-up-the-hypotheses-as-different-models.html"><i class="fa fa-check"></i><b>7.8</b> Set up the hypotheses as different models</a><ul>
+<li class="chapter" data-level="7.8" data-path="sec-mss-set-up-the-hypotheses-as-different-models.html"><a href="sec-mss-set-up-the-hypotheses-as-different-models.html"><i class="fa fa-check"></i><b>7.8</b> Set up the hypotheses as different models</a>
+<ul>
 <li class="chapter" data-level="7.8.1" data-path="sec-mss-set-up-the-hypotheses-as-different-models.html"><a href="sec-mss-set-up-the-hypotheses-as-different-models.html#sec-fit-models-hyp"><i class="fa fa-check"></i><b>7.8.1</b> Fit the models</a></li>
 </ul></li>
-<li class="chapter" data-level="7.9" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html"><i class="fa fa-check"></i><b>7.9</b> Fitting a MARSS model with JAGS</a><ul>
+<li class="chapter" data-level="7.9" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html"><i class="fa fa-check"></i><b>7.9</b> Fitting a MARSS model with JAGS</a>
+<ul>
 <li class="chapter" data-level="7.9.1" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html#sec-mss-writing-the-model-in-jags"><i class="fa fa-check"></i><b>7.9.1</b> Writing the model in JAGS</a></li>
 <li class="chapter" data-level="7.9.2" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html#fit-the-jags-model"><i class="fa fa-check"></i><b>7.9.2</b> Fit the JAGS model</a></li>
 <li class="chapter" data-level="7.9.3" data-path="sec-mss-multivariate-state-space-models-with-jags.html"><a href="sec-mss-multivariate-state-space-models-with-jags.html#sec-mss-plot-the-posteriors-for-the-estimated-states"><i class="fa fa-check"></i><b>7.9.3</b> Plot the posteriors for the estimated states</a></li>
@@ -339,14 +378,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.10" data-path="sec-marss-fitting-with-stan.html"><a href="sec-marss-fitting-with-stan.html"><i class="fa fa-check"></i><b>7.10</b> Fitting a MARSS model with Stan</a></li>
 <li class="chapter" data-level="7.11" data-path="sec-mss-problems.html"><a href="sec-mss-problems.html"><i class="fa fa-check"></i><b>7.11</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="chap-msscov.html"><a href="chap-msscov.html"><i class="fa fa-check"></i><b>8</b> MARSS models with covariates</a><ul>
+<li class="chapter" data-level="8" data-path="chap-msscov.html"><a href="chap-msscov.html"><i class="fa fa-check"></i><b>8</b> MARSS models with covariates</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-msscov.html"><a href="chap-msscov.html#data-and-packages-5"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="8.1" data-path="sec-msscov-overview.html"><a href="sec-msscov-overview.html"><i class="fa fa-check"></i><b>8.1</b> Overview</a></li>
 <li class="chapter" data-level="8.2" data-path="sec-msscov-prepare-data.html"><a href="sec-msscov-prepare-data.html"><i class="fa fa-check"></i><b>8.2</b> Prepare the plankton data</a></li>
 <li class="chapter" data-level="8.3" data-path="sec-msscov-obs-error-only.html"><a href="sec-msscov-obs-error-only.html"><i class="fa fa-check"></i><b>8.3</b> Observation-error only model</a></li>
 <li class="chapter" data-level="8.4" data-path="sec-msscov-proc-error-only.html"><a href="sec-msscov-proc-error-only.html"><i class="fa fa-check"></i><b>8.4</b> Process-error only model</a></li>
 <li class="chapter" data-level="8.5" data-path="sec-msscov-both-error.html"><a href="sec-msscov-both-error.html"><i class="fa fa-check"></i><b>8.5</b> Both process- and observation-error</a></li>
-<li class="chapter" data-level="8.6" data-path="sec-msscov-season.html"><a href="sec-msscov-season.html"><i class="fa fa-check"></i><b>8.6</b> Including seasonal effects in MARSS models</a><ul>
+<li class="chapter" data-level="8.6" data-path="sec-msscov-season.html"><a href="sec-msscov-season.html"><i class="fa fa-check"></i><b>8.6</b> Including seasonal effects in MARSS models</a>
+<ul>
 <li class="chapter" data-level="8.6.1" data-path="sec-msscov-season.html"><a href="sec-msscov-season.html#sec-msscov-season-factors"><i class="fa fa-check"></i><b>8.6.1</b> Seasonal effects as fixed factors</a></li>
 <li class="chapter" data-level="8.6.2" data-path="sec-msscov-season.html"><a href="sec-msscov-season.html#sec-msscov-season-polynomial"><i class="fa fa-check"></i><b>8.6.2</b> Seasonal effects as a polynomial</a></li>
 <li class="chapter" data-level="8.6.3" data-path="sec-msscov-season.html"><a href="sec-msscov-season.html#sec-msscov-season-fourier"><i class="fa fa-check"></i><b>8.6.3</b> Seasonal effects as a Fourier series</a></li>
@@ -355,18 +396,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.8" data-path="sec-msscov-hw-discussion.html"><a href="sec-msscov-hw-discussion.html"><i class="fa fa-check"></i><b>8.8</b> Homework data and discussion</a></li>
 <li class="chapter" data-level="8.9" data-path="sec-msscov-problems.html"><a href="sec-msscov-problems.html"><i class="fa fa-check"></i><b>8.9</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html"><i class="fa fa-check"></i><b>9</b> Dynamic linear models</a><ul>
+<li class="chapter" data-level="9" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html"><i class="fa fa-check"></i><b>9</b> Dynamic linear models</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-dlm-dynamic-linear-models.html"><a href="chap-dlm-dynamic-linear-models.html#data"><i class="fa fa-check"></i>Data</a></li>
 <li class="chapter" data-level="9.1" data-path="sec-dlm-overview.html"><a href="sec-dlm-overview.html"><i class="fa fa-check"></i><b>9.1</b> Overview</a></li>
 <li class="chapter" data-level="9.2" data-path="sec-dlm-state-space-form.html"><a href="sec-dlm-state-space-form.html"><i class="fa fa-check"></i><b>9.2</b> DLM in state-space form</a></li>
-<li class="chapter" data-level="9.3" data-path="sec-dlm-simple-examples.html"><a href="sec-dlm-simple-examples.html"><i class="fa fa-check"></i><b>9.3</b> Stochastic level models</a><ul>
+<li class="chapter" data-level="9.3" data-path="sec-dlm-simple-examples.html"><a href="sec-dlm-simple-examples.html"><i class="fa fa-check"></i><b>9.3</b> Stochastic level models</a>
+<ul>
 <li class="chapter" data-level="9.3.1" data-path="sec-dlm-simple-examples.html"><a href="sec-dlm-simple-examples.html#stochastic-level-with-drift"><i class="fa fa-check"></i><b>9.3.1</b> Stochastic level with drift</a></li>
 </ul></li>
 <li class="chapter" data-level="9.4" data-path="sec-dlm-regression.html"><a href="sec-dlm-regression.html"><i class="fa fa-check"></i><b>9.4</b> Stochastic regression model</a></li>
 <li class="chapter" data-level="9.5" data-path="sec-dlm-with-season.html"><a href="sec-dlm-with-season.html"><i class="fa fa-check"></i><b>9.5</b> DLM with seasonal effect</a></li>
 <li class="chapter" data-level="9.6" data-path="sec-dlm-salmon-example.html"><a href="sec-dlm-salmon-example.html"><i class="fa fa-check"></i><b>9.6</b> Analysis of salmon survival</a></li>
 <li class="chapter" data-level="9.7" data-path="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><a href="sec-dlm-fitting-a-univariate-dlm-with-marss.html"><i class="fa fa-check"></i><b>9.7</b> Fitting with <code>MARSS()</code></a></li>
-<li class="chapter" data-level="9.8" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>9.8</b> Forecasting</a><ul>
+<li class="chapter" data-level="9.8" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html"><i class="fa fa-check"></i><b>9.8</b> Forecasting</a>
+<ul>
 <li class="chapter" data-level="9.8.1" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#estimate-of-the-regression-parameters"><i class="fa fa-check"></i><b>9.8.1</b> Estimate of the regression parameters</a></li>
 <li class="chapter" data-level="9.8.2" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#prediction-of-the-response-variable-y_t"><i class="fa fa-check"></i><b>9.8.2</b> Prediction of the response variable <span class="math inline">\(y_t\)</span></a></li>
 <li class="chapter" data-level="9.8.3" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#computing-the-prediction"><i class="fa fa-check"></i><b>9.8.3</b> Computing the prediction</a></li>
@@ -374,21 +418,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.8.5" data-path="sec-dlm-forecasting-with-a-univariate-dlm.html"><a href="sec-dlm-forecasting-with-a-univariate-dlm.html#sec-dlm-forecasting-a-univariate-dlm-with-marss"><i class="fa fa-check"></i><b>9.8.5</b> Forecasting using MARSS</a></li>
 </ul></li>
 <li class="chapter" data-level="9.9" data-path="sec-dlm-dlm-forecast-diagnostics.html"><a href="sec-dlm-dlm-forecast-diagnostics.html"><i class="fa fa-check"></i><b>9.9</b> Forecast diagnostics</a></li>
-<li class="chapter" data-level="9.10" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>9.10</b> Homework discussion and data</a><ul>
+<li class="chapter" data-level="9.10" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html"><i class="fa fa-check"></i><b>9.10</b> Homework discussion and data</a>
+<ul>
 <li class="chapter" data-level="9.10.1" data-path="sec-dlm-homework.html"><a href="sec-dlm-homework.html#sec-dlm-spawner-recruit-data"><i class="fa fa-check"></i><b>9.10.1</b> Spawner-recruit data</a></li>
 </ul></li>
 <li class="chapter" data-level="9.11" data-path="sec-dlm-problems.html"><a href="sec-dlm-problems.html"><i class="fa fa-check"></i><b>9.11</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="sec-dfa.html"><a href="sec-dfa.html"><i class="fa fa-check"></i><b>10</b> Dynamic Factor Analysis</a><ul>
+<li class="chapter" data-level="10" data-path="sec-dfa.html"><a href="sec-dfa.html"><i class="fa fa-check"></i><b>10</b> Dynamic Factor Analysis</a>
+<ul>
 <li class="chapter" data-level="" data-path="sec-dfa.html"><a href="sec-dfa.html#data-and-packages-6"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="10.1" data-path="sec-dfa-intro.html"><a href="sec-dfa-intro.html"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
 <li class="chapter" data-level="10.2" data-path="sec-dfa-example1.html"><a href="sec-dfa-example1.html"><i class="fa fa-check"></i><b>10.2</b> Example of a DFA model</a></li>
 <li class="chapter" data-level="10.3" data-path="sec-dfa-constraining-a-dfa-model.html"><a href="sec-dfa-constraining-a-dfa-model.html"><i class="fa fa-check"></i><b>10.3</b> Constraining a DFA model</a></li>
 <li class="chapter" data-level="10.4" data-path="sec-dfa-different-error-structures.html"><a href="sec-dfa-different-error-structures.html"><i class="fa fa-check"></i><b>10.4</b> Different error structures</a></li>
-<li class="chapter" data-level="10.5" data-path="sec-dfa-lake-wa-data.html"><a href="sec-dfa-lake-wa-data.html"><i class="fa fa-check"></i><b>10.5</b> Lake Washington phytoplankton data</a><ul>
+<li class="chapter" data-level="10.5" data-path="sec-dfa-lake-wa-data.html"><a href="sec-dfa-lake-wa-data.html"><i class="fa fa-check"></i><b>10.5</b> Lake Washington phytoplankton data</a>
+<ul>
 <li class="chapter" data-level="10.5.1" data-path="sec-dfa-lake-wa-data.html"><a href="sec-dfa-lake-wa-data.html#sec-dfa-plot-lake-wa-data"><i class="fa fa-check"></i><b>10.5.1</b> Plots of the data</a></li>
 </ul></li>
-<li class="chapter" data-level="10.6" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html"><i class="fa fa-check"></i><b>10.6</b> Fitting DFA models with the MARSS package</a><ul>
+<li class="chapter" data-level="10.6" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html"><i class="fa fa-check"></i><b>10.6</b> Fitting DFA models with the MARSS package</a>
+<ul>
 <li class="chapter" data-level="10.6.1" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-observation-model"><i class="fa fa-check"></i><b>10.6.1</b> The observation model</a></li>
 <li class="chapter" data-level="10.6.2" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-process-model"><i class="fa fa-check"></i><b>10.6.2</b> The process model</a></li>
 <li class="chapter" data-level="10.6.3" data-path="sec-dfa-fitting-dfa-models-with-marss.html"><a href="sec-dfa-fitting-dfa-models-with-marss.html#sec-dfa-fit-model-in-marss"><i class="fa fa-check"></i><b>10.6.3</b> Fit the model in MARSS</a></li>
@@ -401,42 +449,50 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.12" data-path="sec-dfa-lakeWA.html"><a href="sec-dfa-lakeWA.html"><i class="fa fa-check"></i><b>10.12</b> Example from Lake Washington</a></li>
 <li class="chapter" data-level="10.13" data-path="sec-dfa-problems.html"><a href="sec-dfa-problems.html"><i class="fa fa-check"></i><b>10.13</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html"><i class="fa fa-check"></i><b>11</b> Covariates with Missing Values</a><ul>
+<li class="chapter" data-level="11" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html"><i class="fa fa-check"></i><b>11</b> Covariates with Missing Values</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-mssmiss.html"><a href="chap-mssmiss.html#data-and-packages-7"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="11.1" data-path="sec-mssmiss-overview.html"><a href="sec-mssmiss-overview.html"><i class="fa fa-check"></i><b>11.1</b> Covariates with missing values or observation error</a></li>
-<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a><ul>
+<li class="chapter" data-level="11.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html"><i class="fa fa-check"></i><b>11.2</b> Example: Snotel Data</a>
+<ul>
 <li class="chapter" data-level="11.2.1" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-ar1-with-spatial-correlation"><i class="fa fa-check"></i><b>11.2.1</b> Estimate missing Feb SWE using AR(1) with spatial correlation</a></li>
 <li class="chapter" data-level="11.2.2" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-only-correlation"><i class="fa fa-check"></i><b>11.2.2</b> Estimate missing Feb SWE using only correlation</a></li>
 <li class="chapter" data-level="11.2.3" data-path="example-snotel-data.html"><a href="example-snotel-data.html#estimate-missing-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.3</b> Estimate missing Feb SWE using DFA</a></li>
 <li class="chapter" data-level="11.2.4" data-path="example-snotel-data.html"><a href="example-snotel-data.html#diagnostics-2"><i class="fa fa-check"></i><b>11.2.4</b> Diagnostics</a></li>
 <li class="chapter" data-level="11.2.5" data-path="example-snotel-data.html"><a href="example-snotel-data.html#plot-the-fitted-or-mean-feb-swe-using-dfa"><i class="fa fa-check"></i><b>11.2.5</b> Plot the fitted or mean Feb SWE using DFA</a></li>
 </ul></li>
-<li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a><ul>
+<li class="chapter" data-level="11.3" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html"><i class="fa fa-check"></i><b>11.3</b> Modeling Seasonal SWE</a>
+<ul>
 <li class="chapter" data-level="11.3.1" data-path="modeling-seasonal-swe.html"><a href="modeling-seasonal-swe.html#modeling-season-across-sites"><i class="fa fa-check"></i><b>11.3.1</b> Modeling season across sites</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a><ul>
-<li class="chapter" data-level="12.1" data-path="sec-jags-dataset.html"><a href="sec-jags-dataset.html"><i class="fa fa-check"></i><b>12.1</b> The airquality dataset</a></li>
+<li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
-<li class="chapter" data-level="12.3" data-path="sec-jags-regression-with-corr-errors.html"><a href="sec-jags-regression-with-corr-errors.html"><i class="fa fa-check"></i><b>12.3</b> Regression with autocorrelated errors</a></li>
-<li class="chapter" data-level="12.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>12.4</b> Random walk time series model</a></li>
+<li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
+<li class="chapter" data-level="12.4" data-path="sec-jags-rw.html"><a href="sec-jags-rw.html"><i class="fa fa-check"></i><b>12.4</b> Random walk with drift</a></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-ar1.html"><a href="sec-jags-ar1.html"><i class="fa fa-check"></i><b>12.5</b> Autoregressive AR(1) time series models</a></li>
-<li class="chapter" data-level="12.6" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>12.6</b> Univariate state space model</a><ul>
-<li class="chapter" data-level="12.6.1" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html#sec-jags-covariates"><i class="fa fa-check"></i><b>12.6.1</b> Including covariates</a></li>
+<li class="chapter" data-level="12.6" data-path="sec-jags-regression-with-corr-errors2.html"><a href="sec-jags-regression-with-corr-errors2.html"><i class="fa fa-check"></i><b>12.6</b> Regression with AR(1) errors</a></li>
+<li class="chapter" data-level="12.7" data-path="sec-jags-uss.html"><a href="sec-jags-uss.html"><i class="fa fa-check"></i><b>12.7</b> Univariate state space model</a></li>
+<li class="chapter" data-level="12.8" data-path="sec-jags-poisson.html"><a href="sec-jags-poisson.html"><i class="fa fa-check"></i><b>12.8</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.9" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.9</b> Forecasting with JAGS models</a></li>
+<li class="chapter" data-level="12.10" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.10</b> Problems</a></li>
 </ul></li>
-<li class="chapter" data-level="12.7" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.7</b> Forecasting with JAGS models</a></li>
-<li class="chapter" data-level="12.8" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.8</b> Problems</a></li>
-</ul></li>
-<li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a><ul>
+<li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
-<li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a><ul>
+<li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
+<ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
 </ul></li>
 <li class="chapter" data-level="13.2" data-path="sec-stan-lr-ar.html"><a href="sec-stan-lr-ar.html"><i class="fa fa-check"></i><b>13.2</b> Linear regression with correlated errors</a></li>
 <li class="chapter" data-level="13.3" data-path="sec-stan-rw.html"><a href="sec-stan-rw.html"><i class="fa fa-check"></i><b>13.3</b> Random walk model</a></li>
 <li class="chapter" data-level="13.4" data-path="sec-stan-ar1.html"><a href="sec-stan-ar1.html"><i class="fa fa-check"></i><b>13.4</b> Autoregressive models</a></li>
 <li class="chapter" data-level="13.5" data-path="sec-stan-uss.html"><a href="sec-stan-uss.html"><i class="fa fa-check"></i><b>13.5</b> Univariate state-space models</a></li>
-<li class="chapter" data-level="13.6" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>13.6</b> Dynamic factor analysis</a><ul>
+<li class="chapter" data-level="13.6" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html"><i class="fa fa-check"></i><b>13.6</b> Dynamic factor analysis</a>
+<ul>
 <li class="chapter" data-level="13.6.1" data-path="sec-stan-dfa.html"><a href="sec-stan-dfa.html#sec-stan-loo"><i class="fa fa-check"></i><b>13.6.1</b> Using leave one out cross-validation to select models</a></li>
 </ul></li>
 <li class="chapter" data-level="13.7" data-path="sec-stan-state-uncertainty.html"><a href="sec-stan-state-uncertainty.html"><i class="fa fa-check"></i><b>13.7</b> Uncertainty intervals on states</a></li>
@@ -447,7 +503,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="13.12" data-path="sec-stan-problems.html"><a href="sec-stan-problems.html"><i class="fa fa-check"></i><b>13.12</b> Problems</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="more-examples.html"><a href="more-examples.html"><i class="fa fa-check"></i>More examples</a></li>
-<li class="chapter" data-level="14" data-path="chap-noisy-sensors-.html"><a href="chap-noisy-sensors-.html"><i class="fa fa-check"></i><b>14</b> Detecting a signal from noisy sensors</a><ul>
+<li class="chapter" data-level="14" data-path="chap-noisy-sensors-.html"><a href="chap-noisy-sensors-.html"><i class="fa fa-check"></i><b>14</b> Detecting a signal from noisy sensors</a>
+<ul>
 <li class="chapter" data-level="14.1" data-path="sec-signal-overview.html"><a href="sec-signal-overview.html"><i class="fa fa-check"></i><b>14.1</b> Overview</a></li>
 <li class="chapter" data-level="14.2" data-path="prep.html"><a href="prep.html"><i class="fa fa-check"></i><b>14.2</b> Prep</a></li>
 <li class="chapter" data-level="14.3" data-path="create-a-signal.html"><a href="create-a-signal.html"><i class="fa fa-check"></i><b>14.3</b> Create a signal</a></li>
@@ -461,14 +518,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="14.11" data-path="correlated-noise.html"><a href="correlated-noise.html"><i class="fa fa-check"></i><b>14.11</b> Correlated noise</a></li>
 <li class="chapter" data-level="14.12" data-path="discussion.html"><a href="discussion.html"><i class="fa fa-check"></i><b>14.12</b> Discussion</a></li>
 </ul></li>
-<li class="chapter" data-level="15" data-path="chap-seasonal-dlm.html"><a href="chap-seasonal-dlm.html"><i class="fa fa-check"></i><b>15</b> Modeling changing seasonality</a><ul>
+<li class="chapter" data-level="15" data-path="chap-seasonal-dlm.html"><a href="chap-seasonal-dlm.html"><i class="fa fa-check"></i><b>15</b> Modeling changing seasonality</a>
+<ul>
 <li class="chapter" data-level="15.1" data-path="sec-seasonal-dlm-overview.html"><a href="sec-seasonal-dlm-overview.html"><i class="fa fa-check"></i><b>15.1</b> Overview</a></li>
 <li class="chapter" data-level="15.2" data-path="time-varying-seasonality-and-amplitude.html"><a href="time-varying-seasonality-and-amplitude.html"><i class="fa fa-check"></i><b>15.2</b> Time-varying seasonality and amplitude</a></li>
 <li class="chapter" data-level="15.3" data-path="using-dlms-to-estimate-changing-season.html"><a href="using-dlms-to-estimate-changing-season.html"><i class="fa fa-check"></i><b>15.3</b> Using DLMs to estimate changing season</a></li>
-<li class="chapter" data-level="15.4" data-path="time-varying-amplitude.html"><a href="time-varying-amplitude.html"><i class="fa fa-check"></i><b>15.4</b> Time-varying amplitude</a><ul>
+<li class="chapter" data-level="15.4" data-path="time-varying-amplitude.html"><a href="time-varying-amplitude.html"><i class="fa fa-check"></i><b>15.4</b> Time-varying amplitude</a>
+<ul>
 <li class="chapter" data-level="15.4.1" data-path="time-varying-amplitude.html"><a href="time-varying-amplitude.html#fitting-the-model"><i class="fa fa-check"></i><b>15.4.1</b> Fitting the model</a></li>
 </ul></li>
-<li class="chapter" data-level="15.5" data-path="multivariate-responses.html"><a href="multivariate-responses.html"><i class="fa fa-check"></i><b>15.5</b> Multivariate responses</a><ul>
+<li class="chapter" data-level="15.5" data-path="multivariate-responses.html"><a href="multivariate-responses.html"><i class="fa fa-check"></i><b>15.5</b> Multivariate responses</a>
+<ul>
 <li class="chapter" data-level="15.5.1" data-path="multivariate-responses.html"><a href="multivariate-responses.html#same-seasonality-and-same-level"><i class="fa fa-check"></i><b>15.5.1</b> Same seasonality and same level</a></li>
 <li class="chapter" data-level="15.5.2" data-path="multivariate-responses.html"><a href="multivariate-responses.html#same-seasonality-and-same-level-but-scaled"><i class="fa fa-check"></i><b>15.5.2</b> Same seasonality and same level but scaled</a></li>
 <li class="chapter" data-level="15.5.3" data-path="multivariate-responses.html"><a href="multivariate-responses.html#scaled-seasonality-and-same-level"><i class="fa fa-check"></i><b>15.5.3</b> Scaled seasonality and same level</a></li>
@@ -477,11 +537,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="15.6" data-path="summary.html"><a href="summary.html"><i class="fa fa-check"></i><b>15.6</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a><ul>
+<li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
+<ul>
 <li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
-<li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a><ul>
+<li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
+<ul>
 <li class="chapter" data-level="16.3.1" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#set-up-the-data"><i class="fa fa-check"></i><b>16.3.1</b> Set up the data</a></li>
 <li class="chapter" data-level="16.3.2" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#specify-the-mathbfz-matrix"><i class="fa fa-check"></i><b>16.3.2</b> Specify the <span class="math inline">\(\mathbf{Z}\)</span> matrix</a></li>
 <li class="chapter" data-level="16.3.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#specify-the-model-list"><i class="fa fa-check"></i><b>16.3.3</b> Specify the model list</a></li>
@@ -489,7 +551,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="16.3.5" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html#plot-the-output"><i class="fa fa-check"></i><b>16.3.5</b> Plot the output</a></li>
 </ul></li>
 <li class="chapter" data-level="16.4" data-path="univariate-results.html"><a href="univariate-results.html"><i class="fa fa-check"></i><b>16.4</b> Univariate results</a></li>
-<li class="chapter" data-level="16.5" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html"><i class="fa fa-check"></i><b>16.5</b> Multivariate DLM 1: Synchrony in levels</a><ul>
+<li class="chapter" data-level="16.5" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html"><i class="fa fa-check"></i><b>16.5</b> Multivariate DLM 1: Synchrony in levels</a>
+<ul>
 <li class="chapter" data-level="16.5.1" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html#state-model"><i class="fa fa-check"></i><b>16.5.1</b> State model</a></li>
 <li class="chapter" data-level="16.5.2" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html#observation-model"><i class="fa fa-check"></i><b>16.5.2</b> Observation model</a></li>
 <li class="chapter" data-level="16.5.3" data-path="multivariate-dlm-1-synchrony-in-levels.html"><a href="multivariate-dlm-1-synchrony-in-levels.html#fit-model"><i class="fa fa-check"></i><b>16.5.3</b> Fit model</a></li>
@@ -517,41 +580,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sec-msscov-season" class="section level2">
+<div id="sec-msscov-season" class="section level2" number="8.6">
 <h2><span class="header-section-number">8.6</span> Including seasonal effects in MARSS models</h2>
 <p>Time-series data are often collected at intervals with some implicit ``seasonality.’’ For example, quarterly earnings for a business, monthly rainfall totals, or hourly air temperatures. In those cases, it is often helpful to extract any recurring seasonal patterns that might otherwise mask some of the other temporal dynamics we are interested in examining.</p>
 <p>Here we show a few approaches for including seasonal effects using the Lake Washington plankton data, which were collected monthly. The following examples will use all five phytoplankton species from Lake Washington. First, let’s set up the data.</p>
-<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="sec-msscov-season.html#cb508-1"></a>years &lt;-<span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1965</span> <span class="op">&amp;</span><span class="st"> </span>fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="op">&lt;</span><span class="st"> </span><span class="dv">1975</span></span>
-<span id="cb508-2"><a href="sec-msscov-season.html#cb508-2"></a>phytos &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Bluegreens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, <span class="st">&quot;Other.algae&quot;</span>)</span>
-<span id="cb508-3"><a href="sec-msscov-season.html#cb508-3"></a>dat &lt;-<span class="st"> </span><span class="kw">t</span>(fulldat[years, phytos])</span>
-<span id="cb508-4"><a href="sec-msscov-season.html#cb508-4"></a></span>
-<span id="cb508-5"><a href="sec-msscov-season.html#cb508-5"></a><span class="co"># z.score data because we changed the mean when we subsampled</span></span>
-<span id="cb508-6"><a href="sec-msscov-season.html#cb508-6"></a>the.mean &lt;-<span class="st"> </span><span class="kw">apply</span>(dat, <span class="dv">1</span>, mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb508-7"><a href="sec-msscov-season.html#cb508-7"></a>the.sigma &lt;-<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">apply</span>(dat, <span class="dv">1</span>, var, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb508-8"><a href="sec-msscov-season.html#cb508-8"></a>dat &lt;-<span class="st"> </span>(dat <span class="op">-</span><span class="st"> </span>the.mean) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>the.sigma)</span>
-<span id="cb508-9"><a href="sec-msscov-season.html#cb508-9"></a><span class="co"># number of time periods/samples</span></span>
-<span id="cb508-10"><a href="sec-msscov-season.html#cb508-10"></a>TT &lt;-<span class="st"> </span><span class="kw">dim</span>(dat)[<span class="dv">2</span>]</span></code></pre></div>
-<div id="sec-msscov-season-factors" class="section level3">
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="sec-msscov-season.html#cb506-1" aria-hidden="true" tabindex="-1"></a>years <span class="ot">&lt;-</span> fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="sc">&gt;=</span> <span class="dv">1965</span> <span class="sc">&amp;</span> fulldat[, <span class="st">&quot;Year&quot;</span>] <span class="sc">&lt;</span> <span class="dv">1975</span></span>
+<span id="cb506-2"><a href="sec-msscov-season.html#cb506-2" aria-hidden="true" tabindex="-1"></a>phytos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Diatoms&quot;</span>, <span class="st">&quot;Greens&quot;</span>, <span class="st">&quot;Bluegreens&quot;</span>, <span class="st">&quot;Unicells&quot;</span>, <span class="st">&quot;Other.algae&quot;</span>)</span>
+<span id="cb506-3"><a href="sec-msscov-season.html#cb506-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">t</span>(fulldat[years, phytos])</span>
+<span id="cb506-4"><a href="sec-msscov-season.html#cb506-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb506-5"><a href="sec-msscov-season.html#cb506-5" aria-hidden="true" tabindex="-1"></a><span class="co"># z.score data because we changed the mean when we subsampled</span></span>
+<span id="cb506-6"><a href="sec-msscov-season.html#cb506-6" aria-hidden="true" tabindex="-1"></a>the.mean <span class="ot">&lt;-</span> <span class="fu">apply</span>(dat, <span class="dv">1</span>, mean, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb506-7"><a href="sec-msscov-season.html#cb506-7" aria-hidden="true" tabindex="-1"></a>the.sigma <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">apply</span>(dat, <span class="dv">1</span>, var, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb506-8"><a href="sec-msscov-season.html#cb506-8" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> (dat <span class="sc">-</span> the.mean) <span class="sc">*</span> (<span class="dv">1</span><span class="sc">/</span>the.sigma)</span>
+<span id="cb506-9"><a href="sec-msscov-season.html#cb506-9" aria-hidden="true" tabindex="-1"></a><span class="co"># number of time periods/samples</span></span>
+<span id="cb506-10"><a href="sec-msscov-season.html#cb506-10" aria-hidden="true" tabindex="-1"></a>TT <span class="ot">&lt;-</span> <span class="fu">dim</span>(dat)[<span class="dv">2</span>]</span></code></pre></div>
+<div id="sec-msscov-season-factors" class="section level3" number="8.6.1">
 <h3><span class="header-section-number">8.6.1</span> Seasonal effects as fixed factors</h3>
 <p>One common approach for estimating seasonal effects is to treat each one as a fixed factor, such that the number of parameters equals the number of ``seasons’’ (e.g., 24 hours per day, 4 quarters per year). The plankton data are collected monthly, so we will treat each month as a fixed factor. To fit a model with fixed month effects, we create a <span class="math inline">\(12 \times T\)</span> covariate matrix <span class="math inline">\(\mathbf{c}\)</span> with one row for each month (Jan, Feb, …) and one column for each time point. We put a 1 in the January row for each column corresponding to a January time point, a 1 in the February row for each column corresponding to a February time point, and so on. All other values of <span class="math inline">\(\mathbf{c}\)</span> equal 0. The following code will create such a <span class="math inline">\(\mathbf{c}\)</span> matrix.</p>
-<div class="sourceCode" id="cb509"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb509-1"><a href="sec-msscov-season.html#cb509-1"></a><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span></span>
-<span id="cb509-2"><a href="sec-msscov-season.html#cb509-2"></a>period &lt;-<span class="st"> </span><span class="dv">12</span></span>
-<span id="cb509-3"><a href="sec-msscov-season.html#cb509-3"></a><span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span></span>
-<span id="cb509-4"><a href="sec-msscov-season.html#cb509-4"></a>per<span class="fl">.1</span>st &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb509-5"><a href="sec-msscov-season.html#cb509-5"></a><span class="co"># create factors for seasons</span></span>
-<span id="cb509-6"><a href="sec-msscov-season.html#cb509-6"></a>c.in &lt;-<span class="st"> </span><span class="kw">diag</span>(period)</span>
-<span id="cb509-7"><a href="sec-msscov-season.html#cb509-7"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>(<span class="kw">ceiling</span>(TT<span class="op">/</span>period))) {</span>
-<span id="cb509-8"><a href="sec-msscov-season.html#cb509-8"></a>    c.in &lt;-<span class="st"> </span><span class="kw">cbind</span>(c.in, <span class="kw">diag</span>(period))</span>
-<span id="cb509-9"><a href="sec-msscov-season.html#cb509-9"></a>}</span>
-<span id="cb509-10"><a href="sec-msscov-season.html#cb509-10"></a><span class="co"># trim c.in to correct start &amp; length</span></span>
-<span id="cb509-11"><a href="sec-msscov-season.html#cb509-11"></a>c.in &lt;-<span class="st"> </span>c.in[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</span>
-<span id="cb509-12"><a href="sec-msscov-season.html#cb509-12"></a><span class="co"># better row names</span></span>
-<span id="cb509-13"><a href="sec-msscov-season.html#cb509-13"></a><span class="kw">rownames</span>(c.in) &lt;-<span class="st"> </span>month.abb</span></code></pre></div>
+<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb507-1"><a href="sec-msscov-season.html#cb507-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span></span>
+<span id="cb507-2"><a href="sec-msscov-season.html#cb507-2" aria-hidden="true" tabindex="-1"></a>period <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb507-3"><a href="sec-msscov-season.html#cb507-3" aria-hidden="true" tabindex="-1"></a><span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span></span>
+<span id="cb507-4"><a href="sec-msscov-season.html#cb507-4" aria-hidden="true" tabindex="-1"></a>per<span class="fl">.1</span>st <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb507-5"><a href="sec-msscov-season.html#cb507-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create factors for seasons</span></span>
+<span id="cb507-6"><a href="sec-msscov-season.html#cb507-6" aria-hidden="true" tabindex="-1"></a>c.in <span class="ot">&lt;-</span> <span class="fu">diag</span>(period)</span>
+<span id="cb507-7"><a href="sec-msscov-season.html#cb507-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>(<span class="fu">ceiling</span>(TT<span class="sc">/</span>period))) {</span>
+<span id="cb507-8"><a href="sec-msscov-season.html#cb507-8" aria-hidden="true" tabindex="-1"></a>    c.in <span class="ot">&lt;-</span> <span class="fu">cbind</span>(c.in, <span class="fu">diag</span>(period))</span>
+<span id="cb507-9"><a href="sec-msscov-season.html#cb507-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb507-10"><a href="sec-msscov-season.html#cb507-10" aria-hidden="true" tabindex="-1"></a><span class="co"># trim c.in to correct start &amp; length</span></span>
+<span id="cb507-11"><a href="sec-msscov-season.html#cb507-11" aria-hidden="true" tabindex="-1"></a>c.in <span class="ot">&lt;-</span> c.in[, (<span class="dv">1</span><span class="sc">:</span>TT) <span class="sc">+</span> (per<span class="fl">.1</span>st <span class="sc">-</span> <span class="dv">1</span>)]</span>
+<span id="cb507-12"><a href="sec-msscov-season.html#cb507-12" aria-hidden="true" tabindex="-1"></a><span class="co"># better row names</span></span>
+<span id="cb507-13"><a href="sec-msscov-season.html#cb507-13" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(c.in) <span class="ot">&lt;-</span> month.abb</span></code></pre></div>
 <p>Next we need to set up the form of the <span class="math inline">\(\mathbf{C}\)</span> matrix which defines any constraints we want to set on the month effects. <span class="math inline">\(\mathbf{C}\)</span> is a <span class="math inline">\(5 \times 12\)</span> matrix. Five taxon and 12 month effects.
 If we wanted each taxon to have the same month effect, i.e. there is a common month effect across all taxon, then
 we have the same value in each <span class="math inline">\(\mathbf{C}\)</span> column:</p>
-<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="sec-msscov-season.html#cb510-1"></a>C &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.abb, <span class="dv">5</span>, <span class="dv">12</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb510-2"><a href="sec-msscov-season.html#cb510-2"></a>C</span></code></pre></div>
+<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="sec-msscov-season.html#cb508-1" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="fu">matrix</span>(month.abb, <span class="dv">5</span>, <span class="dv">12</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb508-2"><a href="sec-msscov-season.html#cb508-2" aria-hidden="true" tabindex="-1"></a>C</span></code></pre></div>
 <pre><code>     [,1]  [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9]  [,10] [,11] [,12]
 [1,] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;
 [2,] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;
@@ -560,90 +623,90 @@ we have the same value in each <span class="math inline">\(\mathbf{C}\)</span> c
 [5,] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;</code></pre>
 <p>Notice, that <span class="math inline">\(\mathbf{C}\)</span> only has 12 values in it, the 12 common month effects.
 However, for this example, we will let each taxon have a different month effect thus allowing different seasonality for each taxon. For this model, we want each value in <span class="math inline">\(\mathbf{C}\)</span> to be unique:</p>
-<div class="sourceCode" id="cb512"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb512-1"><a href="sec-msscov-season.html#cb512-1"></a>C &lt;-<span class="st"> &quot;unconstrained&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="sec-msscov-season.html#cb510-1" aria-hidden="true" tabindex="-1"></a>C <span class="ot">&lt;-</span> <span class="st">&quot;unconstrained&quot;</span></span></code></pre></div>
 <p>Now <span class="math inline">\(\mathbf{C}\)</span> has 5 <span class="math inline">\(\times\)</span> 12 = 60 separate effects.</p>
 <p>Then we set up the form for the rest of the model parameters. We make the following assumptions:</p>
-<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb513-1"><a href="sec-msscov-season.html#cb513-1"></a><span class="co"># Each taxon has unique density-dependence</span></span>
-<span id="cb513-2"><a href="sec-msscov-season.html#cb513-2"></a>B &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
-<span id="cb513-3"><a href="sec-msscov-season.html#cb513-3"></a><span class="co"># Assume independent process errors</span></span>
-<span id="cb513-4"><a href="sec-msscov-season.html#cb513-4"></a>Q &lt;-<span class="st"> &quot;diagonal and unequal&quot;</span></span>
-<span id="cb513-5"><a href="sec-msscov-season.html#cb513-5"></a><span class="co"># We have demeaned the data &amp; are fitting a mean-reverting</span></span>
-<span id="cb513-6"><a href="sec-msscov-season.html#cb513-6"></a><span class="co"># model by estimating a diagonal B, thus</span></span>
-<span id="cb513-7"><a href="sec-msscov-season.html#cb513-7"></a>U &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb513-8"><a href="sec-msscov-season.html#cb513-8"></a><span class="co"># Each obs time series is associated with only one process</span></span>
-<span id="cb513-9"><a href="sec-msscov-season.html#cb513-9"></a>Z &lt;-<span class="st"> &quot;identity&quot;</span></span>
-<span id="cb513-10"><a href="sec-msscov-season.html#cb513-10"></a><span class="co"># The data are demeaned &amp; fluctuate around a mean</span></span>
-<span id="cb513-11"><a href="sec-msscov-season.html#cb513-11"></a>A &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb513-12"><a href="sec-msscov-season.html#cb513-12"></a><span class="co"># We assume observation errors are independent, but they have</span></span>
-<span id="cb513-13"><a href="sec-msscov-season.html#cb513-13"></a><span class="co"># similar variance due to similar collection methods</span></span>
-<span id="cb513-14"><a href="sec-msscov-season.html#cb513-14"></a>R &lt;-<span class="st"> &quot;diagonal and equal&quot;</span></span>
-<span id="cb513-15"><a href="sec-msscov-season.html#cb513-15"></a><span class="co"># We are not including covariate effects in the obs equation</span></span>
-<span id="cb513-16"><a href="sec-msscov-season.html#cb513-16"></a>D &lt;-<span class="st"> &quot;zero&quot;</span></span>
-<span id="cb513-17"><a href="sec-msscov-season.html#cb513-17"></a>d &lt;-<span class="st"> &quot;zero&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb511"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb511-1"><a href="sec-msscov-season.html#cb511-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Each taxon has unique density-dependence</span></span>
+<span id="cb511-2"><a href="sec-msscov-season.html#cb511-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="st">&quot;diagonal and unequal&quot;</span></span>
+<span id="cb511-3"><a href="sec-msscov-season.html#cb511-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Assume independent process errors</span></span>
+<span id="cb511-4"><a href="sec-msscov-season.html#cb511-4" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> <span class="st">&quot;diagonal and unequal&quot;</span></span>
+<span id="cb511-5"><a href="sec-msscov-season.html#cb511-5" aria-hidden="true" tabindex="-1"></a><span class="co"># We have demeaned the data &amp; are fitting a mean-reverting</span></span>
+<span id="cb511-6"><a href="sec-msscov-season.html#cb511-6" aria-hidden="true" tabindex="-1"></a><span class="co"># model by estimating a diagonal B, thus</span></span>
+<span id="cb511-7"><a href="sec-msscov-season.html#cb511-7" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
+<span id="cb511-8"><a href="sec-msscov-season.html#cb511-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Each obs time series is associated with only one process</span></span>
+<span id="cb511-9"><a href="sec-msscov-season.html#cb511-9" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="st">&quot;identity&quot;</span></span>
+<span id="cb511-10"><a href="sec-msscov-season.html#cb511-10" aria-hidden="true" tabindex="-1"></a><span class="co"># The data are demeaned &amp; fluctuate around a mean</span></span>
+<span id="cb511-11"><a href="sec-msscov-season.html#cb511-11" aria-hidden="true" tabindex="-1"></a>A <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
+<span id="cb511-12"><a href="sec-msscov-season.html#cb511-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We assume observation errors are independent, but they have</span></span>
+<span id="cb511-13"><a href="sec-msscov-season.html#cb511-13" aria-hidden="true" tabindex="-1"></a><span class="co"># similar variance due to similar collection methods</span></span>
+<span id="cb511-14"><a href="sec-msscov-season.html#cb511-14" aria-hidden="true" tabindex="-1"></a>R <span class="ot">&lt;-</span> <span class="st">&quot;diagonal and equal&quot;</span></span>
+<span id="cb511-15"><a href="sec-msscov-season.html#cb511-15" aria-hidden="true" tabindex="-1"></a><span class="co"># We are not including covariate effects in the obs equation</span></span>
+<span id="cb511-16"><a href="sec-msscov-season.html#cb511-16" aria-hidden="true" tabindex="-1"></a>D <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
+<span id="cb511-17"><a href="sec-msscov-season.html#cb511-17" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span></code></pre></div>
 <p>Now we can set up the model list for MARSS and fit the model (results are not shown since they are verbose with 60 different month effects).</p>
-<div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="sec-msscov-season.html#cb514-1"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
-<span id="cb514-2"><a href="sec-msscov-season.html#cb514-2"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> c.in, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</span>
-<span id="cb514-3"><a href="sec-msscov-season.html#cb514-3"></a>seas.mod<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</span>
-<span id="cb514-4"><a href="sec-msscov-season.html#cb514-4"></a></span>
-<span id="cb514-5"><a href="sec-msscov-season.html#cb514-5"></a><span class="co"># Get the estimated seasonal effects rows are taxa, cols are</span></span>
-<span id="cb514-6"><a href="sec-msscov-season.html#cb514-6"></a><span class="co"># seasonal effects</span></span>
-<span id="cb514-7"><a href="sec-msscov-season.html#cb514-7"></a>seas<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.1</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</span>
-<span id="cb514-8"><a href="sec-msscov-season.html#cb514-8"></a><span class="kw">rownames</span>(seas<span class="fl">.1</span>) &lt;-<span class="st"> </span>phytos</span>
-<span id="cb514-9"><a href="sec-msscov-season.html#cb514-9"></a><span class="kw">colnames</span>(seas<span class="fl">.1</span>) &lt;-<span class="st"> </span>month.abb</span></code></pre></div>
-<p>The top panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this model. Note that if we had set U=“unequal”, we would need to set one of the columns of <span class="math inline">\(\mathbf{C}\)</span> to zero because the model would be under-determined (infinite number of solutions). If we substracted the mean January abundance off each time series, we could set the January column in <span class="math inline">\(\mathbf{C}\)</span> to 0 and get rid of 5 estimated effects.</p>
+<div class="sourceCode" id="cb512"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb512-1"><a href="sec-msscov-season.html#cb512-1" aria-hidden="true" tabindex="-1"></a>model.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">B =</span> B, <span class="at">U =</span> U, <span class="at">Q =</span> Q, <span class="at">Z =</span> Z, <span class="at">A =</span> A, <span class="at">R =</span> R, </span>
+<span id="cb512-2"><a href="sec-msscov-season.html#cb512-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">C =</span> C, <span class="at">c =</span> c.in, <span class="at">D =</span> D, <span class="at">d =</span> d)</span>
+<span id="cb512-3"><a href="sec-msscov-season.html#cb512-3" aria-hidden="true" tabindex="-1"></a>seas.mod<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat, <span class="at">model =</span> model.list, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> <span class="dv">1500</span>))</span>
+<span id="cb512-4"><a href="sec-msscov-season.html#cb512-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb512-5"><a href="sec-msscov-season.html#cb512-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the estimated seasonal effects rows are taxa, cols are</span></span>
+<span id="cb512-6"><a href="sec-msscov-season.html#cb512-6" aria-hidden="true" tabindex="-1"></a><span class="co"># seasonal effects</span></span>
+<span id="cb512-7"><a href="sec-msscov-season.html#cb512-7" aria-hidden="true" tabindex="-1"></a>seas<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">coef</span>(seas.mod<span class="fl">.1</span>, <span class="at">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="sc">$</span>C</span>
+<span id="cb512-8"><a href="sec-msscov-season.html#cb512-8" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seas<span class="fl">.1</span>) <span class="ot">&lt;-</span> phytos</span>
+<span id="cb512-9"><a href="sec-msscov-season.html#cb512-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(seas<span class="fl">.1</span>) <span class="ot">&lt;-</span> month.abb</span></code></pre></div>
+<p>The top panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this model. Note that if we had set U=“unequal,” we would need to set one of the columns of <span class="math inline">\(\mathbf{C}\)</span> to zero because the model would be under-determined (infinite number of solutions). If we substracted the mean January abundance off each time series, we could set the January column in <span class="math inline">\(\mathbf{C}\)</span> to 0 and get rid of 5 estimated effects.</p>
 </div>
-<div id="sec-msscov-season-polynomial" class="section level3">
+<div id="sec-msscov-season-polynomial" class="section level3" number="8.6.2">
 <h3><span class="header-section-number">8.6.2</span> Seasonal effects as a polynomial</h3>
 <p>The fixed factor approach required estimating 60 effects. Another approach is to model the month effect as a 3rd-order (or higher) polynomial: <span class="math inline">\(a+b\times m + c\times m^2 + d \times m^3\)</span> where <span class="math inline">\(m\)</span> is the month number. This approach has less flexibility but requires only 20 estimated parameters (i.e., 4 regression parameters times 5 taxa). To do so, we create a <span class="math inline">\(4 \times T\)</span> covariate matrix <span class="math inline">\(\mathbf{c}\)</span> with the rows corresponding to 1, <span class="math inline">\(m\)</span>, <span class="math inline">\(m^2\)</span>, and <span class="math inline">\(m^3\)</span>, and the columns again corresponding to the time points. Here is how to set up this matrix:</p>
-<div class="sourceCode" id="cb515"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb515-1"><a href="sec-msscov-season.html#cb515-1"></a><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span></span>
-<span id="cb515-2"><a href="sec-msscov-season.html#cb515-2"></a>period &lt;-<span class="st"> </span><span class="dv">12</span></span>
-<span id="cb515-3"><a href="sec-msscov-season.html#cb515-3"></a><span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span></span>
-<span id="cb515-4"><a href="sec-msscov-season.html#cb515-4"></a>per<span class="fl">.1</span>st &lt;-<span class="st"> </span><span class="dv">1</span></span>
-<span id="cb515-5"><a href="sec-msscov-season.html#cb515-5"></a><span class="co"># order of polynomial</span></span>
-<span id="cb515-6"><a href="sec-msscov-season.html#cb515-6"></a>poly.order &lt;-<span class="st"> </span><span class="dv">3</span></span>
-<span id="cb515-7"><a href="sec-msscov-season.html#cb515-7"></a><span class="co"># create polynomials of months</span></span>
-<span id="cb515-8"><a href="sec-msscov-season.html#cb515-8"></a>month.cov &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, period)</span>
-<span id="cb515-9"><a href="sec-msscov-season.html#cb515-9"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>poly.order) {</span>
-<span id="cb515-10"><a href="sec-msscov-season.html#cb515-10"></a>    month.cov =<span class="st"> </span><span class="kw">rbind</span>(month.cov, (<span class="dv">1</span><span class="op">:</span><span class="dv">12</span>)<span class="op">^</span>i)</span>
-<span id="cb515-11"><a href="sec-msscov-season.html#cb515-11"></a>}</span>
-<span id="cb515-12"><a href="sec-msscov-season.html#cb515-12"></a><span class="co"># our c matrix is month.cov replicated once for each year</span></span>
-<span id="cb515-13"><a href="sec-msscov-season.html#cb515-13"></a>c.m.poly &lt;-<span class="st"> </span><span class="kw">matrix</span>(month.cov, poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, <span class="dt">byrow =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb515-14"><a href="sec-msscov-season.html#cb515-14"></a><span class="co"># trim c.in to correct start &amp; length</span></span>
-<span id="cb515-15"><a href="sec-msscov-season.html#cb515-15"></a>c.m.poly &lt;-<span class="st"> </span>c.m.poly[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</span>
-<span id="cb515-16"><a href="sec-msscov-season.html#cb515-16"></a></span>
-<span id="cb515-17"><a href="sec-msscov-season.html#cb515-17"></a><span class="co"># Everything else remains the same as in the previous example</span></span>
-<span id="cb515-18"><a href="sec-msscov-season.html#cb515-18"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
-<span id="cb515-19"><a href="sec-msscov-season.html#cb515-19"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> c.m.poly, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</span>
-<span id="cb515-20"><a href="sec-msscov-season.html#cb515-20"></a>seas.mod<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb513-1"><a href="sec-msscov-season.html#cb513-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of &#39;seasons&#39; (e.g., 12 months per year)</span></span>
+<span id="cb513-2"><a href="sec-msscov-season.html#cb513-2" aria-hidden="true" tabindex="-1"></a>period <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb513-3"><a href="sec-msscov-season.html#cb513-3" aria-hidden="true" tabindex="-1"></a><span class="co"># first &#39;season&#39; (e.g., Jan = 1, July = 7)</span></span>
+<span id="cb513-4"><a href="sec-msscov-season.html#cb513-4" aria-hidden="true" tabindex="-1"></a>per<span class="fl">.1</span>st <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb513-5"><a href="sec-msscov-season.html#cb513-5" aria-hidden="true" tabindex="-1"></a><span class="co"># order of polynomial</span></span>
+<span id="cb513-6"><a href="sec-msscov-season.html#cb513-6" aria-hidden="true" tabindex="-1"></a>poly.order <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb513-7"><a href="sec-msscov-season.html#cb513-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create polynomials of months</span></span>
+<span id="cb513-8"><a href="sec-msscov-season.html#cb513-8" aria-hidden="true" tabindex="-1"></a>month.cov <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, period)</span>
+<span id="cb513-9"><a href="sec-msscov-season.html#cb513-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>poly.order) {</span>
+<span id="cb513-10"><a href="sec-msscov-season.html#cb513-10" aria-hidden="true" tabindex="-1"></a>    month.cov <span class="ot">=</span> <span class="fu">rbind</span>(month.cov, (<span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)<span class="sc">^</span>i)</span>
+<span id="cb513-11"><a href="sec-msscov-season.html#cb513-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb513-12"><a href="sec-msscov-season.html#cb513-12" aria-hidden="true" tabindex="-1"></a><span class="co"># our c matrix is month.cov replicated once for each year</span></span>
+<span id="cb513-13"><a href="sec-msscov-season.html#cb513-13" aria-hidden="true" tabindex="-1"></a>c.m.poly <span class="ot">&lt;-</span> <span class="fu">matrix</span>(month.cov, poly.order <span class="sc">+</span> <span class="dv">1</span>, TT <span class="sc">+</span> period, <span class="at">byrow =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb513-14"><a href="sec-msscov-season.html#cb513-14" aria-hidden="true" tabindex="-1"></a><span class="co"># trim c.in to correct start &amp; length</span></span>
+<span id="cb513-15"><a href="sec-msscov-season.html#cb513-15" aria-hidden="true" tabindex="-1"></a>c.m.poly <span class="ot">&lt;-</span> c.m.poly[, (<span class="dv">1</span><span class="sc">:</span>TT) <span class="sc">+</span> (per<span class="fl">.1</span>st <span class="sc">-</span> <span class="dv">1</span>)]</span>
+<span id="cb513-16"><a href="sec-msscov-season.html#cb513-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb513-17"><a href="sec-msscov-season.html#cb513-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Everything else remains the same as in the previous example</span></span>
+<span id="cb513-18"><a href="sec-msscov-season.html#cb513-18" aria-hidden="true" tabindex="-1"></a>model.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">B =</span> B, <span class="at">U =</span> U, <span class="at">Q =</span> Q, <span class="at">Z =</span> Z, <span class="at">A =</span> A, <span class="at">R =</span> R, </span>
+<span id="cb513-19"><a href="sec-msscov-season.html#cb513-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">C =</span> C, <span class="at">c =</span> c.m.poly, <span class="at">D =</span> D, <span class="at">d =</span> d)</span>
+<span id="cb513-20"><a href="sec-msscov-season.html#cb513-20" aria-hidden="true" tabindex="-1"></a>seas.mod<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat, <span class="at">model =</span> model.list, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> <span class="dv">1500</span>))</span></code></pre></div>
 <p>The effect of month <span class="math inline">\(m\)</span> for taxon <span class="math inline">\(i\)</span> is <span class="math inline">\(a_i + b_i \times m + c_i \times m^2 + d_i \times m^3\)</span>, where <span class="math inline">\(a_i\)</span>, <span class="math inline">\(b_i\)</span>, <span class="math inline">\(c_i\)</span> and <span class="math inline">\(d_i\)</span> are in the <span class="math inline">\(i\)</span>-th row of <span class="math inline">\(\mathbf{C}\)</span>. We can now calculate the matrix of seasonal effects as follows, where each row is a taxon and each column is a month:</p>
-<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="sec-msscov-season.html#cb516-1"></a>C<span class="fl">.2</span> =<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.2</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</span>
-<span id="cb516-2"><a href="sec-msscov-season.html#cb516-2"></a>seas<span class="fl">.2</span> =<span class="st"> </span>C<span class="fl">.2</span> <span class="op">%*%</span><span class="st"> </span>month.cov</span>
-<span id="cb516-3"><a href="sec-msscov-season.html#cb516-3"></a><span class="kw">rownames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>phytos</span>
-<span id="cb516-4"><a href="sec-msscov-season.html#cb516-4"></a><span class="kw">colnames</span>(seas<span class="fl">.2</span>) &lt;-<span class="st"> </span>month.abb</span></code></pre></div>
+<div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="sec-msscov-season.html#cb514-1" aria-hidden="true" tabindex="-1"></a>C<span class="fl">.2</span> <span class="ot">=</span> <span class="fu">coef</span>(seas.mod<span class="fl">.2</span>, <span class="at">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="sc">$</span>C</span>
+<span id="cb514-2"><a href="sec-msscov-season.html#cb514-2" aria-hidden="true" tabindex="-1"></a>seas<span class="fl">.2</span> <span class="ot">=</span> C<span class="fl">.2</span> <span class="sc">%*%</span> month.cov</span>
+<span id="cb514-3"><a href="sec-msscov-season.html#cb514-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seas<span class="fl">.2</span>) <span class="ot">&lt;-</span> phytos</span>
+<span id="cb514-4"><a href="sec-msscov-season.html#cb514-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(seas<span class="fl">.2</span>) <span class="ot">&lt;-</span> month.abb</span></code></pre></div>
 <p>The middle panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this polynomial model.</p>
 <p>Note: Setting the covariates up like this means that our covariates are collinear since <span class="math inline">\(m\)</span>, <span class="math inline">\(m^2\)</span> and <span class="math inline">\(m^3\)</span> are correlated, obviously. A better approach is to use the <code>poly()</code> function to create an orthogonal polynomial covariate matrix <code>c.m.poly.o</code>:</p>
-<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb517-1"><a href="sec-msscov-season.html#cb517-1"></a>month.cov.o &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span>, <span class="kw">poly</span>(<span class="dv">1</span><span class="op">:</span>period, poly.order))</span>
-<span id="cb517-2"><a href="sec-msscov-season.html#cb517-2"></a>c.m.poly.o &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">t</span>(month.cov.o), poly.order <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, TT <span class="op">+</span><span class="st"> </span>period, </span>
-<span id="cb517-3"><a href="sec-msscov-season.html#cb517-3"></a>    <span class="dt">byrow =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb517-4"><a href="sec-msscov-season.html#cb517-4"></a>c.m.poly.o &lt;-<span class="st"> </span>c.m.poly.o[, (<span class="dv">1</span><span class="op">:</span>TT) <span class="op">+</span><span class="st"> </span>(per<span class="fl">.1</span>st <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb515"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb515-1"><a href="sec-msscov-season.html#cb515-1" aria-hidden="true" tabindex="-1"></a>month.cov.o <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">poly</span>(<span class="dv">1</span><span class="sc">:</span>period, poly.order))</span>
+<span id="cb515-2"><a href="sec-msscov-season.html#cb515-2" aria-hidden="true" tabindex="-1"></a>c.m.poly.o <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">t</span>(month.cov.o), poly.order <span class="sc">+</span> <span class="dv">1</span>, TT <span class="sc">+</span> period, </span>
+<span id="cb515-3"><a href="sec-msscov-season.html#cb515-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">byrow =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb515-4"><a href="sec-msscov-season.html#cb515-4" aria-hidden="true" tabindex="-1"></a>c.m.poly.o <span class="ot">&lt;-</span> c.m.poly.o[, (<span class="dv">1</span><span class="sc">:</span>TT) <span class="sc">+</span> (per<span class="fl">.1</span>st <span class="sc">-</span> <span class="dv">1</span>)]</span></code></pre></div>
 </div>
-<div id="sec-msscov-season-fourier" class="section level3">
+<div id="sec-msscov-season-fourier" class="section level3" number="8.6.3">
 <h3><span class="header-section-number">8.6.3</span> Seasonal effects as a Fourier series</h3>
 <p>The factor approach required estimating 60 effects, and the 3rd order polynomial model was an improvement at only 20 parameters. A third option is to use a discrete Fourier series, which is combination of sine and cosine waves; it would require only 10 parameters. Specifically, the effect of month <span class="math inline">\(m\)</span> on taxon <span class="math inline">\(i\)</span> is <span class="math inline">\(a_i \times \cos(2 \pi m/p) + b_i \times \sin(2 \pi m/p)\)</span>, where <span class="math inline">\(p\)</span> is the period (e.g., 12 months, 4 quarters), and <span class="math inline">\(a_i\)</span> and <span class="math inline">\(b_i\)</span> are contained in the <span class="math inline">\(i\)</span>-th row of <span class="math inline">\(\mathbf{C}\)</span>.</p>
 <p>We begin by defining the <span class="math inline">\(2 \times T\)</span> seasonal covariate matrix <span class="math inline">\(\mathbf{c}\)</span> as a combination of 1 cosine and 1 sine wave:</p>
-<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb518-1"><a href="sec-msscov-season.html#cb518-1"></a>cos.t &lt;-<span class="st"> </span><span class="kw">cos</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</span>
-<span id="cb518-2"><a href="sec-msscov-season.html#cb518-2"></a>sin.t &lt;-<span class="st"> </span><span class="kw">sin</span>(<span class="dv">2</span> <span class="op">*</span><span class="st"> </span>pi <span class="op">*</span><span class="st"> </span><span class="kw">seq</span>(TT)<span class="op">/</span>period)</span>
-<span id="cb518-3"><a href="sec-msscov-season.html#cb518-3"></a>c.Four &lt;-<span class="st"> </span><span class="kw">rbind</span>(cos.t, sin.t)</span></code></pre></div>
+<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="sec-msscov-season.html#cb516-1" aria-hidden="true" tabindex="-1"></a>cos.t <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="fu">seq</span>(TT)<span class="sc">/</span>period)</span>
+<span id="cb516-2"><a href="sec-msscov-season.html#cb516-2" aria-hidden="true" tabindex="-1"></a>sin.t <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> <span class="fu">seq</span>(TT)<span class="sc">/</span>period)</span>
+<span id="cb516-3"><a href="sec-msscov-season.html#cb516-3" aria-hidden="true" tabindex="-1"></a>c.Four <span class="ot">&lt;-</span> <span class="fu">rbind</span>(cos.t, sin.t)</span></code></pre></div>
 <p>Everything else remains the same and we can fit this model as follows:</p>
-<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb519-1"><a href="sec-msscov-season.html#cb519-1"></a>model.list &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">B =</span> B, <span class="dt">U =</span> U, <span class="dt">Q =</span> Q, <span class="dt">Z =</span> Z, <span class="dt">A =</span> A, <span class="dt">R =</span> R, </span>
-<span id="cb519-2"><a href="sec-msscov-season.html#cb519-2"></a>    <span class="dt">C =</span> C, <span class="dt">c =</span> c.Four, <span class="dt">D =</span> D, <span class="dt">d =</span> d)</span>
-<span id="cb519-3"><a href="sec-msscov-season.html#cb519-3"></a>seas.mod<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">MARSS</span>(dat, <span class="dt">model =</span> model.list, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1500</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb517-1"><a href="sec-msscov-season.html#cb517-1" aria-hidden="true" tabindex="-1"></a>model.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">B =</span> B, <span class="at">U =</span> U, <span class="at">Q =</span> Q, <span class="at">Z =</span> Z, <span class="at">A =</span> A, <span class="at">R =</span> R, </span>
+<span id="cb517-2"><a href="sec-msscov-season.html#cb517-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">C =</span> C, <span class="at">c =</span> c.Four, <span class="at">D =</span> D, <span class="at">d =</span> d)</span>
+<span id="cb517-3"><a href="sec-msscov-season.html#cb517-3" aria-hidden="true" tabindex="-1"></a>seas.mod<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat, <span class="at">model =</span> model.list, <span class="at">control =</span> <span class="fu">list</span>(<span class="at">maxit =</span> <span class="dv">1500</span>))</span></code></pre></div>
 <p>We make our seasonal effect matrix as follows:</p>
-<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb520-1"><a href="sec-msscov-season.html#cb520-1"></a>C<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">coef</span>(seas.mod<span class="fl">.3</span>, <span class="dt">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="op">$</span>C</span>
-<span id="cb520-2"><a href="sec-msscov-season.html#cb520-2"></a><span class="co"># The time series of net seasonal effects</span></span>
-<span id="cb520-3"><a href="sec-msscov-season.html#cb520-3"></a>seas<span class="fl">.3</span> &lt;-<span class="st"> </span>C<span class="fl">.3</span> <span class="op">%*%</span><span class="st"> </span>c.Four[, <span class="dv">1</span><span class="op">:</span>period]</span>
-<span id="cb520-4"><a href="sec-msscov-season.html#cb520-4"></a><span class="kw">rownames</span>(seas<span class="fl">.3</span>) &lt;-<span class="st"> </span>phytos</span>
-<span id="cb520-5"><a href="sec-msscov-season.html#cb520-5"></a><span class="kw">colnames</span>(seas<span class="fl">.3</span>) &lt;-<span class="st"> </span>month.abb</span></code></pre></div>
+<div class="sourceCode" id="cb518"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb518-1"><a href="sec-msscov-season.html#cb518-1" aria-hidden="true" tabindex="-1"></a>C<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">coef</span>(seas.mod<span class="fl">.3</span>, <span class="at">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="sc">$</span>C</span>
+<span id="cb518-2"><a href="sec-msscov-season.html#cb518-2" aria-hidden="true" tabindex="-1"></a><span class="co"># The time series of net seasonal effects</span></span>
+<span id="cb518-3"><a href="sec-msscov-season.html#cb518-3" aria-hidden="true" tabindex="-1"></a>seas<span class="fl">.3</span> <span class="ot">&lt;-</span> C<span class="fl">.3</span> <span class="sc">%*%</span> c.Four[, <span class="dv">1</span><span class="sc">:</span>period]</span>
+<span id="cb518-4"><a href="sec-msscov-season.html#cb518-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(seas<span class="fl">.3</span>) <span class="ot">&lt;-</span> phytos</span>
+<span id="cb518-5"><a href="sec-msscov-season.html#cb518-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(seas<span class="fl">.3</span>) <span class="ot">&lt;-</span> month.abb</span></code></pre></div>
 <p>The bottom panel in Figure <a href="sec-msscov-season.html#fig:msscov-mon-effects">8.2</a> shows the estimated seasonal effects for this seasonal-effects model based on a discrete Fourier series.</p>
 
 <div class="figure" style="text-align: center"><span id="fig:msscov-mon-effects"></span>
@@ -653,8 +716,8 @@ Figure 8.2: Estimated monthly effects for the three approaches to estimating sea
 </p>
 </div>
 <p>Rather than rely on our eyes to judge model fits, we should formally assess which of the 3 approaches offers the most parsimonious fit to the data. Here is a table of AICc values for the 3 models:</p>
-<div class="sourceCode" id="cb521"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb521-1"><a href="sec-msscov-season.html#cb521-1"></a><span class="kw">data.frame</span>(<span class="dt">Model =</span> <span class="kw">c</span>(<span class="st">&quot;Fixed&quot;</span>, <span class="st">&quot;Cubic&quot;</span>, <span class="st">&quot;Fourier&quot;</span>), <span class="dt">AICc =</span> <span class="kw">round</span>(<span class="kw">c</span>(seas.mod<span class="fl">.1</span><span class="op">$</span>AICc, </span>
-<span id="cb521-2"><a href="sec-msscov-season.html#cb521-2"></a>    seas.mod<span class="fl">.2</span><span class="op">$</span>AICc, seas.mod<span class="fl">.3</span><span class="op">$</span>AICc), <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb519-1"><a href="sec-msscov-season.html#cb519-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">Model =</span> <span class="fu">c</span>(<span class="st">&quot;Fixed&quot;</span>, <span class="st">&quot;Cubic&quot;</span>, <span class="st">&quot;Fourier&quot;</span>), <span class="at">AICc =</span> <span class="fu">round</span>(<span class="fu">c</span>(seas.mod<span class="fl">.1</span><span class="sc">$</span>AICc, </span>
+<span id="cb519-2"><a href="sec-msscov-season.html#cb519-2" aria-hidden="true" tabindex="-1"></a>    seas.mod<span class="fl">.2</span><span class="sc">$</span>AICc, seas.mod<span class="fl">.3</span><span class="sc">$</span>AICc), <span class="dv">1</span>))</span></code></pre></div>
 <pre><code>    Model   AICc
 1   Fixed 1188.4
 2   Cubic 1144.9

@@ -144,6 +144,7 @@ p + facet_wrap(~Station)
 Imagine that for our study we need an estimate of SWE for all sites.  We will use the information from the sites with full data to estimate the missing SWE for other sites.  We will use a MARSS model to use all the available data.
 
 \begin{equation}
+\begin{gathered}
 \begin{bmatrix}
 x_1 \\ x_2 \\ \dots \\ x_{15}
 \end{bmatrix}_t =
@@ -171,6 +172,7 @@ a_1 \\ a_2 \\ \dots \\ a_{15}
 \begin{bmatrix}
 v_1 \\ v_2 \\ \dots \\ v_{15}
 \end{bmatrix}_t
+\end{gathered}
 (\#eq:mssmiss-ar1)
 \end{equation}
 
@@ -268,6 +270,7 @@ v_1 \\ v_2 \\ \dots \\ v_{15}
 However the EM algorithm used by `MARSS()` runs into numerical issues.  Instead we will set the model up as follows.  Allowing a hidden state observed with small error makes the estimation more stable.
 
 \begin{equation}
+\begin{gathered}
 \begin{bmatrix}
 x_1 \\ x_2 \\ \dots \\ x_{15}
 \end{bmatrix}_t =
@@ -300,6 +303,7 @@ v_1 \\ v_2 \\ \dots \\ v_{15}
 \dots&\dots&\dots&\dots \\ 
 0&0&\dots&0.01
 \end{bmatrix}
+\end{gathered}
 (\#eq:mssmiss-corr)
 \end{equation}
 Again $\mathbf{a}$ is the mean level in the time series.  Note that the expected value of $\mathbf{x}$ is zero if there are no data, so $E(\mathbf{x}_0)=0$.
@@ -357,7 +361,8 @@ mtext("Model Residuals ACF", outer=TRUE, side=3)
 
 Another approach we might take is to model SWE using Dynamic Factor Analysis.  Our model might take the following form with two factors, modeled as AR(1) processes. $\mathbf{a}$ is the mean level of the time series.
 
-$$
+\begin{equation}
+\begin{gathered}
 \begin{bmatrix}
 x_1 \\ x_2
 \end{bmatrix}_t = 
@@ -383,7 +388,9 @@ a_1 \\ a_2 \\ \dots \\ a_{15}
 \begin{bmatrix}
 v_1 \\ v_2 \\ \dots \\ v_{15}
 \end{bmatrix}_t
-$$
+\end{gathered}
+\end{equation}
+
 
 The model is set up as follows:
 ```{r mssmiss-snotel-dfa}

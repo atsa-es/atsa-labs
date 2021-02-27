@@ -68,7 +68,7 @@ Here is the quick start version.
     bookdown documentation suggests that this should work
     ```bookdown::render_book( c("index.Rmd","cleanedRmd/basic-matrix-math.Rmd"), preview=TRUE)```
     but I have not been able to get that to work and it puts garbage in the docs folder.
-* **How do I cite?**  The Fish507.bib file is in the folder "tex". Add bib citations there but search to make sure it is not already there.  "Lab-fitting-DLMs/DLM.Rmd" has examples of citations.
+* **How do I cite?**  The Fish507.bib file is in the folder "tex". Add bib citations there but search to make sure it is not already there.  "Lab-fitting-DLMs/DLM.Rmd" has examples of citations. Basically `\citet{ref}` becomes `@ref` and `\citep{ref}` becomes `[@ref]`.
 * **Don't make changes to the docs folder.** That's were bookdown puts the website files and your changes will get wiped out.
 
 ## Style sheet

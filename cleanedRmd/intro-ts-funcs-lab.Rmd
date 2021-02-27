@@ -1038,7 +1038,7 @@ plot.ts(x2, ylab = expression(italic(x[t])))
 Autoregressive models of order $p$, abbreviated AR($p$), are commonly used in time series analyses.  In particular, AR(1) models (and their multivariate extensions) see considerable use in ecology as we will see later in the course.  Recall from lecture that an AR($p$) model is written as
 
 \begin{equation}
-(\#eq:defnAR_p_coef)
+(\#eq:defnAR.p.coef)
   x_t = \phi_1 x_{t-1} + \phi_2 x_{t-2} + \dots + \phi_p x_{t-p} + w_t,
 \end{equation}
 
@@ -1224,9 +1224,9 @@ for (p in 1:4) {
 ```
 
 
-(ref:tslab-plotAR_p_coefComps) Time series of simulated AR($p$) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF's (center column) and PACF's (right column).  Note that only the first 50 values of $x_t$ are plotted.
+(ref:tslab-plotAR-p-coefComps) Time series of simulated AR($p$) processes (left column) of increasing orders from 1-4 (rows) with their associated ACF's (center column) and PACF's (right column).  Note that only the first 50 values of $x_t$ are plotted.
 
-```{r tslab-plotAR_p_coefComps, eval = TRUE, echo = FALSE, fig = TRUE, fig.height = 8, fig.cap = '(ref:tslab-plotAR_p_coefComps)'}
+```{r tslab-plotAR-p-coefComps, eval = TRUE, echo = FALSE, fig = TRUE, fig.height = 8, fig.cap = '(ref:tslab-plotAR-p-coefComps)'}
 ## set the margins & text size
 par(mfrow = c(4, 3), mar = c(4, 4, 0.5, 0.5), oma = c(0, 0, 0, 0), cex = 1)
 ## loop over orders of p
@@ -1238,7 +1238,7 @@ for (p in 1:4) {
 ```
  
 
-\noindent As we saw in lecture and is evident from our examples shown in Figure \@ref(fig:tslab-plotAR_p_coefComps), the ACF for an AR($p$) process tails off toward zero very slowly, but the PACF goes to zero for lags > $p$.  This is an important diagnostic tool when trying to identify the order of $p$ in ARMA($p,q$) models.
+\noindent As we saw in lecture and is evident from our examples shown in Figure \@ref(fig:tslab-plotAR-p-coefComps), the ACF for an AR($p$) process tails off toward zero very slowly, but the PACF goes to zero for lags > $p$.  This is an important diagnostic tool when trying to identify the order of $p$ in ARMA($p,q$) models.
 
 
 ## Moving-average (MA) models {#sec-tslab-moving-average-ma-models}
@@ -1468,7 +1468,7 @@ auto.arima(ARMA_sim, start.p = 0, max.p = 3, start.q = 0, max.q = 3)
 \noindent We get the same results with an increase in speed and less coding, which is nice.  If you want to see the form for each of the models checked by `auto.arima()` and their associated AIC values, include the argument `trace = 1`.
 
 
-\cleAR_p_coefage
+\clearpage
 
 ## Problems {#sec-tslab-problems}
 
