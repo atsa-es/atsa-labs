@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -586,66 +586,66 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 data, which has it’s own standard error associated with it. We can set up a null model
 modeling temperature and oxygen independently, with different lags allowed</p>
 <p>First we have to modify our data function to also generate temperature data.</p>
-<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb681-1"><a href="sec-neon-oxygen-temp.html#cb681-1" aria-hidden="true" tabindex="-1"></a>create_stan_data <span class="ot">&lt;-</span> <span class="cf">function</span>(data, last_obs, n_forecast, n_lag_o2, </span>
-<span id="cb681-2"><a href="sec-neon-oxygen-temp.html#cb681-2" aria-hidden="true" tabindex="-1"></a>    n_lag_temp) {</span>
-<span id="cb681-3"><a href="sec-neon-oxygen-temp.html#cb681-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create test data</span></span>
-<span id="cb681-4"><a href="sec-neon-oxygen-temp.html#cb681-4" aria-hidden="true" tabindex="-1"></a>    o2_test <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, indx <span class="sc">%in%</span> <span class="fu">seq</span>(last_obs <span class="sc">+</span> <span class="dv">1</span>, </span>
-<span id="cb681-5"><a href="sec-neon-oxygen-temp.html#cb681-5" aria-hidden="true" tabindex="-1"></a>        (last_obs <span class="sc">+</span> n_forecast)))</span>
-<span id="cb681-6"><a href="sec-neon-oxygen-temp.html#cb681-6" aria-hidden="true" tabindex="-1"></a>    temp_test <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, indx <span class="sc">%in%</span> <span class="fu">seq</span>(last_obs <span class="sc">+</span> </span>
-<span id="cb681-7"><a href="sec-neon-oxygen-temp.html#cb681-7" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>, (last_obs <span class="sc">+</span> n_forecast)))</span>
-<span id="cb681-8"><a href="sec-neon-oxygen-temp.html#cb681-8" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb681-9"><a href="sec-neon-oxygen-temp.html#cb681-9" aria-hidden="true" tabindex="-1"></a>    o2_train <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, indx <span class="sc">&lt;=</span> last_obs, <span class="sc">!</span><span class="fu">is.na</span>(oxygen))</span>
-<span id="cb681-10"><a href="sec-neon-oxygen-temp.html#cb681-10" aria-hidden="true" tabindex="-1"></a>    o2_x <span class="ot">&lt;-</span> o2_train<span class="sc">$</span>indx</span>
-<span id="cb681-11"><a href="sec-neon-oxygen-temp.html#cb681-11" aria-hidden="true" tabindex="-1"></a>    o2_y <span class="ot">&lt;-</span> o2_train<span class="sc">$</span>oxygen</span>
-<span id="cb681-12"><a href="sec-neon-oxygen-temp.html#cb681-12" aria-hidden="true" tabindex="-1"></a>    o2_sd <span class="ot">&lt;-</span> o2_train<span class="sc">$</span>oxygen_sd</span>
-<span id="cb681-13"><a href="sec-neon-oxygen-temp.html#cb681-13" aria-hidden="true" tabindex="-1"></a>    n_o2 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(o2_train)</span>
-<span id="cb681-14"><a href="sec-neon-oxygen-temp.html#cb681-14" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb681-15"><a href="sec-neon-oxygen-temp.html#cb681-15" aria-hidden="true" tabindex="-1"></a>    temp_train <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, indx <span class="sc">&lt;=</span> last_obs, <span class="sc">!</span><span class="fu">is.na</span>(temperature))</span>
-<span id="cb681-16"><a href="sec-neon-oxygen-temp.html#cb681-16" aria-hidden="true" tabindex="-1"></a>    temp_x <span class="ot">&lt;-</span> temp_train<span class="sc">$</span>indx</span>
-<span id="cb681-17"><a href="sec-neon-oxygen-temp.html#cb681-17" aria-hidden="true" tabindex="-1"></a>    temp_y <span class="ot">&lt;-</span> temp_train<span class="sc">$</span>temperature</span>
-<span id="cb681-18"><a href="sec-neon-oxygen-temp.html#cb681-18" aria-hidden="true" tabindex="-1"></a>    temp_sd <span class="ot">&lt;-</span> temp_train<span class="sc">$</span>temperature_sd</span>
-<span id="cb681-19"><a href="sec-neon-oxygen-temp.html#cb681-19" aria-hidden="true" tabindex="-1"></a>    n_temp <span class="ot">&lt;-</span> <span class="fu">nrow</span>(temp_train)</span>
-<span id="cb681-20"><a href="sec-neon-oxygen-temp.html#cb681-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb681-21"><a href="sec-neon-oxygen-temp.html#cb681-21" aria-hidden="true" tabindex="-1"></a>    stan_data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">n =</span> last_obs, <span class="at">n_lag_o2 =</span> n_lag_o2, <span class="at">n_lag_temp =</span> n_lag_temp, </span>
-<span id="cb681-22"><a href="sec-neon-oxygen-temp.html#cb681-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">n_forecast =</span> n_forecast, <span class="at">n_o2 =</span> n_o2, <span class="at">o2_x =</span> o2_x, <span class="at">o2_y =</span> o2_y, </span>
-<span id="cb681-23"><a href="sec-neon-oxygen-temp.html#cb681-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">o2_sd =</span> o2_sd, <span class="at">n_temp =</span> n_temp, <span class="at">temp_x =</span> temp_x, <span class="at">temp_y =</span> temp_y, </span>
-<span id="cb681-24"><a href="sec-neon-oxygen-temp.html#cb681-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_sd =</span> temp_sd)</span>
-<span id="cb681-25"><a href="sec-neon-oxygen-temp.html#cb681-25" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb681-26"><a href="sec-neon-oxygen-temp.html#cb681-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">o2_train =</span> o2_train, <span class="at">temp_train =</span> temp_train, </span>
-<span id="cb681-27"><a href="sec-neon-oxygen-temp.html#cb681-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">stan_data =</span> stan_data, <span class="at">o2_test =</span> o2_test, <span class="at">temp_test =</span> temp_test))</span>
-<span id="cb681-28"><a href="sec-neon-oxygen-temp.html#cb681-28" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb682"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb682-1"><a href="sec-neon-oxygen-temp.html#cb682-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">stan_model</span>(<span class="at">file =</span> <span class="st">&quot;model_02.stan&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb682"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb682-1"><a href="sec-neon-oxygen-temp.html#cb682-1" aria-hidden="true" tabindex="-1"></a>create_stan_data <span class="ot">&lt;-</span> <span class="cf">function</span>(data, last_obs, n_forecast, n_lag_o2, </span>
+<span id="cb682-2"><a href="sec-neon-oxygen-temp.html#cb682-2" aria-hidden="true" tabindex="-1"></a>    n_lag_temp) {</span>
+<span id="cb682-3"><a href="sec-neon-oxygen-temp.html#cb682-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create test data</span></span>
+<span id="cb682-4"><a href="sec-neon-oxygen-temp.html#cb682-4" aria-hidden="true" tabindex="-1"></a>    o2_test <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, indx <span class="sc">%in%</span> <span class="fu">seq</span>(last_obs <span class="sc">+</span> <span class="dv">1</span>, </span>
+<span id="cb682-5"><a href="sec-neon-oxygen-temp.html#cb682-5" aria-hidden="true" tabindex="-1"></a>        (last_obs <span class="sc">+</span> n_forecast)))</span>
+<span id="cb682-6"><a href="sec-neon-oxygen-temp.html#cb682-6" aria-hidden="true" tabindex="-1"></a>    temp_test <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, indx <span class="sc">%in%</span> <span class="fu">seq</span>(last_obs <span class="sc">+</span> </span>
+<span id="cb682-7"><a href="sec-neon-oxygen-temp.html#cb682-7" aria-hidden="true" tabindex="-1"></a>        <span class="dv">1</span>, (last_obs <span class="sc">+</span> n_forecast)))</span>
+<span id="cb682-8"><a href="sec-neon-oxygen-temp.html#cb682-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb682-9"><a href="sec-neon-oxygen-temp.html#cb682-9" aria-hidden="true" tabindex="-1"></a>    o2_train <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, indx <span class="sc">&lt;=</span> last_obs, <span class="sc">!</span><span class="fu">is.na</span>(oxygen))</span>
+<span id="cb682-10"><a href="sec-neon-oxygen-temp.html#cb682-10" aria-hidden="true" tabindex="-1"></a>    o2_x <span class="ot">&lt;-</span> o2_train<span class="sc">$</span>indx</span>
+<span id="cb682-11"><a href="sec-neon-oxygen-temp.html#cb682-11" aria-hidden="true" tabindex="-1"></a>    o2_y <span class="ot">&lt;-</span> o2_train<span class="sc">$</span>oxygen</span>
+<span id="cb682-12"><a href="sec-neon-oxygen-temp.html#cb682-12" aria-hidden="true" tabindex="-1"></a>    o2_sd <span class="ot">&lt;-</span> o2_train<span class="sc">$</span>oxygen_sd</span>
+<span id="cb682-13"><a href="sec-neon-oxygen-temp.html#cb682-13" aria-hidden="true" tabindex="-1"></a>    n_o2 <span class="ot">&lt;-</span> <span class="fu">nrow</span>(o2_train)</span>
+<span id="cb682-14"><a href="sec-neon-oxygen-temp.html#cb682-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb682-15"><a href="sec-neon-oxygen-temp.html#cb682-15" aria-hidden="true" tabindex="-1"></a>    temp_train <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(data, indx <span class="sc">&lt;=</span> last_obs, <span class="sc">!</span><span class="fu">is.na</span>(temperature))</span>
+<span id="cb682-16"><a href="sec-neon-oxygen-temp.html#cb682-16" aria-hidden="true" tabindex="-1"></a>    temp_x <span class="ot">&lt;-</span> temp_train<span class="sc">$</span>indx</span>
+<span id="cb682-17"><a href="sec-neon-oxygen-temp.html#cb682-17" aria-hidden="true" tabindex="-1"></a>    temp_y <span class="ot">&lt;-</span> temp_train<span class="sc">$</span>temperature</span>
+<span id="cb682-18"><a href="sec-neon-oxygen-temp.html#cb682-18" aria-hidden="true" tabindex="-1"></a>    temp_sd <span class="ot">&lt;-</span> temp_train<span class="sc">$</span>temperature_sd</span>
+<span id="cb682-19"><a href="sec-neon-oxygen-temp.html#cb682-19" aria-hidden="true" tabindex="-1"></a>    n_temp <span class="ot">&lt;-</span> <span class="fu">nrow</span>(temp_train)</span>
+<span id="cb682-20"><a href="sec-neon-oxygen-temp.html#cb682-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb682-21"><a href="sec-neon-oxygen-temp.html#cb682-21" aria-hidden="true" tabindex="-1"></a>    stan_data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">n =</span> last_obs, <span class="at">n_lag_o2 =</span> n_lag_o2, <span class="at">n_lag_temp =</span> n_lag_temp, </span>
+<span id="cb682-22"><a href="sec-neon-oxygen-temp.html#cb682-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">n_forecast =</span> n_forecast, <span class="at">n_o2 =</span> n_o2, <span class="at">o2_x =</span> o2_x, <span class="at">o2_y =</span> o2_y, </span>
+<span id="cb682-23"><a href="sec-neon-oxygen-temp.html#cb682-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">o2_sd =</span> o2_sd, <span class="at">n_temp =</span> n_temp, <span class="at">temp_x =</span> temp_x, <span class="at">temp_y =</span> temp_y, </span>
+<span id="cb682-24"><a href="sec-neon-oxygen-temp.html#cb682-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">temp_sd =</span> temp_sd)</span>
+<span id="cb682-25"><a href="sec-neon-oxygen-temp.html#cb682-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb682-26"><a href="sec-neon-oxygen-temp.html#cb682-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(<span class="fu">list</span>(<span class="at">o2_train =</span> o2_train, <span class="at">temp_train =</span> temp_train, </span>
+<span id="cb682-27"><a href="sec-neon-oxygen-temp.html#cb682-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">stan_data =</span> stan_data, <span class="at">o2_test =</span> o2_test, <span class="at">temp_test =</span> temp_test))</span>
+<span id="cb682-28"><a href="sec-neon-oxygen-temp.html#cb682-28" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="sec-neon-oxygen-temp.html#cb683-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">stan_model</span>(<span class="at">file =</span> <span class="st">&quot;model_02.stan&quot;</span>)</span></code></pre></div>
 <p>where <code>model_02.stan</code> is the Stan model file that you can <a href="./Rcode/model_02.stan">download here</a>.</p>
-<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="sec-neon-oxygen-temp.html#cb683-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we can try iterating over sets of data with a lag 1</span></span>
-<span id="cb683-2"><a href="sec-neon-oxygen-temp.html#cb683-2" aria-hidden="true" tabindex="-1"></a><span class="co"># model</span></span>
-<span id="cb683-3"><a href="sec-neon-oxygen-temp.html#cb683-3" aria-hidden="true" tabindex="-1"></a>n_forecast <span class="ot">&lt;-</span> <span class="dv">7</span></span>
-<span id="cb683-4"><a href="sec-neon-oxygen-temp.html#cb683-4" aria-hidden="true" tabindex="-1"></a>n_lag <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb683-5"><a href="sec-neon-oxygen-temp.html#cb683-5" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb683-6"><a href="sec-neon-oxygen-temp.html#cb683-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">500</span><span class="sc">:</span>(<span class="fu">nrow</span>(data) <span class="sc">-</span> n_lag)) {</span>
-<span id="cb683-7"><a href="sec-neon-oxygen-temp.html#cb683-7" aria-hidden="true" tabindex="-1"></a>    dat_list <span class="ot">&lt;-</span> <span class="fu">create_stan_data</span>(data, <span class="at">last_obs =</span> i, <span class="at">n_forecast =</span> n_forecast, </span>
-<span id="cb683-8"><a href="sec-neon-oxygen-temp.html#cb683-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">n_lag_o2 =</span> n_lag, <span class="at">n_lag_temp =</span> n_lag)</span>
-<span id="cb683-9"><a href="sec-neon-oxygen-temp.html#cb683-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb683-10"><a href="sec-neon-oxygen-temp.html#cb683-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fit the model. opimizing can be sensitive to starting</span></span>
-<span id="cb683-11"><a href="sec-neon-oxygen-temp.html#cb683-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># values, so let&#39;s try</span></span>
-<span id="cb683-12"><a href="sec-neon-oxygen-temp.html#cb683-12" aria-hidden="true" tabindex="-1"></a>    best_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">1e+100</span></span>
-<span id="cb683-13"><a href="sec-neon-oxygen-temp.html#cb683-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
-<span id="cb683-14"><a href="sec-neon-oxygen-temp.html#cb683-14" aria-hidden="true" tabindex="-1"></a>        test_fit <span class="ot">&lt;-</span> rstan<span class="sc">::</span><span class="fu">optimizing</span>(m, <span class="at">data =</span> dat_list<span class="sc">$</span>stan_data)</span>
-<span id="cb683-15"><a href="sec-neon-oxygen-temp.html#cb683-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (test_fit<span class="sc">$</span>value <span class="sc">&gt;</span> best_map) {</span>
-<span id="cb683-16"><a href="sec-neon-oxygen-temp.html#cb683-16" aria-hidden="true" tabindex="-1"></a>            fit <span class="ot">&lt;-</span> test_fit</span>
-<span id="cb683-17"><a href="sec-neon-oxygen-temp.html#cb683-17" aria-hidden="true" tabindex="-1"></a>            best_map <span class="ot">&lt;-</span> test_fit<span class="sc">$</span>value</span>
-<span id="cb683-18"><a href="sec-neon-oxygen-temp.html#cb683-18" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb683-19"><a href="sec-neon-oxygen-temp.html#cb683-19" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb683-20"><a href="sec-neon-oxygen-temp.html#cb683-20" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb683-21"><a href="sec-neon-oxygen-temp.html#cb683-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># extract forecasts</span></span>
-<span id="cb683-22"><a href="sec-neon-oxygen-temp.html#cb683-22" aria-hidden="true" tabindex="-1"></a>    o2_pred <span class="ot">&lt;-</span> fit<span class="sc">$</span>par[<span class="fu">grep</span>(<span class="st">&quot;o2_forecast&quot;</span>, <span class="fu">names</span>(fit<span class="sc">$</span>par))]</span>
-<span id="cb683-23"><a href="sec-neon-oxygen-temp.html#cb683-23" aria-hidden="true" tabindex="-1"></a>    temp_pred <span class="ot">&lt;-</span> fit<span class="sc">$</span>par[<span class="fu">grep</span>(<span class="st">&quot;temp_forecast&quot;</span>, <span class="fu">names</span>(fit<span class="sc">$</span>par))]</span>
-<span id="cb683-24"><a href="sec-neon-oxygen-temp.html#cb683-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb683-25"><a href="sec-neon-oxygen-temp.html#cb683-25" aria-hidden="true" tabindex="-1"></a>    pred <span class="ot">&lt;-</span> <span class="fu">c</span>(o2_pred, temp_pred)</span>
-<span id="cb683-26"><a href="sec-neon-oxygen-temp.html#cb683-26" aria-hidden="true" tabindex="-1"></a>    obs <span class="ot">&lt;-</span> <span class="fu">c</span>(dat_list<span class="sc">$</span>o2_test<span class="sc">$</span>oxygen, dat_list<span class="sc">$</span>temp_test<span class="sc">$</span>temperature)</span>
-<span id="cb683-27"><a href="sec-neon-oxygen-temp.html#cb683-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># evaluate predictions</span></span>
-<span id="cb683-28"><a href="sec-neon-oxygen-temp.html#cb683-28" aria-hidden="true" tabindex="-1"></a>    rmse[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((obs <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> T))</span>
-<span id="cb683-29"><a href="sec-neon-oxygen-temp.html#cb683-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(rmse)</span>
-<span id="cb683-30"><a href="sec-neon-oxygen-temp.html#cb683-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb684-1"><a href="sec-neon-oxygen-temp.html#cb684-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we can try iterating over sets of data with a lag 1</span></span>
+<span id="cb684-2"><a href="sec-neon-oxygen-temp.html#cb684-2" aria-hidden="true" tabindex="-1"></a><span class="co"># model</span></span>
+<span id="cb684-3"><a href="sec-neon-oxygen-temp.html#cb684-3" aria-hidden="true" tabindex="-1"></a>n_forecast <span class="ot">&lt;-</span> <span class="dv">7</span></span>
+<span id="cb684-4"><a href="sec-neon-oxygen-temp.html#cb684-4" aria-hidden="true" tabindex="-1"></a>n_lag <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb684-5"><a href="sec-neon-oxygen-temp.html#cb684-5" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb684-6"><a href="sec-neon-oxygen-temp.html#cb684-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">500</span><span class="sc">:</span>(<span class="fu">nrow</span>(data) <span class="sc">-</span> n_lag)) {</span>
+<span id="cb684-7"><a href="sec-neon-oxygen-temp.html#cb684-7" aria-hidden="true" tabindex="-1"></a>    dat_list <span class="ot">&lt;-</span> <span class="fu">create_stan_data</span>(data, <span class="at">last_obs =</span> i, <span class="at">n_forecast =</span> n_forecast, </span>
+<span id="cb684-8"><a href="sec-neon-oxygen-temp.html#cb684-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">n_lag_o2 =</span> n_lag, <span class="at">n_lag_temp =</span> n_lag)</span>
+<span id="cb684-9"><a href="sec-neon-oxygen-temp.html#cb684-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb684-10"><a href="sec-neon-oxygen-temp.html#cb684-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fit the model. opimizing can be sensitive to starting</span></span>
+<span id="cb684-11"><a href="sec-neon-oxygen-temp.html#cb684-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># values, so let&#39;s try</span></span>
+<span id="cb684-12"><a href="sec-neon-oxygen-temp.html#cb684-12" aria-hidden="true" tabindex="-1"></a>    best_map <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">1e+100</span></span>
+<span id="cb684-13"><a href="sec-neon-oxygen-temp.html#cb684-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) {</span>
+<span id="cb684-14"><a href="sec-neon-oxygen-temp.html#cb684-14" aria-hidden="true" tabindex="-1"></a>        test_fit <span class="ot">&lt;-</span> rstan<span class="sc">::</span><span class="fu">optimizing</span>(m, <span class="at">data =</span> dat_list<span class="sc">$</span>stan_data)</span>
+<span id="cb684-15"><a href="sec-neon-oxygen-temp.html#cb684-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (test_fit<span class="sc">$</span>value <span class="sc">&gt;</span> best_map) {</span>
+<span id="cb684-16"><a href="sec-neon-oxygen-temp.html#cb684-16" aria-hidden="true" tabindex="-1"></a>            fit <span class="ot">&lt;-</span> test_fit</span>
+<span id="cb684-17"><a href="sec-neon-oxygen-temp.html#cb684-17" aria-hidden="true" tabindex="-1"></a>            best_map <span class="ot">&lt;-</span> test_fit<span class="sc">$</span>value</span>
+<span id="cb684-18"><a href="sec-neon-oxygen-temp.html#cb684-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb684-19"><a href="sec-neon-oxygen-temp.html#cb684-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb684-20"><a href="sec-neon-oxygen-temp.html#cb684-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb684-21"><a href="sec-neon-oxygen-temp.html#cb684-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># extract forecasts</span></span>
+<span id="cb684-22"><a href="sec-neon-oxygen-temp.html#cb684-22" aria-hidden="true" tabindex="-1"></a>    o2_pred <span class="ot">&lt;-</span> fit<span class="sc">$</span>par[<span class="fu">grep</span>(<span class="st">&quot;o2_forecast&quot;</span>, <span class="fu">names</span>(fit<span class="sc">$</span>par))]</span>
+<span id="cb684-23"><a href="sec-neon-oxygen-temp.html#cb684-23" aria-hidden="true" tabindex="-1"></a>    temp_pred <span class="ot">&lt;-</span> fit<span class="sc">$</span>par[<span class="fu">grep</span>(<span class="st">&quot;temp_forecast&quot;</span>, <span class="fu">names</span>(fit<span class="sc">$</span>par))]</span>
+<span id="cb684-24"><a href="sec-neon-oxygen-temp.html#cb684-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb684-25"><a href="sec-neon-oxygen-temp.html#cb684-25" aria-hidden="true" tabindex="-1"></a>    pred <span class="ot">&lt;-</span> <span class="fu">c</span>(o2_pred, temp_pred)</span>
+<span id="cb684-26"><a href="sec-neon-oxygen-temp.html#cb684-26" aria-hidden="true" tabindex="-1"></a>    obs <span class="ot">&lt;-</span> <span class="fu">c</span>(dat_list<span class="sc">$</span>o2_test<span class="sc">$</span>oxygen, dat_list<span class="sc">$</span>temp_test<span class="sc">$</span>temperature)</span>
+<span id="cb684-27"><a href="sec-neon-oxygen-temp.html#cb684-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># evaluate predictions</span></span>
+<span id="cb684-28"><a href="sec-neon-oxygen-temp.html#cb684-28" aria-hidden="true" tabindex="-1"></a>    rmse[i] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((obs <span class="sc">-</span> pred)<span class="sc">^</span><span class="dv">2</span>, <span class="at">na.rm =</span> T))</span>
+<span id="cb684-29"><a href="sec-neon-oxygen-temp.html#cb684-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(rmse)</span>
+<span id="cb684-30"><a href="sec-neon-oxygen-temp.html#cb684-30" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Question: why do the future predictions of either temp or oxygen sometimes fall to 0, and appear to do poorly?</p>
 <p>Question: modify the script above to loop over various oxygen and temperature lags. Using a subset of data, say observations 500:800, which combination yields the best predictions?</p>
 </div>

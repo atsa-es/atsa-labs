@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -590,37 +590,37 @@ y_t = x_t + v_t, \, v_t \sim \,\text{N}(0, r)
 \end{gathered}
 \tag{12.8}
 \end{equation}\]</span></p>
-<p>For the process model, there are a number of ways to parameterize the first state (<span class="math inline">\(x_1\)</span>). Because <span class="math inline">\(x\)</span> is a random walk model not a stationary AR(1), we will place a vague weakly informative prior on <span class="math inline">\(x_0\)</span>: <span class="math inline">\(x_0 \sim \,\text{N}(y_1, \sigma=10)\)</span>. Note, because we use <span class="math inline">\(Y_1\)</span>, our first data point should not be NA. <code>EY</code> is added so that we can track the model fits for <span class="math inline">\(y\)</span>. In this case it is just <code>X</code> but in more complex models it will involve more parameters.</p>
-<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb620-1"><a href="sec-jags-uss.html#cb620-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. MAKE THE SS MODEL for a stochastic level model</span></span>
-<span id="cb620-2"><a href="sec-jags-uss.html#cb620-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb620-3"><a href="sec-jags-uss.html#cb620-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model.txt&quot;</span>)</span>
-<span id="cb620-4"><a href="sec-jags-uss.html#cb620-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb620-5"><a href="sec-jags-uss.html#cb620-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb620-6"><a href="sec-jags-uss.html#cb620-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
-<span id="cb620-7"><a href="sec-jags-uss.html#cb620-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb620-8"><a href="sec-jags-uss.html#cb620-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb620-9"><a href="sec-jags-uss.html#cb620-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
-<span id="cb620-10"><a href="sec-jags-uss.html#cb620-10" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001);</span></span>
-<span id="cb620-11"><a href="sec-jags-uss.html#cb620-11" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; </span></span>
-<span id="cb620-12"><a href="sec-jags-uss.html#cb620-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb620-13"><a href="sec-jags-uss.html#cb620-13" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, 0.001);</span></span>
-<span id="cb620-14"><a href="sec-jags-uss.html#cb620-14" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
-<span id="cb620-15"><a href="sec-jags-uss.html#cb620-15" aria-hidden="true" tabindex="-1"></a><span class="st">   EY[1] &lt;- X[1];</span></span>
-<span id="cb620-16"><a href="sec-jags-uss.html#cb620-16" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnorm(EY[1], inv.r);</span></span>
-<span id="cb620-17"><a href="sec-jags-uss.html#cb620-17" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb620-18"><a href="sec-jags-uss.html#cb620-18" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(X[i-1] + u, inv.q);</span></span>
-<span id="cb620-19"><a href="sec-jags-uss.html#cb620-19" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i];</span></span>
-<span id="cb620-20"><a href="sec-jags-uss.html#cb620-20" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r); </span></span>
-<span id="cb620-21"><a href="sec-jags-uss.html#cb620-21" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb620-22"><a href="sec-jags-uss.html#cb620-22" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb620-23"><a href="sec-jags-uss.html#cb620-23" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb620-24"><a href="sec-jags-uss.html#cb620-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
-<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb621-1"><a href="sec-jags-uss.html#cb621-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N)</span>
-<span id="cb621-2"><a href="sec-jags-uss.html#cb621-2" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
-<span id="cb621-3"><a href="sec-jags-uss.html#cb621-3" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
-<span id="cb621-4"><a href="sec-jags-uss.html#cb621-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
-<span id="cb621-5"><a href="sec-jags-uss.html#cb621-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<pre><code>module glm loaded</code></pre>
+<p>Because <span class="math inline">\(x\)</span> is a random walk model not a stationary AR(1), we will place a vague weakly informative prior on <span class="math inline">\(x_0\)</span>: <span class="math inline">\(x_0 \sim \,\text{N}(y_1, 1000)\)</span>. We had to pass in <code>Y1</code> as data because JAGS would complain if we used <code>Y[1]</code> in our prior (because have <code>X0</code> in our model for <span class="math inline">\(Y[1]\)</span>). <code>EY</code> is added so that we can track the model fits for <span class="math inline">\(y\)</span>. In this case it is just <code>X</code> but in more complex models it will involve more parameters.</p>
+<div class="sourceCode" id="cb622"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb622-1"><a href="sec-jags-uss.html#cb622-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. MAKE THE SS MODEL for a stochastic level model</span></span>
+<span id="cb622-2"><a href="sec-jags-uss.html#cb622-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb622-3"><a href="sec-jags-uss.html#cb622-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model.txt&quot;</span>)</span>
+<span id="cb622-4"><a href="sec-jags-uss.html#cb622-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb622-5"><a href="sec-jags-uss.html#cb622-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb622-6"><a href="sec-jags-uss.html#cb622-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb622-7"><a href="sec-jags-uss.html#cb622-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb622-8"><a href="sec-jags-uss.html#cb622-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb622-9"><a href="sec-jags-uss.html#cb622-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
+<span id="cb622-10"><a href="sec-jags-uss.html#cb622-10" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001);</span></span>
+<span id="cb622-11"><a href="sec-jags-uss.html#cb622-11" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; </span></span>
+<span id="cb622-12"><a href="sec-jags-uss.html#cb622-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(Y1, 0.001);</span></span>
+<span id="cb622-13"><a href="sec-jags-uss.html#cb622-13" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb622-14"><a href="sec-jags-uss.html#cb622-14" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
+<span id="cb622-15"><a href="sec-jags-uss.html#cb622-15" aria-hidden="true" tabindex="-1"></a><span class="st">   EY[1] &lt;- X[1];</span></span>
+<span id="cb622-16"><a href="sec-jags-uss.html#cb622-16" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnorm(EY[1], inv.r);</span></span>
+<span id="cb622-17"><a href="sec-jags-uss.html#cb622-17" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb622-18"><a href="sec-jags-uss.html#cb622-18" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(X[i-1] + u, inv.q);</span></span>
+<span id="cb622-19"><a href="sec-jags-uss.html#cb622-19" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i];</span></span>
+<span id="cb622-20"><a href="sec-jags-uss.html#cb622-20" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r); </span></span>
+<span id="cb622-21"><a href="sec-jags-uss.html#cb622-21" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb622-22"><a href="sec-jags-uss.html#cb622-22" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb622-23"><a href="sec-jags-uss.html#cb622-23" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb622-24"><a href="sec-jags-uss.html#cb622-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
+<p>We fit as usual with the addition of <code>Y1</code> in <code>jags.data</code>.</p>
+<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb623-1"><a href="sec-jags-uss.html#cb623-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N, <span class="at">Y1 =</span> Wind[<span class="dv">1</span>])</span>
+<span id="cb623-2"><a href="sec-jags-uss.html#cb623-2" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
+<span id="cb623-3"><a href="sec-jags-uss.html#cb623-3" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
+<span id="cb623-4"><a href="sec-jags-uss.html#cb623-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb623-5"><a href="sec-jags-uss.html#cb623-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
             </section>
 

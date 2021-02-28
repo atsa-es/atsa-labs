@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -586,17 +586,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><span class="math display">\[y_t = x_t + \beta_1 \sin(2 \pi t/p) + \beta_2 \cos(2 \pi t/p) + e_t\]</span>
 where <span class="math inline">\(t\)</span> is the time step (1 to length of the time series) and <span class="math inline">\(p\)</span> is the frequency of the data (e.g. 12 for monthly data). <span class="math inline">\(\alpha_t\)</span> is the mean level about which the data <span class="math inline">\(y_t\)</span> are fluctuating.</p>
 <p>We can simulate data like this as follows:</p>
-<div class="sourceCode" id="cb703"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb703-1"><a href="sec-seasonal-dlm-overview.html#cb703-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb703-2"><a href="sec-seasonal-dlm-overview.html#cb703-2" aria-hidden="true" tabindex="-1"></a>TT <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb703-3"><a href="sec-seasonal-dlm-overview.html#cb703-3" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb703-4"><a href="sec-seasonal-dlm-overview.html#cb703-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb703-5"><a href="sec-seasonal-dlm-overview.html#cb703-5" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
-<span id="cb703-6"><a href="sec-seasonal-dlm-overview.html#cb703-6" aria-hidden="true" tabindex="-1"></a>beta2 <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
-<span id="cb703-7"><a href="sec-seasonal-dlm-overview.html#cb703-7" aria-hidden="true" tabindex="-1"></a>cov1 <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
-<span id="cb703-8"><a href="sec-seasonal-dlm-overview.html#cb703-8" aria-hidden="true" tabindex="-1"></a>cov2 <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
-<span id="cb703-9"><a href="sec-seasonal-dlm-overview.html#cb703-9" aria-hidden="true" tabindex="-1"></a>xt <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(TT, <span class="dv">0</span>, q))</span>
-<span id="cb703-10"><a href="sec-seasonal-dlm-overview.html#cb703-10" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> xt <span class="sc">+</span> beta1 <span class="sc">*</span> cov1 <span class="sc">+</span> beta2 <span class="sc">*</span> cov2 <span class="sc">+</span> <span class="fu">rnorm</span>(TT, <span class="dv">0</span>, r)</span>
-<span id="cb703-11"><a href="sec-seasonal-dlm-overview.html#cb703-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(yt, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;t&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb704"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb704-1"><a href="sec-seasonal-dlm-overview.html#cb704-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb704-2"><a href="sec-seasonal-dlm-overview.html#cb704-2" aria-hidden="true" tabindex="-1"></a>TT <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb704-3"><a href="sec-seasonal-dlm-overview.html#cb704-3" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb704-4"><a href="sec-seasonal-dlm-overview.html#cb704-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb704-5"><a href="sec-seasonal-dlm-overview.html#cb704-5" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb704-6"><a href="sec-seasonal-dlm-overview.html#cb704-6" aria-hidden="true" tabindex="-1"></a>beta2 <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
+<span id="cb704-7"><a href="sec-seasonal-dlm-overview.html#cb704-7" aria-hidden="true" tabindex="-1"></a>cov1 <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
+<span id="cb704-8"><a href="sec-seasonal-dlm-overview.html#cb704-8" aria-hidden="true" tabindex="-1"></a>cov2 <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
+<span id="cb704-9"><a href="sec-seasonal-dlm-overview.html#cb704-9" aria-hidden="true" tabindex="-1"></a>xt <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(TT, <span class="dv">0</span>, q))</span>
+<span id="cb704-10"><a href="sec-seasonal-dlm-overview.html#cb704-10" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> xt <span class="sc">+</span> beta1 <span class="sc">*</span> cov1 <span class="sc">+</span> beta2 <span class="sc">*</span> cov2 <span class="sc">+</span> <span class="fu">rnorm</span>(TT, <span class="dv">0</span>, r)</span>
+<span id="cb704-11"><a href="sec-seasonal-dlm-overview.html#cb704-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(yt, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;t&quot;</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-41-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>In this case, the seasonal cycle is constant over time since <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> are fixed (not varying in time).</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-42-1.png" width="80%" style="display: block; margin: auto;" /></p>

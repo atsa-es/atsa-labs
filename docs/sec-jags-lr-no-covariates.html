@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -582,7 +582,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="sec-jags-lr-no-covariates" class="section level2" number="12.2">
 <h2><span class="header-section-number">12.2</span> Linear regression with no covariates</h2>
-<p>We will start with a linear regression with only an intercept, so that the predicted values of all observations are the same. We will write the model in the form of Equation <a href="sec-jags-overview.html#eq:jags-marss">(12.1)</a>. Our model is
+<p>We will start with a linear regression with only an intercept. We will write the model in the form of Equation <a href="sec-jags-overview.html#eq:jags-marss">(12.1)</a>. Our model is
 <span class="math display" id="eq:jags-lr1">\[\begin{equation}
 \begin{gathered}
 x_t = u \\
@@ -606,27 +606,30 @@ In this linear regression model, we will treat the residual error as independent
 <span id="cb602-7"><a href="sec-jags-lr-no-covariates.html#cb602-7" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
 <span id="cb602-8"><a href="sec-jags-lr-no-covariates.html#cb602-8" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01);</span></span>
 <span id="cb602-9"><a href="sec-jags-lr-no-covariates.html#cb602-9" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001); # This is inverse gamma</span></span>
-<span id="cb602-10"><a href="sec-jags-lr-no-covariates.html#cb602-10" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; # r is treated as derived parameter</span></span>
+<span id="cb602-10"><a href="sec-jags-lr-no-covariates.html#cb602-10" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; # derived value</span></span>
 <span id="cb602-11"><a href="sec-jags-lr-no-covariates.html#cb602-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:N) {</span></span>
 <span id="cb602-12"><a href="sec-jags-lr-no-covariates.html#cb602-12" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- u</span></span>
-<span id="cb602-13"><a href="sec-jags-lr-no-covariates.html#cb602-13" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i];</span></span>
+<span id="cb602-13"><a href="sec-jags-lr-no-covariates.html#cb602-13" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i]; # derived value</span></span>
 <span id="cb602-14"><a href="sec-jags-lr-no-covariates.html#cb602-14" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r); </span></span>
 <span id="cb602-15"><a href="sec-jags-lr-no-covariates.html#cb602-15" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
 <span id="cb602-16"><a href="sec-jags-lr-no-covariates.html#cb602-16" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
 <span id="cb602-17"><a href="sec-jags-lr-no-covariates.html#cb602-17" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
 <span id="cb602-18"><a href="sec-jags-lr-no-covariates.html#cb602-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
-<p>A couple things to notice: JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and the <code>dnorm()</code> notation means that we assume that the value on the left is normally distributed around a particular mean with a particular precision (1 over the variance). <code>inv.r</code> is <span class="math inline">\(1/r\)</span>.</p>
-<p>The model can briefly be summarized as follows: there are two parameters in the model (the mean and <span class="math inline">\(r\)</span>, the variance of the observation error). In JAGS instead of specifying the normal distribution with the variance, you pass in the precision (1/variance). Thus <code>dnorm(0, 0.01)</code>, our prior on <span class="math inline">\(u\)</span>, is pretty vague. The precision receives a gamma prior, which is equivalent to the variance receiving an inverse gamma prior (fairly common for standard Bayesian regression models). Finally, we write a model for the data <span class="math inline">\(y_t\)</span> (<code>Y[i]</code>). Again we use the <code>dnorm()</code> distribution to say that the data are normally distributed (equivalent to our likelihood).</p>
-<p>The function from the <strong>R2jags</strong> package that we use to run the model is <code>jags()</code>. There is a parallel version of the function called <code>jags.parallel()</code> which is useful for larger, more complex models. The details of both can be found with <code>?jags</code> or <code>?jags.parallel</code>.</p>
-<p>To run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS, (2) a vector of parameters that we want to monitor and have returned back to R, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the <code>jags()</code> function.</p>
-<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="sec-jags-lr-no-covariates.html#cb603-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N)  <span class="co"># named list of inputs</span></span>
+<p>The JAGS code has three parts: our parameter priors, our data model and derived parameters.</p>
+<p><strong>Parameter priors</strong> There are two parameters in the model (<span class="math inline">\(u\)</span>, the mean, and <span class="math inline">\(r\)</span>, the variance of the observation error). We need to set a prior on both of these. We will set a vague prior of a Gaussian with varianc 10 on <span class="math inline">\(u\)</span>. In JAGS instead of specifying the normal distribution with the variance, <span class="math inline">\(N(0, 10)\)</span>, you specify it with the precision (1/variance), so our prior on <span class="math inline">\(u\)</span> is <code>dnorm(0, 0.01)</code>. For <span class="math inline">\(r\)</span>, we need to set a prior on the precision <span class="math inline">\(1/r\)</span>, which we call <code>inv.r</code> in the code. The precision receives a gamma prior, which is equivalent to the variance receiving an inverse gamma prior (fairly common for standard Bayesian regression models).</p>
+<p><strong>Data model</strong> Our data distribution is <span class="math inline">\(y_t \sim \,\text{N}(E[y_t], r)\)</span>. We use the <code>dnorm()</code> distribution with the precision (<span class="math inline">\(1/r\)</span>) instead of <span class="math inline">\(r\)</span>. So our data model is <code>Y[i] = dnorm(EY[i], inv.r)</code>. JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and use the for loop to specify the distribution for each <code>Y[i]</code>. For, this model we didn’t actually need <code>X[i]</code> but we use it because we are building up to a state-space model which has both <span class="math inline">\(x_t\)</span> and <span class="math inline">\(y_t\)</span>.</p>
+<p><strong>Derived values</strong> Derived values are things we want output so we can track them. In this example, our derived values are a bit useless but in more complex models they will be quite handy. Also they can make your code easier to understand.</p>
+<p>To run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS <code>jags.data</code>, (2) a vector of parameters that we want to monitor and have returned back to R <code>jags.params</code>, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the <code>jags()</code> function.</p>
+<div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="sec-jags-lr-no-covariates.html#cb603-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N)</span>
 <span id="cb603-2"><a href="sec-jags-lr-no-covariates.html#cb603-2" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r&quot;</span>, <span class="st">&quot;u&quot;</span>)  <span class="co"># parameters to be monitored</span></span>
 <span id="cb603-3"><a href="sec-jags-lr-no-covariates.html#cb603-3" aria-hidden="true" tabindex="-1"></a>mod_lm_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
 <span id="cb603-4"><a href="sec-jags-lr-no-covariates.html#cb603-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
 <span id="cb603-5"><a href="sec-jags-lr-no-covariates.html#cb603-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>module glm loaded</code></pre>
+<p>The function from the <strong>R2jags</strong> package that we use to run the model is <code>jags()</code>. There is a parallel version of the function called <code>jags.parallel()</code> which is useful for larger, more complex models. The details of both can be found with <code>?jags</code> or <code>?jags.parallel</code>.</p>
 <p>Notice that the <code>jags()</code> function contains a number of other important arguments. In general, larger is better for all arguments: we want to run multiple MCMC chains (maybe 3 or more), and have a burn-in of at least 5000. The total number of samples after the burn-in period is n.iter-n.burnin, which in this case is 5000 samples. Because we are doing this with 3 MCMC chains, and the thinning rate equals 1 (meaning we are saving every sample), we will retain a total of 1500 posterior samples for each parameter.</p>
 <p>The saved object storing our model diagnostics can be accessed directly, and includes some useful summary output.</p>
-<div class="sourceCode" id="cb604"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb604-1"><a href="sec-jags-lr-no-covariates.html#cb604-1" aria-hidden="true" tabindex="-1"></a>mod_lm_intercept</span></code></pre></div>
+<div class="sourceCode" id="cb605"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb605-1"><a href="sec-jags-lr-no-covariates.html#cb605-1" aria-hidden="true" tabindex="-1"></a>mod_lm_intercept</span></code></pre></div>
 <pre><code>Inference for Bugs model at &quot;lm_intercept.txt&quot;, fit using jags,
  3 chains, each with 10000 iterations (first 5000 discarded)
  n.sims = 15000 iterations saved
@@ -642,14 +645,14 @@ DIC info (using the rule, pD = var(deviance)/2)
 pD = 2.0 and DIC = 822.6
 DIC is an estimate of expected predictive error (lower deviance is better).</code></pre>
 <p>The last two columns in the summary contain <code>Rhat</code> (which we want to be close to 1.0), and <code>neff</code> (the effective sample size of each set of posterior draws). To examine the output more closely, we can pull all of the results directly into R,</p>
-<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb606-1"><a href="sec-jags-lr-no-covariates.html#cb606-1" aria-hidden="true" tabindex="-1"></a>R2jags<span class="sc">::</span><span class="fu">attach.jags</span>(mod_lm_intercept)</span></code></pre></div>
-<p>Attaching the <strong>R2jags</strong> object loads the posteriors for the parameters and we can call them directly, e.g. <code>u</code>. If we don’t want to attach them to our workspace, we can find the posteriors buried within the model object.</p>
-<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb607-1"><a href="sec-jags-lr-no-covariates.html#cb607-1" aria-hidden="true" tabindex="-1"></a>post.params <span class="ot">&lt;-</span> mod_lm_intercept<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list</span></code></pre></div>
+<div class="sourceCode" id="cb607"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb607-1"><a href="sec-jags-lr-no-covariates.html#cb607-1" aria-hidden="true" tabindex="-1"></a>R2jags<span class="sc">::</span><span class="fu">attach.jags</span>(mod_lm_intercept)</span></code></pre></div>
+<p>Attaching the <strong>R2jags</strong> object loads the posteriors for the parameters and we can call them directly, e.g. <code>u</code>. If we don’t want to attach them to our workspace, we can find the posteriors within the model object.</p>
+<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb608-1"><a href="sec-jags-lr-no-covariates.html#cb608-1" aria-hidden="true" tabindex="-1"></a>post.params <span class="ot">&lt;-</span> mod_lm_intercept<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list</span></code></pre></div>
 <p>We make a histogram of the posterior distributions of the parameters <code>u</code> and <code>r</code> with the following code,</p>
-<div class="sourceCode" id="cb608"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb608-1"><a href="sec-jags-lr-no-covariates.html#cb608-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we can make plots of posterior values</span></span>
-<span id="cb608-2"><a href="sec-jags-lr-no-covariates.html#cb608-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
-<span id="cb608-3"><a href="sec-jags-lr-no-covariates.html#cb608-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post.params<span class="sc">$</span>u, <span class="dv">40</span>, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;u&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb608-4"><a href="sec-jags-lr-no-covariates.html#cb608-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post.params<span class="sc">$</span>r, <span class="dv">40</span>, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;r&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb609-1"><a href="sec-jags-lr-no-covariates.html#cb609-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we can make plots of posterior values</span></span>
+<span id="cb609-2"><a href="sec-jags-lr-no-covariates.html#cb609-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb609-3"><a href="sec-jags-lr-no-covariates.html#cb609-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post.params<span class="sc">$</span>u, <span class="dv">40</span>, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;u&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb609-4"><a href="sec-jags-lr-no-covariates.html#cb609-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post.params<span class="sc">$</span>r, <span class="dv">40</span>, <span class="at">col =</span> <span class="st">&quot;grey&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;r&quot;</span>, <span class="at">main =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:jags-plot-hist-post"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-plot-hist-post-1.png" alt="Plot of the posteriors for the linear regression model." width="80%" />
@@ -657,18 +660,18 @@ DIC is an estimate of expected predictive error (lower deviance is better).</cod
 Figure 12.1: Plot of the posteriors for the linear regression model.
 </p>
 </div>
-<p>Finally, we can run some useful diagnostics from the <strong>coda</strong> package on this model output. We have written a small function to make the creation of a MCMC list (an argument required for many of the diagnostics). The function is</p>
-<div class="sourceCode" id="cb609"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb609-1"><a href="sec-jags-lr-no-covariates.html#cb609-1" aria-hidden="true" tabindex="-1"></a>createMcmcList <span class="ot">&lt;-</span> <span class="cf">function</span>(jagsmodel) {</span>
-<span id="cb609-2"><a href="sec-jags-lr-no-covariates.html#cb609-2" aria-hidden="true" tabindex="-1"></a>    McmcArray <span class="ot">&lt;-</span> <span class="fu">as.array</span>(jagsmodel<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.array)</span>
-<span id="cb609-3"><a href="sec-jags-lr-no-covariates.html#cb609-3" aria-hidden="true" tabindex="-1"></a>    McmcList <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">&quot;list&quot;</span>, <span class="at">length =</span> <span class="fu">dim</span>(McmcArray)[<span class="dv">2</span>])</span>
-<span id="cb609-4"><a href="sec-jags-lr-no-covariates.html#cb609-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(McmcList)) McmcList[[i]] <span class="ot">&lt;-</span> <span class="fu">as.mcmc</span>(McmcArray[, </span>
-<span id="cb609-5"><a href="sec-jags-lr-no-covariates.html#cb609-5" aria-hidden="true" tabindex="-1"></a>        i, ])</span>
-<span id="cb609-6"><a href="sec-jags-lr-no-covariates.html#cb609-6" aria-hidden="true" tabindex="-1"></a>    McmcList <span class="ot">&lt;-</span> <span class="fu">mcmc.list</span>(McmcList)</span>
-<span id="cb609-7"><a href="sec-jags-lr-no-covariates.html#cb609-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(McmcList)</span>
-<span id="cb609-8"><a href="sec-jags-lr-no-covariates.html#cb609-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>We can run some useful diagnostics from the <strong>coda</strong> package on this model output. We have written a small function to make the creation of a MCMC list (an argument required for many of the diagnostics). The function is</p>
+<div class="sourceCode" id="cb610"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb610-1"><a href="sec-jags-lr-no-covariates.html#cb610-1" aria-hidden="true" tabindex="-1"></a>createMcmcList <span class="ot">&lt;-</span> <span class="cf">function</span>(jagsmodel) {</span>
+<span id="cb610-2"><a href="sec-jags-lr-no-covariates.html#cb610-2" aria-hidden="true" tabindex="-1"></a>    McmcArray <span class="ot">&lt;-</span> <span class="fu">as.array</span>(jagsmodel<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.array)</span>
+<span id="cb610-3"><a href="sec-jags-lr-no-covariates.html#cb610-3" aria-hidden="true" tabindex="-1"></a>    McmcList <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">&quot;list&quot;</span>, <span class="at">length =</span> <span class="fu">dim</span>(McmcArray)[<span class="dv">2</span>])</span>
+<span id="cb610-4"><a href="sec-jags-lr-no-covariates.html#cb610-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(McmcList)) McmcList[[i]] <span class="ot">&lt;-</span> <span class="fu">as.mcmc</span>(McmcArray[, </span>
+<span id="cb610-5"><a href="sec-jags-lr-no-covariates.html#cb610-5" aria-hidden="true" tabindex="-1"></a>        i, ])</span>
+<span id="cb610-6"><a href="sec-jags-lr-no-covariates.html#cb610-6" aria-hidden="true" tabindex="-1"></a>    McmcList <span class="ot">&lt;-</span> <span class="fu">mcmc.list</span>(McmcList)</span>
+<span id="cb610-7"><a href="sec-jags-lr-no-covariates.html#cb610-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(McmcList)</span>
+<span id="cb610-8"><a href="sec-jags-lr-no-covariates.html#cb610-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Creating the MCMC list preserves the random samples generated from each chain and allows you to extract the samples for a given parameter (such as <span class="math inline">\(\mu\)</span>) from any chain you want. To extract <span class="math inline">\(\mu\)</span> from the first chain, for example, you could use the following code. Because <code>createMcmcList()</code> returns a list of <strong>mcmc</strong> objects, we can summarize and plot these directly. Figure <a href="sec-jags-lr-no-covariates.html#fig:jags-plot-myList">12.2</a> shows the plot from <code>plot(myList[[1]])</code>.</p>
-<div class="sourceCode" id="cb610"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb610-1"><a href="sec-jags-lr-no-covariates.html#cb610-1" aria-hidden="true" tabindex="-1"></a>myList <span class="ot">&lt;-</span> <span class="fu">createMcmcList</span>(mod_lm_intercept)</span>
-<span id="cb610-2"><a href="sec-jags-lr-no-covariates.html#cb610-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(myList[[<span class="dv">1</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb611-1"><a href="sec-jags-lr-no-covariates.html#cb611-1" aria-hidden="true" tabindex="-1"></a>myList <span class="ot">&lt;-</span> <span class="fu">createMcmcList</span>(mod_lm_intercept)</span>
+<span id="cb611-2"><a href="sec-jags-lr-no-covariates.html#cb611-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(myList[[<span class="dv">1</span>]])</span></code></pre></div>
 <pre><code>
 Iterations = 1:5000
 Thinning interval = 1 
@@ -689,7 +692,7 @@ u          9.947 0.2877 0.004069       0.004069
 deviance 818.591 819.133 819.961 821.37 826.09
 r          9.982  11.536  12.452  13.49  15.68
 u          9.368   9.756   9.945  10.14  10.50</code></pre>
-<div class="sourceCode" id="cb612"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb612-1"><a href="sec-jags-lr-no-covariates.html#cb612-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(myList[[<span class="dv">1</span>]])</span></code></pre></div>
+<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb613-1"><a href="sec-jags-lr-no-covariates.html#cb613-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(myList[[<span class="dv">1</span>]])</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:jags-plot-myList"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-plot-myList-1.png" alt="Plot of an object output from \(\texttt{creatMcmcList}\)." width="80%" />
@@ -699,12 +702,12 @@ Figure 12.2: Plot of an object output from <span class="math inline">\(\texttt{c
 </div>
 <p>For more quantitative diagnostics of MCMC convergence, we can rely on the <strong>coda</strong> package in R. There
 are several useful statistics available, including the Gelman-Rubin diagnostic (for one or several chains), autocorrelation diagnostics (similar to the ACF you calculated above), the Geweke diagnostic, and Heidelberger-Welch test of stationarity.</p>
-<div class="sourceCode" id="cb613"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb613-1"><a href="sec-jags-lr-no-covariates.html#cb613-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
-<span id="cb613-2"><a href="sec-jags-lr-no-covariates.html#cb613-2" aria-hidden="true" tabindex="-1"></a>gelmanDiags <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">gelman.diag</span>(<span class="fu">createMcmcList</span>(mod_lm_intercept), </span>
-<span id="cb613-3"><a href="sec-jags-lr-no-covariates.html#cb613-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">multivariate =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb613-4"><a href="sec-jags-lr-no-covariates.html#cb613-4" aria-hidden="true" tabindex="-1"></a>autocorDiags <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">autocorr.diag</span>(<span class="fu">createMcmcList</span>(mod_lm_intercept))</span>
-<span id="cb613-5"><a href="sec-jags-lr-no-covariates.html#cb613-5" aria-hidden="true" tabindex="-1"></a>gewekeDiags <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">geweke.diag</span>(<span class="fu">createMcmcList</span>(mod_lm_intercept))</span>
-<span id="cb613-6"><a href="sec-jags-lr-no-covariates.html#cb613-6" aria-hidden="true" tabindex="-1"></a>heidelDiags <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">heidel.diag</span>(<span class="fu">createMcmcList</span>(mod_lm_intercept))</span></code></pre></div>
+<div class="sourceCode" id="cb614"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb614-1"><a href="sec-jags-lr-no-covariates.html#cb614-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
+<span id="cb614-2"><a href="sec-jags-lr-no-covariates.html#cb614-2" aria-hidden="true" tabindex="-1"></a>gelmanDiags <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">gelman.diag</span>(<span class="fu">createMcmcList</span>(mod_lm_intercept), </span>
+<span id="cb614-3"><a href="sec-jags-lr-no-covariates.html#cb614-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">multivariate =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb614-4"><a href="sec-jags-lr-no-covariates.html#cb614-4" aria-hidden="true" tabindex="-1"></a>autocorDiags <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">autocorr.diag</span>(<span class="fu">createMcmcList</span>(mod_lm_intercept))</span>
+<span id="cb614-5"><a href="sec-jags-lr-no-covariates.html#cb614-5" aria-hidden="true" tabindex="-1"></a>gewekeDiags <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">geweke.diag</span>(<span class="fu">createMcmcList</span>(mod_lm_intercept))</span>
+<span id="cb614-6"><a href="sec-jags-lr-no-covariates.html#cb614-6" aria-hidden="true" tabindex="-1"></a>heidelDiags <span class="ot">&lt;-</span> coda<span class="sc">::</span><span class="fu">heidel.diag</span>(<span class="fu">createMcmcList</span>(mod_lm_intercept))</span></code></pre></div>
 </div>
             </section>
 

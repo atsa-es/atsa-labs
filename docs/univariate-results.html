@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -583,12 +583,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="univariate-results" class="section level2" number="16.4">
 <h2><span class="header-section-number">16.4</span> Univariate results</h2>
 <p>Plot of the amplitude of the cycles. All the rivers were analyzed independently. It certainly looks like there are common patterns in the amplitude of the cycles with many showing a steady decline in amplitude. Note the counts were not decreasing so this is not due to fewer spawners.</p>
-<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb728-1"><a href="univariate-results.html#cb728-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dfz, <span class="fu">aes</span>(<span class="at">x =</span> brood_year, <span class="at">y =</span> amplitude)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb728-2"><a href="univariate-results.html#cb728-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>river, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Cycle Amplitude&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb729"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb729-1"><a href="univariate-results.html#cb729-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dfz, <span class="fu">aes</span>(<span class="at">x =</span> brood_year, <span class="at">y =</span> amplitude)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb729-2"><a href="univariate-results.html#cb729-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span>river, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Cycle Amplitude&quot;</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-66-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Plot of the stochastic level. Again all the rivers were analyzed independently. It certainly looks like there are common patterns in the trends. In the next step, we can test this.</p>
-<div class="sourceCode" id="cb729"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb729-1"><a href="univariate-results.html#cb729-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dfz, <span class="fu">aes</span>(<span class="at">x =</span> brood_year, <span class="at">y =</span> trend)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>river, </span>
-<span id="cb729-2"><a href="univariate-results.html#cb729-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Stochastic Level&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb730-1"><a href="univariate-results.html#cb730-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dfz, <span class="fu">aes</span>(<span class="at">x =</span> brood_year, <span class="at">y =</span> trend)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>river, </span>
+<span id="cb730-2"><a href="univariate-results.html#cb730-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span> <span class="fu">ggtitle</span>(<span class="st">&quot;Stochastic Level&quot;</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-67-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
             </section>

@@ -1,0 +1,12 @@
+
+model {  
+   u ~ dnorm(0, 0.01); 
+   inv.q ~ dgamma(0.001,0.001); 
+   q <- 1/inv.q;
+
+   X0 ~ dnorm(0, 0.001);
+   X[1] ~ dnorm(X0 + u, inv.q);
+   for(i in 2:N) {
+      X[i] ~ dnorm(X[i-1] + u, inv.q);
+   }
+}  

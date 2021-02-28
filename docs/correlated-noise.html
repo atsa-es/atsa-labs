@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -586,23 +586,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Our AR-1 errors would look like so with covariance <span class="math inline">\(c\)</span>.</p>
 <p><span class="math display">\[\begin{bmatrix}e \\ w_1 \\ w_2 \\ w_3\end{bmatrix}_t, \quad \begin{bmatrix}e \\ w_1 \\ w_2 \\ w_3\end{bmatrix}_t \sim MVN\left(0, \begin{bmatrix}1&amp;0&amp;0&amp;0\\0&amp;q_1&amp;c_1&amp;c_2 \\ 0&amp;c_1&amp;q_2&amp;c_3 \\ 0&amp;c_2&amp;c_3&amp;q_3\end{bmatrix}\right)\]</span>
 To fit this model, we need to create a <span class="math inline">\(Q\)</span> matrix that looks like the above. It’s a bit of a hassle.</p>
-<div class="sourceCode" id="cb695"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb695-1"><a href="correlated-noise.html#cb695-1" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), n <span class="sc">+</span> <span class="dv">1</span>, n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb695-2"><a href="correlated-noise.html#cb695-2" aria-hidden="true" tabindex="-1"></a>Q[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb695-3"><a href="correlated-noise.html#cb695-3" aria-hidden="true" tabindex="-1"></a>Q2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="st">&quot;q&quot;</span>, n, n)</span>
-<span id="cb695-4"><a href="correlated-noise.html#cb695-4" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(Q2) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb695-5"><a href="correlated-noise.html#cb695-5" aria-hidden="true" tabindex="-1"></a>Q2[<span class="fu">upper.tri</span>(Q2)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;c&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb695-6"><a href="correlated-noise.html#cb695-6" aria-hidden="true" tabindex="-1"></a>Q2[<span class="fu">lower.tri</span>(Q2)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;c&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb695-7"><a href="correlated-noise.html#cb695-7" aria-hidden="true" tabindex="-1"></a>Q[<span class="dv">2</span><span class="sc">:</span>(n <span class="sc">+</span> <span class="dv">1</span>), <span class="dv">2</span><span class="sc">:</span>(n <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> Q2</span>
-<span id="cb695-8"><a href="correlated-noise.html#cb695-8" aria-hidden="true" tabindex="-1"></a>Q</span></code></pre></div>
+<div class="sourceCode" id="cb696"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb696-1"><a href="correlated-noise.html#cb696-1" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), n <span class="sc">+</span> <span class="dv">1</span>, n <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb696-2"><a href="correlated-noise.html#cb696-2" aria-hidden="true" tabindex="-1"></a>Q[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb696-3"><a href="correlated-noise.html#cb696-3" aria-hidden="true" tabindex="-1"></a>Q2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="st">&quot;q&quot;</span>, n, n)</span>
+<span id="cb696-4"><a href="correlated-noise.html#cb696-4" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(Q2) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb696-5"><a href="correlated-noise.html#cb696-5" aria-hidden="true" tabindex="-1"></a>Q2[<span class="fu">upper.tri</span>(Q2)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;c&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb696-6"><a href="correlated-noise.html#cb696-6" aria-hidden="true" tabindex="-1"></a>Q2[<span class="fu">lower.tri</span>(Q2)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;c&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb696-7"><a href="correlated-noise.html#cb696-7" aria-hidden="true" tabindex="-1"></a>Q[<span class="dv">2</span><span class="sc">:</span>(n <span class="sc">+</span> <span class="dv">1</span>), <span class="dv">2</span><span class="sc">:</span>(n <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> Q2</span>
+<span id="cb696-8"><a href="correlated-noise.html#cb696-8" aria-hidden="true" tabindex="-1"></a>Q</span></code></pre></div>
 <pre><code>     [,1] [,2] [,3] [,4]
 [1,] 1    0    0    0   
 [2,] 0    &quot;q1&quot; &quot;c1&quot; &quot;c2&quot;
 [3,] 0    &quot;c1&quot; &quot;q2&quot; &quot;c3&quot;
 [4,] 0    &quot;c2&quot; &quot;c3&quot; &quot;q3&quot;</code></pre>
 <p>Now we can fit as usual using this <span class="math inline">\(Q\)</span> in our model list.</p>
-<div class="sourceCode" id="cb697"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb697-1"><a href="correlated-noise.html#cb697-1" aria-hidden="true" tabindex="-1"></a>mod.list2 <span class="ot">&lt;-</span> mod.list1</span>
-<span id="cb697-2"><a href="correlated-noise.html#cb697-2" aria-hidden="true" tabindex="-1"></a>mod.list2<span class="sc">$</span>Q <span class="ot">&lt;-</span> Q</span>
-<span id="cb697-3"><a href="correlated-noise.html#cb697-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat2, <span class="at">model =</span> mod.list2)</span></code></pre></div>
+<div class="sourceCode" id="cb698"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb698-1"><a href="correlated-noise.html#cb698-1" aria-hidden="true" tabindex="-1"></a>mod.list2 <span class="ot">&lt;-</span> mod.list1</span>
+<span id="cb698-2"><a href="correlated-noise.html#cb698-2" aria-hidden="true" tabindex="-1"></a>mod.list2<span class="sc">$</span>Q <span class="ot">&lt;-</span> Q</span>
+<span id="cb698-3"><a href="correlated-noise.html#cb698-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat2, <span class="at">model =</span> mod.list2)</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 127 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -629,7 +629,7 @@ Initial states (x0) defined at t=0
 Standard errors have not been calculated. 
 Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>The AIC is larger indicating that this model is not more supported, which is not surprising given that the data are not correlated with each other.</p>
-<div class="sourceCode" id="cb699"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb699-1"><a href="correlated-noise.html#cb699-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(fit<span class="sc">$</span>AIC, fit.mod1<span class="sc">$</span>AIC)</span></code></pre></div>
+<div class="sourceCode" id="cb700"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb700-1"><a href="correlated-noise.html#cb700-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(fit<span class="sc">$</span>AIC, fit.mod1<span class="sc">$</span>AIC)</span></code></pre></div>
 <pre><code>[1] 503.2765 501.1914</code></pre>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-36-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>

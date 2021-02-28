@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -590,8 +590,7 @@ y_t = a + x_t
 \end{gathered}
 \tag{12.6}
 \end{equation}\]</span></p>
-<p>The problem with this is that we need a distribution for <span class="math inline">\(y_t\)</span>. We cannot use <code>Y[i] &lt;- a + X[i]</code> in our JA
-GS code. So we need to re-write this as <span class="math inline">\(y_t \sim N(a + b \, x_{t-1}, q)\)</span>.</p>
+<p>The problem with this is that we need a distribution for <span class="math inline">\(y_t\)</span>. We cannot use <code>Y[i] &lt;- a + X[i]</code> in our JAGS code. We need to re-write this as <span class="math inline">\(y_t \sim N(a + b \, x_{t-1}, q)\)</span>.</p>
 <p><span class="math display" id="eq:jags-obs-eqn-lmar2b">\[\begin{equation}
 \begin{gathered}
 y_t \sim N(a + b \, x_{t-1}, q) \\
@@ -600,36 +599,36 @@ x_t = y_t - a
 \tag{12.7}
 \end{equation}\]</span></p>
 <p>We will create the variable <code>EY</code> so we can keep track of our <span class="math inline">\(y_t\)</span> predictions, conditioned on <span class="math inline">\(t-1\)</span>.</p>
-<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb619-1"><a href="sec-jags-regression-with-corr-errors2.html#cb619-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LINEAR REGRESSION with autocorrelated errors no covariates,</span></span>
-<span id="cb619-2"><a href="sec-jags-regression-with-corr-errors2.html#cb619-2" aria-hidden="true" tabindex="-1"></a><span class="co"># intercept only.</span></span>
-<span id="cb619-3"><a href="sec-jags-regression-with-corr-errors2.html#cb619-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb619-4"><a href="sec-jags-regression-with-corr-errors2.html#cb619-4" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;lm_intercept_ar1b.txt&quot;</span>)</span>
-<span id="cb619-5"><a href="sec-jags-regression-with-corr-errors2.html#cb619-5" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb619-6"><a href="sec-jags-regression-with-corr-errors2.html#cb619-6" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb619-7"><a href="sec-jags-regression-with-corr-errors2.html#cb619-7" aria-hidden="true" tabindex="-1"></a><span class="st">   a ~ dnorm(0, 0.01); </span></span>
-<span id="cb619-8"><a href="sec-jags-regression-with-corr-errors2.html#cb619-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb619-9"><a href="sec-jags-regression-with-corr-errors2.html#cb619-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; </span></span>
-<span id="cb619-10"><a href="sec-jags-regression-with-corr-errors2.html#cb619-10" aria-hidden="true" tabindex="-1"></a><span class="st">   b ~ dunif(-1,1);</span></span>
-<span id="cb619-11"><a href="sec-jags-regression-with-corr-errors2.html#cb619-11" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
-<span id="cb619-12"><a href="sec-jags-regression-with-corr-errors2.html#cb619-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, inv.q * (1 - b * b));</span></span>
-<span id="cb619-13"><a href="sec-jags-regression-with-corr-errors2.html#cb619-13" aria-hidden="true" tabindex="-1"></a><span class="st">   # t=1</span></span>
-<span id="cb619-14"><a href="sec-jags-regression-with-corr-errors2.html#cb619-14" aria-hidden="true" tabindex="-1"></a><span class="st">   EY[1] = a + b * X0;</span></span>
-<span id="cb619-15"><a href="sec-jags-regression-with-corr-errors2.html#cb619-15" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnorm(EY[1], inv.q);</span></span>
-<span id="cb619-16"><a href="sec-jags-regression-with-corr-errors2.html#cb619-16" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] &lt;- Y[1] - a;</span></span>
-<span id="cb619-17"><a href="sec-jags-regression-with-corr-errors2.html#cb619-17" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb619-18"><a href="sec-jags-regression-with-corr-errors2.html#cb619-18" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] = a + b * X[i-1];</span></span>
-<span id="cb619-19"><a href="sec-jags-regression-with-corr-errors2.html#cb619-19" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[1], inv.q);</span></span>
-<span id="cb619-20"><a href="sec-jags-regression-with-corr-errors2.html#cb619-20" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- Y[i]-a;</span></span>
-<span id="cb619-21"><a href="sec-jags-regression-with-corr-errors2.html#cb619-21" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb619-22"><a href="sec-jags-regression-with-corr-errors2.html#cb619-22" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb619-23"><a href="sec-jags-regression-with-corr-errors2.html#cb619-23" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb619-24"><a href="sec-jags-regression-with-corr-errors2.html#cb619-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
-<span id="cb619-25"><a href="sec-jags-regression-with-corr-errors2.html#cb619-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb619-26"><a href="sec-jags-regression-with-corr-errors2.html#cb619-26" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N)</span>
-<span id="cb619-27"><a href="sec-jags-regression-with-corr-errors2.html#cb619-27" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
-<span id="cb619-28"><a href="sec-jags-regression-with-corr-errors2.html#cb619-28" aria-hidden="true" tabindex="-1"></a>mod_ar1_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb619-29"><a href="sec-jags-regression-with-corr-errors2.html#cb619-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb619-30"><a href="sec-jags-regression-with-corr-errors2.html#cb619-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb621-1"><a href="sec-jags-regression-with-corr-errors2.html#cb621-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LINEAR REGRESSION with autocorrelated errors no covariates,</span></span>
+<span id="cb621-2"><a href="sec-jags-regression-with-corr-errors2.html#cb621-2" aria-hidden="true" tabindex="-1"></a><span class="co"># intercept only.</span></span>
+<span id="cb621-3"><a href="sec-jags-regression-with-corr-errors2.html#cb621-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-4"><a href="sec-jags-regression-with-corr-errors2.html#cb621-4" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;lm_intercept_ar1b.txt&quot;</span>)</span>
+<span id="cb621-5"><a href="sec-jags-regression-with-corr-errors2.html#cb621-5" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb621-6"><a href="sec-jags-regression-with-corr-errors2.html#cb621-6" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb621-7"><a href="sec-jags-regression-with-corr-errors2.html#cb621-7" aria-hidden="true" tabindex="-1"></a><span class="st">   a ~ dnorm(0, 0.01); </span></span>
+<span id="cb621-8"><a href="sec-jags-regression-with-corr-errors2.html#cb621-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb621-9"><a href="sec-jags-regression-with-corr-errors2.html#cb621-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; </span></span>
+<span id="cb621-10"><a href="sec-jags-regression-with-corr-errors2.html#cb621-10" aria-hidden="true" tabindex="-1"></a><span class="st">   b ~ dunif(-1,1);</span></span>
+<span id="cb621-11"><a href="sec-jags-regression-with-corr-errors2.html#cb621-11" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb621-12"><a href="sec-jags-regression-with-corr-errors2.html#cb621-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, inv.q * (1 - b * b));</span></span>
+<span id="cb621-13"><a href="sec-jags-regression-with-corr-errors2.html#cb621-13" aria-hidden="true" tabindex="-1"></a><span class="st">   # t=1</span></span>
+<span id="cb621-14"><a href="sec-jags-regression-with-corr-errors2.html#cb621-14" aria-hidden="true" tabindex="-1"></a><span class="st">   EY[1] = a + b * X0;</span></span>
+<span id="cb621-15"><a href="sec-jags-regression-with-corr-errors2.html#cb621-15" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnorm(EY[1], inv.q);</span></span>
+<span id="cb621-16"><a href="sec-jags-regression-with-corr-errors2.html#cb621-16" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] &lt;- Y[1] - a;</span></span>
+<span id="cb621-17"><a href="sec-jags-regression-with-corr-errors2.html#cb621-17" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb621-18"><a href="sec-jags-regression-with-corr-errors2.html#cb621-18" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] = a + b * X[i-1];</span></span>
+<span id="cb621-19"><a href="sec-jags-regression-with-corr-errors2.html#cb621-19" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[1], inv.q);</span></span>
+<span id="cb621-20"><a href="sec-jags-regression-with-corr-errors2.html#cb621-20" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- Y[i]-a;</span></span>
+<span id="cb621-21"><a href="sec-jags-regression-with-corr-errors2.html#cb621-21" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb621-22"><a href="sec-jags-regression-with-corr-errors2.html#cb621-22" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb621-23"><a href="sec-jags-regression-with-corr-errors2.html#cb621-23" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb621-24"><a href="sec-jags-regression-with-corr-errors2.html#cb621-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
+<span id="cb621-25"><a href="sec-jags-regression-with-corr-errors2.html#cb621-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-26"><a href="sec-jags-regression-with-corr-errors2.html#cb621-26" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N)</span>
+<span id="cb621-27"><a href="sec-jags-regression-with-corr-errors2.html#cb621-27" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
+<span id="cb621-28"><a href="sec-jags-regression-with-corr-errors2.html#cb621-28" aria-hidden="true" tabindex="-1"></a>mod_ar1_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb621-29"><a href="sec-jags-regression-with-corr-errors2.html#cb621-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb621-30"><a href="sec-jags-regression-with-corr-errors2.html#cb621-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
             </section>
 

@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -583,9 +583,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="chap-jags" class="section level1" number="12">
 <h1><span class="header-section-number">Chapter 12</span> JAGS for Bayesian time series analysis</h1>
 <p>In this lab, we will illustrate how to use JAGS to fit time series models with Bayesian methods. The purpose of this chapter is to teach you some basic JAGS models. To go beyond these basics, study the wide variety of software tools to do time series analysis using Bayesian methods, e.g. packages listed on the R Cran <a href="http://cran.r-project.org/web/views/TimeSeries.html">TimeSeries</a> task view.</p>
-<div id="data-and-pacakges" class="section level3 unnumbered">
-<h3>Data and pacakges</h3>
-<p>For data for this lab, we will include a dataset on air quality in New York. We will load the data and create a couple new variables for future use. For the majority of our models, we are going to treat wind speed as the response variable for our time series models.</p>
+<p>A script with all the R code in the chapter can be downloaded <a href="./Rcode/intro-to-jags.R">here</a>. The Rmd for this chapter can be downloaded <a href="./Rmds/intro-to-jags.Rmd">here</a>.</p>
+<div id="data-and-packages-8" class="section level3 unnumbered">
+<h3>Data and packages</h3>
+<p>For data for this lab, we will use a dataset on air quality in New York. For the majority of our models, we are going to treat wind speed as the response variable for our time series models.</p>
 <div class="sourceCode" id="cb600"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb600-1"><a href="chap-jags.html#cb600-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(airquality, <span class="at">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
 <span id="cb600-2"><a href="chap-jags.html#cb600-2" aria-hidden="true" tabindex="-1"></a>Wind <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Wind  <span class="co"># wind speed</span></span>
 <span id="cb600-3"><a href="chap-jags.html#cb600-3" aria-hidden="true" tabindex="-1"></a>Temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp  <span class="co"># air temperature</span></span>

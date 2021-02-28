@@ -1,0 +1,12 @@
+
+model {  
+   # priors on parameters
+   u ~ dnorm(0, 0.01);
+   inv.r ~ dgamma(0.001,0.001); # This is inverse gamma
+   r <- 1/inv.r; # derived value
+   for(i in 1:N) {
+      X[i] <- u
+      EY[i] <- X[i]; # derived value
+      Y[i] ~ dnorm(EY[i], inv.r); 
+   }
+}  

@@ -9,10 +9,12 @@ knitr::opts_knit$set(unnamed.chunk.label = "jags-")
 
 In this lab, we will illustrate how to use JAGS to fit time series models with Bayesian methods. The purpose of this chapter is to teach you some basic JAGS models. To go beyond these basics, study the wide variety of software tools to do time series analysis using Bayesian methods, e.g. packages listed on the R Cran [TimeSeries](http://cran.r-project.org/web/views/TimeSeries.html) task view.   
 
+A script with all the R code in the chapter can be downloaded  [here](./Rcode/intro-to-jags.R). The Rmd for this chapter can be downloaded [here](./Rmds/intro-to-jags.Rmd).
 
-### Data and pacakges {-}
 
-For data for this lab, we will include a dataset on air quality in New York. We will load the data and create a couple new variables for future use. For the majority of our models, we are going to treat wind speed as the response variable for our time series models. 
+### Data and packages {-}
+
+For data for this lab, we will use a dataset on air quality in New York. For the majority of our models, we are going to treat wind speed as the response variable for our time series models. 
 
 ```{r jags-loaddata, echo=TRUE, results='hide', eval=TRUE}
 data(airquality, package = "datasets")
@@ -44,7 +46,7 @@ We will be fitting linear regressions with this form, and this will mean the JAG
 
 ## Linear regression with no covariates {#sec-jags-lr-no-covariates}
 
-We will start with a linear regression with only an intercept, so that the predicted values of all observations are the same. We will write the model in the form of Equation \@ref(eq:jags-marss). Our model is
+We will start with a linear regression with only an intercept. We will write the model in the form of Equation \@ref(eq:jags-marss). Our model is
 \begin{equation}
 \begin{gathered}
 x_t = u \\
@@ -71,10 +73,10 @@ model {
    # priors on parameters
    u ~ dnorm(0, 0.01);
    inv.r ~ dgamma(0.001,0.001); # This is inverse gamma
-   r <- 1/inv.r; # r is treated as derived parameter
+   r <- 1/inv.r; # derived value
    for(i in 1:N) {
       X[i] <- u
-      EY[i] <- X[i];
+      EY[i] <- X[i]; # derived value
       Y[i] ~ dnorm(EY[i], inv.r); 
    }
 }  
@@ -84,16 +86,19 @@ model {
 removefiles <- c(removefiles, model.loc)
 ```
 
-A couple things to notice: JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and the `dnorm()` notation means that we assume that the value on the left is normally distributed around a particular mean with a particular precision (1 over the variance). `inv.r` is $1/r$.
+The JAGS code has three parts: our parameter priors, our data model and derived parameters.
 
-The model can briefly be summarized as follows: there are two parameters in the model (the mean and $r$, the variance of the observation error). In JAGS instead of specifying the normal distribution with the variance, you pass in the precision (1/variance). Thus `dnorm(0, 0.01)`, our prior on $u$, is pretty vague. The precision receives a gamma prior, which is equivalent to the variance receiving an inverse gamma prior (fairly common for standard Bayesian regression models). Finally, we write a model for the data $y_t$ (`Y[i]`). Again we use the `dnorm()` distribution to say that the data are normally distributed (equivalent to our likelihood). 
+**Parameter priors** There are two parameters in the model ($u$, the mean, and $r$, the variance of the observation error). We need to set a prior on both of these. We will set a vague prior of a Gaussian with varianc 10 on $u$. In JAGS instead of specifying the normal distribution with the variance, $N(0, 10)$, you specify it with the precision (1/variance), so our prior on $u$ is  `dnorm(0, 0.01)`. For $r$, we need to set a prior on the precision $1/r$, which we call `inv.r` in the code. The precision receives a gamma prior, which is equivalent to the variance receiving an inverse gamma prior (fairly common for standard Bayesian regression models). 
 
-The function from the **R2jags** package that we use to run the model is `jags()`. There is a parallel version of the function called `jags.parallel()` which is useful for larger, more complex models. The details of both can be found with `?jags` or `?jags.parallel`.
+**Data model** Our data distribution is $y_t \sim \N(E[y_t], r)$. We use the `dnorm()` distribution with the precision ($1/r$) instead of $r$. So our data model is `Y[i] = dnorm(EY[i], inv.r)`. JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and use the for loop to specify the distribution for each `Y[i]`. For, this model we didn't actually need `X[i]` but we use it because we are building up to a state-space model which has both $x_t$ and $y_t$.
 
-To run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS, (2) a vector of parameters that we want to monitor and have returned back to R, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the `jags()` function. 
+**Derived values** Derived values are things we want output so we can track them. In this example, our derived values are a bit useless but in more complex models they will be quite handy. Also they can make your code easier to understand.
+
+
+To run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS `jags.data`, (2) a vector of parameters that we want to monitor and have returned back to R `jags.params`, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the `jags()` function. 
 
 ```{r jags-call-fun1, results='hide', cache=TRUE}
-jags.data <- list("Y" = Wind, "N" = N) # named list of inputs
+jags.data <- list("Y" = Wind, "N" = N) 
 jags.params <- c("r", "u") # parameters to be monitored
 mod_lm_intercept <- R2jags::jags(jags.data,
   parameters.to.save = jags.params,
@@ -101,6 +106,8 @@ mod_lm_intercept <- R2jags::jags(jags.data,
   n.thin = 1, n.iter = 10000, DIC = TRUE
 )
 ```
+
+The function from the **R2jags** package that we use to run the model is `jags()`. There is a parallel version of the function called `jags.parallel()` which is useful for larger, more complex models. The details of both can be found with `?jags` or `?jags.parallel`.
 
 Notice that the `jags()` function contains a number of other important arguments. In general, larger is better for all arguments: we want to run multiple MCMC chains (maybe 3 or more), and have a burn-in of at least 5000. The total number of samples after the burn-in period is n.iter-n.burnin, which in this case is 5000 samples. Because we are doing this with 3 MCMC chains, and the thinning rate equals 1 (meaning we are saving every sample), we will retain a total of 1500 posterior samples for each parameter.  
 
@@ -114,7 +121,7 @@ The last two columns in the summary contain `Rhat` (which we want to be close to
 ```{r jags-lm1-attach, eval=FALSE}
 R2jags::attach.jags(mod_lm_intercept)
 ```
-Attaching the **R2jags** object loads the posteriors for the parameters and we can call them directly, e.g. `u`. If we don't want to attach them to our workspace, we can find the posteriors buried within the model object.
+Attaching the **R2jags** object loads the posteriors for the parameters and we can call them directly, e.g. `u`. If we don't want to attach them to our workspace, we can find the posteriors within the model object.
 ```{r jags-lm1-attach2}
 post.params <- mod_lm_intercept$BUGSoutput$sims.list
 ```
@@ -136,8 +143,7 @@ hist(post.params$u, 40, col = "grey", xlab = "u", main = "")
 hist(post.params$r, 40, col = "grey", xlab = "r", main = "")
 ```
  
-
-Finally, we can run some useful diagnostics from the **coda** package on this model output. We have written a small function to make the creation of a MCMC list (an argument required for many of the diagnostics). The function is
+We can run some useful diagnostics from the **coda** package on this model output. We have written a small function to make the creation of a MCMC list (an argument required for many of the diagnostics). The function is
 
 ```{r jags-lm1-mcmclist-func, cache=TRUE}
 createMcmcList <- function(jagsmodel) {
@@ -187,7 +193,7 @@ y_t = x_t + v_t, v_t \sim \N(0, r)
 (\#eq:jags-obs-eqn)
 \end{equation}
 
-We (1) modify the JAGS script to include a new coefficient---in this case `C`, (2) update the predictive equation to include the effects of the new covariate, and (3) we include the new covariate in our named data list. 
+To create JAGS code for this model, we (1) add a prior for our new parameter  `C`, (2) update `X[i]` equation to include the new covariate, and (3) we include the new covariate in our named data list. 
 
 ```{r jags-cov, results='hide', cache=TRUE}
 # 1. LINEAR REGRESSION with covariates
@@ -247,7 +253,7 @@ plotModelOutput <- function(jagsmodel, Y) {
 }
 ```
 
-We can use the function to plot the predicted posterior mean with 95\% CIs, as well as the raw data. For example, try
+We can use the function to plot the predicted posterior mean with 95\% CIs, as well as the raw data. Note that the shading is for the CIs on the expected value of $y_t$ so will look narrow relative to the data. For example, try
 ```{r jags-lm1ar-plot, results='hide', eval=FALSE, fig.show='hide'}
 plotModelOutput(mod_lm, Wind)
 ```
@@ -262,9 +268,9 @@ plotModelOutput(mod_lm, Wind)
 
 ## Random walk with drift {#sec-jags-rw}
 
-All of the previous three models are observation error only models. Switching gears, we can create process error models. We will start with a random walk model. In this model, the assumption is that the true state of nature (or latent states) are measured perfectly. Thus, all uncertainty is originating from process variation (for ecological problems, this is often interpreted as environmental variation). 
+The previous models were observation error only models. Switching gears, we can create process error models. We will start with a random walk model. In this model, the assumption is that the underlying state $x_t$ is measured perfectly. All stochasticity is originating from process variation: variation in $x_t$ to $x_{t+1}$. 
 
-For this simple model, we will assume that our process of interest (in this case, daily wind speed) behaves as a random walk. We will call this process $x$ to prepare for the state-space model to come. We have no $y_t$ part of the equation in this case.
+For this simple model, we will assume that wind behaves as a random walk. We will call this process $x$ to prepare for the state-space model to come. We have no $y_t$ part of the equation in this model.
 
 \begin{equation}
 x_t = x_{t-1} + u + w_t, \text{ where }w_t \sim \N(0,q)
@@ -274,9 +280,8 @@ Now $x_t$ is stochastic and $E[x_t] = x_{t-1} + u$ and $x_t \sim \N(E[x_t],q)$.
 
 We are going to need to put a prior on $x_0$, which appears in $E[x_1]$. We could start with $t=2$ and skip this but we will start at $t=1$ since we will need to do that for later problems. The question is what prior should we put on $x_0$? This is not a stationary process. We will just put a vague prior on $x_0$.
 
-The JAGS random walk model and R script to run it is below. We change the JAGS data to use `"X"` instead of `"Y"` since this model has only $x$.
-
-```{r jags-ar1, results='hide', cache=TRUE}
+The JAGS random walk model is:
+```{r jags-rw, results='hide', cache=TRUE}
 # RANDOM WALK with drift
 
 model.loc <- ("rw_intercept.txt")
@@ -293,7 +298,14 @@ model {
    }
 }  
 ", file = model.loc)
+```
+```{r clean3, echo=FALSE, purl=FALSE}
+removefiles <- c(removefiles, model.loc)
+```
 
+To fit this model, we need to change `jags.data` to pass in `X = Wind` instead of `Y = Wind`. Obvioously we could have written the JAGS code with `Y` in place of `X` and kept our `jags.data` code the same as before, but we are working up to a state-space model where we have a hidden random walk called `X` and an observation of that called `Y`. 
+
+```{r jags-rw-fit, results='hide', cache=TRUE}
 jags.data <- list("X" = Wind, "N" = N)
 jags.params <- c("q", "u")
 mod_rw_intercept <- R2jags::jags(jags.data,
@@ -301,15 +313,10 @@ mod_rw_intercept <- R2jags::jags(jags.data,
   n.chains = 3, n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
 )
 ```
-```{r clean3, echo=FALSE, purl=FALSE}
-removefiles <- c(removefiles, model.loc)
-```
 
 ## Autoregressive AR(1) time series models {#sec-jags-ar1}
 
-A variation of the random walk model is the autoregressive time series model of order 1, AR(1). This model introduces a coefficient, which we will call $b$. The parameter $b$ controls the degree to which the random walk reverts to the mean---when $b = 1$, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $b$ can take on negative values.
-
-The math to describe the AR(1) time series model is:
+A variation of the random walk model is the autoregressive time series model of order 1, AR(1). This model introduces a coefficient, which we will call $b$. The parameter $b$ controls the degree to which the random walk reverts to the mean. When $b = 1$, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $b$ can take on negative values.
 
 \begin{equation}
 x_t = b \, x_{t-1} + u + w_t, \text{ where }w_t \sim \N(0,q)
@@ -317,7 +324,7 @@ x_t = b \, x_{t-1} + u + w_t, \text{ where }w_t \sim \N(0,q)
 \end{equation}
 Now $E[x_t] = b \, x_{t-1} + u$.
 
-Once again we need to put a prior on $x_0$, which appears in $E[x_1]$. An AR(1) with $|b|<1$ is a stationary process and the variance of the stationary distribution of $x_t$ is $q/(1-b^2)$. If you think that $x_0$ has the stationary distribution (does your data look stationary?) then you can use the variance of the stationary distribution of $x_t$ for your prior. We specify priors with the precision (1 over the variance) instead of the variance. `inv.q` is $1/q$. Thus the precision of the stationary distribution of $x_0$ is `inv.q * (1-b*b)`.
+Once again we need to put a prior on $x_0$, which appears in $E[x_1]$. An AR(1) with $|b|<1$ is a stationary process and the variance of the stationary distribution of $x_t$ is $q/(1-b^2)$. If you think that $x_0$ has the stationary distribution (does your data look stationary?) then you can use the variance of the stationary distribution of $x_t$ for your prior. We specify priors with the precision (1 over the variance) instead of the variance. Thus the precision of the stationary distribution of $x_0$ is $(1/q)(1-b^2)$. In the code, `inv.q` is $1/q$ and the precision is `inv.q * (1-b*b)`.
 
 ```{r jags-ar1est, echo=TRUE, results='hide', cache=TRUE}
 # AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT
@@ -362,8 +369,7 @@ y_t = a + x_t
 (\#eq:jags-obs-eqn-lmar2)
 \end{equation}
 
-The problem with this is that we need a distribution for $y_t$. We cannot use `Y[i] <- a + X[i]` in our JA
-GS code. So we need to re-write this as $y_t \sim N(a + b \, x_{t-1}, q)$.
+The problem with this is that we need a distribution for $y_t$. We cannot use `Y[i] <- a + X[i]` in our JAGS code. We need to re-write this as $y_t \sim N(a + b \, x_{t-1}, q)$.
 
 \begin{equation}
 \begin{gathered}
@@ -426,7 +432,7 @@ y_t = x_t + v_t, \, v_t \sim \N(0, r)
 (\#eq:jags-proc-eqn-uss)
 \end{equation}
 
-For the process model, there are a number of ways to parameterize the first state ($x_1$). Because $x$ is a random walk model not a stationary AR(1), we will place a vague weakly informative prior on $x_0$: $x_0 \sim \N(y_1, \sigma=10)$. Note, because we use $Y_1$, our first data point should not be NA. `EY` is added so that we can track the model fits for $y$. In this case it is just `X` but in more complex models it will involve more parameters.
+Because $x$ is a random walk model not a stationary AR(1), we will place a vague weakly informative prior on $x_0$: $x_0 \sim \N(y_1, 1000)$. We had to pass in `Y1` as data because JAGS would complain if we used `Y[1]` in our prior (because have `X0` in our model for $Y[1]$). `EY` is added so that we can track the model fits for $y$. In this case it is just `X` but in more complex models it will involve more parameters.
 
 ```{r jags-ss1, echo=TRUE, results='hide', cache=TRUE}
 # 5. MAKE THE SS MODEL for a stochastic level model
@@ -440,8 +446,8 @@ model {
    q <- 1/inv.q;
    inv.r ~ dgamma(0.001,0.001);
    r <- 1/inv.r; 
-
-   X0 ~ dnorm(0, 0.001);
+   X0 ~ dnorm(Y1, 0.001);
+   
    X[1] ~ dnorm(X0 + u, inv.q);
    EY[1] <- X[1];
    Y[1] ~ dnorm(EY[1], inv.r);
@@ -454,9 +460,10 @@ model {
 ", file = model.loc)
 ```
 
+We fit as usual with the addition of `Y1` in `jags.data`.
 
 ```{r jags-ss1-fit, echo=TRUE, results='hide', cache=TRUE}
-jags.data <- list("Y" = Wind, "N" = N)
+jags.data <- list("Y" = Wind, "N" = N, Y1 = Wind[1])
 jags.params <- c("q", "r", "EY", "u")
 mod_ss <- jags(jags.data,
   parameters.to.save = jags.params, model.file = model.loc, n.chains = 3,
@@ -480,7 +487,7 @@ log(EY[i]) <- X[i]
 Y[i] ~ dpois(EY[i])
 ```
 We also need to ensure that our data are 
-integers and we remove the `r` part since the Poisson does not have that.
+integers and we remove the `r` part from our model code since the Poisson does not have that. 
 
 Our univariate state-space code for Poisson observation errors is the following:
 
@@ -508,7 +515,7 @@ model {
 ", file = model.loc)
 ```
 
-We will fit this to the wild dogs data in the **MARSS** package. When we use a Gaussian error model with population data, we would normally log the data, so that still $E[log(y_t)]) = f(x_t)$. In the Poisson model, that log relationship still exists because $log(E[y_t]) = x_t$ but we pass in the raw count data not the log of that. Note, $E[log(y_t)]$ and $log(E[y_t])$ are not equivalent so you will see some difference with the Poisson fits.
+We will fit this to the wild dogs data in the **MARSS** package. 
 
 ```{r jags-ss1-fit-pois, echo=TRUE, results='hide'}
 data(wilddogs, package="MARSS")
@@ -523,6 +530,10 @@ mod_ss <- jags(jags.data,
 ```{r clean7, echo=FALSE, purl=FALSE}
 removefiles <- c(removefiles, model.loc)
 ```
+
+When we use this univariate state-space model with population data, like the wild dogs, we would log the data$^\dagger$, and our $y_t$ in our JAGS code is really $log(y_t)$. In that case, $E[log(y_t)]) = f(x_t)$. So there is a log-link that we are not really explicit about when we pass in the log of our data. In the Poisson model, that log relationship is explicit, aka we specify $log(E[y_t]) = x_t$ and we pass in the raw count data not the log of the data. 
+
+$\dagger$ Why would we typically log population data in this case? Because we would typically think of population processes as multiplicative. Population size at time $t$ is growth **times** population size at time $t-1$. By logging the data, we convert to an additive process. Log population size at time $t$ is log growth **plus** log population size at time $t-1$.
 
 ## Forecasting with JAGS models {#sec-jags-forecast}
 

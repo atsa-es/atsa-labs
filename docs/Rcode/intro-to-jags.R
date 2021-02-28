@@ -21,10 +21,10 @@ model {
    # priors on parameters
    u ~ dnorm(0, 0.01);
    inv.r ~ dgamma(0.001,0.001); # This is inverse gamma
-   r <- 1/inv.r; # r is treated as derived parameter
+   r <- 1/inv.r; # derived value
    for(i in 1:N) {
       X[i] <- u
-      EY[i] <- X[i];
+      EY[i] <- X[i]; # derived value
       Y[i] ~ dnorm(EY[i], inv.r); 
    }
 }  
@@ -33,7 +33,7 @@ model {
 
 
 ## ----jags-call-fun1, results='hide', cache=TRUE---------------------------------
-jags.data <- list("Y" = Wind, "N" = N) # named list of inputs
+jags.data <- list("Y" = Wind, "N" = N) 
 jags.params <- c("r", "u") # parameters to be monitored
 mod_lm_intercept <- R2jags::jags(jags.data,
   parameters.to.save = jags.params,
@@ -156,7 +156,7 @@ plotModelOutput <- function(jagsmodel, Y) {
 plotModelOutput(mod_lm, Wind)
 
 
-## ----jags-ar1, results='hide', cache=TRUE---------------------------------------
+## ----jags-rw, results='hide', cache=TRUE----------------------------------------
 # RANDOM WALK with drift
 
 model.loc <- ("rw_intercept.txt")
@@ -174,13 +174,15 @@ model {
 }  
 ", file = model.loc)
 
+
+
+## ----jags-rw-fit, results='hide', cache=TRUE------------------------------------
 jags.data <- list("X" = Wind, "N" = N)
 jags.params <- c("q", "u")
 mod_rw_intercept <- R2jags::jags(jags.data,
   parameters.to.save = jags.params, model.file = model.loc,
   n.chains = 3, n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
 )
-
 
 
 ## ----jags-ar1est, echo=TRUE, results='hide', cache=TRUE-------------------------
@@ -259,8 +261,8 @@ model {
    q <- 1/inv.q;
    inv.r ~ dgamma(0.001,0.001);
    r <- 1/inv.r; 
-
-   X0 ~ dnorm(0, 0.001);
+   X0 ~ dnorm(Y1, 0.001);
+   
    X[1] ~ dnorm(X0 + u, inv.q);
    EY[1] <- X[1];
    Y[1] ~ dnorm(EY[1], inv.r);
@@ -274,7 +276,7 @@ model {
 
 
 ## ----jags-ss1-fit, echo=TRUE, results='hide', cache=TRUE------------------------
-jags.data <- list("Y" = Wind, "N" = N)
+jags.data <- list("Y" = Wind, "N" = N, Y1 = Wind[1])
 jags.params <- c("q", "r", "EY", "u")
 mod_ss <- jags(jags.data,
   parameters.to.save = jags.params, model.file = model.loc, n.chains = 3,

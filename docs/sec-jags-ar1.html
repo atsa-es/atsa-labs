@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -582,38 +582,37 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="sec-jags-ar1" class="section level2" number="12.5">
 <h2><span class="header-section-number">12.5</span> Autoregressive AR(1) time series models</h2>
-<p>A variation of the random walk model is the autoregressive time series model of order 1, AR(1). This model introduces a coefficient, which we will call <span class="math inline">\(b\)</span>. The parameter <span class="math inline">\(b\)</span> controls the degree to which the random walk reverts to the mean—when <span class="math inline">\(b = 1\)</span>, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, <span class="math inline">\(b\)</span> can take on negative values.</p>
-<p>The math to describe the AR(1) time series model is:</p>
+<p>A variation of the random walk model is the autoregressive time series model of order 1, AR(1). This model introduces a coefficient, which we will call <span class="math inline">\(b\)</span>. The parameter <span class="math inline">\(b\)</span> controls the degree to which the random walk reverts to the mean. When <span class="math inline">\(b = 1\)</span>, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, <span class="math inline">\(b\)</span> can take on negative values.</p>
 <p><span class="math display" id="eq:jags-obs-eqn-ar1">\[\begin{equation}
 x_t = b \, x_{t-1} + u + w_t, \text{ where }w_t \sim \,\text{N}(0,q)
 \tag{12.5}
 \end{equation}\]</span>
 Now <span class="math inline">\(E[x_t] = b \, x_{t-1} + u\)</span>.</p>
-<p>Once again we need to put a prior on <span class="math inline">\(x_0\)</span>, which appears in <span class="math inline">\(E[x_1]\)</span>. An AR(1) with <span class="math inline">\(|b|&lt;1\)</span> is a stationary process and the variance of the stationary distribution of <span class="math inline">\(x_t\)</span> is <span class="math inline">\(q/(1-b^2)\)</span>. If you think that <span class="math inline">\(x_0\)</span> has the stationary distribution (does your data look stationary?) then you can use the variance of the stationary distribution of <span class="math inline">\(x_t\)</span> for your prior. We specify priors with the precision (1 over the variance) instead of the variance. <code>inv.q</code> is <span class="math inline">\(1/q\)</span>. Thus the precision of the stationary distribution of <span class="math inline">\(x_0\)</span> is <code>inv.q * (1-b*b)</code>.</p>
-<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb618-1"><a href="sec-jags-ar1.html#cb618-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT</span></span>
-<span id="cb618-2"><a href="sec-jags-ar1.html#cb618-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb618-3"><a href="sec-jags-ar1.html#cb618-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ar1_intercept.txt&quot;</span>)</span>
-<span id="cb618-4"><a href="sec-jags-ar1.html#cb618-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb618-5"><a href="sec-jags-ar1.html#cb618-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb618-6"><a href="sec-jags-ar1.html#cb618-6" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb618-7"><a href="sec-jags-ar1.html#cb618-7" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb618-8"><a href="sec-jags-ar1.html#cb618-8" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; </span></span>
-<span id="cb618-9"><a href="sec-jags-ar1.html#cb618-9" aria-hidden="true" tabindex="-1"></a><span class="st">   b ~ dunif(-1,1);</span></span>
-<span id="cb618-10"><a href="sec-jags-ar1.html#cb618-10" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
-<span id="cb618-11"><a href="sec-jags-ar1.html#cb618-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, inv.q * (1 - b * b));</span></span>
-<span id="cb618-12"><a href="sec-jags-ar1.html#cb618-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(b * X0 + u, inv.q);</span></span>
-<span id="cb618-13"><a href="sec-jags-ar1.html#cb618-13" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb618-14"><a href="sec-jags-ar1.html#cb618-14" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(b * X[i-1] + u, inv.q);</span></span>
-<span id="cb618-15"><a href="sec-jags-ar1.html#cb618-15" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb618-16"><a href="sec-jags-ar1.html#cb618-16" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb618-17"><a href="sec-jags-ar1.html#cb618-17" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb618-18"><a href="sec-jags-ar1.html#cb618-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
-<span id="cb618-19"><a href="sec-jags-ar1.html#cb618-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb618-20"><a href="sec-jags-ar1.html#cb618-20" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> Wind, <span class="at">N =</span> N)</span>
-<span id="cb618-21"><a href="sec-jags-ar1.html#cb618-21" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
-<span id="cb618-22"><a href="sec-jags-ar1.html#cb618-22" aria-hidden="true" tabindex="-1"></a>mod_ar1_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb618-23"><a href="sec-jags-ar1.html#cb618-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb618-24"><a href="sec-jags-ar1.html#cb618-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Once again we need to put a prior on <span class="math inline">\(x_0\)</span>, which appears in <span class="math inline">\(E[x_1]\)</span>. An AR(1) with <span class="math inline">\(|b|&lt;1\)</span> is a stationary process and the variance of the stationary distribution of <span class="math inline">\(x_t\)</span> is <span class="math inline">\(q/(1-b^2)\)</span>. If you think that <span class="math inline">\(x_0\)</span> has the stationary distribution (does your data look stationary?) then you can use the variance of the stationary distribution of <span class="math inline">\(x_t\)</span> for your prior. We specify priors with the precision (1 over the variance) instead of the variance. Thus the precision of the stationary distribution of <span class="math inline">\(x_0\)</span> is <span class="math inline">\((1/q)(1-b^2)\)</span>. In the code, <code>inv.q</code> is <span class="math inline">\(1/q\)</span> and the precision is <code>inv.q * (1-b*b)</code>.</p>
+<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb620-1"><a href="sec-jags-ar1.html#cb620-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT</span></span>
+<span id="cb620-2"><a href="sec-jags-ar1.html#cb620-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb620-3"><a href="sec-jags-ar1.html#cb620-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ar1_intercept.txt&quot;</span>)</span>
+<span id="cb620-4"><a href="sec-jags-ar1.html#cb620-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb620-5"><a href="sec-jags-ar1.html#cb620-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb620-6"><a href="sec-jags-ar1.html#cb620-6" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb620-7"><a href="sec-jags-ar1.html#cb620-7" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb620-8"><a href="sec-jags-ar1.html#cb620-8" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; </span></span>
+<span id="cb620-9"><a href="sec-jags-ar1.html#cb620-9" aria-hidden="true" tabindex="-1"></a><span class="st">   b ~ dunif(-1,1);</span></span>
+<span id="cb620-10"><a href="sec-jags-ar1.html#cb620-10" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb620-11"><a href="sec-jags-ar1.html#cb620-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, inv.q * (1 - b * b));</span></span>
+<span id="cb620-12"><a href="sec-jags-ar1.html#cb620-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(b * X0 + u, inv.q);</span></span>
+<span id="cb620-13"><a href="sec-jags-ar1.html#cb620-13" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb620-14"><a href="sec-jags-ar1.html#cb620-14" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(b * X[i-1] + u, inv.q);</span></span>
+<span id="cb620-15"><a href="sec-jags-ar1.html#cb620-15" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb620-16"><a href="sec-jags-ar1.html#cb620-16" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb620-17"><a href="sec-jags-ar1.html#cb620-17" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb620-18"><a href="sec-jags-ar1.html#cb620-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
+<span id="cb620-19"><a href="sec-jags-ar1.html#cb620-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb620-20"><a href="sec-jags-ar1.html#cb620-20" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> Wind, <span class="at">N =</span> N)</span>
+<span id="cb620-21"><a href="sec-jags-ar1.html#cb620-21" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
+<span id="cb620-22"><a href="sec-jags-ar1.html#cb620-22" aria-hidden="true" tabindex="-1"></a>mod_ar1_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb620-23"><a href="sec-jags-ar1.html#cb620-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb620-24"><a href="sec-jags-ar1.html#cb620-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
             </section>
 

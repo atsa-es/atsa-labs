@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -590,48 +590,48 @@ y_t = x_t + v_t, v_t \sim \,\text{N}(0, r)
 \end{gathered}
 \tag{12.3}
 \end{equation}\]</span></p>
-<p>We (1) modify the JAGS script to include a new coefficient—in this case <code>C</code>, (2) update the predictive equation to include the effects of the new covariate, and (3) we include the new covariate in our named data list.</p>
-<div class="sourceCode" id="cb614"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb614-1"><a href="sec-jags-covariates.html#cb614-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. LINEAR REGRESSION with covariates</span></span>
-<span id="cb614-2"><a href="sec-jags-covariates.html#cb614-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb614-3"><a href="sec-jags-covariates.html#cb614-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;lm_covariate.txt&quot;</span>)</span>
-<span id="cb614-4"><a href="sec-jags-covariates.html#cb614-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb614-5"><a href="sec-jags-covariates.html#cb614-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb614-6"><a href="sec-jags-covariates.html#cb614-6" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb614-7"><a href="sec-jags-covariates.html#cb614-7" aria-hidden="true" tabindex="-1"></a><span class="st">   C ~ dnorm(0,0.01);</span></span>
-<span id="cb614-8"><a href="sec-jags-covariates.html#cb614-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001); </span></span>
-<span id="cb614-9"><a href="sec-jags-covariates.html#cb614-9" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; </span></span>
-<span id="cb614-10"><a href="sec-jags-covariates.html#cb614-10" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
-<span id="cb614-11"><a href="sec-jags-covariates.html#cb614-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:N) {</span></span>
-<span id="cb614-12"><a href="sec-jags-covariates.html#cb614-12" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- u + C*c[i];</span></span>
-<span id="cb614-13"><a href="sec-jags-covariates.html#cb614-13" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i]</span></span>
-<span id="cb614-14"><a href="sec-jags-covariates.html#cb614-14" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r);</span></span>
-<span id="cb614-15"><a href="sec-jags-covariates.html#cb614-15" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb614-16"><a href="sec-jags-covariates.html#cb614-16" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb614-17"><a href="sec-jags-covariates.html#cb614-17" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb614-18"><a href="sec-jags-covariates.html#cb614-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
-<span id="cb614-19"><a href="sec-jags-covariates.html#cb614-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb614-20"><a href="sec-jags-covariates.html#cb614-20" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N, <span class="at">c =</span> Temp)</span>
-<span id="cb614-21"><a href="sec-jags-covariates.html#cb614-21" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;C&quot;</span>)</span>
-<span id="cb614-22"><a href="sec-jags-covariates.html#cb614-22" aria-hidden="true" tabindex="-1"></a>mod_lm <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb614-23"><a href="sec-jags-covariates.html#cb614-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb614-24"><a href="sec-jags-covariates.html#cb614-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>To create JAGS code for this model, we (1) add a prior for our new parameter <code>C</code>, (2) update <code>X[i]</code> equation to include the new covariate, and (3) we include the new covariate in our named data list.</p>
+<div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb615-1"><a href="sec-jags-covariates.html#cb615-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. LINEAR REGRESSION with covariates</span></span>
+<span id="cb615-2"><a href="sec-jags-covariates.html#cb615-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb615-3"><a href="sec-jags-covariates.html#cb615-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;lm_covariate.txt&quot;</span>)</span>
+<span id="cb615-4"><a href="sec-jags-covariates.html#cb615-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb615-5"><a href="sec-jags-covariates.html#cb615-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb615-6"><a href="sec-jags-covariates.html#cb615-6" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb615-7"><a href="sec-jags-covariates.html#cb615-7" aria-hidden="true" tabindex="-1"></a><span class="st">   C ~ dnorm(0,0.01);</span></span>
+<span id="cb615-8"><a href="sec-jags-covariates.html#cb615-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001); </span></span>
+<span id="cb615-9"><a href="sec-jags-covariates.html#cb615-9" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; </span></span>
+<span id="cb615-10"><a href="sec-jags-covariates.html#cb615-10" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb615-11"><a href="sec-jags-covariates.html#cb615-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:N) {</span></span>
+<span id="cb615-12"><a href="sec-jags-covariates.html#cb615-12" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- u + C*c[i];</span></span>
+<span id="cb615-13"><a href="sec-jags-covariates.html#cb615-13" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i]</span></span>
+<span id="cb615-14"><a href="sec-jags-covariates.html#cb615-14" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r);</span></span>
+<span id="cb615-15"><a href="sec-jags-covariates.html#cb615-15" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb615-16"><a href="sec-jags-covariates.html#cb615-16" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb615-17"><a href="sec-jags-covariates.html#cb615-17" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb615-18"><a href="sec-jags-covariates.html#cb615-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
+<span id="cb615-19"><a href="sec-jags-covariates.html#cb615-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb615-20"><a href="sec-jags-covariates.html#cb615-20" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N, <span class="at">c =</span> Temp)</span>
+<span id="cb615-21"><a href="sec-jags-covariates.html#cb615-21" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;C&quot;</span>)</span>
+<span id="cb615-22"><a href="sec-jags-covariates.html#cb615-22" aria-hidden="true" tabindex="-1"></a>mod_lm <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb615-23"><a href="sec-jags-covariates.html#cb615-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb615-24"><a href="sec-jags-covariates.html#cb615-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>We can show the the posterior fits (the model fits) to the data. Here is a simple function whose arguments are one of our fitted models and the raw data. The function is:</p>
-<div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb615-1"><a href="sec-jags-covariates.html#cb615-1" aria-hidden="true" tabindex="-1"></a>plotModelOutput <span class="ot">&lt;-</span> <span class="cf">function</span>(jagsmodel, Y) {</span>
-<span id="cb615-2"><a href="sec-jags-covariates.html#cb615-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># attach the model</span></span>
-<span id="cb615-3"><a href="sec-jags-covariates.html#cb615-3" aria-hidden="true" tabindex="-1"></a>    EY <span class="ot">&lt;-</span> jagsmodel<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list<span class="sc">$</span>EY</span>
-<span id="cb615-4"><a href="sec-jags-covariates.html#cb615-4" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(Y))</span>
-<span id="cb615-5"><a href="sec-jags-covariates.html#cb615-5" aria-hidden="true" tabindex="-1"></a>    summaryPredictions <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">apply</span>(EY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), </span>
-<span id="cb615-6"><a href="sec-jags-covariates.html#cb615-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">apply</span>(EY, <span class="dv">2</span>, mean), <span class="fu">apply</span>(EY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
-<span id="cb615-7"><a href="sec-jags-covariates.html#cb615-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(Y, <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(<span class="fu">c</span>(Y, summaryPredictions)), </span>
-<span id="cb615-8"><a href="sec-jags-covariates.html#cb615-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">max</span>(<span class="fu">c</span>(Y, summaryPredictions))), <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, </span>
-<span id="cb615-9"><a href="sec-jags-covariates.html#cb615-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="sc">$</span>model.file))</span>
-<span id="cb615-10"><a href="sec-jags-covariates.html#cb615-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">polygon</span>(<span class="fu">c</span>(x, <span class="fu">rev</span>(x)), <span class="fu">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="fu">rev</span>(summaryPredictions[, </span>
-<span id="cb615-11"><a href="sec-jags-covariates.html#cb615-11" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3</span>])), <span class="at">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb615-12"><a href="sec-jags-covariates.html#cb615-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lines</span>(summaryPredictions[, <span class="dv">2</span>])</span>
-<span id="cb615-13"><a href="sec-jags-covariates.html#cb615-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(Y)</span>
-<span id="cb615-14"><a href="sec-jags-covariates.html#cb615-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<p>We can use the function to plot the predicted posterior mean with 95% CIs, as well as the raw data. For example, try</p>
-<div class="sourceCode" id="cb616"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb616-1"><a href="sec-jags-covariates.html#cb616-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotModelOutput</span>(mod_lm, Wind)</span></code></pre></div>
+<div class="sourceCode" id="cb616"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb616-1"><a href="sec-jags-covariates.html#cb616-1" aria-hidden="true" tabindex="-1"></a>plotModelOutput <span class="ot">&lt;-</span> <span class="cf">function</span>(jagsmodel, Y) {</span>
+<span id="cb616-2"><a href="sec-jags-covariates.html#cb616-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># attach the model</span></span>
+<span id="cb616-3"><a href="sec-jags-covariates.html#cb616-3" aria-hidden="true" tabindex="-1"></a>    EY <span class="ot">&lt;-</span> jagsmodel<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list<span class="sc">$</span>EY</span>
+<span id="cb616-4"><a href="sec-jags-covariates.html#cb616-4" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(Y))</span>
+<span id="cb616-5"><a href="sec-jags-covariates.html#cb616-5" aria-hidden="true" tabindex="-1"></a>    summaryPredictions <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">apply</span>(EY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), </span>
+<span id="cb616-6"><a href="sec-jags-covariates.html#cb616-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">apply</span>(EY, <span class="dv">2</span>, mean), <span class="fu">apply</span>(EY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
+<span id="cb616-7"><a href="sec-jags-covariates.html#cb616-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(Y, <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(<span class="fu">c</span>(Y, summaryPredictions)), </span>
+<span id="cb616-8"><a href="sec-jags-covariates.html#cb616-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">max</span>(<span class="fu">c</span>(Y, summaryPredictions))), <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, </span>
+<span id="cb616-9"><a href="sec-jags-covariates.html#cb616-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="sc">$</span>model.file))</span>
+<span id="cb616-10"><a href="sec-jags-covariates.html#cb616-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">polygon</span>(<span class="fu">c</span>(x, <span class="fu">rev</span>(x)), <span class="fu">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="fu">rev</span>(summaryPredictions[, </span>
+<span id="cb616-11"><a href="sec-jags-covariates.html#cb616-11" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3</span>])), <span class="at">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb616-12"><a href="sec-jags-covariates.html#cb616-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lines</span>(summaryPredictions[, <span class="dv">2</span>])</span>
+<span id="cb616-13"><a href="sec-jags-covariates.html#cb616-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(Y)</span>
+<span id="cb616-14"><a href="sec-jags-covariates.html#cb616-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>We can use the function to plot the predicted posterior mean with 95% CIs, as well as the raw data. Note that the shading is for the CIs on the expected value of <span class="math inline">\(y_t\)</span> so will look narrow relative to the data. For example, try</p>
+<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb617-1"><a href="sec-jags-covariates.html#cb617-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotModelOutput</span>(mod_lm, Wind)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:jags-lm1ar-plot1"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-lm1ar-plot1-1.png" alt="Predicted posterior mean with 95% CIs" width="80%" />

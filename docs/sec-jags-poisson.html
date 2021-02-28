@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -589,38 +589,40 @@ We can change this to a Poisson observation error model:
 <pre><code>log(EY[i]) &lt;- X[i]
 Y[i] ~ dpois(EY[i])</code></pre>
 <p>We also need to ensure that our data are
-integers and we remove the <code>r</code> part since the Poisson does not have that.</p>
+integers and we remove the <code>r</code> part from our model code since the Poisson does not have that.</p>
 <p>Our univariate state-space code for Poisson observation errors is the following:</p>
-<div class="sourceCode" id="cb624"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb624-1"><a href="sec-jags-poisson.html#cb624-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SS MODEL with Poisson errors</span></span>
-<span id="cb624-2"><a href="sec-jags-poisson.html#cb624-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb624-3"><a href="sec-jags-poisson.html#cb624-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model_pois.txt&quot;</span>)</span>
-<span id="cb624-4"><a href="sec-jags-poisson.html#cb624-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb624-5"><a href="sec-jags-poisson.html#cb624-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb624-6"><a href="sec-jags-poisson.html#cb624-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
-<span id="cb624-7"><a href="sec-jags-poisson.html#cb624-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb624-8"><a href="sec-jags-poisson.html#cb624-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb624-9"><a href="sec-jags-poisson.html#cb624-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
-<span id="cb624-10"><a href="sec-jags-poisson.html#cb624-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb624-11"><a href="sec-jags-poisson.html#cb624-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, 0.001);</span></span>
-<span id="cb624-12"><a href="sec-jags-poisson.html#cb624-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
-<span id="cb624-13"><a href="sec-jags-poisson.html#cb624-13" aria-hidden="true" tabindex="-1"></a><span class="st">   log(EY[1]) &lt;- X[1]</span></span>
-<span id="cb624-14"><a href="sec-jags-poisson.html#cb624-14" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dpois(EY[1])</span></span>
-<span id="cb624-15"><a href="sec-jags-poisson.html#cb624-15" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb624-16"><a href="sec-jags-poisson.html#cb624-16" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(X[i-1] + u, inv.q);</span></span>
-<span id="cb624-17"><a href="sec-jags-poisson.html#cb624-17" aria-hidden="true" tabindex="-1"></a><span class="st">      log(EY[i]) &lt;- X[i]</span></span>
-<span id="cb624-18"><a href="sec-jags-poisson.html#cb624-18" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dpois(EY[i]); </span></span>
-<span id="cb624-19"><a href="sec-jags-poisson.html#cb624-19" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb624-20"><a href="sec-jags-poisson.html#cb624-20" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb624-21"><a href="sec-jags-poisson.html#cb624-21" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb624-22"><a href="sec-jags-poisson.html#cb624-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
-<p>We will fit this to the wild dogs data in the <strong>MARSS</strong> package. When we use a Gaussian error model with population data, we would normally log the data, so that still <span class="math inline">\(E[log(y_t)]) = f(x_t)\)</span>. In the Poisson model, that log relationship still exists because <span class="math inline">\(log(E[y_t]) = x_t\)</span> but we pass in the raw count data not the log of that. Note, <span class="math inline">\(E[log(y_t)]\)</span> and <span class="math inline">\(log(E[y_t])\)</span> are not equivalent so you will see some difference with the Poisson fits.</p>
-<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb625-1"><a href="sec-jags-poisson.html#cb625-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(wilddogs, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb625-2"><a href="sec-jags-poisson.html#cb625-2" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> wilddogs[, <span class="dv">2</span>], <span class="at">N =</span> <span class="fu">nrow</span>(wilddogs))</span>
-<span id="cb625-3"><a href="sec-jags-poisson.html#cb625-3" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
-<span id="cb625-4"><a href="sec-jags-poisson.html#cb625-4" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
-<span id="cb625-5"><a href="sec-jags-poisson.html#cb625-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
-<span id="cb625-6"><a href="sec-jags-poisson.html#cb625-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb625-1"><a href="sec-jags-poisson.html#cb625-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SS MODEL with Poisson errors</span></span>
+<span id="cb625-2"><a href="sec-jags-poisson.html#cb625-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb625-3"><a href="sec-jags-poisson.html#cb625-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model_pois.txt&quot;</span>)</span>
+<span id="cb625-4"><a href="sec-jags-poisson.html#cb625-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb625-5"><a href="sec-jags-poisson.html#cb625-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb625-6"><a href="sec-jags-poisson.html#cb625-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb625-7"><a href="sec-jags-poisson.html#cb625-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb625-8"><a href="sec-jags-poisson.html#cb625-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb625-9"><a href="sec-jags-poisson.html#cb625-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
+<span id="cb625-10"><a href="sec-jags-poisson.html#cb625-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb625-11"><a href="sec-jags-poisson.html#cb625-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, 0.001);</span></span>
+<span id="cb625-12"><a href="sec-jags-poisson.html#cb625-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
+<span id="cb625-13"><a href="sec-jags-poisson.html#cb625-13" aria-hidden="true" tabindex="-1"></a><span class="st">   log(EY[1]) &lt;- X[1]</span></span>
+<span id="cb625-14"><a href="sec-jags-poisson.html#cb625-14" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dpois(EY[1])</span></span>
+<span id="cb625-15"><a href="sec-jags-poisson.html#cb625-15" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb625-16"><a href="sec-jags-poisson.html#cb625-16" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(X[i-1] + u, inv.q);</span></span>
+<span id="cb625-17"><a href="sec-jags-poisson.html#cb625-17" aria-hidden="true" tabindex="-1"></a><span class="st">      log(EY[i]) &lt;- X[i]</span></span>
+<span id="cb625-18"><a href="sec-jags-poisson.html#cb625-18" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dpois(EY[i]); </span></span>
+<span id="cb625-19"><a href="sec-jags-poisson.html#cb625-19" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb625-20"><a href="sec-jags-poisson.html#cb625-20" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb625-21"><a href="sec-jags-poisson.html#cb625-21" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb625-22"><a href="sec-jags-poisson.html#cb625-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
+<p>We will fit this to the wild dogs data in the <strong>MARSS</strong> package.</p>
+<div class="sourceCode" id="cb626"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb626-1"><a href="sec-jags-poisson.html#cb626-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(wilddogs, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb626-2"><a href="sec-jags-poisson.html#cb626-2" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> wilddogs[, <span class="dv">2</span>], <span class="at">N =</span> <span class="fu">nrow</span>(wilddogs))</span>
+<span id="cb626-3"><a href="sec-jags-poisson.html#cb626-3" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
+<span id="cb626-4"><a href="sec-jags-poisson.html#cb626-4" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
+<span id="cb626-5"><a href="sec-jags-poisson.html#cb626-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb626-6"><a href="sec-jags-poisson.html#cb626-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>module glm loaded</code></pre>
+<p>When we use this univariate state-space model with population data, like the wild dogs, we would log the data<span class="math inline">\(^\dagger\)</span>, and our <span class="math inline">\(y_t\)</span> in our JAGS code is really <span class="math inline">\(log(y_t)\)</span>. In that case, <span class="math inline">\(E[log(y_t)]) = f(x_t)\)</span>. So there is a log-link that we are not really explicit about when we pass in the log of our data. In the Poisson model, that log relationship is explicit, aka we specify <span class="math inline">\(log(E[y_t]) = x_t\)</span> and we pass in the raw count data not the log of the data.</p>
+<p><span class="math inline">\(\dagger\)</span> Why would we typically log population data in this case? Because we would typically think of population processes as multiplicative. Population size at time <span class="math inline">\(t\)</span> is growth <strong>times</strong> population size at time <span class="math inline">\(t-1\)</span>. By logging the data, we convert to an additive process. Log population size at time <span class="math inline">\(t\)</span> is log growth <strong>plus</strong> log population size at time <span class="math inline">\(t-1\)</span>.</p>
 </div>
             </section>
 

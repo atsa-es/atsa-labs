@@ -24,7 +24,7 @@
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-02-26" />
+<meta name="date" content="2021-02-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -468,7 +468,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="12" data-path="chap-jags.html"><a href="chap-jags.html"><i class="fa fa-check"></i><b>12</b> JAGS for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-pacakges"><i class="fa fa-check"></i>Data and pacakges</a></li>
+<li class="chapter" data-level="" data-path="chap-jags.html"><a href="chap-jags.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="12.1" data-path="sec-jags-overview.html"><a href="sec-jags-overview.html"><i class="fa fa-check"></i><b>12.1</b> Overview</a></li>
 <li class="chapter" data-level="12.2" data-path="sec-jags-lr-no-covariates.html"><a href="sec-jags-lr-no-covariates.html"><i class="fa fa-check"></i><b>12.2</b> Linear regression with no covariates</a></li>
 <li class="chapter" data-level="12.3" data-path="sec-jags-covariates.html"><a href="sec-jags-covariates.html"><i class="fa fa-check"></i><b>12.3</b> Linear regression with covariates</a></li>
@@ -482,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="chap-stan.html"><a href="chap-stan.html"><i class="fa fa-check"></i><b>13</b> Stan for Bayesian time series analysis</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-8"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-stan.html"><a href="chap-stan.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="13.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html"><i class="fa fa-check"></i><b>13.1</b> Linear regression</a>
 <ul>
 <li class="chapter" data-level="13.1.1" data-path="sec-stan-lr.html"><a href="sec-stan-lr.html#sec-stan-burn"><i class="fa fa-check"></i><b>13.1.1</b> Burn-in and thinning</a></li>
@@ -539,7 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="16" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html"><i class="fa fa-check"></i><b>16</b> Modeling cyclic sockeye</a>
 <ul>
-<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-9"><i class="fa fa-check"></i>Data and packages</a></li>
+<li class="chapter" data-level="" data-path="chap-cyclic-sockeye.html"><a href="chap-cyclic-sockeye.html#data-and-packages-10"><i class="fa fa-check"></i>Data and packages</a></li>
 <li class="chapter" data-level="16.1" data-path="sec-cyclic-sockeye-overview.html"><a href="sec-cyclic-sockeye-overview.html"><i class="fa fa-check"></i><b>16.1</b> Overview</a></li>
 <li class="chapter" data-level="16.2" data-path="analysis-goal.html"><a href="analysis-goal.html"><i class="fa fa-check"></i><b>16.2</b> Analysis goal</a></li>
 <li class="chapter" data-level="16.3" data-path="modeling-the-cycle.html"><a href="modeling-the-cycle.html"><i class="fa fa-check"></i><b>16.3</b> Modeling the cycle</a>
@@ -583,23 +583,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="discussion" class="section level2" number="14.12">
 <h2><span class="header-section-number">14.12</span> Discussion</h2>
 <p>This example worked because I had a sensor that was quite a bit better than the others with a much smaller level of observation error variance (sd=1 versus 28 and 41 for the others). I didn’t know which one it was, but I did have at least one good sensor. If I up the observation error variance on the first (good) sensor, then my signal estimate is not so good. The variance of the signal estimate is better than the average, but it is still bad. There is only so much that can be done when the sensor adds so much error.</p>
-<div class="sourceCode" id="cb701"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb701-1"><a href="discussion.html#cb701-1" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">28</span>, <span class="dv">41</span>))</span>
-<span id="cb701-2"><a href="discussion.html#cb701-2" aria-hidden="true" tabindex="-1"></a>dat[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> signal <span class="sc">+</span> <span class="fu">arima.sim</span>(TT, <span class="at">model =</span> <span class="fu">list</span>(<span class="at">ar =</span> ar[<span class="dv">1</span>]), </span>
-<span id="cb701-3"><a href="discussion.html#cb701-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> sd[<span class="dv">1</span>])</span>
-<span id="cb701-4"><a href="discussion.html#cb701-4" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat <span class="sc">-</span> <span class="fu">apply</span>(dat, <span class="dv">1</span>, mean) <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, TT)</span>
-<span id="cb701-5"><a href="discussion.html#cb701-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb701-6"><a href="discussion.html#cb701-6" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat2, <span class="at">model =</span> mod.list1, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb702"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb702-1"><a href="discussion.html#cb702-1" aria-hidden="true" tabindex="-1"></a>sd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">28</span>, <span class="dv">41</span>))</span>
+<span id="cb702-2"><a href="discussion.html#cb702-2" aria-hidden="true" tabindex="-1"></a>dat[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> signal <span class="sc">+</span> <span class="fu">arima.sim</span>(TT, <span class="at">model =</span> <span class="fu">list</span>(<span class="at">ar =</span> ar[<span class="dv">1</span>]), </span>
+<span id="cb702-3"><a href="discussion.html#cb702-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd =</span> sd[<span class="dv">1</span>])</span>
+<span id="cb702-4"><a href="discussion.html#cb702-4" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat <span class="sc">-</span> <span class="fu">apply</span>(dat, <span class="dv">1</span>, mean) <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, TT)</span>
+<span id="cb702-5"><a href="discussion.html#cb702-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb702-6"><a href="discussion.html#cb702-6" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat2, <span class="at">model =</span> mod.list1, <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-38-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>One solution is to have more sensors. They can all be horrible but now that I have more, I can get a better estimate of the signal. In this example I have 12 bad sensors instead of 3. The properties of the sensors are the same as in the example above. I will add the new data to the existing data.</p>
-<div class="sourceCode" id="cb702"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb702-1"><a href="discussion.html#cb702-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
-<span id="cb702-2"><a href="discussion.html#cb702-2" aria-hidden="true" tabindex="-1"></a>datm <span class="ot">&lt;-</span> dat</span>
-<span id="cb702-3"><a href="discussion.html#cb702-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) {</span>
-<span id="cb702-4"><a href="discussion.html#cb702-4" aria-hidden="true" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> <span class="fu">createdata</span>(n, TT, ar, sd)</span>
-<span id="cb702-5"><a href="discussion.html#cb702-5" aria-hidden="true" tabindex="-1"></a>    datm <span class="ot">&lt;-</span> <span class="fu">rbind</span>(datm, tmp<span class="sc">$</span>dat)</span>
-<span id="cb702-6"><a href="discussion.html#cb702-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb702-7"><a href="discussion.html#cb702-7" aria-hidden="true" tabindex="-1"></a>datm2 <span class="ot">&lt;-</span> datm <span class="sc">-</span> <span class="fu">apply</span>(datm, <span class="dv">1</span>, mean) <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, TT)</span>
-<span id="cb702-8"><a href="discussion.html#cb702-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb702-9"><a href="discussion.html#cb702-9" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(datm2, <span class="at">model =</span> <span class="fu">makemod</span>(<span class="fu">dim</span>(datm2)[<span class="dv">1</span>]), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb703"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb703-1"><a href="discussion.html#cb703-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb703-2"><a href="discussion.html#cb703-2" aria-hidden="true" tabindex="-1"></a>datm <span class="ot">&lt;-</span> dat</span>
+<span id="cb703-3"><a href="discussion.html#cb703-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>) {</span>
+<span id="cb703-4"><a href="discussion.html#cb703-4" aria-hidden="true" tabindex="-1"></a>    tmp <span class="ot">&lt;-</span> <span class="fu">createdata</span>(n, TT, ar, sd)</span>
+<span id="cb703-5"><a href="discussion.html#cb703-5" aria-hidden="true" tabindex="-1"></a>    datm <span class="ot">&lt;-</span> <span class="fu">rbind</span>(datm, tmp<span class="sc">$</span>dat)</span>
+<span id="cb703-6"><a href="discussion.html#cb703-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb703-7"><a href="discussion.html#cb703-7" aria-hidden="true" tabindex="-1"></a>datm2 <span class="ot">&lt;-</span> datm <span class="sc">-</span> <span class="fu">apply</span>(datm, <span class="dv">1</span>, mean) <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, TT)</span>
+<span id="cb703-8"><a href="discussion.html#cb703-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb703-9"><a href="discussion.html#cb703-9" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(datm2, <span class="at">model =</span> <span class="fu">makemod</span>(<span class="fu">dim</span>(datm2)[<span class="dv">1</span>]), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-40-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Some more caveats are that I simulated data that was the same as the model that I fit, except the signal. However an AR-1 with <span class="math inline">\(b\)</span> and <span class="math inline">\(q\)</span> (sd) estimated is quite flexible and this will likely work for data that is roughly AR-1. A common exception is very smooth data that you get from sensors that record dense data (like every second). That kind of sensor data may need to be subsampled (every 10 or 20 or 30 data point) to get AR-1 like data.</p>
 <p>Lastly I set the seed to 1234 to have an example that looks <em>ok</em>. If you comment that out and rerun the code, you’ll quickly see that the example I used is not one of the bad ones. It’s not unusually good, just not unusually bad.</p>
