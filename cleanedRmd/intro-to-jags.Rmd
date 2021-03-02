@@ -44,7 +44,9 @@ y_t = x_t + a + v_t, \, v_t \sim \,\text{N}(0, r)
 
 We will be fitting linear regressions with this form, and this will mean the JAGS code is more verbose than necessary, but the goal is to build up to our univariate state-space code by building off simpler models.
 
-## Linear regression with no covariates {#sec-jags-lr-no-covariates}
+## Univariatate response models {#sec-jags-univariate}
+
+### Linear regression with no covariates {#sec-jags-lr-no-covariates}
 
 We will start with a linear regression with only an intercept. We will write the model in the form of Equation \@ref(eq:jags-marss). Our model is
 \begin{equation}
@@ -181,7 +183,7 @@ heidelDiags <- coda::heidel.diag(createMcmcList(mod_lm_intercept))
 ```
 
 
-## Linear regression with covariates {#sec-jags-covariates}
+### Linear regression with covariates {#sec-jags-covariates}
 
 We can introduce `Temp` as the covariate explaining our response variable `Wind`. Our new equation is
 
@@ -266,7 +268,7 @@ plotModelOutput(mod_lm, Wind)
 ```
 
 
-## Random walk with drift {#sec-jags-rw}
+### Random walk with drift {#sec-jags-rw}
 
 The previous models were observation error only models. Switching gears, we can create process error models. We will start with a random walk model. In this model, the assumption is that the underlying state $x_t$ is measured perfectly. All stochasticity is originating from process variation: variation in $x_t$ to $x_{t+1}$. 
 
@@ -314,7 +316,7 @@ mod_rw_intercept <- R2jags::jags(jags.data,
 )
 ```
 
-## Autoregressive AR(1) time series models {#sec-jags-ar1}
+### Autoregressive AR(1) time series models {#sec-jags-ar1}
 
 A variation of the random walk model is the autoregressive time series model of order 1, AR(1). This model introduces a coefficient, which we will call $b$. The parameter $b$ controls the degree to which the random walk reverts to the mean. When $b = 1$, the model is identical to the random walk, but at smaller values, the model will revert back to the mean (which in this case is zero). Also, $b$ can take on negative values.
 
@@ -357,7 +359,7 @@ mod_ar1_intercept <- R2jags::jags(jags.data,
 removefiles <- c(removefiles, model.loc)
 ```
 
-## Regression with AR(1) errors {#sec-jags-regression-with-corr-errors2}
+### Regression with AR(1) errors {#sec-jags-regression-with-corr-errors2}
 
 The AR(1) model in the previous section suggests a way that we could include correlated errors in our linear regression. We could use the $x_t$ AR(1) process as our errors for $y_t$. Here is an example of modifying the intercept only linear regression model. We will set $u$ to 0 so that our AR(1) errors have a mean of 0.
 
@@ -420,7 +422,7 @@ removefiles <- c(removefiles, model.loc)
 
 
 
-## Univariate state space model {#sec-jags-uss}
+### Univariate state space model {#sec-jags-uss}
 
 Now we will combine the process and observation models to create a univariate state-space model. This is the classic stochastic level model.
 
@@ -475,8 +477,236 @@ mod_ss <- jags(jags.data,
 removefiles <- c(removefiles, model.loc)
 ```
 
-## Poisson observation errors {#sec-jags-poisson}
-  
+## Multivariate state-space models {#sec-jags-marss}
+
+In the multivariate state-space model, our observations and hidden states can be multivariate along with all the parameters:
+\begin{equation}
+\begin{gathered}
+\mathbf{x}_t = \mathbf{B} \mathbf{x}_{t-1}+\mathbf{u}+\mathbf{w}_t \text{ where } \mathbf{w}_t \sim \,\text{N}(0,\mathbf{Q}) \\
+\mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t \text{ where } \mathbf{v}_t \sim \,\text{N}(0,\mathbf{R}) \\
+\mathbf{x}_0 = \boldsymbol{\mu}
+\end{gathered}   
+(\#eq:jags-marss)
+\end{equation}
+
+### One hidden state
+
+Let's start with a very simple MARSS model with JAGS: two observation time-series and one hidden state. Our $\mathbf{x}_t$ model is $x_t = x_{t-1} + u + w_t$ and our $\mathbf{y}_t$ model is 
+\begin{equation}
+ \begin{bmatrix}
+    y_{1} \\
+    y_{2}\end{bmatrix}_t = 
+    \begin{bmatrix}
+    1\\
+    1\end{bmatrix} x_t +  
+    \begin{bmatrix}
+    0 \\
+    a_2\end{bmatrix} + 
+    \begin{bmatrix}
+    v_{1} \\
+    v_{2}\end{bmatrix}_t, \,
+    \begin{bmatrix}
+    v_{1} \\
+    v_{2}\end{bmatrix}_t \sim 
+    \,\text{MVN}\left(0, \begin{bmatrix}
+    r_1&0 \\
+    0&r_2\end{bmatrix}\right)
+(\#eq:jags-marss-y)
+\end{equation}
+
+We need to put a prior on our $x_0$ (initial $x$). Since $b=1$, we have a random walk rather than a stationary process and we will put a vague prior on the $x_0$. We need to deal with the $\mathbf{a}$ so that our code doesn't run in circles by trying to match $x$ up with different $y_t$ time series. We force $x_t$ to track the mean of $y_{1,t}$ and then use $a_2$ to scale the other $y_t$ relative to that. The problem is that a random walk is very flexible and if we tried to estimate $a_1$ then we would have infinite solutions.
+
+To keep our JAGS code organized, let's separate the $\mathbf{x}$ and $\mathbf{y}$ parts of the code.
+```{r jags-jagsscript-marss1}
+jagsscript <- cat("
+model {  
+   # Process model
+   u ~ dnorm(0, 0.01); # one u
+   inv.q~dgamma(0.001,0.001);
+   q <- 1/inv.q; # one q
+
+   ## Inital states at t=0
+   X0 ~ dnorm(Y1,0.001); # vague normal prior 
+   
+   EX[1] <- X0 + u;
+   X[1] ~ dnorm(EX[1], inv.q);
+   for(t in 2:N) {
+         EX[t] <- X[t-1] + u;
+         X[t] ~ dnorm(EX[t], inv.q);
+   }
+
+   # Observation model
+   # The Rs are different in each site
+   for(i in 1:n) {
+     inv.r[i]~dgamma(0.001,0.001);
+     r[i] <- 1/inv.r[i];
+   }
+   # The first A is 0 and the others are estimated
+   a[1] <- 0;
+   for(i in 2:n) {
+     a[i]~dnorm(0,0.001);
+   }   
+   for(t in 1:N) {
+     for(i in 1:n) {
+       EY[i,t] <- X[t]+a[i]
+       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);
+     }
+   }
+}  
+
+",file="marss-jags1.txt")
+```
+```{r clean-marss1, echo=FALSE, purl=FALSE}
+removefiles <- c(removefiles, model.loc)
+```
+
+To fit the model, we write the data list, parameter list, and pass the model to the `jags()` function.
+```{r jags-marss1-fit, results='hide', message=FALSE, cache=TRUE}
+data(harborSealWA, package="MARSS")
+dat <- t(harborSealWA[,2:3])
+jags.data <- list("Y" = dat, n = nrow(dat), N = ncol(dat), Y1 = dat[1,1]) 
+jags.params <- c("EY", "u", "q", "r")
+model.loc <- "marss-jags1.txt" # name of the txt file
+mod_marss1 <- R2jags::jags(jags.data,
+  parameters.to.save = jags.params,
+  model.file = model.loc, n.chains = 3,
+  n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
+)
+```
+
+We can make a plot of our estimated parameters:
+```{r jags-marss1-hist}
+post.params <- mod_marss1$BUGSoutput$sims.list
+par(mfrow=c(2,2))
+hist(log(post.params$q), main="log(q)", xlab="")
+hist(post.params$u, main="u", xlab="")
+hist(log(post.params$r[,1]), main="log(r_1)", xlab="")
+hist(log(post.params$r[,2]), main="log(r_2)", xlab="")
+```
+
+We can make a plot of the model fitted $y_t$ with 50% credible intervals and the data. Note that the credible intervals are for the expected value of $y_{i,t}$ so will be narrower than the data.
+```{r jags-marss1-plot-fun, warning=FALSE, message=FALSE}
+make.ey.plot <- function(mod, dat){
+   library(ggplot2)
+EY <- mod$BUGSoutput$sims.list$EY
+n <- nrow(dat); N <- ncol(dat)
+df <- c()
+for(i in 1:n){
+tmp <- data.frame(n = paste0("Y",i),
+                  x = 1:N, 
+                  ey=apply(EY[,i,, drop=FALSE],3,median),
+                  ey.low=apply(EY[,i,, drop=FALSE],3,quantile,probs=0.25),
+                  ey.up=apply(EY[,i,, drop=FALSE],3,quantile,probs=0.75),
+                  y=dat[i,]
+                  )
+df <- rbind(df, tmp)
+}
+ggplot(df, aes(x=x, y=ey)) + geom_line() +
+   geom_ribbon(aes(ymin=ey.low, ymax=ey.up), alpha=0.25) +
+   geom_point(data=df, aes(x=x, y=y)) +
+   facet_wrap(~n) + theme_bw()
+}
+```
+
+```{r jags-marss1-plot, warning=FALSE, message=FALSE}
+make.ey.plot(mod_marss1, dat)
+```
+
+
+### $m$ hidden states
+
+Let's add multiple hidden states. We'll say that each $y_t$ is observing its own $x_t$ but the $x_t$ share the same $q$ but not $u$. Our $\mathbf{x}_t$ model is \begin{equation}
+ \begin{bmatrix}
+    x_{1} \\
+    x_{2}\end{bmatrix}_t = 
+    \begin{bmatrix}
+    1&0\\
+    0&1\end{bmatrix}
+    \begin{bmatrix}
+    x_{1} \\
+    x_{2}\end{bmatrix}_{t-1} +  
+    \begin{bmatrix}
+    u_1 \\
+    u_2\end{bmatrix} + 
+    \begin{bmatrix}
+    w_{1} \\
+    w_{2}\end{bmatrix}_t, \,
+    \begin{bmatrix}
+    w_{1} \\
+    w_{2}\end{bmatrix}_t \sim 
+    \,\text{MVN}\left(0, \begin{bmatrix}
+    q&0 \\
+    0&q\end{bmatrix}\right)
+(\#eq:jags-marss2)
+\end{equation}
+
+Here is the JAGS model. Note that $a_i$ is 0 for all $i$ because each $y_t$ is associated with its own $x_t$.
+```{r jags-jagsscript-marss2}
+jagsscript <- cat("
+model {  
+   # Process model
+   inv.q~dgamma(0.001,0.001);
+   q <- 1/inv.q; # one q
+
+   ## Inital states at t=0
+   for(i in 1:n) {
+      u[i] ~ dnorm(0, 0.01); 
+      X0[i] ~ dnorm(Y1[i],0.001); 
+   }
+
+   for(i in 1:n) {
+     EX[i,1] <- X0[i] + u[i];
+     X[i,1] ~ dnorm(EX[i,1], inv.q);
+   }
+   for(t in 2:N) {
+      for(i in 1:n) {
+         EX[i,t] <- X[i,t-1] + u[i];
+         X[i,t] ~ dnorm(EX[i,t], inv.q);
+      }
+   }
+
+   # Observation model
+   # The Rs are different in each site
+   for(i in 1:n) {
+     inv.r[i]~dgamma(0.001,0.001);
+     r[i] <- 1/inv.r[i];
+   }
+   for(t in 1:N) {
+     for(i in 1:n) {
+       EY[i,t] <- X[i,t]
+       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);
+     }
+   }
+}  
+
+",file="marss-jags2.txt")
+```
+```{r clean-marss2, echo=FALSE, purl=FALSE}
+removefiles <- c(removefiles, model.loc)
+```
+
+Our code to fit the model changes a little.
+```{r jags-marss2-fit, results='hide', message=FALSE, cache=TRUE}
+data(harborSealWA, package="MARSS")
+dat <- t(harborSealWA[,2:3])
+jags.data <- list("Y" = dat, n = nrow(dat), N = ncol(dat), Y1 = dat[,1]) 
+jags.params <- c("EY", "u", "q", "r")
+model.loc <- "marss-jags2.txt" # name of the txt file
+mod_marss1 <- R2jags::jags(jags.data,
+  parameters.to.save = jags.params,
+  model.file = model.loc, n.chains = 3,
+  n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
+)
+```
+
+```{r jags-marss2-plot, warning=FALSE, message=FALSE}
+make.ey.plot(mod_marss1, dat)
+```
+
+## Non-Gaussian observation errors {#sec-jags-non-gaussian}
+
+### Poisson observation errors {#sec-jags-poisson}
+
 So far we have used the following observation model $y_t \sim \,\text{N}(x_t, r)$. 
 We can change this to a Poisson observation error model:
 $y_t \sim \text{Pois}(\lambda_t)$ where $E[y_t] = \lambda_t$. $\text{log}(\lambda_t) = x_t$ where $x_t$ is our process model. 
@@ -535,6 +765,7 @@ When we use this univariate state-space model with population data, like the wil
 
 $\dagger$ Why would we typically log population data in this case? Because we would typically think of population processes as multiplicative. Population size at time $t$ is growth **times** population size at time $t-1$. By logging the data, we convert to an additive process. Log population size at time $t$ is log growth **plus** log population size at time $t-1$.
 
+
 ## Forecasting with JAGS models {#sec-jags-forecast}
 
 There are a number of different approaches to using Bayesian time series models to perform forecasting. One approach might be to fit a model, and use those posterior distributions to forecast as a secondary step (say within R). A more streamlined approach is to do this within the JAGS code itself. We can take advantage of the fact that JAGS allows you to include NAs in the response variable (but never in the predictors). Let's use the same Wind dataset, and the univariate state-space model described above to forecast three time steps into the future. We can do this by including 3 more NAs in the dataset, and incrementing the variable ```N``` by 3.
@@ -551,7 +782,6 @@ mod_ss_forecast <- jags(jags.data,
 ```
 
 We can inspect the fitted model object, and see that ```EY``` contains the 3 new predictions for the forecasts from this model. 
-
 
 \clearpage
 

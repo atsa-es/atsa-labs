@@ -1,0 +1,37 @@
+
+model {  
+   # Process model
+   inv.q~dgamma(0.001,0.001);
+   q <- 1/inv.q; # one q
+
+   ## Inital states at t=0
+   for(i in 1:n) {
+      u[i] ~ dnorm(0, 0.01); 
+      X0[i] ~ dnorm(Y1[i],0.001); 
+   }
+
+   for(i in 1:n) {
+     EX[i,1] <- X0[i] + u[i];
+     X[i,1] ~ dnorm(EX[i,1], inv.q);
+   }
+   for(t in 2:N) {
+      for(i in 1:n) {
+         EX[i,t] <- X[i,t-1] + u[i];
+         X[i,t] ~ dnorm(EX[i,t], inv.q);
+      }
+   }
+
+   # Observation model
+   # The Rs are different in each site
+   for(i in 1:n) {
+     inv.r[i]~dgamma(0.001,0.001);
+     r[i] <- 1/inv.r[i];
+   }
+   for(t in 1:N) {
+     for(i in 1:n) {
+       EY[i,t] <- X[i,t]
+       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);
+     }
+   }
+}  
+

@@ -286,6 +286,155 @@ mod_ss <- jags(jags.data,
 
 
 
+## ----jags-jagsscript-marss1-----------------------------------------------------
+jagsscript <- cat("
+model {  
+   # Process model
+   u ~ dnorm(0, 0.01); # one u
+   inv.q~dgamma(0.001,0.001);
+   q <- 1/inv.q; # one q
+
+   ## Inital states at t=0
+   X0 ~ dnorm(Y1,0.001); # vague normal prior 
+   
+   EX[1] <- X0 + u;
+   X[1] ~ dnorm(EX[1], inv.q);
+   for(t in 2:N) {
+         EX[t] <- X[t-1] + u;
+         X[t] ~ dnorm(EX[t], inv.q);
+   }
+
+   # Observation model
+   # The Rs are different in each site
+   for(i in 1:n) {
+     inv.r[i]~dgamma(0.001,0.001);
+     r[i] <- 1/inv.r[i];
+   }
+   # The first A is 0 and the others are estimated
+   a[1] <- 0;
+   for(i in 2:n) {
+     a[i]~dnorm(0,0.001);
+   }   
+   for(t in 1:N) {
+     for(i in 1:n) {
+       EY[i,t] <- X[t]+a[i]
+       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);
+     }
+   }
+}  
+
+",file="marss-jags1.txt")
+
+
+
+## ----jags-marss1-fit, results='hide', message=FALSE, cache=TRUE-----------------
+data(harborSealWA, package="MARSS")
+dat <- t(harborSealWA[,2:3])
+jags.data <- list("Y" = dat, n = nrow(dat), N = ncol(dat), Y1 = dat[1,1]) 
+jags.params <- c("EY", "u", "q", "r")
+model.loc <- "marss-jags1.txt" # name of the txt file
+mod_marss1 <- R2jags::jags(jags.data,
+  parameters.to.save = jags.params,
+  model.file = model.loc, n.chains = 3,
+  n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
+)
+
+
+## ----jags-marss1-hist-----------------------------------------------------------
+post.params <- mod_marss1$BUGSoutput$sims.list
+par(mfrow=c(2,2))
+hist(log(post.params$q), main="log(q)", xlab="")
+hist(post.params$u, main="u", xlab="")
+hist(log(post.params$r[,1]), main="log(r_1)", xlab="")
+hist(log(post.params$r[,2]), main="log(r_2)", xlab="")
+
+
+## ----jags-marss1-plot-fun, warning=FALSE, message=FALSE-------------------------
+make.ey.plot <- function(mod, dat){
+   library(ggplot2)
+EY <- mod$BUGSoutput$sims.list$EY
+n <- nrow(dat); N <- ncol(dat)
+df <- c()
+for(i in 1:n){
+tmp <- data.frame(n = paste0("Y",i),
+                  x = 1:N, 
+                  ey=apply(EY[,i,, drop=FALSE],3,median),
+                  ey.low=apply(EY[,i,, drop=FALSE],3,quantile,probs=0.25),
+                  ey.up=apply(EY[,i,, drop=FALSE],3,quantile,probs=0.75),
+                  y=dat[i,]
+                  )
+df <- rbind(df, tmp)
+}
+ggplot(df, aes(x=x, y=ey)) + geom_line() +
+   geom_ribbon(aes(ymin=ey.low, ymax=ey.up), alpha=0.25) +
+   geom_point(data=df, aes(x=x, y=y)) +
+   facet_wrap(~n) + theme_bw()
+}
+
+
+## ----jags-marss1-plot, warning=FALSE, message=FALSE-----------------------------
+make.ey.plot(mod_marss1, dat)
+
+
+## ----jags-jagsscript-marss2-----------------------------------------------------
+jagsscript <- cat("
+model {  
+   # Process model
+   inv.q~dgamma(0.001,0.001);
+   q <- 1/inv.q; # one q
+
+   ## Inital states at t=0
+   for(i in 1:n) {
+      u[i] ~ dnorm(0, 0.01); 
+      X0[i] ~ dnorm(Y1[i],0.001); 
+   }
+
+   for(i in 1:n) {
+     EX[i,1] <- X0[i] + u[i];
+     X[i,1] ~ dnorm(EX[i,1], inv.q);
+   }
+   for(t in 2:N) {
+      for(i in 1:n) {
+         EX[i,t] <- X[i,t-1] + u[i];
+         X[i,t] ~ dnorm(EX[i,t], inv.q);
+      }
+   }
+
+   # Observation model
+   # The Rs are different in each site
+   for(i in 1:n) {
+     inv.r[i]~dgamma(0.001,0.001);
+     r[i] <- 1/inv.r[i];
+   }
+   for(t in 1:N) {
+     for(i in 1:n) {
+       EY[i,t] <- X[i,t]
+       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);
+     }
+   }
+}  
+
+",file="marss-jags2.txt")
+
+
+
+## ----jags-marss2-fit, results='hide', message=FALSE, cache=TRUE-----------------
+data(harborSealWA, package="MARSS")
+dat <- t(harborSealWA[,2:3])
+jags.data <- list("Y" = dat, n = nrow(dat), N = ncol(dat), Y1 = dat[,1]) 
+jags.params <- c("EY", "u", "q", "r")
+model.loc <- "marss-jags2.txt" # name of the txt file
+mod_marss1 <- R2jags::jags(jags.data,
+  parameters.to.save = jags.params,
+  model.file = model.loc, n.chains = 3,
+  n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
+)
+
+
+## ----jags-marss2-plot, warning=FALSE, message=FALSE-----------------------------
+make.ey.plot(mod_marss1, dat)
+
+
 ## ----jags-ss1-pois, echo=TRUE, results='hide'-----------------------------------
 # SS MODEL with Poisson errors
 

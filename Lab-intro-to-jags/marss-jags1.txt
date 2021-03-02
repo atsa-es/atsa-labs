@@ -1,0 +1,36 @@
+
+model {  
+   # Process model
+   u ~ dnorm(0, 0.01); # one u
+   inv.q~dgamma(0.001,0.001);
+   q <- 1/inv.q; # one q
+
+   ## Inital states at t=0
+   X0 ~ dnorm(Y1,0.001); # vague normal prior 
+   
+   EX[1] <- X0 + u;
+   X[1] ~ dnorm(EX[1], inv.q);
+   for(t in 2:N) {
+         EX[t] <- X[t-1] + u;
+         X[t] ~ dnorm(EX[t], inv.q);
+   }
+
+   # Observation model
+   # The Rs are different in each site
+   for(i in 1:n) {
+     inv.r[i]~dgamma(0.001,0.001);
+     r[i] <- 1/inv.r[i];
+   }
+   # The first A is 0 and the others are estimated
+   a[1] <- 0;
+   for(i in 2:n) {
+     a[i]~dnorm(0,0.001);
+   }   
+   for(t in 1:N) {
+     for(i in 1:n) {
+       EY[i,t] <- X[t]+a[i]
+       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);
+     }
+   }
+}  
+
