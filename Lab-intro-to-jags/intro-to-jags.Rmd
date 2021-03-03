@@ -66,8 +66,7 @@ In this linear regression model, we will treat the residual error as independent
 To run the JAGS model, we will need to start by writing the model in JAGS notation.  We can construct the model in Equation \@ref(eq:jags-lr1) as
 
 ```{r jags-lr1, results='hide', cache=TRUE}
-# LINEAR REGRESSION with no covariates
-# intercept only. The parameters are
+# LINEAR REGRESSION intercept only.
 
 model.loc <- "lm_intercept.txt" # name of the txt file
 jagsscript <- cat("
@@ -76,6 +75,8 @@ model {
    u ~ dnorm(0, 0.01);
    inv.r ~ dgamma(0.001,0.001); # This is inverse gamma
    r <- 1/inv.r; # derived value
+   
+   # likelihood
    for(i in 1:N) {
       X[i] <- u
       EY[i] <- X[i]; # derived value
@@ -92,7 +93,7 @@ The JAGS code has three parts: our parameter priors, our data model and derived 
 
 **Parameter priors** There are two parameters in the model ($u$, the mean, and $r$, the variance of the observation error). We need to set a prior on both of these. We will set a vague prior of a Gaussian with varianc 10 on $u$. In JAGS instead of specifying the normal distribution with the variance, $N(0, 10)$, you specify it with the precision (1/variance), so our prior on $u$ is  `dnorm(0, 0.01)`. For $r$, we need to set a prior on the precision $1/r$, which we call `inv.r` in the code. The precision receives a gamma prior, which is equivalent to the variance receiving an inverse gamma prior (fairly common for standard Bayesian regression models). 
 
-**Data model** Our data distribution is $y_t \sim \N(E[y_t], r)$. We use the `dnorm()` distribution with the precision ($1/r$) instead of $r$. So our data model is `Y[i] = dnorm(EY[i], inv.r)`. JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and use the for loop to specify the distribution for each `Y[i]`. For, this model we didn't actually need `X[i]` but we use it because we are building up to a state-space model which has both $x_t$ and $y_t$.
+**Likelihood** Our data distribution is $y_t \sim \N(E[y_t], r)$. We use the `dnorm()` distribution with the precision ($1/r$) instead of $r$. So our data model is `Y[i] = dnorm(EY[i], inv.r)`. JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and use the for loop to specify the distribution for each `Y[i]`. For, this model we didn't actually need `X[i]` but we use it because we are building up to a state-space model which has both $x_t$ and $y_t$.
 
 **Derived values** Derived values are things we want output so we can track them. In this example, our derived values are a bit useless but in more complex models they will be quite handy. Also they can make your code easier to understand.
 
@@ -203,11 +204,13 @@ To create JAGS code for this model, we (1) add a prior for our new parameter  `C
 model.loc <- ("lm_covariate.txt")
 jagsscript <- cat("
 model {  
+   # priors on parameters
    u ~ dnorm(0, 0.01); 
    C ~ dnorm(0,0.01);
    inv.r ~ dgamma(0.001,0.001); 
    r <- 1/inv.r; 
    
+   # likelihood
    for(i in 1:N) {
       X[i] <- u + C*c[i];
       EY[i] <- X[i]
@@ -289,11 +292,13 @@ The JAGS random walk model is:
 model.loc <- ("rw_intercept.txt")
 jagsscript <- cat("
 model {  
+   # priors on parameters
    u ~ dnorm(0, 0.01); 
    inv.q ~ dgamma(0.001,0.001); 
    q <- 1/inv.q;
-
    X0 ~ dnorm(0, 0.001);
+   
+   # likelihood
    X[1] ~ dnorm(X0 + u, inv.q);
    for(i in 2:N) {
       X[i] ~ dnorm(X[i-1] + u, inv.q);
@@ -334,12 +339,14 @@ Once again we need to put a prior on $x_0$, which appears in $E[x_1]$. An AR(1) 
 model.loc <- ("ar1_intercept.txt")
 jagsscript <- cat("
 model {  
+   # priors on parameters
    u ~ dnorm(0, 0.01); 
    inv.q ~ dgamma(0.001,0.001); 
    q <- 1/inv.q; 
    b ~ dunif(-1,1);
-   
    X0 ~ dnorm(0, inv.q * (1 - b * b));
+   
+   # likelihood
    X[1] ~ dnorm(b * X0 + u, inv.q);
    for(i in 2:N) {
       X[i] ~ dnorm(b * X[i-1] + u, inv.q);
@@ -390,18 +397,19 @@ We will create the variable `EY` so we can keep track of our $y_t$ predictions, 
 model.loc <- ("lm_intercept_ar1b.txt")
 jagsscript <- cat("
 model {  
+   # priors on parameters
    a ~ dnorm(0, 0.01); 
    inv.q ~ dgamma(0.001,0.001); 
    q <- 1/inv.q; 
    b ~ dunif(-1,1);
-   
    X0 ~ dnorm(0, inv.q * (1 - b * b));
-   # t=1
-   EY[1] = a + b * X0;
+   
+   # likelihood
+   EY[1] <- a + b * X0;
    Y[1] ~ dnorm(EY[1], inv.q);
    X[1] <- Y[1] - a;
    for(i in 2:N) {
-      EY[i] = a + b * X[i-1];
+      EY[i] <- a + b * X[i-1];
       Y[i] ~ dnorm(EY[1], inv.q);
       X[i] <- Y[i]-a;
    }
@@ -450,6 +458,7 @@ model {
    r <- 1/inv.r; 
    X0 ~ dnorm(Y1, 0.001);
    
+   # likelihood
    X[1] ~ dnorm(X0 + u, inv.q);
    EY[1] <- X[1];
    Y[1] ~ dnorm(EY[1], inv.r);
@@ -520,14 +529,12 @@ To keep our JAGS code organized, let's separate the $\xx$ and $\yy$ parts of the
 ```{r jags-jagsscript-marss1}
 jagsscript <- cat("
 model {  
-   # Process model
+   # process model priors
    u ~ dnorm(0, 0.01); # one u
    inv.q~dgamma(0.001,0.001);
    q <- 1/inv.q; # one q
-
-   ## Inital states at t=0
-   X0 ~ dnorm(Y1,0.001); # vague normal prior 
-   
+   X0 ~ dnorm(Y1,0.001); # initial state
+   # process model likelihood
    EX[1] <- X0 + u;
    X[1] ~ dnorm(EX[1], inv.q);
    for(t in 2:N) {
@@ -535,17 +542,16 @@ model {
          X[t] ~ dnorm(EX[t], inv.q);
    }
 
-   # Observation model
-   # The Rs are different in each site
-   for(i in 1:n) {
+   # observation model priors
+   for(i in 1:n) { # r's differ by site
      inv.r[i]~dgamma(0.001,0.001);
      r[i] <- 1/inv.r[i];
    }
-   # The first A is 0 and the others are estimated
-   a[1] <- 0;
+   a[1] <- 0; # first a is 0, rest estimated
    for(i in 2:n) {
      a[i]~dnorm(0,0.001);
    }   
+   # observation model likelihood
    for(t in 1:N) {
      for(i in 1:n) {
        EY[i,t] <- X[t]+a[i]
@@ -644,16 +650,14 @@ Here is the JAGS model. Note that $a_i$ is 0 for all $i$ because each $y_t$ is a
 ```{r jags-jagsscript-marss2}
 jagsscript <- cat("
 model {  
-   # Process model
+   # process model priors
    inv.q~dgamma(0.001,0.001);
    q <- 1/inv.q; # one q
-
-   ## Inital states at t=0
    for(i in 1:n) {
       u[i] ~ dnorm(0, 0.01); 
-      X0[i] ~ dnorm(Y1[i],0.001); 
+      X0[i] ~ dnorm(Y1[i],0.001); # initial states
    }
-
+   # process model likelihood
    for(i in 1:n) {
      EX[i,1] <- X0[i] + u[i];
      X[i,1] ~ dnorm(EX[i,1], inv.q);
@@ -665,12 +669,12 @@ model {
       }
    }
 
-   # Observation model
-   # The Rs are different in each site
-   for(i in 1:n) {
+   # observation model priors
+   for(i in 1:n) { # The r's are different by site
      inv.r[i]~dgamma(0.001,0.001);
      r[i] <- 1/inv.r[i];
    }
+   # observation model likelihood
    for(t in 1:N) {
      for(i in 1:n) {
        EY[i,t] <- X[i,t]
@@ -719,7 +723,7 @@ Y[i] ~ dpois(EY[i])
 We also need to ensure that our data are 
 integers and we remove the `r` part from our model code since the Poisson does not have that. 
 
-Our univariate state-space code for Poisson observation errors is the following:
+Our univariate state-space code with Poisson observation errors is the following:
 
 ```{r jags-ss1-pois, echo=TRUE, results='hide'}
 # SS MODEL with Poisson errors
@@ -731,15 +735,16 @@ model {
    u ~ dnorm(0, 0.01); 
    inv.q ~ dgamma(0.001,0.001); 
    q <- 1/inv.q;
-
    X0 ~ dnorm(0, 0.001);
+   
+   # likelihood
    X[1] ~ dnorm(X0 + u, inv.q);
    log(EY[1]) <- X[1]
    Y[1] ~ dpois(EY[1])
-   for(i in 2:N) {
-      X[i] ~ dnorm(X[i-1] + u, inv.q);
-      log(EY[i]) <- X[i]
-      Y[i] ~ dpois(EY[i]); 
+   for(t in 2:N) {
+      X[t] ~ dnorm(X[t-1] + u, inv.q);
+      log(EY[t]) <- X[t]
+      Y[t] ~ dpois(EY[t]); 
    }
 }  
 ", file = model.loc)
@@ -765,6 +770,65 @@ When we use this univariate state-space model with population data, like the wil
 
 $\dagger$ Why would we typically log population data in this case? Because we would typically think of population processes as multiplicative. Population size at time $t$ is growth **times** population size at time $t-1$. By logging the data, we convert to an additive process. Log population size at time $t$ is log growth **plus** log population size at time $t-1$.
 
+### Negative binomial observation errors {#sec-jags-negbin}
+
+In the Poisson distribution, the mean and variance are the same. Using the negative binomial distribution, we can relax that assumption and allow the mean and variance to be different. The negative binomial distribution has two parameters, $r$ and $p$. $r$ is the dispersion parameter. As $r \rightarrow \infty$, the distribution becomes the Poisson distribution and when $r$ is small, the distribution is overdispersed (higher variance) relative to the Poisson. In practice, $r > 30$ is going to be very close to the Poisson. $p$ is the success parameter, $p = r/(r+E[y_t])$. As for the Poisson, $log E[y_{i,t}] = x_t$---for the univariate state-space model in this example with one state, $z=1$ and $a=0$.
+
+To allow negative binomial errors we change the `Y[i]` part to
+```
+log(EY[i]) <- X[i]
+p[i] <- r/(r + EY[i])
+Y[i] ~ dnegbin(p[i], r)
+```
+Now that we have $r$ again in the model, we will need to put a prior on it. $r$ is positive and 50 is close to infinity. The following is a sufficiently vague prior.
+```
+r ~ dunif(0,50)
+```
+
+Our univariate state-space code with negative binomial observation errors is the following:
+
+```{r jags-ss1-negbin, echo=TRUE, results='hide'}
+# SS MODEL with negative binomial errors
+
+model.loc <- ("ss_model_negbin.txt")
+jagsscript <- cat("
+model {  
+   # priors on parameters
+   u ~ dnorm(0, 0.01); 
+   inv.q ~ dgamma(0.001,0.001); 
+   q <- 1/inv.q;
+   X0 ~ dnorm(0, 0.001);
+   
+   # likelihood
+   X[1] ~ dnorm(X0 + u, inv.q);
+   log(EY[1]) <- X[1]
+   p[1] <- r/(r + EY[1])
+   Y[1] ~ dnegbin(p[1], r)
+   for(t in 2:N) {
+      X[t] ~ dnorm(X[t-1] + u, inv.q);
+      log(EY[i]) <- X[t]
+      p[t] <- r/(r + EY[t])
+      Y[t] ~ dnegbin(p[t], r)
+   }
+}  
+", file = model.loc)
+```
+
+We will fit this to the wild dogs data in the **MARSS** package. 
+
+```{r jags-ss1-fit-pois, echo=TRUE, results='hide'}
+data(wilddogs, package="MARSS")
+jags.data <- list("Y" = wilddogs[,2], "N" = nrow(wilddogs))
+jags.params <- c("q", "EY", "u", "r")
+mod_ss <- jags(jags.data,
+  parameters.to.save = jags.params, model.file = model.loc, n.chains = 3,
+  n.burnin = 5000, n.thin = 1, n.iter = 10000, DIC = TRUE
+)
+```
+
+```{r clean-negbin, echo=FALSE, purl=FALSE}
+removefiles <- c(removefiles, model.loc)
+```
 
 ## Forecasting with JAGS models {#sec-jags-forecast}
 
