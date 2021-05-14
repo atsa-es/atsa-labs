@@ -176,8 +176,8 @@ We could also write Form 1 as follows:
 \end{equation}
 This is just the transpose of Form 1.  Work through the matrix algebra to make sure you understand why Equation \@ref(eq:stackloss-form1b) is Equation \@ref(eq:stacklossi) for all the $i$ data points together and why it is equal to the transpose of Equation \@ref(eq:stackloss-form1).  You'll need the relationship $(\mathbf{A}\mathbf{B})^\top=\mathbf{B}^\top \mathbf{A}^\top$.
 
-Let's write Equation \@ref(eq:stackloss-form1b) as $\mathbf{y} = \DD\dd$, where $\DD$ contains our parameters.  Then we can solve for $\DD$ following the steps in Section \@ref(sec-mlr-solveform1) but multiplying from the right instead of from the left.  Work through the steps to show that 
-$\dd = \mathbf{y}\dd^\top(\dd\dd^\top)^{-1}$.
+Let's write Equation \@ref(eq:stackloss-form1b) as $\mathbf{y} = \dd\DD$, where $\DD$ contains our parameters.  Then we can solve for $\DD$ following the steps in Section \@ref(sec-mlr-solveform1) but multiplying from the right instead of from the left.  Work through the steps to show that 
+$\dd = \mathbf{y}\DD^\top(\DD\DD^\top)^{-1}$.
 
 ```{r mlr-stack.loss.form1b.comp}
 y=matrix(dat$stack.loss, nrow=1)
