@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>14.6 Fit the model | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="14.6 Fit the model | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:image" content="/images/cover.png" />
   <meta property="og:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   
 
@@ -19,12 +19,12 @@
   <meta name="twitter:title" content="14.6 Fit the model | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="twitter:image" content="images/cover.png" />
+  <meta name="twitter:image" content="/images/cover.png" />
 
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-03-01" />
+<meta name="date" content="2021-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="model-shared-stochastic-level-with-ar-1-observation-errors.html"/>
 <link rel="next" href="show-the-fits.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -117,6 +119,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -138,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
 <ul>
@@ -487,6 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.4" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html"><i class="fa fa-check"></i><b>12.4</b> Non-Gaussian observation errors</a>
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-poisson"><i class="fa fa-check"></i><b>12.4.1</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.4.2" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-negbin"><i class="fa fa-check"></i><b>12.4.2</b> Negative binomial observation errors</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.5</b> Forecasting with JAGS models</a></li>
 <li class="chapter" data-level="12.6" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.6</b> Problems</a></li>
@@ -594,27 +621,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="fit-the-model" class="section level2" number="14.6">
 <h2><span class="header-section-number">14.6</span> Fit the model</h2>
 <p>We specify this one-to-one in R for <code>MARSS()</code>:</p>
-<div class="sourceCode" id="cb695"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb695-1"><a href="fit-the-model.html#cb695-1" aria-hidden="true" tabindex="-1"></a>makemod <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
-<span id="cb695-2"><a href="fit-the-model.html#cb695-2" aria-hidden="true" tabindex="-1"></a>    B <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), n <span class="sc">+</span> <span class="dv">1</span>, n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb695-3"><a href="fit-the-model.html#cb695-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(B)[<span class="dv">2</span><span class="sc">:</span>(n <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;b&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb695-4"><a href="fit-the-model.html#cb695-4" aria-hidden="true" tabindex="-1"></a>    B[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb695-5"><a href="fit-the-model.html#cb695-5" aria-hidden="true" tabindex="-1"></a>    A <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
-<span id="cb695-6"><a href="fit-the-model.html#cb695-6" aria-hidden="true" tabindex="-1"></a>    Z <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">diag</span>(<span class="dv">1</span>, n))</span>
-<span id="cb695-7"><a href="fit-the-model.html#cb695-7" aria-hidden="true" tabindex="-1"></a>    Q <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), n <span class="sc">+</span> <span class="dv">1</span>, n <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb695-8"><a href="fit-the-model.html#cb695-8" aria-hidden="true" tabindex="-1"></a>    Q[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb695-9"><a href="fit-the-model.html#cb695-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(Q)[<span class="dv">2</span><span class="sc">:</span>(n <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
-<span id="cb695-10"><a href="fit-the-model.html#cb695-10" aria-hidden="true" tabindex="-1"></a>    R <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
-<span id="cb695-11"><a href="fit-the-model.html#cb695-11" aria-hidden="true" tabindex="-1"></a>    U <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
-<span id="cb695-12"><a href="fit-the-model.html#cb695-12" aria-hidden="true" tabindex="-1"></a>    x0 <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
-<span id="cb695-13"><a href="fit-the-model.html#cb695-13" aria-hidden="true" tabindex="-1"></a>    mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">B =</span> B, <span class="at">A =</span> A, <span class="at">Z =</span> Z, <span class="at">Q =</span> Q, <span class="at">R =</span> R, <span class="at">U =</span> U, </span>
-<span id="cb695-14"><a href="fit-the-model.html#cb695-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">x0 =</span> x0, <span class="at">tinitx =</span> <span class="dv">0</span>)</span>
-<span id="cb695-15"><a href="fit-the-model.html#cb695-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(mod.list)</span>
-<span id="cb695-16"><a href="fit-the-model.html#cb695-16" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb695-17"><a href="fit-the-model.html#cb695-17" aria-hidden="true" tabindex="-1"></a>mod.list1 <span class="ot">&lt;-</span> <span class="fu">makemod</span>(<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb701"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb701-1"><a href="fit-the-model.html#cb701-1" aria-hidden="true" tabindex="-1"></a>makemod <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb701-2"><a href="fit-the-model.html#cb701-2" aria-hidden="true" tabindex="-1"></a>    B <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), n <span class="sc">+</span> <span class="dv">1</span>, n <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb701-3"><a href="fit-the-model.html#cb701-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(B)[<span class="dv">2</span><span class="sc">:</span>(n <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;b&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb701-4"><a href="fit-the-model.html#cb701-4" aria-hidden="true" tabindex="-1"></a>    B[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb701-5"><a href="fit-the-model.html#cb701-5" aria-hidden="true" tabindex="-1"></a>    A <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
+<span id="cb701-6"><a href="fit-the-model.html#cb701-6" aria-hidden="true" tabindex="-1"></a>    Z <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, <span class="fu">diag</span>(<span class="dv">1</span>, n))</span>
+<span id="cb701-7"><a href="fit-the-model.html#cb701-7" aria-hidden="true" tabindex="-1"></a>    Q <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), n <span class="sc">+</span> <span class="dv">1</span>, n <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb701-8"><a href="fit-the-model.html#cb701-8" aria-hidden="true" tabindex="-1"></a>    Q[<span class="dv">1</span>, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb701-9"><a href="fit-the-model.html#cb701-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(Q)[<span class="dv">2</span><span class="sc">:</span>(n <span class="sc">+</span> <span class="dv">1</span>)] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="sc">:</span>n)</span>
+<span id="cb701-10"><a href="fit-the-model.html#cb701-10" aria-hidden="true" tabindex="-1"></a>    R <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
+<span id="cb701-11"><a href="fit-the-model.html#cb701-11" aria-hidden="true" tabindex="-1"></a>    U <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
+<span id="cb701-12"><a href="fit-the-model.html#cb701-12" aria-hidden="true" tabindex="-1"></a>    x0 <span class="ot">&lt;-</span> <span class="st">&quot;zero&quot;</span></span>
+<span id="cb701-13"><a href="fit-the-model.html#cb701-13" aria-hidden="true" tabindex="-1"></a>    mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">B =</span> B, <span class="at">A =</span> A, <span class="at">Z =</span> Z, <span class="at">Q =</span> Q, <span class="at">R =</span> R, <span class="at">U =</span> U, </span>
+<span id="cb701-14"><a href="fit-the-model.html#cb701-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">x0 =</span> x0, <span class="at">tinitx =</span> <span class="dv">0</span>)</span>
+<span id="cb701-15"><a href="fit-the-model.html#cb701-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(mod.list)</span>
+<span id="cb701-16"><a href="fit-the-model.html#cb701-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb701-17"><a href="fit-the-model.html#cb701-17" aria-hidden="true" tabindex="-1"></a>mod.list1 <span class="ot">&lt;-</span> <span class="fu">makemod</span>(<span class="dv">3</span>)</span></code></pre></div>
 <p>Demean the data.</p>
-<div class="sourceCode" id="cb696"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb696-1"><a href="fit-the-model.html#cb696-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat <span class="sc">-</span> <span class="fu">apply</span>(dat, <span class="dv">1</span>, mean) <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, TT)</span></code></pre></div>
+<div class="sourceCode" id="cb702"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb702-1"><a href="fit-the-model.html#cb702-1" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">&lt;-</span> dat <span class="sc">-</span> <span class="fu">apply</span>(dat, <span class="dv">1</span>, mean) <span class="sc">%*%</span> <span class="fu">matrix</span>(<span class="dv">1</span>, <span class="dv">1</span>, TT)</span></code></pre></div>
 <p>Fit to that</p>
-<div class="sourceCode" id="cb697"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb697-1"><a href="fit-the-model.html#cb697-1" aria-hidden="true" tabindex="-1"></a>fit.mod1 <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat2, <span class="at">model =</span> mod.list1)</span></code></pre></div>
+<div class="sourceCode" id="cb703"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb703-1"><a href="fit-the-model.html#cb703-1" aria-hidden="true" tabindex="-1"></a>fit.mod1 <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(dat2, <span class="at">model =</span> mod.list1)</span></code></pre></div>
 <pre><code>Success! algorithm run for 15 iterations. abstol and log-log tests passed.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -667,6 +694,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

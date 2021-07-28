@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>13.5 Univariate state-space models | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="13.5 Univariate state-space models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:image" content="/images/cover.png" />
   <meta property="og:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   
 
@@ -19,12 +19,12 @@
   <meta name="twitter:title" content="13.5 Univariate state-space models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="twitter:image" content="images/cover.png" />
+  <meta name="twitter:image" content="/images/cover.png" />
 
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-03-01" />
+<meta name="date" content="2021-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="sec-stan-ar1.html"/>
 <link rel="next" href="sec-stan-dfa.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -117,6 +119,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -138,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
 <ul>
@@ -487,6 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.4" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html"><i class="fa fa-check"></i><b>12.4</b> Non-Gaussian observation errors</a>
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-poisson"><i class="fa fa-check"></i><b>12.4.1</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.4.2" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-negbin"><i class="fa fa-check"></i><b>12.4.2</b> Negative binomial observation errors</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.5</b> Forecasting with JAGS models</a></li>
 <li class="chapter" data-level="12.6" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.6</b> Problems</a></li>
@@ -595,12 +622,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">13.5</span> Univariate state-space models</h2>
 <p>At this point, we’ve fit models with observation or process error, but we haven’t tried to estimate both simultaneously. We will do so here, and introduce some new notation to describe the process model and observation model. We use the notation <span class="math inline">\({x_t}\)</span> to denote the latent state or state of nature (which is unobserved) at time <span class="math inline">\(t\)</span> and <span class="math inline">\({y_t}\)</span> to denote the observed data. For introductory purposes, we’ll make the process model autoregressive (similar to our AR(1) model),</p>
 <p><span class="math display">\[x_{t} = \phi  x_{t-1} + e_{t}, e_{t} \sim N(0,q)\]</span></p>
-<p>For the process model, there are a number of ways to parameterize the first ‘state,’ and we’ll talk about this more in the class, but for the sake of this model, we’ll place a vague weakly informative prior on <span class="math inline">\(x_1\)</span>, <span class="math inline">\(x_1 \sim N(0, 0.01)\)</span>.Second, we need to construct an observation model linking the estimate unseen states of nature <span class="math inline">\(x_t\)</span> to the data <span class="math inline">\(y_t\)</span>. For simplicitly, we’ll assume that the observation errors are indepdendent and identically distributed, with no observation component. Mathematically, this model is
+<p>For the process model, there are a number of ways to parameterize the first ‘state,’ and we’ll talk about this more in the class, but for the sake of this model, we’ll place a vague weakly informative prior on <span class="math inline">\(x_0\)</span>, <span class="math inline">\(x_0 \sim N(0, 10)\)</span>.Second, we need to construct an observation model linking the estimate unseen states of nature <span class="math inline">\(x_t\)</span> to the data <span class="math inline">\(y_t\)</span>. For simplicitly, we’ll assume that the observation errors are indepdendent and identically distributed, with no observation component. Mathematically, this model is
 <span class="math display">\[Y_t \sim N(x_t, r)\]</span>
 In the two above models, we’ll refer to <span class="math inline">\(q\)</span> as the standard deviation of the process variance and <span class="math inline">\(r\)</span> as the standard deviation of the observation error variance</p>
 <p>We can fit the state-space AR(1) and random walk models using the <code>fit_stan()</code> function:</p>
-<div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb658-1"><a href="sec-stan-uss.html#cb658-1" aria-hidden="true" tabindex="-1"></a>ss_ar <span class="ot">&lt;-</span> atsar<span class="sc">::</span><span class="fu">fit_stan</span>(<span class="at">y =</span> Temp, <span class="at">est_drift =</span> <span class="cn">FALSE</span>, <span class="at">model_name =</span> <span class="st">&quot;ss_ar&quot;</span>)</span>
-<span id="cb658-2"><a href="sec-stan-uss.html#cb658-2" aria-hidden="true" tabindex="-1"></a>ss_rw <span class="ot">&lt;-</span> atsar<span class="sc">::</span><span class="fu">fit_stan</span>(<span class="at">y =</span> Temp, <span class="at">est_drift =</span> <span class="cn">FALSE</span>, <span class="at">model_name =</span> <span class="st">&quot;ss_rw&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb664"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb664-1"><a href="sec-stan-uss.html#cb664-1" aria-hidden="true" tabindex="-1"></a>ss_ar <span class="ot">&lt;-</span> atsar<span class="sc">::</span><span class="fu">fit_stan</span>(<span class="at">y =</span> Temp, <span class="at">est_drift =</span> <span class="cn">FALSE</span>, <span class="at">model_name =</span> <span class="st">&quot;ss_ar&quot;</span>)</span>
+<span id="cb664-2"><a href="sec-stan-uss.html#cb664-2" aria-hidden="true" tabindex="-1"></a>ss_rw <span class="ot">&lt;-</span> atsar<span class="sc">::</span><span class="fu">fit_stan</span>(<span class="at">y =</span> Temp, <span class="at">est_drift =</span> <span class="cn">FALSE</span>, <span class="at">model_name =</span> <span class="st">&quot;ss_rw&quot;</span>)</span></code></pre></div>
 </div>
             </section>
 
@@ -631,6 +658,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

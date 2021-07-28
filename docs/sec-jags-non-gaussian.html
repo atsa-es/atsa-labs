@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12.4 Non-Gaussian observation errors | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12.4 Non-Gaussian observation errors | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:image" content="/images/cover.png" />
   <meta property="og:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   
 
@@ -19,12 +19,12 @@
   <meta name="twitter:title" content="12.4 Non-Gaussian observation errors | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="twitter:image" content="images/cover.png" />
+  <meta name="twitter:image" content="/images/cover.png" />
 
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-03-01" />
+<meta name="date" content="2021-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="sec-jags-marss.html"/>
 <link rel="next" href="sec-jags-forecast.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -117,6 +119,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -138,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
 <ul>
@@ -487,6 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.4" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html"><i class="fa fa-check"></i><b>12.4</b> Non-Gaussian observation errors</a>
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-poisson"><i class="fa fa-check"></i><b>12.4.1</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.4.2" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-negbin"><i class="fa fa-check"></i><b>12.4.2</b> Negative binomial observation errors</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.5</b> Forecasting with JAGS models</a></li>
 <li class="chapter" data-level="12.6" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.6</b> Problems</a></li>
@@ -597,45 +624,90 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">12.4.1</span> Poisson observation errors</h3>
 <p>So far we have used the following observation model <span class="math inline">\(y_t \sim \,\text{N}(x_t, r)\)</span>.
 We can change this to a Poisson observation error model:
-<span class="math inline">\(y_t \sim \text{Pois}(\lambda_t)\)</span> where <span class="math inline">\(E[y_t] = \lambda_t\)</span>. <span class="math inline">\(\text{log}(\lambda_t) = x_t\)</span> where <span class="math inline">\(x_t\)</span> is our process model.</p>
-<p>All we need to change to allow Poisson errors is to change the <code>Y[i]</code> part to</p>
-<pre><code>log(EY[i]) &lt;- X[i]
-Y[i] ~ dpois(EY[i])</code></pre>
+<span class="math inline">\(Y_t \sim \text{Pois}(\lambda_t)\)</span> where <span class="math inline">\(E[Y_t] = \lambda_t\)</span>. <span class="math inline">\(\text{log}(\lambda_t) = x_t\)</span> where <span class="math inline">\(x_t\)</span> is our process model.</p>
+<p>All we need to change to allow Poisson errors is to change the <code>Y[t]</code> part to</p>
+<pre><code>log(EY[t]) &lt;- X[i]
+Y[t] ~ dpois(EY[t])</code></pre>
 <p>We also need to ensure that our data are
 integers and we remove the <code>r</code> part from our model code since the Poisson does not have that.</p>
-<p>Our univariate state-space code for Poisson observation errors is the following:</p>
-<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb633-1"><a href="sec-jags-non-gaussian.html#cb633-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SS MODEL with Poisson errors</span></span>
-<span id="cb633-2"><a href="sec-jags-non-gaussian.html#cb633-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb633-3"><a href="sec-jags-non-gaussian.html#cb633-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model_pois.txt&quot;</span>)</span>
-<span id="cb633-4"><a href="sec-jags-non-gaussian.html#cb633-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb633-5"><a href="sec-jags-non-gaussian.html#cb633-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb633-6"><a href="sec-jags-non-gaussian.html#cb633-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
-<span id="cb633-7"><a href="sec-jags-non-gaussian.html#cb633-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb633-8"><a href="sec-jags-non-gaussian.html#cb633-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb633-9"><a href="sec-jags-non-gaussian.html#cb633-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
-<span id="cb633-10"><a href="sec-jags-non-gaussian.html#cb633-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb633-11"><a href="sec-jags-non-gaussian.html#cb633-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, 0.001);</span></span>
-<span id="cb633-12"><a href="sec-jags-non-gaussian.html#cb633-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
-<span id="cb633-13"><a href="sec-jags-non-gaussian.html#cb633-13" aria-hidden="true" tabindex="-1"></a><span class="st">   log(EY[1]) &lt;- X[1]</span></span>
-<span id="cb633-14"><a href="sec-jags-non-gaussian.html#cb633-14" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dpois(EY[1])</span></span>
-<span id="cb633-15"><a href="sec-jags-non-gaussian.html#cb633-15" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb633-16"><a href="sec-jags-non-gaussian.html#cb633-16" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(X[i-1] + u, inv.q);</span></span>
-<span id="cb633-17"><a href="sec-jags-non-gaussian.html#cb633-17" aria-hidden="true" tabindex="-1"></a><span class="st">      log(EY[i]) &lt;- X[i]</span></span>
-<span id="cb633-18"><a href="sec-jags-non-gaussian.html#cb633-18" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dpois(EY[i]); </span></span>
-<span id="cb633-19"><a href="sec-jags-non-gaussian.html#cb633-19" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb633-20"><a href="sec-jags-non-gaussian.html#cb633-20" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb633-21"><a href="sec-jags-non-gaussian.html#cb633-21" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb633-22"><a href="sec-jags-non-gaussian.html#cb633-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
+<p>Our univariate state-space code with Poisson observation errors is the following:</p>
+<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb635-1"><a href="sec-jags-non-gaussian.html#cb635-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SS MODEL with Poisson errors</span></span>
+<span id="cb635-2"><a href="sec-jags-non-gaussian.html#cb635-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb635-3"><a href="sec-jags-non-gaussian.html#cb635-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model_pois.txt&quot;</span>)</span>
+<span id="cb635-4"><a href="sec-jags-non-gaussian.html#cb635-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb635-5"><a href="sec-jags-non-gaussian.html#cb635-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb635-6"><a href="sec-jags-non-gaussian.html#cb635-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb635-7"><a href="sec-jags-non-gaussian.html#cb635-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb635-8"><a href="sec-jags-non-gaussian.html#cb635-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb635-9"><a href="sec-jags-non-gaussian.html#cb635-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
+<span id="cb635-10"><a href="sec-jags-non-gaussian.html#cb635-10" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, 0.001);</span></span>
+<span id="cb635-11"><a href="sec-jags-non-gaussian.html#cb635-11" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb635-12"><a href="sec-jags-non-gaussian.html#cb635-12" aria-hidden="true" tabindex="-1"></a><span class="st">   # likelihood</span></span>
+<span id="cb635-13"><a href="sec-jags-non-gaussian.html#cb635-13" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
+<span id="cb635-14"><a href="sec-jags-non-gaussian.html#cb635-14" aria-hidden="true" tabindex="-1"></a><span class="st">   log(EY[1]) &lt;- X[1]</span></span>
+<span id="cb635-15"><a href="sec-jags-non-gaussian.html#cb635-15" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dpois(EY[1])</span></span>
+<span id="cb635-16"><a href="sec-jags-non-gaussian.html#cb635-16" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
+<span id="cb635-17"><a href="sec-jags-non-gaussian.html#cb635-17" aria-hidden="true" tabindex="-1"></a><span class="st">      X[t] ~ dnorm(X[t-1] + u, inv.q);</span></span>
+<span id="cb635-18"><a href="sec-jags-non-gaussian.html#cb635-18" aria-hidden="true" tabindex="-1"></a><span class="st">      log(EY[t]) &lt;- X[t]</span></span>
+<span id="cb635-19"><a href="sec-jags-non-gaussian.html#cb635-19" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[t] ~ dpois(EY[t]); </span></span>
+<span id="cb635-20"><a href="sec-jags-non-gaussian.html#cb635-20" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb635-21"><a href="sec-jags-non-gaussian.html#cb635-21" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb635-22"><a href="sec-jags-non-gaussian.html#cb635-22" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb635-23"><a href="sec-jags-non-gaussian.html#cb635-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
 <p>We will fit this to the wild dogs data in the <strong>MARSS</strong> package.</p>
-<div class="sourceCode" id="cb634"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb634-1"><a href="sec-jags-non-gaussian.html#cb634-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(wilddogs, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb634-2"><a href="sec-jags-non-gaussian.html#cb634-2" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> wilddogs[, <span class="dv">2</span>], <span class="at">N =</span> <span class="fu">nrow</span>(wilddogs))</span>
-<span id="cb634-3"><a href="sec-jags-non-gaussian.html#cb634-3" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
-<span id="cb634-4"><a href="sec-jags-non-gaussian.html#cb634-4" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
-<span id="cb634-5"><a href="sec-jags-non-gaussian.html#cb634-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
-<span id="cb634-6"><a href="sec-jags-non-gaussian.html#cb634-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb636-1"><a href="sec-jags-non-gaussian.html#cb636-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(wilddogs, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb636-2"><a href="sec-jags-non-gaussian.html#cb636-2" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> wilddogs[, <span class="dv">2</span>], <span class="at">N =</span> <span class="fu">nrow</span>(wilddogs))</span>
+<span id="cb636-3"><a href="sec-jags-non-gaussian.html#cb636-3" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
+<span id="cb636-4"><a href="sec-jags-non-gaussian.html#cb636-4" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
+<span id="cb636-5"><a href="sec-jags-non-gaussian.html#cb636-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb636-6"><a href="sec-jags-non-gaussian.html#cb636-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>module glm loaded</code></pre>
-<p>When we use this univariate state-space model with population data, like the wild dogs, we would log the data<span class="math inline">\(^\dagger\)</span>, and our <span class="math inline">\(y_t\)</span> in our JAGS code is really <span class="math inline">\(log(y_t)\)</span>. In that case, <span class="math inline">\(E[log(y_t)]) = f(x_t)\)</span>. So there is a log-link that we are not really explicit about when we pass in the log of our data. In the Poisson model, that log relationship is explicit, aka we specify <span class="math inline">\(log(E[y_t]) = x_t\)</span> and we pass in the raw count data not the log of the data.</p>
+<p>When we use this univariate state-space model with population data, like the wild dogs, we would log the data<span class="math inline">\(^\dagger\)</span>, and our <span class="math inline">\(y_t\)</span> in our JAGS code is really <span class="math inline">\(log(y_t)\)</span>. In that case, <span class="math inline">\(E[log(Y_t)]) = f(x_t)\)</span>. So there is a log-link that we are not really explicit about when we pass in the log of our data. In the Poisson model, that log relationship is explicit, aka we specify <span class="math inline">\(log(E[Y_t]) = x_t\)</span> and we pass in the raw count data not the log of the data.</p>
 <p><span class="math inline">\(\dagger\)</span> Why would we typically log population data in this case? Because we would typically think of population processes as multiplicative. Population size at time <span class="math inline">\(t\)</span> is growth <strong>times</strong> population size at time <span class="math inline">\(t-1\)</span>. By logging the data, we convert to an additive process. Log population size at time <span class="math inline">\(t\)</span> is log growth <strong>plus</strong> log population size at time <span class="math inline">\(t-1\)</span>.</p>
+</div>
+<div id="sec-jags-negbin" class="section level3" number="12.4.2">
+<h3><span class="header-section-number">12.4.2</span> Negative binomial observation errors</h3>
+<p>In the Poisson distribution, the mean and variance are the same. Using the negative binomial distribution, we can relax that assumption and allow the mean and variance to be different. The negative binomial distribution has two parameters, <span class="math inline">\(r\)</span> and <span class="math inline">\(p\)</span>. <span class="math inline">\(r\)</span> is the dispersion parameter. As <span class="math inline">\(r \rightarrow \infty\)</span>, the distribution becomes the Poisson distribution and when <span class="math inline">\(r\)</span> is small, the distribution is overdispersed (higher variance) relative to the Poisson. In practice, <span class="math inline">\(r &gt; 30\)</span> is going to be very close to the Poisson. <span class="math inline">\(p\)</span> is the success parameter, <span class="math inline">\(p = r/(r+E[Y_t])\)</span>. As for the Poisson, <span class="math inline">\(log E[Y_{t}] = x_t\)</span>—for the univariate state-space model in this example with one state, <span class="math inline">\(z=1\)</span> and <span class="math inline">\(a=0\)</span>.</p>
+<p>To allow negative binomial errors we change the <code>Y[t]</code> part to</p>
+<pre><code>log(EY[t]) &lt;- X[t]
+p[t] &lt;- r/(r + EY[t])
+Y[t] ~ dnegbin(p[t], r)</code></pre>
+<p>Now that we have <span class="math inline">\(r\)</span> again in the model, we will need to put a prior on it. <span class="math inline">\(r\)</span> is positive and 50 is close to infinity. The following is a sufficiently vague prior.</p>
+<pre><code>r ~ dunif(0,50)</code></pre>
+<p>Our univariate state-space code with negative binomial observation errors is the following:</p>
+<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="sec-jags-non-gaussian.html#cb640-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SS MODEL with negative binomial errors</span></span>
+<span id="cb640-2"><a href="sec-jags-non-gaussian.html#cb640-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb640-3"><a href="sec-jags-non-gaussian.html#cb640-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model_negbin.txt&quot;</span>)</span>
+<span id="cb640-4"><a href="sec-jags-non-gaussian.html#cb640-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb640-5"><a href="sec-jags-non-gaussian.html#cb640-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb640-6"><a href="sec-jags-non-gaussian.html#cb640-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb640-7"><a href="sec-jags-non-gaussian.html#cb640-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb640-8"><a href="sec-jags-non-gaussian.html#cb640-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb640-9"><a href="sec-jags-non-gaussian.html#cb640-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
+<span id="cb640-10"><a href="sec-jags-non-gaussian.html#cb640-10" aria-hidden="true" tabindex="-1"></a><span class="st">   r ~ dunif(0,50);</span></span>
+<span id="cb640-11"><a href="sec-jags-non-gaussian.html#cb640-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, 0.001);</span></span>
+<span id="cb640-12"><a href="sec-jags-non-gaussian.html#cb640-12" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb640-13"><a href="sec-jags-non-gaussian.html#cb640-13" aria-hidden="true" tabindex="-1"></a><span class="st">   # likelihood</span></span>
+<span id="cb640-14"><a href="sec-jags-non-gaussian.html#cb640-14" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
+<span id="cb640-15"><a href="sec-jags-non-gaussian.html#cb640-15" aria-hidden="true" tabindex="-1"></a><span class="st">   log(EY[1]) &lt;- X[1]</span></span>
+<span id="cb640-16"><a href="sec-jags-non-gaussian.html#cb640-16" aria-hidden="true" tabindex="-1"></a><span class="st">   p[1] &lt;- r/(r + EY[1])</span></span>
+<span id="cb640-17"><a href="sec-jags-non-gaussian.html#cb640-17" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnegbin(p[1], r)</span></span>
+<span id="cb640-18"><a href="sec-jags-non-gaussian.html#cb640-18" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
+<span id="cb640-19"><a href="sec-jags-non-gaussian.html#cb640-19" aria-hidden="true" tabindex="-1"></a><span class="st">      X[t] ~ dnorm(X[t-1] + u, inv.q);</span></span>
+<span id="cb640-20"><a href="sec-jags-non-gaussian.html#cb640-20" aria-hidden="true" tabindex="-1"></a><span class="st">      log(EY[t]) &lt;- X[t]</span></span>
+<span id="cb640-21"><a href="sec-jags-non-gaussian.html#cb640-21" aria-hidden="true" tabindex="-1"></a><span class="st">      p[t] &lt;- r/(r + EY[t])</span></span>
+<span id="cb640-22"><a href="sec-jags-non-gaussian.html#cb640-22" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[t] ~ dnegbin(p[t], r)</span></span>
+<span id="cb640-23"><a href="sec-jags-non-gaussian.html#cb640-23" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb640-24"><a href="sec-jags-non-gaussian.html#cb640-24" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb640-25"><a href="sec-jags-non-gaussian.html#cb640-25" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb640-26"><a href="sec-jags-non-gaussian.html#cb640-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
+<p>We will fit this to the wild dogs data in the <strong>MARSS</strong> package.</p>
+<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb641-1"><a href="sec-jags-non-gaussian.html#cb641-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(wilddogs, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb641-2"><a href="sec-jags-non-gaussian.html#cb641-2" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> wilddogs[, <span class="dv">2</span>], <span class="at">N =</span> <span class="fu">nrow</span>(wilddogs))</span>
+<span id="cb641-3"><a href="sec-jags-non-gaussian.html#cb641-3" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb641-4"><a href="sec-jags-non-gaussian.html#cb641-4" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
+<span id="cb641-5"><a href="sec-jags-non-gaussian.html#cb641-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb641-6"><a href="sec-jags-non-gaussian.html#cb641-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 </div>
             </section>
@@ -667,6 +739,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

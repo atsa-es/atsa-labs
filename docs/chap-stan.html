@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 13 Stan for Bayesian time series analysis | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 13 Stan for Bayesian time series analysis | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:image" content="/images/cover.png" />
   <meta property="og:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   
 
@@ -19,12 +19,12 @@
   <meta name="twitter:title" content="Chapter 13 Stan for Bayesian time series analysis | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="twitter:image" content="images/cover.png" />
+  <meta name="twitter:image" content="/images/cover.png" />
 
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-03-01" />
+<meta name="date" content="2021-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="sec-jags-problems.html"/>
 <link rel="next" href="sec-stan-lr.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -117,6 +119,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -138,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
 <ul>
@@ -487,6 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.4" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html"><i class="fa fa-check"></i><b>12.4</b> Non-Gaussian observation errors</a>
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-poisson"><i class="fa fa-check"></i><b>12.4.1</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.4.2" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-negbin"><i class="fa fa-check"></i><b>12.4.2</b> Negative binomial observation errors</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.5</b> Forecasting with JAGS models</a></li>
 <li class="chapter" data-level="12.6" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.6</b> Problems</a></li>
@@ -598,23 +625,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="data-and-packages-9" class="section level3 unnumbered">
 <h3>Data and packages</h3>
 <p>You will need the <strong>atsar</strong> and <strong>bayesdfa</strong> packages we have written for fitting state-space time series models with Stan. Install using the <strong>devtools</strong> package.</p>
-<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb638-1"><a href="chap-stan.html#cb638-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb638-2"><a href="chap-stan.html#cb638-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows users will likely need to set this</span></span>
-<span id="cb638-3"><a href="chap-stan.html#cb638-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
-<span id="cb638-4"><a href="chap-stan.html#cb638-4" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</span>
-<span id="cb638-5"><a href="chap-stan.html#cb638-5" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;nwfsc-timeseries/tvvarss&quot;</span>)</span>
-<span id="cb638-6"><a href="chap-stan.html#cb638-6" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;fate-ewi/bayesdfa&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb644-1"><a href="chap-stan.html#cb644-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb644-2"><a href="chap-stan.html#cb644-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows users will likely need to set this</span></span>
+<span id="cb644-3"><a href="chap-stan.html#cb644-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
+<span id="cb644-4"><a href="chap-stan.html#cb644-4" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</span>
+<span id="cb644-5"><a href="chap-stan.html#cb644-5" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;nwfsc-timeseries/tvvarss&quot;</span>)</span>
+<span id="cb644-6"><a href="chap-stan.html#cb644-6" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;fate-ewi/bayesdfa&quot;</span>)</span></code></pre></div>
 <p>In addition, you will need the <strong>rstan</strong>, <strong>datasets</strong>, <strong>parallel</strong> and <strong>loo</strong> packages. After installing, if needed, load the packages:</p>
-<div class="sourceCode" id="cb639"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb639-1"><a href="chap-stan.html#cb639-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(atsar)</span>
-<span id="cb639-2"><a href="chap-stan.html#cb639-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
-<span id="cb639-3"><a href="chap-stan.html#cb639-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(loo)</span></code></pre></div>
+<div class="sourceCode" id="cb645"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb645-1"><a href="chap-stan.html#cb645-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(atsar)</span>
+<span id="cb645-2"><a href="chap-stan.html#cb645-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb645-3"><a href="chap-stan.html#cb645-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(loo)</span></code></pre></div>
 <p>Once you have Stan and <strong>rstan</strong> installed, optimize Stan on your machine:</p>
-<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="chap-stan.html#cb640-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rstan_options</span>(<span class="at">auto_write =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb640-2"><a href="chap-stan.html#cb640-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb646"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb646-1"><a href="chap-stan.html#cb646-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rstan_options</span>(<span class="at">auto_write =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb646-2"><a href="chap-stan.html#cb646-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span></code></pre></div>
 <p>For this lab, we will use a data set on air quality in New York from the <strong>datasets</strong> package. Load the data and create a couple new variables for future use.</p>
-<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb641-1"><a href="chap-stan.html#cb641-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(airquality, <span class="at">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
-<span id="cb641-2"><a href="chap-stan.html#cb641-2" aria-hidden="true" tabindex="-1"></a>Wind <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Wind  <span class="co"># wind speed</span></span>
-<span id="cb641-3"><a href="chap-stan.html#cb641-3" aria-hidden="true" tabindex="-1"></a>Temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp  <span class="co"># air temperature</span></span></code></pre></div>
+<div class="sourceCode" id="cb647"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb647-1"><a href="chap-stan.html#cb647-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(airquality, <span class="at">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
+<span id="cb647-2"><a href="chap-stan.html#cb647-2" aria-hidden="true" tabindex="-1"></a>Wind <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Wind  <span class="co"># wind speed</span></span>
+<span id="cb647-3"><a href="chap-stan.html#cb647-3" aria-hidden="true" tabindex="-1"></a>Temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp  <span class="co"># air temperature</span></span></code></pre></div>
 </div>
 </div>
             </section>
@@ -646,6 +673,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

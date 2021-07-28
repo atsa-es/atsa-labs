@@ -1,15 +1,15 @@
-## ----uss-loadpackages, results='hide', message=FALSE, warning=FALSE-------------
+## ----uss-loadpackages, results='hide', message=FALSE, warning=FALSE----------------------------
 library(stats)
 library(MARSS)
 library(forecast)
 library(datasets)
 
 
-## ----uss-bad.1------------------------------------------------------------------
+## ----uss-bad.1---------------------------------------------------------------------------------
 class(1)
 
 
-## ----uss-mod.list---------------------------------------------------------------
+## ----uss-mod.list------------------------------------------------------------------------------
 mod.list <- list(
   B = matrix(1), U = matrix(0), Q = matrix("q"),
   Z = matrix(1), A = matrix(0), R = matrix("r"),
@@ -17,36 +17,36 @@ mod.list <- list(
 )
 
 
-## ----uss-set-seed-invisible, echo=FALSE-----------------------------------------
+## ----uss-set-seed-invisible, echo=FALSE--------------------------------------------------------
 set.seed(123)
 
 
-## ----uss-ar1-w-error------------------------------------------------------------
+## ----uss-ar1-w-error---------------------------------------------------------------------------
 q <- 0.1
 r <- 0.1
 n <- 100
 y <- cumsum(rnorm(n, 0, sqrt(q))) + rnorm(n, 0, sqrt(r))
 
 
-## ----uss-ar1-fit----------------------------------------------------------------
+## ----uss-ar1-fit-------------------------------------------------------------------------------
 fit <- MARSS(y, model = mod.list)
 
 
-## ----uss-mod.list.1, results='hide'---------------------------------------------
+## ----uss-mod.list.1, results='hide'------------------------------------------------------------
 mod.list$Q <- matrix(0.1)
 fit <- MARSS(y, model = mod.list)
 
 
-## ----uss-data-------------------------------------------------------------------
+## ----uss-data----------------------------------------------------------------------------------
 library(datasets)
 dat <- Nile
 
 
-## ----uss-plotdata, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-plotdata)'-----------
+## ----uss-plotdata, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-plotdata)'--------------------------
 plot(Nile, ylab = "Flow volume", xlab = "Year")
 
 
-## ----uss-mod.nile.0, eval=TRUE--------------------------------------------------
+## ----uss-mod.nile.0, eval=TRUE-----------------------------------------------------------------
 mod.nile.0 <- list(
   B = matrix(1), U = matrix(0), Q = matrix(0),
   Z = matrix(1), A = matrix(0), R = matrix("r"),
@@ -54,15 +54,15 @@ mod.nile.0 <- list(
 )
 
 
-## ----uss-fit.data.0, eval=TRUE, results='hide'----------------------------------
+## ----uss-fit.data.0, eval=TRUE, results='hide'-------------------------------------------------
 kem.0 <- MARSS(dat, model = mod.nile.0)
 
 
-## ----uss-coef-mod0--------------------------------------------------------------
+## ----uss-coef-mod0-----------------------------------------------------------------------------
 c(coef(kem.0, type = "vector"), LL = kem.0$logLik, AICc = kem.0$AICc)
 
 
-## ----uss-mod.nile.1, eval=TRUE--------------------------------------------------
+## ----uss-mod.nile.1, eval=TRUE-----------------------------------------------------------------
 mod.nile.1 <- list(
   B = matrix(1), U = matrix("u"), Q = matrix(0),
   Z = matrix(1), A = matrix(0), R = matrix("r"),
@@ -70,15 +70,15 @@ mod.nile.1 <- list(
 )
 
 
-## ----uss-fit.data.1, eval=TRUE, results='hide'----------------------------------
+## ----uss-fit.data.1, eval=TRUE, results='hide'-------------------------------------------------
 kem.1 <- MARSS(dat, model = mod.nile.1)
 
 
-## ----uss-fit.data.1.coef, eval=TRUE---------------------------------------------
+## ----uss-fit.data.1.coef, eval=TRUE------------------------------------------------------------
 c(coef(kem.1, type = "vector"), LL = kem.1$logLik, AICc = kem.1$AICc)
 
 
-## ----uss-mod.nile.2, eval=TRUE--------------------------------------------------
+## ----uss-mod.nile.2, eval=TRUE-----------------------------------------------------------------
 mod.nile.2 <- list(
   B = matrix(1), U = matrix(0), Q = matrix("q"),
   Z = matrix(1), A = matrix(0), R = matrix("r"),
@@ -86,56 +86,56 @@ mod.nile.2 <- list(
 )
 
 
-## ----uss-mod.nile.not.used, eval=FALSE------------------------------------------
+## ----uss-mod.nile.not.used, eval=FALSE---------------------------------------------------------
 ## A <- "zero"
 ## U <- "zero"
 
 
-## ----uss-fit.data.2, eval=TRUE, results='hide'----------------------------------
+## ----uss-fit.data.2, eval=TRUE, results='hide'-------------------------------------------------
 kem.2 <- MARSS(dat, model = mod.nile.2)
 
 
-## ----uss-fit.data.2.coef, eval=TRUE---------------------------------------------
+## ----uss-fit.data.2.coef, eval=TRUE------------------------------------------------------------
 c(coef(kem.2, type = "vector"), LL = kem.2$logLik, AICc = kem.2$AICc)
 
 
-## ----uss-mod.nile.3, eval=TRUE--------------------------------------------------
+## ----uss-mod.nile.3, eval=TRUE-----------------------------------------------------------------
 mod.nile.3 <- list(
   B = matrix(1), U = matrix("u"), Q = matrix("q"),
   Z = matrix(1), A = matrix(0), R = matrix("r"),
   x0 = matrix("mu"), tinitx = 0
 )
 
-## ----uss-fit.data.3, eval=TRUE, results='hide'----------------------------------
+## ----uss-fit.data.3, eval=TRUE, results='hide'-------------------------------------------------
 kem.3 <- MARSS(dat, model = mod.nile.3)
 
 
-## ----uss-fit.data.3.coef, eval=TRUE---------------------------------------------
+## ----uss-fit.data.3.coef, eval=TRUE------------------------------------------------------------
 c(coef(kem.3, type = "vector"), LL = kem.3$logLik, AICc = kem.3$AICc)
 
 
-## ----uss-fit.data.2.structTS, eval=TRUE-----------------------------------------
+## ----uss-fit.data.2.structTS, eval=TRUE--------------------------------------------------------
 fit.sts <- StructTS(dat, type = "level")
 fit.sts
 
 
-## ----uss-fit.data.2.comp, eval=FALSE--------------------------------------------
+## ----uss-fit.data.2.comp, eval=FALSE-----------------------------------------------------------
 ## trees <- window(treering, start = 0)
 ## fitts <- StructTS(trees, type = "level")
 ## fitem <- MARSS(trees, mod.nile.2)
 ## fitbf <- MARSS(trees, mod.nile.2, method = "BFGS")
 
 
-## ----uss-fit.data.2.fitted.structTS, eval=TRUE----------------------------------
+## ----uss-fit.data.2.fitted.structTS, eval=TRUE-------------------------------------------------
 t <- 10
 fitted(fit.sts)[t]
 
 
-## ----uss-fit-data-2-xtT, eval=TRUE, results='hide'------------------------------
+## ----uss-fit-data-2-xtT, eval=TRUE, results='hide'---------------------------------------------
 fitted(kem.2, type="xtT") %>% subset(t==11)
 
 
-## ----uss-fit-data-2-xtt1, eval=TRUE, results='hide'-----------------------------
+## ----uss-fit-data-2-xtt1, eval=TRUE, results='hide'--------------------------------------------
 fitted(kem.2, type="xtt1") %>% subset(t==11)
 
 
@@ -176,17 +176,17 @@ lines(1871:1970, kem$states[1, ] + 1.96 * kem$states.se[1, ], col = "red", lty =
 legend("topright", paste("model 3, AICc=", format(kem$AICc, digits = 1)), bty = "n")
 
 
-## ----uss-nile-aics--------------------------------------------------------------
+## ----uss-nile-aics-----------------------------------------------------------------------------
 nile.aic <- c(kem.0$AICc, kem.1$AICc, kem.2$AICc, kem.3$AICc)
 
 
-## ----uss-nile-delaic------------------------------------------------------------
+## ----uss-nile-delaic---------------------------------------------------------------------------
 delAIC <- nile.aic - min(nile.aic)
 relLik <- exp(-0.5 * delAIC)
 aicweight <- relLik / sum(relLik)
 
 
-## ----uss-aic-table--------------------------------------------------------------
+## ----uss-aic-table-----------------------------------------------------------------------------
 aic.table <- data.frame(
   AICc = nile.aic,
   delAIC = delAIC,
@@ -196,15 +196,15 @@ aic.table <- data.frame(
 rownames(aic.table) <- c("flat level", "linear trend", "stoc level", "stoc level w drift")
 
 
-## ----uss-aic-table-round--------------------------------------------------------
+## ----uss-aic-table-round-----------------------------------------------------------------------
 round(aic.table, digits = 3)
 
 
-## ----uss-innov-resids0----------------------------------------------------------
+## ----uss-innov-resids0-------------------------------------------------------------------------
 head(residuals(kem.0))
 
 
-## ----uss-acf0, fig.show='hide'--------------------------------------------------
+## ----uss-acf0, fig.show='hide'-----------------------------------------------------------------
 par(mfrow = c(2, 2), mar=c(2,2,4,2))
 resids <- residuals(kem.0)
 acf(resids$.resids, main = "flat level v(t)", na.action = na.pass)
@@ -214,7 +214,7 @@ resids <- residuals(kem.2)
 acf(resids$.resids, main = "stoc level v(t)", na.action = na.pass)
 
 
-## ----uss-acfs, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-acfs)'-------------------
+## ----uss-acfs, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-acfs)'----------------------------------
 par(mfrow = c(2, 2), mar=c(2,2,4,2))
 resids <- residuals(kem.0)
 acf(resids$.resids, main = "flat level v(t)", na.action = na.pass)
@@ -225,7 +225,7 @@ acf(resids$.resids, main = "stoc level v(t)", na.action = na.pass)
 
 
 
-## ----uss-resids, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-resids)'---------------
+## ----uss-resids, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-resids)'------------------------------
 par(mfrow = c(3, 2))
 resids <- MARSSresiduals(kem.0)
 plot(resids$model.residuals[1, ],
@@ -250,7 +250,7 @@ plot(resids$state.residuals[1, ], ylab = "state residual", xlab = "", main = "st
 abline(h = 0)
 
 
-## ----uss-resids2, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-resids)'--------------
+## ----uss-resids2, echo=FALSE, fig=TRUE, fig.cap='(ref:uss-resids)'-----------------------------
 par(mfrow = c(1, 2))
 resids <- residuals(kem.2, type="tT", standardization="marginal")
 mresids <- subset(resids, name == "model")
@@ -267,18 +267,18 @@ abline(h = 0)
 abline(h = c(2,-2), lty=2)
 
 
-## ----uss-jags-data--------------------------------------------------------------
+## ----uss-jags-data-----------------------------------------------------------------------------
 library(datasets)
 y <- Nile
 
 
-## ----uss-loadpackages-jags, results='hide', message=FALSE, warning=FALSE--------
+## ----uss-loadpackages-jags, results='hide', message=FALSE, warning=FALSE-----------------------
 library(R2jags)
 library(rjags)
 library(coda)
 
 
-## ----uss-jags-model-------------------------------------------------------------
+## ----uss-jags-model----------------------------------------------------------------------------
 model.loc <- "ss_model.txt"
 jagsscript <- cat("
    model {  
@@ -304,12 +304,12 @@ jagsscript <- cat("
    ", file = model.loc)
 
 
-## ----uss-jags-set---------------------------------------------------------------
+## ----uss-jags-set------------------------------------------------------------------------------
 jags.data <- list("Y" = y, "TT" = length(y), Y1 = y[1])
 jags.params <- c("sd.q", "sd.r", "X", "mu", "u")
 
 
-## ----uss-jags-fit, results='hide', message=FALSE, cache=TRUE--------------------
+## ----uss-jags-fit, results='hide', message=FALSE, cache=TRUE-----------------------------------
 mod_ss <- jags(jags.data,
   parameters.to.save = jags.params,
   model.file = model.loc, n.chains = 3,
@@ -331,7 +331,7 @@ abline(v = log(coef(kem.3)$R), col = "red")
 detach.jags()
 
 
-## ----uss-jags-plot-states-fun, message=FALSE, warning=FALSE---------------------
+## ----uss-jags-plot-states-fun, message=FALSE, warning=FALSE------------------------------------
 plotModelOutput <- function(jagsmodel, Y) {
   attach.jags(jagsmodel)
   x <- seq(1, length(Y))
@@ -354,13 +354,13 @@ title("State estimate and data from\nJAGS (black) versus MARSS (red)")
 
 
 
-## ----uss-stan-setup, message=FALSE----------------------------------------------
+## ----uss-stan-setup, message=FALSE-------------------------------------------------------------
 library(datasets)
 library(rstan)
 y <- as.vector(Nile)
 
 
-## ----uss-stan-ar-model----------------------------------------------------------
+## ----uss-stan-ar-model-------------------------------------------------------------------------
 scode <- "
 data {
   int<lower=0> TT;
@@ -399,7 +399,7 @@ generated quantities {
 "
 
 
-## ----uss-stan-fit-model, message=FALSE, warning=FALSE, results='hide', cache=TRUE----
+## ----uss-stan-fit-model, message=FALSE, warning=FALSE, results='hide', cache=TRUE--------------
 # We pass in the non-NA ys as vector
 ypos <- y[!is.na(y)]
 n_pos <- sum(!is.na(y)) # number on non-NA ys
@@ -426,7 +426,7 @@ lines(pred_hi)
 points(y, col = "blue")
 
 
-## ----uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95 percent credible intervals"----
+## ----uss-stan-ar-level-ggplot, fig.cap="Estimated level and 95 percent credible intervals"-----
 library(ggplot2)
 nile <- data.frame(y = y, year = 1871:1970)
 h <- ggplot(nile, aes(year))
@@ -448,30 +448,30 @@ hist(log(pars$sd_r^2))
 abline(v = log(coef(kem.3)$R), col = "red")
 
 
-## ----uss-hw1, results='hide'----------------------------------------------------
+## ----uss-hw1, results='hide'-------------------------------------------------------------------
 library(MARSS)
 dat <- log(grouse[, 2])
 
 
-## ----uss-hw3data----------------------------------------------------------------
+## ----uss-hw3data-------------------------------------------------------------------------------
 dat <- cumsum(rnorm(100, 0.1, 1))
 
 
-## ----uss-hw3data.diff-----------------------------------------------------------
+## ----uss-hw3data.diff--------------------------------------------------------------------------
 diff.dat <- diff(dat)
 
 
-## ----uss-hw4, results='hide'----------------------------------------------------
+## ----uss-hw4, results='hide'-------------------------------------------------------------------
 library(MARSS)
 dat <- log(graywhales[, 2])
 
 
-## ----uss-hw-greywhales, eval=FALSE----------------------------------------------
+## ----uss-hw-greywhales, eval=FALSE-------------------------------------------------------------
 ## residuals(fit)$state.residuals[1, ]
 ## residuals(fit)$model.residuals[1, ]
 
 
-## ----uss-hw6, results='hide'----------------------------------------------------
+## ----uss-hw6, results='hide'-------------------------------------------------------------------
 library(forecast)
 dat <- log(airmiles)
 n <- length(dat)
@@ -479,20 +479,20 @@ training.dat <- dat[1:(n - 3)]
 test.dat <- dat[(n - 2):n]
 
 
-## ----uss-hw-marylee-------------------------------------------------------------
+## ----uss-hw-marylee----------------------------------------------------------------------------
 turtlename <- "MaryLee"
 dat <- loggerheadNoisy[which(loggerheadNoisy$turtle == turtlename), 5:6]
 dat <- t(dat)
 
 
-## ----uss-hw-movement-fit1, results='hide'---------------------------------------
+## ----uss-hw-movement-fit1, results='hide'------------------------------------------------------
 fit0 <- MARSS(dat)
 
 
-## ----uss-hw-movement-model-compare, eval=FALSE----------------------------------
+## ----uss-hw-movement-model-compare, eval=FALSE-------------------------------------------------
 ## fit1 <- MARSS(dat, list(Q = ...))
 
 
-## ----uss-hw-movement-resids, eval=FALSE-----------------------------------------
+## ----uss-hw-movement-resids, eval=FALSE--------------------------------------------------------
 ## resids <- residuals(fit0)$state.residuals
 

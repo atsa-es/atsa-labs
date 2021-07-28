@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>15.4 Time-varying amplitude | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="15.4 Time-varying amplitude | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:image" content="/images/cover.png" />
   <meta property="og:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   
 
@@ -19,12 +19,12 @@
   <meta name="twitter:title" content="15.4 Time-varying amplitude | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="twitter:image" content="images/cover.png" />
+  <meta name="twitter:image" content="/images/cover.png" />
 
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-03-01" />
+<meta name="date" content="2021-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="using-dlms-to-estimate-changing-season.html"/>
 <link rel="next" href="multivariate-responses.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -117,6 +119,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -138,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
 <ul>
@@ -487,6 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.4" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html"><i class="fa fa-check"></i><b>12.4</b> Non-Gaussian observation errors</a>
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-poisson"><i class="fa fa-check"></i><b>12.4.1</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.4.2" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-negbin"><i class="fa fa-check"></i><b>12.4.2</b> Negative binomial observation errors</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.5</b> Forecasting with JAGS models</a></li>
 <li class="chapter" data-level="12.6" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.6</b> Problems</a></li>
@@ -598,19 +625,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In this case, the <span class="math inline">\(\beta\)</span>’s remain constant but the sum of the sines and cosines is multiplied by a time-varying scaling factor.</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-53-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>Here we simulate some data where <span class="math inline">\(z_t\)</span> is sinusoidal and is largest in the beginning of the time-series. Note we want <span class="math inline">\(z_t\)</span> to stay positive otherwise our peak will become a valley when <span class="math inline">\(z_t\)</span> goes negative.</p>
-<div class="sourceCode" id="cb722"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb722-1"><a href="time-varying-amplitude.html#cb722-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
-<span id="cb722-2"><a href="time-varying-amplitude.html#cb722-2" aria-hidden="true" tabindex="-1"></a>TT <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb722-3"><a href="time-varying-amplitude.html#cb722-3" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb722-4"><a href="time-varying-amplitude.html#cb722-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
-<span id="cb722-5"><a href="time-varying-amplitude.html#cb722-5" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
-<span id="cb722-6"><a href="time-varying-amplitude.html#cb722-6" aria-hidden="true" tabindex="-1"></a>beta2 <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
-<span id="cb722-7"><a href="time-varying-amplitude.html#cb722-7" aria-hidden="true" tabindex="-1"></a>zt <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span>TT) <span class="sc">+</span> <span class="fl">0.75</span></span>
-<span id="cb722-8"><a href="time-varying-amplitude.html#cb722-8" aria-hidden="true" tabindex="-1"></a>cov1 <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
-<span id="cb722-9"><a href="time-varying-amplitude.html#cb722-9" aria-hidden="true" tabindex="-1"></a>cov2 <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
-<span id="cb722-10"><a href="time-varying-amplitude.html#cb722-10" aria-hidden="true" tabindex="-1"></a>xt <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(TT, <span class="dv">0</span>, q))</span>
-<span id="cb722-11"><a href="time-varying-amplitude.html#cb722-11" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> xt <span class="sc">+</span> zt <span class="sc">*</span> beta1 <span class="sc">*</span> cov1 <span class="sc">+</span> zt <span class="sc">*</span> beta2 <span class="sc">*</span> cov2 <span class="sc">+</span> <span class="fu">rnorm</span>(TT, </span>
-<span id="cb722-12"><a href="time-varying-amplitude.html#cb722-12" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>, r)</span>
-<span id="cb722-13"><a href="time-varying-amplitude.html#cb722-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(yt, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;t&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb728-1"><a href="time-varying-amplitude.html#cb728-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb728-2"><a href="time-varying-amplitude.html#cb728-2" aria-hidden="true" tabindex="-1"></a>TT <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb728-3"><a href="time-varying-amplitude.html#cb728-3" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb728-4"><a href="time-varying-amplitude.html#cb728-4" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fl">0.1</span></span>
+<span id="cb728-5"><a href="time-varying-amplitude.html#cb728-5" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb728-6"><a href="time-varying-amplitude.html#cb728-6" aria-hidden="true" tabindex="-1"></a>beta2 <span class="ot">&lt;-</span> <span class="fl">0.4</span></span>
+<span id="cb728-7"><a href="time-varying-amplitude.html#cb728-7" aria-hidden="true" tabindex="-1"></a>zt <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span>TT) <span class="sc">+</span> <span class="fl">0.75</span></span>
+<span id="cb728-8"><a href="time-varying-amplitude.html#cb728-8" aria-hidden="true" tabindex="-1"></a>cov1 <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
+<span id="cb728-9"><a href="time-varying-amplitude.html#cb728-9" aria-hidden="true" tabindex="-1"></a>cov2 <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
+<span id="cb728-10"><a href="time-varying-amplitude.html#cb728-10" aria-hidden="true" tabindex="-1"></a>xt <span class="ot">&lt;-</span> <span class="fu">cumsum</span>(<span class="fu">rnorm</span>(TT, <span class="dv">0</span>, q))</span>
+<span id="cb728-11"><a href="time-varying-amplitude.html#cb728-11" aria-hidden="true" tabindex="-1"></a>yt <span class="ot">&lt;-</span> xt <span class="sc">+</span> zt <span class="sc">*</span> beta1 <span class="sc">*</span> cov1 <span class="sc">+</span> zt <span class="sc">*</span> beta2 <span class="sc">*</span> cov2 <span class="sc">+</span> <span class="fu">rnorm</span>(TT, </span>
+<span id="cb728-12"><a href="time-varying-amplitude.html#cb728-12" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span>, r)</span>
+<span id="cb728-13"><a href="time-varying-amplitude.html#cb728-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(yt, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;t&quot;</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-54-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <div id="fitting-the-model" class="section level3" number="15.4.1">
 <h3><span class="header-section-number">15.4.1</span> Fitting the model</h3>
@@ -625,15 +652,15 @@ The seasonality (peak location) will be the same for <span class="math inline">\
 <p><span class="math display">\[\begin{bmatrix}x_1 \\ x_2  \end{bmatrix}_t = \begin{bmatrix}x_1 \\ x_2 \end{bmatrix}_{t-1} + \begin{bmatrix}w_1 \\ w_2 \end{bmatrix}_t\]</span></p>
 <p><span class="math display">\[y_t = \begin{bmatrix}1&amp; \sin(2\pi t/p) + \beta \cos(2\pi t/p)\end{bmatrix} \begin{bmatrix}x_1 \\ x_2 \end{bmatrix}_t + v_t\]</span></p>
 <p>To set up the <code>Z</code> matrix, we can pass in values like <code>"1 + 0.5*beta"</code>. <code>MARSS()</code> will translate that to <span class="math inline">\(1+0.5\beta\)</span>.</p>
-<div class="sourceCode" id="cb723"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb723-1"><a href="time-varying-amplitude.html#cb723-1" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">list</span>(<span class="dv">1</span>), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, TT))</span>
-<span id="cb723-2"><a href="time-varying-amplitude.html#cb723-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>, ] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>), <span class="st">&quot; + &quot;</span>, <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> </span>
-<span id="cb723-3"><a href="time-varying-amplitude.html#cb723-3" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>), <span class="st">&quot;*beta&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb729"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb729-1"><a href="time-varying-amplitude.html#cb729-1" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">list</span>(<span class="dv">1</span>), <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, TT))</span>
+<span id="cb729-2"><a href="time-varying-amplitude.html#cb729-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>, ] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>), <span class="st">&quot; + &quot;</span>, <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> </span>
+<span id="cb729-3"><a href="time-varying-amplitude.html#cb729-3" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>), <span class="st">&quot;*beta&quot;</span>)</span></code></pre></div>
 <p>Then we make our model list. We need to set <code>A</code> since <code>MARSS()</code> doesn’t like the default value of <code>scaling</code> when <code>Z</code> is time-varying.</p>
-<div class="sourceCode" id="cb724"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb724-1"><a href="time-varying-amplitude.html#cb724-1" aria-hidden="true" tabindex="-1"></a>mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="at">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, <span class="at">Z =</span> Z, </span>
-<span id="cb724-2"><a href="time-varying-amplitude.html#cb724-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">A =</span> <span class="st">&quot;zero&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb725"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb725-1"><a href="time-varying-amplitude.html#cb725-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(MARSS)</span>
-<span id="cb725-2"><a href="time-varying-amplitude.html#cb725-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(yt, <span class="at">model =</span> mod.list, <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">x0 =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
-<span id="cb725-3"><a href="time-varying-amplitude.html#cb725-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>, <span class="dv">1</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb730-1"><a href="time-varying-amplitude.html#cb730-1" aria-hidden="true" tabindex="-1"></a>mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="at">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, <span class="at">Z =</span> Z, </span>
+<span id="cb730-2"><a href="time-varying-amplitude.html#cb730-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">A =</span> <span class="st">&quot;zero&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb731"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb731-1"><a href="time-varying-amplitude.html#cb731-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(MARSS)</span>
+<span id="cb731-2"><a href="time-varying-amplitude.html#cb731-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(yt, <span class="at">model =</span> mod.list, <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">x0 =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb731-3"><a href="time-varying-amplitude.html#cb731-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span>, <span class="dv">1</span>)))</span></code></pre></div>
 <p>We are able to recover the level, seasonality and changing amplitude of the seasonality.</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-56-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
@@ -667,6 +694,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

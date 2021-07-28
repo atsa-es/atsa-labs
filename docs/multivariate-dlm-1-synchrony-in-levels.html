@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>16.5 Multivariate DLM 1: Synchrony in levels | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="16.5 Multivariate DLM 1: Synchrony in levels | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:image" content="/images/cover.png" />
   <meta property="og:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   
 
@@ -19,12 +19,12 @@
   <meta name="twitter:title" content="16.5 Multivariate DLM 1: Synchrony in levels | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="twitter:image" content="images/cover.png" />
+  <meta name="twitter:image" content="/images/cover.png" />
 
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-03-01" />
+<meta name="date" content="2021-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="univariate-results.html"/>
 <link rel="next" href="references.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -117,6 +119,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -138,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
 <ul>
@@ -487,6 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.4" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html"><i class="fa fa-check"></i><b>12.4</b> Non-Gaussian observation errors</a>
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-poisson"><i class="fa fa-check"></i><b>12.4.1</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.4.2" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-negbin"><i class="fa fa-check"></i><b>12.4.2</b> Negative binomial observation errors</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.5</b> Forecasting with JAGS models</a></li>
 <li class="chapter" data-level="12.6" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.6</b> Problems</a></li>
@@ -630,23 +657,23 @@ x_a \\ x_b \\
 <div id="fit-model" class="section level3" number="16.5.3">
 <h3><span class="header-section-number">16.5.3</span> Fit model</h3>
 <p>Set the number of rivers.</p>
-<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb739-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb739-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2</span></span></code></pre></div>
+<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb745-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb745-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2</span></span></code></pre></div>
 <p>The following code will create the <span class="math inline">\(\mathbf{Z}\)</span> for a model with <span class="math inline">\(n\)</span> rivers. The first <span class="math inline">\(\mathbf{Z}\)</span> is shown.</p>
-<div class="sourceCode" id="cb740"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb740-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb740-1" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(n, n <span class="sc">*</span> <span class="dv">3</span>, TT))</span>
-<span id="cb740-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb740-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, ] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span>, n)</span>
-<span id="cb740-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb740-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>TT) {</span>
-<span id="cb740-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb740-4" aria-hidden="true" tabindex="-1"></a>    Z[, (n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> n), t] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t<span class="sc">/</span>p), n)</span>
-<span id="cb740-5"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb740-5" aria-hidden="true" tabindex="-1"></a>    Z[, (<span class="dv">2</span> <span class="sc">*</span> n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">3</span> <span class="sc">*</span> n), t] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t<span class="sc">/</span>p), n)</span>
-<span id="cb740-6"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb740-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb740-7"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb740-7" aria-hidden="true" tabindex="-1"></a>Z[, , <span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb746"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb746-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-1" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(n, n <span class="sc">*</span> <span class="dv">3</span>, TT))</span>
+<span id="cb746-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, ] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span>, n)</span>
+<span id="cb746-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>TT) {</span>
+<span id="cb746-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-4" aria-hidden="true" tabindex="-1"></a>    Z[, (n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> n), t] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t<span class="sc">/</span>p), n)</span>
+<span id="cb746-5"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-5" aria-hidden="true" tabindex="-1"></a>    Z[, (<span class="dv">2</span> <span class="sc">*</span> n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">3</span> <span class="sc">*</span> n), t] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t<span class="sc">/</span>p), n)</span>
+<span id="cb746-6"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb746-7"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-7" aria-hidden="true" tabindex="-1"></a>Z[, , <span class="dv">1</span>]</span></code></pre></div>
 <pre><code>     [,1] [,2]      [,3]      [,4]     [,5]     [,6]
 [1,]    1    0 0.9510565 0.0000000 0.309017 0.000000
 [2,]    0    1 0.0000000 0.9510565 0.000000 0.309017</code></pre>
 <p>And this code will make the <span class="math inline">\(\mathbf{Q}\)</span> matrix:</p>
-<div class="sourceCode" id="cb742"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb742-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb742-1" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), <span class="dv">3</span> <span class="sc">*</span> n, <span class="dv">3</span> <span class="sc">*</span> n)</span>
-<span id="cb742-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb742-2" aria-hidden="true" tabindex="-1"></a>Q[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n] <span class="ot">&lt;-</span> <span class="st">&quot;c&quot;</span></span>
-<span id="cb742-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb742-3" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(Q) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, letters[<span class="dv">1</span><span class="sc">:</span>n]), <span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> n)))</span>
-<span id="cb742-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb742-4" aria-hidden="true" tabindex="-1"></a>Q</span></code></pre></div>
+<div class="sourceCode" id="cb748"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb748-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb748-1" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), <span class="dv">3</span> <span class="sc">*</span> n, <span class="dv">3</span> <span class="sc">*</span> n)</span>
+<span id="cb748-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb748-2" aria-hidden="true" tabindex="-1"></a>Q[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n] <span class="ot">&lt;-</span> <span class="st">&quot;c&quot;</span></span>
+<span id="cb748-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb748-3" aria-hidden="true" tabindex="-1"></a><span class="fu">diag</span>(Q) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, letters[<span class="dv">1</span><span class="sc">:</span>n]), <span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> n)))</span>
+<span id="cb748-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb748-4" aria-hidden="true" tabindex="-1"></a>Q</span></code></pre></div>
 <pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
 [1,] &quot;qa&quot; &quot;c&quot;  0    0    0    0   
 [2,] &quot;c&quot;  &quot;qb&quot; 0    0    0    0   
@@ -655,46 +682,46 @@ x_a \\ x_b \\
 [5,] 0    0    0    0    &quot;q3&quot; 0   
 [6,] 0    0    0    0    0    &quot;q4&quot;</code></pre>
 <p>We will write a function to prepare the model matrices and fit. It takes the names of the rivers.</p>
-<div class="sourceCode" id="cb744"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb744-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-1" aria-hidden="true" tabindex="-1"></a>fitriver.m <span class="ot">&lt;-</span> <span class="cf">function</span>(river, <span class="at">p =</span> <span class="dv">5</span>) {</span>
-<span id="cb744-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">require</span>(tidyr)</span>
-<span id="cb744-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">require</span>(dplyr)</span>
-<span id="cb744-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">require</span>(MARSS)</span>
-<span id="cb744-5"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-5" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">subset</span>(sockeye, region <span class="sc">%in%</span> river)</span>
-<span id="cb744-6"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-6" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> brood_year, <span class="at">names_from =</span> <span class="st">&quot;region&quot;</span>, </span>
-<span id="cb744-7"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">values_from =</span> spawners) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>brood_year)</span>
-<span id="cb744-8"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-8" aria-hidden="true" tabindex="-1"></a>    yt <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">log</span>(df))</span>
-<span id="cb744-9"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-9" aria-hidden="true" tabindex="-1"></a>    TT <span class="ot">&lt;-</span> <span class="fu">ncol</span>(yt)</span>
-<span id="cb744-10"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-10" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(yt)</span>
-<span id="cb744-11"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-11" aria-hidden="true" tabindex="-1"></a>    Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(n, n <span class="sc">*</span> <span class="dv">3</span>, TT))</span>
-<span id="cb744-12"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-12" aria-hidden="true" tabindex="-1"></a>    Z[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, ] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span>, n)</span>
-<span id="cb744-13"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>TT) {</span>
-<span id="cb744-14"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-14" aria-hidden="true" tabindex="-1"></a>        Z[, (n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> n), t] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t<span class="sc">/</span>p), n)</span>
-<span id="cb744-15"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-15" aria-hidden="true" tabindex="-1"></a>        Z[, (<span class="dv">2</span> <span class="sc">*</span> n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">3</span> <span class="sc">*</span> n), t] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t<span class="sc">/</span>p), </span>
-<span id="cb744-16"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-16" aria-hidden="true" tabindex="-1"></a>            n)</span>
-<span id="cb744-17"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-17" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb744-18"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-18" aria-hidden="true" tabindex="-1"></a>    Q <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), <span class="dv">3</span> <span class="sc">*</span> n, <span class="dv">3</span> <span class="sc">*</span> n)</span>
-<span id="cb744-19"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-19" aria-hidden="true" tabindex="-1"></a>    Q[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;c&quot;</span>, <span class="dv">1</span><span class="sc">:</span>(n<span class="sc">^</span><span class="dv">2</span>))</span>
-<span id="cb744-20"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(Q) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, letters[<span class="dv">1</span><span class="sc">:</span>n]), <span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> </span>
-<span id="cb744-21"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-21" aria-hidden="true" tabindex="-1"></a>        n)))</span>
-<span id="cb744-22"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-22" aria-hidden="true" tabindex="-1"></a>    Q[<span class="fu">lower.tri</span>(Q)] <span class="ot">&lt;-</span> <span class="fu">t</span>(Q)[<span class="fu">lower.tri</span>(Q)]</span>
-<span id="cb744-23"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-23" aria-hidden="true" tabindex="-1"></a>    mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="at">Q =</span> Q, <span class="at">Z =</span> Z, <span class="at">A =</span> <span class="st">&quot;zero&quot;</span>)</span>
-<span id="cb744-24"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-24" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(yt, <span class="at">model =</span> mod.list, <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">x0 =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
-<span id="cb744-25"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-25" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3</span> <span class="sc">*</span> n, <span class="dv">1</span>)), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb744-26"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(fit)</span>
-<span id="cb744-27"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb744-27" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb750"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb750-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-1" aria-hidden="true" tabindex="-1"></a>fitriver.m <span class="ot">&lt;-</span> <span class="cf">function</span>(river, <span class="at">p =</span> <span class="dv">5</span>) {</span>
+<span id="cb750-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">require</span>(tidyr)</span>
+<span id="cb750-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">require</span>(dplyr)</span>
+<span id="cb750-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">require</span>(MARSS)</span>
+<span id="cb750-5"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-5" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">subset</span>(sockeye, region <span class="sc">%in%</span> river)</span>
+<span id="cb750-6"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-6" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> brood_year, <span class="at">names_from =</span> <span class="st">&quot;region&quot;</span>, </span>
+<span id="cb750-7"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">values_from =</span> spawners) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>brood_year)</span>
+<span id="cb750-8"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-8" aria-hidden="true" tabindex="-1"></a>    yt <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">log</span>(df))</span>
+<span id="cb750-9"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-9" aria-hidden="true" tabindex="-1"></a>    TT <span class="ot">&lt;-</span> <span class="fu">ncol</span>(yt)</span>
+<span id="cb750-10"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-10" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(yt)</span>
+<span id="cb750-11"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-11" aria-hidden="true" tabindex="-1"></a>    Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(n, n <span class="sc">*</span> <span class="dv">3</span>, TT))</span>
+<span id="cb750-12"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-12" aria-hidden="true" tabindex="-1"></a>    Z[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, ] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span>, n)</span>
+<span id="cb750-13"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (t <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>TT) {</span>
+<span id="cb750-14"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-14" aria-hidden="true" tabindex="-1"></a>        Z[, (n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> n), t] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t<span class="sc">/</span>p), n)</span>
+<span id="cb750-15"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-15" aria-hidden="true" tabindex="-1"></a>        Z[, (<span class="dv">2</span> <span class="sc">*</span> n <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>(<span class="dv">3</span> <span class="sc">*</span> n), t] <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> t<span class="sc">/</span>p), </span>
+<span id="cb750-16"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-16" aria-hidden="true" tabindex="-1"></a>            n)</span>
+<span id="cb750-17"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb750-18"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-18" aria-hidden="true" tabindex="-1"></a>    Q <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">list</span>(<span class="dv">0</span>), <span class="dv">3</span> <span class="sc">*</span> n, <span class="dv">3</span> <span class="sc">*</span> n)</span>
+<span id="cb750-19"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-19" aria-hidden="true" tabindex="-1"></a>    Q[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;c&quot;</span>, <span class="dv">1</span><span class="sc">:</span>(n<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb750-20"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">diag</span>(Q) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, letters[<span class="dv">1</span><span class="sc">:</span>n]), <span class="fu">paste0</span>(<span class="st">&quot;q&quot;</span>, <span class="dv">1</span><span class="sc">:</span>(<span class="dv">2</span> <span class="sc">*</span> </span>
+<span id="cb750-21"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-21" aria-hidden="true" tabindex="-1"></a>        n)))</span>
+<span id="cb750-22"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-22" aria-hidden="true" tabindex="-1"></a>    Q[<span class="fu">lower.tri</span>(Q)] <span class="ot">&lt;-</span> <span class="fu">t</span>(Q)[<span class="fu">lower.tri</span>(Q)]</span>
+<span id="cb750-23"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-23" aria-hidden="true" tabindex="-1"></a>    mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="at">Q =</span> Q, <span class="at">Z =</span> Z, <span class="at">A =</span> <span class="st">&quot;zero&quot;</span>)</span>
+<span id="cb750-24"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-24" aria-hidden="true" tabindex="-1"></a>    fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(yt, <span class="at">model =</span> mod.list, <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">x0 =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb750-25"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-25" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3</span> <span class="sc">*</span> n, <span class="dv">1</span>)), <span class="at">silent =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb750-26"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(fit)</span>
+<span id="cb750-27"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb750-27" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>Now we can fit for two (or more) rivers. Note it didn’t quite converge as some of the variances for the <span class="math inline">\(\beta\)</span>’s are going to 0 (constant <span class="math inline">\(\beta\)</span> value).</p>
-<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb745-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb745-1" aria-hidden="true" tabindex="-1"></a>river <span class="ot">&lt;-</span> <span class="fu">unique</span>(sockeye<span class="sc">$</span>region)</span>
-<span id="cb745-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb745-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(river)</span>
-<span id="cb745-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb745-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">fitriver.m</span>(river)</span></code></pre></div>
+<div class="sourceCode" id="cb751"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb751-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb751-1" aria-hidden="true" tabindex="-1"></a>river <span class="ot">&lt;-</span> <span class="fu">unique</span>(sockeye<span class="sc">$</span>region)</span>
+<span id="cb751-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb751-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(river)</span>
+<span id="cb751-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb751-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">fitriver.m</span>(river)</span></code></pre></div>
 </div>
 <div id="look-at-the-results" class="section level3" number="16.5.4">
 <h3><span class="header-section-number">16.5.4</span> Look at the results</h3>
 <p>We will look at the correlation plot for the trends.</p>
-<div class="sourceCode" id="cb746"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb746-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(corrplot)</span>
-<span id="cb746-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-2" aria-hidden="true" tabindex="-1"></a>Qmat <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit, <span class="at">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="sc">$</span>Q[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n]</span>
-<span id="cb746-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Qmat) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(Qmat) <span class="ot">&lt;-</span> river</span>
-<span id="cb746-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-4" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">cov2cor</span>(Qmat)</span>
-<span id="cb746-5"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb746-5" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(M, <span class="at">order =</span> <span class="st">&quot;hclust&quot;</span>, <span class="at">addrect =</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb752-1"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb752-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(corrplot)</span>
+<span id="cb752-2"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb752-2" aria-hidden="true" tabindex="-1"></a>Qmat <span class="ot">&lt;-</span> <span class="fu">coef</span>(fit, <span class="at">type =</span> <span class="st">&quot;matrix&quot;</span>)<span class="sc">$</span>Q[<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n]</span>
+<span id="cb752-3"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb752-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(Qmat) <span class="ot">&lt;-</span> <span class="fu">colnames</span>(Qmat) <span class="ot">&lt;-</span> river</span>
+<span id="cb752-4"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb752-4" aria-hidden="true" tabindex="-1"></a>M <span class="ot">&lt;-</span> <span class="fu">cov2cor</span>(Qmat)</span>
+<span id="cb752-5"><a href="multivariate-dlm-1-synchrony-in-levels.html#cb752-5" aria-hidden="true" tabindex="-1"></a><span class="fu">corrplot</span>(M, <span class="at">order =</span> <span class="st">&quot;hclust&quot;</span>, <span class="at">addrect =</span> <span class="dv">4</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/cyclic-sockeye-corrplot-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>We can compare to the locations and see that this suggests that there is small scale regional correlation in the spawner counts.</p>
 <p><img src="images/BB_sockeye_rivers_inset.png" width="50%" style="display: block; margin: auto;" /></p>
@@ -731,6 +758,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

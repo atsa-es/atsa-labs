@@ -1,43 +1,43 @@
-## ----mlr-loadpackages, results='hide', warning=FALSE, message=FALSE-------------
+## ----mlr-loadpackages, results='hide', warning=FALSE, message=FALSE----------------------------
 library(stats)
 library(MARSS)
 library(datasets)
 
 
-## ----mlr-stackloss.data---------------------------------------------------------
+## ----mlr-stackloss.data------------------------------------------------------------------------
 data(stackloss, package="datasets")
 dat = stackloss[1:4,] #subsetted first 4 rows
 dat
 
 
-## ----mlr-stackloss1, results='hide'---------------------------------------------
+## ----mlr-stackloss1, results='hide'------------------------------------------------------------
 #the dat data.frame is defined on the first page of the chapter
 lm(stack.loss ~ Air.Flow, data=dat)
 
 
-## ----mlr-model.matrix-----------------------------------------------------------
+## ----mlr-model.matrix--------------------------------------------------------------------------
 fit=lm(stack.loss ~ Air.Flow, data=dat)
 Z=model.matrix(fit)
 Z[1:4,]
 
 
-## ----mlr-stackloss2-------------------------------------------------------------
+## ----mlr-stackloss2----------------------------------------------------------------------------
 y=matrix(dat$stack.loss, ncol=1)
 Z=cbind(1,dat$Air.Flow) #or use model.matrix() to get Z
 solve(t(Z)%*%Z)%*%t(Z)%*%y
 coef(lm(stack.loss ~ Air.Flow, data=dat))
 
 
-## ----mlr-form1_mult_exp_var-----------------------------------------------------
+## ----mlr-form1_mult_exp_var--------------------------------------------------------------------
 fit1.mult=lm(stack.loss ~ Air.Flow + Water.Temp + Acid.Conc., data=dat)
 
 
-## ----mlr-model.matrix.mult.exp.var----------------------------------------------
+## ----mlr-model.matrix.mult.exp.var-------------------------------------------------------------
 Z=model.matrix(fit1.mult)
 Z
 
 
-## ----mlr-stackloss3-------------------------------------------------------------
+## ----mlr-stackloss3----------------------------------------------------------------------------
 y=matrix(dat$stack.loss, ncol=1)
 Z=cbind(1,dat$Air.Flow, dat$Water.Temp, dat$Acid.Conc)
 #or Z=model.matrix(fit2)
@@ -45,93 +45,93 @@ solve(t(Z)%*%Z)%*%t(Z)%*%y
 coef(fit1.mult)
 
 
-## ----mlr-stack.loss.form1b.comp-------------------------------------------------
+## ----mlr-stack.loss.form1b.comp----------------------------------------------------------------
 y=matrix(dat$stack.loss, nrow=1)
 d=rbind(1, dat$Air.Flow, dat$Water.Temp, dat$Acid.Conc)
 y%*%t(d)%*%solve(d%*%t(d))
 coef(fit1.mult)
 
 
-## ----mlr-newstackloss-----------------------------------------------------------
+## ----mlr-newstackloss--------------------------------------------------------------------------
 dat = cbind(dat, reg=rep(c("n","s"),4)[1:4])
 dat
 
 
-## ----mlr-newstackloss.lm--------------------------------------------------------
+## ----mlr-newstackloss.lm-----------------------------------------------------------------------
 fit2 = lm(stack.loss ~ -1 + Air.Flow + reg, data=dat)
 coef(fit2)
 
 
-## ----mlr-newstackloss-lm-model-matrix-------------------------------------------
+## ----mlr-newstackloss-lm-model-matrix----------------------------------------------------------
 Z=model.matrix(fit2)
 Z[1:4,]
 
 
-## ----mlr-stackloss-form1-Z------------------------------------------------------
+## ----mlr-stackloss-form1-Z---------------------------------------------------------------------
 Z=cbind(dat$Air.Flow,c(1,0,1,0),c(0,1,0,1))
 colnames(Z)=c("beta","regn","regs")
 
 
-## ----mlr-stackloss.form1.Z.lm---------------------------------------------------
+## ----mlr-stackloss.form1.Z.lm------------------------------------------------------------------
 Z=model.matrix(fit2)
 Z[1:4,]
 
 
-## ----mlr-stackloss.form1.ns.solve-----------------------------------------------
+## ----mlr-stackloss.form1.ns.solve--------------------------------------------------------------
 y=matrix(dat$stack.loss, ncol=1)
 solve(t(Z)%*%Z)%*%t(Z)%*%y
 
 
-## ----mlr-stackloss.form1.lm.coef------------------------------------------------
+## ----mlr-stackloss.form1.lm.coef---------------------------------------------------------------
 coef(fit2)
 
 
-## ----mlr-newstackloss3----------------------------------------------------------
+## ----mlr-newstackloss3-------------------------------------------------------------------------
 dat = cbind(dat, owner=c("s","a"))
 dat
 
 
-## ----mlr-newstackloss.lm3-------------------------------------------------------
+## ----mlr-newstackloss.lm3----------------------------------------------------------------------
 coef(lm(stack.loss ~ -1 + Air.Flow:owner + reg, data=dat))
 
 
-## ----mlr-stackloss.form1.Z.lm.beta----------------------------------------------
+## ----mlr-stackloss.form1.Z.lm.beta-------------------------------------------------------------
 fit3=lm(stack.loss ~ -1 + Air.Flow:owner + reg, data=dat)
 Z=model.matrix(fit3)
 Z[1:4,]
 
 
-## ----mlr-stackloss.form1.owner.solve--------------------------------------------
+## ----mlr-stackloss.form1.owner.solve-----------------------------------------------------------
 y=matrix(dat$stack.loss, ncol=1)
 solve(t(Z)%*%Z)%*%t(Z)%*%y
 
 
-## ----mlr-newstackloss.qtr-------------------------------------------------------
+## ----mlr-newstackloss.qtr----------------------------------------------------------------------
 dat = cbind(dat, qtr=paste(rep("qtr",4),1:4,sep=""))
 dat
 
 
-## ----mlr-newstackloss.lm.qtr----------------------------------------------------
+## ----mlr-newstackloss.lm.qtr-------------------------------------------------------------------
 coef(lm(stack.loss ~ -1 + qtr, data=dat))
 
 
-## ----mlr-newstackloss.lm.qtr2---------------------------------------------------
+## ----mlr-newstackloss.lm.qtr2------------------------------------------------------------------
 coef(lm(stack.loss ~ qtr, data=dat))
 
 
-## ----mlr-stackloss.form1.Z.lm.qtr1----------------------------------------------
+## ----mlr-stackloss.form1.Z.lm.qtr1-------------------------------------------------------------
 fit4=lm(stack.loss ~ -1 + qtr, data=dat)
 Z=model.matrix(fit4)
 Z[1:4,]
 
 
-## ----mlr-stackloss.form1.Z.lm.qtr2----------------------------------------------
+## ----mlr-stackloss.form1.Z.lm.qtr2-------------------------------------------------------------
 fit5=lm(stack.loss ~ qtr, data=dat)
 Z=model.matrix(fit5)
 Z[1:4,]
 
 
-## ----mlr-set-up-big-dataset-----------------------------------------------------
+## ----mlr-set-up-big-dataset--------------------------------------------------------------------
 data(stackloss, package="datasets")
 fulldat=stackloss
 n=nrow(fulldat)
@@ -141,40 +141,40 @@ fulldat=cbind(fulldat,
           reg=rep(c("n","s"),n)[1:n])
 
 
-## ----mlr-complex.lm-------------------------------------------------------------
+## ----mlr-complex.lm----------------------------------------------------------------------------
 fit7 = lm(stack.loss ~ -1 + qtr + Air.Flow:qtr:owner, data=fulldat)
 
 
-## ----mlr-complex.lm.Z, results='hide'-------------------------------------------
+## ----mlr-complex.lm.Z, results='hide'----------------------------------------------------------
 model.matrix(fit7)
 
 
-## ----mlr-complex.form1.solve, results='hide'------------------------------------
+## ----mlr-complex.form1.solve, results='hide'---------------------------------------------------
 Z=model.matrix(fit7)
 
 
-## ----mlr-confounded-------------------------------------------------------------
+## ----mlr-confounded----------------------------------------------------------------------------
 coef(lm(stack.loss ~ -1 + Air.Flow + reg + qtr, data=fulldat))
 
 
-## ----mlr-confounded2------------------------------------------------------------
+## ----mlr-confounded2---------------------------------------------------------------------------
 fit=lm(stack.loss ~ -1 + Air.Flow + reg + qtr, data=fulldat)
 Z=model.matrix(fit)
 
 
-## ----mlr-confounded23-----------------------------------------------------------
+## ----mlr-confounded23--------------------------------------------------------------------------
 fulldat2=fulldat
 fulldat2$reg2 = rep(c("n","n","n","n","s","s","s","s"),3)[1:21]
 fit=lm(stack.loss ~ Air.Flow + reg2 + qtr, data=fulldat2)
 coef(fit)
 
 
-## ----mlr-vec--------------------------------------------------------------------
+## ----mlr-vec-----------------------------------------------------------------------------------
 A=matrix(1:6,nrow=2,byrow=TRUE)
 vecA = matrix(A,ncol=1)
 
 
-## ----mlr-stackloss.form2.solve, tidy=FALSE--------------------------------------
+## ----mlr-stackloss.form2.solve, tidy=FALSE-----------------------------------------------------
 #make your y and x matrices
 y=matrix(dat$stack.loss, ncol=1)
 x=matrix(c(1,dat$Air.Flow),ncol=1)
@@ -193,7 +193,7 @@ solve(t(M)%*%M)%*%t(M)%*%y
 coef(lm(dat$stack.loss ~ dat$Air.Flow))
 
 
-## ----mlr-stackloss.form2.ns-----------------------------------------------------
+## ----mlr-stackloss.form2.ns--------------------------------------------------------------------
 y=matrix(dat$stack.loss, ncol=1)
 x=matrix(c(1,dat$Air.Flow),ncol=1)
 n=nrow(dat)
@@ -208,7 +208,7 @@ M=kronecker(t(x),diag(n))%*%P
 solve(t(M)%*%M)%*%t(M)%*%y
 
 
-## ----mlr-stackloss.form2.owners-------------------------------------------------
+## ----mlr-stackloss.form2.owners----------------------------------------------------------------
 Z=matrix(list(0),n,k*n+1)
 Z[seq(1,n,2),1]="alphanorth"
 Z[seq(2,n,2),1]="alphasouth"
@@ -218,7 +218,7 @@ M=kronecker(t(x),diag(n))%*%P
 solve(t(M)%*%M)%*%t(M)%*%y
 
 
-## ----mlr-homework-data, tidy=FALSE----------------------------------------------
+## ----mlr-homework-data, tidy=FALSE-------------------------------------------------------------
 data(airquality, package="datasets")
 #remove any rows with NAs omitted.
 airquality=na.omit(airquality)
@@ -230,22 +230,22 @@ airquality$region = rep(c("north","south"),60)[1:111]
 homeworkdat = airquality[1:5,]
 
 
-## ----mlr-hw1--------------------------------------------------------------------
+## ----mlr-hw1-----------------------------------------------------------------------------------
 fit=lm(Ozone ~ Wind + Temp, data=homeworkdat)
 
 
-## ----mlr-hw1b-------------------------------------------------------------------
+## ----mlr-hw1b----------------------------------------------------------------------------------
 fit=lm(Ozone ~ -1 + Wind + Temp, data=homeworkdat)
 
 
-## ----mlr-hw4--------------------------------------------------------------------
+## ----mlr-hw4-----------------------------------------------------------------------------------
 fit=lm(Ozone ~ -1 + region, data=homeworkdat)
 
 
-## ----mlr-hw5--------------------------------------------------------------------
+## ----mlr-hw5-----------------------------------------------------------------------------------
 fit=lm(Ozone ~ Temp:region, data=homeworkdat)
 
 
-## ----mlr-hw8--------------------------------------------------------------------
+## ----mlr-hw8-----------------------------------------------------------------------------------
 fit=lm(Ozone ~ -1 + Temp:region + Month, data=airquality)
 

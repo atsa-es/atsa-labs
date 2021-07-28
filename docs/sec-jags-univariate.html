@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>12.2 Univariatate response models | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="12.2 Univariatate response models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:image" content="/images/cover.png" />
   <meta property="og:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   
 
@@ -19,12 +19,12 @@
   <meta name="twitter:title" content="12.2 Univariatate response models | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="twitter:image" content="images/cover.png" />
+  <meta name="twitter:image" content="/images/cover.png" />
 
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-03-01" />
+<meta name="date" content="2021-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="sec-jags-overview.html"/>
 <link rel="next" href="sec-jags-marss.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -117,6 +119,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -138,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
 <ul>
@@ -487,6 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.4" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html"><i class="fa fa-check"></i><b>12.4</b> Non-Gaussian observation errors</a>
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-poisson"><i class="fa fa-check"></i><b>12.4.1</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.4.2" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-negbin"><i class="fa fa-check"></i><b>12.4.2</b> Negative binomial observation errors</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.5</b> Forecasting with JAGS models</a></li>
 <li class="chapter" data-level="12.6" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.6</b> Problems</a></li>
@@ -605,32 +632,33 @@ y_t = x_t + v_t, v_t \sim \,\text{N}(0, r)
 \end{equation}\]</span>
 An equivalent way to think about this model is
 <span class="math display">\[\begin{equation}
-y_t \sim \,\text{N}(E[y_t], r)
+Y_t \sim \,\text{N}(E[Y_t], r)
 \end{equation}\]</span>
-<span class="math inline">\(E[{y}_{t}] = x_t\)</span> where <span class="math inline">\(x_t = u\)</span>.
+<span class="math inline">\(E[Y_{t}] = x_t\)</span> where <span class="math inline">\(x_t = u\)</span>.
 In this linear regression model, we will treat the residual error as independent and identically distributed Gaussian observation error.</p>
 <p>To run the JAGS model, we will need to start by writing the model in JAGS notation. We can construct the model in Equation <a href="sec-jags-univariate.html#eq:jags-lr1">(12.2)</a> as</p>
-<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb602-1"><a href="sec-jags-univariate.html#cb602-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LINEAR REGRESSION with no covariates intercept only. The</span></span>
-<span id="cb602-2"><a href="sec-jags-univariate.html#cb602-2" aria-hidden="true" tabindex="-1"></a><span class="co"># parameters are</span></span>
-<span id="cb602-3"><a href="sec-jags-univariate.html#cb602-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb602-4"><a href="sec-jags-univariate.html#cb602-4" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> <span class="st">&quot;lm_intercept.txt&quot;</span>  <span class="co"># name of the txt file</span></span>
-<span id="cb602-5"><a href="sec-jags-univariate.html#cb602-5" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb602-6"><a href="sec-jags-univariate.html#cb602-6" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb602-7"><a href="sec-jags-univariate.html#cb602-7" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
-<span id="cb602-8"><a href="sec-jags-univariate.html#cb602-8" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01);</span></span>
-<span id="cb602-9"><a href="sec-jags-univariate.html#cb602-9" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001); # This is inverse gamma</span></span>
-<span id="cb602-10"><a href="sec-jags-univariate.html#cb602-10" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; # derived value</span></span>
-<span id="cb602-11"><a href="sec-jags-univariate.html#cb602-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:N) {</span></span>
-<span id="cb602-12"><a href="sec-jags-univariate.html#cb602-12" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- u</span></span>
-<span id="cb602-13"><a href="sec-jags-univariate.html#cb602-13" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i]; # derived value</span></span>
-<span id="cb602-14"><a href="sec-jags-univariate.html#cb602-14" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r); </span></span>
-<span id="cb602-15"><a href="sec-jags-univariate.html#cb602-15" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb602-16"><a href="sec-jags-univariate.html#cb602-16" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb602-17"><a href="sec-jags-univariate.html#cb602-17" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb602-18"><a href="sec-jags-univariate.html#cb602-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
+<div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb602-1"><a href="sec-jags-univariate.html#cb602-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LINEAR REGRESSION intercept only.</span></span>
+<span id="cb602-2"><a href="sec-jags-univariate.html#cb602-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb602-3"><a href="sec-jags-univariate.html#cb602-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> <span class="st">&quot;lm_intercept.txt&quot;</span>  <span class="co"># name of the txt file</span></span>
+<span id="cb602-4"><a href="sec-jags-univariate.html#cb602-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb602-5"><a href="sec-jags-univariate.html#cb602-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb602-6"><a href="sec-jags-univariate.html#cb602-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb602-7"><a href="sec-jags-univariate.html#cb602-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01);</span></span>
+<span id="cb602-8"><a href="sec-jags-univariate.html#cb602-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001); # This is inverse gamma</span></span>
+<span id="cb602-9"><a href="sec-jags-univariate.html#cb602-9" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; # derived value</span></span>
+<span id="cb602-10"><a href="sec-jags-univariate.html#cb602-10" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb602-11"><a href="sec-jags-univariate.html#cb602-11" aria-hidden="true" tabindex="-1"></a><span class="st">   # likelihood</span></span>
+<span id="cb602-12"><a href="sec-jags-univariate.html#cb602-12" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:N) {</span></span>
+<span id="cb602-13"><a href="sec-jags-univariate.html#cb602-13" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- u</span></span>
+<span id="cb602-14"><a href="sec-jags-univariate.html#cb602-14" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i]; # derived value</span></span>
+<span id="cb602-15"><a href="sec-jags-univariate.html#cb602-15" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r); </span></span>
+<span id="cb602-16"><a href="sec-jags-univariate.html#cb602-16" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb602-17"><a href="sec-jags-univariate.html#cb602-17" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb602-18"><a href="sec-jags-univariate.html#cb602-18" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb602-19"><a href="sec-jags-univariate.html#cb602-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
 <p>The JAGS code has three parts: our parameter priors, our data model and derived parameters.</p>
 <p><strong>Parameter priors</strong> There are two parameters in the model (<span class="math inline">\(u\)</span>, the mean, and <span class="math inline">\(r\)</span>, the variance of the observation error). We need to set a prior on both of these. We will set a vague prior of a Gaussian with varianc 10 on <span class="math inline">\(u\)</span>. In JAGS instead of specifying the normal distribution with the variance, <span class="math inline">\(N(0, 10)\)</span>, you specify it with the precision (1/variance), so our prior on <span class="math inline">\(u\)</span> is <code>dnorm(0, 0.01)</code>. For <span class="math inline">\(r\)</span>, we need to set a prior on the precision <span class="math inline">\(1/r\)</span>, which we call <code>inv.r</code> in the code. The precision receives a gamma prior, which is equivalent to the variance receiving an inverse gamma prior (fairly common for standard Bayesian regression models).</p>
-<p><strong>Data model</strong> Our data distribution is <span class="math inline">\(y_t \sim \,\text{N}(E[y_t], r)\)</span>. We use the <code>dnorm()</code> distribution with the precision (<span class="math inline">\(1/r\)</span>) instead of <span class="math inline">\(r\)</span>. So our data model is <code>Y[i] = dnorm(EY[i], inv.r)</code>. JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and use the for loop to specify the distribution for each <code>Y[i]</code>. For, this model we didn’t actually need <code>X[i]</code> but we use it because we are building up to a state-space model which has both <span class="math inline">\(x_t\)</span> and <span class="math inline">\(y_t\)</span>.</p>
+<p><strong>Likelihood</strong> Our data distribution is <span class="math inline">\(Y_t \sim \,\text{N}(E[Y_t], r)\)</span>. We use the <code>dnorm()</code> distribution with the precision (<span class="math inline">\(1/r\)</span>) instead of <span class="math inline">\(r\)</span>. So our data model is <code>Y[t] = dnorm(EY[t], inv.r)</code>. JAGS is not vectorized so we need to use for loops (instead of matrix multiplication) and use the for loop to specify the distribution for each <code>Y[t]</code>. For, this model we didn’t actually need <code>X[t]</code> but we use it because we are building up to a state-space model which has both <span class="math inline">\(x_t\)</span> and <span class="math inline">\(y_t\)</span>.</p>
 <p><strong>Derived values</strong> Derived values are things we want output so we can track them. In this example, our derived values are a bit useless but in more complex models they will be quite handy. Also they can make your code easier to understand.</p>
 <p>To run the model, we need to create several new objects, representing (1) a list of data that we will pass to JAGS <code>jags.data</code>, (2) a vector of parameters that we want to monitor and have returned back to R <code>jags.params</code>, and (3) the name of our text file that contains the JAGS model we wrote above. With those three things, we can call the <code>jags()</code> function.</p>
 <div class="sourceCode" id="cb603"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb603-1"><a href="sec-jags-univariate.html#cb603-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N)</span>
@@ -738,42 +766,45 @@ y_t = x_t + v_t, v_t \sim \,\text{N}(0, r)
 <span id="cb615-3"><a href="sec-jags-univariate.html#cb615-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;lm_covariate.txt&quot;</span>)</span>
 <span id="cb615-4"><a href="sec-jags-univariate.html#cb615-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
 <span id="cb615-5"><a href="sec-jags-univariate.html#cb615-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb615-6"><a href="sec-jags-univariate.html#cb615-6" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb615-7"><a href="sec-jags-univariate.html#cb615-7" aria-hidden="true" tabindex="-1"></a><span class="st">   C ~ dnorm(0,0.01);</span></span>
-<span id="cb615-8"><a href="sec-jags-univariate.html#cb615-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001); </span></span>
-<span id="cb615-9"><a href="sec-jags-univariate.html#cb615-9" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; </span></span>
-<span id="cb615-10"><a href="sec-jags-univariate.html#cb615-10" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
-<span id="cb615-11"><a href="sec-jags-univariate.html#cb615-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:N) {</span></span>
-<span id="cb615-12"><a href="sec-jags-univariate.html#cb615-12" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- u + C*c[i];</span></span>
-<span id="cb615-13"><a href="sec-jags-univariate.html#cb615-13" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i]</span></span>
-<span id="cb615-14"><a href="sec-jags-univariate.html#cb615-14" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r);</span></span>
-<span id="cb615-15"><a href="sec-jags-univariate.html#cb615-15" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb615-16"><a href="sec-jags-univariate.html#cb615-16" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb615-17"><a href="sec-jags-univariate.html#cb615-17" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb615-18"><a href="sec-jags-univariate.html#cb615-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
-<span id="cb615-19"><a href="sec-jags-univariate.html#cb615-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb615-20"><a href="sec-jags-univariate.html#cb615-20" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N, <span class="at">c =</span> Temp)</span>
-<span id="cb615-21"><a href="sec-jags-univariate.html#cb615-21" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;C&quot;</span>)</span>
-<span id="cb615-22"><a href="sec-jags-univariate.html#cb615-22" aria-hidden="true" tabindex="-1"></a>mod_lm <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb615-23"><a href="sec-jags-univariate.html#cb615-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb615-24"><a href="sec-jags-univariate.html#cb615-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<span id="cb615-6"><a href="sec-jags-univariate.html#cb615-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb615-7"><a href="sec-jags-univariate.html#cb615-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb615-8"><a href="sec-jags-univariate.html#cb615-8" aria-hidden="true" tabindex="-1"></a><span class="st">   C ~ dnorm(0,0.01);</span></span>
+<span id="cb615-9"><a href="sec-jags-univariate.html#cb615-9" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001); </span></span>
+<span id="cb615-10"><a href="sec-jags-univariate.html#cb615-10" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; </span></span>
+<span id="cb615-11"><a href="sec-jags-univariate.html#cb615-11" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb615-12"><a href="sec-jags-univariate.html#cb615-12" aria-hidden="true" tabindex="-1"></a><span class="st">   # likelihood</span></span>
+<span id="cb615-13"><a href="sec-jags-univariate.html#cb615-13" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:N) {</span></span>
+<span id="cb615-14"><a href="sec-jags-univariate.html#cb615-14" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- u + C*c[i];</span></span>
+<span id="cb615-15"><a href="sec-jags-univariate.html#cb615-15" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i]</span></span>
+<span id="cb615-16"><a href="sec-jags-univariate.html#cb615-16" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r);</span></span>
+<span id="cb615-17"><a href="sec-jags-univariate.html#cb615-17" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb615-18"><a href="sec-jags-univariate.html#cb615-18" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb615-19"><a href="sec-jags-univariate.html#cb615-19" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb615-20"><a href="sec-jags-univariate.html#cb615-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
+<span id="cb615-21"><a href="sec-jags-univariate.html#cb615-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb615-22"><a href="sec-jags-univariate.html#cb615-22" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N, <span class="at">c =</span> Temp)</span>
+<span id="cb615-23"><a href="sec-jags-univariate.html#cb615-23" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;r&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;C&quot;</span>)</span>
+<span id="cb615-24"><a href="sec-jags-univariate.html#cb615-24" aria-hidden="true" tabindex="-1"></a>mod_lm <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb615-25"><a href="sec-jags-univariate.html#cb615-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb615-26"><a href="sec-jags-univariate.html#cb615-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>module glm loaded</code></pre>
 <p>We can show the the posterior fits (the model fits) to the data. Here is a simple function whose arguments are one of our fitted models and the raw data. The function is:</p>
-<div class="sourceCode" id="cb616"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb616-1"><a href="sec-jags-univariate.html#cb616-1" aria-hidden="true" tabindex="-1"></a>plotModelOutput <span class="ot">&lt;-</span> <span class="cf">function</span>(jagsmodel, Y) {</span>
-<span id="cb616-2"><a href="sec-jags-univariate.html#cb616-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># attach the model</span></span>
-<span id="cb616-3"><a href="sec-jags-univariate.html#cb616-3" aria-hidden="true" tabindex="-1"></a>    EY <span class="ot">&lt;-</span> jagsmodel<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list<span class="sc">$</span>EY</span>
-<span id="cb616-4"><a href="sec-jags-univariate.html#cb616-4" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(Y))</span>
-<span id="cb616-5"><a href="sec-jags-univariate.html#cb616-5" aria-hidden="true" tabindex="-1"></a>    summaryPredictions <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">apply</span>(EY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), </span>
-<span id="cb616-6"><a href="sec-jags-univariate.html#cb616-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">apply</span>(EY, <span class="dv">2</span>, mean), <span class="fu">apply</span>(EY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
-<span id="cb616-7"><a href="sec-jags-univariate.html#cb616-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(Y, <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(<span class="fu">c</span>(Y, summaryPredictions)), </span>
-<span id="cb616-8"><a href="sec-jags-univariate.html#cb616-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">max</span>(<span class="fu">c</span>(Y, summaryPredictions))), <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, </span>
-<span id="cb616-9"><a href="sec-jags-univariate.html#cb616-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="sc">$</span>model.file))</span>
-<span id="cb616-10"><a href="sec-jags-univariate.html#cb616-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">polygon</span>(<span class="fu">c</span>(x, <span class="fu">rev</span>(x)), <span class="fu">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="fu">rev</span>(summaryPredictions[, </span>
-<span id="cb616-11"><a href="sec-jags-univariate.html#cb616-11" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3</span>])), <span class="at">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
-<span id="cb616-12"><a href="sec-jags-univariate.html#cb616-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lines</span>(summaryPredictions[, <span class="dv">2</span>])</span>
-<span id="cb616-13"><a href="sec-jags-univariate.html#cb616-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(Y)</span>
-<span id="cb616-14"><a href="sec-jags-univariate.html#cb616-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb617-1"><a href="sec-jags-univariate.html#cb617-1" aria-hidden="true" tabindex="-1"></a>plotModelOutput <span class="ot">&lt;-</span> <span class="cf">function</span>(jagsmodel, Y) {</span>
+<span id="cb617-2"><a href="sec-jags-univariate.html#cb617-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># attach the model</span></span>
+<span id="cb617-3"><a href="sec-jags-univariate.html#cb617-3" aria-hidden="true" tabindex="-1"></a>    EY <span class="ot">&lt;-</span> jagsmodel<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list<span class="sc">$</span>EY</span>
+<span id="cb617-4"><a href="sec-jags-univariate.html#cb617-4" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="fu">length</span>(Y))</span>
+<span id="cb617-5"><a href="sec-jags-univariate.html#cb617-5" aria-hidden="true" tabindex="-1"></a>    summaryPredictions <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">apply</span>(EY, <span class="dv">2</span>, quantile, <span class="fl">0.025</span>), </span>
+<span id="cb617-6"><a href="sec-jags-univariate.html#cb617-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">apply</span>(EY, <span class="dv">2</span>, mean), <span class="fu">apply</span>(EY, <span class="dv">2</span>, quantile, <span class="fl">0.975</span>))</span>
+<span id="cb617-7"><a href="sec-jags-univariate.html#cb617-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(Y, <span class="at">col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="fu">min</span>(<span class="fu">c</span>(Y, summaryPredictions)), </span>
+<span id="cb617-8"><a href="sec-jags-univariate.html#cb617-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">max</span>(<span class="fu">c</span>(Y, summaryPredictions))), <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;95% CIs of predictions and data&quot;</span>, </span>
+<span id="cb617-9"><a href="sec-jags-univariate.html#cb617-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">&quot;JAGS results:&quot;</span>, jagsmodel<span class="sc">$</span>model.file))</span>
+<span id="cb617-10"><a href="sec-jags-univariate.html#cb617-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">polygon</span>(<span class="fu">c</span>(x, <span class="fu">rev</span>(x)), <span class="fu">c</span>(summaryPredictions[, <span class="dv">1</span>], <span class="fu">rev</span>(summaryPredictions[, </span>
+<span id="cb617-11"><a href="sec-jags-univariate.html#cb617-11" aria-hidden="true" tabindex="-1"></a>        <span class="dv">3</span>])), <span class="at">col =</span> <span class="st">&quot;grey70&quot;</span>, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb617-12"><a href="sec-jags-univariate.html#cb617-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lines</span>(summaryPredictions[, <span class="dv">2</span>])</span>
+<span id="cb617-13"><a href="sec-jags-univariate.html#cb617-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">points</span>(Y)</span>
+<span id="cb617-14"><a href="sec-jags-univariate.html#cb617-14" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>We can use the function to plot the predicted posterior mean with 95% CIs, as well as the raw data. Note that the shading is for the CIs on the expected value of <span class="math inline">\(y_t\)</span> so will look narrow relative to the data. For example, try</p>
-<div class="sourceCode" id="cb617"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb617-1"><a href="sec-jags-univariate.html#cb617-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotModelOutput</span>(mod_lm, Wind)</span></code></pre></div>
+<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb618-1"><a href="sec-jags-univariate.html#cb618-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotModelOutput</span>(mod_lm, Wind)</span></code></pre></div>
 
 <div class="figure" style="text-align: center"><span id="fig:jags-lm1ar-plot1"></span>
 <img src="Applied_Time_Series_Analysis_files/figure-html/jags-lm1ar-plot1-1.png" alt="Predicted posterior mean with 95% CIs" width="80%" />
@@ -790,32 +821,34 @@ Figure 12.3: Predicted posterior mean with 95% CIs
 x_t = x_{t-1} + u + w_t, \text{ where }w_t \sim \,\text{N}(0,q)
 \tag{12.4}
 \end{equation}\]</span>
-Now <span class="math inline">\(x_t\)</span> is stochastic and <span class="math inline">\(E[x_t] = x_{t-1} + u\)</span> and <span class="math inline">\(x_t \sim \,\text{N}(E[x_t],q)\)</span>.</p>
-<p>We are going to need to put a prior on <span class="math inline">\(x_0\)</span>, which appears in <span class="math inline">\(E[x_1]\)</span>. We could start with <span class="math inline">\(t=2\)</span> and skip this but we will start at <span class="math inline">\(t=1\)</span> since we will need to do that for later problems. The question is what prior should we put on <span class="math inline">\(x_0\)</span>? This is not a stationary process. We will just put a vague prior on <span class="math inline">\(x_0\)</span>.</p>
+Now <span class="math inline">\(x_t\)</span> is stochastic and <span class="math inline">\(E[X_t] = x_{t-1} + u\)</span> and <span class="math inline">\(X_t \sim \,\text{N}(E[X_t],q)\)</span>.</p>
+<p>We are going to need to put a prior on <span class="math inline">\(x_0\)</span>, which appears in <span class="math inline">\(E[X_1]\)</span>. We could start with <span class="math inline">\(t=2\)</span> and skip this but we will start at <span class="math inline">\(t=1\)</span> since we will need to do that for later problems. The question is what prior should we put on <span class="math inline">\(x_0\)</span>? This is not a stationary process. We will just put a vague prior on <span class="math inline">\(x_0\)</span>.</p>
 <p>The JAGS random walk model is:</p>
-<div class="sourceCode" id="cb618"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb618-1"><a href="sec-jags-univariate.html#cb618-1" aria-hidden="true" tabindex="-1"></a><span class="co"># RANDOM WALK with drift</span></span>
-<span id="cb618-2"><a href="sec-jags-univariate.html#cb618-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb618-3"><a href="sec-jags-univariate.html#cb618-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;rw_intercept.txt&quot;</span>)</span>
-<span id="cb618-4"><a href="sec-jags-univariate.html#cb618-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb618-5"><a href="sec-jags-univariate.html#cb618-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb618-6"><a href="sec-jags-univariate.html#cb618-6" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb618-7"><a href="sec-jags-univariate.html#cb618-7" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb618-8"><a href="sec-jags-univariate.html#cb618-8" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
-<span id="cb618-9"><a href="sec-jags-univariate.html#cb618-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb618-10"><a href="sec-jags-univariate.html#cb618-10" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, 0.001);</span></span>
-<span id="cb618-11"><a href="sec-jags-univariate.html#cb618-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
-<span id="cb618-12"><a href="sec-jags-univariate.html#cb618-12" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb618-13"><a href="sec-jags-univariate.html#cb618-13" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(X[i-1] + u, inv.q);</span></span>
-<span id="cb618-14"><a href="sec-jags-univariate.html#cb618-14" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb618-15"><a href="sec-jags-univariate.html#cb618-15" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb618-16"><a href="sec-jags-univariate.html#cb618-16" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb618-17"><a href="sec-jags-univariate.html#cb618-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
+<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb619-1"><a href="sec-jags-univariate.html#cb619-1" aria-hidden="true" tabindex="-1"></a><span class="co"># RANDOM WALK with drift</span></span>
+<span id="cb619-2"><a href="sec-jags-univariate.html#cb619-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb619-3"><a href="sec-jags-univariate.html#cb619-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;rw_intercept.txt&quot;</span>)</span>
+<span id="cb619-4"><a href="sec-jags-univariate.html#cb619-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb619-5"><a href="sec-jags-univariate.html#cb619-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb619-6"><a href="sec-jags-univariate.html#cb619-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb619-7"><a href="sec-jags-univariate.html#cb619-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb619-8"><a href="sec-jags-univariate.html#cb619-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb619-9"><a href="sec-jags-univariate.html#cb619-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
+<span id="cb619-10"><a href="sec-jags-univariate.html#cb619-10" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, 0.001);</span></span>
+<span id="cb619-11"><a href="sec-jags-univariate.html#cb619-11" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb619-12"><a href="sec-jags-univariate.html#cb619-12" aria-hidden="true" tabindex="-1"></a><span class="st">   # likelihood</span></span>
+<span id="cb619-13"><a href="sec-jags-univariate.html#cb619-13" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
+<span id="cb619-14"><a href="sec-jags-univariate.html#cb619-14" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
+<span id="cb619-15"><a href="sec-jags-univariate.html#cb619-15" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(X[i-1] + u, inv.q);</span></span>
+<span id="cb619-16"><a href="sec-jags-univariate.html#cb619-16" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb619-17"><a href="sec-jags-univariate.html#cb619-17" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb619-18"><a href="sec-jags-univariate.html#cb619-18" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb619-19"><a href="sec-jags-univariate.html#cb619-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
 <p>To fit this model, we need to change <code>jags.data</code> to pass in <code>X = Wind</code> instead of <code>Y = Wind</code>. Obvioously we could have written the JAGS code with <code>Y</code> in place of <code>X</code> and kept our <code>jags.data</code> code the same as before, but we are working up to a state-space model where we have a hidden random walk called <code>X</code> and an observation of that called <code>Y</code>.</p>
-<div class="sourceCode" id="cb619"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb619-1"><a href="sec-jags-univariate.html#cb619-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> Wind, <span class="at">N =</span> N)</span>
-<span id="cb619-2"><a href="sec-jags-univariate.html#cb619-2" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
-<span id="cb619-3"><a href="sec-jags-univariate.html#cb619-3" aria-hidden="true" tabindex="-1"></a>mod_rw_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb619-4"><a href="sec-jags-univariate.html#cb619-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb619-5"><a href="sec-jags-univariate.html#cb619-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb620-1"><a href="sec-jags-univariate.html#cb620-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> Wind, <span class="at">N =</span> N)</span>
+<span id="cb620-2"><a href="sec-jags-univariate.html#cb620-2" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
+<span id="cb620-3"><a href="sec-jags-univariate.html#cb620-3" aria-hidden="true" tabindex="-1"></a>mod_rw_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb620-4"><a href="sec-jags-univariate.html#cb620-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb620-5"><a href="sec-jags-univariate.html#cb620-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="sec-jags-ar1" class="section level3" number="12.2.4">
 <h3><span class="header-section-number">12.2.4</span> Autoregressive AR(1) time series models</h3>
@@ -824,32 +857,35 @@ Now <span class="math inline">\(x_t\)</span> is stochastic and <span class="math
 x_t = b \, x_{t-1} + u + w_t, \text{ where }w_t \sim \,\text{N}(0,q)
 \tag{12.5}
 \end{equation}\]</span>
-Now <span class="math inline">\(E[x_t] = b \, x_{t-1} + u\)</span>.</p>
-<p>Once again we need to put a prior on <span class="math inline">\(x_0\)</span>, which appears in <span class="math inline">\(E[x_1]\)</span>. An AR(1) with <span class="math inline">\(|b|&lt;1\)</span> is a stationary process and the variance of the stationary distribution of <span class="math inline">\(x_t\)</span> is <span class="math inline">\(q/(1-b^2)\)</span>. If you think that <span class="math inline">\(x_0\)</span> has the stationary distribution (does your data look stationary?) then you can use the variance of the stationary distribution of <span class="math inline">\(x_t\)</span> for your prior. We specify priors with the precision (1 over the variance) instead of the variance. Thus the precision of the stationary distribution of <span class="math inline">\(x_0\)</span> is <span class="math inline">\((1/q)(1-b^2)\)</span>. In the code, <code>inv.q</code> is <span class="math inline">\(1/q\)</span> and the precision is <code>inv.q * (1-b*b)</code>.</p>
-<div class="sourceCode" id="cb620"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb620-1"><a href="sec-jags-univariate.html#cb620-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT</span></span>
-<span id="cb620-2"><a href="sec-jags-univariate.html#cb620-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb620-3"><a href="sec-jags-univariate.html#cb620-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ar1_intercept.txt&quot;</span>)</span>
-<span id="cb620-4"><a href="sec-jags-univariate.html#cb620-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb620-5"><a href="sec-jags-univariate.html#cb620-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb620-6"><a href="sec-jags-univariate.html#cb620-6" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb620-7"><a href="sec-jags-univariate.html#cb620-7" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb620-8"><a href="sec-jags-univariate.html#cb620-8" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; </span></span>
-<span id="cb620-9"><a href="sec-jags-univariate.html#cb620-9" aria-hidden="true" tabindex="-1"></a><span class="st">   b ~ dunif(-1,1);</span></span>
-<span id="cb620-10"><a href="sec-jags-univariate.html#cb620-10" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
-<span id="cb620-11"><a href="sec-jags-univariate.html#cb620-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, inv.q * (1 - b * b));</span></span>
-<span id="cb620-12"><a href="sec-jags-univariate.html#cb620-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(b * X0 + u, inv.q);</span></span>
-<span id="cb620-13"><a href="sec-jags-univariate.html#cb620-13" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb620-14"><a href="sec-jags-univariate.html#cb620-14" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(b * X[i-1] + u, inv.q);</span></span>
-<span id="cb620-15"><a href="sec-jags-univariate.html#cb620-15" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb620-16"><a href="sec-jags-univariate.html#cb620-16" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb620-17"><a href="sec-jags-univariate.html#cb620-17" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb620-18"><a href="sec-jags-univariate.html#cb620-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
-<span id="cb620-19"><a href="sec-jags-univariate.html#cb620-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb620-20"><a href="sec-jags-univariate.html#cb620-20" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> Wind, <span class="at">N =</span> N)</span>
-<span id="cb620-21"><a href="sec-jags-univariate.html#cb620-21" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
-<span id="cb620-22"><a href="sec-jags-univariate.html#cb620-22" aria-hidden="true" tabindex="-1"></a>mod_ar1_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb620-23"><a href="sec-jags-univariate.html#cb620-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb620-24"><a href="sec-jags-univariate.html#cb620-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+Now <span class="math inline">\(E[X_t] = b \, x_{t-1} + u\)</span>.</p>
+<p>Once again we need to put a prior on <span class="math inline">\(x_0\)</span>, which appears in <span class="math inline">\(E[X_1]\)</span>. An AR(1) with <span class="math inline">\(|b|&lt;1\)</span> is a stationary process and the variance of the stationary distribution of <span class="math inline">\(x_t\)</span> is <span class="math inline">\(q/(1-b^2)\)</span>. If you think that <span class="math inline">\(x_0\)</span> has the stationary distribution (does your data look stationary?) then you can use the variance of the stationary distribution of <span class="math inline">\(x_t\)</span> for your prior. We specify priors with the precision (1 over the variance) instead of the variance. Thus the precision of the stationary distribution of <span class="math inline">\(x_0\)</span> is <span class="math inline">\((1/q)(1-b^2)\)</span>. In the code, <code>inv.q</code> is <span class="math inline">\(1/q\)</span> and the precision is <code>inv.q * (1-b*b)</code>.</p>
+<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb621-1"><a href="sec-jags-univariate.html#cb621-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AR(1) MODEL WITH AND ESTIMATED AR COEFFICIENT</span></span>
+<span id="cb621-2"><a href="sec-jags-univariate.html#cb621-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-3"><a href="sec-jags-univariate.html#cb621-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ar1_intercept.txt&quot;</span>)</span>
+<span id="cb621-4"><a href="sec-jags-univariate.html#cb621-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb621-5"><a href="sec-jags-univariate.html#cb621-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb621-6"><a href="sec-jags-univariate.html#cb621-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb621-7"><a href="sec-jags-univariate.html#cb621-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb621-8"><a href="sec-jags-univariate.html#cb621-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb621-9"><a href="sec-jags-univariate.html#cb621-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; </span></span>
+<span id="cb621-10"><a href="sec-jags-univariate.html#cb621-10" aria-hidden="true" tabindex="-1"></a><span class="st">   b ~ dunif(-1,1);</span></span>
+<span id="cb621-11"><a href="sec-jags-univariate.html#cb621-11" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, inv.q * (1 - b * b));</span></span>
+<span id="cb621-12"><a href="sec-jags-univariate.html#cb621-12" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb621-13"><a href="sec-jags-univariate.html#cb621-13" aria-hidden="true" tabindex="-1"></a><span class="st">   # likelihood</span></span>
+<span id="cb621-14"><a href="sec-jags-univariate.html#cb621-14" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(b * X0 + u, inv.q);</span></span>
+<span id="cb621-15"><a href="sec-jags-univariate.html#cb621-15" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
+<span id="cb621-16"><a href="sec-jags-univariate.html#cb621-16" aria-hidden="true" tabindex="-1"></a><span class="st">      X[t] ~ dnorm(b * X[t-1] + u, inv.q);</span></span>
+<span id="cb621-17"><a href="sec-jags-univariate.html#cb621-17" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb621-18"><a href="sec-jags-univariate.html#cb621-18" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb621-19"><a href="sec-jags-univariate.html#cb621-19" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb621-20"><a href="sec-jags-univariate.html#cb621-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
+<span id="cb621-21"><a href="sec-jags-univariate.html#cb621-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-22"><a href="sec-jags-univariate.html#cb621-22" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">X =</span> Wind, <span class="at">N =</span> N)</span>
+<span id="cb621-23"><a href="sec-jags-univariate.html#cb621-23" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
+<span id="cb621-24"><a href="sec-jags-univariate.html#cb621-24" aria-hidden="true" tabindex="-1"></a>mod_ar1_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb621-25"><a href="sec-jags-univariate.html#cb621-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb621-26"><a href="sec-jags-univariate.html#cb621-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>module glm loaded</code></pre>
 </div>
 <div id="sec-jags-regression-with-corr-errors2" class="section level3" number="12.2.5">
 <h3><span class="header-section-number">12.2.5</span> Regression with AR(1) errors</h3>
@@ -861,45 +897,46 @@ y_t = a + x_t
 \end{gathered}
 \tag{12.6}
 \end{equation}\]</span></p>
-<p>The problem with this is that we need a distribution for <span class="math inline">\(y_t\)</span>. We cannot use <code>Y[i] &lt;- a + X[i]</code> in our JAGS code. We need to re-write this as <span class="math inline">\(y_t \sim N(a + b \, x_{t-1}, q)\)</span>.</p>
+<p>The problem with this is that we need a distribution for <span class="math inline">\(y_t\)</span>. We cannot use <code>Y[t] &lt;- a + X[t]</code> in our JAGS code (<span class="math inline">\(Y_t\)</span> is a random varible with a distribution; you cannot assign it a value). We need to re-write this as <span class="math inline">\(Y_t \sim N(a + b \, x_{t-1}, q)\)</span>.</p>
 <p><span class="math display" id="eq:jags-obs-eqn-lmar2b">\[\begin{equation}
 \begin{gathered}
-y_t \sim N(a + b \, x_{t-1}, q) \\
+Y_t \sim N(a + b \, x_{t-1}, q) \\
 x_t = y_t - a
 \end{gathered}
 \tag{12.7}
 \end{equation}\]</span></p>
-<p>We will create the variable <code>EY</code> so we can keep track of our <span class="math inline">\(y_t\)</span> predictions, conditioned on <span class="math inline">\(t-1\)</span>.</p>
-<div class="sourceCode" id="cb621"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb621-1"><a href="sec-jags-univariate.html#cb621-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LINEAR REGRESSION with autocorrelated errors no covariates,</span></span>
-<span id="cb621-2"><a href="sec-jags-univariate.html#cb621-2" aria-hidden="true" tabindex="-1"></a><span class="co"># intercept only.</span></span>
-<span id="cb621-3"><a href="sec-jags-univariate.html#cb621-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb621-4"><a href="sec-jags-univariate.html#cb621-4" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;lm_intercept_ar1b.txt&quot;</span>)</span>
-<span id="cb621-5"><a href="sec-jags-univariate.html#cb621-5" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb621-6"><a href="sec-jags-univariate.html#cb621-6" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb621-7"><a href="sec-jags-univariate.html#cb621-7" aria-hidden="true" tabindex="-1"></a><span class="st">   a ~ dnorm(0, 0.01); </span></span>
-<span id="cb621-8"><a href="sec-jags-univariate.html#cb621-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb621-9"><a href="sec-jags-univariate.html#cb621-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; </span></span>
-<span id="cb621-10"><a href="sec-jags-univariate.html#cb621-10" aria-hidden="true" tabindex="-1"></a><span class="st">   b ~ dunif(-1,1);</span></span>
-<span id="cb621-11"><a href="sec-jags-univariate.html#cb621-11" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
-<span id="cb621-12"><a href="sec-jags-univariate.html#cb621-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, inv.q * (1 - b * b));</span></span>
-<span id="cb621-13"><a href="sec-jags-univariate.html#cb621-13" aria-hidden="true" tabindex="-1"></a><span class="st">   # t=1</span></span>
-<span id="cb621-14"><a href="sec-jags-univariate.html#cb621-14" aria-hidden="true" tabindex="-1"></a><span class="st">   EY[1] = a + b * X0;</span></span>
-<span id="cb621-15"><a href="sec-jags-univariate.html#cb621-15" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnorm(EY[1], inv.q);</span></span>
-<span id="cb621-16"><a href="sec-jags-univariate.html#cb621-16" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] &lt;- Y[1] - a;</span></span>
-<span id="cb621-17"><a href="sec-jags-univariate.html#cb621-17" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb621-18"><a href="sec-jags-univariate.html#cb621-18" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] = a + b * X[i-1];</span></span>
-<span id="cb621-19"><a href="sec-jags-univariate.html#cb621-19" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[1], inv.q);</span></span>
-<span id="cb621-20"><a href="sec-jags-univariate.html#cb621-20" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] &lt;- Y[i]-a;</span></span>
-<span id="cb621-21"><a href="sec-jags-univariate.html#cb621-21" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb621-22"><a href="sec-jags-univariate.html#cb621-22" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb621-23"><a href="sec-jags-univariate.html#cb621-23" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb621-24"><a href="sec-jags-univariate.html#cb621-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
-<span id="cb621-25"><a href="sec-jags-univariate.html#cb621-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb621-26"><a href="sec-jags-univariate.html#cb621-26" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N)</span>
-<span id="cb621-27"><a href="sec-jags-univariate.html#cb621-27" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
-<span id="cb621-28"><a href="sec-jags-univariate.html#cb621-28" aria-hidden="true" tabindex="-1"></a>mod_ar1_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb621-29"><a href="sec-jags-univariate.html#cb621-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb621-30"><a href="sec-jags-univariate.html#cb621-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>We will create the variable <code>EY</code> so we can keep track of the expected value of <span class="math inline">\(Y_t\)</span>, conditioned on <span class="math inline">\(t-1\)</span>.</p>
+<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb623-1"><a href="sec-jags-univariate.html#cb623-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LINEAR REGRESSION with autocorrelated errors no</span></span>
+<span id="cb623-2"><a href="sec-jags-univariate.html#cb623-2" aria-hidden="true" tabindex="-1"></a><span class="co"># covariates, intercept only.</span></span>
+<span id="cb623-3"><a href="sec-jags-univariate.html#cb623-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb623-4"><a href="sec-jags-univariate.html#cb623-4" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;lm_intercept_ar1b.txt&quot;</span>)</span>
+<span id="cb623-5"><a href="sec-jags-univariate.html#cb623-5" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb623-6"><a href="sec-jags-univariate.html#cb623-6" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb623-7"><a href="sec-jags-univariate.html#cb623-7" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb623-8"><a href="sec-jags-univariate.html#cb623-8" aria-hidden="true" tabindex="-1"></a><span class="st">   a ~ dnorm(0, 0.01); </span></span>
+<span id="cb623-9"><a href="sec-jags-univariate.html#cb623-9" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb623-10"><a href="sec-jags-univariate.html#cb623-10" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; </span></span>
+<span id="cb623-11"><a href="sec-jags-univariate.html#cb623-11" aria-hidden="true" tabindex="-1"></a><span class="st">   b ~ dunif(-1,1);</span></span>
+<span id="cb623-12"><a href="sec-jags-univariate.html#cb623-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(0, inv.q * (1 - b * b));</span></span>
+<span id="cb623-13"><a href="sec-jags-univariate.html#cb623-13" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb623-14"><a href="sec-jags-univariate.html#cb623-14" aria-hidden="true" tabindex="-1"></a><span class="st">   # likelihood</span></span>
+<span id="cb623-15"><a href="sec-jags-univariate.html#cb623-15" aria-hidden="true" tabindex="-1"></a><span class="st">   EY[1] &lt;- a + b * X0;</span></span>
+<span id="cb623-16"><a href="sec-jags-univariate.html#cb623-16" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnorm(EY[1], inv.q);</span></span>
+<span id="cb623-17"><a href="sec-jags-univariate.html#cb623-17" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] &lt;- Y[1] - a;</span></span>
+<span id="cb623-18"><a href="sec-jags-univariate.html#cb623-18" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
+<span id="cb623-19"><a href="sec-jags-univariate.html#cb623-19" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[t] &lt;- a + b * X[t-1];</span></span>
+<span id="cb623-20"><a href="sec-jags-univariate.html#cb623-20" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[t] ~ dnorm(EY[1], inv.q);</span></span>
+<span id="cb623-21"><a href="sec-jags-univariate.html#cb623-21" aria-hidden="true" tabindex="-1"></a><span class="st">      X[t] &lt;- Y[t]-a;</span></span>
+<span id="cb623-22"><a href="sec-jags-univariate.html#cb623-22" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb623-23"><a href="sec-jags-univariate.html#cb623-23" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb623-24"><a href="sec-jags-univariate.html#cb623-24" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb623-25"><a href="sec-jags-univariate.html#cb623-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span>
+<span id="cb623-26"><a href="sec-jags-univariate.html#cb623-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb623-27"><a href="sec-jags-univariate.html#cb623-27" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N)</span>
+<span id="cb623-28"><a href="sec-jags-univariate.html#cb623-28" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>)</span>
+<span id="cb623-29"><a href="sec-jags-univariate.html#cb623-29" aria-hidden="true" tabindex="-1"></a>mod_ar1_intercept <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb623-30"><a href="sec-jags-univariate.html#cb623-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb623-31"><a href="sec-jags-univariate.html#cb623-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 <div id="sec-jags-uss" class="section level3" number="12.2.6">
 <h3><span class="header-section-number">12.2.6</span> Univariate state space model</h3>
@@ -912,36 +949,37 @@ y_t = x_t + v_t, \, v_t \sim \,\text{N}(0, r)
 \tag{12.8}
 \end{equation}\]</span></p>
 <p>Because <span class="math inline">\(x\)</span> is a random walk model not a stationary AR(1), we will place a vague weakly informative prior on <span class="math inline">\(x_0\)</span>: <span class="math inline">\(x_0 \sim \,\text{N}(y_1, 1000)\)</span>. We had to pass in <code>Y1</code> as data because JAGS would complain if we used <code>Y[1]</code> in our prior (because have <code>X0</code> in our model for <span class="math inline">\(Y[1]\)</span>). <code>EY</code> is added so that we can track the model fits for <span class="math inline">\(y\)</span>. In this case it is just <code>X</code> but in more complex models it will involve more parameters.</p>
-<div class="sourceCode" id="cb622"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb622-1"><a href="sec-jags-univariate.html#cb622-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. MAKE THE SS MODEL for a stochastic level model</span></span>
-<span id="cb622-2"><a href="sec-jags-univariate.html#cb622-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb622-3"><a href="sec-jags-univariate.html#cb622-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model.txt&quot;</span>)</span>
-<span id="cb622-4"><a href="sec-jags-univariate.html#cb622-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb622-5"><a href="sec-jags-univariate.html#cb622-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb622-6"><a href="sec-jags-univariate.html#cb622-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
-<span id="cb622-7"><a href="sec-jags-univariate.html#cb622-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
-<span id="cb622-8"><a href="sec-jags-univariate.html#cb622-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
-<span id="cb622-9"><a href="sec-jags-univariate.html#cb622-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
-<span id="cb622-10"><a href="sec-jags-univariate.html#cb622-10" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001);</span></span>
-<span id="cb622-11"><a href="sec-jags-univariate.html#cb622-11" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; </span></span>
-<span id="cb622-12"><a href="sec-jags-univariate.html#cb622-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(Y1, 0.001);</span></span>
-<span id="cb622-13"><a href="sec-jags-univariate.html#cb622-13" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
-<span id="cb622-14"><a href="sec-jags-univariate.html#cb622-14" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
-<span id="cb622-15"><a href="sec-jags-univariate.html#cb622-15" aria-hidden="true" tabindex="-1"></a><span class="st">   EY[1] &lt;- X[1];</span></span>
-<span id="cb622-16"><a href="sec-jags-univariate.html#cb622-16" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnorm(EY[1], inv.r);</span></span>
-<span id="cb622-17"><a href="sec-jags-univariate.html#cb622-17" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:N) {</span></span>
-<span id="cb622-18"><a href="sec-jags-univariate.html#cb622-18" aria-hidden="true" tabindex="-1"></a><span class="st">      X[i] ~ dnorm(X[i-1] + u, inv.q);</span></span>
-<span id="cb622-19"><a href="sec-jags-univariate.html#cb622-19" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[i] &lt;- X[i];</span></span>
-<span id="cb622-20"><a href="sec-jags-univariate.html#cb622-20" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[i] ~ dnorm(EY[i], inv.r); </span></span>
-<span id="cb622-21"><a href="sec-jags-univariate.html#cb622-21" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb622-22"><a href="sec-jags-univariate.html#cb622-22" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb622-23"><a href="sec-jags-univariate.html#cb622-23" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb622-24"><a href="sec-jags-univariate.html#cb622-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
+<div class="sourceCode" id="cb624"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb624-1"><a href="sec-jags-univariate.html#cb624-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. MAKE THE SS MODEL for a stochastic level model</span></span>
+<span id="cb624-2"><a href="sec-jags-univariate.html#cb624-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb624-3"><a href="sec-jags-univariate.html#cb624-3" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> (<span class="st">&quot;ss_model.txt&quot;</span>)</span>
+<span id="cb624-4"><a href="sec-jags-univariate.html#cb624-4" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb624-5"><a href="sec-jags-univariate.html#cb624-5" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb624-6"><a href="sec-jags-univariate.html#cb624-6" aria-hidden="true" tabindex="-1"></a><span class="st">   # priors on parameters</span></span>
+<span id="cb624-7"><a href="sec-jags-univariate.html#cb624-7" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); </span></span>
+<span id="cb624-8"><a href="sec-jags-univariate.html#cb624-8" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q ~ dgamma(0.001,0.001); </span></span>
+<span id="cb624-9"><a href="sec-jags-univariate.html#cb624-9" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q;</span></span>
+<span id="cb624-10"><a href="sec-jags-univariate.html#cb624-10" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.r ~ dgamma(0.001,0.001);</span></span>
+<span id="cb624-11"><a href="sec-jags-univariate.html#cb624-11" aria-hidden="true" tabindex="-1"></a><span class="st">   r &lt;- 1/inv.r; </span></span>
+<span id="cb624-12"><a href="sec-jags-univariate.html#cb624-12" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(Y1, 0.001);</span></span>
+<span id="cb624-13"><a href="sec-jags-univariate.html#cb624-13" aria-hidden="true" tabindex="-1"></a><span class="st">   </span></span>
+<span id="cb624-14"><a href="sec-jags-univariate.html#cb624-14" aria-hidden="true" tabindex="-1"></a><span class="st">   # likelihood</span></span>
+<span id="cb624-15"><a href="sec-jags-univariate.html#cb624-15" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(X0 + u, inv.q);</span></span>
+<span id="cb624-16"><a href="sec-jags-univariate.html#cb624-16" aria-hidden="true" tabindex="-1"></a><span class="st">   EY[1] &lt;- X[1];</span></span>
+<span id="cb624-17"><a href="sec-jags-univariate.html#cb624-17" aria-hidden="true" tabindex="-1"></a><span class="st">   Y[1] ~ dnorm(EY[1], inv.r);</span></span>
+<span id="cb624-18"><a href="sec-jags-univariate.html#cb624-18" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
+<span id="cb624-19"><a href="sec-jags-univariate.html#cb624-19" aria-hidden="true" tabindex="-1"></a><span class="st">      X[t] ~ dnorm(X[t-1] + u, inv.q);</span></span>
+<span id="cb624-20"><a href="sec-jags-univariate.html#cb624-20" aria-hidden="true" tabindex="-1"></a><span class="st">      EY[t] &lt;- X[t];</span></span>
+<span id="cb624-21"><a href="sec-jags-univariate.html#cb624-21" aria-hidden="true" tabindex="-1"></a><span class="st">      Y[t] ~ dnorm(EY[t], inv.r); </span></span>
+<span id="cb624-22"><a href="sec-jags-univariate.html#cb624-22" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb624-23"><a href="sec-jags-univariate.html#cb624-23" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb624-24"><a href="sec-jags-univariate.html#cb624-24" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb624-25"><a href="sec-jags-univariate.html#cb624-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> model.loc)</span></code></pre></div>
 <p>We fit as usual with the addition of <code>Y1</code> in <code>jags.data</code>.</p>
-<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb623-1"><a href="sec-jags-univariate.html#cb623-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N, <span class="at">Y1 =</span> Wind[<span class="dv">1</span>])</span>
-<span id="cb623-2"><a href="sec-jags-univariate.html#cb623-2" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
-<span id="cb623-3"><a href="sec-jags-univariate.html#cb623-3" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
-<span id="cb623-4"><a href="sec-jags-univariate.html#cb623-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
-<span id="cb623-5"><a href="sec-jags-univariate.html#cb623-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb625-1"><a href="sec-jags-univariate.html#cb625-1" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> Wind, <span class="at">N =</span> N, <span class="at">Y1 =</span> Wind[<span class="dv">1</span>])</span>
+<span id="cb625-2"><a href="sec-jags-univariate.html#cb625-2" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>)</span>
+<span id="cb625-3"><a href="sec-jags-univariate.html#cb625-3" aria-hidden="true" tabindex="-1"></a>mod_ss <span class="ot">&lt;-</span> <span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, <span class="at">model.file =</span> model.loc, </span>
+<span id="cb625-4"><a href="sec-jags-univariate.html#cb625-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, <span class="at">n.iter =</span> <span class="dv">10000</span>, </span>
+<span id="cb625-5"><a href="sec-jags-univariate.html#cb625-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
 </div>
             </section>
@@ -973,6 +1011,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {

@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>15.3 Using DLMs to estimate changing season | Applied Time Series Analysis for Fisheries and Environmental Sciences</title>
   <meta name="description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
   <meta property="og:title" content="15.3 Using DLMs to estimate changing season | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:image" content="/images/cover.png" />
   <meta property="og:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
   
 
@@ -19,12 +19,12 @@
   <meta name="twitter:title" content="15.3 Using DLMs to estimate changing season | Applied Time Series Analysis for Fisheries and Environmental Sciences" />
   
   <meta name="twitter:description" content="These are the computer labs for Fish 507: Applied Time Series Analysis for Fisheries and Environmental Sciences." />
-  <meta name="twitter:image" content="images/cover.png" />
+  <meta name="twitter:image" content="/images/cover.png" />
 
 <meta name="author" content="E. E. Holmes, M. D. Scheuerell, and E. J. Ward" />
 
 
-<meta name="date" content="2021-03-01" />
+<meta name="date" content="2021-07-28" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +33,7 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <link rel="prev" href="time-varying-seasonality-and-amplitude.html"/>
 <link rel="next" href="time-varying-amplitude.html"/>
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -51,6 +51,8 @@
 
 
 
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
@@ -117,6 +119,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -138,6 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#book-package"><i class="fa fa-check"></i>Book package</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#authors"><i class="fa fa-check"></i>Authors</a></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#citation"><i class="fa fa-check"></i>Citation</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#license"><i class="fa fa-check"></i>License</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="chap-basicmat.html"><a href="chap-basicmat.html"><i class="fa fa-check"></i><b>1</b> Basic matrix math in R</a>
 <ul>
@@ -487,6 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.4" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html"><i class="fa fa-check"></i><b>12.4</b> Non-Gaussian observation errors</a>
 <ul>
 <li class="chapter" data-level="12.4.1" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-poisson"><i class="fa fa-check"></i><b>12.4.1</b> Poisson observation errors</a></li>
+<li class="chapter" data-level="12.4.2" data-path="sec-jags-non-gaussian.html"><a href="sec-jags-non-gaussian.html#sec-jags-negbin"><i class="fa fa-check"></i><b>12.4.2</b> Negative binomial observation errors</a></li>
 </ul></li>
 <li class="chapter" data-level="12.5" data-path="sec-jags-forecast.html"><a href="sec-jags-forecast.html"><i class="fa fa-check"></i><b>12.5</b> Forecasting with JAGS models</a></li>
 <li class="chapter" data-level="12.6" data-path="sec-jags-problems.html"><a href="sec-jags-problems.html"><i class="fa fa-check"></i><b>12.6</b> Problems</a></li>
@@ -598,16 +625,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span class="math display">\[y_t = \begin{bmatrix}1&amp; \sin(2\pi t/p)&amp;\cos(2\pi t/p)\end{bmatrix} \begin{bmatrix}x \\ \beta_1 \\ \beta_2 \end{bmatrix}_t + v_t\]</span></p>
 <p>We can fit the model to the <span class="math inline">\(y_t\)</span> data and estimate the <span class="math inline">\(\beta\)</span>’s and <span class="math inline">\(\alpha\)</span>. We specify this one-to-one in R for <code>MARSS()</code>.</p>
 <p><code>Z</code> is time-varying and we set this up with an array with the 3rd dimension being time.</p>
-<div class="sourceCode" id="cb713"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb713-1"><a href="using-dlms-to-estimate-changing-season.html#cb713-1" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, TT))</span>
-<span id="cb713-2"><a href="using-dlms-to-estimate-changing-season.html#cb713-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>, ] <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
-<span id="cb713-3"><a href="using-dlms-to-estimate-changing-season.html#cb713-3" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">1</span>, <span class="dv">3</span>, ] <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb719-1"><a href="using-dlms-to-estimate-changing-season.html#cb719-1" aria-hidden="true" tabindex="-1"></a>Z <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">1</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, TT))</span>
+<span id="cb719-2"><a href="using-dlms-to-estimate-changing-season.html#cb719-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">1</span>, <span class="dv">2</span>, ] <span class="ot">&lt;-</span> <span class="fu">sin</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span>
+<span id="cb719-3"><a href="using-dlms-to-estimate-changing-season.html#cb719-3" aria-hidden="true" tabindex="-1"></a>Z[<span class="dv">1</span>, <span class="dv">3</span>, ] <span class="ot">&lt;-</span> <span class="fu">cos</span>(<span class="dv">2</span> <span class="sc">*</span> pi <span class="sc">*</span> (<span class="dv">1</span><span class="sc">:</span>TT)<span class="sc">/</span><span class="dv">12</span>)</span></code></pre></div>
 <p>Then we make our model list. We need to set <code>A</code> since <code>MARSS()</code> doesn’t like the default value of <code>scaling</code> when <code>Z</code> is time-varying.</p>
-<div class="sourceCode" id="cb714"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb714-1"><a href="using-dlms-to-estimate-changing-season.html#cb714-1" aria-hidden="true" tabindex="-1"></a>mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="at">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, <span class="at">Z =</span> Z, </span>
-<span id="cb714-2"><a href="using-dlms-to-estimate-changing-season.html#cb714-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">A =</span> <span class="st">&quot;zero&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb720"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb720-1"><a href="using-dlms-to-estimate-changing-season.html#cb720-1" aria-hidden="true" tabindex="-1"></a>mod.list <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">U =</span> <span class="st">&quot;zero&quot;</span>, <span class="at">Q =</span> <span class="st">&quot;diagonal and unequal&quot;</span>, <span class="at">Z =</span> Z, </span>
+<span id="cb720-2"><a href="using-dlms-to-estimate-changing-season.html#cb720-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">A =</span> <span class="st">&quot;zero&quot;</span>)</span></code></pre></div>
 <p>When we fit the model we need to give <code>MARSS()</code> initial values for <code>x0</code>. It cannot come up with default ones for this model. It doesn’t really matter what you pick.</p>
-<div class="sourceCode" id="cb715"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb715-1"><a href="using-dlms-to-estimate-changing-season.html#cb715-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(MARSS)</span>
-<span id="cb715-2"><a href="using-dlms-to-estimate-changing-season.html#cb715-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(yt, <span class="at">model =</span> mod.list, <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">x0 =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
-<span id="cb715-3"><a href="using-dlms-to-estimate-changing-season.html#cb715-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>, <span class="dv">1</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb721"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb721-1"><a href="using-dlms-to-estimate-changing-season.html#cb721-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(MARSS)</span>
+<span id="cb721-2"><a href="using-dlms-to-estimate-changing-season.html#cb721-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(yt, <span class="at">model =</span> mod.list, <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">x0 =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb721-3"><a href="using-dlms-to-estimate-changing-season.html#cb721-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>, <span class="dv">1</span>)))</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 45 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -637,14 +664,14 @@ Use MARSSparamCIs to compute CIs and bias estimates.</code></pre>
 <p>We can compare the estimated cycles to the ones used in the simulation.</p>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-48-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>We can make this a bit harder by imagining that our data have missing values. Let’s imagine that we only observe half the months.</p>
-<div class="sourceCode" id="cb718"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb718-1"><a href="using-dlms-to-estimate-changing-season.html#cb718-1" aria-hidden="true" tabindex="-1"></a>yt.miss <span class="ot">&lt;-</span> yt</span>
-<span id="cb718-2"><a href="using-dlms-to-estimate-changing-season.html#cb718-2" aria-hidden="true" tabindex="-1"></a>yt.miss[<span class="fu">sample</span>(<span class="dv">100</span>, <span class="dv">50</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb718-3"><a href="using-dlms-to-estimate-changing-season.html#cb718-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(yt, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>)</span>
-<span id="cb718-4"><a href="using-dlms-to-estimate-changing-season.html#cb718-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(yt.miss)</span></code></pre></div>
+<div class="sourceCode" id="cb724"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb724-1"><a href="using-dlms-to-estimate-changing-season.html#cb724-1" aria-hidden="true" tabindex="-1"></a>yt.miss <span class="ot">&lt;-</span> yt</span>
+<span id="cb724-2"><a href="using-dlms-to-estimate-changing-season.html#cb724-2" aria-hidden="true" tabindex="-1"></a>yt.miss[<span class="fu">sample</span>(<span class="dv">100</span>, <span class="dv">50</span>)] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb724-3"><a href="using-dlms-to-estimate-changing-season.html#cb724-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(yt, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>)</span>
+<span id="cb724-4"><a href="using-dlms-to-estimate-changing-season.html#cb724-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(yt.miss)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-49-1.png" width="80%" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb719-1"><a href="using-dlms-to-estimate-changing-season.html#cb719-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(MARSS)</span>
-<span id="cb719-2"><a href="using-dlms-to-estimate-changing-season.html#cb719-2" aria-hidden="true" tabindex="-1"></a>fit.miss <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(yt.miss, <span class="at">model =</span> mod.list, <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">x0 =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
-<span id="cb719-3"><a href="using-dlms-to-estimate-changing-season.html#cb719-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>, <span class="dv">1</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb725"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb725-1"><a href="using-dlms-to-estimate-changing-season.html#cb725-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(MARSS)</span>
+<span id="cb725-2"><a href="using-dlms-to-estimate-changing-season.html#cb725-2" aria-hidden="true" tabindex="-1"></a>fit.miss <span class="ot">&lt;-</span> <span class="fu">MARSS</span>(yt.miss, <span class="at">model =</span> mod.list, <span class="at">inits =</span> <span class="fu">list</span>(<span class="at">x0 =</span> <span class="fu">matrix</span>(<span class="dv">0</span>, </span>
+<span id="cb725-3"><a href="using-dlms-to-estimate-changing-season.html#cb725-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">3</span>, <span class="dv">1</span>)))</span></code></pre></div>
 <pre><code>Success! abstol and log-log tests passed at 108 iterations.
 Alert: conv.test.slope.tol is 0.5.
 Test with smaller values (&lt;0.1) to ensure convergence.
@@ -702,6 +729,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
