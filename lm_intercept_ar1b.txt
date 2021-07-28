@@ -1,0 +1,19 @@
+
+model {  
+   # priors on parameters
+   a ~ dnorm(0, 0.01); 
+   inv.q ~ dgamma(0.001,0.001); 
+   q <- 1/inv.q; 
+   b ~ dunif(-1,1);
+   X0 ~ dnorm(0, inv.q * (1 - b * b));
+   
+   # likelihood
+   EY[1] <- a + b * X0;
+   Y[1] ~ dnorm(EY[1], inv.q);
+   X[1] <- Y[1] - a;
+   for(t in 2:N) {
+      EY[t] <- a + b * X[t-1];
+      Y[t] ~ dnorm(EY[1], inv.q);
+      X[t] <- Y[t]-a;
+   }
+}  

@@ -1,0 +1,15 @@
+
+model {  
+   # priors on parameters
+   u ~ dnorm(0, 0.01); 
+   C ~ dnorm(0,0.01);
+   inv.r ~ dgamma(0.001,0.001); 
+   r <- 1/inv.r; 
+   
+   # likelihood
+   for(i in 1:N) {
+      X[i] <- u + C*c[i];
+      EY[i] <- X[i]
+      Y[i] ~ dnorm(EY[i], inv.r);
+   }
+}  
