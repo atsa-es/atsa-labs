@@ -323,7 +323,7 @@ mod.list.corr = list(B=B, Q=Q, R=R, U=U, x0=x0, A=A, tinitx=0)
 
 Now we can fit a MARSS model and get estimates of the missing SWEs.  Convergence is slow.  We set $\mathbf{a}$ equal to the mean of the time series to speed convergence.
 
-```{r mssmiss-snotelfit-corr, results="hide"}
+```{r mssmiss-snotelfit-corr, results="hide", cache = TRUE}
 m <- apply(dat.feb, 1, mean, na.rm=TRUE)
 fit.corr <- MARSS(dat.feb, model=mod.list.corr, control=list(maxit=5000), 
                   inits=list(A=matrix(m,ns,1)))

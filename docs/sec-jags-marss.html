@@ -627,7 +627,7 @@ div.csl-indent {
 \mathbf{y}_t = \mathbf{Z}\mathbf{x}_t+\mathbf{a}+\mathbf{v}_t \text{ where } \mathbf{v}_t \sim \,\text{N}(0,\mathbf{R}) \\
 \mathbf{x}_0 = \boldsymbol{\mu}
 \end{gathered}   
-\tag{12.1}
+\tag{12.9}
 \end{equation}\]</span></p>
 <div id="one-hidden-state" class="section level3" number="12.3.1">
 <h3><span class="header-section-number">12.3.1</span> One hidden state</h3>
@@ -651,83 +651,83 @@ div.csl-indent {
     \,\text{MVN}\left(0, \begin{bmatrix}
     r_1&amp;0 \\
     0&amp;r_2\end{bmatrix}\right)
-\tag{12.9}
+\tag{12.10}
 \end{equation}\]</span></p>
 <p>We need to put a prior on our <span class="math inline">\(x_0\)</span> (initial <span class="math inline">\(x\)</span>). Since <span class="math inline">\(b=1\)</span>, we have a random walk rather than a stationary process and we will put a vague prior on the <span class="math inline">\(x_0\)</span>. We need to deal with the <span class="math inline">\(\mathbf{a}\)</span> so that our code doesn’t run in circles by trying to match <span class="math inline">\(x\)</span> up with different <span class="math inline">\(y_t\)</span> time series. We force <span class="math inline">\(x_t\)</span> to track the mean of <span class="math inline">\(y_{1,t}\)</span> and then use <span class="math inline">\(a_2\)</span> to scale the other <span class="math inline">\(y_t\)</span> relative to that. The problem is that a random walk is very flexible and if we tried to estimate <span class="math inline">\(a_1\)</span> then we would have infinite solutions.</p>
 <p>To keep our JAGS code organized, let’s separate the <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{y}\)</span> parts of the code.</p>
-<div class="sourceCode" id="cb626"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb626-1"><a href="sec-jags-marss.html#cb626-1" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb626-2"><a href="sec-jags-marss.html#cb626-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb626-3"><a href="sec-jags-marss.html#cb626-3" aria-hidden="true" tabindex="-1"></a><span class="st">   # process model priors</span></span>
-<span id="cb626-4"><a href="sec-jags-marss.html#cb626-4" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); # one u</span></span>
-<span id="cb626-5"><a href="sec-jags-marss.html#cb626-5" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q~dgamma(0.001,0.001);</span></span>
-<span id="cb626-6"><a href="sec-jags-marss.html#cb626-6" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; # one q</span></span>
-<span id="cb626-7"><a href="sec-jags-marss.html#cb626-7" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(Y1,0.001); # initial state</span></span>
-<span id="cb626-8"><a href="sec-jags-marss.html#cb626-8" aria-hidden="true" tabindex="-1"></a><span class="st">   # process model likelihood</span></span>
-<span id="cb626-9"><a href="sec-jags-marss.html#cb626-9" aria-hidden="true" tabindex="-1"></a><span class="st">   EX[1] &lt;- X0 + u;</span></span>
-<span id="cb626-10"><a href="sec-jags-marss.html#cb626-10" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(EX[1], inv.q);</span></span>
-<span id="cb626-11"><a href="sec-jags-marss.html#cb626-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
-<span id="cb626-12"><a href="sec-jags-marss.html#cb626-12" aria-hidden="true" tabindex="-1"></a><span class="st">         EX[t] &lt;- X[t-1] + u;</span></span>
-<span id="cb626-13"><a href="sec-jags-marss.html#cb626-13" aria-hidden="true" tabindex="-1"></a><span class="st">         X[t] ~ dnorm(EX[t], inv.q);</span></span>
-<span id="cb626-14"><a href="sec-jags-marss.html#cb626-14" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb626-15"><a href="sec-jags-marss.html#cb626-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb626-16"><a href="sec-jags-marss.html#cb626-16" aria-hidden="true" tabindex="-1"></a><span class="st">   # observation model priors</span></span>
-<span id="cb626-17"><a href="sec-jags-marss.html#cb626-17" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:n) { # r&#39;s differ by site</span></span>
-<span id="cb626-18"><a href="sec-jags-marss.html#cb626-18" aria-hidden="true" tabindex="-1"></a><span class="st">     inv.r[i]~dgamma(0.001,0.001);</span></span>
-<span id="cb626-19"><a href="sec-jags-marss.html#cb626-19" aria-hidden="true" tabindex="-1"></a><span class="st">     r[i] &lt;- 1/inv.r[i];</span></span>
-<span id="cb626-20"><a href="sec-jags-marss.html#cb626-20" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb626-21"><a href="sec-jags-marss.html#cb626-21" aria-hidden="true" tabindex="-1"></a><span class="st">   a[1] &lt;- 0; # first a is 0, rest estimated</span></span>
-<span id="cb626-22"><a href="sec-jags-marss.html#cb626-22" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:n) {</span></span>
-<span id="cb626-23"><a href="sec-jags-marss.html#cb626-23" aria-hidden="true" tabindex="-1"></a><span class="st">     a[i]~dnorm(0,0.001);</span></span>
-<span id="cb626-24"><a href="sec-jags-marss.html#cb626-24" aria-hidden="true" tabindex="-1"></a><span class="st">   }   </span></span>
-<span id="cb626-25"><a href="sec-jags-marss.html#cb626-25" aria-hidden="true" tabindex="-1"></a><span class="st">   # observation model likelihood</span></span>
-<span id="cb626-26"><a href="sec-jags-marss.html#cb626-26" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 1:N) {</span></span>
-<span id="cb626-27"><a href="sec-jags-marss.html#cb626-27" aria-hidden="true" tabindex="-1"></a><span class="st">     for(i in 1:n) {</span></span>
-<span id="cb626-28"><a href="sec-jags-marss.html#cb626-28" aria-hidden="true" tabindex="-1"></a><span class="st">       EY[i,t] &lt;- X[t]+a[i]</span></span>
-<span id="cb626-29"><a href="sec-jags-marss.html#cb626-29" aria-hidden="true" tabindex="-1"></a><span class="st">       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);</span></span>
-<span id="cb626-30"><a href="sec-jags-marss.html#cb626-30" aria-hidden="true" tabindex="-1"></a><span class="st">     }</span></span>
-<span id="cb626-31"><a href="sec-jags-marss.html#cb626-31" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb626-32"><a href="sec-jags-marss.html#cb626-32" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb626-33"><a href="sec-jags-marss.html#cb626-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb626-34"><a href="sec-jags-marss.html#cb626-34" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb626-35"><a href="sec-jags-marss.html#cb626-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;marss-jags1.txt&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb623"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb623-1"><a href="sec-jags-marss.html#cb623-1" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb623-2"><a href="sec-jags-marss.html#cb623-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb623-3"><a href="sec-jags-marss.html#cb623-3" aria-hidden="true" tabindex="-1"></a><span class="st">   # process model priors</span></span>
+<span id="cb623-4"><a href="sec-jags-marss.html#cb623-4" aria-hidden="true" tabindex="-1"></a><span class="st">   u ~ dnorm(0, 0.01); # one u</span></span>
+<span id="cb623-5"><a href="sec-jags-marss.html#cb623-5" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q~dgamma(0.001,0.001);</span></span>
+<span id="cb623-6"><a href="sec-jags-marss.html#cb623-6" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; # one q</span></span>
+<span id="cb623-7"><a href="sec-jags-marss.html#cb623-7" aria-hidden="true" tabindex="-1"></a><span class="st">   X0 ~ dnorm(Y1,0.001); # initial state</span></span>
+<span id="cb623-8"><a href="sec-jags-marss.html#cb623-8" aria-hidden="true" tabindex="-1"></a><span class="st">   # process model likelihood</span></span>
+<span id="cb623-9"><a href="sec-jags-marss.html#cb623-9" aria-hidden="true" tabindex="-1"></a><span class="st">   EX[1] &lt;- X0 + u;</span></span>
+<span id="cb623-10"><a href="sec-jags-marss.html#cb623-10" aria-hidden="true" tabindex="-1"></a><span class="st">   X[1] ~ dnorm(EX[1], inv.q);</span></span>
+<span id="cb623-11"><a href="sec-jags-marss.html#cb623-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
+<span id="cb623-12"><a href="sec-jags-marss.html#cb623-12" aria-hidden="true" tabindex="-1"></a><span class="st">         EX[t] &lt;- X[t-1] + u;</span></span>
+<span id="cb623-13"><a href="sec-jags-marss.html#cb623-13" aria-hidden="true" tabindex="-1"></a><span class="st">         X[t] ~ dnorm(EX[t], inv.q);</span></span>
+<span id="cb623-14"><a href="sec-jags-marss.html#cb623-14" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb623-15"><a href="sec-jags-marss.html#cb623-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb623-16"><a href="sec-jags-marss.html#cb623-16" aria-hidden="true" tabindex="-1"></a><span class="st">   # observation model priors</span></span>
+<span id="cb623-17"><a href="sec-jags-marss.html#cb623-17" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:n) { # r&#39;s differ by site</span></span>
+<span id="cb623-18"><a href="sec-jags-marss.html#cb623-18" aria-hidden="true" tabindex="-1"></a><span class="st">     inv.r[i]~dgamma(0.001,0.001);</span></span>
+<span id="cb623-19"><a href="sec-jags-marss.html#cb623-19" aria-hidden="true" tabindex="-1"></a><span class="st">     r[i] &lt;- 1/inv.r[i];</span></span>
+<span id="cb623-20"><a href="sec-jags-marss.html#cb623-20" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb623-21"><a href="sec-jags-marss.html#cb623-21" aria-hidden="true" tabindex="-1"></a><span class="st">   a[1] &lt;- 0; # first a is 0, rest estimated</span></span>
+<span id="cb623-22"><a href="sec-jags-marss.html#cb623-22" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 2:n) {</span></span>
+<span id="cb623-23"><a href="sec-jags-marss.html#cb623-23" aria-hidden="true" tabindex="-1"></a><span class="st">     a[i]~dnorm(0,0.001);</span></span>
+<span id="cb623-24"><a href="sec-jags-marss.html#cb623-24" aria-hidden="true" tabindex="-1"></a><span class="st">   }   </span></span>
+<span id="cb623-25"><a href="sec-jags-marss.html#cb623-25" aria-hidden="true" tabindex="-1"></a><span class="st">   # observation model likelihood</span></span>
+<span id="cb623-26"><a href="sec-jags-marss.html#cb623-26" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 1:N) {</span></span>
+<span id="cb623-27"><a href="sec-jags-marss.html#cb623-27" aria-hidden="true" tabindex="-1"></a><span class="st">     for(i in 1:n) {</span></span>
+<span id="cb623-28"><a href="sec-jags-marss.html#cb623-28" aria-hidden="true" tabindex="-1"></a><span class="st">       EY[i,t] &lt;- X[t]+a[i]</span></span>
+<span id="cb623-29"><a href="sec-jags-marss.html#cb623-29" aria-hidden="true" tabindex="-1"></a><span class="st">       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);</span></span>
+<span id="cb623-30"><a href="sec-jags-marss.html#cb623-30" aria-hidden="true" tabindex="-1"></a><span class="st">     }</span></span>
+<span id="cb623-31"><a href="sec-jags-marss.html#cb623-31" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb623-32"><a href="sec-jags-marss.html#cb623-32" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb623-33"><a href="sec-jags-marss.html#cb623-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb623-34"><a href="sec-jags-marss.html#cb623-34" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb623-35"><a href="sec-jags-marss.html#cb623-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;marss-jags1.txt&quot;</span>)</span></code></pre></div>
 <p>To fit the model, we write the data list, parameter list, and pass the model to the <code>jags()</code> function.</p>
-<div class="sourceCode" id="cb627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb627-1"><a href="sec-jags-marss.html#cb627-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(harborSealWA, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb627-2"><a href="sec-jags-marss.html#cb627-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">t</span>(harborSealWA[, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])</span>
-<span id="cb627-3"><a href="sec-jags-marss.html#cb627-3" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> dat, <span class="at">n =</span> <span class="fu">nrow</span>(dat), <span class="at">N =</span> <span class="fu">ncol</span>(dat), <span class="at">Y1 =</span> dat[<span class="dv">1</span>, </span>
-<span id="cb627-4"><a href="sec-jags-marss.html#cb627-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>])</span>
-<span id="cb627-5"><a href="sec-jags-marss.html#cb627-5" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>)</span>
-<span id="cb627-6"><a href="sec-jags-marss.html#cb627-6" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> <span class="st">&quot;marss-jags1.txt&quot;</span>  <span class="co"># name of the txt file</span></span>
-<span id="cb627-7"><a href="sec-jags-marss.html#cb627-7" aria-hidden="true" tabindex="-1"></a>mod_marss1 <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb627-8"><a href="sec-jags-marss.html#cb627-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb627-9"><a href="sec-jags-marss.html#cb627-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb624"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb624-1"><a href="sec-jags-marss.html#cb624-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(harborSealWA, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb624-2"><a href="sec-jags-marss.html#cb624-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">t</span>(harborSealWA[, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])</span>
+<span id="cb624-3"><a href="sec-jags-marss.html#cb624-3" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> dat, <span class="at">n =</span> <span class="fu">nrow</span>(dat), <span class="at">N =</span> <span class="fu">ncol</span>(dat), <span class="at">Y1 =</span> dat[<span class="dv">1</span>, </span>
+<span id="cb624-4"><a href="sec-jags-marss.html#cb624-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>])</span>
+<span id="cb624-5"><a href="sec-jags-marss.html#cb624-5" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb624-6"><a href="sec-jags-marss.html#cb624-6" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> <span class="st">&quot;marss-jags1.txt&quot;</span>  <span class="co"># name of the txt file</span></span>
+<span id="cb624-7"><a href="sec-jags-marss.html#cb624-7" aria-hidden="true" tabindex="-1"></a>mod_marss1 <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb624-8"><a href="sec-jags-marss.html#cb624-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb624-9"><a href="sec-jags-marss.html#cb624-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p>We can make a plot of our estimated parameters:</p>
-<div class="sourceCode" id="cb628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb628-1"><a href="sec-jags-marss.html#cb628-1" aria-hidden="true" tabindex="-1"></a>post.params <span class="ot">&lt;-</span> mod_marss1<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list</span>
-<span id="cb628-2"><a href="sec-jags-marss.html#cb628-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb628-3"><a href="sec-jags-marss.html#cb628-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(post.params<span class="sc">$</span>q), <span class="at">main =</span> <span class="st">&quot;log(q)&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb628-4"><a href="sec-jags-marss.html#cb628-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post.params<span class="sc">$</span>u, <span class="at">main =</span> <span class="st">&quot;u&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb628-5"><a href="sec-jags-marss.html#cb628-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(post.params<span class="sc">$</span>r[, <span class="dv">1</span>]), <span class="at">main =</span> <span class="st">&quot;log(r_1)&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>)</span>
-<span id="cb628-6"><a href="sec-jags-marss.html#cb628-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(post.params<span class="sc">$</span>r[, <span class="dv">2</span>]), <span class="at">main =</span> <span class="st">&quot;log(r_2)&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb625"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb625-1"><a href="sec-jags-marss.html#cb625-1" aria-hidden="true" tabindex="-1"></a>post.params <span class="ot">&lt;-</span> mod_marss1<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list</span>
+<span id="cb625-2"><a href="sec-jags-marss.html#cb625-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb625-3"><a href="sec-jags-marss.html#cb625-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(post.params<span class="sc">$</span>q), <span class="at">main =</span> <span class="st">&quot;log(q)&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb625-4"><a href="sec-jags-marss.html#cb625-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(post.params<span class="sc">$</span>u, <span class="at">main =</span> <span class="st">&quot;u&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb625-5"><a href="sec-jags-marss.html#cb625-5" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(post.params<span class="sc">$</span>r[, <span class="dv">1</span>]), <span class="at">main =</span> <span class="st">&quot;log(r_1)&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb625-6"><a href="sec-jags-marss.html#cb625-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log</span>(post.params<span class="sc">$</span>r[, <span class="dv">2</span>]), <span class="at">main =</span> <span class="st">&quot;log(r_2)&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/jags-marss1-hist-1.png" width="80%" style="display: block; margin: auto;" /></p>
 <p>We can make a plot of the model fitted <span class="math inline">\(y_t\)</span> with 50% credible intervals and the data. Note that the credible intervals are for the expected value of <span class="math inline">\(y_{i,t}\)</span> so will be narrower than the data.</p>
-<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="sec-jags-marss.html#cb629-1" aria-hidden="true" tabindex="-1"></a>make.ey.plot <span class="ot">&lt;-</span> <span class="cf">function</span>(mod, dat) {</span>
-<span id="cb629-2"><a href="sec-jags-marss.html#cb629-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">library</span>(ggplot2)</span>
-<span id="cb629-3"><a href="sec-jags-marss.html#cb629-3" aria-hidden="true" tabindex="-1"></a>    EY <span class="ot">&lt;-</span> mod<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list<span class="sc">$</span>EY</span>
-<span id="cb629-4"><a href="sec-jags-marss.html#cb629-4" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dat)</span>
-<span id="cb629-5"><a href="sec-jags-marss.html#cb629-5" aria-hidden="true" tabindex="-1"></a>    N <span class="ot">&lt;-</span> <span class="fu">ncol</span>(dat)</span>
-<span id="cb629-6"><a href="sec-jags-marss.html#cb629-6" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
-<span id="cb629-7"><a href="sec-jags-marss.html#cb629-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
-<span id="cb629-8"><a href="sec-jags-marss.html#cb629-8" aria-hidden="true" tabindex="-1"></a>        tmp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n =</span> <span class="fu">paste0</span>(<span class="st">&quot;Y&quot;</span>, i), <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>N, <span class="at">ey =</span> <span class="fu">apply</span>(EY[, </span>
-<span id="cb629-9"><a href="sec-jags-marss.html#cb629-9" aria-hidden="true" tabindex="-1"></a>            i, , <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">3</span>, median), <span class="at">ey.low =</span> <span class="fu">apply</span>(EY[, </span>
-<span id="cb629-10"><a href="sec-jags-marss.html#cb629-10" aria-hidden="true" tabindex="-1"></a>            i, , <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">3</span>, quantile, <span class="at">probs =</span> <span class="fl">0.25</span>), <span class="at">ey.up =</span> <span class="fu">apply</span>(EY[, </span>
-<span id="cb629-11"><a href="sec-jags-marss.html#cb629-11" aria-hidden="true" tabindex="-1"></a>            i, , <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">3</span>, quantile, <span class="at">probs =</span> <span class="fl">0.75</span>), <span class="at">y =</span> dat[i, </span>
-<span id="cb629-12"><a href="sec-jags-marss.html#cb629-12" aria-hidden="true" tabindex="-1"></a>            ])</span>
-<span id="cb629-13"><a href="sec-jags-marss.html#cb629-13" aria-hidden="true" tabindex="-1"></a>        df <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df, tmp)</span>
-<span id="cb629-14"><a href="sec-jags-marss.html#cb629-14" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb629-15"><a href="sec-jags-marss.html#cb629-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> ey)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ey.low, </span>
-<span id="cb629-16"><a href="sec-jags-marss.html#cb629-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">ymax =</span> ey.up), <span class="at">alpha =</span> <span class="fl">0.25</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data =</span> df, </span>
-<span id="cb629-17"><a href="sec-jags-marss.html#cb629-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>n) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span>
-<span id="cb629-18"><a href="sec-jags-marss.html#cb629-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="sec-jags-marss.html#cb630-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make.ey.plot</span>(mod_marss1, dat)</span></code></pre></div>
+<div class="sourceCode" id="cb626"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb626-1"><a href="sec-jags-marss.html#cb626-1" aria-hidden="true" tabindex="-1"></a>make.ey.plot <span class="ot">&lt;-</span> <span class="cf">function</span>(mod, dat) {</span>
+<span id="cb626-2"><a href="sec-jags-marss.html#cb626-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">library</span>(ggplot2)</span>
+<span id="cb626-3"><a href="sec-jags-marss.html#cb626-3" aria-hidden="true" tabindex="-1"></a>    EY <span class="ot">&lt;-</span> mod<span class="sc">$</span>BUGSoutput<span class="sc">$</span>sims.list<span class="sc">$</span>EY</span>
+<span id="cb626-4"><a href="sec-jags-marss.html#cb626-4" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(dat)</span>
+<span id="cb626-5"><a href="sec-jags-marss.html#cb626-5" aria-hidden="true" tabindex="-1"></a>    N <span class="ot">&lt;-</span> <span class="fu">ncol</span>(dat)</span>
+<span id="cb626-6"><a href="sec-jags-marss.html#cb626-6" aria-hidden="true" tabindex="-1"></a>    df <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb626-7"><a href="sec-jags-marss.html#cb626-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb626-8"><a href="sec-jags-marss.html#cb626-8" aria-hidden="true" tabindex="-1"></a>        tmp <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">n =</span> <span class="fu">paste0</span>(<span class="st">&quot;Y&quot;</span>, i), <span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span>N, <span class="at">ey =</span> <span class="fu">apply</span>(EY[, </span>
+<span id="cb626-9"><a href="sec-jags-marss.html#cb626-9" aria-hidden="true" tabindex="-1"></a>            i, , <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">3</span>, median), <span class="at">ey.low =</span> <span class="fu">apply</span>(EY[, </span>
+<span id="cb626-10"><a href="sec-jags-marss.html#cb626-10" aria-hidden="true" tabindex="-1"></a>            i, , <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">3</span>, quantile, <span class="at">probs =</span> <span class="fl">0.25</span>), <span class="at">ey.up =</span> <span class="fu">apply</span>(EY[, </span>
+<span id="cb626-11"><a href="sec-jags-marss.html#cb626-11" aria-hidden="true" tabindex="-1"></a>            i, , <span class="at">drop =</span> <span class="cn">FALSE</span>], <span class="dv">3</span>, quantile, <span class="at">probs =</span> <span class="fl">0.75</span>), <span class="at">y =</span> dat[i, </span>
+<span id="cb626-12"><a href="sec-jags-marss.html#cb626-12" aria-hidden="true" tabindex="-1"></a>            ])</span>
+<span id="cb626-13"><a href="sec-jags-marss.html#cb626-13" aria-hidden="true" tabindex="-1"></a>        df <span class="ot">&lt;-</span> <span class="fu">rbind</span>(df, tmp)</span>
+<span id="cb626-14"><a href="sec-jags-marss.html#cb626-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb626-15"><a href="sec-jags-marss.html#cb626-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> ey)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ey.low, </span>
+<span id="cb626-16"><a href="sec-jags-marss.html#cb626-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">ymax =</span> ey.up), <span class="at">alpha =</span> <span class="fl">0.25</span>) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data =</span> df, </span>
+<span id="cb626-17"><a href="sec-jags-marss.html#cb626-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>n) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span>
+<span id="cb626-18"><a href="sec-jags-marss.html#cb626-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb627"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb627-1"><a href="sec-jags-marss.html#cb627-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make.ey.plot</span>(mod_marss1, dat)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/jags-marss1-plot-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="m-hidden-states" class="section level3" number="12.3.2">
@@ -757,54 +757,54 @@ div.csl-indent {
 (\#eq:jags-marss2)
 \end{equation}\]</span></p>
 <p>Here is the JAGS model. Note that <span class="math inline">\(a_i\)</span> is 0 for all <span class="math inline">\(i\)</span> because each <span class="math inline">\(y_t\)</span> is associated with its own <span class="math inline">\(x_t\)</span>.</p>
-<div class="sourceCode" id="cb631"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb631-1"><a href="sec-jags-marss.html#cb631-1" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
-<span id="cb631-2"><a href="sec-jags-marss.html#cb631-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
-<span id="cb631-3"><a href="sec-jags-marss.html#cb631-3" aria-hidden="true" tabindex="-1"></a><span class="st">   # process model priors</span></span>
-<span id="cb631-4"><a href="sec-jags-marss.html#cb631-4" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q~dgamma(0.001,0.001);</span></span>
-<span id="cb631-5"><a href="sec-jags-marss.html#cb631-5" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; # one q</span></span>
-<span id="cb631-6"><a href="sec-jags-marss.html#cb631-6" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:n) {</span></span>
-<span id="cb631-7"><a href="sec-jags-marss.html#cb631-7" aria-hidden="true" tabindex="-1"></a><span class="st">      u[i] ~ dnorm(0, 0.01); </span></span>
-<span id="cb631-8"><a href="sec-jags-marss.html#cb631-8" aria-hidden="true" tabindex="-1"></a><span class="st">      X0[i] ~ dnorm(Y1[i],0.001); # initial states</span></span>
-<span id="cb631-9"><a href="sec-jags-marss.html#cb631-9" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb631-10"><a href="sec-jags-marss.html#cb631-10" aria-hidden="true" tabindex="-1"></a><span class="st">   # process model likelihood</span></span>
-<span id="cb631-11"><a href="sec-jags-marss.html#cb631-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:n) {</span></span>
-<span id="cb631-12"><a href="sec-jags-marss.html#cb631-12" aria-hidden="true" tabindex="-1"></a><span class="st">     EX[i,1] &lt;- X0[i] + u[i];</span></span>
-<span id="cb631-13"><a href="sec-jags-marss.html#cb631-13" aria-hidden="true" tabindex="-1"></a><span class="st">     X[i,1] ~ dnorm(EX[i,1], inv.q);</span></span>
-<span id="cb631-14"><a href="sec-jags-marss.html#cb631-14" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb631-15"><a href="sec-jags-marss.html#cb631-15" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
-<span id="cb631-16"><a href="sec-jags-marss.html#cb631-16" aria-hidden="true" tabindex="-1"></a><span class="st">      for(i in 1:n) {</span></span>
-<span id="cb631-17"><a href="sec-jags-marss.html#cb631-17" aria-hidden="true" tabindex="-1"></a><span class="st">         EX[i,t] &lt;- X[i,t-1] + u[i];</span></span>
-<span id="cb631-18"><a href="sec-jags-marss.html#cb631-18" aria-hidden="true" tabindex="-1"></a><span class="st">         X[i,t] ~ dnorm(EX[i,t], inv.q);</span></span>
-<span id="cb631-19"><a href="sec-jags-marss.html#cb631-19" aria-hidden="true" tabindex="-1"></a><span class="st">      }</span></span>
-<span id="cb631-20"><a href="sec-jags-marss.html#cb631-20" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb631-21"><a href="sec-jags-marss.html#cb631-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb631-22"><a href="sec-jags-marss.html#cb631-22" aria-hidden="true" tabindex="-1"></a><span class="st">   # observation model priors</span></span>
-<span id="cb631-23"><a href="sec-jags-marss.html#cb631-23" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:n) { # The r&#39;s are different by site</span></span>
-<span id="cb631-24"><a href="sec-jags-marss.html#cb631-24" aria-hidden="true" tabindex="-1"></a><span class="st">     inv.r[i]~dgamma(0.001,0.001);</span></span>
-<span id="cb631-25"><a href="sec-jags-marss.html#cb631-25" aria-hidden="true" tabindex="-1"></a><span class="st">     r[i] &lt;- 1/inv.r[i];</span></span>
-<span id="cb631-26"><a href="sec-jags-marss.html#cb631-26" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb631-27"><a href="sec-jags-marss.html#cb631-27" aria-hidden="true" tabindex="-1"></a><span class="st">   # observation model likelihood</span></span>
-<span id="cb631-28"><a href="sec-jags-marss.html#cb631-28" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 1:N) {</span></span>
-<span id="cb631-29"><a href="sec-jags-marss.html#cb631-29" aria-hidden="true" tabindex="-1"></a><span class="st">     for(i in 1:n) {</span></span>
-<span id="cb631-30"><a href="sec-jags-marss.html#cb631-30" aria-hidden="true" tabindex="-1"></a><span class="st">       EY[i,t] &lt;- X[i,t]</span></span>
-<span id="cb631-31"><a href="sec-jags-marss.html#cb631-31" aria-hidden="true" tabindex="-1"></a><span class="st">       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);</span></span>
-<span id="cb631-32"><a href="sec-jags-marss.html#cb631-32" aria-hidden="true" tabindex="-1"></a><span class="st">     }</span></span>
-<span id="cb631-33"><a href="sec-jags-marss.html#cb631-33" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
-<span id="cb631-34"><a href="sec-jags-marss.html#cb631-34" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
-<span id="cb631-35"><a href="sec-jags-marss.html#cb631-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb631-36"><a href="sec-jags-marss.html#cb631-36" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
-<span id="cb631-37"><a href="sec-jags-marss.html#cb631-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;marss-jags2.txt&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb628"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb628-1"><a href="sec-jags-marss.html#cb628-1" aria-hidden="true" tabindex="-1"></a>jagsscript <span class="ot">&lt;-</span> <span class="fu">cat</span>(<span class="st">&quot;</span></span>
+<span id="cb628-2"><a href="sec-jags-marss.html#cb628-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {  </span></span>
+<span id="cb628-3"><a href="sec-jags-marss.html#cb628-3" aria-hidden="true" tabindex="-1"></a><span class="st">   # process model priors</span></span>
+<span id="cb628-4"><a href="sec-jags-marss.html#cb628-4" aria-hidden="true" tabindex="-1"></a><span class="st">   inv.q~dgamma(0.001,0.001);</span></span>
+<span id="cb628-5"><a href="sec-jags-marss.html#cb628-5" aria-hidden="true" tabindex="-1"></a><span class="st">   q &lt;- 1/inv.q; # one q</span></span>
+<span id="cb628-6"><a href="sec-jags-marss.html#cb628-6" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:n) {</span></span>
+<span id="cb628-7"><a href="sec-jags-marss.html#cb628-7" aria-hidden="true" tabindex="-1"></a><span class="st">      u[i] ~ dnorm(0, 0.01); </span></span>
+<span id="cb628-8"><a href="sec-jags-marss.html#cb628-8" aria-hidden="true" tabindex="-1"></a><span class="st">      X0[i] ~ dnorm(Y1[i],0.001); # initial states</span></span>
+<span id="cb628-9"><a href="sec-jags-marss.html#cb628-9" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb628-10"><a href="sec-jags-marss.html#cb628-10" aria-hidden="true" tabindex="-1"></a><span class="st">   # process model likelihood</span></span>
+<span id="cb628-11"><a href="sec-jags-marss.html#cb628-11" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:n) {</span></span>
+<span id="cb628-12"><a href="sec-jags-marss.html#cb628-12" aria-hidden="true" tabindex="-1"></a><span class="st">     EX[i,1] &lt;- X0[i] + u[i];</span></span>
+<span id="cb628-13"><a href="sec-jags-marss.html#cb628-13" aria-hidden="true" tabindex="-1"></a><span class="st">     X[i,1] ~ dnorm(EX[i,1], inv.q);</span></span>
+<span id="cb628-14"><a href="sec-jags-marss.html#cb628-14" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb628-15"><a href="sec-jags-marss.html#cb628-15" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 2:N) {</span></span>
+<span id="cb628-16"><a href="sec-jags-marss.html#cb628-16" aria-hidden="true" tabindex="-1"></a><span class="st">      for(i in 1:n) {</span></span>
+<span id="cb628-17"><a href="sec-jags-marss.html#cb628-17" aria-hidden="true" tabindex="-1"></a><span class="st">         EX[i,t] &lt;- X[i,t-1] + u[i];</span></span>
+<span id="cb628-18"><a href="sec-jags-marss.html#cb628-18" aria-hidden="true" tabindex="-1"></a><span class="st">         X[i,t] ~ dnorm(EX[i,t], inv.q);</span></span>
+<span id="cb628-19"><a href="sec-jags-marss.html#cb628-19" aria-hidden="true" tabindex="-1"></a><span class="st">      }</span></span>
+<span id="cb628-20"><a href="sec-jags-marss.html#cb628-20" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb628-21"><a href="sec-jags-marss.html#cb628-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb628-22"><a href="sec-jags-marss.html#cb628-22" aria-hidden="true" tabindex="-1"></a><span class="st">   # observation model priors</span></span>
+<span id="cb628-23"><a href="sec-jags-marss.html#cb628-23" aria-hidden="true" tabindex="-1"></a><span class="st">   for(i in 1:n) { # The r&#39;s are different by site</span></span>
+<span id="cb628-24"><a href="sec-jags-marss.html#cb628-24" aria-hidden="true" tabindex="-1"></a><span class="st">     inv.r[i]~dgamma(0.001,0.001);</span></span>
+<span id="cb628-25"><a href="sec-jags-marss.html#cb628-25" aria-hidden="true" tabindex="-1"></a><span class="st">     r[i] &lt;- 1/inv.r[i];</span></span>
+<span id="cb628-26"><a href="sec-jags-marss.html#cb628-26" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb628-27"><a href="sec-jags-marss.html#cb628-27" aria-hidden="true" tabindex="-1"></a><span class="st">   # observation model likelihood</span></span>
+<span id="cb628-28"><a href="sec-jags-marss.html#cb628-28" aria-hidden="true" tabindex="-1"></a><span class="st">   for(t in 1:N) {</span></span>
+<span id="cb628-29"><a href="sec-jags-marss.html#cb628-29" aria-hidden="true" tabindex="-1"></a><span class="st">     for(i in 1:n) {</span></span>
+<span id="cb628-30"><a href="sec-jags-marss.html#cb628-30" aria-hidden="true" tabindex="-1"></a><span class="st">       EY[i,t] &lt;- X[i,t]</span></span>
+<span id="cb628-31"><a href="sec-jags-marss.html#cb628-31" aria-hidden="true" tabindex="-1"></a><span class="st">       Y[i,t] ~ dnorm(EY[i,t], inv.r[i]);</span></span>
+<span id="cb628-32"><a href="sec-jags-marss.html#cb628-32" aria-hidden="true" tabindex="-1"></a><span class="st">     }</span></span>
+<span id="cb628-33"><a href="sec-jags-marss.html#cb628-33" aria-hidden="true" tabindex="-1"></a><span class="st">   }</span></span>
+<span id="cb628-34"><a href="sec-jags-marss.html#cb628-34" aria-hidden="true" tabindex="-1"></a><span class="st">}  </span></span>
+<span id="cb628-35"><a href="sec-jags-marss.html#cb628-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb628-36"><a href="sec-jags-marss.html#cb628-36" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span>, </span>
+<span id="cb628-37"><a href="sec-jags-marss.html#cb628-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">file =</span> <span class="st">&quot;marss-jags2.txt&quot;</span>)</span></code></pre></div>
 <p>Our code to fit the model changes a little.</p>
-<div class="sourceCode" id="cb632"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb632-1"><a href="sec-jags-marss.html#cb632-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(harborSealWA, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
-<span id="cb632-2"><a href="sec-jags-marss.html#cb632-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">t</span>(harborSealWA[, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])</span>
-<span id="cb632-3"><a href="sec-jags-marss.html#cb632-3" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> dat, <span class="at">n =</span> <span class="fu">nrow</span>(dat), <span class="at">N =</span> <span class="fu">ncol</span>(dat), <span class="at">Y1 =</span> dat[, </span>
-<span id="cb632-4"><a href="sec-jags-marss.html#cb632-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>])</span>
-<span id="cb632-5"><a href="sec-jags-marss.html#cb632-5" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>)</span>
-<span id="cb632-6"><a href="sec-jags-marss.html#cb632-6" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> <span class="st">&quot;marss-jags2.txt&quot;</span>  <span class="co"># name of the txt file</span></span>
-<span id="cb632-7"><a href="sec-jags-marss.html#cb632-7" aria-hidden="true" tabindex="-1"></a>mod_marss1 <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
-<span id="cb632-8"><a href="sec-jags-marss.html#cb632-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
-<span id="cb632-9"><a href="sec-jags-marss.html#cb632-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb633"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb633-1"><a href="sec-jags-marss.html#cb633-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make.ey.plot</span>(mod_marss1, dat)</span></code></pre></div>
+<div class="sourceCode" id="cb629"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb629-1"><a href="sec-jags-marss.html#cb629-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(harborSealWA, <span class="at">package =</span> <span class="st">&quot;MARSS&quot;</span>)</span>
+<span id="cb629-2"><a href="sec-jags-marss.html#cb629-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">&lt;-</span> <span class="fu">t</span>(harborSealWA[, <span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>])</span>
+<span id="cb629-3"><a href="sec-jags-marss.html#cb629-3" aria-hidden="true" tabindex="-1"></a>jags.data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> dat, <span class="at">n =</span> <span class="fu">nrow</span>(dat), <span class="at">N =</span> <span class="fu">ncol</span>(dat), <span class="at">Y1 =</span> dat[, </span>
+<span id="cb629-4"><a href="sec-jags-marss.html#cb629-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>])</span>
+<span id="cb629-5"><a href="sec-jags-marss.html#cb629-5" aria-hidden="true" tabindex="-1"></a>jags.params <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;EY&quot;</span>, <span class="st">&quot;u&quot;</span>, <span class="st">&quot;q&quot;</span>, <span class="st">&quot;r&quot;</span>)</span>
+<span id="cb629-6"><a href="sec-jags-marss.html#cb629-6" aria-hidden="true" tabindex="-1"></a>model.loc <span class="ot">&lt;-</span> <span class="st">&quot;marss-jags2.txt&quot;</span>  <span class="co"># name of the txt file</span></span>
+<span id="cb629-7"><a href="sec-jags-marss.html#cb629-7" aria-hidden="true" tabindex="-1"></a>mod_marss1 <span class="ot">&lt;-</span> R2jags<span class="sc">::</span><span class="fu">jags</span>(jags.data, <span class="at">parameters.to.save =</span> jags.params, </span>
+<span id="cb629-8"><a href="sec-jags-marss.html#cb629-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">model.file =</span> model.loc, <span class="at">n.chains =</span> <span class="dv">3</span>, <span class="at">n.burnin =</span> <span class="dv">5000</span>, <span class="at">n.thin =</span> <span class="dv">1</span>, </span>
+<span id="cb629-9"><a href="sec-jags-marss.html#cb629-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n.iter =</span> <span class="dv">10000</span>, <span class="at">DIC =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb630"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb630-1"><a href="sec-jags-marss.html#cb630-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make.ey.plot</span>(mod_marss1, dat)</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/jags-marss2-plot-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
 </div>

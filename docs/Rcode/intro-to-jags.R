@@ -258,8 +258,6 @@ mod_ar1_intercept <- R2jags::jags(jags.data,
 
 
 ## ----jags-ss1, echo=TRUE, results='hide', cache=TRUE-------------------------------------------
-# 5. MAKE THE SS MODEL for a stochastic level model
-
 model.loc <- ("ss_model.txt")
 jagsscript <- cat("
 model {  
@@ -517,7 +515,7 @@ mod_ss <- jags(jags.data,
 
 
 ## ----jags-cov-forecast, results='hide', cache=TRUE---------------------------------------------
-jags.data <- list("Y" = c(Wind, NA, NA, NA), "N" = (N + 3))
+jags.data <- list("Y" = c(Wind, NA, NA, NA), "N" = (N + 3), Y1 = Wind[1])
 jags.params <- c("q", "r", "EY", "u")
 model.loc <- ("ss_model.txt")
 mod_ss_forecast <- jags(jags.data,

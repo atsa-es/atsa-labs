@@ -621,9 +621,9 @@ div.csl-indent {
 <div id="create-data" class="section level2" number="14.4">
 <h2><span class="header-section-number">14.4</span> Create data</h2>
 <p>Plot the data and the error added to the signal by each sensor. The data is the error (on right) plus the signal. The signal is definitely not obvious in the data. The data look mostly like the error, which is autocorrelated so has trends in it unlike white noise error.</p>
-<div class="sourceCode" id="cb700"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb700-1"><a href="create-data.html#cb700-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">subset</span>(df, name <span class="sc">!=</span> <span class="st">&quot;signal&quot;</span>), <span class="fu">aes</span>(<span class="at">x =</span> t, <span class="at">y =</span> val)) <span class="sc">+</span> </span>
-<span id="cb700-2"><a href="create-data.html#cb700-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>name, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
-<span id="cb700-3"><a href="create-data.html#cb700-3" aria-hidden="true" tabindex="-1"></a>p1</span></code></pre></div>
+<div class="sourceCode" id="cb690"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb690-1"><a href="create-data.html#cb690-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">subset</span>(df, name <span class="sc">!=</span> <span class="st">&quot;signal&quot;</span>), <span class="fu">aes</span>(<span class="at">x =</span> t, <span class="at">y =</span> val)) <span class="sc">+</span> </span>
+<span id="cb690-2"><a href="create-data.html#cb690-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>name, <span class="at">ncol =</span> <span class="dv">2</span>)</span>
+<span id="cb690-3"><a href="create-data.html#cb690-3" aria-hidden="true" tabindex="-1"></a>p1</span></code></pre></div>
 <p><img src="Applied_Time_Series_Analysis_files/figure-html/unnamed-chunk-21-1.png" width="80%" style="display: block; margin: auto;" /></p>
 </div>
             </section>

@@ -625,23 +625,23 @@ div.csl-indent {
 <div id="data-and-packages-9" class="section level3 unnumbered">
 <h3>Data and packages</h3>
 <p>You will need the <strong>atsar</strong> and <strong>bayesdfa</strong> packages we have written for fitting state-space time series models with Stan. Install using the <strong>devtools</strong> package.</p>
-<div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb644-1"><a href="chap-stan.html#cb644-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb644-2"><a href="chap-stan.html#cb644-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows users will likely need to set this</span></span>
-<span id="cb644-3"><a href="chap-stan.html#cb644-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
-<span id="cb644-4"><a href="chap-stan.html#cb644-4" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</span>
-<span id="cb644-5"><a href="chap-stan.html#cb644-5" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;nwfsc-timeseries/tvvarss&quot;</span>)</span>
-<span id="cb644-6"><a href="chap-stan.html#cb644-6" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;fate-ewi/bayesdfa&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb640-1"><a href="chap-stan.html#cb640-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb640-2"><a href="chap-stan.html#cb640-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows users will likely need to set this</span></span>
+<span id="cb640-3"><a href="chap-stan.html#cb640-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Sys.setenv(&#39;R_REMOTES_NO_ERRORS_FROM_WARNINGS&#39; = &#39;true&#39;)</span></span>
+<span id="cb640-4"><a href="chap-stan.html#cb640-4" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;nwfsc-timeseries/atsar&quot;</span>)</span>
+<span id="cb640-5"><a href="chap-stan.html#cb640-5" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;nwfsc-timeseries/tvvarss&quot;</span>)</span>
+<span id="cb640-6"><a href="chap-stan.html#cb640-6" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;fate-ewi/bayesdfa&quot;</span>)</span></code></pre></div>
 <p>In addition, you will need the <strong>rstan</strong>, <strong>datasets</strong>, <strong>parallel</strong> and <strong>loo</strong> packages. After installing, if needed, load the packages:</p>
-<div class="sourceCode" id="cb645"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb645-1"><a href="chap-stan.html#cb645-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(atsar)</span>
-<span id="cb645-2"><a href="chap-stan.html#cb645-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
-<span id="cb645-3"><a href="chap-stan.html#cb645-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(loo)</span></code></pre></div>
+<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb641-1"><a href="chap-stan.html#cb641-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(atsar)</span>
+<span id="cb641-2"><a href="chap-stan.html#cb641-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstan)</span>
+<span id="cb641-3"><a href="chap-stan.html#cb641-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(loo)</span></code></pre></div>
 <p>Once you have Stan and <strong>rstan</strong> installed, optimize Stan on your machine:</p>
-<div class="sourceCode" id="cb646"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb646-1"><a href="chap-stan.html#cb646-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rstan_options</span>(<span class="at">auto_write =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb646-2"><a href="chap-stan.html#cb646-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb642-1"><a href="chap-stan.html#cb642-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rstan_options</span>(<span class="at">auto_write =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb642-2"><a href="chap-stan.html#cb642-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">mc.cores =</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>())</span></code></pre></div>
 <p>For this lab, we will use a data set on air quality in New York from the <strong>datasets</strong> package. Load the data and create a couple new variables for future use.</p>
-<div class="sourceCode" id="cb647"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb647-1"><a href="chap-stan.html#cb647-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(airquality, <span class="at">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
-<span id="cb647-2"><a href="chap-stan.html#cb647-2" aria-hidden="true" tabindex="-1"></a>Wind <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Wind  <span class="co"># wind speed</span></span>
-<span id="cb647-3"><a href="chap-stan.html#cb647-3" aria-hidden="true" tabindex="-1"></a>Temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp  <span class="co"># air temperature</span></span></code></pre></div>
+<div class="sourceCode" id="cb643"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb643-1"><a href="chap-stan.html#cb643-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(airquality, <span class="at">package =</span> <span class="st">&quot;datasets&quot;</span>)</span>
+<span id="cb643-2"><a href="chap-stan.html#cb643-2" aria-hidden="true" tabindex="-1"></a>Wind <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Wind  <span class="co"># wind speed</span></span>
+<span id="cb643-3"><a href="chap-stan.html#cb643-3" aria-hidden="true" tabindex="-1"></a>Temp <span class="ot">&lt;-</span> airquality<span class="sc">$</span>Temp  <span class="co"># air temperature</span></span></code></pre></div>
 </div>
 </div>
             </section>
