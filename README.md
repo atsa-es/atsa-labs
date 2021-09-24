@@ -24,7 +24,7 @@
     ```
     library(devtools)
     install_github("rstudio/bookdown")
-    install_github("nwfsc-timeseries/atsalibrary")
+    install_github("atsa-es/atsalibrary")
     ```
 Note Windows users may need to run:
     ```
