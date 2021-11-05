@@ -52,7 +52,7 @@ Here is the quick start version.
 * **But I cloned the whole repo.  Can I use 'Build Book' in RStudio?**  Well, yes but it takes a long time to build the whole book.  Here's how to do just your chapter.  
     * Set your working directory to be your folder like 'Lab-fitting-DLMs'
     * Edit your Rmd, like DLM.Rmd
-    * Click **knit**.  Ignore 'Build Book' in the Build tab.  
+    * Click **knit**.  Ignore 'Build Book' in the Build tab. If **knit** doesn't work, use knit from the command line using something like `rmarkdown::render("Lab-fitting-DLMs/DLM.Rmd")`. Or if you want to have the knit button work, then add this to your yaml (temporarily) `knit: (function(input, ...) {rmarkdown::render(input)})`. Why wouldn't the knit button work? Because if RStudio identifies your project as a bookdown project (by the existence of `_bookdown.yml`, it redefines the knit button to `bookdown::render_book()` and your Rmd is not in the `_bookdown.yml` file yet.
     * knit will put the html files in your folder and you'll need to clean up later.  The mathdefs won't be replaced and you won't have a bibliography.  If that bugs you, put this yaml at the top of your Rmd
     ```
     ---
