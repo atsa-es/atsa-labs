@@ -1,3 +1,8 @@
+ <!-- badges: start -->
+JupyterLab: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/atsa-es/atsa-labs/HEAD)
+RStudio: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/atsa-es/atsa-labs/HEAD?urlpath=rstudio)
+ <!-- badges: end -->
+
 # AFTS Labbook Info
 
 * [Installing bookdown](#installing-bookdown)
